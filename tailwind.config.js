@@ -13,6 +13,13 @@ module.exports = {
     },
     extend: {
       colors: {
+        brand: {
+          blue: '#4154FA',
+          'dark-blue': '#2B3EDF',
+        },
+        common: {
+          neutral: '#83858A',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

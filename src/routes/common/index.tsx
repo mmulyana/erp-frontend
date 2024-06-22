@@ -1,4 +1,4 @@
-import { PATH } from '@/utils/constant/_path.ts'
+import { PATH } from '@/utils/constant/_paths.ts'
 import { Route } from 'react-router-dom'
 import { lazy } from 'react'
 
