@@ -1,4 +1,5 @@
 import { URLS } from '@/utils/constant/_urls'
+import { CookieKeys, CookieStorage } from '@/utils/cookie'
 import fetchOptions from '@/utils/fetch-options'
 
 type LoginPayload = {
@@ -6,6 +7,7 @@ type LoginPayload = {
   email?: string
   password: string
 }
+
 export const useAuth = () => {
   const logIn = async (payload: LoginPayload) => {
     try {
@@ -16,6 +18,8 @@ export const useAuth = () => {
       if (!res.ok) {
         throw new Error(data.message)
       }
+
+      CookieStorage.set(CookieKeys.AuthToken, data.data.token)
 
       return data
     } catch (error: any) {
