@@ -20,7 +20,7 @@ import { isValidEmail } from '@/utils/is-email-valid'
 
 import { AlertCircle, Eye, EyeOff, XIcon } from 'lucide-react'
 import Logo from '/public/erp-logo.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
 
 type Payload = {
@@ -31,6 +31,7 @@ type Payload = {
 
 export default function Login() {
   const { logIn } = useAuth()
+  const navigate = useNavigate()
   const [errorBanner, setErrorBanner] = useState('')
   const [isPassword, setIsPassword] = useState(false)
 
@@ -54,14 +55,15 @@ export default function Login() {
     }
 
     const response = await logIn(payload)
-    console.log(response)
-
+    
     if (response?.message?.includes('Invalid')) {
       setErrorBanner('Email atau password salah')
       return
     } else {
       setErrorBanner('')
     }
+
+    navigate(PATH.DASHBOARD)
   }
 
   return (
@@ -157,7 +159,13 @@ export default function Login() {
         </form>
         <div className='text-center mt-3 mb-4'>
           <p className='text-common-neutral'>
-            Belum punya akun? <Link to={PATH.REGISTER} className='text-brand-blue underline underline-offset-2'>Daftar</Link>
+            Belum punya akun?{' '}
+            <Link
+              to={PATH.REGISTER}
+              className='text-brand-blue underline underline-offset-2'
+            >
+              Daftar
+            </Link>
           </p>
         </div>
       </Form>
