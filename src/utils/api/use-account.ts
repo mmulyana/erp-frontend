@@ -4,15 +4,22 @@ import { URLS } from '../constant/_urls'
 import fetchOptions from '../fetch-options'
 import { CookieKeys, CookieStorage } from '../cookie'
 
-const useAccount = (id: number | undefined) => {
+export const useUserAccount = (id: number | undefined) => {
   return useQuery({
     queryKey: [KEYS.ACCOUNT],
-    queryFn: () => fetcher(id),
+    queryFn: () => fetcherUserAccount(id),
     enabled: !!id,
   })
 }
 
-const fetcher = async (id: number | undefined) => {
+export const useAccounts = () => {
+  return useQuery({
+    queryKey: [KEYS.ACCOUNTS],
+    queryFn: () => fetcherAccounts(),
+  })
+}
+
+const fetcherUserAccount = async (id: number | undefined) => {
   const options = new fetchOptions('GET')
   const token = CookieStorage.get(CookieKeys.AuthToken)
   options.addToken(token)
@@ -21,5 +28,12 @@ const fetcher = async (id: number | undefined) => {
 
   return data.user
 }
+const fetcherAccounts = async () => {
+  const options = new fetchOptions('GET')
+  const token = CookieStorage.get(CookieKeys.AuthToken)
+  options.addToken(token)
+  const response = await fetch(URLS.ACCOUNT, options.data)
+  const { data } = await response.json()
 
-export default useAccount
+  return data.users
+}
