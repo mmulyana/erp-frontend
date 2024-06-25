@@ -4,4 +4,5 @@ export const PATH = {
   FORGOT: '/forgot',
   REGISTER: '/register',
   NOT_FOUND: '*',
+  DASHBOARD: '/dashboard',
 }
