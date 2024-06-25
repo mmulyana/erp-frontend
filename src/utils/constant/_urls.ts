@@ -6,4 +6,5 @@ export const URLS = {
   REGISTER: V1 + '/auth/register',
   CHECK_EMAIL: V1 + '/auth/check/email',
   CHECK_NAME: V1 + '/auth/check/name',
+  ACCOUNT: V1 + '/account',
 }
