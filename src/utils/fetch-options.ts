@@ -1,5 +1,5 @@
 export default class fetchOptions {
-  public data
+  public data: any
 
   constructor(method: string, body: any, type: string = 'application/json') {
     this.data = {
@@ -9,5 +9,9 @@ export default class fetchOptions {
       },
       body: body,
     }
+  }
+
+  addToken(token: string) {
+    this.data.headers.Authorization = 'Bearer ' + token
   }
 }
