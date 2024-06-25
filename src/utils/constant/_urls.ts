@@ -7,4 +7,5 @@ export const URLS = {
   CHECK_EMAIL: V1 + '/auth/check/email',
   CHECK_NAME: V1 + '/auth/check/name',
   ACCOUNT: V1 + '/account',
+  ROLES: V1 + '/roles',
 }
