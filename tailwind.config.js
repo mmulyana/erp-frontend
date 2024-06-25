@@ -19,6 +19,9 @@ module.exports = {
         },
         common: {
           neutral: '#83858A',
+          background: {
+            1: '#F3F4F7',
+          },
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
