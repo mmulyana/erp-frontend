@@ -19,6 +19,14 @@ export const useAccounts = () => {
   })
 }
 
+export const useAccount = (id?: number) => {
+  return useQuery({
+    queryKey: [KEYS.ACCOUNT, id],
+    queryFn: () => fetcherUserAccount(id),
+    enabled: !!id,
+  })
+}
+
 const fetcherUserAccount = async (id: number | undefined) => {
   const options = new fetchOptions('GET')
   const token = CookieStorage.get(CookieKeys.AuthToken)
