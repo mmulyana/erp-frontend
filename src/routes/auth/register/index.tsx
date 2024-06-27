@@ -23,7 +23,6 @@ import { PATH } from '@/utils/constant/_paths'
 import { registerSchema } from '../_schemas/register.schema'
 import fetchOptions from '@/utils/fetch-options'
 import { URLS } from '@/utils/constant/_urls'
-import debounce from 'debounce'
 
 type Payload = {
   name: string
