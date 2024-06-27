@@ -13,7 +13,7 @@ export default function Dashboard() {
   return (
     <>
       <p>Dashboard</p>
-      <Link to={PATH.USERS}>users</Link>
+      <Link to={PATH.ACCOUNT}>users</Link>
     </>
   )
 }
