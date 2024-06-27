@@ -5,7 +5,8 @@ import LoadingScreen from '@/components/loading-screen/index.tsx'
 import ProtectedRoute from '@/utils/protected-route.tsx'
 
 const Main = lazy(() => import('./main/index.tsx'))
-const Users = lazy(() => import('./users/index.tsx'))
+const Account = lazy(() => import('./account-and-roles/account/index.tsx'))
+const Roles = lazy(() => import('./account-and-roles/roles/index.tsx'))
 
 const useRoutes = () => {
   return [
@@ -15,8 +16,13 @@ const useRoutes = () => {
       show: true,
     },
     {
-      path: PATH.USERS,
-      element: <Users />,
+      path: PATH.ACCOUNT,
+      element: <Account />,
+      show: true,
+    },
+    {
+      path: PATH.ROLES,
+      element: <Roles />,
       show: true,
     },
   ]
