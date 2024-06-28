@@ -1,8 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { KEYS } from '../constant/_keys'
 import { URLS } from '../constant/_urls'
 import fetchOptions from '../fetch-options'
 import { CookieKeys, CookieStorage } from '../cookie'
+import { User } from '../types/user'
+import { Account } from '../types/account'
 
 export const useUserAccount = (id: number | undefined) => {
   return useQuery({
@@ -27,10 +29,45 @@ export const useAccount = (id?: number) => {
   })
 }
 
+export const useEditAccount = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ payload, id }: { payload: EditPayload; id: number }) =>
+      fetcherEditAccount({ payload, id }),
+    onSuccess: (data: Account) => {
+      queryClient.setQueryData([KEYS.ACCOUNT, data.id], data)
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACCOUNTS],
+      })
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+  })
+}
+
+type EditPayload = Pick<User, 'email' | 'name'> & {
+  password?: string
+  rolesId?: number
+}
+
+const fetcherEditAccount = async ({
+  payload,
+  id,
+}: {
+  payload?: EditPayload
+  id: number
+}) => {
+  const options = new fetchOptions('PATCH', JSON.stringify(payload))
+  options.addToken()
+
+  const response = await fetch(`${URLS.ACCOUNT}/${id}`, options.data)
+  return response.json()
+}
+
 const fetcherUserAccount = async (id: number | undefined) => {
   const options = new fetchOptions('GET')
-  const token = CookieStorage.get(CookieKeys.AuthToken)
-  options.addToken(token)
+  options.addToken()
   const response = await fetch(URLS.ACCOUNT + `/${id}`, options.data)
   const { data } = await response.json()
 
@@ -38,8 +75,7 @@ const fetcherUserAccount = async (id: number | undefined) => {
 }
 const fetcherAccounts = async () => {
   const options = new fetchOptions('GET')
-  const token = CookieStorage.get(CookieKeys.AuthToken)
-  options.addToken(token)
+  options.addToken()
   const response = await fetch(URLS.ACCOUNT, options.data)
   const { data } = await response.json()
 

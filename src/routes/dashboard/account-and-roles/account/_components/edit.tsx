@@ -17,9 +17,9 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer'
-import { useAccount } from '@/utils/api/use-account'
+import { useAccount, useEditAccount } from '@/utils/api/use-account'
 import { useForm } from 'react-hook-form'
-import { userSchema } from '../schema'
+import { userSchema } from './schema'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
@@ -32,6 +32,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { delay } from '@/utils/delay'
 
 const text = {
   title: 'Edit Account',
@@ -42,7 +43,10 @@ type Props = {
   id?: number
 }
 export default function Edit(props: Props) {
+  const { mutate } = useEditAccount()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isPending, setIsPending] = useState<boolean>(false)
+
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -61,8 +65,17 @@ export default function Edit(props: Props) {
     }
   }, [isLoading, data])
 
-  const onSubmit = (data: z.infer<typeof userSchema>) => {
-    console.log(data)
+  const onSubmit = async (data: z.infer<typeof userSchema>) => {
+    mutate({ payload: data, id: Number(props.id) })
+    
+    setIsPending(true)
+    delay(400).then(() => {
+      setIsPending(false)
+    })
+
+    delay(600).then(() => {
+      setIsOpen(false)
+    })
   }
 
   if (isSmall) {
@@ -194,7 +207,9 @@ export default function Edit(props: Props) {
                 )}
               />
               <DialogFooter>
-                <Button type='submit'>Save changes</Button>
+                <Button type='submit'>
+                  {isPending ? 'loading' : 'Save changes'}
+                </Button>
               </DialogFooter>
             </form>
           </Form>

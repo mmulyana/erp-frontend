@@ -1,3 +1,5 @@
+import { CookieKeys, CookieStorage } from './cookie'
+
 export default class fetchOptions {
   public data: any
 
@@ -11,7 +13,8 @@ export default class fetchOptions {
     }
   }
 
-  addToken(token: string) {
+  addToken() {
+    const token = CookieStorage.get(CookieKeys.AuthToken)
     this.data.headers.Authorization = 'Bearer ' + token
   }
 }
