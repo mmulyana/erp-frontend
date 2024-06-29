@@ -1,25 +1,9 @@
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { Button } from '@/components/ui/button'
 import { AlertCircle, Pencil, XIcon } from 'lucide-react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from '@/components/ui/drawer'
 import { useAccount, useEditAccount } from '@/utils/api/use-account'
 import { useForm } from 'react-hook-form'
-import { userSchema } from './schema'
+import { userEditSchema } from './schema'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useMemo, useState } from 'react'
@@ -36,6 +20,7 @@ import { delay } from '@/utils/delay'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { useRoles } from '@/utils/api/use-roles'
 import { Combobox } from '@/components/combobox'
+import ResponsiveModal from '@/components/responsive-modal.tsx'
 
 const text = {
   title: 'Edit Account',
@@ -51,8 +36,8 @@ export default function Edit(props: Props) {
   const [isPending, setIsPending] = useState<boolean>(false)
   const [errorBanner, setErrorBanner] = useState<string>('')
 
-  const form = useForm<z.infer<typeof userSchema>>({
-    resolver: zodResolver(userSchema),
+  const form = useForm<z.infer<typeof userEditSchema>>({
+    resolver: zodResolver(userEditSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -63,7 +48,6 @@ export default function Edit(props: Props) {
     form.setValue('rolesId', Number(value))
   }
 
-  const isSmall = useMediaQuery('only screen and (max-width : 768px)')
   const { data, isLoading } = useAccount(props.id)
   const { data: dataRoles, isLoading: rolesIsLoading } = useRoles()
 
@@ -88,7 +72,7 @@ export default function Edit(props: Props) {
     return () => setErrorBanner('')
   }, [isOpen])
 
-  const onSubmit = async (data: z.infer<typeof userSchema>) => {
+  const onSubmit = async (data: z.infer<typeof userEditSchema>) => {
     mutate(
       { payload: data, id: Number(props.id) },
       {
@@ -109,195 +93,103 @@ export default function Edit(props: Props) {
     )
   }
 
-  if (isSmall) {
-    return (
-      <>
-        <Button
-          variant='ghost'
-          className='text-gray-400 hover:text-gray-800'
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <Pencil className='h-4 w-4' />
-        </Button>
-        <Drawer open={isOpen} onOpenChange={setIsOpen}>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>{text.title}</DrawerTitle>
-              <DrawerDescription>{text.body}</DrawerDescription>
-            </DrawerHeader>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className='w-full flex flex-col gap-4 px-4'
-              >
-                <div>
-                  {errorBanner !== '' && (
-                    <Alert
-                      variant='destructive'
-                      className='py-2 h-fit bg-red-100'
-                    >
-                      <AlertCircle className='h-4 w-4 absolute !top-1/2 -translate-y-1/2' />
-                      <AlertTitle className='m-0 text-base leading-none font-normal'>
-                        {errorBanner}
-                        <XIcon
-                          className='h-4 w-4 text-red-500 -translate-y-1/2 absolute top-1/2 right-2 cursor-pointer'
-                          onClick={() => setErrorBanner('')}
-                        />
-                      </AlertTitle>
-                    </Alert>
-                  )}
-                </div>
-                <FormField
-                  control={form.control}
-                  name='name'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nama</FormLabel>
-                      <div className='relative'>
-                        <FormControl>
-                          <Input placeholder='Name' {...field} />
-                        </FormControl>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='email'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <div className='relative'>
-                        <FormControl>
-                          <Input
-                            placeholder='Email'
-                            {...field}
-                            autoComplete='none'
-                          />
-                        </FormControl>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Combobox
-                  data={roles || []}
-                  placeholder='Role'
-                  setValue={setSelect}
-                  value={form.watch('rolesId')?.toString()}
-                />
-                <DrawerFooter className='grid grid-cols-2 px-0 gap-4'>
-                  <Button
-                    type='button'
-                    onClick={() => setIsOpen(false)}
-                    variant='outline'
-                    className='w-full'
-                  >
-                    Cancel
-                  </Button>
-                  <Button type='submit'>
-                    {isPending ? 'loading' : 'Save changes'}
-                  </Button>
-                </DrawerFooter>
-              </form>
-            </Form>
-          </DrawerContent>
-        </Drawer>
-      </>
-    )
-  }
-
   return (
     <>
       <Button
-        onClick={() => setIsOpen(!isOpen)}
         variant='ghost'
         className='text-gray-400 hover:text-gray-800'
+        onClick={() => setIsOpen(!isOpen)}
       >
         <Pencil className='h-4 w-4' />
       </Button>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className='sm:max-w-[480px]'>
-          <DialogHeader>
-            <DialogTitle>{text.title}</DialogTitle>
-            <DialogDescription>{text.body}</DialogDescription>
-          </DialogHeader>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className='w-full flex flex-col gap-4'
-            >
-              <div>
-                {errorBanner !== '' && (
-                  <Alert
-                    variant='destructive'
-                    className='py-2 h-fit bg-red-100'
-                  >
-                    <AlertCircle className='h-4 w-4 absolute !top-1/2 -translate-y-1/2' />
-                    <AlertTitle className='m-0 text-base leading-none font-normal'>
-                      {errorBanner}
-                      <XIcon
-                        className='h-4 w-4 text-red-500 -translate-y-1/2 absolute top-1/2 right-2 cursor-pointer'
-                        onClick={() => setErrorBanner('')}
+      <ResponsiveModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title={text.title}
+        body={text.body}
+      >
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='w-full flex flex-col gap-4'
+          >
+            <div>
+              {errorBanner !== '' && (
+                <Alert variant='destructive' className='py-2 h-fit bg-red-100'>
+                  <AlertCircle className='h-4 w-4 absolute !top-1/2 -translate-y-1/2' />
+                  <AlertTitle className='m-0 text-base leading-none font-normal'>
+                    {errorBanner}
+                    <XIcon
+                      className='h-4 w-4 text-red-500 -translate-y-1/2 absolute top-1/2 right-2 cursor-pointer'
+                      onClick={() => setErrorBanner('')}
+                    />
+                  </AlertTitle>
+                </Alert>
+              )}
+            </div>
+
+            <FormField
+              control={form.control}
+              name='name'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nama</FormLabel>
+                  <div className='relative'>
+                    <FormControl>
+                      <Input placeholder='Name' {...field} />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <div className='relative'>
+                    <FormControl>
+                      <Input
+                        placeholder='Email'
+                        {...field}
+                        autoComplete='none'
                       />
-                    </AlertTitle>
-                  </Alert>
-                )}
-              </div>
-              <FormField
-                control={form.control}
-                name='name'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nama</FormLabel>
-                    <div className='relative'>
-                      <FormControl>
-                        <Input placeholder='Name' {...field} />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormItem className='flex flex-col'>
+              <FormLabel>Role</FormLabel>
+              <Combobox
+                data={roles || []}
+                placeholder='Role'
+                setValue={setSelect}
+                value={form.watch('rolesId')?.toString()}
               />
-              <FormField
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <div className='relative'>
-                      <FormControl>
-                        <Input
-                          placeholder='Email'
-                          {...field}
-                          autoComplete='none'
-                        />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormItem className='flex flex-col'>
-                <FormLabel>Role</FormLabel>
-                <Combobox
-                  data={roles || []}
-                  placeholder='Role'
-                  setValue={setSelect}
-                  value={form.watch('rolesId')?.toString()}
-                />
-                <FormMessage />
-              </FormItem>
-              <DialogFooter>
-                <Button type='submit'>
-                  {isPending ? 'loading' : 'Save changes'}
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+            </FormItem>
+
+            <div className='md:flex md:justify-end grid grid-cols-2 px-0 gap-4'>
+              <Button
+                type='button'
+                onClick={() => setIsOpen(false)}
+                variant='outline'
+                className='w-full block md:hidden'
+              >
+                Cancel
+              </Button>
+              <Button type='submit'>
+                {isPending ? 'loading' : 'Save changes'}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </ResponsiveModal>
     </>
   )
 }
