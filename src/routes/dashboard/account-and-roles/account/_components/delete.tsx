@@ -18,9 +18,11 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer'
 import { useState } from 'react'
+import { useDeleteAccount } from '@/utils/api/use-account'
+import { delay } from '@/utils/delay'
 
 type Props = {
-  id?: number
+  id: number
 }
 
 let text = {
@@ -30,7 +32,29 @@ let text = {
 
 export default function Delete(props: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isPending, setIsPending] = useState<boolean>(false)
+
   const isSmall = useMediaQuery('only screen and (max-width : 768px)')
+
+  const { mutate } = useDeleteAccount()
+
+  const submit = () => {
+    mutate(
+      { id: props.id },
+      {
+        onSuccess: () => {
+          setIsPending(true)
+          delay(400).then(() => {
+            setIsPending(false)
+          })
+
+          delay(600).then(() => {
+            setIsOpen(false)
+          })
+        },
+      }
+    )
+  }
 
   if (isSmall) {
     return (
@@ -58,8 +82,8 @@ export default function Delete(props: Props) {
               >
                 Cancel
               </Button>
-              <Button type='submit' variant='destructive'>
-                Delete
+              <Button onClick={submit} variant='destructive'>
+                {isPending ? 'loading' : 'Delete'}
               </Button>
             </DrawerFooter>
           </DrawerContent>
@@ -92,8 +116,8 @@ export default function Delete(props: Props) {
             >
               Cancel
             </Button>
-            <Button type='submit' variant='destructive'>
-              Delete
+            <Button onClick={submit} variant='destructive'>
+              {isPending ? 'loading' : 'Delete'}
             </Button>
           </DialogFooter>
         </DialogContent>

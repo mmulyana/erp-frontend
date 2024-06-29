@@ -196,7 +196,9 @@ export default function Edit(props: Props) {
                   >
                     Cancel
                   </Button>
-                  <Button type='submit'>Save changes</Button>
+                  <Button type='submit'>
+                    {isPending ? 'loading' : 'Save changes'}
+                  </Button>
                 </DrawerFooter>
               </form>
             </Form>

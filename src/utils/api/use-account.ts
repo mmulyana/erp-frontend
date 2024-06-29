@@ -44,6 +44,19 @@ export const useEditAccount = () => {
   })
 }
 
+export const useDeleteAccount = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id }: { id: number }) => fetcherDeleteAccount(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACCOUNTS],
+      })
+    },
+  })
+}
+
 type EditPayload = Pick<User, 'email' | 'name'> & {
   password?: string
   rolesId?: number
@@ -62,7 +75,20 @@ const fetcherEditAccount = async ({
   const response = await fetch(`${URLS.ACCOUNT}/${id}`, options.data)
   let data = await response.json()
   if (!response.ok) {
-    throw new Error(data.message || 'Failed to update account')
+    throw new Error(data.message)
+  }
+
+  return data
+}
+
+const fetcherDeleteAccount = async (id: number) => {
+  const options = new fetchOptions('DELETE')
+  options.addToken()
+
+  const response = await fetch(`${URLS.ACCOUNT}/${id}`, options.data)
+  let data = await response.json()
+  if (!response.ok) {
+    throw new Error(data.message)
   }
 
   return data
