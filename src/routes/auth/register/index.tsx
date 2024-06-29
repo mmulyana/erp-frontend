@@ -18,11 +18,13 @@ import { Alert, AlertTitle } from '@/components/ui/alert'
 import { useDebounce } from '@uidotdev/usehooks'
 import { AlertCircle, CheckCircle, Eye, EyeOff, XIcon } from 'lucide-react'
 import Logo from '/public/erp-logo.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
 import { registerSchema } from '../_schemas/register.schema'
 import fetchOptions from '@/utils/fetch-options'
 import { URLS } from '@/utils/constant/_urls'
+import { delay } from '@/utils/delay'
+import { toast } from 'sonner'
 
 type Payload = {
   name: string
@@ -42,6 +44,7 @@ export default function Register() {
   const [isPassword, setIsPassword] = useState(false)
   const [isConfirmPassword, setIsConfirmPassword] = useState(false)
   const [isAvailable, setIsAvailable] = useState<Record<string, boolean>>({})
+  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -71,6 +74,11 @@ export default function Register() {
     } else {
       setErrorBanner('')
     }
+
+    delay(500).then(() => {
+      toast(response.message)
+    })
+    navigate(PATH.LOGIN)
   }
 
   const checkIsAvailable = async (value: string, type: 'email' | 'name') => {
@@ -210,7 +218,7 @@ export default function Register() {
                       placeholder='password'
                       {...field}
                       autoComplete='none'
-                      type={isPassword ? 'password' : 'text'}
+                      type={!isPassword ? 'password' : 'text'}
                     />
                   </FormControl>
                   <Button
@@ -242,7 +250,7 @@ export default function Register() {
                       placeholder='password'
                       {...field}
                       autoComplete='none'
-                      type={isConfirmPassword ? 'password' : 'text'}
+                      type={!isConfirmPassword ? 'password' : 'text'}
                     />
                   </FormControl>
                   <Button

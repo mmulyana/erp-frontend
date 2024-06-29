@@ -22,6 +22,8 @@ import { AlertCircle, Eye, EyeOff, XIcon } from 'lucide-react'
 import Logo from '/public/erp-logo.svg'
 import { Link, useNavigate } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
+import { delay } from '@/utils/delay'
+import { toast } from 'sonner'
 
 type Payload = {
   name?: string
@@ -55,14 +57,17 @@ export default function Login() {
     }
 
     const response = await logIn(payload)
-    
+
     if (response?.message?.includes('Invalid')) {
       setErrorBanner('Email atau password salah')
       return
     } else {
       setErrorBanner('')
     }
-
+    
+    delay(500).then(() => {
+      toast(response.message)
+    })
     navigate(PATH.DASHBOARD)
   }
 
