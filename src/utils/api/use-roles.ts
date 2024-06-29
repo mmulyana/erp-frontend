@@ -1,17 +1,60 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { KEYS } from '../constant/_keys'
-import fetchOptions from '../fetch-options'
-import { URLS } from '../constant/_urls'
+import {
+  fetcherCreateRoles,
+  fetcherDeleteRoles,
+  fetcherRole,
+  fetcherRoles,
+  fetcherUpdateRoles,
+} from './fetcher/fetcher-roles'
 
 export const useRoles = () => {
-  return useQuery({ queryKey: [KEYS.ROLES], queryFn: () => fetcherRoles() })
+  return useQuery({ queryKey: [KEYS.ROLES], queryFn: fetcherRoles })
 }
 
-const fetcherRoles = async () => {
-  const options = new fetchOptions('GET')
-  options.addToken()
-  const response = await fetch(URLS.ROLES, options.data)
-  const { data } = await response.json()
+export const useRole = (id?: number) => {
+  return useQuery({
+    queryKey: [KEYS.ROLES, id],
+    queryFn: () => fetcherRole(id),
+    enabled: !!id,
+  })
+}
 
-  return data.roles
+export const useUpdateRoles = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: fetcherUpdateRoles,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ROLES],
+      })
+    },
+  })
+}
+
+export const useDeleteRoles = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: fetcherDeleteRoles,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ROLES],
+      })
+    },
+  })
+}
+
+export const useCreateRoles = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: fetcherCreateRoles,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ROLES],
+      })
+    },
+  })
 }
