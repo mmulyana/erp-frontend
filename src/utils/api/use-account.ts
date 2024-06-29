@@ -57,6 +57,39 @@ export const useDeleteAccount = () => {
   })
 }
 
+export const useCreateAccount = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: fetcherCreateAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACCOUNTS],
+      })
+    },
+  })
+}
+
+type createFetcherPayload = {
+  name: string
+  email: string
+  rolesId?: number
+  password?: string
+}
+
+const fetcherCreateAccount = async (payload: createFetcherPayload) => {
+  const options = new fetchOptions('POST', JSON.stringify(payload))
+  options.addToken()
+
+  const response = await fetch(`${URLS.ACCOUNT}`, options.data)
+  let data = await response.json()
+  if (!response.ok) {
+    throw new Error(data.message)
+  }
+
+  return data
+}
+
 type EditPayload = Pick<User, 'email' | 'name'> & {
   password?: string
   rolesId?: number
@@ -102,6 +135,7 @@ const fetcherUserAccount = async (id: number | undefined) => {
 
   return data.user
 }
+
 const fetcherAccounts = async () => {
   const options = new fetchOptions('GET')
   options.addToken()
