@@ -8,4 +8,5 @@ export const URLS = {
   CHECK_NAME: V1 + '/auth/check/name',
   ACCOUNT: V1 + '/account',
   ROLES: V1 + '/roles',
+  PERMISSION_GROUP: V1 + '/permission-group',
 }
