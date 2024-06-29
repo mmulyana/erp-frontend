@@ -79,9 +79,10 @@
   height: 4px;
   width: 130px;
   --c: no-repeat linear-gradient(#4154FA 0 0);
-  background: var(--c), var(--c), #d7b8fc;
+  background: var(--c), var(--c), #dadada;
   background-size: 60% 100%;
   animation: l16 3s infinite;
+  border-radius: 80px;
 }
 @keyframes l16 {
   0% {

@@ -2,6 +2,7 @@ import { PATH } from '@/utils/constant/_paths.ts'
 import { Route } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import LoadingScreen from '@/components/loading-screen/index.tsx'
+import Protected from './_components/protected.tsx'
 
 const Login = lazy(() => import('./login/index.tsx'))
 const Register = lazy(() => import('./register/index.tsx'))
@@ -37,7 +38,9 @@ export default function AuthRoutes() {
           key={index}
           path={route.path}
           element={
-            <Suspense fallback={<LoadingScreen />}>{route.element}</Suspense>
+            <Suspense fallback={<LoadingScreen />}>
+              <Protected>{route.element}</Protected>
+            </Suspense>
           }
         />
       ))}
