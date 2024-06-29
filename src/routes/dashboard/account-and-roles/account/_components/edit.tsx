@@ -53,7 +53,7 @@ export default function Edit(props: Props) {
 
   const roles = useMemo(() => {
     if (rolesIsLoading) return []
-    return dataRoles.map((role: { name: string; id: number }) => ({
+    return dataRoles?.data.data.roles.map((role: { name: string; id: number }) => ({
       label: role.name,
       value: role.id.toString(),
     }))
