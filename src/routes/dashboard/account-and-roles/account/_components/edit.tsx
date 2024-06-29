@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { Button } from '@/components/ui/button'
-import { Pencil } from 'lucide-react'
+import { AlertCircle, Pencil, XIcon } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -22,7 +22,7 @@ import { useForm } from 'react-hook-form'
 import { userSchema } from './schema'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Form,
   FormControl,
@@ -33,6 +33,9 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { delay } from '@/utils/delay'
+import { Alert, AlertTitle } from '@/components/ui/alert'
+import { useRoles } from '@/utils/api/use-roles'
+import { Combobox } from '@/components/combobox'
 
 const text = {
   title: 'Edit Account',
@@ -46,6 +49,7 @@ export default function Edit(props: Props) {
   const { mutate } = useEditAccount()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isPending, setIsPending] = useState<boolean>(false)
+  const [errorBanner, setErrorBanner] = useState<string>('')
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
@@ -55,27 +59,54 @@ export default function Edit(props: Props) {
     },
   })
 
+  const setSelect = (value: string) => {
+    form.setValue('rolesId', Number(value))
+  }
+
   const isSmall = useMediaQuery('only screen and (max-width : 768px)')
-  const { isLoading, data } = useAccount(props.id)
+  const { data, isLoading } = useAccount(props.id)
+  const { data: dataRoles, isLoading: rolesIsLoading } = useRoles()
+
+  const roles = useMemo(() => {
+    if (rolesIsLoading) return []
+    return dataRoles.map((role: { name: string; id: number }) => ({
+      label: role.name,
+      value: role.id.toString(),
+    }))
+  }, [dataRoles, rolesIsLoading])
 
   useEffect(() => {
     if (!isLoading) {
       form.setValue('name', data.name)
       form.setValue('email', data.email)
+      form.setValue('rolesId', data.roles.id)
     }
   }, [isLoading, data])
 
-  const onSubmit = async (data: z.infer<typeof userSchema>) => {
-    mutate({ payload: data, id: Number(props.id) })
-    
-    setIsPending(true)
-    delay(400).then(() => {
-      setIsPending(false)
-    })
+  useEffect(() => {
+    if (!isOpen) setErrorBanner('')
+    return () => setErrorBanner('')
+  }, [isOpen])
 
-    delay(600).then(() => {
-      setIsOpen(false)
-    })
+  const onSubmit = async (data: z.infer<typeof userSchema>) => {
+    mutate(
+      { payload: data, id: Number(props.id) },
+      {
+        onError: (error: any) => {
+          setErrorBanner(error.message)
+        },
+        onSuccess: () => {
+          setIsPending(true)
+          delay(400).then(() => {
+            setIsPending(false)
+          })
+
+          delay(600).then(() => {
+            setIsOpen(false)
+          })
+        },
+      }
+    )
   }
 
   if (isSmall) {
@@ -99,6 +130,23 @@ export default function Edit(props: Props) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className='w-full flex flex-col gap-4 px-4'
               >
+                <div>
+                  {errorBanner !== '' && (
+                    <Alert
+                      variant='destructive'
+                      className='py-2 h-fit bg-red-100'
+                    >
+                      <AlertCircle className='h-4 w-4 absolute !top-1/2 -translate-y-1/2' />
+                      <AlertTitle className='m-0 text-base leading-none font-normal'>
+                        {errorBanner}
+                        <XIcon
+                          className='h-4 w-4 text-red-500 -translate-y-1/2 absolute top-1/2 right-2 cursor-pointer'
+                          onClick={() => setErrorBanner('')}
+                        />
+                      </AlertTitle>
+                    </Alert>
+                  )}
+                </div>
                 <FormField
                   control={form.control}
                   name='name'
@@ -132,6 +180,12 @@ export default function Edit(props: Props) {
                       <FormMessage />
                     </FormItem>
                   )}
+                />
+                <Combobox
+                  data={roles || []}
+                  placeholder='Role'
+                  setValue={setSelect}
+                  value={form.watch('rolesId')?.toString()}
                 />
                 <DrawerFooter className='grid grid-cols-2 px-0 gap-4'>
                   <Button
@@ -172,6 +226,23 @@ export default function Edit(props: Props) {
               onSubmit={form.handleSubmit(onSubmit)}
               className='w-full flex flex-col gap-4'
             >
+              <div>
+                {errorBanner !== '' && (
+                  <Alert
+                    variant='destructive'
+                    className='py-2 h-fit bg-red-100'
+                  >
+                    <AlertCircle className='h-4 w-4 absolute !top-1/2 -translate-y-1/2' />
+                    <AlertTitle className='m-0 text-base leading-none font-normal'>
+                      {errorBanner}
+                      <XIcon
+                        className='h-4 w-4 text-red-500 -translate-y-1/2 absolute top-1/2 right-2 cursor-pointer'
+                        onClick={() => setErrorBanner('')}
+                      />
+                    </AlertTitle>
+                  </Alert>
+                )}
+              </div>
               <FormField
                 control={form.control}
                 name='name'
@@ -206,6 +277,16 @@ export default function Edit(props: Props) {
                   </FormItem>
                 )}
               />
+              <FormItem className='flex flex-col'>
+                <FormLabel>Role</FormLabel>
+                <Combobox
+                  data={roles || []}
+                  placeholder='Role'
+                  setValue={setSelect}
+                  value={form.watch('rolesId')?.toString()}
+                />
+                <FormMessage />
+              </FormItem>
               <DialogFooter>
                 <Button type='submit'>
                   {isPending ? 'loading' : 'Save changes'}
