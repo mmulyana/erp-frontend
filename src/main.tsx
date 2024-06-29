@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Routers from './routes'
 import './globals.css'
+import NotificationWrapper from './utils/notification'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,9 +18,11 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routers />
-      </BrowserRouter>
+      <NotificationWrapper>
+        <BrowserRouter>
+          <Routers />
+        </BrowserRouter>
+      </NotificationWrapper>
     </QueryClientProvider>
   </React.StrictMode>
 )
