@@ -8,8 +8,6 @@ export default function Dashboard() {
   const user = useAtomValue(userAtom)
   const { data } = useUserAccount(user?.id)
 
-  console.log(data)
-
   return (
     <>
       <p>Dashboard</p>
