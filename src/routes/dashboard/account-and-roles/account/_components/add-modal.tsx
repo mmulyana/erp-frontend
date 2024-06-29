@@ -48,7 +48,7 @@ export default function AddModal(props: Props) {
 
   const roles = useMemo(() => {
     if (isLoading) return []
-    return data.map((role: { name: string; id: number }) => ({
+    return data?.data?.data?.roles.map((role: { name: string; id: number }) => ({
       label: role.name,
       value: role.id.toString(),
     }))
