@@ -6,7 +6,7 @@ import { delay } from '@/utils/delay'
 import ResponsiveModal from '@/components/responsive-modal.tsx'
 
 type Props = {
-  id: number
+  id?: number
 }
 
 let TEXT = {
@@ -21,6 +21,7 @@ export default function Delete(props: Props) {
   const { mutate } = useDeleteAccount()
 
   const submit = () => {
+    if(!props.id) return
     mutate(
       { id: props.id },
       {
