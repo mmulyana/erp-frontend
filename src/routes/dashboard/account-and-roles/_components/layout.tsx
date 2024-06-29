@@ -33,7 +33,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
                 },
                 {
                   title: 'Roles',
-                  label: dataRoles?.length || '0',
+                  label: dataRoles?.data.data.roles.length || '0',
                   icon: KeyRound,
                   path: PATH.ROLES,
                 },

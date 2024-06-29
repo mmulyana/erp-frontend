@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useAccounts } from '@/utils/api/use-account'
 import { Plus, Users2 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -5,13 +6,12 @@ import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/data-table'
 import { columns } from './_components/columns'
 import Layout from '../_components/layout'
-import { useState } from 'react'
 import AddModal from './_components/add-modal'
 
 export default function Account() {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-
   const { data } = useAccounts()
+
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   return (
     <>
