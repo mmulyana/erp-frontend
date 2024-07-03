@@ -1,14 +1,31 @@
 import Navbar from '@/components/navbar'
 import { useAccounts } from '@/utils/api/use-account'
+import { usePermissionGroup } from '@/utils/api/use-permission'
 import { useRoles } from '@/utils/api/use-roles'
 import { PATH } from '@/utils/constant/_paths'
 import { Separator } from '@radix-ui/react-separator'
 import { KeyRound, Shield, Users2 } from 'lucide-react'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 export default function Layout({ children }: React.PropsWithChildren) {
-  const { data: dataAccounts } = useAccounts()
-  const { data: dataRoles } = useRoles()
+  const { data: dataAccounts, isLoading: isLoadingAccount } = useAccounts()
+  const { data: dataRoles, isLoading: isLoadingRoles } = useRoles()
+  const { data: dataGroups, isLoading: isLoadingGroup } = usePermissionGroup()
+
+  const groups = useMemo(() => {
+    if (isLoadingGroup) return '0'
+    return dataGroups?.data.data.groups.length
+  }, [dataGroups])
+
+  const accounts = useMemo(() => {
+    if (isLoadingAccount) return '0'
+    return dataAccounts?.length
+  }, [dataAccounts])
+
+  const roles = useMemo(() => {
+    if (isLoadingRoles) return '0'
+    return dataRoles?.data.data.roles.length
+  }, [dataRoles])
 
   return (
     <>
@@ -27,22 +44,22 @@ export default function Layout({ children }: React.PropsWithChildren) {
               links={[
                 {
                   title: 'Users',
-                  label: dataAccounts?.length || '0',
+                  label: accounts?.toString(),
                   icon: Users2,
                   path: PATH.ACCOUNT,
                 },
                 {
                   title: 'Roles',
-                  label: dataRoles?.data.data.roles.length || '0',
+                  label: roles?.toString(),
                   icon: KeyRound,
                   path: PATH.ROLES,
                 },
                 {
-                  title: "Permission",
-                  label: "",
+                  title: 'Permission',
+                  label: groups?.toString(),
                   icon: Shield,
-                  path: PATH.ROLES_PERMISSION
-                }
+                  path: PATH.ROLES_PERMISSION,
+                },
               ]}
             />
           </div>
