@@ -7,6 +7,9 @@ import ProtectedRoute from '@/utils/protected-route.tsx'
 const Main = lazy(() => import('./main/index.tsx'))
 const Account = lazy(() => import('./account-and-roles/account/index.tsx'))
 const Roles = lazy(() => import('./account-and-roles/roles/index.tsx'))
+const Permission = lazy(
+  () => import('./account-and-roles/permission/index.tsx')
+)
 
 const useRoutes = () => {
   return [
@@ -23,6 +26,11 @@ const useRoutes = () => {
     {
       path: PATH.ROLES,
       element: <Roles />,
+      show: true,
+    },
+    {
+      path: PATH.ROLES_PERMISSION,
+      element: <Permission />,
       show: true,
     },
   ]

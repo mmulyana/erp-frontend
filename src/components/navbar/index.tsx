@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn'
 import { LucideIcon } from 'lucide-react'
-import { Link, matchPath, useLocation } from 'react-router-dom'
+import { Link, matchPath, useLocation, useMatch } from 'react-router-dom'
 import { buttonVariants } from '../ui/button'
 
 interface navVertical {
@@ -36,7 +36,9 @@ function NavbarVertical(props: navVertical) {
               key={index}
               to={link.path}
               className={cn(
-                buttonVariants({ variant: isActive ? 'secondary' : null }),
+                buttonVariants({
+                  variant: !!isActive?.pathname ? 'secondary' : null,
+                }),
                 'rounded-lg flex justify-between items-center'
               )}
             >
@@ -47,8 +49,9 @@ function NavbarVertical(props: navVertical) {
               {link.label && (
                 <span
                   className={cn(
-                    'font-normal',
-                    isActive ? 'text-neutral-800' : 'text-neutral-300'
+                    !!isActive?.pathname
+                      ? 'text-neutral-800'
+                      : 'text-neutral-400'
                   )}
                 >
                   {link.label}
