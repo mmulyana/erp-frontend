@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn'
 import { LucideIcon } from 'lucide-react'
-import { Link, matchPath, useLocation, useMatch } from 'react-router-dom'
+import { Link, matchPath, useLocation } from 'react-router-dom'
 import { buttonVariants } from '../ui/button'
 
 interface navVertical {
