@@ -1,10 +1,23 @@
 import { useQuery } from '@tanstack/react-query'
 import { KEYS } from '../constant/_keys'
-import { fetcherPermissionGroup } from './fetcher/fetcher-permission'
+import {
+  fetcherPermissionsGroup,
+  fetcherPermissionGroup,
+} from './fetcher/fetcher-permission'
 
-export const usePermissionGroup = () => {
+export const usePermissionsGroup = () => {
   return useQuery({
     queryKey: [KEYS.PERMISSION_GROUP],
-    queryFn: fetcherPermissionGroup,
+    queryFn: fetcherPermissionsGroup,
   })
 }
+
+export const usePermissionGroup = (id: number) => {
+  return useQuery({
+    queryKey: [KEYS.PERMISSION_GROUP, id],
+    queryFn: () => fetcherPermissionGroup(id),
+    enabled: !!id
+  })
+}
+
+
