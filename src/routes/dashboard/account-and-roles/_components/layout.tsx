@@ -1,6 +1,6 @@
 import Navbar from '@/components/navbar'
 import { useAccounts } from '@/utils/api/use-account'
-import { usePermissionGroup } from '@/utils/api/use-permission'
+import { usePermissionsGroup } from '@/utils/api/use-permission'
 import { useRoles } from '@/utils/api/use-roles'
 import { PATH } from '@/utils/constant/_paths'
 import { Separator } from '@radix-ui/react-separator'
@@ -10,7 +10,7 @@ import React, { useMemo } from 'react'
 export default function Layout({ children }: React.PropsWithChildren) {
   const { data: dataAccounts, isLoading: isLoadingAccount } = useAccounts()
   const { data: dataRoles, isLoading: isLoadingRoles } = useRoles()
-  const { data: dataGroups, isLoading: isLoadingGroup } = usePermissionGroup()
+  const { data: dataGroups, isLoading: isLoadingGroup } = usePermissionsGroup()
 
   const groups = useMemo(() => {
     if (isLoadingGroup) return '0'
