@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { ScrollArea } from '../ui/scroll-area'
 
 type Props = {
   isOpen: boolean
@@ -37,7 +38,9 @@ export default function ResponsiveModal({
             <DrawerTitle>{props.title}</DrawerTitle>
             <DrawerDescription>{props.body}</DrawerDescription>
           </DrawerHeader>
-          <div className='p-4'>{children}</div>
+          <ScrollArea className='h-72 w-full p-4 pb-10 shadow-inner'>
+            {children}
+          </ScrollArea>
         </DrawerContent>
       </Drawer>
     )
@@ -46,11 +49,11 @@ export default function ResponsiveModal({
   return (
     <Dialog open={props.isOpen} onOpenChange={props.setIsOpen}>
       <DialogContent className={props.className?.dialog}>
-        <DialogHeader>
+        <DialogHeader className='px-4'>
           <DialogTitle>{props.title}</DialogTitle>
           <DialogDescription>{props.body}</DialogDescription>
         </DialogHeader>
-        {children}
+        <ScrollArea className='max-h-80 w-full px-5'>{children}</ScrollArea>
       </DialogContent>
     </Dialog>
   )
