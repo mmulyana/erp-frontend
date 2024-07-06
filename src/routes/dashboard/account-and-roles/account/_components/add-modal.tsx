@@ -93,7 +93,7 @@ export default function AddModal(props: Props) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='w-full flex flex-col gap-4'
+          className='w-full flex flex-col gap-4 px-1'
         >
           <div>
             {errorBanner !== '' && (

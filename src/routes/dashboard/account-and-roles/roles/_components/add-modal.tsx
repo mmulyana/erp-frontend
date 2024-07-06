@@ -18,7 +18,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { delay } from '@/utils/delay'
 import { rolesCreateSchema } from './schema'
-import { usePermissionGroup } from '@/utils/api/use-permission'
+import { usePermissionsGroup } from '@/utils/api/use-permission'
 import { PermissionGroup } from '@/utils/types/permision-group'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
@@ -34,7 +34,7 @@ type Props = {
 }
 export default function AddModal(props: Props) {
   const { mutate } = useCreateRoles()
-  const { data } = usePermissionGroup()
+  const { data } = usePermissionsGroup()
 
   const [errorBanner, setErrorBanner] = useState<string>('')
   const [isPending, setIsPending] = useState<boolean>(false)
@@ -81,7 +81,7 @@ export default function AddModal(props: Props) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='w-full flex flex-col gap-4'
+          className='w-full flex flex-col gap-4 px-1'
         >
           <div>
             {errorBanner !== '' && (
