@@ -1,4 +1,3 @@
-import { useMediaQuery } from '@uidotdev/usehooks'
 import { Button } from '@/components/ui/button'
 import { AlertCircle, Pencil, XIcon } from 'lucide-react'
 import { useAccount, useEditAccount } from '@/utils/api/use-account'
