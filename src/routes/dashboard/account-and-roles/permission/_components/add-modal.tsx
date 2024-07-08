@@ -14,6 +14,10 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { useCreatePermissionGroup } from '@/utils/api/use-permission'
+import { createPGPayload } from '@/utils/api/fetcher/fetcher-permission'
+import { delay } from '@/utils/delay'
+import { toast } from 'sonner'
 
 type Props = {
   open: boolean
@@ -35,13 +39,29 @@ export default function AddModal(props: Props) {
     },
   })
 
+  const { mutate, isPending } = useCreatePermissionGroup()
+
   const { fields, append, remove } = useFieldArray({
     name: 'permissionNames',
     control: form.control,
   })
 
   const onSubmit = async (data: z.infer<typeof permissionCreateSchema>) => {
-    console.log(data)
+    const payload: createPGPayload = {
+      name: data.name,
+      description: data.description || '',
+      permissionNames:
+        data?.permissionNames?.map((permission) => permission.name.replace(/[\s-]+/g, "_")) || [],
+    }
+
+    mutate(payload, {
+      onError: (error: any) => {
+        toast(error)
+      },
+      onSuccess: () => {
+        delay(600).then(() => props.setOpen(false))
+      },
+    })
   }
 
   return (
@@ -114,8 +134,13 @@ export default function AddModal(props: Props) {
           </div>
 
           <div className='flex flex-end w-full'>
-            <Button type='submit' variant='default' className='block ml-auto'>
-              Simpan
+            <Button
+              type='submit'
+              variant='default'
+              className='block ml-auto'
+              disabled={isPending}
+            >
+              {isPending ? 'loading' : 'Simpan'}
             </Button>
           </div>
         </form>
