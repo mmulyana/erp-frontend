@@ -26,7 +26,6 @@ export const permissionUpdateSchema = z.object({
   newPermissionNames: z
     .array(
       z.object({
-        id: z.number(),
         name: z.string(),
       })
     )

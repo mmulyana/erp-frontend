@@ -2,7 +2,7 @@ import {
   usePermissionGroup,
   useUpdatePermissionGroup,
 } from '@/utils/api/use-permission'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { permissionUpdateSchema } from './schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
 
 const TEXT = {
   TITLE: 'Edit Permission',
@@ -30,7 +31,7 @@ type Props = {
   setOpen: (val: boolean) => void
 }
 export default function EditModal(props: Props) {
-  //   const { mutate, isPending } = useUpdatePermissionGroup()
+  const { mutate, isPending } = useUpdatePermissionGroup()
   const { data, isLoading } = usePermissionGroup(props.id)
 
   const form = useForm<z.infer<typeof permissionUpdateSchema>>({
@@ -43,12 +44,32 @@ export default function EditModal(props: Props) {
     },
   })
 
+  const { fields, remove } = useFieldArray({
+    name: 'permissionNames',
+    control: form.control,
+  })
+
+  const {
+    fields: fieldsNew,
+    append: appendNew,
+    remove: removeNew,
+  } = useFieldArray({
+    name: 'newPermissionNames',
+    control: form.control,
+  })
+
   useEffect(() => {
     if (props.open && !!props.id && !isLoading) {
-        const { name, description, permissions } = data?.data?.data.group[0]
-        form.setValue('name', name)
-        form.setValue('description', description)
-        form.setValue('permissionNames', permissions)
+      const { name, description, permissions } = data?.data?.data.group[0]
+      const newPermissions = permissions.map(
+        (permission: Record<string, number | string>) => ({
+          id: permission.id,
+          name: permission.name.toString().replace('_', ' '),
+        })
+      )
+      form.setValue('name', name)
+      form.setValue('description', description)
+      form.setValue('permissionNames', newPermissions)
     }
   }, [isLoading, data, props.open, props.id])
 
@@ -96,6 +117,71 @@ export default function EditModal(props: Props) {
                 </FormItem>
               )}
             />
+
+            <div>
+              <FormLabel>Nama Perizinan</FormLabel>
+              {fields.map((field, index) => (
+                <div key={field.id} className='message-item'>
+                  <div className='grid grid-cols-[1fr_40px] gap-4 mt-2'>
+                    <Input
+                      {...form.register(`permissionNames.${index}.name`)}
+                    />
+                    <Button
+                      type='button'
+                      variant='ghost'
+                      size='sm'
+                      onClick={() => remove(index)}
+                    >
+                      <span className='text-xs'>Hapus</span>
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <FormLabel>Perizinan Baru</FormLabel>
+
+              {fieldsNew.map((field, index) => (
+                <div key={field.id} className='message-item'>
+                  <div className='grid grid-cols-[1fr_40px] gap-4 mt-2'>
+                    <Input
+                      {...form.register(`newPermissionNames.${index}.name`)}
+                    />
+                    <Button
+                      type='button'
+                      variant='ghost'
+                      size='sm'
+                      onClick={() => removeNew(index)}
+                    >
+                      <span className='text-xs'>Hapus</span>
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <Button
+                type='button'
+                variant='secondary'
+                size='sm'
+                onClick={() => appendNew({ name: '' })}
+              >
+                Tambah
+              </Button>
+            </div>
+
+            <div className='flex flex-end w-full'>
+              <Button
+                type='submit'
+                variant='default'
+                className='block ml-auto'
+                disabled={isPending}
+              >
+                {isPending ? 'loading' : 'Simpan'}
+              </Button>
+            </div>
           </form>
         </Form>
       </ResponsiveModal>
