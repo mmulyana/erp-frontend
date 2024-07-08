@@ -4,6 +4,7 @@ import {
   fetcherPermissionsGroup,
   fetcherPermissionGroup,
   fetcherCreatePermissionGroup,
+  fetcherUpdatePermissionGroup,
 } from './fetcher/fetcher-permission'
 
 export const usePermissionsGroup = () => {
@@ -26,6 +27,19 @@ export const useCreatePermissionGroup = () => {
 
   return useMutation({
     mutationFn: fetcherCreatePermissionGroup,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PERMISSION_GROUP],
+      })
+    },
+  })
+}
+
+export const useUpdatePermissionGroup = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: fetcherUpdatePermissionGroup,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.PERMISSION_GROUP],
