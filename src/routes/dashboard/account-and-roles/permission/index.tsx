@@ -1,7 +1,7 @@
 import { Plus, Shield } from 'lucide-react'
 import Layout from '../_components/layout'
 import { usePermissionsGroup } from '@/utils/api/use-permission'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { PermissionGroup } from '@/utils/types/permision-group'
 import {
   Table,
@@ -14,15 +14,22 @@ import {
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import AddModal from './_components/add-modal'
+import EditModal from './_components/edit-modal'
 
 export default function Permission() {
   const { data, isLoading } = usePermissionsGroup()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false)
+  const [id, setId] = useState<number | undefined>(undefined)
 
   const groups = useMemo(() => {
     if (isLoading) return []
     return data?.data.data.groups
   }, [data])
+
+  useEffect(() => {
+    if (!isOpenEdit) setId(undefined)
+  }, [isOpenEdit])
 
   return (
     <>
@@ -66,6 +73,10 @@ export default function Permission() {
                   <Button
                     variant='secondary'
                     className='gap-1 flex items-center px-2 py-1.5 h-fit rounded hover:bg-gray-200'
+                    onClick={() => {
+                      setIsOpenEdit(!isOpenEdit)
+                      setId(group.id)
+                    }}
                   >
                     <Plus className='h-4 w-4' />{' '}
                     <span className='text-xs'>Edit</span>
@@ -106,6 +117,7 @@ export default function Permission() {
         </div>
       </Layout>
       <AddModal open={isOpen} setOpen={setIsOpen} />
+      <EditModal open={isOpenEdit} setOpen={setIsOpenEdit} id={id} />
     </>
   )
 }
