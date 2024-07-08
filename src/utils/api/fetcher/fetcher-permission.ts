@@ -6,6 +6,11 @@ export type createPGPayload = Pick<PermissionGroup, 'name' | 'description'> & {
   permissionNames: string[]
 }
 
+export type updatePGPayload = createPGPayload & {
+  id: number
+  newPermissionNames?: string[]
+}
+
 export const fetcherPermissionsGroup = async () => {
   return await http(URLS.PERMISSION_GROUP)
 }
@@ -18,4 +23,10 @@ export const fetcherCreatePermissionGroup = async (
   payload: createPGPayload
 ) => {
   return await http.post(URLS.PERMISSION_GROUP, payload)
+}
+
+export const fetcherUpdatePermissionGroup = async (
+  payload: updatePGPayload
+) => {
+  return await http.post(`${URLS.PERMISSION_GROUP}/${payload.id}`, payload)
 }
