@@ -6,7 +6,7 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { permissionUpdateSchema } from './schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ResponsiveModal from '@/components/responsive-modal.tsx'
 import {
   Form,
@@ -19,6 +19,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import DeleteModalPermission from './delete-modal-permission'
 
 const TEXT = {
   TITLE: 'Edit Permission',
@@ -33,6 +34,8 @@ type Props = {
 export default function EditModal(props: Props) {
   const { mutate, isPending } = useUpdatePermissionGroup()
   const { data, isLoading } = usePermissionGroup(props.id)
+  const [isOpen, setIsOpen] = useState(false)
+  const [id, setId] = useState<number | undefined>(undefined)
 
   const form = useForm<z.infer<typeof permissionUpdateSchema>>({
     resolver: zodResolver(permissionUpdateSchema),
@@ -75,6 +78,14 @@ export default function EditModal(props: Props) {
 
   const onSubmit = async (data: z.infer<typeof permissionUpdateSchema>) => {
     console.log(data)
+  }
+
+  const handleDeletePermission = (field: any) => {
+    const id = data?.data?.data.group[0].permissions.find(
+      (d: any) => d.name === field.name.replace(/[\s-]+/g, "_")
+    ).id
+    setIsOpen(true)
+    setId(id)
   }
 
   return (
@@ -130,7 +141,9 @@ export default function EditModal(props: Props) {
                       type='button'
                       variant='ghost'
                       size='sm'
-                      onClick={() => remove(index)}
+                      onClick={() => {
+                        handleDeletePermission(field)
+                      }}
                     >
                       <span className='text-xs'>Hapus</span>
                     </Button>
@@ -185,6 +198,8 @@ export default function EditModal(props: Props) {
           </form>
         </Form>
       </ResponsiveModal>
+
+      <DeleteModalPermission open={isOpen} setOpen={setIsOpen} id={id} />
     </>
   )
 }
