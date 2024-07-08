@@ -14,7 +14,7 @@ export const usePermissionsGroup = () => {
   })
 }
 
-export const usePermissionGroup = (id: number) => {
+export const usePermissionGroup = (id?: number) => {
   return useQuery({
     queryKey: [KEYS.PERMISSION_GROUP, id],
     queryFn: () => fetcherPermissionGroup(id),
