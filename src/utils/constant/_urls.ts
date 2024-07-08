@@ -9,4 +9,5 @@ export const URLS = {
   ACCOUNT: V1 + '/account',
   ROLES: V1 + '/roles',
   PERMISSION_GROUP: V1 + '/permission-group',
+  PERMISSION_CHECK: V1 + '/permission/check',
 }
