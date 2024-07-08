@@ -30,3 +30,7 @@ export const fetcherUpdatePermissionGroup = async (
 ) => {
   return await http.post(`${URLS.PERMISSION_GROUP}/${payload.id}`, payload)
 }
+
+export const fetcherDeletePermission = async (id: number) => {
+  return await http.delete(`${URLS.PERMISSION_GROUP}/${id}`)
+}
