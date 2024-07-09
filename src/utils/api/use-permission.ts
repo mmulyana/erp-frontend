@@ -6,6 +6,7 @@ import {
   fetcherCreatePermissionGroup,
   fetcherUpdatePermissionGroup,
   fetcherDeletePermission,
+  fetcherCheckPermission,
 } from './fetcher/fetcher-permission'
 
 export const usePermissionsGroup = () => {
@@ -49,15 +50,28 @@ export const useUpdatePermissionGroup = () => {
   })
 }
 
-export const useDeletePermission = (id: number) => {
+export const useDeletePermission = (id?: number) => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: () => fetcherDeletePermission(id),
+    mutationFn: fetcherDeletePermission,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.PERMISSION_GROUP, id],
       })
+
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PERMISSION_GROUP],
+      })
     },
+  })
+}
+
+// id for permission
+export const useCheckPermission = (id?: number) => {
+  return useQuery({
+    queryKey: [KEYS.PERMISSION_CHECK, id],
+    queryFn: () => fetcherCheckPermission(id),
+    enabled: !!id,
   })
 }
