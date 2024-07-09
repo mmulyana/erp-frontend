@@ -51,7 +51,9 @@ export default function AddModal(props: Props) {
       name: data.name,
       description: data.description || '',
       permissionNames:
-        data?.permissionNames?.map((permission) => permission.name.replace(/[\s-]+/g, "_")) || [],
+        data?.permissionNames
+          ?.filter((permission) => permission.name !== '')
+          .map((permission) => permission.name.replace(/[\s-]+/g, '_')) || [],
     }
 
     mutate(payload, {
