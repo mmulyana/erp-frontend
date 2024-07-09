@@ -6,75 +6,137 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { URLS } from '@/utils/constant/_urls'
-import http from '@/utils/http'
+import {
+  useCheckPermission,
+  useDeletePermission,
+} from '@/utils/api/use-permission'
+import { delay } from '@/utils/delay'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
+// id for permission group
 type Props = {
   id?: number
+  idGroup?: number
   open: boolean
   setOpen: (val: boolean) => void
 }
 
-type Response = {
-  count_role: number
-  count_account: number
-  roleNames: string[]
-}
-
 const TEXT = {
-  TITLE: 'Hapus perizinan ini',
+  TITLE: 'Hapus perizinan',
   BODY: '',
 }
 
 export default function DeleteModalPermission(props: Props) {
-  const [data, setData] = useState<Response>({
-    count_account: 0,
-    count_role: 0,
-    roleNames: [],
-  })
+  const { mutate, isPending } = useDeletePermission(props.idGroup)
+  const { data, isLoading } = useCheckPermission(props.id)
+  const [warning, setWarning] = useState(false)
 
-  async function checkPermission(id?: number) {
-    if (!id) return
-    const response = await http(`${URLS.PERMISSION_CHECK}/${id}`)
-    setData(response.data.data)
-    // console.log(response)
+  async function handleDelete() {
+    if (!props.id) toast('Silahkan pilih perizinan lagi')
+
+    mutate(props.id, {
+      onSuccess: () => {
+        toast('Perizinan ini berhasil dihapus')
+        delay(600).then(() => props.setOpen(false))
+      },
+      onError: (error) => {
+        toast(error.message)
+      },
+    })
   }
 
   useEffect(() => {
-    console.log('id', props.id)
-    if (props.open && !!props.id) checkPermission(props.id)
-  }, [props.open, props.id])
+    setWarning(false)
+  }, [])
 
-  console.log(data)
+  const isSaveToDelete =
+    !isLoading && !data?.data.data.count_role && !data?.data.data.count_account
 
   if (!props.open) return null
 
   return (
     <Dialog open={props.open} onOpenChange={props.setOpen}>
-      <DialogContent className='px-4'>
+      <DialogContent className='px-4 !sm:max-w-[calc(100%-16px)] max-w-[400px] rounded-xl'>
         <DialogHeader>
           <DialogTitle>{TEXT.TITLE}</DialogTitle>
           <DialogDescription>{TEXT.BODY}</DialogDescription>
         </DialogHeader>
         <div>
-          <p className='text-lg text-center text-gray-800'>
-            Menghapus izin ini akan berdampak pada{' '}
-            <span className='font-bold'>{data.count_role}</span> role dan{' '}
-            <span className='font-bold'>{data.count_account}</span> akun
-          </p>
-          <p className='text-sm text-gray-500 text-center'>
-            {data.roleNames.length > 0
-              ? 'Role yang terdampat :' +
-                data.roleNames.map(
-                  (name: string, index: number) =>
-                    `${name} ${index == data.roleNames.length - 1 ? '' : ','}`
-                )
-              : null}
-          </p>
-        </div>
-        <div className='flex justify-end w-full'>
-            <Button variant='destructive'>Hapus</Button>
+          {isSaveToDelete ? (
+            <>
+              <p className='text-center text-gray-500'>
+                Menghapus izin ini aman dilakukan dan tidak akan berdampak pada
+                role dan akun manapun
+              </p>
+              <div className='flex justify-end w-full mt-4'>
+                <Button variant='destructive' onClick={handleDelete}>
+                  {isPending ? 'loading' : 'Hapus'}
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              {warning ? (
+                <>
+                  <p className='text-center text-gray-800'>
+                    Role yang akan kehilangan akses perizinan ini
+                  </p>
+                  <div className='flex justify-center gap-1 flex-wrap mt-2 text-sm'>
+                    {data?.data.data.roleNames.map(
+                      (name: string, index: number) => (
+                        <span className='text-gray-400'>
+                          {name}{' '}
+                          {index === data?.data.data.roleNames.length - 1
+                            ? null
+                            : ','}
+                        </span>
+                      )
+                    )}
+                    <div className='mt-4 grid grid-cols-2 gap-2 w-full'>
+                      <Button
+                        className='w-full'
+                        variant='secondary'
+                        onClick={() => props.setOpen(false)}
+                      >
+                        Batal
+                      </Button>
+                      <Button
+                        className='w-full'
+                        variant='destructive'
+                        onClick={handleDelete}
+                      >
+                        {isPending ? 'loading' : 'Hapus'}
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className='text-center text-gray-800'>
+                    Menghapus izin ini akan menyebabkan kehilangan akses pada{' '}
+                    <span className='font-bold'>
+                      {data?.data.data.count_role}
+                    </span>{' '}
+                    role dan{' '}
+                    <span className='font-bold'>
+                      {data?.data.data.count_account}
+                    </span>{' '}
+                    akun
+                  </p>
+
+                  <div className='flex justify-end w-full mt-4'>
+                    <Button
+                      variant='destructive'
+                      onClick={() => setWarning(true)}
+                    >
+                      Hapus
+                    </Button>
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>
