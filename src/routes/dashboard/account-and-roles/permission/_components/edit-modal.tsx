@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import DeleteModalPermission from './delete-modal-permission'
+import { toast } from 'sonner'
 
 const TEXT = {
   TITLE: 'Edit Permission',
@@ -47,7 +48,7 @@ export default function EditModal(props: Props) {
     },
   })
 
-  const { fields, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     name: 'permissionNames',
     control: form.control,
   })
@@ -77,12 +78,41 @@ export default function EditModal(props: Props) {
   }, [isLoading, data, props.open, props.id])
 
   const onSubmit = async (data: z.infer<typeof permissionUpdateSchema>) => {
-    console.log(data)
+    if (!props.id) {
+      toast('Silahkan update perizinan kembali')
+      return
+    }
+
+    const payload = {
+      id: props.id,
+      ...data,
+      newPermissionNames:
+        data?.newPermissionNames
+          ?.filter((permission) => permission.name !== '')
+          .map((permission) => permission.name.replace(/[\s-]+/g, '_')) || [],
+    } as any
+
+    if (
+      payload.hasOwnProperty('permissionNames') &&
+      payload?.permissionNames.length === 0
+    ) {
+      delete payload.permissionNames
+    }
+
+    mutate(payload, {
+      onSuccess: () => {
+        toast('Perizinan berhasil diupdate')
+        form.reset()
+      },
+      onError: (error) => {
+        toast(error.message)
+      },
+    })
   }
 
   const handleDeletePermission = (field: any) => {
     const id = data?.data?.data.group[0].permissions.find(
-      (d: any) => d.name === field.name.replace(/[\s-]+/g, "_")
+      (d: any) => d.name === field.name.replace(/[\s-]+/g, '_')
     ).id
     setIsOpen(true)
     setId(id)
@@ -130,7 +160,7 @@ export default function EditModal(props: Props) {
             />
 
             <div>
-              <FormLabel>Nama Perizinan</FormLabel>
+              {fields.length > 0 && <FormLabel>Nama Perizinan</FormLabel>}
               {fields.map((field, index) => (
                 <div key={field.id} className='message-item'>
                   <div className='grid grid-cols-[1fr_40px] gap-4 mt-2'>
@@ -153,7 +183,7 @@ export default function EditModal(props: Props) {
             </div>
 
             <div>
-              <FormLabel>Perizinan Baru</FormLabel>
+              {fieldsNew.length > 0 && <FormLabel>Perizinan Baru</FormLabel>}
 
               {fieldsNew.map((field, index) => (
                 <div key={field.id} className='message-item'>
@@ -181,7 +211,7 @@ export default function EditModal(props: Props) {
                 size='sm'
                 onClick={() => appendNew({ name: '' })}
               >
-                Tambah
+                {fieldsNew.length > 0 ? 'Tambah' : 'Buat perizinan baru'}
               </Button>
             </div>
 
@@ -199,7 +229,12 @@ export default function EditModal(props: Props) {
         </Form>
       </ResponsiveModal>
 
-      <DeleteModalPermission open={isOpen} setOpen={setIsOpen} id={id} />
+      <DeleteModalPermission
+        open={isOpen}
+        setOpen={setIsOpen}
+        id={id}
+        idGroup={props.id}
+      />
     </>
   )
 }
