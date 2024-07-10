@@ -1,4 +1,4 @@
-import { KeyRound, Plus, Users2 } from 'lucide-react'
+import { KeyRound, Plus } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/data-table'
