@@ -18,6 +18,10 @@ import { delay } from '@/utils/delay'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { useRole, useUpdateRoles } from '@/utils/api/use-roles'
 import ResponsiveModal from '@/components/responsive-modal.tsx'
+import { usePermissionsGroup } from '@/utils/api/use-permission'
+import { PermissionGroup } from '@/utils/types/permision-group'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 
 const text = {
   title: 'Edit Account',
@@ -29,7 +33,9 @@ type Props = {
 }
 export default function Edit(props: Props) {
   const { mutate } = useUpdateRoles()
+
   const { data, isLoading } = useRole(props.id)
+  const { data: groups } = usePermissionsGroup()
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isPending, setIsPending] = useState<boolean>(false)
@@ -39,12 +45,17 @@ export default function Edit(props: Props) {
     resolver: zodResolver(rolesCreateSchema),
     defaultValues: {
       name: '',
+      permissionIds: [],
     },
   })
 
   useEffect(() => {
     if (!isLoading) {
-      form.setValue('name', data?.data.role.name)
+      form.setValue('name', data?.data.data.role.name)
+      const ids = data?.data.data.role.permissionIds.map(
+        (permission: number) => permission
+      )
+      form.setValue('permissionIds', ids)
     }
   }, [isLoading, data])
 
@@ -55,24 +66,28 @@ export default function Edit(props: Props) {
 
   const onSubmit = async (data: z.infer<typeof rolesCreateSchema>) => {
     if (!props.id) return
-    mutate(
-      { name: data.name, id: props.id },
-      {
-        onError: (error: any) => {
-          setErrorBanner(error.message)
-        },
-        onSuccess: () => {
-          setIsPending(true)
-          delay(400).then(() => {
-            setIsPending(false)
-          })
+    
+    const payload = {
+      name: data.name,
+      id: props.id,
+      permissionIds: data.permissionIds,
+    }
 
-          delay(600).then(() => {
-            setIsOpen(false)
-          })
-        },
-      }
-    )
+    mutate(payload, {
+      onError: (error: any) => {
+        setErrorBanner(error.message)
+      },
+      onSuccess: () => {
+        setIsPending(true)
+        delay(400).then(() => {
+          setIsPending(false)
+        })
+
+        delay(600).then(() => {
+          setIsOpen(false)
+        })
+      },
+    })
   }
 
   return (
@@ -125,6 +140,64 @@ export default function Edit(props: Props) {
                 </FormItem>
               )}
             />
+
+            <div className='flex flex-col gap-2'>
+              <FormLabel>Perizinan</FormLabel>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 gap-y-4'>
+                {groups?.data?.data?.groups?.map((group: PermissionGroup) => (
+                  <div key={group.id}>
+                    <p className='text-sm mb-1.5 capitalize text-gray-800 font-semibold'>
+                      {group.name}
+                    </p>
+                    <div className='flex flex-col gap-1'>
+                      {group?.permissions?.map((permission) => (
+                        <FormField
+                          key={permission.id}
+                          control={form.control}
+                          name='permissionIds'
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <div className='flex gap-2 items-center'>
+                                  <Checkbox
+                                    id={permission.id + '-' + permission.name}
+                                    checked={
+                                      field?.value?.includes(permission.id) ||
+                                      false
+                                    }
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([
+                                            ...field.value,
+                                            permission,
+                                          ])
+                                        : field.onChange(
+                                            field.value.filter(
+                                              (value: number) =>
+                                                value !== permission.id
+                                            )
+                                          )
+                                    }}
+                                  />
+                                  <Label
+                                    className='block cursor-pointer font-normal text-sm text-gray-600 pb-0.5 capitalize'
+                                    htmlFor={
+                                      permission.id + '-' + permission.name
+                                    }
+                                  >
+                                    {permission.name.replace('_', ' ')}
+                                  </Label>
+                                </div>
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className='md:flex md:justify-end grid grid-cols-2 px-0 gap-4'>
               <Button
