@@ -43,28 +43,27 @@ export default function AddModal(props: Props) {
     resolver: zodResolver(rolesCreateSchema),
     defaultValues: {
       name: '',
-      permissionNames: [],
+      permissionIds: [],
     },
   })
 
   const onSubmit = async (data: z.infer<typeof rolesCreateSchema>) => {
-    console.log(data)
-    // mutate(data, {
-    //   onError: (error: any) => {
-    //     console.log(error)
-    //     setErrorBanner(error.message)
-    //   },
-    //   onSuccess: () => {
-    //     setIsPending(true)
-    //     delay(400).then(() => {
-    //       setIsPending(false)
-    //     })
+    mutate(data, {
+      onError: (error: any) => {
+        console.log(error)
+        setErrorBanner(error.message)
+      },
+      onSuccess: () => {
+        setIsPending(true)
+        delay(400).then(() => {
+          setIsPending(false)
+        })
 
-    //     delay(600).then(() => {
-    //       props.setOpen(false)
-    //     })
-    //   },
-    // })
+        delay(600).then(() => {
+          props.setOpen(false)
+        })
+      },
+    })
   }
 
   useEffect(() => {
@@ -81,7 +80,7 @@ export default function AddModal(props: Props) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='w-full flex flex-col gap-4 px-1'
+          className='w-full flex flex-col gap-4 px-1 pb-8 md:pb-16'
         >
           <div>
             {errorBanner !== '' && (
@@ -113,60 +112,74 @@ export default function AddModal(props: Props) {
               </FormItem>
             )}
           />
-
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-            {data?.data?.data?.groups?.map((group: PermissionGroup) => (
-              <div key={group.id}>
-                <p>{group.name}</p>
-                {group?.permissions?.map((permission) => (
-                  <FormField
-                    key={permission.id}
-                    control={form.control}
-                    name='permissionNames'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Checkbox
-                            id={permission.id + '-' + permission.name}
-                            checked={
-                              field?.value?.includes(permission.name) || false
-                            }
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([
-                                    ...field.value,
-                                    permission.name,
-                                  ])
-                                : field.onChange(
-                                    field.value.filter(
-                                      (value: string) =>
-                                        value !== permission.name
-                                    )
-                                  )
-                            }}
-                          />
-                        </FormControl>
-                        <Label htmlFor={permission.id + '-' + permission.name}>
-                          {permission.name.replace('_', ' ')}
-                        </Label>
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
-            ))}
+          <div className='flex flex-col gap-2'>
+            <FormLabel>Perizinan</FormLabel>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 gap-y-4'>
+              {data?.data?.data?.groups?.map((group: PermissionGroup) => (
+                <div key={group.id}>
+                  <p className='text-sm mb-1.5 capitalize text-gray-800 font-semibold'>
+                    {group.name}
+                  </p>
+                  <div className='flex flex-col gap-1'>
+                    {group?.permissions?.map((permission) => (
+                      <FormField
+                        key={permission.id}
+                        control={form.control}
+                        name='permissionIds'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className='flex gap-2 items-center'>
+                                <Checkbox
+                                  id={permission.id + '-' + permission.name}
+                                  checked={
+                                    field?.value?.includes(permission.id) ||
+                                    false
+                                  }
+                                  onCheckedChange={(checked) => {
+                                    return checked
+                                      ? field.onChange([
+                                          ...field.value,
+                                          permission.id,
+                                        ])
+                                      : field.onChange(
+                                          field.value.filter(
+                                            (value: number) =>
+                                              value !== permission.id
+                                          )
+                                        )
+                                  }}
+                                />
+                                <Label
+                                  className='block cursor-pointer font-normal text-sm text-gray-600 pb-0.5 capitalize'
+                                  htmlFor={
+                                    permission.id + '-' + permission.name
+                                  }
+                                >
+                                  {permission.name.replace('_', ' ')}
+                                </Label>
+                              </div>
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className='md:flex md:justify-end grid grid-cols-2 px-0 gap-4'>
+          <div className='md:flex md:justify-end grid grid-cols-2 gap-4 absolute bottom-0 left-0 w-full px-4 bg-white border-t border-gray-200 p-2'>
             <Button
               type='button'
               onClick={() => props.setOpen(false)}
               variant='outline'
               className='w-full block md:hidden'
             >
-              Cancel
+              Batal
             </Button>
-            <Button type='submit'>{isPending ? 'loading' : 'Create'}</Button>
+            <Button type='submit'>{isPending ? 'loading' : 'Buat'}</Button>
           </div>
         </form>
       </Form>
