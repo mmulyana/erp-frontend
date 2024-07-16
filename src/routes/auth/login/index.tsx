@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button'
 import Layout from '../_components/layout'
+import { Button } from '@/components/ui/button'
 import { useAuth } from '../_hooks/use-auth'
 import {
   Form,
@@ -35,7 +35,7 @@ export default function Login() {
   const { logIn } = useAuth()
   const navigate = useNavigate()
   const [errorBanner, setErrorBanner] = useState('')
-  const [isPassword, setIsPassword] = useState(false)
+  const [isPassword, setIsPassword] = useState(true)
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -137,7 +137,7 @@ export default function Login() {
                     className='h-7 w-7 p-0 rounded-xl absolute hover:bg-transparent -translate-y-1/2 top-1/2 right-2'
                     onClick={() => setIsPassword(!isPassword)}
                   >
-                    {isPassword ? (
+                    {!isPassword ? (
                       <EyeOff className='w-5 h-5 text-gray-500' />
                     ) : (
                       <Eye className='w-5 h-5 text-gray-500' />
