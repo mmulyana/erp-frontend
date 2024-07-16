@@ -1,5 +1,4 @@
 import { Plus, Shield } from 'lucide-react'
-import Layout from '../_components/layout'
 import { usePermissionsGroup } from '@/utils/api/use-permission'
 import { useEffect, useMemo, useState } from 'react'
 import { PermissionGroup } from '@/utils/types/permision-group'
@@ -15,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import AddModal from './_components/add-modal'
 import EditModal from './_components/edit-modal'
+import { Layout } from '../component'
 
 export default function Permission() {
   const { data, isLoading } = usePermissionsGroup()

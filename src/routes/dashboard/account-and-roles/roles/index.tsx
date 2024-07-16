@@ -3,10 +3,10 @@ import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/data-table'
 import { columns } from './_components/columns'
-import Layout from '../_components/layout'
 import { useRoles } from '@/utils/api/use-roles'
 import { useState } from 'react'
 import AddModal from './_components/add-modal'
+import { Layout } from '../component'
 
 export default function Roles() {
   const { data } = useRoles()
