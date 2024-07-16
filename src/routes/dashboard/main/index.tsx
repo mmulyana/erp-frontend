@@ -1,17 +1,9 @@
-import { userAtom } from '@/atom/auth'
-import { useUserAccount } from '@/utils/api/use-account'
-import { PATH } from '@/utils/constant/_paths'
-import { useAtomValue } from 'jotai'
-import { Link } from 'react-router-dom'
+import { DashboardLayout } from '../component'
 
 export default function Dashboard() {
-  const user = useAtomValue(userAtom)
-  const { data } = useUserAccount(user?.id)
-
   return (
-    <>
+    <DashboardLayout>
       <p>Dashboard</p>
-      <Link to={PATH.ACCOUNT}>users</Link>
-    </>
+    </DashboardLayout>
   )
 }
