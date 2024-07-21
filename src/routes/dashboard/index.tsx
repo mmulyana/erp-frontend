@@ -4,18 +4,19 @@ import React, { Suspense, lazy } from 'react'
 import LoadingScreen from '@/components/loading-screen/index.tsx'
 import ProtectedRoute from '@/utils/protected-route.tsx'
 
-const Main = lazy(() => import('./main/index.tsx'))
+const Overview = lazy(() => import('./overview/index.tsx'))
 const Account = lazy(() => import('./account-and-roles/account/index.tsx'))
 const Roles = lazy(() => import('./account-and-roles/roles/index.tsx'))
 const Permission = lazy(
   () => import('./account-and-roles/permission/index.tsx')
 )
+const Employee = lazy(() => import('./employee/index.tsx'))
 
 const useRoutes = () => {
   return [
     {
       path: PATH.DASHBOARD,
-      element: <Main />,
+      element: <Overview />,
       show: true,
     },
     {
@@ -31,6 +32,11 @@ const useRoutes = () => {
     {
       path: PATH.ROLES_PERMISSION,
       element: <Permission />,
+      show: true,
+    },
+    {
+      path: PATH.EMPLOYEE,
+      element: <Employee />,
       show: true,
     },
   ]
