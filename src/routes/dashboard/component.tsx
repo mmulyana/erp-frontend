@@ -11,7 +11,7 @@ export function DashboardLayout({ children }: React.PropsWithChildren) {
     <>
       <Sidebar />
       <div className='pl-[240px]'>
-        <div className='px-4'>{children}</div>
+        <div className='px-5'>{children}</div>
       </div>
     </>
   )
@@ -27,16 +27,28 @@ function Sidebar() {
         menus: [
           {
             name: 'Dashboard',
-            path: '/dashboard',
+            path: PATH.DASHBOARD,
           },
         ],
       },
       {
-        name: 'Human Resource',
+        name: 'SDM',
         menus: [
           {
-            name: 'Employee',
-            path: '/employee',
+            name: 'Pegawai',
+            path: PATH.EMPLOYEE,
+          },
+          {
+            name: 'Kehadiran',
+            path: PATH.EMPLOYEE_ATTENDANCE,
+          },
+          {
+            name: 'Cuti',
+            path: PATH.EMPLOYEE_PAID_LEAVE,
+          },
+          {
+            name: 'Kasbon',
+            path: PATH.EMPLOYEE_CASH_ADVANCES,
           },
         ],
       },
@@ -44,15 +56,15 @@ function Sidebar() {
         name: 'Admin',
         menus: [
           {
-            name: 'Account Management',
+            name: 'Akun',
             path: PATH.ACCOUNT,
           },
           {
-            name: 'Role Management',
+            name: 'Peran',
             path: PATH.ROLES,
           },
           {
-            name: 'Permission Management',
+            name: 'Hak istimewa',
             path: PATH.ROLES_PERMISSION,
           },
         ],
@@ -69,7 +81,7 @@ function Sidebar() {
       <div className='px-4 pt-2.5'>
         <div className='flex gap-2 items-center'>
           <div className='w-8 h-8 rounded-full bg-brand-blue flex items-center justify-center'>
-            <img src={Logo} alt='logo erp' className='w-5'/>
+            <img src={Logo} alt='logo erp' className='w-5' />
           </div>
           <span>ERP BJS</span>
         </div>
@@ -110,6 +122,88 @@ function Sidebar() {
           ))}
         </div>
       </ScrollArea>
+    </div>
+  )
+}
+
+type Link = {
+  name: string
+  path: string
+  show: boolean
+}
+
+type SidebarLinksProps = Link & {
+  menus?: Link[]
+}
+function SidebarLinks(props: SidebarLinksProps) {
+  const isActive = matchPath({ path: props.path }, location.pathname)
+
+  return (
+    <>
+      {props.name !== 'Index' &&
+        (props.path !== '' ? (
+          <Link
+            to={props.path}
+            className={cn(
+              'flex justify-between px-2.5 py-1.5 rounded-md border',
+              isActive
+                ? 'bg-white border-[#e1e1e2] shadow-sm'
+                : 'border-transparent hover:bg-white/50 hover:border-[#e1e1e2]/50'
+            )}
+          >
+            {props.name}
+          </Link>
+        ) : (
+          <p
+            className={cn(
+              'flex justify-between px-2.5 py-1.5 rounded-md border',
+              isActive
+                ? 'bg-white border-[#e1e1e2] shadow-sm'
+                : 'border-transparent hover:bg-white/50 hover:border-[#e1e1e2]/50'
+            )}
+          >
+            {props.name}
+          </p>
+        ))}
+      {props.menus &&
+        props.menus?.length > 0 &&
+        props.menus.map((menu, index) => {
+          const isActiveMenu = matchPath({ path: menu.path }, location.pathname)
+          return (
+            <div key={index}>
+              <div className='flex flex-col gap-1 mt-1.5'>
+                <Link
+                  to={menu.path}
+                  className={cn(
+                    'flex justify-between px-2.5 py-1.5 rounded-md border',
+                    isActiveMenu
+                      ? 'bg-white border-[#e1e1e2] shadow-sm'
+                      : 'border-transparent hover:bg-white/50 hover:border-[#e1e1e2]/50'
+                  )}
+                >
+                  <span className='text-sm text-[#00071D]'>{menu.name}</span>
+                </Link>
+              </div>
+            </div>
+          )
+        })}
+    </>
+  )
+}
+
+type HeaderProps = React.PropsWithChildren & {
+  subtitle?: string
+  title?: string
+  icon?: React.ReactNode
+}
+export function Header(props: HeaderProps) {
+  return (
+    <div className='pt-2.5 pb-2 flex items-center justify-between border-b-[0.5px] border-gray-200'>
+      <div>
+        <p className='text-xs text-gray-400'>{props.subtitle || 'subtitle'}</p>
+        <p className='text-lg text-gray-800 font-medium'>{props.title || 'title'}</p>
+      </div>
+      {props.children}
     </div>
   )
 }
