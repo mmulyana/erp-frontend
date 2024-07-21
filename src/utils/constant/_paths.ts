@@ -8,4 +8,9 @@ export const PATH = {
   ACCOUNT: '/dashboard/accounts',
   ROLES: '/dashboard/roles',
   ROLES_PERMISSION: '/dashboard/roles-permission',
+  EMPLOYEE: '/dashboard/employee',
+  EMPLOYEE_ADD: '/dashboard/employee/add',
+  EMPLOYEE_PAID_LEAVE: '/dashboard/employee/paid-leave',
+  EMPLOYEE_ATTENDANCE: '/dashboard/employee/attendance',
+  EMPLOYEE_CASH_ADVANCES: '/dashboard/employee/cash-advances',
 }
