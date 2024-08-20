@@ -4,4 +4,5 @@ export const KEYS = {
   ROLES: 'roles',
   PERMISSION_GROUP: 'permission',
   PERMISSION_CHECK: 'permission_check',
+  HRIS_POSITION: 'hris_position',
 }
