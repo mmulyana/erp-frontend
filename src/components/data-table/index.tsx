@@ -19,11 +19,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  footer?: React.ReactNode
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  footer,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -32,14 +34,14 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className='rounded-md border'>
+    <div className='rounded-md border overflow-hidden'>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className='bg-[#F9FAFB]'>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -67,11 +69,24 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className='h-24 text-center'>
-                No results.
-              </TableCell>
-            </TableRow>
+            <>
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className='h-24 text-center'
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className='h-10 bg-[#F9FAFB] py-0'
+                >
+                  {footer || null}
+                </TableCell>
+              </TableRow>
+            </>
           )}
         </TableBody>
       </Table>
