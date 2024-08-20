@@ -11,7 +11,7 @@ export function DashboardLayout({ children }: React.PropsWithChildren) {
     <>
       <Sidebar />
       <div className='pl-[240px]'>
-        <div className='px-5'>{children}</div>
+        <div>{children}</div>
       </div>
     </>
   )
@@ -139,7 +139,7 @@ type HeaderProps = React.PropsWithChildren & {
 }
 export function Header(props: HeaderProps) {
   return (
-    <div className='pt-2.5 pb-2 flex items-center justify-between border-b-[0.5px] border-gray-200'>
+    <div className='pt-2.5 pb-2 flex items-center justify-between border-b-[0.5px] border-gray-200 px-8'>
       <div>
         <p className='text-xs text-gray-400'>{props.subtitle || 'subtitle'}</p>
         <p className='text-lg text-gray-800 font-medium'>{props.title || 'title'}</p>
