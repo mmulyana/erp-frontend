@@ -12,24 +12,31 @@ import { Button } from '@/components/ui/button'
 import { Container } from './component'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTable } from '@/components/data-table'
+import { usePosition } from '@/utils/api/user-position'
 
 type Data = {
   id: number
   name: string
   description?: string
   employee?: {
-    imgs: string[],
+    imgs: string[]
     count: number
   }
 }
 
 export default function Employee() {
+  const { data, isLoading } = usePosition()
   return (
     <DashboardLayout>
       <Header subtitle='SDM' title='Pegawai'></Header>
       <Container>
         <TableHeader />
-        <DataTable data={[]} columns={columns}/>
+        <DataTable
+          data={data?.data?.data || []}
+          columns={columns}
+          withLoading
+          isLoading={isLoading}
+        />
       </Container>
     </DashboardLayout>
   )
@@ -67,10 +74,10 @@ function TableHeader() {
   )
 }
 
-
 export const columns: ColumnDef<Data>[] = [
   {
-    header: '#'
+    header: '#',
+    cell: (info) => info.row.index + 1,
   },
   {
     accessorKey: 'name',
@@ -86,6 +93,11 @@ export const columns: ColumnDef<Data>[] = [
   {
     id: 'action',
     header: '',
-    cell: () => <Ellipsis className='w-6 h-6 text-[#313951]/50'/>,
+    size: 24,
+    cell: () => (
+      <div className='flex justify-end w-full'>
+        <Ellipsis className='w-6 h-6 text-[#313951]/50' />
+      </div>
+    ),
   },
 ]
