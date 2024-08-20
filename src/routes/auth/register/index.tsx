@@ -25,6 +25,7 @@ import fetchOptions from '@/utils/fetch-options'
 import { URLS } from '@/utils/constant/_urls'
 import { delay } from '@/utils/delay'
 import { toast } from 'sonner'
+import Protected from '../_components/protected'
 
 type Payload = {
   name: string
@@ -137,155 +138,161 @@ export default function Register() {
   }, [debouncedEmail])
 
   return (
-    <Layout>
-      <div className='flex gap-4'>
-        <div className='w-14 h-14 rounded-full bg-brand-blue flex items-center justify-center'>
-          <img src={Logo} alt='logo erp' />
+    <Protected>
+      <Layout>
+        <div className='flex gap-4'>
+          <div className='w-14 h-14 rounded-full bg-brand-blue flex items-center justify-center'>
+            <img src={Logo} alt='logo erp' />
+          </div>
+          <div className='w-[calc(100%-72px)] flex flex-col justify-center'>
+            <p className='text-[#2E2C2C] font-medium'>Sign Up</p>
+            <p className='text-[#2E2C2C]/60 text-sm'>create new account</p>
+          </div>
         </div>
-        <div className='w-[calc(100%-72px)] flex flex-col justify-center'>
-          <p className='text-[#2E2C2C] font-medium'>Sign Up</p>
-          <p className='text-[#2E2C2C]/60 text-sm'>create new account</p>
+        <div className='h-14 flex flex-col justify-center'>
+          {errorBanner !== '' && (
+            <Alert variant='destructive' className='py-2 h-fit bg-red-100'>
+              <AlertCircle className='h-4 w-4 absolute !top-1/2 -translate-y-1/2' />
+              <AlertTitle className='m-0 text-base leading-none font-normal'>
+                {errorBanner}
+                <XIcon
+                  className='h-4 w-4 text-red-500 -translate-y-1/2 absolute top-1/2 right-2 cursor-pointer'
+                  onClick={() => setErrorBanner('')}
+                />
+              </AlertTitle>
+            </Alert>
+          )}
         </div>
-      </div>
-      <div className='h-14 flex flex-col justify-center'>
-        {errorBanner !== '' && (
-          <Alert variant='destructive' className='py-2 h-fit bg-red-100'>
-            <AlertCircle className='h-4 w-4 absolute !top-1/2 -translate-y-1/2' />
-            <AlertTitle className='m-0 text-base leading-none font-normal'>
-              {errorBanner}
-              <XIcon
-                className='h-4 w-4 text-red-500 -translate-y-1/2 absolute top-1/2 right-2 cursor-pointer'
-                onClick={() => setErrorBanner('')}
-              />
-            </AlertTitle>
-          </Alert>
-        )}
-      </div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='w-full flex flex-col gap-4'
-        >
-          <FormField
-            control={form.control}
-            name='name'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nama</FormLabel>
-                <div className='relative'>
-                  <FormControl>
-                    <Input placeholder='Name' {...field} />
-                  </FormControl>
-                  {isAvailable?.name == true && (
-                    <div className='h-7 w-7 p-0 rounded-xl absolute flex items-center justify-center -translate-y-1/2 top-1/2 right-2'>
-                      <CheckCircle className='h-5 w-5 text-teal-500' />
-                    </div>
-                  )}
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='email'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <div className='relative'>
-                  <FormControl>
-                    <Input placeholder='Email' {...field} autoComplete='none' />
-                  </FormControl>
-                  {isAvailable?.email == true && (
-                    <div className='h-7 w-7 p-0 rounded-xl absolute flex items-center justify-center -translate-y-1/2 top-1/2 right-2'>
-                      <CheckCircle className='h-5 w-5 text-teal-500' />
-                    </div>
-                  )}
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='password'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <div className='relative'>
-                  <FormControl>
-                    <Input
-                      placeholder='password'
-                      {...field}
-                      autoComplete='none'
-                      type={!isPassword ? 'password' : 'text'}
-                    />
-                  </FormControl>
-                  <Button
-                    type='button'
-                    variant='ghost'
-                    className='h-7 w-7 p-0 rounded-xl absolute hover:bg-transparent -translate-y-1/2 top-1/2 right-2'
-                    onClick={() => setIsPassword(!isPassword)}
-                  >
-                    {isPassword ? (
-                      <EyeOff className='w-5 h-5 text-gray-500' />
-                    ) : (
-                      <Eye className='w-5 h-5 text-gray-500' />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='w-full flex flex-col gap-4'
+          >
+            <FormField
+              control={form.control}
+              name='name'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nama</FormLabel>
+                  <div className='relative'>
+                    <FormControl>
+                      <Input placeholder='Name' {...field} />
+                    </FormControl>
+                    {isAvailable?.name == true && (
+                      <div className='h-7 w-7 p-0 rounded-xl absolute flex items-center justify-center -translate-y-1/2 top-1/2 right-2'>
+                        <CheckCircle className='h-5 w-5 text-teal-500' />
+                      </div>
                     )}
-                  </Button>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='confirmPassword'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <div className='relative'>
-                  <FormControl>
-                    <Input
-                      placeholder='password'
-                      {...field}
-                      autoComplete='none'
-                      type={!isConfirmPassword ? 'password' : 'text'}
-                    />
-                  </FormControl>
-                  <Button
-                    type='button'
-                    variant='ghost'
-                    className='h-7 w-7 p-0 rounded-xl absolute hover:bg-transparent -translate-y-1/2 top-1/2 right-2'
-                    onClick={() => setIsConfirmPassword(!isConfirmPassword)}
-                  >
-                    {isConfirmPassword ? (
-                      <EyeOff className='w-5 h-5 text-gray-500' />
-                    ) : (
-                      <Eye className='w-5 h-5 text-gray-500' />
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <div className='relative'>
+                    <FormControl>
+                      <Input
+                        placeholder='Email'
+                        {...field}
+                        autoComplete='none'
+                      />
+                    </FormControl>
+                    {isAvailable?.email == true && (
+                      <div className='h-7 w-7 p-0 rounded-xl absolute flex items-center justify-center -translate-y-1/2 top-1/2 right-2'>
+                        <CheckCircle className='h-5 w-5 text-teal-500' />
+                      </div>
                     )}
-                  </Button>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type='submit' variant='default' className='mt-2'>
-            Sign Up
-          </Button>
-        </form>
-        <div className='text-center mt-3 mb-4'>
-          <p className='text-common-neutral'>
-            Sudah punya akun?{' '}
-            <Link
-              to={PATH.LOGIN}
-              className='text-brand-blue underline underline-offset-2'
-            >
-              Masuk
-            </Link>
-          </p>
-        </div>
-      </Form>
-    </Layout>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='password'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <div className='relative'>
+                    <FormControl>
+                      <Input
+                        placeholder='password'
+                        {...field}
+                        autoComplete='none'
+                        type={!isPassword ? 'password' : 'text'}
+                      />
+                    </FormControl>
+                    <Button
+                      type='button'
+                      variant='ghost'
+                      className='h-7 w-7 p-0 rounded-xl absolute hover:bg-transparent -translate-y-1/2 top-1/2 right-2'
+                      onClick={() => setIsPassword(!isPassword)}
+                    >
+                      {isPassword ? (
+                        <EyeOff className='w-5 h-5 text-gray-500' />
+                      ) : (
+                        <Eye className='w-5 h-5 text-gray-500' />
+                      )}
+                    </Button>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='confirmPassword'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <div className='relative'>
+                    <FormControl>
+                      <Input
+                        placeholder='password'
+                        {...field}
+                        autoComplete='none'
+                        type={!isConfirmPassword ? 'password' : 'text'}
+                      />
+                    </FormControl>
+                    <Button
+                      type='button'
+                      variant='ghost'
+                      className='h-7 w-7 p-0 rounded-xl absolute hover:bg-transparent -translate-y-1/2 top-1/2 right-2'
+                      onClick={() => setIsConfirmPassword(!isConfirmPassword)}
+                    >
+                      {isConfirmPassword ? (
+                        <EyeOff className='w-5 h-5 text-gray-500' />
+                      ) : (
+                        <Eye className='w-5 h-5 text-gray-500' />
+                      )}
+                    </Button>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type='submit' variant='default' className='mt-2'>
+              Sign Up
+            </Button>
+          </form>
+          <div className='text-center mt-3 mb-4'>
+            <p className='text-common-neutral'>
+              Sudah punya akun?{' '}
+              <Link
+                to={PATH.LOGIN}
+                className='text-brand-blue underline underline-offset-2'
+              >
+                Masuk
+              </Link>
+            </p>
+          </div>
+        </Form>
+      </Layout>
+    </Protected>
   )
 }
