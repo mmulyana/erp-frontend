@@ -38,7 +38,7 @@ export default function ResponsiveModal({
             <DrawerTitle>{props.title}</DrawerTitle>
             <DrawerDescription>{props.body}</DrawerDescription>
           </DrawerHeader>
-          <ScrollArea className='h-72 w-full p-4 pb-10 shadow-inner'>
+          <ScrollArea className='max-h-[80vh] h-fit w-full p-4 shadow-inner'>
             {children}
           </ScrollArea>
         </DrawerContent>
@@ -53,7 +53,7 @@ export default function ResponsiveModal({
           <DialogTitle>{props.title}</DialogTitle>
           <DialogDescription>{props.body}</DialogDescription>
         </DialogHeader>
-        <ScrollArea className='max-h-80 w-full px-5'>{children}</ScrollArea>
+        <ScrollArea className='h-fit max-h-80  w-full px-5'>{children}</ScrollArea>
       </DialogContent>
     </Dialog>
   )
