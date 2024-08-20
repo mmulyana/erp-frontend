@@ -4,7 +4,7 @@ export const PATH = {
   FORGOT: '/forgot',
   REGISTER: '/register',
   NOT_FOUND: '*',
-  DASHBOARD: '/dashboard',
+  DASHBOARD_OVERVIEW: '/dashboard/overview',
   ACCOUNT: '/dashboard/accounts',
   ROLES: '/dashboard/roles',
   ROLES_PERMISSION: '/dashboard/roles-permission',
