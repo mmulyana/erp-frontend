@@ -9,7 +9,7 @@ export default function Protected({ children }: React.PropsWithChildren) {
   useEffect(() => {
     const token = CookieStorage.get(CookieKeys.AuthToken)
     if (token) {
-      navigate(PATH.DASHBOARD, { replace: true })
+      navigate(PATH.DASHBOARD_OVERVIEW, { replace: true })
       navigate(0)
     }
     return () => {}
