@@ -1,10 +1,18 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/utils/cn'
 import { PATH } from '@/utils/constant/_paths'
-import { ChevronLeft } from 'lucide-react'
-import { useMemo } from 'react'
+import { ChevronLeft, SlashIcon } from 'lucide-react'
+import React, { useMemo } from 'react'
 import Logo from '/public/erp-logo.svg'
 import { Link, matchPath, useLocation } from 'react-router-dom'
+import {
+  Breadcrumb as BreadCrumbWrapper,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 
 export function DashboardLayout({ children }: React.PropsWithChildren) {
   return (
@@ -43,7 +51,7 @@ function Sidebar() {
             path: PATH.EMPLOYEE_ATTENDANCE,
           },
           {
-            name: 'Cuti', 
+            name: 'Cuti',
             path: PATH.EMPLOYEE_PAID_LEAVE,
           },
           {
@@ -74,7 +82,7 @@ function Sidebar() {
   )
 
   return (
-    <div className='fixed top-0 left-0 w-[240px] bg-[#F8F8F8] h-[100dvh] border-r border-[#e1e1e2]'>
+    <div className='fixed top-0 left-0 w-[240px] h-[100dvh] border-r border-[#e1e1e2]'>
       <button className='w-6 h-6 rounded-full bg-white border border-[#e1e1e2] absolute top-2.5 -right-3 flex items-center justify-center'>
         <ChevronLeft className='w-4 text-gray-500' />
       </button>
@@ -142,9 +150,51 @@ export function Header(props: HeaderProps) {
     <div className='pt-2.5 pb-2 flex items-center justify-between border-b-[0.5px] border-gray-200 px-8'>
       <div>
         <p className='text-xs text-gray-400'>{props.subtitle || 'subtitle'}</p>
-        <p className='text-lg text-gray-800 font-medium'>{props.title || 'title'}</p>
+        <p className='text-lg text-gray-800 font-medium'>
+          {props.title || 'title'}
+        </p>
       </div>
       {props.children}
     </div>
+  )
+}
+
+type BreadcrumbProps = {
+  links: {
+    href: string
+    name: string
+  }[]
+}
+export function Breadcrumb({ links }: BreadcrumbProps) {
+  const lastIndex = links.length - 1
+
+  return (
+    <BreadCrumbWrapper>
+      <BreadcrumbList>
+        {links.map((link, index) => (
+          <React.Fragment key={index}>
+            <BreadcrumbItem>
+              {index === lastIndex ? (
+                <BreadcrumbPage className='text-[#021328] text-sm font-medium'>
+                  {link.name}
+                </BreadcrumbPage>
+              ) : (
+                <BreadcrumbLink
+                  href={link.href}
+                  className='text-[#989CA8] text-sm'
+                >
+                  {link.name}
+                </BreadcrumbLink>
+              )}
+            </BreadcrumbItem>
+            {index !== lastIndex && (
+              <BreadcrumbSeparator>
+                <SlashIcon className='w-[10px] h-[10px] text-[#989CA8]' />
+              </BreadcrumbSeparator>
+            )}
+          </React.Fragment>
+        ))}
+      </BreadcrumbList>
+    </BreadCrumbWrapper>
   )
 }
