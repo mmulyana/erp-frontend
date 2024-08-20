@@ -27,12 +27,12 @@ function Sidebar() {
         menus: [
           {
             name: 'Dashboard',
-            path: PATH.DASHBOARD,
+            path: PATH.DASHBOARD_OVERVIEW,
           },
         ],
       },
       {
-        name: 'SDM',
+        name: 'HRIS',
         menus: [
           {
             name: 'Pegawai',
@@ -43,7 +43,7 @@ function Sidebar() {
             path: PATH.EMPLOYEE_ATTENDANCE,
           },
           {
-            name: 'Cuti',
+            name: 'Cuti', 
             path: PATH.EMPLOYEE_PAID_LEAVE,
           },
           {
@@ -130,65 +130,6 @@ type Link = {
   name: string
   path: string
   show: boolean
-}
-
-type SidebarLinksProps = Link & {
-  menus?: Link[]
-}
-function SidebarLinks(props: SidebarLinksProps) {
-  const isActive = matchPath({ path: props.path }, location.pathname)
-
-  return (
-    <>
-      {props.name !== 'Index' &&
-        (props.path !== '' ? (
-          <Link
-            to={props.path}
-            className={cn(
-              'flex justify-between px-2.5 py-1.5 rounded-md border',
-              isActive
-                ? 'bg-white border-[#e1e1e2] shadow-sm'
-                : 'border-transparent hover:bg-white/50 hover:border-[#e1e1e2]/50'
-            )}
-          >
-            {props.name}
-          </Link>
-        ) : (
-          <p
-            className={cn(
-              'flex justify-between px-2.5 py-1.5 rounded-md border',
-              isActive
-                ? 'bg-white border-[#e1e1e2] shadow-sm'
-                : 'border-transparent hover:bg-white/50 hover:border-[#e1e1e2]/50'
-            )}
-          >
-            {props.name}
-          </p>
-        ))}
-      {props.menus &&
-        props.menus?.length > 0 &&
-        props.menus.map((menu, index) => {
-          const isActiveMenu = matchPath({ path: menu.path }, location.pathname)
-          return (
-            <div key={index}>
-              <div className='flex flex-col gap-1 mt-1.5'>
-                <Link
-                  to={menu.path}
-                  className={cn(
-                    'flex justify-between px-2.5 py-1.5 rounded-md border',
-                    isActiveMenu
-                      ? 'bg-white border-[#e1e1e2] shadow-sm'
-                      : 'border-transparent hover:bg-white/50 hover:border-[#e1e1e2]/50'
-                  )}
-                >
-                  <span className='text-sm text-[#00071D]'>{menu.name}</span>
-                </Link>
-              </div>
-            </div>
-          )
-        })}
-    </>
-  )
 }
 
 type HeaderProps = React.PropsWithChildren & {
