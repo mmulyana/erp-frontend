@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { KEYS } from '../constant/_keys'
-import { URLS } from '../constant/_urls'
-import fetchOptions from '../fetch-options'
-import { User } from '../types/user'
-import { Account } from '../types/account'
+import { KEYS } from '../utils/constant/_keys'
+import { URLS } from '../utils/constant/_urls'
+import fetchOptions from '../utils/fetch-options'
+import { User } from '../utils/types/user'
+import { Account } from '../utils/types/account'
 
 export const useUserAccount = (id: number | undefined) => {
   return useQuery({

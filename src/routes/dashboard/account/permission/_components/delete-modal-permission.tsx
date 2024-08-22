@@ -9,7 +9,7 @@ import {
 import {
   useCheckPermission,
   useDeletePermission,
-} from '@/utils/api/use-permission'
+} from '@/hooks/use-permission'
 import { delay } from '@/utils/delay'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'

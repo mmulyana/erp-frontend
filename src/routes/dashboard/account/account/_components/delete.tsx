@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Trash } from 'lucide-react'
 import { useState } from 'react'
-import { useDeleteAccount } from '@/utils/api/use-account'
+import { useDeleteAccount } from '@/hooks/use-account'
 import { delay } from '@/utils/delay'
 import ResponsiveModal from '@/components/responsive-modal.tsx'
 

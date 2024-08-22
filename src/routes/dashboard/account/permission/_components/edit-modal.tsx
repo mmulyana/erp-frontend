@@ -1,7 +1,7 @@
 import {
   usePermissionGroup,
   useUpdatePermissionGroup,
-} from '@/utils/api/use-permission'
+} from '@/hooks/use-permission'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { permissionUpdateSchema } from './schema'

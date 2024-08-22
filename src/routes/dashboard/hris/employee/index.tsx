@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import { Breadcrumb, DashboardLayout, Header } from '../component'
+import { Breadcrumb, DashboardLayout, Header } from '../../component'
 import { ChevronDown, Ellipsis, Search, Table } from 'lucide-react'
 import {
   DropdownMenuSeparator,
@@ -20,7 +20,7 @@ import {
   useDetailPosition,
   usePosition,
   useUpdatePosition,
-} from '@/utils/api/use-position'
+} from '@/hooks/use-position'
 import { PATH } from '@/utils/constant/_paths'
 import { useEffect, useState } from 'react'
 import ResponsiveModal from '@/components/responsive-modal.tsx'

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { AlertCircle, Pencil, XIcon } from 'lucide-react'
-import { useAccount, useEditAccount } from '@/utils/api/use-account'
+import { useAccount, useEditAccount } from '@/hooks/use-account'
 import { useForm } from 'react-hook-form'
 import { userEditSchema } from './schema'
 import { z } from 'zod'
@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { delay } from '@/utils/delay'
 import { Alert, AlertTitle } from '@/components/ui/alert'
-import { useRoles } from '@/utils/api/use-roles'
+import { useRoles } from '@/hooks/use-roles'
 import { Combobox } from '@/components/combobox'
 import ResponsiveModal from '@/components/responsive-modal.tsx'
 
