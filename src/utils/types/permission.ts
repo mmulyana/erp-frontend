@@ -1,1 +1,1 @@
-export type Permission = Record<string, { enabled: boolean }>
+export type Permission = Record<string, string>

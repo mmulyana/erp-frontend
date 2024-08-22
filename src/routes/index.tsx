@@ -4,11 +4,12 @@ import { Suspense } from 'react'
 import { authRoutes } from './auth'
 import { commonRoutes } from './common'
 import { dashboardRoutes } from './dashboard'
+import ProtectedRoute from '@/utils/protected-route'
 
 export const routes = [
-  { path: '/', children: authRoutes },
-  { path: '/', children: commonRoutes },
-  { path: '/dashboard/*', children: dashboardRoutes },
+  { path: '/', children: authRoutes, auth: false },
+  { path: '/', children: commonRoutes, auth: false },
+  { path: '/dashboard/*', children: dashboardRoutes, auth: true },
 ]
 
 export default function Router() {
@@ -21,7 +22,11 @@ export default function Router() {
             path={childRoute.path}
             element={
               <Suspense fallback={<LoadingScreen />}>
-                {childRoute.element}
+                {route.auth ? (
+                  <ProtectedRoute>{childRoute.element}</ProtectedRoute>
+                ) : (
+                  childRoute.element
+                )}
               </Suspense>
             }
           />
