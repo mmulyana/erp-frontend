@@ -10,11 +10,17 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Container } from './component'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTable } from '@/components/data-table'
-import { useCreatePosition, usePosition } from '@/utils/api/user-position'
+import {
+  useCreatePosition,
+  useDeletePosition,
+  useDetailPosition,
+  usePosition,
+  useUpdatePosition,
+} from '@/utils/api/user-position'
 import { PATH } from '@/utils/constant/_paths'
 import { useEffect, useState } from 'react'
 import ResponsiveModal from '@/components/responsive-modal.tsx'
@@ -31,6 +37,17 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { delay } from '@/utils/delay'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { cn } from '@/utils/cn'
 
 export default function Employee() {
   const { data, isLoading } = usePosition()
@@ -52,6 +69,8 @@ export default function Employee() {
 }
 
 function TableHeader() {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <div className='flex justify-between items-center mt-6 mb-4'>
       <div className='flex gap-4'>
@@ -85,16 +104,24 @@ function TableHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <ModalAdd />
+      <Button onClick={() => setIsOpen(true)}>Tambah Posisi</Button>
+      <ModalAdd open={isOpen} setOpen={setIsOpen} />
     </div>
   )
 }
 
 type Position = z.infer<typeof positionSchema>
 
-function ModalAdd() {
-  const [open, setOpen] = useState(false)
-  const { mutate } = useCreatePosition()
+type ModalProps = {
+  id?: number
+  open: boolean
+  setOpen: (val: boolean) => void
+}
+
+function ModalAdd({ id, open, setOpen }: ModalProps) {
+  const { mutate: create } = useCreatePosition()
+  const { mutate: update } = useUpdatePosition()
+  const { data, isLoading } = useDetailPosition(id)
 
   const form = useForm<Position>({
     resolver: zodResolver(positionSchema),
@@ -105,7 +132,18 @@ function ModalAdd() {
   })
 
   const onSubmit = async (data: Position) => {
-    mutate(data, {
+    if (!!id) {
+      update(
+        { ...data, id },
+        {
+          onSuccess: () => {
+            delay(400).then(() => setOpen(false))
+          },
+        }
+      )
+      return
+    }
+    create(data, {
       onSuccess: () => {
         delay(400).then(() => setOpen(false))
       },
@@ -116,14 +154,22 @@ function ModalAdd() {
     if (!open) form.reset()
   }, [open])
 
+  useEffect(() => {
+    if (!id) return
+    if (!isLoading && !!data?.data) {
+      console.log(data?.data)
+      form.setValue('name', data?.data?.data?.name)
+      form.setValue('description', data?.data?.data?.description || '')
+    }
+  }, [id, isLoading, data])
+
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Buat Posisi Baru</Button>
       <ResponsiveModal
         isOpen={open}
         setIsOpen={setOpen}
-        title='Posisi baru'
-        body='Tambahkan posisi baru'
+        title={!!id ? 'Edit Posisi' : 'Posisi baru'}
+        body={!!id ? 'Edit posisi ini' : 'Tambahkan posisi baru'}
       >
         <Form {...form}>
           <form
@@ -166,6 +212,44 @@ function ModalAdd() {
   )
 }
 
+function ModalDelete({ id, open, setOpen }: ModalProps) {
+  const { mutate } = useDeletePosition()
+  const onDelete = async () => {
+    if (!id) return
+    mutate(
+      { id },
+      {
+        onSuccess: () => {
+          delay(400).then(() => setOpen(false))
+        },
+      }
+    )
+  }
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Hapus posisi ini?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Posisi ini akan dihapus dari database
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => setOpen(false)}>
+            Batal
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={onDelete}
+            className={cn(buttonVariants({ variant: 'destructive' }))}
+          >
+            Lanjutkan
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+
 type Data = {
   id: number
   name: string
@@ -205,25 +289,46 @@ export const columns: ColumnDef<Data>[] = [
   },
   {
     id: 'action',
+    accessorKey: 'id',
+
     header: '',
     size: 24,
-    cell: () => (
-      <div className='flex justify-end w-full'>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className='border-none'>
-            <Button variant='outline'>
-              <Ellipsis className='w-6 h-6 text-[#313951]/50' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className='w-full right-0'>
-            <DropdownMenuGroup>
-              <DropdownMenuItem>Ubah</DropdownMenuItem>
-              <DropdownMenuItem>Hapus</DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    ),
+    cell: ({ cell }) => {
+      const [isEdit, setIsEdit] = useState(false)
+      const [isDelete, setIsDelete] = useState(false)
+
+      return (
+        <div className='flex justify-end w-full'>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className='border-none'>
+              <Button variant='outline'>
+                <Ellipsis className='w-6 h-6 text-[#313951]/50' />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='w-full right-0'>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => setIsEdit(true)}>
+                  Ubah
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setIsDelete(true)}>
+                  Hapus
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <ModalAdd
+            id={cell.row.original.id}
+            open={isEdit}
+            setOpen={setIsEdit}
+          />
+          <ModalDelete
+            id={cell.row.original.id}
+            open={isDelete}
+            setOpen={setIsDelete}
+          />
+        </div>
+      )
+    },
   },
 ]
 
