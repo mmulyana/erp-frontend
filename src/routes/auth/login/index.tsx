@@ -1,6 +1,5 @@
-import Layout from '../_components/layout'
 import { Button } from '@/components/ui/button'
-import { useAuth } from '../_hooks/use-auth'
+import { useAuth } from '@/hooks/use-auth'
 import {
   Form,
   FormControl,
@@ -11,7 +10,6 @@ import {
 } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoginSchema } from '../_schemas/login.schema'
 import { Input } from '@/components/ui/input'
 import { z } from 'zod'
 import { useState } from 'react'
@@ -24,13 +22,20 @@ import { Link, useNavigate } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
 import { delay } from '@/utils/delay'
 import { toast } from 'sonner'
-import Protected from '../_components/protected'
+import { Layout, Protected } from '../component'
 
 type Payload = {
   name?: string
   email?: string
   password: string
 }
+
+export const LoginSchema = z.object({
+  name: z.string().min(1, { message: 'Masukkan nama atau email Anda' }),
+  password: z.string().min(8, {
+    message: 'Silakan masukkan kata sandi yang terdiri dari minimal 8 karakter',
+  }),
+})
 
 export default function Login() {
   const { logIn } = useAuth()

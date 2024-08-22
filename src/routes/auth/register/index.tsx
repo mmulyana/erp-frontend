@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
-import Layout from '../_components/layout'
-import { useAuth } from '../_hooks/use-auth'
+import { useAuth } from '@/hooks/use-auth'
 import {
   Form,
   FormControl,
@@ -20,12 +19,11 @@ import { AlertCircle, CheckCircle, Eye, EyeOff, XIcon } from 'lucide-react'
 import Logo from '/public/erp-logo.svg'
 import { Link, useNavigate } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
-import { registerSchema } from '../_schemas/register.schema'
 import fetchOptions from '@/utils/fetch-options'
 import { URLS } from '@/utils/constant/_urls'
 import { delay } from '@/utils/delay'
 import { toast } from 'sonner'
-import Protected from '../_components/protected'
+import { Layout, Protected } from '../component'
 
 type Payload = {
   name: string
@@ -33,6 +31,28 @@ type Payload = {
   password: string
   confirm_password: string
 }
+
+export const registerSchema = z
+  .object({
+    name: z.string().min(1, { message: 'Masukkan nama Anda' }),
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(
+        8,
+        'Silakan masukkan kata sandi yang terdiri dari minimal 8 karakter'
+      ),
+    confirmPassword: z
+      .string()
+      .min(
+        6,
+        'Silakan masukkan konfirmasi kata sandi yang terdiri dari minimal 8 karakter'
+      ),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords tidak sama',
+    path: ['confirmPassword'],
+  })
 
 type PayloadAvailability = {
   name?: string
