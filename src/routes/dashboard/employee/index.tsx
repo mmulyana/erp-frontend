@@ -20,7 +20,7 @@ import {
   useDetailPosition,
   usePosition,
   useUpdatePosition,
-} from '@/utils/api/user-position'
+} from '@/utils/api/use-position'
 import { PATH } from '@/utils/constant/_paths'
 import { useEffect, useState } from 'react'
 import ResponsiveModal from '@/components/responsive-modal.tsx'
