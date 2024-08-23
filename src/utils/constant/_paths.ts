@@ -9,6 +9,7 @@ export const PATH = {
   ROLES: '/dashboard/roles',
   ROLES_PERMISSION: '/dashboard/roles-permission',
   EMPLOYEE: '/dashboard/employee',
+  EMPLOYEE_DETAIL: '/dashboard/employee/:detail',
   EMPLOYEE_ADD: '/dashboard/employee/add',
   EMPLOYEE_PAID_LEAVE: '/dashboard/employee/paid-leave',
   EMPLOYEE_ATTENDANCE: '/dashboard/employee/attendance',
