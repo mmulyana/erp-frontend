@@ -1,6 +1,13 @@
 import { Input } from '@/components/ui/input'
 import { Breadcrumb, DashboardLayout, Header } from '../../component'
-import { ChevronDown, Ellipsis, Search, Table } from 'lucide-react'
+import {
+  ChevronDown,
+  Ellipsis,
+  PencilIcon,
+  Search,
+  Table,
+  TrashIcon,
+} from 'lucide-react'
 import {
   DropdownMenuSeparator,
   DropdownMenu,
@@ -48,6 +55,35 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { cn } from '@/utils/cn'
+import { generatePath, Link } from 'react-router-dom'
+
+const positionSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+})
+
+type Position = z.infer<typeof positionSchema>
+
+type Data = {
+  id: number
+  name: string
+  description?: string
+  _count: {
+    employees: number
+  }
+  employees: { fullname: string }[]
+}
+
+const links = [
+  {
+    name: 'Dashboard',
+    href: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Pegawai',
+    href: PATH.EMPLOYEE,
+  },
+]
 
 export default function Employee() {
   const { data, isLoading } = usePosition()
@@ -104,13 +140,13 @@ function TableHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Button onClick={() => setIsOpen(true)}>Tambah Posisi</Button>
+      <Button onClick={() => setIsOpen(true)} className='py-1'>
+        Tambah Jabatan
+      </Button>
       <ModalAdd open={isOpen} setOpen={setIsOpen} />
     </div>
   )
 }
-
-type Position = z.infer<typeof positionSchema>
 
 type ModalProps = {
   id?: number
@@ -250,27 +286,6 @@ function ModalDelete({ id, open, setOpen }: ModalProps) {
   )
 }
 
-type Data = {
-  id: number
-  name: string
-  description?: string
-  employee?: {
-    imgs: string[]
-    count: number
-  }
-}
-
-const links = [
-  {
-    name: 'Dashboard',
-    href: PATH.DASHBOARD_OVERVIEW,
-  },
-  {
-    name: 'Pegawai',
-    href: PATH.EMPLOYEE,
-  },
-]
-
 export const columns: ColumnDef<Data>[] = [
   {
     header: '#',
@@ -279,9 +294,43 @@ export const columns: ColumnDef<Data>[] = [
   {
     accessorKey: 'name',
     header: 'Nama',
+    cell: ({ cell }) => {
+      return (
+        <Link
+          to={generatePath(PATH.EMPLOYEE_DETAIL, {
+            detail: `${cell.row.original.name.split(" ").join('-')}-${cell.row.original.id}`,
+          })}
+        >
+          {cell.row.original.name}
+        </Link>
+      )
+    },
   },
   {
     header: 'Pegawai',
+    cell: ({ cell }) => {
+      if (cell.row.original._count.employees == 0) return null
+      return (
+        <div className='flex gap-2 items-center'>
+          <div className='flex'>
+            {cell.row.original.employees.slice(0, 3).map((item, idx) => (
+              <div
+                key={idx}
+                className='w-6 h-6 bg-blue-700 text-white relative rounded-full'
+              >
+                <span className='text-xs absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+                  {item.fullname.at(0)}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className='h-1 w-1 rounded-full bg-[#313951]/50'></div>
+          <p className='text-sm text-[#313951]'>
+            {cell.row.original._count.employees} Orang
+          </p>
+        </div>
+      )
+    },
   },
   {
     accessorKey: 'description',
@@ -300,17 +349,28 @@ export const columns: ColumnDef<Data>[] = [
       return (
         <div className='flex justify-end w-full'>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild className='border-none'>
-              <Button variant='outline'>
-                <Ellipsis className='w-6 h-6 text-[#313951]/50' />
+            <DropdownMenuTrigger
+              asChild
+              className='border-transparent hover:border-gray-200'
+            >
+              <Button variant='outline' className='p-0 h-fit rounded px-0.5'>
+                <Ellipsis className='w-6 h-6 text-[#313951]/70' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className='w-full right-0'>
               <DropdownMenuGroup>
-                <DropdownMenuItem onClick={() => setIsEdit(true)}>
+                <DropdownMenuItem
+                  onClick={() => setIsEdit(true)}
+                  className='flex items-center gap-2 cursor-pointer'
+                >
+                  <PencilIcon className='w-4 h-4 text-blue-400' />
                   Ubah
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setIsDelete(true)}>
+                <DropdownMenuItem
+                  onClick={() => setIsDelete(true)}
+                  className='flex items-center gap-2 cursor-pointer'
+                >
+                  <TrashIcon className='w-4 h-4 text-red-500' />
                   Hapus
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -331,8 +391,3 @@ export const columns: ColumnDef<Data>[] = [
     },
   },
 ]
-
-const positionSchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
-})
