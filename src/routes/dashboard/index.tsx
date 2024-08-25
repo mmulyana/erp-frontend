@@ -1,13 +1,14 @@
 import { PATH } from '@/utils/constant/_paths.ts'
 import { lazy } from 'react'
 
-const Permission = lazy(
-  () => import('./account/permission/index.tsx')
-)
+const Permission = lazy(() => import('./account/permission/index.tsx'))
 const Account = lazy(() => import('./account/account/index.tsx'))
 const Roles = lazy(() => import('./account/roles/index.tsx'))
 const Overview = lazy(() => import('./overview/index.tsx'))
 const Employee = lazy(() => import('./hris/employee/index.tsx'))
+const EmployeeByPosition = lazy(
+  () => import('./hris/employee/detail/index.tsx')
+)
 
 export const dashboardRoutes = [
   {
@@ -29,5 +30,9 @@ export const dashboardRoutes = [
   {
     path: PATH.EMPLOYEE,
     element: <Employee />,
+  },
+  {
+    path: PATH.EMPLOYEE_DETAIL,
+    element: <EmployeeByPosition />,
   },
 ]
