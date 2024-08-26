@@ -1,13 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { EmployeeInput } from '@/utils/types/employee'
+import { EmployeeStatus } from '@/utils/enum/common'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { EmployeeInput } from '@/utils/types/employee'
 import { toast } from 'sonner'
 
 type ParamsEmployee = {
   search?: string
   positionId?: string
+  status?: EmployeeStatus
 }
 export const useEmployees = (params: ParamsEmployee) => {
   return useQuery({
