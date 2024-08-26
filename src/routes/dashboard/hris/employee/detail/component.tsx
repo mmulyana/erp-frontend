@@ -1,9 +1,12 @@
 import Search from '@/components/common/search'
+import Modal from '@/components/modal-v2'
 import { Button } from '@/components/ui/button'
 import { useEmployees } from '@/hooks/use-employee'
 import { EmployeeStatus } from '@/utils/enum/common'
 import useUrlState from '@ahooksjs/use-url-state'
 import { isString } from 'lodash'
+import { UserRoundPlus } from 'lucide-react'
+import { useState } from 'react'
 import { z } from 'zod'
 
 type TableEmployeeProps = {
@@ -26,8 +29,31 @@ export function TableEmployee({ status, positionId }: TableEmployeeProps) {
             <Search />
           </div>
         </div>
-        <Button>Tambah Pegawai</Button>
+        <ModalAdd />
       </div>
+    </>
+  )
+}
+
+function ModalAdd() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button onClick={() => setOpen(!open)}>Tambah Pegawai</Button>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        title='Tambah Pegawai Baru'
+        subtitle='Silahkan masukkan data yang dibutuhkan'
+        icon={
+          <div className='h-8 w-8 rounded-[8px] bg-[#5463E8] border border-[#4752BE] flex items-center justify-center shadow-md shadow-[#5463E8]/50'>
+            <UserRoundPlus className='w-5 h-5 text-white' />
+          </div>
+        }
+      >
+        <div className='pb-8'></div>
+      </Modal>
     </>
   )
 }
