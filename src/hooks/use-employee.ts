@@ -1,7 +1,9 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { useQuery } from '@tanstack/react-query'
+import { EmployeeInput } from '@/utils/types/employee'
+import { toast } from 'sonner'
 
 type ParamsEmployee = {
   search?: string
@@ -33,5 +35,19 @@ export const useEmployee = (id?: number) => {
       return await http(`${URLS.EMPLOYEE}/${id}`)
     },
     enabled: !!id,
+  })
+}
+
+export const useCreateEmployee = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: EmployeeInput) => {
+      return await http.post(URLS.EMPLOYEE, data)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
   })
 }
