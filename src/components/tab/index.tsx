@@ -33,7 +33,7 @@ export function Tabs({ children }: TabsProps) {
             {!!child.props.badge && (
               <span
                 className={cn(
-                  'text-white text-xs py-0.5 px-1 rounded',
+                  'text-white text-xs py-0.5 px-1.5 rounded-md',
                   index == active ? 'bg-[#5463E8]' : 'bg-[#989CA8]'
                 )}
               >
