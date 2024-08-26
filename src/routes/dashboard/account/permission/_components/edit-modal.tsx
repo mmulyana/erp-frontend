@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { permissionUpdateSchema } from './schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
-import ResponsiveModal from '@/components/responsive-modal.tsx'
+import ResponsiveModal from '@/components/modal-responsive'
 import {
   Form,
   FormControl,

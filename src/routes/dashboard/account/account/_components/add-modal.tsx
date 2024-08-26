@@ -1,4 +1,4 @@
-import ResponsiveModal from '@/components/responsive-modal.tsx'
+import ResponsiveModal from '@/components/modal-responsive'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { userCreateSchema } from './schema'

@@ -30,7 +30,7 @@ import {
 } from '@/hooks/use-position'
 import { PATH } from '@/utils/constant/_paths'
 import { useEffect, useState } from 'react'
-import ResponsiveModal from '@/components/responsive-modal.tsx'
+import ResponsiveModal from '@/components/modal-responsive'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -74,6 +74,25 @@ type Data = {
   employees: { fullname: string }[]
 }
 
+const tableData: Data[] = [
+  {
+    id: 1,
+    name: 'Staf',
+    description: '',
+    _count: {
+      employees: 2,
+    },
+    employees: [
+      {
+        fullname: 'A',
+      },
+      {
+        fullname: 'B',
+      },
+    ],
+  },
+]
+
 const links = [
   {
     name: 'Dashboard',
@@ -94,7 +113,7 @@ export default function Employee() {
         <Breadcrumb links={links} />
         <TableHeader />
         <DataTable
-          data={data?.data?.data || []}
+          data={data?.data?.data || tableData}
           columns={columns}
           withLoading
           isLoading={isLoading}
@@ -298,7 +317,9 @@ export const columns: ColumnDef<Data>[] = [
       return (
         <Link
           to={generatePath(PATH.EMPLOYEE_DETAIL, {
-            detail: `${cell.row.original.name.split(" ").join('-')}-${cell.row.original.id}`,
+            detail: `${cell.row.original.name.split(' ').join('-')}-${
+              cell.row.original.id
+            }`,
           })}
         >
           {cell.row.original.name}

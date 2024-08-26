@@ -1,4 +1,4 @@
-import ResponsiveModal from '@/components/responsive-modal.tsx'
+import ResponsiveModal from '@/components/modal-responsive'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { permissionCreateSchema } from './schema'

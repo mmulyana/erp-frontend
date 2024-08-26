@@ -19,7 +19,7 @@ import { delay } from '@/utils/delay'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { useRoles } from '@/hooks/use-roles'
 import { Combobox } from '@/components/combobox'
-import ResponsiveModal from '@/components/responsive-modal.tsx'
+import ResponsiveModal from '@/components/modal-responsive'
 
 const text = {
   title: 'Edit Account',
