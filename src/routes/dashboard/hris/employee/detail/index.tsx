@@ -1,14 +1,15 @@
+import { generatePath, useParams } from 'react-router-dom'
+import { EmployeeStatus } from '@/utils/enum/common'
+import { PATH } from '@/utils/constant/_paths'
 import { Tab, Tabs } from '@/components/tab'
-import { useEmployees } from '@/hooks/use-employee'
+import { TableEmployee } from './component'
+import { Container } from '../component'
 import {
   Breadcrumb,
   DashboardLayout,
   Header,
 } from '@/routes/dashboard/component'
-import { PATH } from '@/utils/constant/_paths'
 import { useState } from 'react'
-import { generatePath, useParams } from 'react-router-dom'
-import { Container } from '../component'
 
 const links = [
   {
@@ -23,8 +24,6 @@ const links = [
 
 export default function Detail() {
   const { detail } = useParams()
-  const {} = useEmployees({ positionId: detail?.split('-').pop() })
-
   const [lastLink] = useState<any>(() => {
     if (!detail) return
     const parts = detail.split('-')
@@ -37,22 +36,37 @@ export default function Detail() {
       }),
     }
   })
+  const positionId = detail?.split('-').pop()
 
   return (
     <DashboardLayout>
       <Header title='Pegawai' />
-      <Container>
+      <Container className='pt-4 pb-6'>
         <Breadcrumb links={[...links, lastLink]} />
-        <Tabs>
-          <Tab label='Semua' badge='120'>
-            <p>Semua</p>
-            <p>{detail?.split('-').pop()}</p>
-          </Tab>
-          <Tab label='Aktif' badge='50'>
-            <p>Aktif</p>
-          </Tab>
-        </Tabs>
       </Container>
+      <Tabs>
+        <Tab label='Semua' badge='120'>
+          <Container className='py-6'>
+            <TableEmployee positionId={positionId} />
+          </Container>
+        </Tab>
+        <Tab label='Aktif' badge='50'>
+          <Container className='py-6'>
+            <TableEmployee
+              status={EmployeeStatus.active}
+              positionId={positionId}
+            />
+          </Container>
+        </Tab>
+        <Tab label='Tidak aktif' badge='50'>
+          <Container className='py-6'>
+            <TableEmployee
+              status={EmployeeStatus.nonactive}
+              positionId={positionId}
+            />
+          </Container>
+        </Tab>
+      </Tabs>
     </DashboardLayout>
   )
 }
