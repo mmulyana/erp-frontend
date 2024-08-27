@@ -181,7 +181,7 @@ const columnOvertime: ColumnDef<OvertimeType>[] = [
     header: 'Deskripsi',
   },
   {
-    id: 'actiion',
+    id: 'action',
     cell: () => (
       <div className='flex justify-end w-full'>
         <DropdownMenu>
