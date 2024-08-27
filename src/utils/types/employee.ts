@@ -34,13 +34,13 @@ export type Employee = {
   positionId?: number
   last_education?: string
   position?: Position
-  attendances: Attendance[]
-  cashAdvances: CashAdvance[]
-  leaves: Leave[]
-  contact: Contact[]
-  address: Address[]
-  statusTracks: EmployeeStatusTrack[]
-  employeeCompetency: EmployeeCompetency[]
+  attendances?: Attendance[]
+  cashAdvances?: CashAdvance[]
+  leaves?: Leave[]
+  contact?: Contact[]
+  address?: Address[]
+  statusTracks?: EmployeeStatusTrack[]
+  employeeCompetency?: EmployeeCompetency[]
 }
 
 type EmployeeCompetency = {
