@@ -1,7 +1,7 @@
 import { PATH } from '@/utils/constant/_paths'
 import { Breadcrumb, Container, DashboardLayout } from '../../component'
 import { Tab, Tabs } from '@/components/tab'
-import { Header } from './component'
+import { Header, Overtime, Regular } from './component'
 
 const links = [
   {
@@ -23,10 +23,14 @@ export default function Page() {
       </Container>
       <Tabs>
         <Tab label='Reguler'>
-          <Container>Reguler</Container>
+          <Container>
+            <Regular />
+          </Container>
         </Tab>
         <Tab label='Lembur'>
-          <Container>Lembur</Container>
+          <Container>
+            <Overtime />
+          </Container>
         </Tab>
       </Tabs>
     </DashboardLayout>
