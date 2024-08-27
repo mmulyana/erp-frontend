@@ -6,9 +6,8 @@ const Account = lazy(() => import('./account/account/index.tsx'))
 const Roles = lazy(() => import('./account/roles/index.tsx'))
 const Overview = lazy(() => import('./overview/index.tsx'))
 const Employee = lazy(() => import('./hris/employee/index.tsx'))
-const EmployeeByPosition = lazy(
-  () => import('./hris/employee/detail/index.tsx')
-)
+const EmployeeByPosition = lazy(() => import('./hris/employee/detail/index.tsx'))
+const Attendance = lazy(() => import('./hris/attendance/index.tsx'))
 
 export const dashboardRoutes = [
   {
@@ -35,4 +34,8 @@ export const dashboardRoutes = [
     path: PATH.EMPLOYEE_DETAIL,
     element: <EmployeeByPosition />,
   },
+  {
+    path: PATH.EMPLOYEE_ATTENDANCE,
+    element: <Attendance />
+  }
 ]
