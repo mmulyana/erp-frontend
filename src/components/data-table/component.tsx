@@ -1,3 +1,13 @@
+import useUrlState from '@ahooksjs/use-url-state'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select'
+
 interface PaginationProps {
   currentPage: number
   totalPages: number
@@ -52,5 +62,31 @@ export function Pagination({
         </li>
       </ul>
     </nav>
+  )
+}
+
+type LimitProps = {
+  limit?: number
+}
+export function Limit({ limit }: LimitProps) {
+  const [url, setUrl] = useUrlState({ limit: limit })
+  return (
+    <Select>
+      <SelectTrigger className='w-[180px]'>
+        <SelectValue
+          placeholder={limit ?? '10'}
+          onChange={(e) => console.log(e)}
+        />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem value='10'>10</SelectItem>
+          <SelectItem value='20'>20</SelectItem>
+          <SelectItem value='30'>30</SelectItem>
+          <SelectItem value='40'>40</SelectItem>
+          <SelectItem value='50'>50</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   )
 }
