@@ -12,7 +12,7 @@ export default function Search() {
         value={url.name}
         onChange={(e) => setUrl({ name: e.target.value })}
         placeholder='Search'
-        className='pl-8 text-sm h-fit py-2 shadow'
+        className='pl-8 text-sm h-8 py-2 shadow-md shadow-gray-100 border border-[#EFF0F2] rounded-[8px]'
       />
     </div>
   )
