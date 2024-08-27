@@ -1,12 +1,15 @@
+import Filter from '@/components/common/filter'
 import Search from '@/components/common/search'
 import Modal from '@/components/modal-v2'
 import { Button } from '@/components/ui/button'
 import { useEmployees } from '@/hooks/use-employee'
 import { EmployeeStatus } from '@/utils/enum/common'
 import useUrlState from '@ahooksjs/use-url-state'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { isString } from 'lodash'
 import { UserRoundPlus } from 'lucide-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 type TableEmployeeProps = {
@@ -24,10 +27,11 @@ export function TableEmployee({ status, positionId }: TableEmployeeProps) {
   return (
     <>
       <div className='flex justify-between items-center'>
-        <div className='flex gap-16'>
+        <div className='flex gap-4'>
           <div className='max-w-[180px]'>
             <Search />
           </div>
+          <Filter />
         </div>
         <ModalAdd />
       </div>
@@ -37,6 +41,11 @@ export function TableEmployee({ status, positionId }: TableEmployeeProps) {
 
 function ModalAdd() {
   const [open, setOpen] = useState(false)
+
+  const form = useForm<EmployeeSchema>({
+    resolver: zodResolver(employeeSchema),
+    defaultValues: {},
+  })
 
   return (
     <>
