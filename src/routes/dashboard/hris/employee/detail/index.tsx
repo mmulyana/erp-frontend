@@ -3,9 +3,9 @@ import { EmployeeStatus } from '@/utils/enum/common'
 import { PATH } from '@/utils/constant/_paths'
 import { Tab, Tabs } from '@/components/tab'
 import { TableEmployee } from './component'
-import { Container } from '../component'
 import {
   Breadcrumb,
+  Container,
   DashboardLayout,
   Header,
 } from '@/routes/dashboard/component'
