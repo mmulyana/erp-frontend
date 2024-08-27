@@ -46,7 +46,7 @@ export function TableEmployee({ status, positionId }: TableEmployeeProps) {
         </div>
         <ModalAdd />
       </div>
-      <DataTable columns={columns} data={dummyEmployees}/>
+      <DataTable columns={columns} data={dummyEmployees} />
     </>
   )
 }
@@ -68,7 +68,9 @@ function ModalAdd() {
 
   return (
     <>
-      <Button onClick={() => setOpen(!open)} className='h-8'>Tambah Pegawai</Button>
+      <Button onClick={() => setOpen(!open)} className='h-8'>
+        Tambah Pegawai
+      </Button>
       <Modal
         open={open}
         setOpen={setOpen}
@@ -110,11 +112,11 @@ export const columns: ColumnDef<Employee>[] = [
     cell: ({ cell }) => {
       const contact = cell.row.original.contact
       const primaryIndex = useMemo(
-        () => contact.findIndex((c) => !!c.isPrimary),
+        () => contact?.findIndex((c) => !!c.isPrimary),
         [contact]
       )
 
-      return <p>{contact[primaryIndex]?.value}</p>
+      return <p>{contact?.[primaryIndex ?? 0]?.value}</p>
     },
   },
   {
@@ -143,8 +145,8 @@ export const columns: ColumnDef<Employee>[] = [
       const competencies = cell.row.original.employeeCompetency
       return (
         <p>
-          {!!competencies.length &&
-            competencies.map((item) => (
+          {!!competencies?.length &&
+            competencies?.map((item) => (
               <p key={item.id}>{item.competency.name}</p>
             ))}
         </p>
