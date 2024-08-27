@@ -1,7 +1,7 @@
-import { Breadcrumb, DashboardLayout, Header } from '../../component'
+import { Breadcrumb, Container, DashboardLayout, Header } from '../../component'
 import { DataTable } from '@/components/data-table'
 import { PATH } from '@/utils/constant/_paths'
-import { columns, Container, Data, TableHeader } from './component'
+import { columns, Data, TableHeader } from './component'
 import { usePosition } from '@/hooks/use-position'
 
 const links = [
