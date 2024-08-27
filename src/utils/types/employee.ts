@@ -32,6 +32,7 @@ export type Employee = {
   kk?: string
   religion?: string
   positionId?: number
+  last_education?: string
   position?: Position
   attendances: Attendance[]
   cashAdvances: CashAdvance[]
