@@ -7,60 +7,85 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select'
+import { cn } from '@/utils/cn'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface PaginationProps {
-  currentPage: number
   totalPages: number
-  onPageChange: (page: number) => void
 }
 
-export function Pagination({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: PaginationProps) {
-  const pageNumbers = []
+export function Pagination({ totalPages }: PaginationProps) {
+  const [url, setUrl] = useUrlState({ page: '' })
+  const getPageNumbers = () => {
+    const pageNumbers = []
+    const delta = 1
 
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i)
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= (url.page !== '' ? Number(url.page) : 1) - delta &&
+          i <= (url.page !== '' ? Number(url.page) : 1) + delta)
+      ) {
+        pageNumbers.push(i)
+      } else if (i === 2 || i === totalPages - 1) {
+        pageNumbers.push('...')
+      }
+    }
+
+    return pageNumbers
   }
 
   return (
-    <nav>
-      <ul className='pagination'>
-        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-          <button
-            className='page-link'
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-        </li>
-        {pageNumbers.map((number) => (
-          <li
-            key={number}
-            className={`page-item ${currentPage === number ? 'active' : ''}`}
-          >
-            <button className='page-link' onClick={() => onPageChange(number)}>
+    <nav className='flex justify-between items-center w-full'>
+      <button
+        onClick={() => setUrl({ page: Number(url.page) - 1 })}
+        disabled={(url.page !== '' ? Number(url.page) : 1) === 1}
+        className={cn(
+          'w-6 h-6 flex justify-center items-center border rounded border-[#D4D7DF]',
+          (url.page !== '' ? Number(url.page) : 1) === 1
+            ? 'bg-transparent border-transparent text-[#747C94]/50'
+            : 'bg-white text-[#747C94]'
+        )}
+      >
+        <ChevronLeft className='w-5 h-5' />
+      </button>
+      <ul className='flex gap-2'>
+        {getPageNumbers().map((number, index) => (
+          <li key={index}>
+            <button
+              className={cn(
+                'w-6 h-6 flex justify-center items-center border text-sm rounded',
+                (url.page !== '' ? Number(url.page) : 1) == number
+                  ? 'border-[#D4D7DF] bg-white'
+                  : number === '...'
+                  ? 'border-transparent'
+                  : 'border-transparent hover:bg-white hover:border-[#D4D7DF]'
+              )}
+              onClick={() => {
+                if (typeof number === 'number') {
+                  setUrl({ page: number })
+                }
+              }}
+              disabled={number === '...'}
+            >
               {number}
             </button>
           </li>
         ))}
-        <li
-          className={`page-item ${
-            currentPage === totalPages ? 'disabled' : ''
-          }`}
-        >
-          <button
-            className='page-link'
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </li>
       </ul>
+      <button
+        onClick={() => setUrl({ page: Number(url.page) + 1 })}
+        disabled={(url.page !== '' ? Number(url.page) : 1) === totalPages}
+        className={cn(
+          'w-6 h-6 flex justify-center items-center border rounded border-[#D4D7DF]',
+          (url.page !== '' ? Number(url.page) : 1) === totalPages
+            ? 'bg-transparent border-transparent text-[#747C94]/50'
+            : 'bg-white text-[#747C94]'
+        )}
+      >
+        <ChevronRight className='w-5 h-5' />
+      </button>
     </nav>
   )
 }
@@ -69,14 +94,15 @@ type LimitProps = {
   limit?: number
 }
 export function Limit({ limit }: LimitProps) {
-  const [url, setUrl] = useUrlState({ limit: limit })
+  const [_, setUrl] = useUrlState({ limit: limit })
   return (
-    <Select>
-      <SelectTrigger className='w-[180px]'>
-        <SelectValue
-          placeholder={limit ?? '10'}
-          onChange={(e) => console.log(e)}
-        />
+    <Select
+      onValueChange={(val: string) => {
+        setUrl({ limit: val })
+      }}
+    >
+      <SelectTrigger className='w-fit h-8 border border-[#EFF0F2] rounded-[8px] shadow-md shadow-gray-100'>
+        <SelectValue placeholder={limit ?? '10'} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
