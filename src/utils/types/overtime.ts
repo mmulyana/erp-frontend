@@ -6,5 +6,5 @@ export type Overtime = {
   date: string
   total_hour: number
   description?: string
-  employee: Employee
+  employee?: Employee
 }
