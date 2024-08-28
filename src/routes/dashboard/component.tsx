@@ -2,7 +2,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/utils/cn'
 import { PATH } from '@/utils/constant/_paths'
 import { ChevronLeft, SlashIcon } from 'lucide-react'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import Logo from '/public/erp-logo.svg'
 import { Link, matchPath, useLocation } from 'react-router-dom'
 import {
@@ -13,12 +13,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { atom, useAtomValue, useSetAtom } from 'jotai'
 
 export function DashboardLayout({ children }: React.PropsWithChildren) {
   return (
     <>
       <Sidebar />
       <div className='pl-[240px]'>
+        <Header />
         <div>{children}</div>
       </div>
     </>
@@ -140,21 +142,13 @@ type Link = {
   show: boolean
 }
 
-type HeaderProps = React.PropsWithChildren & {
-  subtitle?: string
-  title?: string
-  icon?: React.ReactNode
-}
-export function Header(props: HeaderProps) {
+export function Header() {
+  const title = useAtomValue(titleAtom)
   return (
-    <div className='pt-2.5 pb-2 flex items-center justify-between border-b-[0.5px] border-gray-200 px-8'>
+    <div className='flex items-center justify-between border-b-[0.5px] border-gray-200 px-8 h-[48px]'>
       <div>
-        <p className='text-xs text-gray-400'>{props.subtitle || 'subtitle'}</p>
-        <p className='text-lg text-gray-800 font-medium'>
-          {props.title || 'title'}
-        </p>
+        <p className='text-lg text-gray-800 font-medium'>{title || ''}</p>
       </div>
-      {props.children}
     </div>
   )
 }
@@ -204,4 +198,13 @@ export function Container({
   className,
 }: React.PropsWithChildren & { className?: string }) {
   return <div className={cn('py-4 px-8', className)}>{children}</div>
+}
+
+const titleAtom = atom('')
+export const useTitle = (title: string) => {
+  const setTitle = useSetAtom(titleAtom)
+
+  useEffect(() => {
+    setTitle(title)
+  }, [title])
 }
