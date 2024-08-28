@@ -1,4 +1,9 @@
-import { Breadcrumb, Container, DashboardLayout, Header } from '../../component'
+import {
+  Breadcrumb,
+  Container,
+  DashboardLayout,
+  useTitle,
+} from '../../component'
 import { DataTable } from '@/components/data-table'
 import { PATH } from '@/utils/constant/_paths'
 import { columns, Data, TableHeader } from './component'
@@ -17,9 +22,9 @@ const links = [
 
 export default function Employee() {
   const { data, isLoading } = usePosition()
+  useTitle('Pegawai')
   return (
     <DashboardLayout>
-      <Header subtitle='SDM' title='Pegawai'></Header>
       <Container>
         <Breadcrumb links={links} />
         <TableHeader />
