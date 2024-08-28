@@ -14,7 +14,7 @@ import {
   Breadcrumb,
   Container,
   DashboardLayout,
-  Header,
+  useTitle,
 } from '@/routes/dashboard/component'
 import { PATH } from '@/utils/constant/_paths'
 import { id } from 'date-fns/locale'
@@ -36,9 +36,10 @@ const links = [
 ]
 
 export default function TableDemo() {
+  useTitle('Absensi')
+
   return (
     <DashboardLayout>
-      <Header subtitle='human resource' title='Attendance'></Header>
       <Container className='space-y-4'>
         <Breadcrumb links={links} />
 
