@@ -22,17 +22,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
+import { Limit } from '@/components/data-table/component'
 
 type TableEmployeeProps = {
   status?: EmployeeStatus
   positionId?: string
 }
 export function TableEmployee({ status, positionId }: TableEmployeeProps) {
-  const [url] = useUrlState({ name: '' })
-  const {} = useEmployees({
+  const [url] = useUrlState({ name: '', page: '' })
+  const { isLoading } = useEmployees({
     ...(!!status ? { status } : undefined),
     ...(isString(url.name) ? { name: url.name } : undefined),
     ...(!!positionId ? { positionId } : undefined),
+    ...(isString(url.page) ? { page: url.page } : undefined),
   })
 
   return (
@@ -43,10 +45,17 @@ export function TableEmployee({ status, positionId }: TableEmployeeProps) {
             <Search />
           </div>
           <Filter />
+          <Limit />
         </div>
         <ModalAdd />
       </div>
-      <DataTable columns={columns} data={dummyEmployees} />
+      <DataTable
+        columns={columns}
+        data={dummyEmployees}
+        withPagination
+        withLoading
+        isLoading={isLoading}
+      />
     </>
   )
 }
@@ -82,7 +91,7 @@ function ModalAdd() {
           </div>
         }
       >
-        <div className='pb-8'>
+        <div className='pb-8 h-[400px]'>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(submit)}>
               <FormField
