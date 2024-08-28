@@ -8,6 +8,7 @@ import {
 import { Attendance } from './attendance'
 import { CashAdvance } from './cash-advance'
 import { Leave } from './leave'
+import { Overtime } from './overtime'
 import { Position } from './position'
 
 export type EmployeeInput = Omit<
@@ -40,6 +41,7 @@ export type Employee = {
   contact?: Contact[]
   address?: Address[]
   statusTracks?: EmployeeStatusTrack[]
+  overtime?: Overtime[]
   employeeCompetency?: EmployeeCompetency[]
 }
 
