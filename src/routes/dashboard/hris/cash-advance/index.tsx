@@ -1,4 +1,4 @@
-import { Breadcrumb, Container, DashboardLayout } from '../../component'
+import { Breadcrumb, Container, DashboardLayout, useTitle } from '../../component'
 import CardInfo from '@/components/common/card-info'
 import Filter from '@/components/common/filter'
 import Search from '@/components/common/search'
@@ -19,6 +19,8 @@ const links = [
 ]
 
 export default function Page() {
+  useTitle('Kasbon')
+
   return (
     <DashboardLayout>
       <Container>
