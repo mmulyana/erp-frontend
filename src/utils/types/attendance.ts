@@ -7,5 +7,5 @@ export type Attendance = {
   total_hour: number
   isOnLeave?: boolean
   leaveId?: number
-  employee: Employee
+  employee?: Employee
 }
