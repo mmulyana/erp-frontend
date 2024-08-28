@@ -13,21 +13,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Pagination } from './component'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  footer?: React.ReactNode
   isLoading?: boolean
   withLoading?: boolean
+  withPagination?: boolean
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  footer,
   isLoading,
   withLoading = false,
+  withPagination,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -82,7 +83,10 @@ export function DataTable<TData, TValue>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className='bg-[#F9FAFB] text-[#747C94] text-sm font-medium'>
+                <TableHead
+                  key={header.id}
+                  className='bg-[#F9FAFB] text-[#747C94] text-sm font-medium'
+                >
                   {withLoading && isLoading ? (
                     <div className='h-4 w-full bg-gray-200 rounded animate-pulse'></div>
                   ) : (
@@ -96,18 +100,11 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
-          {renderTableBody()}
-          <TableRow>
-            <TableCell
-              colSpan={columns.length}
-              className='h-10 bg-[#F9FAFB] py-0'
-            >
-              {footer || null}
-            </TableCell>
-          </TableRow>
-        </TableBody>
+        <TableBody>{renderTableBody()}</TableBody>
       </Table>
+      <div className='bg-[#F9FAFB] py-2 px-3 border-t w-full min-h-12 flex justify-between items-center'>
+        {!!withPagination && <Pagination totalPages={10} />}
+      </div>
     </div>
   )
 }
