@@ -1,5 +1,5 @@
 import { PATH } from '@/utils/constant/_paths'
-import { Breadcrumb, Container, DashboardLayout } from '../../component'
+import { Breadcrumb, Container, DashboardLayout, useTitle } from '../../component'
 import { Tab, Tabs } from '@/components/tab'
 import { Header, Overtime, Regular } from './component'
 
@@ -15,6 +15,8 @@ const links = [
 ]
 
 export default function Page() {
+  useTitle('Absensi')
+
   return (
     <DashboardLayout>
       <Container>
