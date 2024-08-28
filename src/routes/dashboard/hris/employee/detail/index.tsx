@@ -7,7 +7,7 @@ import {
   Breadcrumb,
   Container,
   DashboardLayout,
-  Header,
+  useTitle,
 } from '@/routes/dashboard/component'
 import { useState } from 'react'
 
@@ -24,6 +24,8 @@ const links = [
 
 export default function Detail() {
   const { detail } = useParams()
+  useTitle('Pegawai')
+
   const [lastLink] = useState<any>(() => {
     if (!detail) return
     const parts = detail.split('-')
@@ -40,7 +42,6 @@ export default function Detail() {
 
   return (
     <DashboardLayout>
-      <Header title='Pegawai' />
       <Container className='pt-4 pb-6'>
         <Breadcrumb links={[...links, lastLink]} />
       </Container>
