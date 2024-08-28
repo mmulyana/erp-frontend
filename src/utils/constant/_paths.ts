@@ -14,4 +14,5 @@ export const PATH = {
   EMPLOYEE_PAID_LEAVE: '/dashboard/employee/paid-leave',
   EMPLOYEE_ATTENDANCE: '/dashboard/employee/attendance',
   EMPLOYEE_CASH_ADVANCES: '/dashboard/employee/cash-advances',
+  EMPLOYEE_ATTENDANCE_SUMMARY: '/dashboard/employee/attendance/summary',
 }
