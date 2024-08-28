@@ -33,7 +33,7 @@ export function Tabs({ children }: TabsProps) {
             {!!child.props.badge && (
               <span
                 className={cn(
-                  'text-white text-xs py-0.5 px-1.5 rounded-md',
+                  'text-white text-xs py-0.5 px-1.5 rounded-full',
                   index == active ? 'bg-[#5463E8]' : 'bg-[#989CA8]'
                 )}
               >
@@ -41,7 +41,7 @@ export function Tabs({ children }: TabsProps) {
               </span>
             )}
             {index === active && (
-              <div className='absolute bottom-0 left-0 w-full h-[3px] bg-[#5463E8]'></div>
+              <div className='absolute bottom-0 left-0 w-full h-[3px] bg-[#5463E8] rounded-t-lg'></div>
             )}
           </button>
         ))}
