@@ -284,7 +284,7 @@ export const columns: ColumnDef<Data>[] = [
             {cell.row.original.employees.slice(0, 3).map((item, idx) => (
               <div
                 key={idx}
-                className='w-6 h-6 bg-blue-700 text-white relative rounded-full'
+                className='w-6 h-6 bg-blue-500 text-white relative rounded-full -mr-1.5 border-[2.5px] border-white'
               >
                 <span className='text-xs absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
                   {item.fullname.at(0)}
@@ -292,7 +292,7 @@ export const columns: ColumnDef<Data>[] = [
               </div>
             ))}
           </div>
-          <div className='h-1 w-1 rounded-full bg-[#313951]/50'></div>
+          <div className='h-1 w-1 rounded-full bg-[#313951]/50 ml-1'></div>
           <p className='text-sm text-[#313951]'>
             {cell.row.original._count.employees} Orang
           </p>
@@ -325,7 +325,7 @@ export const columns: ColumnDef<Data>[] = [
                 <Ellipsis className='w-6 h-6 text-[#313951]/70' />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className='w-full right-0'>
+            <DropdownMenuContent className='!min-w-[48px] right-0'>
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => setIsEdit(true)}
