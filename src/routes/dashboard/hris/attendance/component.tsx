@@ -111,7 +111,7 @@ const columnsRegular: ColumnDef<Attendance>[] = [
     id: 'nama',
     header: 'Nama',
     cell: ({ cell }) => {
-      return <p>{cell.row.original.employee.fullname}</p>
+      return <p>{cell.row.original?.employee?.fullname}</p>
     },
   },
   {
@@ -162,7 +162,7 @@ const columnOvertime: ColumnDef<OvertimeType>[] = [
     id: 'nama',
     header: 'Nama',
     cell: ({ cell }) => {
-      return <p>{cell.row.original.employee.fullname}</p>
+      return <p>{cell.row.original.employee?.fullname}</p>
     },
   },
   {
