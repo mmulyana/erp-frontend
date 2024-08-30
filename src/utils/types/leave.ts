@@ -1,4 +1,3 @@
-import { LeaveType, Status } from '../enum/common'
 import { Employee } from './employee'
 
 export type Leave = {
@@ -9,5 +8,4 @@ export type Leave = {
   leaveType: string
   employee: Employee
   description?: string
-  // status: Status
 }
