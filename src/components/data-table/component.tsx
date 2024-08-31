@@ -75,7 +75,9 @@ export function Pagination({ totalPages }: PaginationProps) {
         ))}
       </ul>
       <button
-        onClick={() => setUrl({ page: Number(url.page) + 1 })}
+        onClick={() =>
+          setUrl({ page: (url.page !== '' ? Number(url.page) : 1) + 1 })
+        }
         disabled={(url.page !== '' ? Number(url.page) : 1) === totalPages}
         className={cn(
           'w-6 h-6 flex justify-center items-center border rounded border-[#D4D7DF]',
