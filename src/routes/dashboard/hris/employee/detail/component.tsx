@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
 import { Limit } from '@/components/data-table/component'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { PATH } from '@/utils/constant/_paths'
 
 type TableEmployeeProps = {
   status?: EmployeeStatus
@@ -36,6 +38,8 @@ export function TableEmployee({ status, positionId }: TableEmployeeProps) {
     ...(!!positionId ? { positionId } : undefined),
     ...(isString(url.page) ? { page: url.page } : undefined),
   })
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -47,7 +51,12 @@ export function TableEmployee({ status, positionId }: TableEmployeeProps) {
           <Filter />
           <Limit />
         </div>
-        <ModalAdd />
+        <Button
+          className='h-8'
+          onClick={() => navigate(`${PATH.EMPLOYEE_ADD}?path=${pathname}`)}
+        >
+          Tambah pegawai
+        </Button>
       </div>
       <DataTable
         columns={columns}
