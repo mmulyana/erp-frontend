@@ -21,6 +21,7 @@ interface DataTableProps<TData, TValue> {
   isLoading?: boolean
   withLoading?: boolean
   withPagination?: boolean
+  totalPages?: number
 }
 
 export function DataTable<TData, TValue>({
@@ -29,6 +30,7 @@ export function DataTable<TData, TValue>({
   isLoading,
   withLoading = false,
   withPagination,
+  totalPages
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -103,7 +105,7 @@ export function DataTable<TData, TValue>({
         <TableBody>{renderTableBody()}</TableBody>
       </Table>
       <div className='bg-[#F9FAFB] py-2 px-3 border-t w-full min-h-12 flex justify-between items-center'>
-        {!!withPagination && <Pagination totalPages={10} />}
+        {!!withPagination && <Pagination totalPages={totalPages ?? 1} />}
       </div>
     </div>
   )
