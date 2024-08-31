@@ -43,6 +43,7 @@ export type Employee = {
   statusTracks?: EmployeeStatusTrack[]
   overtime?: Overtime[]
   employeeCompetency?: EmployeeCompetency[]
+  certifications?: Certification[]
 }
 
 type EmployeeCompetency = {
@@ -52,7 +53,6 @@ type EmployeeCompetency = {
   certificationId: number
   employee: Employee
   competency: Competency
-  certification: Certification
 }
 
 type Competency = {
@@ -62,12 +62,13 @@ type Competency = {
 }
 
 type Certification = {
-  id: number
+  id?: number
   name: string
   issuingOrganization: string
-  issueDate: Date
-  expiryDate: Date
-  EmployeeCompetency: EmployeeCompetency[]
+  issueDate: string
+  expiryDate: string
+  employeeId: number
+  employee?: Employee
 }
 
 type Contact = {
@@ -99,5 +100,7 @@ type EmployeeStatusTrack = {
   date: Date
   status: EmployeeStatus
   employeeId: number
+  competencyId?: number
+  comptency?: Competency
   employee: Employee
 }
