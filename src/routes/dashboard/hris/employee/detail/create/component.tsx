@@ -11,14 +11,13 @@ type FormStep = {
 }
 type StepperWrapper = {
   children: ReactElement<FormStep>[]
-  onSubmit: () => void
 }
 
 export function StepperItem({ children }: FormStep) {
   return <div>{children}</div>
 }
 
-export function StepperWrapper({ children, onSubmit }: StepperWrapper) {
+export function StepperWrapper({ children }: StepperWrapper) {
   const navigate = useNavigate()
   const [url] = useUrlState({ path: '' })
   const [currentStep, setCurrentStep] = useState(0)
@@ -87,15 +86,14 @@ export function StepperWrapper({ children, onSubmit }: StepperWrapper) {
         </Button>
       </div>
       <div className='max-w-3xl mx-auto rounded-xl h-fit pt-24'>
-        <div className='bg-white rounded-xl p-4'>{children[currentStep]}</div>
+        <div className='rounded-xl p-4'>{children[currentStep]}</div>
         <div className='h-fit w-full flex justify-end py-4 gap-4 px-4'>
           {anySteps ? (
             <>
               <Button
-                type='button'
+                type='submit'
                 variant='outline'
                 className='bg-transparent border-[#5463E8] text-[#5463E8]'
-                onClick={onSubmit}
               >
                 Simpan
               </Button>
@@ -126,7 +124,7 @@ export function StepperWrapper({ children, onSubmit }: StepperWrapper) {
               >
                 Kembali
               </Button>
-              <Button type='button' size='sm'>
+              <Button type='submit' size='sm'>
                 Simpan
               </Button>
             </>
