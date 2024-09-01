@@ -11,11 +11,6 @@ import { Leave } from './leave'
 import { Overtime } from './overtime'
 import { Position } from './position'
 
-export type EmployeeInput = Omit<
-  Employee,
-  'attendances' | 'position' | 'cashAdvances' | 'leaves' | 'statusTracks'
->
-
 export type Employee = {
   id?: number
   fullname: string
@@ -35,15 +30,15 @@ export type Employee = {
   positionId?: number
   last_education?: string
   position?: Position
+  contact?: Contact[]
+  address?: Address[]
+  employeeCompetency?: EmployeeCompetency[]
+  certifications?: Certification[]
   attendances?: Attendance[]
   cashAdvances?: CashAdvance[]
   leaves?: Leave[]
-  contact?: Contact[]
-  address?: Address[]
   statusTracks?: EmployeeStatusTrack[]
   overtime?: Overtime[]
-  employeeCompetency?: EmployeeCompetency[]
-  certifications?: Certification[]
 }
 
 type EmployeeCompetency = {
