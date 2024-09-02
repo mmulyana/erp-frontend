@@ -73,7 +73,7 @@ export function StepperWrapper({ children }: StepperWrapper) {
           </Fragment>
         ))}
       </div>
-      <div className='h-20 absolute flex justify-center items-center pl-4'>
+      <div className='h-20 fixed flex justify-center items-center pl-4'>
         <Button
           variant='ghost'
           className='flex gap-1 items-center hover:bg-gray-200 rounded-md pl-1 pr-4'
