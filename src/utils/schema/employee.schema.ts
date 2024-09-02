@@ -42,7 +42,6 @@ const CompetencySchema = z.object({
 })
 
 const EmployeeCompetencySchema = z.object({
-  employeeId: z.number(),
   competencyId: z.number(),
   certificationId: z.number(),
   competency: CompetencySchema,
@@ -72,9 +71,7 @@ const PositionSchema = z.object({
 })
 
 const EmployeeSchema = z.object({
-  id: z.number().optional(),
   fullname: z.string(),
-  nickname: z.string().optional(),
   hireDate: z.date().optional(),
   salary_per_month: z.number().optional(),
   salary_per_day: z.number().optional(),
