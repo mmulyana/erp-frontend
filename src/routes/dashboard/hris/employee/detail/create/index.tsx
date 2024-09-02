@@ -17,6 +17,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useCreateEmployee } from '@/hooks/use-employee'
+import { useNavigate } from 'react-router-dom'
+import useUrlState from '@ahooksjs/use-url-state'
 
 const labelContact = {
   [ContactType.email]: 'Email',
@@ -25,30 +28,34 @@ const labelContact = {
 }
 
 export default function Create() {
+  const { mutate } = useCreateEmployee()
+  const navigate = useNavigate()
+  const [url] = useUrlState({ path: '', positionId: 1 })
+
   const form = useForm<EmployeeValidationType>({
     resolver: zodResolver(EmployeeValidationSchema),
     defaultValues: {
       fullname: '',
-      contact: [
-        {
-          isPrimary: true,
-          type: ContactType.phoneNumber,
-          value: '',
-        },
-      ],
-      address: [
-        {
-          desa: '',
-          rt: '',
-          rw: '',
-          kampung: '',
-          kecamatan: '',
-          kabupaten: '',
-          kodePos: undefined,
-          provinsi: '',
-          type: AddressType.domicile,
-        },
-      ],
+      // contact: [
+      //   {
+      //     isPrimary: true,
+      //     type: ContactType.phoneNumber,
+      //     value: '',
+      //   },
+      // ],
+      // address: [
+      //   {
+      //     desa: '',
+      //     rt: '',
+      //     rw: '',
+      //     kampung: '',
+      //     kecamatan: '',
+      //     kabupaten: '',
+      //     kodePos: undefined,
+      //     provinsi: '',
+      //     type: AddressType.domicile,
+      //   },
+      // ],
     },
   })
 
@@ -59,7 +66,14 @@ export default function Create() {
   }
 
   const onSubmit = async (data: EmployeeValidationType) => {
-    console.log(data)
+    mutate(
+      { fullname: data.fullname, positionId: Number(url.positionId) },
+      {
+        onSuccess: () => {
+          navigate(url.path)
+        },
+      }
+    )
   }
 
   const {
@@ -92,20 +106,12 @@ export default function Create() {
                 </div>
               </div>
               <div className='flex flex-col gap-4 p-4 pb-6 border bg-white rounded-xl'>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                  <FormField
-                    label='Nama lengkap'
-                    control={form.control}
-                    name='fullname'
-                    render={({ field }) => <Input {...field} />}
-                  />
-                  <FormField
-                    label='Nama panggilan'
-                    control={form.control}
-                    name='nickname'
-                    render={({ field }) => <Input {...field} />}
-                  />
-                </div>
+                <FormField
+                  label='Nama lengkap'
+                  control={form.control}
+                  name='fullname'
+                  render={({ field }) => <Input {...field} />}
+                />
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <FormField
                     label='Tanggal lahir'
@@ -332,7 +338,9 @@ export default function Create() {
                       <FormField
                         name={`address.${index}.kodePos`}
                         control={form.control}
-                        render={({ field }) => <Input {...field} type='number'/>}
+                        render={({ field }) => (
+                          <Input {...field} type='number' />
+                        )}
                         label='Kode Pos'
                       />
                       <FormField
