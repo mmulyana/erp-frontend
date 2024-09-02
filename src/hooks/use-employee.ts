@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { EmployeeInput } from '@/utils/types/employee'
 import { EmployeeStatus } from '@/utils/enum/common'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
@@ -44,7 +43,7 @@ export const useCreateEmployee = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: EmployeeInput) => {
+    mutationFn: async (data: any) => {
       return await http.post(URLS.EMPLOYEE, data)
     },
     onSuccess: (data) => {
