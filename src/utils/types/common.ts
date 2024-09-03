@@ -1,4 +1,4 @@
-export type Params = {
-    page?: string
-    limit?: string
+export type Pagination = {
+  page?: string
+  limit?: string
 }
