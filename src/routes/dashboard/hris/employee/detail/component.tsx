@@ -31,7 +31,7 @@ export function TableEmployee({ status, positionId }: TableEmployeeProps) {
     ...(isString(url.name) ? { name: url.name } : undefined),
     ...(!!positionId ? { positionId } : undefined),
     ...(isString(url.page) ? { page: url.page } : undefined),
-  })
+  }, {})
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
