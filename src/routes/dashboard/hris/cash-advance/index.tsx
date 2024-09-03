@@ -1,11 +1,17 @@
-import { Breadcrumb, Container, DashboardLayout, useTitle } from '../../component'
+import {
+  Breadcrumb,
+  Container,
+  DashboardLayout,
+  useTitle,
+} from '../../component'
 import CardInfo from '@/components/common/card-info'
 import Filter from '@/components/common/filter'
 import Search from '@/components/common/search'
 import { DataTable } from '@/components/data-table'
-import { Button } from '@/components/ui/button'
 import { PATH } from '@/utils/constant/_paths'
-import { columns, data } from './component'
+import { columns, ModalAdd } from './component'
+import useUrlState from '@ahooksjs/use-url-state'
+import { useCashAdvance } from '@/hooks/use-cash-advance'
 
 const links = [
   {
@@ -20,6 +26,14 @@ const links = [
 
 export default function Page() {
   useTitle('Kasbon')
+
+  const [url] = useUrlState({ name: '', page: 1, limit: 10 })
+
+  const { data, isLoading } = useCashAdvance({
+    ...(url.name !== '' ? { name: url.name } : undefined),
+    limit: url.limit,
+    page: url.page,
+  })
 
   return (
     <DashboardLayout>
@@ -40,9 +54,14 @@ export default function Page() {
             </div>
             <Filter />
           </div>
-          <Button className='h-8'>Tambah data</Button>
+          <ModalAdd/>
         </div>
-        <DataTable columns={columns} data={data} />
+        <DataTable
+          columns={columns}
+          data={data?.data?.data || []}
+          withLoading
+          isLoading={isLoading}
+        />
       </Container>
     </DashboardLayout>
   )
