@@ -10,7 +10,13 @@ type ParamsEmployee = {
   positionId?: string
   status?: EmployeeStatus
 }
-export const useEmployees = (params: ParamsEmployee) => {
+type AdditionalEmployee = {
+  enabled?: boolean
+}
+export const useEmployees = (
+  params: ParamsEmployee,
+  additional: AdditionalEmployee
+) => {
   return useQuery({
     queryKey: [KEYS.EMPLOYEE, params],
     queryFn: async () => {
@@ -25,7 +31,7 @@ export const useEmployees = (params: ParamsEmployee) => {
           throw err
         })
     },
-    enabled: !!params.positionId,
+    enabled: additional.enabled,
   })
 }
 
