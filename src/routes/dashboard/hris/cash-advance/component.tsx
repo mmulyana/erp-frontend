@@ -27,7 +27,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { id } from 'date-fns/locale'
-import { delay } from 'lodash'
 import { Ellipsis } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -51,9 +50,7 @@ export function ModalAdd() {
       { ...data, employeeId: Number(data.employeeId) },
       {
         onSuccess: async () => {
-          delay(() => {
-            setIsOpen(false)
-          }, 600)
+          setIsOpen(false)
         },
       }
     )
