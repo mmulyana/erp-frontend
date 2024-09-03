@@ -1,10 +1,16 @@
-import { Breadcrumb, Container, DashboardLayout, useTitle } from '../../component'
+import {
+  Breadcrumb,
+  Container,
+  DashboardLayout,
+  useTitle,
+} from '../../component'
 import { DataTable } from '@/components/data-table'
 import Search from '@/components/common/search'
 import Filter from '@/components/common/filter'
-import { Button } from '@/components/ui/button'
 import { PATH } from '@/utils/constant/_paths'
-import { columns, data } from './component'
+import { columns, ModalAdd } from './component'
+import { useLeaves } from '@/hooks/use-leaves'
+import useUrlState from '@ahooksjs/use-url-state'
 
 const links = [
   {
@@ -19,6 +25,10 @@ const links = [
 
 export default function Page() {
   useTitle('Cuti')
+  const [url] = useUrlState({ name: '' })
+  const { data, isLoading } = useLeaves({
+    name: url.name,
+  })
 
   return (
     <DashboardLayout>
@@ -35,9 +45,14 @@ export default function Page() {
               className='h-8 flex gap-1 items-center border border-[#EFF0F2] rounded-[8px] shadow-md shadow-gray-100 pl-2 pr-1.5'
             />
           </div>
-          <Button className='h-8'>Tambah data</Button>
+          <ModalAdd />
         </div>
-        <DataTable columns={columns} data={data} withPagination />
+        <DataTable
+          columns={columns}
+          data={data?.data?.data || []}
+          withPagination
+          isLoading={isLoading}
+        />
       </Container>
     </DashboardLayout>
   )
