@@ -6,4 +6,6 @@ export const KEYS = {
   PERMISSION_CHECK: 'permission_check',
   HRIS_POSITION: 'hris_position',
   EMPLOYEE: 'employee',
+  LEAVES: 'leaves',
+  CASH_ADVANCES: 'cash_advances',
 }
