@@ -13,4 +13,6 @@ export const URLS = {
   PERMISSION: V1 + '/permission',
   HRIS_POSITION: V1 + '/hris/position',
   EMPLOYEE: V1 + '/hris/employee',
+  LEAVES: V1 + '/hris/leave',
+  CASH_ADVANCES: V1 + '/hris/cash-advance',
 }
