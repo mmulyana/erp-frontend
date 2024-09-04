@@ -20,8 +20,7 @@ type createOvertime = {
   employeeId: number
   date: string
   total_hour: number
-  type: 'presence' | 'absent' | 'leave'
-  leaveId?: number
+  description?: string
 }
 export const useCreateAttendance = () => {
   const queryClient = useQueryClient()
