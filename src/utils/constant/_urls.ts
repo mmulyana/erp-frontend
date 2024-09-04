@@ -15,4 +15,6 @@ export const URLS = {
   EMPLOYEE: V1 + '/hris/employee',
   LEAVES: V1 + '/hris/leave',
   CASH_ADVANCES: V1 + '/hris/cash-advance',
+  ATTENDANCE: V1 + '/hris/attendance',
+  OVERTIME: V1 + '/hris/overtime'
 }
