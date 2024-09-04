@@ -7,22 +7,26 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 type OvertimesParams = Pagination & {
   name?: string
 }
-export const useOvertimes = async (params: OvertimesParams) => {
+export const useOvertime = (params: OvertimesParams) => {
   return useQuery({
     queryKey: [KEYS.OVERTIME, params],
     queryFn: async () => {
-      return await http(URLS.OVERTIME)
+      return await http.request({
+        method: 'GET',
+        url: URLS.OVERTIME,
+        params,
+      })
     },
   })
 }
 
 type createOvertime = {
   employeeId: number
-  date: string
+  date: string | Date
   total_hour: number
   description?: string
 }
-export const useCreateAttendance = () => {
+export const useCreateOvertime = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
