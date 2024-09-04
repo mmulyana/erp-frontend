@@ -1,9 +1,6 @@
-import { DashboardLayout, Header } from '../component'
+import { DashboardLayout, useTitle } from '../component'
 
 export default function Dashboard() {
-  return (
-    <DashboardLayout>
-      <Header subtitle='Dashboard' title='Overview'></Header>
-    </DashboardLayout>
-  )
+  useTitle('Overview')
+  return <DashboardLayout></DashboardLayout>
 }
