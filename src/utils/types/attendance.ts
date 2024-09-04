@@ -5,7 +5,7 @@ export type Attendance = {
   employeeId: number
   date: string
   total_hour: number
-  isOnLeave?: boolean
+  type: 'presence' | 'absent' | 'leave'
   leaveId?: number
   employee?: Employee
 }
