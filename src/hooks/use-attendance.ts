@@ -7,20 +7,24 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 type AttendanceParams = Pagination & {
   name?: string
 }
-export const useAttendances = async (params: AttendanceParams) => {
+export const useAttendances = (params: AttendanceParams) => {
   return useQuery({
     queryKey: [KEYS.ATTENDANCE, params],
     queryFn: async () => {
-      return await http(URLS.ATTENDANCE)
+      return await http.request({
+        method: 'GET',
+        url: URLS.ATTENDANCE,
+        params,
+      })
     },
   })
 }
 
 type createAttendance = {
   employeeId: number
-  date: string
+  date: string | any
   total_hour: number
-  type: 'presence' | 'absent' | 'leave'
+  type: 'presence' | 'absent' | 'leave' | 'not_yet'
   leaveId?: number
 }
 export const useCreateAttendance = () => {
@@ -29,6 +33,25 @@ export const useCreateAttendance = () => {
   return useMutation({
     mutationFn: async (payload: createAttendance) => {
       return await http.post(URLS.ATTENDANCE, payload)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.ATTENDANCE] })
+    },
+  })
+}
+
+export const useUpdateAttendance = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: number
+      payload: Omit<createAttendance, 'employeeId'>
+    }) => {
+      return await http.patch(`${URLS.ATTENDANCE}/${id}`, payload)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [KEYS.ATTENDANCE] })
