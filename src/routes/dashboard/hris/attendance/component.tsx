@@ -16,7 +16,6 @@ import Filter from '@/components/common/filter'
 import { ColumnDef } from '@tanstack/react-table'
 import { cn } from '@/utils/cn'
 import { DataTable } from '@/components/data-table'
-import { Overtime as OvertimeType } from '@/utils/types/overtime'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +27,22 @@ import {
   useUpdateAttendance,
 } from '@/hooks/use-attendance'
 import { Employee } from '@/utils/types/employee'
+import ResponsiveModal from '@/components/modal-responsive'
+import { useEmployees } from '@/hooks/use-employee'
+import { useCreateOvertime, useOvertime } from '@/hooks/use-overtime'
+import { useForm } from 'react-hook-form'
+import { overtimeSchema, OvertimeSchema } from '@/utils/schema/overtime.schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Form, FormField } from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 type AttendanceType = 'presence' | 'absent' | 'leave' | 'not_yet'
 
@@ -92,7 +107,7 @@ export function Regular() {
   const [url] = useUrlState({ name: '', date: '' })
   const { data, isLoading } = useAttendances({
     name: url.name,
-    ...(url.date !== '' ? { date: url.date } : undefined),
+    ...(url.date !== '' ? { date: format(url.date, 'yyyy-dd-MM') } : undefined),
   })
   return (
     <>
@@ -115,6 +130,12 @@ export function Regular() {
 }
 
 export function Overtime() {
+  const [url] = useUrlState({ name: '', date: '' })
+  const { data, isLoading } = useOvertime({
+    name: url.name,
+    ...(url.date !== '' ? { date: format(url.date, 'yyyy-dd-MM') } : undefined),
+  })
+
   return (
     <>
       <div className='flex justify-between items-center mb-4'>
@@ -124,12 +145,19 @@ export function Overtime() {
           </div>
           <Filter />
         </div>
+        <ModalAdd />
       </div>
-      <DataTable columns={columnOvertime} data={dataOvertime} />
+      <DataTable
+        columns={columnOvertime}
+        data={data?.data?.data || []}
+        withLoading
+        isLoading={isLoading}
+      />
     </>
   )
 }
 
+// ATTENDANCE
 const useAttendanceActions = (employeeId: number, id?: number) => {
   const { mutate: create } = useCreateAttendance()
   const { mutate: update } = useUpdateAttendance()
@@ -140,7 +168,8 @@ const useAttendanceActions = (employeeId: number, id?: number) => {
     mode: 'create' | 'update',
     total_hour?: number
   ) => {
-    const date = url.date !== '' ? new Date(url.date) : new Date()
+    const date =
+      url.date !== '' ? new Date(format(url.date, 'yyyy-dd-MM')) : new Date()
 
     if (mode === 'update') {
       if (!id) return
@@ -207,6 +236,109 @@ const AttendanceButton = ({
   </Button>
 )
 
+// OVERTIME
+export function ModalAdd() {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const { data: employees } = useEmployees({}, { enabled: isOpen })
+  const { mutate } = useCreateOvertime()
+
+  const form = useForm<OvertimeSchema>({
+    resolver: zodResolver(overtimeSchema),
+    defaultValues: {
+      total_hour: 0,
+      date: '',
+      description: undefined,
+    },
+  })
+
+  const submit = async (data: OvertimeSchema) => {
+    mutate(
+      {
+        ...data,
+        employeeId: Number(data.employeeId),
+        date: new Date(format(data.date, 'yyyy-MM-dd')),
+      },
+      {
+        onSuccess: async () => {
+          setIsOpen(false)
+        },
+      }
+    )
+  }
+
+  return (
+    <>
+      <Button className='h-8' onClick={() => setIsOpen(true)}>
+        Tambah data
+      </Button>
+      <ResponsiveModal title='' isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(submit)}>
+            <FormField
+              control={form.control}
+              name='employeeId'
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  value={field?.value?.toString()}
+                >
+                  <SelectTrigger className='w-full rounded-xl shadow-sm shadow-gray-950/10 border border-[#DEE0E3]'>
+                    <SelectValue placeholder='Pilih pegawai' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {employees?.data?.data?.map(
+                      (emp: Employee & { id: number }) => (
+                        <SelectItem key={emp.id} value={emp?.id?.toString()}>
+                          {emp.fullname}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='date'
+              render={({ field }) => (
+                <Input {...field} className='block' type='date' />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='total_hour'
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type='number'
+                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  onBlur={(e) => {
+                    field.onBlur()
+                    if (isNaN(e.target.valueAsNumber)) {
+                      form.setValue('total_hour', 0)
+                    }
+                  }}
+                />
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <Textarea placeholder='Keterangan' {...field} />
+              )}
+            />
+            <Button type='submit'>Buat</Button>
+          </form>
+        </Form>
+      </ResponsiveModal>
+    </>
+  )
+}
+
+// COLUMNS
 const columnsRegular: ColumnDef<
   Employee & { id: number; attendances?: { id: number }[] }
 >[] = [
@@ -273,28 +405,39 @@ const columnsRegular: ColumnDef<
   },
 ]
 
-const columnOvertime: ColumnDef<OvertimeType>[] = [
+const columnOvertime: ColumnDef<
+  Employee & { id: number; overtime?: { id: number }[] }
+>[] = [
   {
-    id: 'nama',
+    accessorKey: 'fullname',
     header: 'Nama',
-    cell: ({ cell }) => {
-      return <p>{cell.row.original.employee?.fullname}</p>
-    },
   },
   {
     id: 'jabatan',
     header: 'Jabatan',
     cell: ({ cell }) => {
-      return <p>{cell.row.original.employee?.position?.name}</p>
+      return <p>{cell.row.original?.position?.name}</p>
     },
   },
   {
-    accessorKey: 'total_hour',
+    id: 'total_hour',
     header: 'Jumlah jam',
+    cell: ({ cell }) => (
+      <p>
+        {!!cell.row.original.overtime?.length &&
+          cell.row.original?.overtime[0]?.total_hour}
+      </p>
+    ),
   },
   {
-    accessorKey: 'description',
-    header: 'Deskripsi',
+    id: 'description',
+    header: 'Keterangan',
+    cell: ({ cell }) => (
+      <p>
+        {!!cell.row.original.overtime?.length &&
+          cell.row.original?.overtime[0]?.description}
+      </p>
+    ),
   },
   {
     id: 'action',
@@ -332,31 +475,3 @@ const columnOvertime: ColumnDef<OvertimeType>[] = [
 //     },
 //   },
 // ]
-const dataOvertime: OvertimeType[] = [
-  {
-    id: 1,
-    employeeId: 1,
-    date: '2024-08-27',
-    employee: {
-      fullname: 'Mulyana',
-      position: {
-        id: 1,
-        name: 'Staf',
-      },
-    },
-    total_hour: 1,
-  },
-  {
-    id: 1,
-    employeeId: 1,
-    date: '2024-08-27',
-    employee: {
-      fullname: 'Widya syahrul rohmah',
-      position: {
-        id: 1,
-        name: 'Staf',
-      },
-    },
-    total_hour: 2,
-  },
-]
