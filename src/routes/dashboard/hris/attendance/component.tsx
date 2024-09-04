@@ -1,5 +1,12 @@
 import { addDays, format, isValid, subDays, parse, isToday } from 'date-fns'
-import { ChevronLeft, ChevronRight, Ellipsis } from 'lucide-react'
+import {
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Ellipsis,
+  TriangleAlert,
+  X,
+} from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { Button } from '@/components/ui/button'
 import { id } from 'date-fns/locale'
@@ -7,7 +14,6 @@ import { useState } from 'react'
 import Search from '@/components/common/search'
 import Filter from '@/components/common/filter'
 import { ColumnDef } from '@tanstack/react-table'
-import { Attendance } from '@/utils/types/attendance'
 import { cn } from '@/utils/cn'
 import { DataTable } from '@/components/data-table'
 import { Overtime as OvertimeType } from '@/utils/types/overtime'
@@ -16,6 +22,14 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  useAttendances,
+  useCreateAttendance,
+  useUpdateAttendance,
+} from '@/hooks/use-attendance'
+import { Employee } from '@/utils/types/employee'
+
+type AttendanceType = 'presence' | 'absent' | 'leave' | 'not_yet'
 
 export function Header() {
   const [url, setUrl] = useUrlState({ date: '' })
@@ -75,6 +89,11 @@ export function Header() {
 }
 
 export function Regular() {
+  const [url] = useUrlState({ name: '', date: '' })
+  const { data, isLoading } = useAttendances({
+    name: url.name,
+    ...(url.date !== '' ? { date: url.date } : undefined),
+  })
   return (
     <>
       <div className='flex justify-between items-center mb-4'>
@@ -85,7 +104,12 @@ export function Regular() {
           <Filter />
         </div>
       </div>
-      <DataTable columns={columnsRegular} data={dataRegular} />
+      <DataTable
+        columns={columnsRegular}
+        data={data?.data?.data || []}
+        withLoading
+        isLoading={isLoading}
+      />
     </>
   )
 }
@@ -106,51 +130,143 @@ export function Overtime() {
   )
 }
 
-const columnsRegular: ColumnDef<Attendance>[] = [
+const useAttendanceActions = (employeeId: number, id?: number) => {
+  const { mutate: create } = useCreateAttendance()
+  const { mutate: update } = useUpdateAttendance()
+  const [url] = useUrlState({ date: '' })
+
+  const createAttendance = (
+    type: AttendanceType,
+    mode: 'create' | 'update',
+    total_hour?: number
+  ) => {
+    const date = url.date !== '' ? new Date(url.date) : new Date()
+
+    if (mode === 'update') {
+      if (!id) return
+
+      update({
+        id: id,
+        payload: {
+          date: date.toISOString(),
+          total_hour: total_hour || 0,
+          type,
+        },
+      })
+      return
+    }
+
+    create({
+      date: date.toISOString(),
+      employeeId,
+      total_hour: total_hour || 0,
+      type,
+    })
+  }
+
+  return {
+    onPresence: (total_hour: number) =>
+      createAttendance('presence', 'create', total_hour),
+    onAbsent: () => createAttendance('absent', 'create'),
+    onLeave: () => createAttendance('leave', 'create'),
+    onUpdate: (type: 'presence' | 'absent' | 'leave', total_hour: number) =>
+      createAttendance(type, 'update', total_hour),
+  }
+}
+
+type AttendanceButtonProps = {
+  type: AttendanceType
+  onClick: () => void
+  children: React.ReactNode
+  currentAttendance: AttendanceType
+}
+const AttendanceButton = ({
+  type,
+  onClick,
+  children,
+  currentAttendance,
+}: AttendanceButtonProps) => (
+  <Button
+    className={cn(
+      'p-0 h-7 w-7 rounded-full border border-[#EFF0F2] bg-[#F9FAFB] text-[#747C94]',
+      type === 'presence' &&
+        currentAttendance === 'presence' &&
+        'bg-green-600 disabled:bg-emerald-600 disabled:border-emerald-900 text-white',
+      type === 'absent' &&
+        currentAttendance === 'absent' &&
+        'bg-red-600 text-white disabled:bg-red-700 disabled:border-red-900',
+      type === 'leave' &&
+        currentAttendance === 'leave' &&
+        'bg-amber-500 text-white disabled:bg-amber-700 disabled:border-amber-900'
+    )}
+    variant='ghost'
+    disabled={currentAttendance === type}
+    onClick={onClick}
+  >
+    {children}
+  </Button>
+)
+
+const columnsRegular: ColumnDef<
+  Employee & { id: number; attendances?: { id: number }[] }
+>[] = [
   {
-    id: 'nama',
+    accessorKey: 'fullname',
     header: 'Nama',
-    cell: ({ cell }) => {
-      return <p>{cell.row.original?.employee?.fullname}</p>
-    },
   },
   {
     id: 'jabatan',
     header: 'Jabatan',
     cell: ({ cell }) => {
-      return <p>{cell.row.original.employee?.position?.name}</p>
+      return <p>{cell.row.original?.position?.name}</p>
     },
   },
   {
     id: 'Status',
     header: () => <div className='flex justify-end pr-24'>Status</div>,
-    cell: () => {
+    cell: ({ row }) => {
+      const attendance = (
+        !!row.original.attendances?.length
+          ? row.original?.attendances[0]?.type
+          : 'not_yet'
+      ) as AttendanceType
+
+      const { onPresence, onAbsent, onLeave, onUpdate } = useAttendanceActions(
+        row.original.id,
+        !!row.original.attendances?.length
+          ? row.original.attendances[0].id
+          : undefined
+      )
+
       return (
         <div className='flex justify-end gap-4 items-center'>
-          <Button
-            className={cn(
-              'w-7 h-8 rounded-full border border-[#EFF0F2] bg-[#F9FAFB] text-[#747C94]'
-            )}
-            variant='ghost'
+          <AttendanceButton
+            type='presence'
+            currentAttendance={attendance}
+            onClick={() => {
+              attendance == 'not_yet' ? onPresence(1) : onUpdate('presence', 1)
+            }}
           >
-            H
-          </Button>
-          <Button
-            className={cn(
-              'w-7 h-8 rounded-full border border-[#EFF0F2] bg-[#F9FAFB] text-[#747C94]'
-            )}
-            variant='ghost'
+            <Check className='w-4 h-4' />
+          </AttendanceButton>
+          <AttendanceButton
+            type='absent'
+            currentAttendance={attendance}
+            onClick={() => {
+              attendance == 'not_yet' ? onAbsent() : onUpdate('absent', 0)
+            }}
           >
-            A
-          </Button>
-          <Button
-            className={cn(
-              'w-7 h-8 rounded-full border border-[#EFF0F2] bg-[#F9FAFB] text-[#747C94]'
-            )}
-            variant='ghost'
+            <X className='w-4 h-4' />
+          </AttendanceButton>
+          <AttendanceButton
+            type='leave'
+            currentAttendance={attendance}
+            onClick={() => {
+              attendance == 'not_yet' ? onLeave() : onUpdate('leave', 0)
+            }}
           >
-            I
-          </Button>
+            <TriangleAlert className='w-4 h-4' />
+          </AttendanceButton>
         </div>
       )
     },
@@ -200,34 +316,22 @@ const columnOvertime: ColumnDef<OvertimeType>[] = [
   },
 ]
 
-const dataRegular: Attendance[] = [
-  {
-    id: 1,
-    employeeId: 1,
-    date: '2024-08-27',
-    employee: {
-      fullname: 'Mulyana',
-      position: {
-        id: 1,
-        name: 'Staf',
-      },
-    },
-    total_hour: 1,
-  },
-  {
-    id: 1,
-    employeeId: 1,
-    date: '2024-08-27',
-    employee: {
-      fullname: 'Widya syahrul rohmah',
-      position: {
-        id: 1,
-        name: 'Staf',
-      },
-    },
-    total_hour: 1,
-  },
-]
+// const dataRegular: Employee[] = [
+//   {
+//     fullname: 'Mulyana',
+//     position: {
+//       id: 1,
+//       name: 'Staf',
+//     },
+//   },
+//   {
+//     fullname: 'Widya syahrul rohmah💕',
+//     position: {
+//       id: 1,
+//       name: 'Staf',
+//     },
+//   },
+// ]
 const dataOvertime: OvertimeType[] = [
   {
     id: 1,
