@@ -8,4 +8,6 @@ export const KEYS = {
   EMPLOYEE: 'employee',
   LEAVES: 'leaves',
   CASH_ADVANCES: 'cash_advances',
+  ATTENDANCE: 'attendance',
+  OVERTIME: 'overtime',
 }
