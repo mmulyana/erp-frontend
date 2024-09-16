@@ -107,7 +107,11 @@ export function Regular() {
   const [url] = useUrlState({ name: '', date: '' })
   const { data, isLoading } = useAttendances({
     name: url.name,
-    ...(url.date !== '' ? { date: format(url.date, 'yyyy-dd-MM') } : undefined),
+    ...(url.date !== ''
+      ? {
+          date: format(parse(url.date, 'dd-MM-yyyy', new Date()), 'dd-MM-yyyy'),
+        }
+      : undefined),
   })
   return (
     <>
@@ -169,7 +173,7 @@ const useAttendanceActions = (employeeId: number, id?: number) => {
     total_hour?: number
   ) => {
     const date =
-      url.date !== '' ? new Date(format(url.date, 'yyyy-dd-MM')) : new Date()
+      url.date !== '' ? parse(url.date, 'dd-MM-yyyy', new Date()) : new Date()
 
     if (mode === 'update') {
       if (!id) return
@@ -177,7 +181,7 @@ const useAttendanceActions = (employeeId: number, id?: number) => {
       update({
         id: id,
         payload: {
-          date: date.toISOString(),
+          date: new Date(format(date, 'dd-MM-yyyy')).toISOString(),
           total_hour: total_hour || 0,
           type,
         },
