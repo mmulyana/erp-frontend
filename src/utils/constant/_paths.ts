@@ -15,4 +15,7 @@ export const PATH = {
   EMPLOYEE_ATTENDANCE: '/dashboard/employee/attendance',
   EMPLOYEE_CASH_ADVANCES: '/dashboard/employee/cash-advances',
   EMPLOYEE_ATTENDANCE_SUMMARY: '/dashboard/employee/attendance/summary',
+
+  PROJECT_INDEX: '/dashboard/project',
+  PROJECT_MODE: '/dashboard/project/mode',
 }
