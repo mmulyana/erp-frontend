@@ -16,5 +16,6 @@ export const URLS = {
   LEAVES: V1 + '/hris/leave',
   CASH_ADVANCES: V1 + '/hris/cash-advance',
   ATTENDANCE: V1 + '/hris/attendance',
-  OVERTIME: V1 + '/hris/overtime'
+  OVERTIME: V1 + '/hris/overtime',
+  PROJECT: V1 + '/project'
 }
