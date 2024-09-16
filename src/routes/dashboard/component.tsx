@@ -63,6 +63,15 @@ function Sidebar() {
         ],
       },
       {
+        name: 'Project',
+        menus: [
+          {
+            name: 'Overview',
+            path: PATH.PROJECT_INDEX,
+          },
+        ],
+      },
+      {
         name: 'Admin',
         menus: [
           {
@@ -96,7 +105,7 @@ function Sidebar() {
           <span>ERP BJS</span>
         </div>
       </div>
-      <ScrollArea className='px-4 mt-4'>
+      <ScrollArea className='px-4 mt-4 h-screen'>
         <div className='flex flex-col gap-2.5'>
           {sidebarMenus.map((sidebar, index) => (
             <div key={index}>
