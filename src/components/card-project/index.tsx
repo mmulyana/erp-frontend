@@ -1,8 +1,7 @@
 import { cn } from '@/utils/cn'
-import { Projects } from '@/utils/types/api'
 import { MessageCircle } from 'lucide-react'
 
-export default function CardProject(props: Projects) {
+export default function CardProject(props: any) {
   return (
     <div className='w-full h-fit rounded-[8px] border border-[#DCE1EB] bg-white px-3 pt-3 pb-[10px]'>
       {props.client && (
@@ -18,11 +17,14 @@ export default function CardProject(props: Projects) {
         {props.name}
       </p>
       <div
-        className={cn('flex gap-2 flex-wrap', !!props.labels.length && 'mt-2')}
+        className={cn('flex gap-2 flex-wrap', !!props?.labels?.length && 'mt-2')}
       >
-        {!!props.labels.length &&
-          props.labels.map((item) => (
-            <div className='pl-2 pr-2.5 py-0.5 rounded-full bg-[#5463E8]/10 flex gap-1 items-center pb-1'>
+        {!!props?.labels?.length &&
+          props.labels.map((item: any, index: number) => (
+            <div
+              className='pl-2 pr-2.5 py-0.5 rounded-full bg-[#5463E8]/10 flex gap-1 items-center pb-1'
+              key={index}
+            >
               <div className='w-1 h-1 rounded-full bg-[#5463E8]'></div>
               <p className='text-xs text-[#5463E8]'>{item.label.name}</p>
             </div>
@@ -35,10 +37,10 @@ export default function CardProject(props: Projects) {
             <p className='text-sm'>{props?._count.comments}</p>
           </div>
         </div>
-        <div className={cn(!!props.employees.length && 'flex justify-end')}>
-          {!!props.employees.length && props.employees.length >= 5 ? (
+        <div className={cn(!!props.employees?.length && 'flex justify-end')}>
+          {!!props.employees?.length && props.employees?.length >= 5 ? (
             <>
-              {props.employees.slice(0, 3).map((emp, index) => (
+              {props.employees.slice(0, 3).map((emp: any, index: number) => (
                 <div
                   className={cn(
                     'w-7 h-7 rounded-full overflow-hidden',
@@ -46,9 +48,13 @@ export default function CardProject(props: Projects) {
                     !emp.employee.photo &&
                       'bg-blue-500 flex justify-center items-center -ml-2 border-2 border-white'
                   )}
+                  key={index}
                 >
                   {emp.employee.photo ? (
-                    <img className='w-7 h-7 rounded-full border-2 border-white' src={emp.employee.photo} />
+                    <img
+                      className='w-7 h-7 rounded-full border-2 border-white'
+                      src={emp.employee.photo}
+                    />
                   ) : (
                     <p className='uppercase text-white text-sm pb-0.5'>
                       {emp.employee.fullname.at(0)}
@@ -61,7 +67,7 @@ export default function CardProject(props: Projects) {
               </div>
             </>
           ) : (
-            props.employees.map((emp, index) => (
+            props.employees.map((emp: any, index: number) => (
               <div
                 className={cn(
                   'w-7 h-7 rounded-full overflow-hidden',
@@ -69,9 +75,13 @@ export default function CardProject(props: Projects) {
                   !emp.employee.photo &&
                     'bg-blue-500 flex justify-center items-center -ml-2 border-2 border-white'
                 )}
+                key={index}
               >
                 {emp.employee.photo ? (
-                  <img className='w-7 h-7 rounded-full border-2 border-white' src={emp.employee.photo} />
+                  <img
+                    className='w-7 h-7 rounded-full border-2 border-white'
+                    src={emp.employee.photo}
+                  />
                 ) : (
                   <p className='uppercase text-white text-sm pb-0.5'>
                     {emp.employee.fullname.at(0)}
