@@ -23,10 +23,17 @@ import { CSS } from '@dnd-kit/utilities'
 import { cn } from '@/utils/cn'
 import { Board, Item } from '@/utils/types/api'
 import CardProject from '@/components/card-project'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { socket } from '@/utils/socket'
+import { GripVertical } from 'lucide-react'
+import ListProject from '@/components/list-project'
 
-export function Kanban() {
+type View = 'kanban' | 'list'
+type Props = {
+  view: View
+}
+
+export function Mode({ view }: Props) {
   // START HANDLE KANBAN
   const [containers, setContainers] = useState<Board[]>([])
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
@@ -218,47 +225,65 @@ export function Kanban() {
   // END HANDLE KANBAN
 
   return (
-    <div className='grid grid-cols-4 gap-6 h-full'>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragMove={handleDragMove}
-        onDragEnd={handleDragEnd}
+    <ScrollArea className='w-full whitespace-nowrap'>
+      <div
+        className={cn(
+          'h-full',
+          view === 'kanban' && 'flex gap-2',
+          view === 'list' && 'flex flex-col flex-nowrap'
+        )}
       >
-        <SortableContext items={containers.map((i) => i.id)}>
-          {containers.map((container) => (
-            <Container
-              id={container.id}
-              name={container.name}
-              key={container.id}
-            >
-              <SortableContext items={container.items.map((i) => i.id)}>
-                <div className='flex items-start flex-col gap-y-4'>
-                  {container.items.map((i) => (
-                    <Items
-                      name={i?.project?.name || ''}
-                      id={i.id}
-                      key={i.id}
-                      project={i.project}
-                    />
-                  ))}
-                </div>
-              </SortableContext>
-            </Container>
-          ))}
-        </SortableContext>
-        <DragOverlay adjustScale={false}>
-          {activeId && activeId.toString().includes('item') && (
-            <Items
-              id={activeId}
-              project={fintItem(activeId) || undefined}
-              isPreview
-            />
-          )}
-        </DragOverlay>
-      </DndContext>
-    </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragMove={handleDragMove}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext items={containers.map((i) => i.id)}>
+            {containers.map((container) => (
+              <Container
+                id={container.id}
+                name={container.name}
+                color={container.color}
+                key={container.id}
+                view={view}
+              >
+                <SortableContext items={container.items.map((i) => i.id)}>
+                  <div
+                    className={cn(
+                      'flex items-start flex-col',
+                      view === 'kanban' && 'gap-y-4'
+                    )}
+                  >
+                    {container.items.map((i) => (
+                      <Items
+                        name={i?.project?.name || ''}
+                        id={i.id}
+                        key={i.id}
+                        project={i.project}
+                        view={view}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </Container>
+            ))}
+          </SortableContext>
+          <DragOverlay adjustScale={false}>
+            {activeId && activeId.toString().includes('item') && (
+              <Items
+                id={activeId}
+                project={fintItem(activeId) || undefined}
+                isPreview
+                view={view}
+              />
+            )}
+          </DragOverlay>
+        </DndContext>
+      </div>
+      <ScrollBar orientation='horizontal' />
+    </ScrollArea>
   )
 }
 
@@ -266,8 +291,10 @@ type ContainerProps = {
   id: UniqueIdentifier
   children: React.ReactNode
   name?: string
+  color?: string
+  view: View
 }
-function Container({ id, children, name }: ContainerProps) {
+function Container({ id, children, name, view, color }: ContainerProps) {
   const { setNodeRef } = useSortable({
     id: id,
     data: {
@@ -279,13 +306,29 @@ function Container({ id, children, name }: ContainerProps) {
     <div
       ref={setNodeRef}
       className={cn(
-        'w-full h-full py-4 bg-gray-50 rounded-xl flex flex-col gap-y-4'
+        'w-full flex flex-col',
+        view === 'kanban' && 'bg-gray-50 rounded-xl w-[266px]',
+        view === 'list' && 'bg-[#F6F7F9] border-y border-[#EFF0F2]'
       )}
     >
-      <div className='mb-2 px-4'>
-        <p>{name}</p>
+      <div
+        className={cn(
+          'px-4 flex gap-2 items-center',
+          view == 'kanban' && 'mb-3 pt-[10px]',
+          view == 'list' && 'py-2'
+        )}
+      >
+        <div
+          className='h-3 w-3 rounded-full border-[3px]'
+          style={{ borderColor: color }}
+        ></div>
+        <p className='capitalize pb-0.5'>{name}</p>
       </div>
-      <ScrollArea className='h-[calc(100vh-200px)] px-4'>{children}</ScrollArea>
+      <ScrollArea
+        className={cn(view === 'kanban' && 'h-[calc(100vh-168px)] px-2')}
+      >
+        {children}
+      </ScrollArea>
     </div>
   )
 }
@@ -294,23 +337,20 @@ const Items = ({
   name,
   project,
   isPreview = false,
+  view,
 }: Omit<Item, 'containerId' | 'position' | 'id'> & {
   name?: string
   id: UniqueIdentifier
   isPreview?: boolean
+  view: View
 }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({
-    id: id,
-    data: {
-      type: 'item',
-    },
-  })
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: id,
+      data: {
+        type: 'item',
+      },
+    })
   return (
     <div
       ref={setNodeRef}
@@ -321,11 +361,25 @@ const Items = ({
       }}
       className={cn('w-full cursor-pointer')}
     >
-      <div {...listeners}>
-        <div className={cn(isPreview && 'rotate-6')}>
-          <CardProject name={name} {...project} />
+      {view == 'kanban' && (
+        <div {...listeners}>
+          <div className={cn(isPreview && 'rotate-6')}>
+            <CardProject name={name} {...project} />
+          </div>
         </div>
-      </div>
+      )}
+      {view == 'list' && (
+        <div className='h-[50px] relative w-full flex items-center border border-[#DCE1EB] bg-white'>
+          <div className='w-1 h-full bg-[#5463E8] absolute top-0 left-0'></div>
+          <div
+            className='px-4 h-full flex justify-start items-center'
+            {...listeners}
+          >
+            <GripVertical className='w-5 h-5 text-[#DCE1EB]' />
+          </div>
+          <ListProject {...project} />
+        </div>
+      )}
     </div>
   )
 }
