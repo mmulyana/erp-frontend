@@ -39,7 +39,6 @@ export function Kanban() {
     })
 
     socket.on('updated_data', (updatedData) => {
-      console.log('there updated', updatedData)
       setContainers(updatedData)
     })
 
