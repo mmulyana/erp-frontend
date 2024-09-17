@@ -13,6 +13,7 @@ const AttendanceSummary = lazy(() => import('./hris/attendance/summary/index.tsx
 const CashAdvance = lazy(() => import('./hris/cash-advance/index.tsx'))
 const Leave = lazy(() => import('./hris/leave/index.tsx'))
 const Project = lazy(() => import('./project/index.tsx'))
+const ProjectView = lazy(() => import('./project/view/index.tsx'))
 
 export const dashboardRoutes = [
   {
@@ -62,5 +63,9 @@ export const dashboardRoutes = [
   {
     path: PATH.PROJECT_INDEX,
     element: <Project />
+  },
+  {
+    path: PATH.PROJECT_VIEW,
+    element: <ProjectView />
   }
 ]
