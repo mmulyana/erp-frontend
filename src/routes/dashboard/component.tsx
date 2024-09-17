@@ -69,6 +69,10 @@ function Sidebar() {
             name: 'Overview',
             path: PATH.PROJECT_INDEX,
           },
+          {
+            name: 'View',
+            path: PATH.PROJECT_VIEW,
+          },
         ],
       },
       {
