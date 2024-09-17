@@ -21,12 +21,10 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 
 import { cn } from '@/utils/cn'
-import { io } from 'socket.io-client'
 import { Board, Item } from '@/utils/types/api'
 import CardProject from '@/components/card-project'
 import { ScrollArea } from '@/components/ui/scroll-area'
-
-const socket = io('http://localhost:5001')
+import { socket } from '@/utils/socket'
 
 export function Kanban() {
   // START HANDLE KANBAN
