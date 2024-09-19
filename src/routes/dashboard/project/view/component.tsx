@@ -67,7 +67,7 @@ export function Mode({ view }: Props) {
     }
   }
 
-  const fintItem = (id: UniqueIdentifier | undefined) => {
+  const findProject = (id: UniqueIdentifier | undefined) => {
     const container = findValueOfItems(id, 'item')
     if (!container) return ''
     const item = container.items.find((item) => item.id === id)
@@ -76,7 +76,11 @@ export function Mode({ view }: Props) {
   }
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -198,31 +202,22 @@ export function Mode({ view }: Props) {
 
       if (!activeContainer || !overContainer) return
 
-      const activeContainerIndex = containers.findIndex(
-        (container) => container.id === activeContainer.id
-      )
-      const overContainerIndex = containers.findIndex(
-        (container) => container.id === overContainer.id
-      )
-
-      let newIndex: number
-
-      if (activeContainerIndex === overContainerIndex) {
-        newIndex = overContainer.items.findIndex((item) => item.id === overId)
-      } else {
-        newIndex = overContainer.items.length
-      }
-
-      const payload = {
-        itemId: activeId,
-        position: newIndex,
-        containerId: overContainer.id,
-      }
-
-      socket.emit('update_order_items', payload)
+      updatedItems(overContainer.id)
     }
   }
   // END HANDLE KANBAN
+
+  const updatedItems = (containerId: string) => {
+    console.log(containerId)
+    const selectedItems = containers.filter((item) => item.id == containerId)[0]
+    const items = selectedItems.items.map((item, index) => ({
+      id: item.id,
+      containerId: containerId,
+      position: index + 1,
+    }))
+    console.log(items)
+    socket.emit('update_order_items', items)
+  }
 
   return (
     <ScrollArea className='w-full whitespace-nowrap'>
@@ -274,7 +269,7 @@ export function Mode({ view }: Props) {
             {activeId && activeId.toString().includes('item') && (
               <Items
                 id={activeId}
-                project={fintItem(activeId) || undefined}
+                project={findProject(activeId) || undefined}
                 isPreview
                 view={view}
               />
@@ -322,7 +317,9 @@ function Container({ id, children, name, view, color }: ContainerProps) {
           className='h-3 w-3 rounded-full border-[3px]'
           style={{ borderColor: color }}
         ></div>
-        <p className='capitalize pb-0.5'>{name}</p>
+        <p className='capitalize pb-0.5'>
+          {name} {id}
+        </p>
       </div>
       <ScrollArea
         className={cn(view === 'kanban' && 'h-[calc(100vh-168px)] px-2')}
@@ -362,10 +359,12 @@ const Items = ({
       className={cn('w-full cursor-pointer')}
     >
       {view == 'kanban' && (
-        <div {...listeners}>
-          <div className={cn(isPreview && 'rotate-6')}>
-            <CardProject name={name} {...project} />
-          </div>
+        <div className={cn('relative', isPreview && 'rotate-6')}>
+          <div
+            className='absolute top-4 right-4 w-20 h-4 bg-red-500'
+            {...listeners}
+          ></div>
+          <CardProject name={name} {...project} />
         </div>
       )}
       {view == 'list' && (
