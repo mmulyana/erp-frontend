@@ -3,7 +3,7 @@ import { MessageCircle } from 'lucide-react'
 
 export default function CardProject(props: any) {
   return (
-    <div className='w-full h-fit rounded-[8px] border border-[#DCE1EB] bg-white px-3 pt-3 pb-[10px]'>
+    <div className={cn('w-full h-fit rounded-[8px] border border-[#DCE1EB] bg-white px-3 pt-3 pb-[10px] mb-2')}>
       {props.client && (
         <div className='border-full p-1 border border-[#F3F4F8] inline-flex gap-2 rounded-full pr-2'>
           <img
