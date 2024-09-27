@@ -1,25 +1,14 @@
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { cn } from '@/utils/cn'
-import { PATH } from '@/utils/constant/_paths'
-import { ChevronLeft, SlashIcon } from 'lucide-react'
-import React, { useEffect, useMemo } from 'react'
-import Logo from '/public/erp-logo.svg'
-import { Link, matchPath, useLocation } from 'react-router-dom'
-import {
-  Breadcrumb as BreadCrumbWrapper,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import { atom, useAtomValue, useSetAtom } from 'jotai'
+import React, { useState } from 'react'
+import SidebarMenus from '@/utils/constant/sidebar-menus'
+import UserCard from './_component/user-card'
+import LinkGroup from './_component/link-group'
+import Header from './_component/header'
 
 export function DashboardLayout({ children }: React.PropsWithChildren) {
   return (
     <>
       <Sidebar />
-      <div className='pl-[240px]'>
+      <div className='pl-[264px]'>
         <Header />
         <div>{children}</div>
       </div>
@@ -28,196 +17,21 @@ export function DashboardLayout({ children }: React.PropsWithChildren) {
 }
 
 function Sidebar() {
-  const location = useLocation()
-
-  const sidebarMenus = useMemo(
-    () => [
-      {
-        name: 'Index',
-        menus: [
-          {
-            name: 'Dashboard',
-            path: PATH.DASHBOARD_OVERVIEW,
-          },
-        ],
-      },
-      {
-        name: 'HRIS',
-        menus: [
-          {
-            name: 'Pegawai',
-            path: PATH.EMPLOYEE,
-          },
-          {
-            name: 'Kehadiran',
-            path: PATH.EMPLOYEE_ATTENDANCE,
-          },
-          {
-            name: 'Cuti',
-            path: PATH.EMPLOYEE_PAID_LEAVE,
-          },
-          {
-            name: 'Kasbon',
-            path: PATH.EMPLOYEE_CASH_ADVANCES,
-          },
-        ],
-      },
-      {
-        name: 'Project',
-        menus: [
-          {
-            name: 'Overview',
-            path: PATH.PROJECT_INDEX,
-          },
-          {
-            name: 'View',
-            path: PATH.PROJECT_VIEW,
-          },
-        ],
-      },
-      {
-        name: 'Admin',
-        menus: [
-          {
-            name: 'Akun',
-            path: PATH.ACCOUNT,
-          },
-          {
-            name: 'Peran',
-            path: PATH.ROLES,
-          },
-          {
-            name: 'Hak istimewa',
-            path: PATH.ROLES_PERMISSION,
-          },
-        ],
-      },
-    ],
-    []
-  )
-
+  const [open, setOpen] = useState('')
   return (
-    <div className='fixed top-0 left-0 w-[240px] h-[100dvh] border-r border-[#e1e1e2]'>
-      <button className='w-6 h-6 rounded-full bg-white border border-[#e1e1e2] absolute top-2.5 -right-3 flex items-center justify-center'>
-        <ChevronLeft className='w-4 text-gray-500' />
-      </button>
-      <div className='px-4 pt-2.5'>
-        <div className='flex gap-2 items-center'>
-          <div className='w-8 h-8 rounded-full bg-brand-blue flex items-center justify-center'>
-            <img src={Logo} alt='logo erp' className='w-5' />
-          </div>
-          <span>ERP BJS</span>
+    <div className='fixed top-0 left-0 w-[264px] h-[100dvh] border-r border-[#EFF0F2]'>
+      <div className='px-4 h-12 w-full border-b border-[#EFF0F2] flex items-center gap-2'>
+        <div className='rounded h-6 w-6 bg-[#365EFF] flex justify-center items-center'>
+          <span className='uppercase text-white'>B</span>
         </div>
+        <p className='text-[#3D556B] font-semibold'>BJS ERP</p>
       </div>
-      <ScrollArea className='px-4 mt-4 h-screen'>
-        <div className='flex flex-col gap-2.5'>
-          {sidebarMenus.map((sidebar, index) => (
-            <div key={index}>
-              {sidebar.name !== 'Index' && (
-                <p className='text-xs text-gray-400'>{sidebar.name}</p>
-              )}
-              <div className='flex flex-col gap-1 mt-1.5'>
-                {sidebar?.menus.map((menu, menuIndex) => {
-                  const isActive = matchPath(
-                    { path: menu.path },
-                    location.pathname
-                  )
-
-                  return (
-                    <Link
-                      to={menu.path}
-                      key={menuIndex}
-                      className={cn(
-                        'flex justify-between px-2.5 py-1.5 rounded-md border',
-                        isActive
-                          ? 'bg-white border-[#e1e1e2] shadow-sm'
-                          : 'border-transparent hover:bg-white/50 hover:border-[#e1e1e2]/50'
-                      )}
-                    >
-                      <span className='text-sm text-[#00071D]'>
-                        {menu.name}
-                      </span>
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
-    </div>
-  )
-}
-
-type Link = {
-  name: string
-  path: string
-  show: boolean
-}
-
-export function Header() {
-  const title = useAtomValue(titleAtom)
-  return (
-    <div className='flex items-center justify-between border-b-[0.5px] border-gray-200 px-8 h-[48px]'>
-      <div>
-        <p className='text-lg text-gray-800 font-medium'>{title || ''}</p>
-      </div>
-    </div>
-  )
-}
-
-type BreadcrumbProps = {
-  links: {
-    href: string
-    name: string
-  }[]
-}
-export function Breadcrumb({ links }: BreadcrumbProps) {
-  const lastIndex = links.length - 1
-
-  return (
-    <BreadCrumbWrapper>
-      <BreadcrumbList>
-        {links.map((link, index) => (
-          <React.Fragment key={index}>
-            <BreadcrumbItem>
-              {index === lastIndex ? (
-                <BreadcrumbPage className='text-[#021328] text-sm font-medium'>
-                  {link.name}
-                </BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink
-                  href={link.href}
-                  className='text-[#989CA8] text-sm'
-                >
-                  {link.name}
-                </BreadcrumbLink>
-              )}
-            </BreadcrumbItem>
-            {index !== lastIndex && (
-              <BreadcrumbSeparator>
-                <SlashIcon className='w-[10px] h-[10px] text-[#989CA8]' />
-              </BreadcrumbSeparator>
-            )}
-          </React.Fragment>
+      <div className='p-4 flex flex-col gap-2'>
+        <UserCard />
+        {SidebarMenus.map((menu, index) => (
+          <LinkGroup key={index} {...menu} open={open} setOpen={setOpen} />
         ))}
-      </BreadcrumbList>
-    </BreadCrumbWrapper>
+      </div>
+    </div>
   )
-}
-
-export function Container({
-  children,
-  className,
-}: React.PropsWithChildren & { className?: string }) {
-  return <div className={cn('py-4 px-8', className)}>{children}</div>
-}
-
-const titleAtom = atom('')
-export const useTitle = (title: string) => {
-  const setTitle = useSetAtom(titleAtom)
-
-  useEffect(() => {
-    setTitle(title)
-  }, [title])
 }
