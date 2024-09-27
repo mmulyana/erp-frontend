@@ -3,29 +3,24 @@ import { EmployeeStatus } from '@/utils/enum/common'
 import { PATH } from '@/utils/constant/_paths'
 import { Tab, Tabs } from '@/components/tab'
 import { TableEmployee } from './component'
-import {
-  Breadcrumb,
-  Container,
-  DashboardLayout,
-  useTitle,
-} from '@/routes/dashboard/component'
+import { DashboardLayout } from '@/routes/dashboard/component'
 import { useState } from 'react'
+import { Title, useTitle } from '@/routes/dashboard/_component/header'
+import Container from '@/routes/dashboard/_component/container'
 
 const links = [
   {
     name: 'Dashboard',
-    href: PATH.DASHBOARD_OVERVIEW,
+    path: PATH.DASHBOARD_OVERVIEW,
   },
   {
     name: 'Jabatan',
-    href: PATH.EMPLOYEE,
+    path: PATH.EMPLOYEE,
   },
 ]
 
 export default function Detail() {
   const { detail } = useParams()
-  useTitle('Pegawai')
-
   const [lastLink] = useState<any>(() => {
     if (!detail) return
     const parts = detail.split('-')
@@ -33,19 +28,21 @@ export default function Detail() {
     const result = parts.join(' ')
     return {
       name: result,
-      href: generatePath(PATH.EMPLOYEE_DETAIL, {
+      path: generatePath(PATH.EMPLOYEE_DETAIL, {
         detail: detail?.split('-').pop(),
       }),
     }
   })
+  useTitle([
+    ...links,
+    lastLink as Title,
+  ])
+
   const positionId = detail?.split('-').pop()
 
   return (
     <DashboardLayout>
-      <Container className='pt-4 pb-6'>
-        <Breadcrumb links={[...links, lastLink]} />
-      </Container>
-      <Tabs>
+      <Tabs className='mt-5'>
         <Tab label='Semua' badge='120'>
           <Container className='py-6'>
             <TableEmployee positionId={positionId} />
