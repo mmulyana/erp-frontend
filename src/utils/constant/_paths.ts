@@ -18,4 +18,6 @@ export const PATH = {
 
   PROJECT_INDEX: '/dashboard/project',
   PROJECT_VIEW: '/dashboard/project/view',
+
+  INVENTORY_INDEX: '/dashboard/inventory',
 }
