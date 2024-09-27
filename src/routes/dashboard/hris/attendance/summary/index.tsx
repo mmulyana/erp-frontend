@@ -10,39 +10,35 @@ import { data, dates } from '../data'
 import { format, isEqual, isSunday, parseISO } from 'date-fns'
 import { cn } from '@/utils/cn'
 import React, { useId } from 'react'
-import {
-  Breadcrumb,
-  Container,
-  DashboardLayout,
-  useTitle,
-} from '@/routes/dashboard/component'
+import { DashboardLayout } from '@/routes/dashboard/component'
 import { PATH } from '@/utils/constant/_paths'
 import { id } from 'date-fns/locale'
 import Search from '@/components/common/search'
+import { useTitle } from '@/routes/dashboard/_component/header'
+import Container from '@/routes/dashboard/_component/container'
+import Breadcrumb from '@/routes/dashboard/_component/bread-crumb'
 
 const links = [
   {
     name: 'Dashboard',
-    href: PATH.DASHBOARD_OVERVIEW,
+    path: PATH.DASHBOARD_OVERVIEW,
   },
   {
     name: 'Absensi',
-    href: PATH.EMPLOYEE_ATTENDANCE,
+    path: PATH.EMPLOYEE_ATTENDANCE,
   },
   {
     name: 'Rekapan',
-    href: PATH.EMPLOYEE_ATTENDANCE_SUMMARY,
+    path: PATH.EMPLOYEE_ATTENDANCE_SUMMARY,
   },
 ]
 
 export default function TableDemo() {
-  useTitle('Absensi')
+  useTitle(links)
 
   return (
     <DashboardLayout>
       <Container className='space-y-4'>
-        <Breadcrumb links={links} />
-
         <div className='flex justify-between items-center mb-4'>
           <div className='flex gap-4'>
             <div className='max-w-[180px]'>
@@ -86,12 +82,18 @@ export default function TableDemo() {
                 return (
                   <React.Fragment key={index}>
                     <TableCell
-                      className={cn('border min-w-8', isWeekend && 'bg-red-400')}
+                      className={cn(
+                        'border min-w-8',
+                        isWeekend && 'bg-red-400'
+                      )}
                     >
                       H
                     </TableCell>
                     <TableCell
-                      className={cn('border min-w-8', isWeekend && 'bg-red-400')}
+                      className={cn(
+                        'border min-w-8',
+                        isWeekend && 'bg-red-400'
+                      )}
                     >
                       J
                     </TableCell>
@@ -163,8 +165,12 @@ export default function TableDemo() {
                             </React.Fragment>
                           )
                         })}
-                        <TableCell className='border text-center'>{attendanceHours}</TableCell>
-                        <TableCell className='border text-center'>{overtimeHours}</TableCell>
+                        <TableCell className='border text-center'>
+                          {attendanceHours}
+                        </TableCell>
+                        <TableCell className='border text-center'>
+                          {overtimeHours}
+                        </TableCell>
                       </TableRow>
                     )
                   })}
