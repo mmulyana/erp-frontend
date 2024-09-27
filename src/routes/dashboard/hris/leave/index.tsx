@@ -1,9 +1,4 @@
-import {
-  Breadcrumb,
-  Container,
-  DashboardLayout,
-  useTitle,
-} from '../../component'
+import { DashboardLayout } from '../../component'
 import { DataTable } from '@/components/data-table'
 import Search from '@/components/common/search'
 import Filter from '@/components/common/filter'
@@ -11,20 +6,23 @@ import { PATH } from '@/utils/constant/_paths'
 import { columns, ModalAdd } from './component'
 import { useLeaves } from '@/hooks/use-leaves'
 import useUrlState from '@ahooksjs/use-url-state'
+import { useTitle } from '../../_component/header'
+import Container from '../../_component/container'
+import Breadcrumb from '../../_component/bread-crumb'
 
 const links = [
   {
     name: 'Dashboard',
-    href: PATH.DASHBOARD_OVERVIEW,
+    path: PATH.DASHBOARD_OVERVIEW,
   },
   {
     name: 'Cuti',
-    href: PATH.EMPLOYEE_PAID_LEAVE,
+    path: PATH.EMPLOYEE_PAID_LEAVE,
   },
 ]
 
 export default function Page() {
-  useTitle('Cuti')
+  useTitle(links)
   const [url] = useUrlState({ name: '' })
   const { data, isLoading } = useLeaves({
     name: url.name,
@@ -33,8 +31,7 @@ export default function Page() {
   return (
     <DashboardLayout>
       <Container>
-        <Breadcrumb links={links} />
-        <div className='flex justify-between items-center mb-4 mt-6'>
+        <div className='flex justify-between items-center mb-4'>
           <div className='flex gap-4'>
             <div className='max-w-[180px]'>
               <Search />
