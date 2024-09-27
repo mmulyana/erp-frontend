@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Tab, TabsV2 } from '@/components/tab'
 import { LayoutDashboard, Table } from 'lucide-react'
-import { Container, DashboardLayout } from '../../component'
+import { DashboardLayout } from '../../component'
 import { Mode } from './component'
 import { cn } from '@/utils/cn'
+import Container from '../../_component/container'
 
 export default function View() {
   const [active, setActive] = useState(0)
