@@ -10,17 +10,23 @@ type TabProps = {
 
 type TabsProps = {
   children: React.ReactElement<TabProps>[]
+  className?: string
 }
 
 export function Tab({ children }: TabProps) {
   return <div>{children}</div>
 }
 
-export function Tabs({ children }: TabsProps) {
+export function Tabs({ children, className }: TabsProps) {
   const [active, setActive] = useState(0)
   return (
     <div>
-      <div className='w-full border-b border-[#EFF0F2] flex gap-6 px-8'>
+      <div
+        className={cn(
+          'w-full border-b border-[#EFF0F2] flex gap-6 px-4',
+          className
+        )}
+      >
         {children.map((child, index) => (
           <button
             key={index}
@@ -59,7 +65,7 @@ export function TabsV2({
 }: TabsProps & { setActive: (...param: any) => void; active: number }) {
   return (
     <div>
-      <div className='w-full border-b border-[#EFF0F2] flex gap-6 px-8'>
+      <div className='w-full border-b border-[#EFF0F2] flex gap-6 px-4'>
         {children.map((child, index) => (
           <button
             key={index}
