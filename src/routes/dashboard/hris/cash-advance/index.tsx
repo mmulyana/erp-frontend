@@ -1,9 +1,4 @@
-import {
-  Breadcrumb,
-  Container,
-  DashboardLayout,
-  useTitle,
-} from '../../component'
+import { DashboardLayout } from '../../component'
 import CardInfo from '@/components/common/card-info'
 import Filter from '@/components/common/filter'
 import Search from '@/components/common/search'
@@ -12,20 +7,22 @@ import { PATH } from '@/utils/constant/_paths'
 import { columns, ModalAdd } from './component'
 import useUrlState from '@ahooksjs/use-url-state'
 import { useCashAdvance } from '@/hooks/use-cash-advance'
+import { useTitle } from '../../_component/header'
+import Container from '../../_component/container'
 
 const links = [
   {
     name: 'Dashboard',
-    href: PATH.DASHBOARD_OVERVIEW,
+    path: PATH.DASHBOARD_OVERVIEW,
   },
   {
     name: 'Kasbon',
-    href: PATH.EMPLOYEE_CASH_ADVANCES,
+    path: PATH.EMPLOYEE_CASH_ADVANCES,
   },
 ]
 
 export default function Page() {
-  useTitle('Kasbon')
+  useTitle(links)
 
   const [url] = useUrlState({ name: '', page: 1, limit: 10 })
 
@@ -38,7 +35,6 @@ export default function Page() {
   return (
     <DashboardLayout>
       <Container>
-        <Breadcrumb links={links} />
         <div className='max-w-[224px] mt-4 mb-6'>
           <CardInfo
             title='Jumlah kasbon bulan ini'
@@ -54,7 +50,7 @@ export default function Page() {
             </div>
             <Filter />
           </div>
-          <ModalAdd/>
+          <ModalAdd />
         </div>
         <DataTable
           columns={columns}
