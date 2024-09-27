@@ -1,32 +1,29 @@
-import {
-  Breadcrumb,
-  Container,
-  DashboardLayout,
-  useTitle,
-} from '../../component'
+import { DashboardLayout } from '../../component'
 import { DataTable } from '@/components/data-table'
 import { PATH } from '@/utils/constant/_paths'
 import { columns, Data, TableHeader } from './component'
 import { usePosition } from '@/hooks/use-position'
+import Container from '../../_component/container'
+import { useTitle } from '../../_component/header'
 
 const links = [
   {
     name: 'Dashboard',
-    href: PATH.DASHBOARD_OVERVIEW,
+    path: PATH.DASHBOARD_OVERVIEW,
   },
   {
     name: 'Pegawai',
-    href: PATH.EMPLOYEE,
+    path: PATH.EMPLOYEE,
   },
 ]
 
 export default function Employee() {
   const { data, isLoading } = usePosition()
-  useTitle('Pegawai')
+  useTitle(links)
+
   return (
     <DashboardLayout>
       <Container>
-        <Breadcrumb links={links} />
         <TableHeader />
         <DataTable
           data={data?.data?.data || tableData}
