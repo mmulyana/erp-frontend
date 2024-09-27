@@ -1,6 +1,8 @@
-import { DashboardLayout, useTitle } from '../component'
+import { PATH } from '@/utils/constant/_paths'
+import { useTitle } from '../_component/header'
+import { DashboardLayout } from '../component'
 
 export default function Dashboard() {
-  useTitle('Overview')
+  useTitle([{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW }])
   return <DashboardLayout></DashboardLayout>
 }
