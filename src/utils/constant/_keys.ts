@@ -11,6 +11,8 @@ export const KEYS = {
   ATTENDANCE: 'attendance',
   OVERTIME: 'overtime',
   PROJECT: 'project',
-  GOODS: "goods",
-  TRANSACTION: "transaction"
+  GOODS: 'goods',
+  TRANSACTION: 'transaction',
+  SUPPLIER: 'supplier',
+  SUPPLIER_EMPLOYEE: 'supplier-employee',
 }
