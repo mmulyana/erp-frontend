@@ -11,6 +11,7 @@ type TabProps = {
 type TabsProps = {
   children: React.ReactElement<TabProps>[]
   className?: string
+  action?: React.ReactNode
 }
 
 export function Tab({ children }: TabProps) {
@@ -23,7 +24,7 @@ export function Tabs({ children, className }: TabsProps) {
     <div>
       <div
         className={cn(
-          'w-full border-b border-[#EFF0F2] flex gap-6 px-4',
+          'w-full border-b border-[#EFF0F2] flex gap-6 px-4 relative',
           className
         )}
       >
@@ -62,28 +63,36 @@ export function TabsV2({
   children,
   setActive,
   active,
-}: TabsProps & { setActive: (...param: any) => void; active: number }) {
+  hideBorder,
+}: TabsProps & {
+  setActive: (...param: any) => void
+  active: number
+  hideBorder?: boolean
+}) {
   return (
-    <div>
-      <div className='w-full border-b border-[#EFF0F2] flex gap-6 px-4'>
-        {children.map((child, index) => (
-          <button
-            key={index}
-            className={cn(
-              'px-2 pb-3 relative flex gap-1 items-center',
-              active == child.props.index
-                ? 'text-[#5463E8] font-medium'
-                : 'text-[#989CA8]'
-            )}
-            onClick={() => setActive(index)}
-          >
-            {child.props.children}
-            {active == child.props.index && (
-              <div className='absolute bottom-0 left-0 w-full h-[3px] bg-[#5463E8] rounded-t-lg'></div>
-            )}
-          </button>
-        ))}
-      </div>
+    <div
+      className={cn(
+        'w-full flex gap-6 px-4',
+        !hideBorder && 'border-b border-[#EFF0F2] '
+      )}
+    >
+      {children.map((child, index) => (
+        <button
+          key={index}
+          className={cn(
+            'px-2 pb-3 relative flex gap-1 items-center',
+            active == child.props.index
+              ? 'text-[#5463E8] font-medium'
+              : 'text-[#989CA8]'
+          )}
+          onClick={() => setActive(index)}
+        >
+          {child.props.children}
+          {active == child.props.index && (
+            <div className='absolute bottom-0 left-0 w-full h-[3px] bg-[#5463E8] rounded-t-lg'></div>
+          )}
+        </button>
+      ))}
     </div>
   )
 }
