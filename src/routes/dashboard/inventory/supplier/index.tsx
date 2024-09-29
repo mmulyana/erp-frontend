@@ -12,8 +12,12 @@ import { DataTable } from '@/components/data-table'
 import Overlay from '@/components/common/overlay'
 import { generatePath, Link } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
+import { useTitle } from '../../_component/header'
+import { links } from './data'
 
 export default function Supplier() {
+  useTitle(links)
+
   const { data: dataSupplier, isLoading } = useSupplier({})
   const data = useMemo(() => dataSupplier?.data?.data, [isLoading])
 
