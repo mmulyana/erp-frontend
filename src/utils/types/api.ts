@@ -95,3 +95,36 @@ export type Goods = {
     name: string
   }
 }
+
+export type Supplier = {
+  id: number
+  name: string
+  phone?: string
+  address?: string
+  status: 'active' | 'nonactive'
+  photoUrl?: string
+  employees: SupplierEmployee[]
+  tags: SupplierToTag[]
+}
+
+export type SupplierEmployee = {
+  id: number
+  name: string
+  position?: string
+  phone?: string
+  status: 'active' | 'nonactive'
+  supplierId: number
+}
+
+export type SupplierToTag = {
+  id: number
+  supplierId: number
+  tagId: number
+  tag: SupplierTag
+}
+
+export type SupplierTag = {
+  id: number
+  name: string
+  color: string
+}
