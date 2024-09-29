@@ -24,8 +24,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { PATH } from '@/utils/constant/_paths'
+import { useTitle } from '../_component/header'
+
+export const links = [
+  {
+    name: 'Inventory',
+    path: PATH.INVENTORY_INDEX,
+  },
+]
 
 export default function Index() {
+  useTitle(links)
+  
   const { data: dataGoods, isLoading } = useGoods({})
   const data = useMemo(() => dataGoods?.data?.data, [isLoading])
 
