@@ -65,3 +65,33 @@ export interface LabelLabel {
   name: string
   color: string
 }
+
+export type Goods = {
+  id: number
+  name: string
+  qty: number
+  available: number
+  minimum: number
+  photoUrl?: string
+  locationId: number
+  measurementId: number
+  categoryId: number
+  brandId: number
+  brand: {
+    id: number
+    name: string
+    photoUrl?: string
+  }
+  category: {
+    id: number
+    name: string
+  }
+  location: {
+    id: number
+    name: string
+  }
+  measurement: {
+    id: number
+    name: string
+  }
+}
