@@ -21,6 +21,8 @@ const ProjectView = lazy(() => import('./project/view/index.tsx'))
 
 // INVENTORY
 const Inventory = lazy(() => import('./inventory/index.tsx'))
+const InventorySupplier = lazy(() => import('./inventory/supplier/index.tsx'))
+const InventorySupplierEmployee = lazy(() => import('./inventory/supplier/employee.tsx'))
 
 export const dashboardRoutes = [
   {
@@ -78,5 +80,13 @@ export const dashboardRoutes = [
   {
     path: PATH.INVENTORY_INDEX,
     element: <Inventory />,
+  },
+  {
+    path: PATH.INVENTORY_SUPPLIER,
+    element: <InventorySupplier />,
+  },
+  {
+    path: PATH.INVENTORY_SUPPLIER_EMPLOYEE,
+    element: <InventorySupplierEmployee />,
   },
 ]
