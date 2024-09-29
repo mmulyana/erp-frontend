@@ -21,29 +21,32 @@ export default function Supplier() {
     {
       accessorKey: 'name',
       header: 'Nama',
-      cell: ({ row }) => (
-        <Overlay
-          className='w-fit pr-2.5'
-          overlay={
+      cell: ({ row }) => {
+        const detail = row.original.name.split(' ').join('-')
+        return (
+          <Overlay
+            className='w-fit pr-2.5'
+            overlay={
+              <Link
+                to={generatePath(PATH.INVENTORY_SUPPLIER_EMPLOYEE, {
+                  detail: `${detail}-${row.original.id}`,
+                })}
+                className='absolute -right-0 translate-x-full text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] top-1/2 -translate-y-1/2 bg-white hover:shadow-sm hover:shadow-gray-200'
+              >
+                Lihat
+              </Link>
+            }
+          >
             <Link
               to={generatePath(PATH.INVENTORY_SUPPLIER_EMPLOYEE, {
-                id: row.original.id,
+                detail: `${detail}-${row.original.id}`,
               })}
-              className='absolute -right-0 translate-x-full text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] top-1/2 -translate-y-1/2 bg-white hover:shadow-sm hover:shadow-gray-200'
             >
-              Lihat
+              {row?.original?.name}
             </Link>
-          }
-        >
-          <Link
-            to={generatePath(PATH.INVENTORY_SUPPLIER_EMPLOYEE, {
-              id: row.original.id,
-            })}
-          >
-            {row.original.name}
-          </Link>
-        </Overlay>
-      ),
+          </Overlay>
+        )
+      },
     },
     {
       accessorKey: 'phone',
