@@ -20,4 +20,6 @@ export const PATH = {
   PROJECT_VIEW: '/dashboard/project/view',
 
   INVENTORY_INDEX: '/dashboard/inventory',
+  INVENTORY_SUPPLIER: '/dashboard/inventory/supplier',
+  INVENTORY_SUPPLIER_EMPLOYEE: '/dashboard/inventory/supplier/:id',
 }
