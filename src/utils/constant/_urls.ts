@@ -17,5 +17,12 @@ export const URLS = {
   CASH_ADVANCES: V1 + '/hris/cash-advance',
   ATTENDANCE: V1 + '/hris/attendance',
   OVERTIME: V1 + '/hris/overtime',
-  PROJECT: V1 + '/project'
+  PROJECT: V1 + '/project',
+
+  // INVENTORY
+  INVENTORY_GOODS: V1 + '/inventory/goods',
+  INVENTORY_CATEGORY: V1 + '/inventory/category',
+  INVENTORY_SUPPLIER: V1 + '/inventory/supplier',
+  INVENTORY_SUPPLIER_EMPLOYEE: V1 + '/inventory/supplier/employee',
+  INVENTORY_LABEL: V1 + '/inventory/label',
 }
