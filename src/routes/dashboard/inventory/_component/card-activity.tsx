@@ -1,12 +1,16 @@
+import { PackageMinus, PackagePlus } from 'lucide-react'
+
 type Props = {
   type: string
   isLast?: boolean
 }
 export default function CardActivity({ type, isLast }: Props) {
   return (
-    <div className='px-4 grid grid-cols-[40px_1fr] gap-4'>
+    <div className='grid grid-cols-[40px_1fr] gap-4'>
       <div className='relative'>
-        <div className='w-full h-10 rounded-full bg-white border border-[#EFF0F2] flex items-center justify-center'></div>
+        <div className='w-full h-10 rounded-full bg-white border border-[#EFF0F2] flex items-center justify-center'>
+          <TransactionIcon type={type} />
+        </div>
         {!isLast && (
           <div className='h-[calc(100%-40px)] w-[1px] bg-[#EFF0F2] absolute left-1/2 -translate-x-1/2 -z-10' />
         )}
@@ -40,5 +44,15 @@ function TransactionType({ type }: Pick<Props, 'type'>) {
     )
   }
 
+  return null
+}
+
+function TransactionIcon({ type }: Pick<Props, 'type'>) {
+  if (type == 'in') {
+    return <PackagePlus className='w-5 h-5 text-[#313951]' />
+  }
+  if (type == 'out') {
+    return <PackageMinus className='w-5 h-5 text-[#313951]' />
+  }
   return null
 }
