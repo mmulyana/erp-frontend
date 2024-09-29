@@ -45,6 +45,10 @@ const SidebarMenus = [
         name: 'Barang',
         path: PATH.INVENTORY_INDEX,
       },
+      {
+        name: 'Supplier',
+        path: PATH.INVENTORY_SUPPLIER,
+      },
     ],
   },
   {
