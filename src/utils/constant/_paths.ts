@@ -22,4 +22,5 @@ export const PATH = {
   INVENTORY_INDEX: '/dashboard/inventory',
   INVENTORY_SUPPLIER: '/dashboard/inventory/supplier',
   INVENTORY_SUPPLIER_EMPLOYEE: '/dashboard/inventory/supplier/:detail',
+  INVENTORY_SETTING: '/dashboard/inventory/setting',
 }
