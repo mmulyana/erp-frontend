@@ -1,11 +1,26 @@
 import { cn } from '@/utils/cn'
-import { useState } from 'react'
+import { useMediaQuery } from '@uidotdev/usehooks'
+import React, { useMemo, useState } from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
+import { buttonVariants } from '../ui/button'
+import { ListIcon } from 'lucide-react'
 
 type TabProps = {
   label: string
   index?: number
   badge?: string
   children: React.ReactNode
+}
+type TabV3Props = TabProps & {
+  title?: React.ReactNode
 }
 
 type TabsProps = {
@@ -15,6 +30,9 @@ type TabsProps = {
 }
 
 export function Tab({ children }: TabProps) {
+  return <div>{children}</div>
+}
+export function TabV3({ children }: TabV3Props) {
   return <div>{children}</div>
 }
 
@@ -94,5 +112,95 @@ export function TabsV2({
         </button>
       ))}
     </div>
+  )
+}
+
+export function TabsV3({
+  children,
+  className,
+  renderAction,
+  activeClassName,
+}: Omit<TabsProps, 'children'> & {
+  renderAction?: (index: number) => React.ReactNode
+  className?: string
+  activeClassName?: string
+  children: React.ReactElement<TabV3Props>[]
+}) {
+  const [active, setActive] = useState(0)
+
+  const isSmall = useMediaQuery('only screen and (max-width : 768px)')
+  const handleActive = (value: string) => {
+    setActive(parseInt(value, 10))
+  }
+
+  const activeMenu = useMemo(() => {
+    const menus = children.map((child) => ({
+      label: child.props.label,
+      index: child.props.index,
+    }))
+
+    let index = menus.findIndex((menu) => menu.index === active)
+    return menus[index].label
+  }, [active])
+
+  return (
+    <>
+      <div className='flex justify-between items-center px-4 border-b border-transparent md:border-[#EFF0F2] gap-4 py-2 md:py-0'>
+        {isSmall ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <div
+                className={cn(
+                  buttonVariants({ variant: 'outline' }),
+                  'px-2.5 gap-2'
+                )}
+              >
+                <ListIcon className='w-4 h-4' />
+                <p className='text-sm text-[#313951]'>{activeMenu}</p>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='ml-4'>
+              <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup
+                value={active.toString()}
+                onValueChange={handleActive}
+              >
+                {children.map((child, index) => (
+                  <DropdownMenuRadioItem key={index} value={index.toString()}>
+                    {child.props.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <div
+            className={cn(
+              'w-full flex gap-6 relative border-b md:border-transparent border-[#EFF0F2]',
+              className
+            )}
+          >
+            {children.map((child, index) => (
+              <button
+                key={index}
+                className={cn(
+                  'px-2 pb-3 relative flex gap-1 items-center text-[#989CA8]',
+                  active == index && activeClassName
+                )}
+                onClick={() => setActive(index)}
+              >
+                {child.props.title || child.props.label}
+                {index === active && (
+                  <div className='absolute -bottom-0.5 left-0 w-full h-[3px] bg-[#5463E8] rounded-t-lg'></div>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+        {renderAction && renderAction(active)}
+      </div>
+      <div>{children[active]}</div>
+    </>
   )
 }
