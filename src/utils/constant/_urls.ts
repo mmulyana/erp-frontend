@@ -25,4 +25,5 @@ export const URLS = {
   INVENTORY_SUPPLIER: V1 + '/inventory/supplier',
   INVENTORY_SUPPLIER_EMPLOYEE: V1 + '/inventory/supplier/employee',
   INVENTORY_LABEL: V1 + '/inventory/label',
+  INVENTORY_BRAND: V1 + '/inventory/brand',
 }
