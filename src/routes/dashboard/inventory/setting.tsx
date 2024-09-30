@@ -1,7 +1,6 @@
 import { TabsV3, TabV3 } from '@/components/tab'
 import { DashboardLayout } from '../_component/layout'
 import SearchV2 from '@/components/common/search/search-v2'
-import Filter from '@/components/common/filter'
 import { Button } from '@/components/ui/button'
 import Container from '../_component/container'
 import {
@@ -9,6 +8,7 @@ import {
   DataCategory,
   DataLocation,
   DataMeasurement,
+  DataTag,
 } from './_component/setting/component'
 
 export default function Settings() {
@@ -19,7 +19,6 @@ export default function Settings() {
         renderAction={() => (
           <div className='flex gap-2 items-center justify-end'>
             <SearchV2 />
-            <Filter></Filter>
             <Button>Tambah</Button>
           </div>
         )}
@@ -45,7 +44,9 @@ export default function Settings() {
           </Container>
         </TabV3>
         <TabV3 label='Tag' index={4}>
-          <p>Tag</p>
+          <Container>
+            <DataTag />
+          </Container>
         </TabV3>
       </TabsV3>
     </DashboardLayout>
