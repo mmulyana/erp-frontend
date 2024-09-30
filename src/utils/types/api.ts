@@ -78,24 +78,30 @@ export type Goods = {
   categoryId: number
   brandId: number
   brand: GoodsBrand
-  category: {
-    id: number
-    name: string
-  }
-  location: {
-    id: number
-    name: string
-  }
-  measurement: {
-    id: number
-    name: string
-  }
+  category: GoodsCategory
+  location: GoodsLocation
+  measurement: GoodsMeasurement
 }
 
 export type GoodsBrand = {
   id: number
   name: string
   photoUrl?: string
+}
+
+export type GoodsCategory = {
+  id: number
+  name: string
+}
+
+export type GoodsLocation = {
+  id: number
+  name: string
+}
+
+export type GoodsMeasurement = {
+  id: number
+  name: string
 }
 
 export type Supplier = {
