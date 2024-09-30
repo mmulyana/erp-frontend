@@ -8,6 +8,7 @@ import {
   DataBrand,
   DataCategory,
   DataLocation,
+  DataMeasurement,
 } from './_component/setting/component'
 
 export default function Settings() {
@@ -39,7 +40,9 @@ export default function Settings() {
           </Container>
         </TabV3>
         <TabV3 label='Ukuran' index={3}>
-          <p>Ukuran</p>
+          <Container>
+            <DataMeasurement />
+          </Container>
         </TabV3>
         <TabV3 label='Tag' index={4}>
           <p>Tag</p>
