@@ -1,4 +1,3 @@
-import { DashboardLayout } from '../../component'
 import CardInfo from '@/components/common/card-info'
 import Filter from '@/components/common/filter'
 import Search from '@/components/common/search'
@@ -9,6 +8,7 @@ import useUrlState from '@ahooksjs/use-url-state'
 import { useCashAdvance } from '@/hooks/api/use-cash-advance'
 import { useTitle } from '../../_component/header'
 import Container from '../../_component/container'
+import { DashboardLayout } from '../../_component/layout'
 
 const links = [
   {

@@ -10,13 +10,12 @@ import { data, dates } from '../data'
 import { format, isEqual, isSunday, parseISO } from 'date-fns'
 import { cn } from '@/utils/cn'
 import React, { useId } from 'react'
-import { DashboardLayout } from '@/routes/dashboard/component'
 import { PATH } from '@/utils/constant/_paths'
 import { id } from 'date-fns/locale'
 import Search from '@/components/common/search'
 import { useTitle } from '@/routes/dashboard/_component/header'
 import Container from '@/routes/dashboard/_component/container'
-import Breadcrumb from '@/routes/dashboard/_component/bread-crumb'
+import { DashboardLayout } from '@/routes/dashboard/_component/layout'
 
 const links = [
   {

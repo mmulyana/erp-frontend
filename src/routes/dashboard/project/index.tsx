@@ -1,10 +1,10 @@
 import { useProject } from '@/hooks/api/use-project'
-import { DashboardLayout } from '../component'
 import CardProject from '@/components/card-project'
 import { Project } from '@/utils/types/api'
 import Container from '../_component/container'
 import { useTitle } from '../_component/header'
 import { PATH } from '@/utils/constant/_paths'
+import { DashboardLayout } from '../_component/layout'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])

@@ -3,10 +3,10 @@ import { EmployeeStatus } from '@/utils/enum/common'
 import { PATH } from '@/utils/constant/_paths'
 import { Tab, Tabs } from '@/components/tab'
 import { TableEmployee } from './component'
-import { DashboardLayout } from '@/routes/dashboard/component'
 import { useState } from 'react'
 import { Title, useTitle } from '@/routes/dashboard/_component/header'
 import Container from '@/routes/dashboard/_component/container'
+import { DashboardLayout } from '@/routes/dashboard/_component/layout'
 
 const links = [
   {

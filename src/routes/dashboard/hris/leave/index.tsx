@@ -1,4 +1,3 @@
-import { DashboardLayout } from '../../component'
 import { DataTable } from '@/components/data-table'
 import Search from '@/components/common/search'
 import Filter from '@/components/common/filter'
@@ -8,7 +7,7 @@ import { useLeaves } from '@/hooks/api/use-leaves'
 import useUrlState from '@ahooksjs/use-url-state'
 import { useTitle } from '../../_component/header'
 import Container from '../../_component/container'
-import Breadcrumb from '../../_component/bread-crumb'
+import { DashboardLayout } from '../../_component/layout'
 
 const links = [
   {

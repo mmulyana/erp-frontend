@@ -1,4 +1,4 @@
-import { DashboardLayout } from '../component'
+import { DashboardLayout } from '../_component/layout'
 
 export function Layout({ children }: React.PropsWithChildren) {
   return (

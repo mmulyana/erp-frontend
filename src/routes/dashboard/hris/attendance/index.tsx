@@ -1,9 +1,9 @@
 import { PATH } from '@/utils/constant/_paths'
 import { Tab, Tabs } from '@/components/tab'
 import { Header, Overtime, Regular } from './component'
-import { DashboardLayout } from '../../component'
 import { useTitle } from '../../_component/header'
 import Container from '../../_component/container'
+import { DashboardLayout } from '../../_component/layout'
 
 const links = [
   {
