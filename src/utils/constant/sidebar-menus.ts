@@ -49,6 +49,10 @@ const SidebarMenus = [
         name: 'Supplier',
         path: PATH.INVENTORY_SUPPLIER,
       },
+      {
+        name: 'Pengaturan',
+        path: PATH.INVENTORY_SETTING,
+      },
     ],
   },
   {
