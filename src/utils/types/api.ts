@@ -77,11 +77,7 @@ export type Goods = {
   measurementId: number
   categoryId: number
   brandId: number
-  brand: {
-    id: number
-    name: string
-    photoUrl?: string
-  }
+  brand: GoodsBrand
   category: {
     id: number
     name: string
@@ -94,6 +90,12 @@ export type Goods = {
     id: number
     name: string
   }
+}
+
+export type GoodsBrand = {
+  id: number
+  name: string
+  photoUrl?: string
 }
 
 export type Supplier = {
