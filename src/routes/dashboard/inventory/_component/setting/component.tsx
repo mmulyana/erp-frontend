@@ -1,9 +1,10 @@
 import { DataTable } from '@/components/data-table'
 import { useBrand } from '@/hooks/api/use-brand'
 import { useMemo } from 'react'
-import { columnsBrand, columnsCategory, columnsLocation } from './columns'
+import { columnsBrand, columnsCategory, columnsLocation, columnsMeasurement } from './columns'
 import { useCategory } from '@/hooks/api/use-category'
 import { useLocation } from '@/hooks/api/use-location'
+import { useMeasurement } from '@/hooks/api/use-measurement'
 
 export function DataBrand() {
   const { data: brands, isLoading } = useBrand({})
@@ -47,6 +48,22 @@ export function DataLocation() {
     <>
       <DataTable
         columns={columnsLocation}
+        data={data || []}
+        isLoading={isLoading}
+        withLoading
+        withPagination
+      />
+    </>
+  )
+}
+export function DataMeasurement() {
+  const { data: measurement, isLoading } = useMeasurement({})
+  const data = useMemo(() => measurement?.data?.data, [isLoading])
+
+  return (
+    <>
+      <DataTable
+        columns={columnsMeasurement}
         data={data || []}
         isLoading={isLoading}
         withLoading
