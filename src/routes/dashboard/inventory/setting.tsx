@@ -4,7 +4,7 @@ import SearchV2 from '@/components/common/search/search-v2'
 import Filter from '@/components/common/filter'
 import { Button } from '@/components/ui/button'
 import Container from '../_component/container'
-import { DataBrand } from './_component/setting/component'
+import { DataBrand, DataCategory } from './_component/setting/component'
 
 export default function Settings() {
   return (
@@ -25,7 +25,9 @@ export default function Settings() {
           </Container>
         </TabV3>
         <TabV3 label='Kategori' index={1}>
-          <p>Kategori</p>
+          <Container>
+            <DataCategory />
+          </Container>
         </TabV3>
         <TabV3 label='Lokasi' index={2}>
           <p>Lokasi</p>
