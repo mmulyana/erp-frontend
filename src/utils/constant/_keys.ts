@@ -16,4 +16,5 @@ export const KEYS = {
   SUPPLIER: 'supplier',
   SUPPLIER_EMPLOYEE: 'supplier-employee',
   BRAND: 'brand',
+  CATEGORY: 'category',
 }
