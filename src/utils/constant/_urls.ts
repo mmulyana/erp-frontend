@@ -22,6 +22,9 @@ export const URLS = {
   // INVENTORY
   INVENTORY_GOODS: V1 + '/inventory/goods',
   INVENTORY_CATEGORY: V1 + '/inventory/category',
+  INVENTORY_LOCATION: V1 + '/inventory/location',
+  INVENTORY_SUPPLIER_TAG: V1 + '/inventory/tag',
+  INVENTORY_MEASUREMENT: V1 + '/inventory/measurement',
   INVENTORY_SUPPLIER: V1 + '/inventory/supplier',
   INVENTORY_SUPPLIER_EMPLOYEE: V1 + '/inventory/supplier/employee',
   INVENTORY_LABEL: V1 + '/inventory/label',
