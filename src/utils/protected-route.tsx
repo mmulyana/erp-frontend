@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode'
 import { User } from './types/user'
 import { useSetAtom } from 'jotai'
 import { userAtom } from '@/atom/auth'
-import { useUserAccount } from '../hooks/use-account'
+import { useUserAccount } from '../hooks/api/use-account'
 import { permissionAtom } from '@/atom/permission'
 
 export default function ProtectedRoute({ children }: React.PropsWithChildren) {

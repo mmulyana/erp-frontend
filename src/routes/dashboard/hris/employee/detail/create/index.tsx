@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useCreateEmployee } from '@/hooks/use-employee'
+import { useCreateEmployee } from '@/hooks/api/use-employee'
 import { useNavigate } from 'react-router-dom'
 import useUrlState from '@ahooksjs/use-url-state'
 

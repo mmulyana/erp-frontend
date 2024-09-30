@@ -1,7 +1,7 @@
 import Filter from '@/components/common/filter'
 import Search from '@/components/common/search'
 import { Button } from '@/components/ui/button'
-import { useEmployees } from '@/hooks/use-employee'
+import { useEmployees } from '@/hooks/api/use-employee'
 import { EmployeeStatus } from '@/utils/enum/common'
 import { Employee } from '@/utils/types/employee'
 import useUrlState from '@ahooksjs/use-url-state'

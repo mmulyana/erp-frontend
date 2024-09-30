@@ -1,4 +1,4 @@
-import { useProject } from '@/hooks/use-project'
+import { useProject } from '@/hooks/api/use-project'
 import { DashboardLayout } from '../component'
 import CardProject from '@/components/card-project'
 import { Project } from '@/utils/types/api'

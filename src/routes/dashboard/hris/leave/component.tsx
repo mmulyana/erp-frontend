@@ -15,8 +15,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { useEmployees } from '@/hooks/use-employee'
-import { useCreateLeaves } from '@/hooks/use-leaves'
+import { useEmployees } from '@/hooks/api/use-employee'
+import { useCreateLeaves } from '@/hooks/api/use-leaves'
 import { leaveSchema, LeaveSchema } from '@/utils/schema/leave.schema'
 import { Employee } from '@/utils/types/employee'
 import { Leave } from '@/utils/types/leave'

@@ -25,11 +25,11 @@ import {
   useAttendances,
   useCreateAttendance,
   useUpdateAttendance,
-} from '@/hooks/use-attendance'
+} from '@/hooks/api/use-attendance'
 import { Employee } from '@/utils/types/employee'
 import ResponsiveModal from '@/components/modal-responsive'
-import { useEmployees } from '@/hooks/use-employee'
-import { useCreateOvertime, useOvertime } from '@/hooks/use-overtime'
+import { useEmployees } from '@/hooks/api/use-employee'
+import { useCreateOvertime, useOvertime } from '@/hooks/api/use-overtime'
 import { useForm } from 'react-hook-form'
 import { overtimeSchema, OvertimeSchema } from '@/utils/schema/overtime.schema'
 import { zodResolver } from '@hookform/resolvers/zod'

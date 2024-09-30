@@ -23,7 +23,7 @@ import {
   useDeletePosition,
   useDetailPosition,
   useUpdatePosition,
-} from '@/hooks/use-position'
+} from '@/hooks/api/use-position'
 import { cn } from '@/utils/cn'
 import { useEffect, useState } from 'react'
 import ResponsiveModal from '@/components/modal-responsive'

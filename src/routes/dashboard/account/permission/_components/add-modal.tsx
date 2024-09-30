@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import { useCreatePermissionGroup } from '@/hooks/use-permission'
+import { useCreatePermissionGroup } from '@/hooks/api/use-permission'
 import { createPGPayload } from '@/utils/api/fetcher/fetcher-permission'
 import { delay } from '@/utils/delay'
 import { toast } from 'sonner'

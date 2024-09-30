@@ -2,7 +2,7 @@ import { DashboardLayout } from '../../component'
 import { DataTable } from '@/components/data-table'
 import { PATH } from '@/utils/constant/_paths'
 import { columns, Data, TableHeader } from './component'
-import { usePosition } from '@/hooks/use-position'
+import { usePosition } from '@/hooks/api/use-position'
 import Container from '../../_component/container'
 import { useTitle } from '../../_component/header'
 

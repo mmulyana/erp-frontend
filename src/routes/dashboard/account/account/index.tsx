@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAccounts } from '@/hooks/use-account'
+import { useAccounts } from '@/hooks/api/use-account'
 import { Plus, Users2 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'

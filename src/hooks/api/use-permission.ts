@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PermissionGroup } from '@/utils/types/permision-group'
-import { KEYS } from '../utils/constant/_keys'
+import { KEYS } from '../../utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 

@@ -1,5 +1,5 @@
 import { Plus, Shield } from 'lucide-react'
-import { usePermissionsGroup } from '@/hooks/use-permission'
+import { usePermissionsGroup } from '@/hooks/api/use-permission'
 import { useEffect, useMemo, useState } from 'react'
 import { PermissionGroup } from '@/utils/types/permision-group'
 import {

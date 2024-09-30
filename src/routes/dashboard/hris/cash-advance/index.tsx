@@ -6,7 +6,7 @@ import { DataTable } from '@/components/data-table'
 import { PATH } from '@/utils/constant/_paths'
 import { columns, ModalAdd } from './component'
 import useUrlState from '@ahooksjs/use-url-state'
-import { useCashAdvance } from '@/hooks/use-cash-advance'
+import { useCashAdvance } from '@/hooks/api/use-cash-advance'
 import { useTitle } from '../../_component/header'
 import Container from '../../_component/container'
 

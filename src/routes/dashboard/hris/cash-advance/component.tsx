@@ -15,8 +15,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { useCreateCashAdvance } from '@/hooks/use-cash-advance'
-import { useEmployees } from '@/hooks/use-employee'
+import { useCreateCashAdvance } from '@/hooks/api/use-cash-advance'
+import { useEmployees } from '@/hooks/api/use-employee'
 import {
   cashAdvanceSchema,
   CashAdvancesSchema,
