@@ -13,17 +13,9 @@ import TopHeader from '../_component/top-header'
 import { DataTable } from '@/components/data-table'
 import Container from '../../_component/container'
 import useUrlState from '@ahooksjs/use-url-state'
+import { links } from './data'
 
-const links = [
-  {
-    name: 'Inventory',
-    path: PATH.INVENTORY_INDEX,
-  },
-  {
-    name: 'Supplier',
-    path: PATH.INVENTORY_SUPPLIER,
-  },
-]
+
 
 export default function Employee() {
   const [url] = useUrlState({ name: '' })
