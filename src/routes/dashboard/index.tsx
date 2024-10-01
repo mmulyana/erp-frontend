@@ -24,6 +24,10 @@ const Inventory = lazy(() => import('./inventory/index.tsx'))
 const InventorySupplier = lazy(() => import('./inventory/supplier/index.tsx'))
 const InventorySupplierEmployee = lazy(() => import('./inventory/supplier/employee.tsx'))
 const InventorySetting = lazy(() => import('./inventory/setting.tsx'))
+const InventoryStockIn = lazy(() => import('./inventory/manage/stock-in.tsx'))
+const InventoryStockOut = lazy(() => import('./inventory/manage/stock-out.tsx'))
+const InventoryStockOpname = lazy(() => import('./inventory/manage/stock-opname.tsx'))
+const InventoryStockBorrowed = lazy(() => import('./inventory/manage/stock-borrowed.tsx'))
 
 export const dashboardRoutes = [
   {
@@ -93,5 +97,21 @@ export const dashboardRoutes = [
   {
     path: PATH.INVENTORY_SETTING,
     element: <InventorySetting />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK_IN,
+    element: <InventoryStockIn />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK_OUT,
+    element: <InventoryStockOut />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK_OPNAME,
+    element: <InventoryStockOpname />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK_BORROWED,
+    element: <InventoryStockBorrowed />,
   },
 ]
