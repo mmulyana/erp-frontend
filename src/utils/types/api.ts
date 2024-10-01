@@ -136,3 +136,20 @@ export type SupplierTag = {
   name: string
   color: string
 }
+
+export type Transaction = {
+  id: number
+  goodsId: number
+  qty: number
+  price: string
+  photoUrl?: string
+  supplierId: 1
+  date: string
+  type: 'in' | 'out' | 'borrowed' | 'returned' | 'opname'
+  description?: string
+  projectId?: number
+  isReturned?: boolean
+  project?: Partial<Project>
+  good: Partial<Goods>
+  supplier: Partial<Supplier>
+}
