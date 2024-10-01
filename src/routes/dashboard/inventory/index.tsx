@@ -1,6 +1,5 @@
 import { Button, buttonVariants } from '@/components/ui/button'
 import Container from '../_component/container'
-import { DashboardLayout } from '../component'
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/cn'
 import { ColumnDef } from '@tanstack/react-table'
@@ -26,6 +25,7 @@ import {
 } from '@/components/ui/select'
 import { PATH } from '@/utils/constant/_paths'
 import { useTitle } from '../_component/header'
+import { DashboardLayout } from '../_component/layout'
 
 export const links = [
   {
