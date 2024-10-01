@@ -7,7 +7,7 @@ import { cn } from '@/utils/cn'
 interface DialogContentProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
   showClose?: boolean
-  customClose?: React.ReactNode
+  close?: React.ReactNode
 }
 
 const Dialog = DialogPrimitive.Root
@@ -54,7 +54,7 @@ const DialogContent = React.forwardRef<
             <span className='sr-only'>Close</span>
           </DialogPrimitive.Close>
         )}
-        {!showClose && props.customClose && props.customClose}
+        {!showClose && props.close && props.close}
       </DialogPrimitive.Content>
     </DialogOverlay>
   </DialogPortal>
