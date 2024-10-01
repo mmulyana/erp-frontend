@@ -1,16 +1,21 @@
 import { cn } from '@/utils/cn'
+import { useState } from 'react'
 import { Link, matchPath, useLocation } from 'react-router-dom'
+
+type MenuItem = {
+  name: string
+  path: string
+  menus?: MenuItem[]
+}
 
 type LinkGroupProps = {
   name: string
   path: string
-  menus: {
-    name: string
-    path: string
-  }[]
+  menus: MenuItem[]
   open: string
   setOpen: (val: string) => void
 }
+
 export default function LinkGroup({
   name,
   path,
@@ -20,6 +25,7 @@ export default function LinkGroup({
 }: LinkGroupProps) {
   const location = useLocation()
   const activeMenu = location.pathname.includes(path)
+
   return (
     <div className='w-full relative'>
       <button
@@ -38,9 +44,47 @@ export default function LinkGroup({
       )}
       {(open === path || activeMenu) && (
         <div className='flex flex-col gap-2 pl-8 mt-2'>
-          {menus.map((menu, index) => (
-            <LinkItem key={index} {...menu} pathname={location.pathname} />
-          ))}
+          {menus.map((menu, index) => {
+            if (menu.menus && menu.menus.length) {
+              const [activeSubMenu, setActiveSubMenu] = useState('')
+              const isActive = location.pathname.includes(menu.path)
+
+              return (
+                <div className='w-full relative' key={index}>
+                  <button
+                    className={cn(
+                      'flex items-center px-4 rounded-[8px] h-8 text-sm',
+                      isActive
+                        ? 'text-gray-700 bg-[#E3E3E3]/20'
+                        : 'text-gray-500'
+                    )}
+                    onClick={() => setActiveSubMenu(menu.path)}
+                  >
+                    {menu.name}
+                  </button>
+                  {(isActive || activeSubMenu === menu.path) && (
+                    <div className='flex flex-col gap-2 pl-8 mt-2'>
+                      {menu.menus.map((itemMenu, index) => (
+                        <LinkItem
+                          key={index}
+                          {...itemMenu}
+                          pathname={location.pathname}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {(isActive || activeSubMenu === menu.path) && (
+                    <div className='absolute top-8 left-0 w-8 h-[calc(100%-45px)]'>
+                      <div className='absolute w-[1px] h-full bg-[#EFF0F2] left-1/2 -translate-x-1/2'></div>
+                    </div>
+                  )}
+                </div>
+              )
+            }
+            return (
+              <LinkItem key={index} {...menu} pathname={location.pathname} />
+            )
+          })}
         </div>
       )}
     </div>
@@ -52,6 +96,7 @@ type LinkProps = {
   path: string
   pathname: string
 }
+
 function LinkItem({ name, path, pathname }: LinkProps) {
   const isActive = !!matchPath({ path }, pathname)
   return (
