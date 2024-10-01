@@ -3,7 +3,7 @@ import { PATH } from './_paths'
 const SidebarMenus = [
   {
     name: 'HRIS',
-    path: "employee",
+    path: 'employee',
     menus: [
       {
         name: 'Pegawai',
@@ -25,7 +25,7 @@ const SidebarMenus = [
   },
   {
     name: 'Proyek',
-    path: "project",
+    path: 'project',
     menus: [
       {
         name: 'Overview',
@@ -39,11 +39,33 @@ const SidebarMenus = [
   },
   {
     name: 'Inventory',
-    path: "inventory",
+    path: 'inventory',
     menus: [
       {
         name: 'Barang',
         path: PATH.INVENTORY_INDEX,
+      },
+      {
+        name: 'Kelola',
+        path: '/inventory/manage',
+        menus: [
+          {
+            name: 'Barang masuk',
+            path: PATH.INVENTORY_STOCK_IN,
+          },
+          {
+            name: 'Barang keluar',
+            path: PATH.INVENTORY_STOCK_OUT,
+          },
+          {
+            name: 'Opname',
+            path: PATH.INVENTORY_STOCK_OPNAME,
+          },
+          {
+            name: 'Peminjaman',
+            path: PATH.INVENTORY_STOCK_BORROWED,
+          },
+        ],
       },
       {
         name: 'Supplier',
