@@ -8,14 +8,33 @@ import { SupplierEmployee } from '@/utils/types/api'
 import Chips from '@/components/common/chips'
 import { Button } from '@/components/ui/button'
 import { Ellipsis } from 'lucide-react'
-import { useSupplierEmployee } from '@/hooks/api/use-supplier-employee'
+import {
+  useCreateSupplierEmployee,
+  useSupplierEmployee,
+} from '@/hooks/api/use-supplier-employee'
 import TopHeader from '../_component/top-header'
 import { DataTable } from '@/components/data-table'
 import Container from '../../_component/container'
 import useUrlState from '@ahooksjs/use-url-state'
 import { links } from './data'
-
-
+import { useForm, Controller } from 'react-hook-form'
+import { CreateSupplierEmployee } from '@/utils/types/form'
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import { Form, FormField } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
 
 export default function Employee() {
   const [url] = useUrlState({ name: '' })
@@ -38,12 +57,17 @@ export default function Employee() {
   const positionId = detail?.split('-').pop()
 
   // GET DATA
-  const { data: dataEmployee, isLoading } = useSupplierEmployee({
+  const {
+    data: dataEmployee,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useSupplierEmployee({
     id: Number(positionId),
     enabled: !!Number(positionId),
     ...(url.name !== '' ? { name: url.name } : { name: '' }),
   })
-  const data = useMemo(() => dataEmployee?.data?.data, [isLoading])
+  const data = useMemo(() => dataEmployee?.data?.data, [isLoading, isFetching])
 
   // COLUMN
   const columns: ColumnDef<SupplierEmployee>[] = [
@@ -79,10 +103,39 @@ export default function Employee() {
     },
   ]
 
+  // HANDLE DATA
+  const { mutate } = useCreateSupplierEmployee()
+
+  const form = useForm<CreateSupplierEmployee>({
+    defaultValues: {
+      name: '',
+      phone: '',
+      position: '',
+      status: '',
+    },
+  })
+
+  const onSubmit = async (data: CreateSupplierEmployee) => {
+    if (!Number(positionId)) return
+
+    mutate(
+      { payload: { ...data, supplierId: Number(positionId) } },
+      {
+        onSuccess: () => {
+          refetch()
+          setOpen(false)
+          form.reset()
+        },
+      }
+    )
+  }
+
+  const [open, setOpen] = useState(false)
+
   return (
     <DashboardLayout>
       <Container className='flex flex-col gap-4'>
-        <TopHeader title={lastLink.name} />
+        <TopHeader title={lastLink.name} onClick={() => setOpen(true)} />
         <DataTable
           columns={columns}
           data={data || []}
@@ -91,6 +144,77 @@ export default function Employee() {
           withPagination
         />
       </Container>
+      <Modal title='Tambah pegawai' open={open} setOpen={setOpen}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <ModalContainer setOpen={setOpen}>
+              <FormField
+                label='Nama'
+                control={form.control}
+                name='name'
+                render={({ field }) => <Input {...field} />}
+              />
+              <FormField
+                label='Jabatan'
+                control={form.control}
+                name='position'
+                render={({ field }) => <Input {...field} />}
+              />
+              <FormField
+                label='No. Telp'
+                control={form.control}
+                name='phone'
+                render={({ field }) => <Input {...field} />}
+              />
+              <Controller
+                name='status'
+                control={form.control}
+                render={({ field }) => (
+                  <Popover>
+                    <PopoverTrigger asChild className='w-full'>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='w-full justify-start'
+                        type='button'
+                      >
+                        {field.value ? (
+                          <span>{field.value}</span>
+                        ) : (
+                          <span>Pilih Status</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className='p-0' side='bottom' align='start'>
+                      <Command>
+                        <CommandInput placeholder='Change status...' />
+                        <CommandList>
+                          <CommandEmpty>No results found.</CommandEmpty>
+                          <CommandGroup>
+                            {['active', 'nonactive'].map(
+                              (item: string, index: number) => (
+                                <CommandItem
+                                  key={index}
+                                  value={item}
+                                  onSelect={(value) => {
+                                    form.setValue('status', value)
+                                  }}
+                                >
+                                  <span>{item}</span>
+                                </CommandItem>
+                              )
+                            )}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                )}
+              />
+            </ModalContainer>
+          </form>
+        </Form>
+      </Modal>
     </DashboardLayout>
   )
 }
