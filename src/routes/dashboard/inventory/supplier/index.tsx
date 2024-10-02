@@ -211,10 +211,7 @@ export default function Supplier() {
                 control={form.control}
                 name='photo'
                 rules={{ validate: validateFileSize }}
-                render={({
-                  field: { value, onChange, ...field },
-                  fieldState: { error },
-                }) => (
+                render={({ field: { value, onChange, ...field } }) => (
                   <div>
                     <Input
                       type='file'
