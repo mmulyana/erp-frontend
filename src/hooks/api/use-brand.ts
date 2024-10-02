@@ -3,6 +3,7 @@ import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { Pagination } from '@/utils/types/common'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 type brandParams = Pagination & {}
 export const useBrand = (params: brandParams) => {
@@ -37,8 +38,9 @@ export const useCreateBrand = () => {
         },
       })
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.BRAND] })
+      toast.success(data.data.message)
     },
   })
 }
