@@ -120,17 +120,20 @@ export function TabsV3({
   className,
   renderAction,
   activeClassName,
+  onActiveChange,
 }: Omit<TabsProps, 'children'> & {
   renderAction?: (index: number) => React.ReactNode
   className?: string
   activeClassName?: string
   children: React.ReactElement<TabV3Props>[]
+  onActiveChange?: (val: number) => void
 }) {
   const [active, setActive] = useState(0)
 
   const isSmall = useMediaQuery('only screen and (max-width : 768px)')
   const handleActive = (value: string) => {
-    setActive(parseInt(value, 10))
+    setActive(Number(value))
+    onActiveChange && onActiveChange(Number(value))
   }
 
   const activeMenu = useMemo(() => {
@@ -188,7 +191,10 @@ export function TabsV3({
                   'px-2 pb-3 relative flex gap-1 items-center text-[#989CA8]',
                   active == index && activeClassName
                 )}
-                onClick={() => setActive(index)}
+                onClick={() => {
+                  setActive(index)
+                  onActiveChange && onActiveChange(index)
+                }}
               >
                 {child.props.title || child.props.label}
                 {index === active && (
