@@ -5,6 +5,8 @@ import { Transaction } from '@/utils/types/api'
 import { PATH } from '@/utils/constant/_paths'
 import { Button } from '@/components/ui/button'
 import { Ellipsis } from 'lucide-react'
+import { format } from 'date-fns'
+import { formatToRupiah } from '@/utils/formatCurrency'
 
 export const column: ColumnDef<Transaction>[] = [
   {
@@ -49,6 +51,7 @@ export const column: ColumnDef<Transaction>[] = [
   {
     accessorKey: 'price',
     header: 'Harga',
+    cell: ({ row }) => <p>{formatToRupiah(Number(row.original.price))}</p>,
   },
   {
     id: 'brand',
@@ -63,6 +66,7 @@ export const column: ColumnDef<Transaction>[] = [
   {
     accessorKey: 'date',
     header: 'Tanggal',
+    cell: ({ row }) => <p>{format(row.original.date, 'dd MMMM yyyy')}</p>,
   },
   {
     id: 'action',
