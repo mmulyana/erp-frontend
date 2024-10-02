@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import Container from '../../_component/container'
 import { DataTable } from '@/components/data-table'
 import { column } from './_component/column'
+import TopHeader from '../_component/top-header'
 
 export default function StockOpname() {
   const { data: transaction, isLoading } = useTransaction({ type: 'opname' })
@@ -11,7 +12,8 @@ export default function StockOpname() {
 
   return (
     <DashboardLayout>
-      <Container>
+      <Container className='flex flex-col gap-4'>
+        <TopHeader title='Opname' />
         <DataTable
           columns={column}
           data={data || []}
