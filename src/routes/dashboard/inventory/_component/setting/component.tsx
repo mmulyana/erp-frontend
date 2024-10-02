@@ -1,15 +1,21 @@
 import { DataTable } from '@/components/data-table'
 import { useBrand } from '@/hooks/api/use-brand'
 import { useMemo } from 'react'
-import { columnsBrand, columnsCategory, columnsLocation, columnsMeasurement, columnsTag } from './columns'
+import {
+  columnsBrand,
+  columnsCategory,
+  columnsLocation,
+  columnsMeasurement,
+  columnsTag,
+} from './columns'
 import { useCategory } from '@/hooks/api/use-category'
 import { useLocation } from '@/hooks/api/use-location'
 import { useMeasurement } from '@/hooks/api/use-measurement'
 import { useTag } from '@/hooks/api/use-tag'
 
 export function DataBrand() {
-  const { data: brands, isLoading } = useBrand({})
-  const data = useMemo(() => brands?.data?.data, [isLoading])
+  const { data: brands, isLoading, isFetching } = useBrand({})
+  const data = useMemo(() => brands?.data?.data, [isLoading, isFetching])
 
   return (
     <>
@@ -25,8 +31,8 @@ export function DataBrand() {
 }
 
 export function DataCategory() {
-  const { data: category, isLoading } = useCategory({})
-  const data = useMemo(() => category?.data?.data, [isLoading])
+  const { data: category, isLoading, isFetching } = useCategory({})
+  const data = useMemo(() => category?.data?.data, [isLoading, isFetching])
 
   return (
     <>
