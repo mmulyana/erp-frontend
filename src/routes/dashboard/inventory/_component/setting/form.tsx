@@ -5,6 +5,7 @@ import { useCreateBrand } from '@/hooks/api/use-brand'
 import { useCreateCategory } from '@/hooks/api/use-category'
 import { useCreateLocation } from '@/hooks/api/use-location'
 import { useCreateMeasurement } from '@/hooks/api/use-measurement'
+import { useCreateTag } from '@/hooks/api/use-tag'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -260,6 +261,62 @@ export function FormMeasurement({ onClose }: Props) {
             control={form.control}
             name='name'
             render={({ field }) => <Input {...field} />}
+          />
+        </div>
+        <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
+          <Button
+            type='button'
+            variant='secondary'
+            onClick={() => onClose(false)}
+          >
+            Batal
+          </Button>
+          <Button>Simpan</Button>
+        </div>
+      </form>
+    </Form>
+  )
+}
+export function FormTag({ onClose }: Props) {
+  const { mutate } = useCreateTag()
+
+  const form = useForm({
+    defaultValues: {
+      name: '',
+      color: '',
+    },
+  })
+
+  const onSubmit = async (data: any) => {
+    mutate(
+      {
+        payload: data,
+      },
+      {
+        onSuccess: () => {
+          onClose(false)
+          form.reset()
+        },
+      }
+    )
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className='px-4 py-4 space-y-4'>
+          <p>Tags</p>
+          <FormField
+            label='Nama'
+            control={form.control}
+            name='name'
+            render={({ field }) => <Input {...field} />}
+          />
+          <FormField
+            label='Warna'
+            control={form.control}
+            name='color'
+            render={({ field }) => <Input type='color' {...field} />}
           />
         </div>
         <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
