@@ -64,8 +64,8 @@ export function DataLocation() {
   )
 }
 export function DataMeasurement() {
-  const { data: measurement, isLoading } = useMeasurement({})
-  const data = useMemo(() => measurement?.data?.data, [isLoading])
+  const { data: measurement, isLoading, isFetching } = useMeasurement({})
+  const data = useMemo(() => measurement?.data?.data, [isLoading, isFetching])
 
   return (
     <>
