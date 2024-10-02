@@ -6,14 +6,31 @@ import { Supplier as SupplierType } from '@/utils/types/api'
 import Chips from '@/components/common/chips'
 import { Button } from '@/components/ui/button'
 import { Ellipsis } from 'lucide-react'
-import { useSupplier } from '@/hooks/api/use-supplier'
-import { useMemo } from 'react'
+import { useCreateSupplier, useSupplier } from '@/hooks/api/use-supplier'
+import { useMemo, useState } from 'react'
 import { DataTable } from '@/components/data-table'
 import Overlay from '@/components/common/overlay'
 import { generatePath, Link } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
 import { useTitle } from '../../_component/header'
 import { links } from './data'
+import { useForm, Controller } from 'react-hook-form'
+import Modal from '@/components/modal-v2'
+import { Form, FormField } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
 
 export default function Supplier() {
   useTitle(links)
@@ -98,10 +115,61 @@ export default function Supplier() {
     },
   ]
 
+  // START OF HANDLE FORM
+  const { mutate } = useCreateSupplier()
+  const form = useForm({
+    defaultValues: {
+      name: '',
+      phone: '',
+      email: '',
+      address: '',
+      status: '',
+      tags: [],
+      photo: null as File | null,
+    },
+  })
+
+  const [open, setOpen] = useState(false)
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+
+  const onSubmit = (data: any) => {
+    mutate(
+      { payload: data },
+      {
+        onSuccess: () => {
+          setOpen(false)
+          form.reset()
+        },
+      }
+    )
+  }
+
+  const validateFileSize = (file: File | null) => {
+    if (!file) return true
+    const maxSize = 5 * 1024 * 1024
+    return file.size <= maxSize || 'File size must be less than 5MB'
+  }
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+      form.setValue('photo', file)
+    } else {
+      setPhotoPreview(null)
+      form.setValue('photo', null)
+    }
+  }
+  // END OF HANDLE FORM
+
   return (
     <DashboardLayout>
       <Container className='flex flex-col gap-4'>
-        <TopHeader title='Supplier' />
+        <TopHeader title='Supplier' onClick={() => setOpen(true)} />
         <DataTable
           columns={columns}
           data={data || []}
@@ -110,6 +178,122 @@ export default function Supplier() {
           withPagination
         />
       </Container>
+      <Modal title='Buat supplier' open={open} setOpen={setOpen}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className='p-4 space-y-4'>
+              <FormField
+                label='Nama'
+                control={form.control}
+                name='name'
+                render={({ field }) => <Input {...field} />}
+              />
+              <FormField
+                label='No. Telp'
+                control={form.control}
+                name='phone'
+                render={({ field }) => <Input {...field} />}
+              />
+              <FormField
+                label='Email'
+                control={form.control}
+                name='email'
+                render={({ field }) => <Input {...field} />}
+              />
+              <FormField
+                label='Alamat'
+                control={form.control}
+                name='address'
+                render={({ field }) => <Input {...field} />}
+              />
+              <FormField
+                label='Photo'
+                control={form.control}
+                name='photo'
+                rules={{ validate: validateFileSize }}
+                render={({
+                  field: { value, onChange, ...field },
+                  fieldState: { error },
+                }) => (
+                  <div>
+                    <Input
+                      type='file'
+                      accept='image/*'
+                      onChange={(e) => {
+                        handlePhotoChange(e)
+                        onChange(e.target.files?.[0] || null)
+                      }}
+                      {...field}
+                    />
+                    {photoPreview && (
+                      <img
+                        src={photoPreview}
+                        alt='Preview'
+                        className='mt-2 max-w-xs max-h-40 object-contain'
+                      />
+                    )}
+                  </div>
+                )}
+              />
+              <Controller
+                name='status'
+                control={form.control}
+                render={({ field }) => (
+                  <Popover>
+                    <PopoverTrigger asChild className='w-full'>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='w-full justify-start'
+                        type='button'
+                      >
+                        {field.value ? (
+                          <span>{field.value}</span>
+                        ) : (
+                          <span>Pilih Status</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className='p-0' side='right' align='start'>
+                      <Command>
+                        <CommandInput placeholder='Change status...' />
+                        <CommandList>
+                          <CommandEmpty>No results found.</CommandEmpty>
+                          <CommandGroup>
+                            {['active', 'nonactive'].map(
+                              (item: string, index: number) => (
+                                <CommandItem
+                                  key={index}
+                                  value={item}
+                                  onSelect={(value) => {
+                                    form.setValue('status', value)
+                                  }}
+                                >
+                                  <span>{item}</span>
+                                </CommandItem>
+                              )
+                            )}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                )}
+              />
+            </div>
+            <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
+              <Button
+                type='button'
+                variant='secondary'
+                onClick={() => setOpen(false)}
+              >
+                Batal
+              </Button>
+              <Button>Simpan</Button>
+            </div>
+          </form>
+        </Form>
+      </Modal>
     </DashboardLayout>
   )
 }
