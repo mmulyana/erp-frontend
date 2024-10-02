@@ -1,8 +1,11 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import { Pagination } from '@/utils/types/common'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import http from '@/utils/http'
+import { CreateSupplier } from '@/utils/types/form'
+import { objectToFormData } from '@/utils/ObjectToFormData'
+import { toast } from 'sonner'
 
 type supplierParams = Pagination & {}
 export const useSupplier = (params: supplierParams) => {
@@ -11,5 +14,25 @@ export const useSupplier = (params: supplierParams) => {
       return await http(URLS.INVENTORY_SUPPLIER)
     },
     queryKey: [KEYS.SUPPLIER, params],
+  })
+}
+
+export const useCreateSupplier = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ payload }: { payload: CreateSupplier }) => {
+      const formData = objectToFormData(payload)
+
+      return await http.post(URLS.INVENTORY_SUPPLIER, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.SUPPLIER] })
+      toast.success(data.data.message)
+    },
   })
 }
