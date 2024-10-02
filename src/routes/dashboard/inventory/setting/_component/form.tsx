@@ -43,8 +43,8 @@ export function FormBrand({ onClose }: Props) {
   }
 
   const validateFileSize = (file: File | null) => {
-    if (!file) return true // Allow empty file input
-    const maxSize = 5 * 1024 * 1024 // 5MB in bytes
+    if (!file) return true
+    const maxSize = 5 * 1024 * 1024
     return file.size <= maxSize || 'File size must be less than 5MB'
   }
 

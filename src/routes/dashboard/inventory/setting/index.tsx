@@ -1,24 +1,24 @@
 import { TabsV3, TabV3 } from '@/components/tab'
-import { DashboardLayout } from '../_component/layout'
 import SearchV2 from '@/components/common/search/search-v2'
 import { Button } from '@/components/ui/button'
-import Container from '../_component/container'
-import {
-  DataBrand,
-  DataCategory,
-  DataLocation,
-  DataMeasurement,
-  DataTag,
-} from './_component/setting/component'
 import { useEffect, useState } from 'react'
+import Modal from '@/components/modal-v2'
 import {
   FormBrand,
   FormCategory,
   FormLocation,
   FormMeasurement,
   FormTag,
-} from './_component/setting/form'
-import Modal from '@/components/modal-v2'
+} from './_component/form'
+import { DashboardLayout } from '../../_component/layout'
+import Container from '../../_component/container'
+import {
+  DataBrand,
+  DataCategory,
+  DataLocation,
+  DataMeasurement,
+  DataTag,
+} from './_component/component'
 
 export default function Settings() {
   const [active, setActive] = useState(0)
