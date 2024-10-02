@@ -29,11 +29,17 @@ export const useCreateSupplierEmployee = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ payload }: { payload: CreateSupplierEmployee }) => {
+    mutationFn: async ({
+      payload,
+    }: {
+      payload: CreateSupplierEmployee & { supplierId: number }
+    }) => {
       return await http.post(URLS.INVENTORY_SUPPLIER_EMPLOYEE, payload)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.SUPPLIER_EMPLOYEE] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.SUPPLIER_EMPLOYEE],
+      })
       toast(data.data.message)
     },
   })
