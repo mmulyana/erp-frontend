@@ -47,6 +47,7 @@ import {
 import { useMeasurement } from '@/hooks/api/use-measurement'
 import { useLocation } from '@/hooks/api/use-location'
 import { useCategory } from '@/hooks/api/use-category'
+import { useTransaction } from '@/hooks/api/use-transaction'
 
 export const links = [
   {
@@ -88,6 +89,13 @@ export default function Index() {
     [queryCategory.isLoading]
   )
 
+  const queryTransaction = useTransaction({})
+  const transactions = useMemo(
+    () => queryTransaction.data?.data?.data,
+    [queryTransaction.isLoading, queryTransaction.isFetching]
+  )
+
+  // START OF COLUMNS
   const columns: ColumnDef<Goods>[] = [
     {
       accessorKey: 'name',
@@ -144,6 +152,7 @@ export default function Index() {
       ),
     },
   ]
+  // END OF COLUMNS
 
   // START OF ADD DATA
   const { mutate: create } = useCreateGoods()
@@ -168,7 +177,6 @@ export default function Index() {
         onSuccess: () => {
           setOpen(false)
           form.reset()
-          queryGoods.refetch()
         },
       }
     )
@@ -234,10 +242,13 @@ export default function Index() {
             </div>
             <div>
               <ScrollArea className='h-[calc(100vh-128px)] pr-4'>
-                <CardActivity type='in' />
-                <CardActivity type='out' />
-                <CardActivity type='in' />
-                <CardActivity type='in' isLast />
+                {transactions?.map((item, index) => (
+                  <CardActivity
+                    {...item}
+                    key={item.id}
+                    isLast={index === transactions?.length - 1}
+                  />
+                ))}
               </ScrollArea>
             </div>
           </Container>
