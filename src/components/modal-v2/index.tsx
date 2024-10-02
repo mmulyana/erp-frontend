@@ -1,5 +1,6 @@
 import { X } from 'lucide-react'
 import { Dialog, DialogContent } from '../ui/dialog'
+import { Button } from '../ui/button'
 
 type Props = {
   open: boolean
@@ -40,5 +41,27 @@ function CustomClose({ setOpen }: CloseProps) {
         <span className='sr-only'>Close</span>
       </button>
     </div>
+  )
+}
+
+type ModalProps = {
+  children: React.ReactNode
+  setOpen: (val: boolean) => void
+}
+export function ModalContainer({ children, setOpen }: ModalProps) {
+  return (
+    <>
+      <div className='p-4 space-y-4'>{children}</div>
+      <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
+        <Button
+          type='button'
+          variant='secondary'
+          onClick={() => setOpen(false)}
+        >
+          Batal
+        </Button>
+        <Button>Simpan</Button>
+      </div>
+    </>
   )
 }
