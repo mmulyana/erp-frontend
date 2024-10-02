@@ -3,6 +3,7 @@ import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useCreateBrand } from '@/hooks/api/use-brand'
 import { useCreateCategory } from '@/hooks/api/use-category'
+import { useCreateLocation } from '@/hooks/api/use-location'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -120,6 +121,58 @@ export function FormBrand({ onClose }: Props) {
 }
 export function FormCategory({ onClose }: Props) {
   const { mutate } = useCreateCategory()
+
+  const form = useForm({
+    defaultValues: {
+      name: '',
+    },
+  })
+
+  const onSubmit = async (data: any) => {
+    mutate(
+      {
+        payload: {
+          name: data.name,
+        },
+      },
+      {
+        onSuccess: () => {
+          onClose(false)
+          form.reset()
+        },
+      }
+    )
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className='px-4 py-4 space-y-4'>
+          <p>Kategori</p>
+
+          <FormField
+            label='Nama'
+            control={form.control}
+            name='name'
+            render={({ field }) => <Input {...field} />}
+          />
+        </div>
+        <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
+          <Button
+            type='button'
+            variant='secondary'
+            onClick={() => onClose(false)}
+          >
+            Batal
+          </Button>
+          <Button>Simpan</Button>
+        </div>
+      </form>
+    </Form>
+  )
+}
+export function FormLocation({ onClose }: Props) {
+  const { mutate } = useCreateLocation()
 
   const form = useForm({
     defaultValues: {
