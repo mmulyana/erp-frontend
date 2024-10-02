@@ -46,7 +46,6 @@ export function DataCategory() {
     </>
   )
 }
-
 export function DataLocation() {
   const { data: location, isLoading, isFetching } = useLocation({})
   const data = useMemo(() => location?.data?.data, [isLoading, isFetching])
@@ -80,8 +79,8 @@ export function DataMeasurement() {
   )
 }
 export function DataTag() {
-  const { data: tag, isLoading } = useTag({})
-  const data = useMemo(() => tag?.data?.data, [isLoading])
+  const { data: tag, isLoading, isFetching } = useTag({})
+  const data = useMemo(() => tag?.data?.data, [isLoading, isFetching])
 
   return (
     <>
