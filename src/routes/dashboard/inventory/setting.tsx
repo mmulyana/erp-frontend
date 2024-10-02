@@ -11,7 +11,11 @@ import {
   DataTag,
 } from './_component/setting/component'
 import { useEffect, useState } from 'react'
-import { FormBrand, FormCategory } from './_component/setting/form'
+import {
+  FormBrand,
+  FormCategory,
+  FormLocation,
+} from './_component/setting/form'
 import Modal from '@/components/modal-v2'
 
 export default function Settings() {
@@ -21,6 +25,7 @@ export default function Settings() {
   const form: any = {
     0: <FormBrand onClose={setOpen} />,
     1: <FormCategory onClose={setOpen} />,
+    2: <FormLocation onClose={setOpen} />,
   }
 
   useEffect(() => {
