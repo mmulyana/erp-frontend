@@ -15,6 +15,7 @@ import {
   FormBrand,
   FormCategory,
   FormLocation,
+  FormMeasurement,
 } from './_component/setting/form'
 import Modal from '@/components/modal-v2'
 
@@ -26,6 +27,7 @@ export default function Settings() {
     0: <FormBrand onClose={setOpen} />,
     1: <FormCategory onClose={setOpen} />,
     2: <FormLocation onClose={setOpen} />,
+    3: <FormMeasurement onClose={setOpen} />,
   }
 
   useEffect(() => {
