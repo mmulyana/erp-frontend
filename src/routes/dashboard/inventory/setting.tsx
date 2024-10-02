@@ -22,7 +22,7 @@ export default function Settings() {
   const [active, setActive] = useState(0)
   const [open, setOpen] = useState(false)
 
-  const form: any = {
+  const form: Record<number, React.ReactNode> = {
     0: <FormBrand onClose={setOpen} />,
     1: <FormCategory onClose={setOpen} />,
     2: <FormLocation onClose={setOpen} />,
