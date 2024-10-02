@@ -8,8 +8,10 @@ type Props = {
   title: string
   titleButton?: string | React.ReactNode
   onClick?: (val: any) => void
+  withoutFilter?: boolean
 }
 export default function TopHeader({
+  withoutFilter,
   filterContent,
   title,
   titleButton,
@@ -23,9 +25,11 @@ export default function TopHeader({
       </div>
       <div className='flex gap-2 items-center'>
         <SearchV2 />
-        <Filter>
-          <div className='flex flex-col gap-2'>{filterContent}</div>
-        </Filter>
+        {!withoutFilter && (
+          <Filter>
+            <div className='flex flex-col gap-2'>{filterContent}</div>
+          </Filter>
+        )}
         <Button onClick={onClick}>{titleButton ?? 'Tambah'}</Button>
       </div>
     </div>
