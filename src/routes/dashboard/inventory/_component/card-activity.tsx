@@ -1,10 +1,11 @@
+import { Transaction } from '@/utils/types/api'
+import { format } from 'date-fns'
 import { PackageMinus, PackagePlus } from 'lucide-react'
 
-type Props = {
-  type: string
+type Props = Transaction & {
   isLast?: boolean
 }
-export default function CardActivity({ type, isLast }: Props) {
+export default function CardActivity({ type, isLast, ...props}: Props) {
   return (
     <div className='grid grid-cols-[40px_1fr] gap-4'>
       <div className='relative'>
@@ -18,9 +19,9 @@ export default function CardActivity({ type, isLast }: Props) {
       <div className='relative flex flex-col gap-2 mb-4'>
         <TransactionType type={type} />
         <p className='text-sm text-[#313951]'>
-          Produk 1 kini tersedia, masuk stok sebanyak 10 pcs!
+          Produk {props.qty} kini tersedia, masuk stok sebanyak 10 pcs!
         </p>
-        <p className='text-sm text-[#313951]/50'>10 Februari 2024</p>
+        <p className='text-sm text-[#313951]/50'>{format(props.date, 'dd MMMM yyyy')}</p>
       </div>
     </div>
   )
