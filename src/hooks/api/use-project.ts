@@ -9,7 +9,7 @@ type Params = {
   labelId?: number
   clientId?: number
 }
-export const useProject = (params: Params) => {
+export const useProject = (params?: Params) => {
   return useQuery({
     queryKey: [KEYS.PROJECT, params],
     queryFn: async () => {
