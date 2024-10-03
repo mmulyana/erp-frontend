@@ -19,11 +19,11 @@ export type CreateTransaction = {
   goodsId: string
   qty: string
   price: string
-  supplierId: string
+  supplierId?: string
   date: string
   type: string
   description?: string
   projectId?: string
-  isReturned?: boolean
+  isReturned?: string
   photo?: File | null
 }
