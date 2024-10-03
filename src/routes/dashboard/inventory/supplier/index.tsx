@@ -31,12 +31,25 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
+import { useTag } from '@/hooks/api/use-tag'
+import MultiSelectV1 from '@/components/common/select/mult-select-v1'
 
 export default function Supplier() {
   useTitle(links)
 
-  const { data: dataSupplier, isLoading } = useSupplier({})
-  const data = useMemo(() => dataSupplier?.data?.data, [isLoading])
+  const { data: dataSupplier, isLoading, isFetching, refetch } = useSupplier({})
+  const data = useMemo(() => dataSupplier?.data?.data, [isLoading, isFetching])
+
+  const queryTag = useTag()
+  const tags = useMemo(
+    () =>
+      queryTag?.data?.data?.data?.map((item: any) => ({
+        ...item,
+        label: item.name,
+        value: item.id,
+      })) || [],
+    [queryTag.isLoading]
+  )
 
   const columns: ColumnDef<SupplierType>[] = [
     {
@@ -82,7 +95,7 @@ export default function Supplier() {
       header: 'Tag',
       cell: ({ row }) => {
         return (
-          <div className='flex gap-2 flex-wrap items-center max-w-[120px]'>
+          <div className='flex gap-2 flex-wrap items-center max-w-[180px]'>
             {row.original.tags.map((item, index) => (
               <div
                 key={index}
@@ -124,7 +137,7 @@ export default function Supplier() {
       email: '',
       address: '',
       status: '',
-      tags: [],
+      tags: [] as string[],
       photo: null as File | null,
     },
   })
@@ -132,11 +145,16 @@ export default function Supplier() {
   const [open, setOpen] = useState(false)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
 
+  const handleTags = (ids: string[]) => {
+    form.setValue('tags', [...ids])
+  }
+
   const onSubmit = (data: any) => {
     mutate(
       { payload: data },
       {
         onSuccess: () => {
+          refetch()
           setOpen(false)
           form.reset()
         },
@@ -277,6 +295,7 @@ export default function Supplier() {
                   </Popover>
                 )}
               />
+              <MultiSelectV1 options={tags} onChange={handleTags} />
             </div>
             <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
               <Button
