@@ -32,11 +32,6 @@ export default function StockOut() {
     () => queryGoods.data?.data.data || [],
     [queryGoods.isLoading, queryGoods.isFetching]
   )
-  const querySupplier = useSupplier({})
-  const suppliers = useMemo(
-    () => querySupplier.data?.data.data || [],
-    [querySupplier.isLoading, querySupplier.isFetching]
-  )
 
   // HANDLE FORM
   const { mutate } = useCreateTransaction()
