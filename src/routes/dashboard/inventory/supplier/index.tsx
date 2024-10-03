@@ -32,11 +32,22 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import InputFile from '@/components/common/input-file'
+import useUrlState from '@ahooksjs/use-url-state'
 
 export default function Supplier() {
   useTitle(links)
 
-  const { data: dataSupplier, isLoading, isFetching, refetch } = useSupplier({})
+  const [url, setUrl] = useUrlState({ name: '', tag: '' })
+
+  const {
+    data: dataSupplier,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useSupplier({
+    ...(url.name !== '' ? { name: url.name } : undefined),
+    ...(url.tag !== '' ? { tag: url.tag } : undefined),
+  })
   const data = useMemo(() => dataSupplier?.data?.data, [isLoading, isFetching])
 
   const queryTag = useTag()
