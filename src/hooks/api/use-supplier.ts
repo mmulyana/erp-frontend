@@ -7,11 +7,18 @@ import { CreateSupplier } from '@/utils/types/form'
 import { objectToFormData } from '@/utils/ObjectToFormData'
 import { toast } from 'sonner'
 
-type supplierParams = Pagination & {}
+type supplierParams = Pagination & {
+  name?: string
+  tag?: string
+}
 export const useSupplier = (params: supplierParams) => {
   return useQuery({
     queryFn: async () => {
-      return await http(URLS.INVENTORY_SUPPLIER)
+      return await http.request({
+        method: 'GET',
+        url: URLS.INVENTORY_SUPPLIER,
+        params,
+      })
     },
     queryKey: [KEYS.SUPPLIER, params],
   })
