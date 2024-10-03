@@ -5,8 +5,12 @@ import TopHeader from '../_component/top-header'
 import { Supplier as SupplierType } from '@/utils/types/api'
 import Chips from '@/components/common/chips'
 import { Button } from '@/components/ui/button'
-import { Ellipsis } from 'lucide-react'
-import { useCreateSupplier, useSupplier } from '@/hooks/api/use-supplier'
+import { Ellipsis, TrashIcon } from 'lucide-react'
+import {
+  useCreateSupplier,
+  useDeleteSupplier,
+  useSupplier,
+} from '@/hooks/api/use-supplier'
 import { useMemo, useState } from 'react'
 import { DataTable } from '@/components/data-table'
 import Overlay from '@/components/common/overlay'
@@ -14,25 +18,20 @@ import { generatePath, Link } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
 import { useTitle } from '../../_component/header'
 import { links } from './data'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import Modal from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command'
 import { useTag } from '@/hooks/api/use-tag'
 import MultiSelectV1 from '@/components/common/select/mult-select-v1'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import InputFile from '@/components/common/input-file'
 
 export default function Supplier() {
   useTitle(links)
@@ -84,7 +83,7 @@ export default function Supplier() {
     },
     {
       accessorKey: 'phone',
-      header: 'Kontak',
+      header: 'No. Telp',
     },
     {
       accessorKey: 'address',
@@ -115,15 +114,26 @@ export default function Supplier() {
     },
     {
       id: 'action',
-      cell: () => (
-        <div className='flex justify-end'>
-          <Button
-            variant='outline'
-            className='p-0.5 rounded-[6px] h-5 w-5 border-[#EFF0F2]'
-          >
+      cell: ({ cell }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger className='flex justify-center items-center rounded-[6px] h-5 w-5 border border-[#EFF0F2]'>
             <Ellipsis className='w-4 h-4 text-[#313951]' />
-          </Button>
-        </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='w-10 p-0'>
+            <DropdownMenuItem className='cursor-pointer p-0'>
+              <Button
+                className='gap-1 justify-start px-2 flex items-center w-full border-none'
+                variant='outline'
+                onClick={() => {
+                  setSelectedSupplier({ id: cell.row.original.id, open: true })
+                }}
+              >
+                <TrashIcon className='w-4 h-4 text-red-400' />
+                Hapus
+              </Button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ]
@@ -134,16 +144,14 @@ export default function Supplier() {
     defaultValues: {
       name: '',
       phone: '',
-      email: '',
       address: '',
-      status: '',
+      status: 'active',
       tags: [] as string[],
       photo: null as File | null,
     },
   })
 
   const [open, setOpen] = useState(false)
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
 
   const handleTags = (ids: string[]) => {
     form.setValue('tags', [...ids])
@@ -161,28 +169,33 @@ export default function Supplier() {
       }
     )
   }
-
-  const validateFileSize = (file: File | null) => {
-    if (!file) return true
-    const maxSize = 5 * 1024 * 1024
-    return file.size <= maxSize || 'File size must be less than 5MB'
-  }
-
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-      form.setValue('photo', file)
-    } else {
-      setPhotoPreview(null)
-      form.setValue('photo', null)
-    }
-  }
   // END OF HANDLE FORM
+
+  // HANDLE DELETE
+  const { mutate: deleteSupplier } = useDeleteSupplier()
+
+  const [selectedSupplier, setSelectedSupplier] = useState<{
+    id: number
+    open: boolean
+  } | null>(null)
+
+  const onDelete = () => {
+    if (!selectedSupplier) return
+
+    deleteSupplier(
+      { id: selectedSupplier?.id },
+      {
+        onSuccess: () => {
+          refetch()
+          setSelectedSupplier(null)
+        },
+      }
+    )
+  }
+
+  const handleRemoveSelected = () => {
+    setSelectedSupplier(null)
+  }
 
   return (
     <DashboardLayout>
@@ -200,6 +213,8 @@ export default function Supplier() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className='p-4 space-y-4'>
+              <InputFile name='photo' label='Photo' />
+
               <FormField
                 label='Nama'
                 control={form.control}
@@ -213,88 +228,12 @@ export default function Supplier() {
                 render={({ field }) => <Input {...field} />}
               />
               <FormField
-                label='Email'
-                control={form.control}
-                name='email'
-                render={({ field }) => <Input {...field} />}
-              />
-              <FormField
                 label='Alamat'
                 control={form.control}
                 name='address'
-                render={({ field }) => <Input {...field} />}
+                render={({ field }) => <Textarea {...field} />}
               />
-              <FormField
-                label='Photo'
-                control={form.control}
-                name='photo'
-                rules={{ validate: validateFileSize }}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <div>
-                    <Input
-                      type='file'
-                      accept='image/*'
-                      onChange={(e) => {
-                        handlePhotoChange(e)
-                        onChange(e.target.files?.[0] || null)
-                      }}
-                      {...field}
-                    />
-                    {photoPreview && (
-                      <img
-                        src={photoPreview}
-                        alt='Preview'
-                        className='mt-2 max-w-xs max-h-40 object-contain'
-                      />
-                    )}
-                  </div>
-                )}
-              />
-              <Controller
-                name='status'
-                control={form.control}
-                render={({ field }) => (
-                  <Popover>
-                    <PopoverTrigger asChild className='w-full'>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='w-full justify-start'
-                        type='button'
-                      >
-                        {field.value ? (
-                          <span>{field.value}</span>
-                        ) : (
-                          <span>Pilih Status</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='p-0' side='right' align='start'>
-                      <Command>
-                        <CommandInput placeholder='Change status...' />
-                        <CommandList>
-                          <CommandEmpty>No results found.</CommandEmpty>
-                          <CommandGroup>
-                            {['active', 'nonactive'].map(
-                              (item: string, index: number) => (
-                                <CommandItem
-                                  key={index}
-                                  value={item}
-                                  onSelect={(value) => {
-                                    form.setValue('status', value)
-                                  }}
-                                >
-                                  <span>{item}</span>
-                                </CommandItem>
-                              )
-                            )}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                )}
-              />
+
               <MultiSelectV1 options={tags} onChange={handleTags} />
             </div>
             <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
@@ -309,6 +248,25 @@ export default function Supplier() {
             </div>
           </form>
         </Form>
+      </Modal>
+      <Modal
+        title='Hapus supplier'
+        open={selectedSupplier?.open || false}
+        setOpen={handleRemoveSelected}
+      >
+        <div className='p-4 space-y-4'>
+          Tindakan akan ini akan menghapus supplier serta pegawai dan lainnya
+        </div>
+        <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
+          <Button
+            type='button'
+            variant='secondary'
+            onClick={() => setSelectedSupplier(null)}
+          >
+            Batal
+          </Button>
+          <Button onClick={onDelete}>Hapus</Button>
+        </div>
       </Modal>
     </DashboardLayout>
   )
