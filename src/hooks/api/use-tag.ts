@@ -6,7 +6,7 @@ import http from '@/utils/http'
 import { toast } from 'sonner'
 
 type Params = Pagination & {}
-export const useTag = (params: Params) => {
+export const useTag = (params?: Params) => {
   return useQuery({
     queryFn: async () => {
       return await http(URLS.INVENTORY_SUPPLIER_TAG)
