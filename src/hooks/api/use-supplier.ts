@@ -36,3 +36,17 @@ export const useCreateSupplier = () => {
     },
   })
 }
+
+export const useDeleteSupplier = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      return await http.delete(URLS.INVENTORY_SUPPLIER + '/' + id)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.SUPPLIER] })
+      toast.success(data.data.message)
+    },
+  })
+}
