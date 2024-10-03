@@ -8,29 +8,17 @@ import Container from '../../_component/container'
 import { DataTable } from '@/components/data-table'
 import { column } from './_component/column'
 import TopHeader from '../_component/top-header'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { CreateTransaction } from '@/utils/types/form'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import InputFile from '@/components/common/input-file'
 import { useGoods } from '@/hooks/api/use-goods'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command'
+import { CommandItem } from '@/components/ui/command'
 import { Textarea } from '@/components/ui/textarea'
 import { useSupplier } from '@/hooks/api/use-supplier'
+import Select from '@/components/common/select/select-v1'
 
 export default function StockIn() {
   const queryTransaction = useTransaction({ type: 'in' })
@@ -100,106 +88,55 @@ export default function StockIn() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <ModalContainer setOpen={setOpen}>
-              <Controller
+              <Select
+                open={openGoods}
+                setOpen={setOpenGoods}
                 name='goodsId'
-                control={form.control}
-                render={({ field }) => (
-                  <Popover open={openGoods} onOpenChange={setOpenGoods}>
-                    <PopoverTrigger className='w-full'>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='w-full justify-start'
-                        type='button'
-                      >
-                        {field.value ? (
-                          <span>
-                            {
-                              goods.find(
-                                (s: any) => s.id === Number(field.value)
-                              )?.name
-                            }
-                          </span>
-                        ) : (
-                          <span>Pilih kategori</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='p-0' side='bottom' align='start'>
-                      <Command>
-                        <CommandInput placeholder='Change status...' />
-                        <CommandList>
-                          <CommandEmpty>No results found.</CommandEmpty>
-                          <CommandGroup>
-                            {goods.map((item: any) => (
-                              <CommandItem
-                                key={item.id}
-                                value={item.id.toString()}
-                                onSelect={(value) => {
-                                  form.setValue('goodsId', value as string)
-                                  setOpenGoods(false)
-                                }}
-                              >
-                                <span>{item.name}</span>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                placeholder='Pilih barang'
+                preview={(val) => (
+                  <span>
+                    {goods.find((s: any) => s.id === Number(val))?.name}
+                  </span>
                 )}
-              />
-              <Controller
+              >
+                {goods.map((item: any) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.id.toString()}
+                    onSelect={(value) => {
+                      form.setValue('goodsId', value)
+                      setOpenGoods(false)
+                    }}
+                  >
+                    <span>{item.name}</span>
+                  </CommandItem>
+                ))}
+              </Select>
+              <Select
+                open={openSupplier}
+                setOpen={setOpenSupplier}
                 name='supplierId'
-                control={form.control}
-                render={({ field }) => (
-                  <Popover open={openSupplier} onOpenChange={setOpenSupplier}>
-                    <PopoverTrigger className='w-full'>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='w-full justify-start'
-                        type='button'
-                      >
-                        {field.value ? (
-                          <span>
-                            {
-                              suppliers.find(
-                                (s: any) => s.id === Number(field.value)
-                              )?.name
-                            }
-                          </span>
-                        ) : (
-                          <span>Pilih supplier</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='p-0' side='bottom' align='start'>
-                      <Command>
-                        <CommandInput placeholder='Change status...' />
-                        <CommandList>
-                          <CommandEmpty>No results found.</CommandEmpty>
-                          <CommandGroup>
-                            {suppliers.map((item: any) => (
-                              <CommandItem
-                                key={item.id}
-                                value={item.id.toString()}
-                                onSelect={(value) => {
-                                  form.setValue('supplierId', value as string)
-                                  setOpenSupplier(false)
-                                }}
-                              >
-                                <span>{item.name}</span>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                placeholder='Pilih toko'
+                preview={(val) => (
+                  <span>
+                    {suppliers.find((s: any) => s.id === Number(val))?.name}
+                  </span>
                 )}
-              />
+              >
+                {goods.map((item: any) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.id.toString()}
+                    onSelect={(value) => {
+                      form.setValue('supplierId', value)
+                      setOpenSupplier(false)
+                    }}
+                  >
+                    <span>{item.name}</span>
+                  </CommandItem>
+                ))}
+              </Select>
+
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 <FormField
                   label='Kuantitas'
