@@ -53,7 +53,7 @@ export default function Filter({ children }: { children?: React.ReactNode }) {
             <p className='text-sm text-[#313951]'>Filter</p>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='max-w-[400px]'>
+        <DropdownMenuContent className='max-w-[400px] p-0'>
           {children}
         </DropdownMenuContent>
       </DropdownMenu>
