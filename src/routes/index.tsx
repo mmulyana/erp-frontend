@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Suspense } from 'react'
 import { authRoutes } from './auth'
 import { commonRoutes } from './common'
-import { dashboardRoutes } from './dashboard'
+import { dashboardRoutes } from './dashboard/routes'
 import ProtectedRoute from '@/utils/protected-route'
 
 export const routes = [
