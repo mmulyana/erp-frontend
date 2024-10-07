@@ -8,7 +8,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { SlashIcon } from 'lucide-react'
+import { Settings, SlashIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export type Title = {
   name: string
@@ -32,7 +33,6 @@ export default function Header() {
         <BreadcrumbList>
           {links.map((link, index) => {
             const lastIndex = links.length - 1
-            const firstIndex = index == 0
 
             return (
               <React.Fragment key={index}>
@@ -60,6 +60,21 @@ export default function Header() {
           })}
         </BreadcrumbList>
       </BreadCrumbWrapper>
+      <div className='flex gap-2 items-center'>
+        <Button
+          variant='secondary'
+          className='w-8 h-8 p-0 rounded-full bg-[#EFF0F2]'
+        >
+          <Settings className='w-5 h-5 text-[#313951]/70' />
+        </Button>
+        <Button
+          variant='secondary'
+          className='w-8 h-8 rounded-full bg-[#FFF] border border-[#2A9D90] p-0.5 relative'
+        >
+          <div className='w-full h-full rounded-full bg-gray-400'></div>
+          <div className='w-3 h-3 rounded-full border-2 border-white bg-[#2A9D90] absolute -right-0.5 -bottom-0.5'></div>
+        </Button>
+      </div>
     </div>
   )
 }
