@@ -33,11 +33,18 @@ import {
 } from '@/components/ui/dropdown-menu'
 import InputFile from '@/components/common/input-file'
 import useUrlState from '@ahooksjs/use-url-state'
+import {
+  SelectItem,
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 export default function Supplier() {
   useTitle(links)
 
-  const [url, setUrl] = useUrlState({ name: '', tag: '' })
+  const [url, setUrl] = useUrlState({ name: '', tag: '', status: '' })
 
   const {
     data: dataSupplier,
@@ -211,7 +218,47 @@ export default function Supplier() {
   return (
     <DashboardLayout>
       <Container className='flex flex-col gap-4'>
-        <TopHeader title='Supplier' onClick={() => setOpen(true)} />
+        <TopHeader
+          title='Supplier'
+          onClick={() => setOpen(true)}
+          filterContent={
+            <>
+              <div className='px-2 h-8 flex items-center w-full font-semibold border-b border-gray-100'>
+                <span className='text-sm text-gray-600'>Filter</span>
+              </div>
+              <div className='px-2 space-y-2 pb-2.5'>
+                <Select
+                  onValueChange={(e) => setUrl({ ...url, tag: e })}
+                  value={url.tag}
+                >
+                  <SelectTrigger className='w-[180px]'>
+                    <SelectValue placeholder='Tag' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {tags.map((item: any) => (
+                      <SelectItem value={item.id.toString()}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select
+                  onValueChange={(e) => setUrl({ ...url, status: e })}
+                  value={url.status}
+                >
+                  <SelectTrigger className='w-[180px]'>
+                    <SelectValue placeholder='Tag' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['active', 'nonactive'].map((item) => (
+                      <SelectItem value={item}>{item}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
+          }
+        />
         <DataTable
           columns={columns}
           data={data || []}
