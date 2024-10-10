@@ -2,6 +2,10 @@ import { PATH } from './_paths'
 
 const SidebarMenus = [
   {
+    name: 'Dashboard',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
     name: 'HRIS',
     path: 'employee',
     menus: [

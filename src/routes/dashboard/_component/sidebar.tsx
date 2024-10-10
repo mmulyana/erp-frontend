@@ -44,14 +44,7 @@ export default function Sidebar({ open, setOpen }: Props) {
             <p className='text-[#3D556B] font-semibold'>BJS ERP</p>
           </div>
           <div className='p-4 flex flex-col gap-2'>
-            {SidebarMenus.map((menu, index) => (
-              <LinkGroup
-                key={index}
-                {...menu}
-                open={openMenu}
-                setOpen={setOpenMenu}
-              />
-            ))}
+           
           </div>
         </div>
       </>
@@ -71,14 +64,7 @@ export default function Sidebar({ open, setOpen }: Props) {
         <p className='text-[#3D556B] font-semibold'>BJS ERP</p>
       </div>
       <div className='p-4 flex flex-col gap-2'>
-        {SidebarMenus.map((menu, index) => (
-          <LinkGroup
-            key={index}
-            {...menu}
-            open={openMenu}
-            setOpen={setOpenMenu}
-          />
-        ))}
+        
       </div>
     </div>
   )
