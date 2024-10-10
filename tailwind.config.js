@@ -24,6 +24,7 @@ module.exports = {
           },
         },
         dark: '#313951',
+        line: '#EFF0F2',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

@@ -14,6 +14,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Pagination } from './component'
+import { cn } from '@/utils/cn'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -30,7 +31,7 @@ export function DataTable<TData, TValue>({
   isLoading,
   withLoading = false,
   withPagination,
-  totalPages
+  totalPages,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -43,11 +44,9 @@ export function DataTable<TData, TValue>({
       .fill(0)
       .map((_, index) => (
         <TableRow key={`skeleton-${index}`}>
-          {columns.map((_, cellIndex) => (
-            <TableCell key={`skeleton-cell-${cellIndex}`}>
-              <div className='h-4 bg-gray-200 rounded animate-pulse'></div>
-            </TableCell>
-          ))}
+          <TableCell>
+            <div className='h-4 w-full bg-gray-200 rounded animate-pulse'></div>
+          </TableCell>
         </TableRow>
       ))
   }
@@ -59,9 +58,20 @@ export function DataTable<TData, TValue>({
 
     if (table.getRowModel().rows?.length) {
       return table.getRowModel().rows.map((row) => (
-        <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-          {row.getVisibleCells().map((cell) => (
-            <TableCell key={cell.id} className='text-[#313951] text-sm'>
+        <TableRow
+          key={row.id}
+          data-state={row.getIsSelected() && 'selected'}
+          className='h-10 py-0'
+        >
+          {row.getVisibleCells().map((cell, index) => (
+            <TableCell
+              key={cell.id}
+              className={cn(
+                'text-dark/70 font-normal text-sm h-10 py-0',
+                index !== row.getVisibleCells().length - 1 &&
+                  'border-l border-line'
+              )}
+            >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
           ))}
@@ -71,7 +81,7 @@ export function DataTable<TData, TValue>({
 
     return (
       <TableRow>
-        <TableCell colSpan={columns.length} className='h-24 text-center'>
+        <TableCell colSpan={columns.length} className='h-10 text-center'>
           No results.
         </TableCell>
       </TableRow>
@@ -79,23 +89,23 @@ export function DataTable<TData, TValue>({
   }
 
   return (
-    <div className='rounded-md border overflow-hidden'>
+    <div className='overflow-hidden'>
       <Table>
-        <TableHeader>
+        <TableHeader className='border-y border-line'>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
+              {headerGroup.headers.map((header, index) => (
                 <TableHead
                   key={header.id}
-                  className='bg-[#F9FAFB] text-[#747C94] text-sm font-medium'
+                  className={cn(
+                    'text-[#313951] font-normal text-sm h-9',
+                    index !== headerGroup.headers.length - 1  &&
+                      'border-l border-line'
+                  )}
                 >
-                  {withLoading && isLoading ? (
-                    <div className='h-4 w-full bg-gray-200 rounded animate-pulse'></div>
-                  ) : (
-                    flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
                   )}
                 </TableHead>
               ))}
@@ -104,7 +114,7 @@ export function DataTable<TData, TValue>({
         </TableHeader>
         <TableBody>{renderTableBody()}</TableBody>
       </Table>
-      <div className='bg-[#F9FAFB] py-2 px-3 border-t w-full min-h-12 flex justify-between items-center'>
+      <div className='bg-[#F9FAFB] px-3 border-y border-line w-full h-12 flex justify-between items-center'>
         {!!withPagination && <Pagination totalPages={totalPages ?? 1} />}
       </div>
     </div>
