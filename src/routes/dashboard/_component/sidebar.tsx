@@ -31,7 +31,7 @@ export default function Sidebar({ open, setOpen }: Props) {
         )}
         <div
           className={cn(
-            'fixed top-0 left-0 w-[264px] h-full bg-white z-10 duration-150 ease-out',
+            'fixed top-0 left-0 w-[264px] h-full bg-white z-10 duration-150 ease-in',
             !open && '-left-[264px]'
           )}
         >
