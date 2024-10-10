@@ -18,7 +18,7 @@ type HeadProps = React.PropsWithChildren & {
 export function CardHead({ children, className }: HeadProps) {
   return (
     <div
-      className={cn('px-4 h-10 flex justify-between items-center', className)}
+      className={cn('px-4 h-10 flex justify-between items-center border-b border-[#EFF0F2]', className)}
     >
       {children}
     </div>
