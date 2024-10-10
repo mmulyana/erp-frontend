@@ -2,7 +2,6 @@ import { DataTable } from '@/components/data-table'
 import { PATH } from '@/utils/constant/_paths'
 import { columns, Data, TableHeader } from './component'
 import { usePosition } from '@/hooks/api/use-position'
-import Container from '../../_component/container'
 import { useTitle } from '../../_component/header'
 import { DashboardLayout } from '../../_component/layout'
 
@@ -23,15 +22,18 @@ export default function Employee() {
 
   return (
     <DashboardLayout>
-      <Container>
-        <TableHeader />
-        <DataTable
-          data={data?.data?.data || tableData}
-          columns={columns}
-          withLoading
-          isLoading={isLoading}
-        />
-      </Container>
+      <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
+        <div>
+          <TableHeader />
+          <DataTable
+            data={data?.data?.data || tableData}
+            columns={columns}
+            withLoading
+            isLoading={isLoading}
+          />
+        </div>
+        <div className='h-[calc(100vh-48px)] border-l border-line'></div>
+      </div>
     </DashboardLayout>
   )
 }
@@ -41,16 +43,5 @@ const tableData: Data[] = [
     id: 1,
     name: 'Staf',
     description: '',
-    _count: {
-      employees: 2,
-    },
-    employees: [
-      {
-        fullname: 'A',
-      },
-      {
-        fullname: 'B',
-      },
-    ],
   },
 ]

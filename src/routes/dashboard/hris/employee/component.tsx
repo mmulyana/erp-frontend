@@ -2,6 +2,7 @@ import { Input } from '@/components/ui/input'
 import {
   ChevronDown,
   Ellipsis,
+  ListIcon,
   PencilIcon,
   Search,
   Table,
@@ -64,10 +65,6 @@ export type Data = {
   id: number
   name: string
   description?: string
-  _count: {
-    employees: number
-  }
-  employees: { fullname: string }[]
 }
 
 export function TableHeader() {
@@ -254,8 +251,15 @@ function ModalDelete({ id, open, setOpen }: ModalProps) {
 
 export const columns: ColumnDef<Data>[] = [
   {
-    header: '#',
-    cell: (info) => info.row.index + 1,
+    id: 'counter',
+    header: () => (
+      <div className='flex justify-center items-center'>
+        <ListIcon className='w-5 h-5 text-dark/50' />
+      </div>
+    ),
+    cell: (info) => (
+      <div className='px-0 text-center'>{info.row.index + 1}</div>
+    ),
   },
   {
     accessorKey: 'name',
@@ -271,32 +275,6 @@ export const columns: ColumnDef<Data>[] = [
         >
           {cell.row.original.name}
         </Link>
-      )
-    },
-  },
-  {
-    header: 'Pegawai',
-    cell: ({ cell }) => {
-      if (cell.row.original._count.employees == 0) return null
-      return (
-        <div className='flex gap-2 items-center'>
-          <div className='flex'>
-            {cell.row.original.employees.slice(0, 3).map((item, idx) => (
-              <div
-                key={idx}
-                className='w-6 h-6 bg-blue-500 text-white relative rounded-full -mr-1.5 border-[2.5px] border-white'
-              >
-                <span className='text-xs absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
-                  {item.fullname.at(0)}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className='h-1 w-1 rounded-full bg-[#313951]/50 ml-1'></div>
-          <p className='text-sm text-[#313951]'>
-            {cell.row.original._count.employees} Orang
-          </p>
-        </div>
       )
     },
   },

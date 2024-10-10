@@ -13,6 +13,7 @@ import {
 
 export default function Dashboard() {
   useTitle([{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW }])
+  
   return (
     <DashboardLayout>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-6 p-4'>
@@ -40,7 +41,7 @@ export default function Dashboard() {
         </div>
         <Card>
           <CardHead>
-            <p className='text-dark'>Lampiran</p>
+            <p className='text-dark font-medium'>Lampiran</p>
             <div className='rounded-full h-7 flex bg-[#EFF0F2] p-0.5 pr-2.5'>
               <label className='flex gap-1'>
                 <div className='h-6 w-6 rounded-full bg-white flex items-center justify-center'>
