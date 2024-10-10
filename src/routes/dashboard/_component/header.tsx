@@ -10,6 +10,8 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Settings, SlashIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useMediaQuery } from '@uidotdev/usehooks'
+import { cn } from '@/utils/cn'
 
 export type Title = {
   name: string
@@ -27,8 +29,15 @@ export const useTitle = (title: Title[]) => {
 }
 export default function Header() {
   const links = useAtomValue(titleAtom)
+  const isSmall = useMediaQuery('only screen and (max-width : 768px)')
+
   return (
-    <div className='flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12'>
+    <div
+      className={cn(
+        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12',
+        isSmall && 'pl-[calc(48px+8px)]'
+      )}
+    >
       <BreadCrumbWrapper>
         <BreadcrumbList>
           {links.map((link, index) => {
