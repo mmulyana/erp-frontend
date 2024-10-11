@@ -6,7 +6,6 @@ import {
   MaritalStatus,
 } from '../enum/common'
 import { Attendance } from './attendance'
-import { CashAdvance } from './cash-advance'
 import { Leave } from './leave'
 import { Overtime } from './overtime'
 import { Position } from './position'
@@ -247,4 +246,13 @@ type EmployeeStatusTrack = {
   competencyId?: number
   comptency?: Competency
   employee: Employee
+}
+
+export type CashAdvance = {
+  id: number
+  employeeId: number
+  amount: number
+  requestDate: string
+  employee: Employee
+  description?: string
 }
