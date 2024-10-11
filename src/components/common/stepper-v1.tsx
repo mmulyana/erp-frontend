@@ -5,15 +5,16 @@ import { atom, useAtom, useAtomValue } from 'jotai'
 
 const stepperAtom = atom<number>(0)
 
+export type navigationParams = {
+  setStep: (val: number) => void
+  step: number
+  nextStep: () => void
+  prevStep: () => void
+  totalSteps: number
+}
 type StepperProps = {
   children: React.ReactNode
-  navigation?: (params: {
-    setStep: (val: number) => void
-    step: number
-    nextStep: () => void
-    prevStep: () => void
-    totalSteps: number
-  }) => React.ReactNode
+  navigation?: (params: navigationParams) => React.ReactNode
 }
 
 type StepperItemProps = {
