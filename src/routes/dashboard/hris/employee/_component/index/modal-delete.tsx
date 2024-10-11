@@ -14,7 +14,7 @@ import { cn } from '@/utils/cn'
 import { delay } from '@/utils/delay'
 
 type ModalProps = {
-  id?: number
+  id?: number | null
   open: boolean
   setOpen: (val: boolean) => void
 }

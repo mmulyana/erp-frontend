@@ -1,4 +1,5 @@
 import ResponsiveModal from '@/components/modal-responsive'
+import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -28,14 +29,17 @@ const positionSchema = z.object({
 type Position = z.infer<typeof positionSchema>
 
 type ModalProps = {
-  id?: number
+  id: number | null
   open: boolean
   setOpen: (val: boolean) => void
 }
 export default function ModalAdd({ id, open, setOpen }: ModalProps) {
   const { mutate: create } = useCreatePosition()
   const { mutate: update } = useUpdatePosition()
-  const { data, isLoading } = useDetailPosition(id)
+  const { data, isLoading } = useDetailPosition({
+    id: id || undefined,
+    enabled: !!id,
+  })
 
   const form = useForm<Position>({
     resolver: zodResolver(positionSchema),
@@ -79,49 +83,35 @@ export default function ModalAdd({ id, open, setOpen }: ModalProps) {
 
   return (
     <>
-      <ResponsiveModal
-        isOpen={open}
-        setIsOpen={setOpen}
-        title={!!id ? 'Edit Posisi' : 'Posisi baru'}
-        body={!!id ? 'Edit posisi ini' : 'Tambahkan posisi baru'}
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        title={id ? 'Edit Posisi' : 'Posisi baru'}
       >
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className='w-full flex flex-col gap-4 px-1 pb-8 md:pb-0'
           >
-            <FormField
-              control={form.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nama</FormLabel>
-                  <FormControl>
-                    <Input placeholder='Nama posisi' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='description'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Deskripsi</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className='flex justify-end mt-4'>
-              <Button type='submit'>Simpan</Button>
-            </div>
+            <ModalContainer setOpen={setOpen}>
+              <FormField
+                control={form.control}
+                name='name'
+                label='Nama'
+                render={({ field }) => (
+                  <Input placeholder='Nama posisi' {...field} />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='description'
+                label='Deskripsi'
+                render={({ field }) => <Textarea {...field} />}
+              />
+            </ModalContainer>
           </form>
         </Form>
-      </ResponsiveModal>
+      </Modal>
     </>
   )
 }
