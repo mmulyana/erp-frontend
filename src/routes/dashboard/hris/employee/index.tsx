@@ -18,6 +18,9 @@ import {
 import { links } from './_component/links'
 import { createLinkDetail } from '@/utils/create-link-detail'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import ModalAdd from './_component/index/modal-add'
+import ModalDelete from './_component/index/modal-delete'
 
 export default function Employee() {
   const { data, isLoading } = usePosition()
@@ -26,7 +29,7 @@ export default function Employee() {
   // COLUMNS POSITION
   const columns: ColumnDef<{
     name: string
-    id: string
+    id: number
     description?: string
   }>[] = [
     {
@@ -65,16 +68,28 @@ export default function Employee() {
       accessorKey: 'id',
       header: '',
       size: 24,
-      cell: () => {
+      cell: ({ row }) => {
         return (
           <div className='flex justify-end w-full'>
             <DropdownEdit>
               <DropdownMenuGroup>
-                <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer'
+                  onClick={() => {
+                    handleDialog('add', true)
+                    setSelectedId(row.original.id)
+                  }}
+                >
                   <PencilIcon className='w-3.5 h-3.5 text-dark/50' />
                   Ubah
                 </DropdownMenuItem>
-                <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer'
+                  onClick={() => {
+                    handleDialog('delete', true)
+                    setSelectedId(row.original.id)
+                  }}
+                >
                   <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
                   Hapus
                 </DropdownMenuItem>
@@ -86,6 +101,20 @@ export default function Employee() {
     },
   ]
   // COLUMNS
+  type Dialog = { add: boolean; delete: boolean }
+  const [dialog, setDialog] = useState<Dialog>({
+    add: false,
+    delete: false,
+  })
+  const [selectedId, setSelectedId] = useState<number | null>(null)
+
+  const handleDialog = (type: keyof Dialog, val?: boolean) => {
+    setDialog((prev) => ({ ...prev, [type]: val || false }))
+    if (!val && selectedId !== null) {
+      setSelectedId(null)
+    }
+  }
+
   return (
     <DashboardLayout>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
@@ -95,7 +124,7 @@ export default function Employee() {
               <NetworkIcon className='text-[#989CA8]' />
               <p className='text-dark font-medium'>Jabatan</p>
             </div>
-            <Button>Tambah</Button>
+            <Button onClick={() => handleDialog('add', true)}>Tambah</Button>
           </HeadTable>
           <FilterTable placeholder='Cari jabatan' />
           <DataTable
@@ -110,12 +139,16 @@ export default function Employee() {
           <CardStatusEmployee />
         </div>
       </div>
-      {/* <ModalAdd id={cell.row.original.id} open={isEdit} setOpen={setIsEdit} />
+      <ModalAdd
+        id={selectedId}
+        open={dialog.add}
+        setOpen={() => handleDialog('add')}
+      />
       <ModalDelete
-        id={cell.row.original.id}
-        open={isDelete}
-        setOpen={setIsDelete}
-      /> */}
+        id={selectedId}
+        open={dialog.delete}
+        setOpen={() => handleDialog('delete')}
+      />
     </DashboardLayout>
   )
 }
