@@ -16,11 +16,13 @@ type TableEmployeeProps = {
   status?: EmployeeStatus
   positionId?: string
   name?: string
+  onAddEmployee: () => void
 }
 export default function TableEmployee({
   status,
   positionId,
   name,
+  onAddEmployee,
 }: TableEmployeeProps) {
   const [url] = useUrlState({ name: '', page: '' })
   const { isLoading, data } = useEmployees(
@@ -108,7 +110,7 @@ export default function TableEmployee({
           <Button variant='secondary' className='w-8 p-0'>
             <SettingsIcon className='w-4 h-4 text-dark/70' />
           </Button>
-          <Button>Tambah</Button>
+          <Button onClick={onAddEmployee}>Tambah</Button>
         </div>
       </HeadTable>
       <FilterTable placeholder='Cari pegawai' />
