@@ -10,12 +10,12 @@ import {
 import { useMemo } from 'react'
 import { Label, Pie, PieChart } from 'recharts'
 
-export const chartData1 = [
+const chartData1 = [
   { position: 'staff', count: 8, fill: '#274754' },
   { position: 'tukang', count: 20, fill: '#2A9D90' },
   { position: 'helper', count: 28, fill: '#F4A462' },
 ]
-export const chartConfig1 = {
+const chartConfig1 = {
   visitors: {
     label: 'Pegawai',
   },

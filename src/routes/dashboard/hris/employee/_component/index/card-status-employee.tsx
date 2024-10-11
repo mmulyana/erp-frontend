@@ -9,11 +9,11 @@ import {
 } from '@/components/ui/chart'
 import { Pie, PieChart } from 'recharts'
 
-export const chartData2 = [
+const chartData2 = [
   { status: 'active', count: 42, fill: '#5463E8' },
   { status: 'nonactive', count: 8, fill: '#274754' },
 ]
-export const chartConfig2 = {
+const chartConfig2 = {
   visitors: {
     label: 'Pegawai',
   },
