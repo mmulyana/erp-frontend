@@ -5,10 +5,6 @@ import {
   Gender,
   MaritalStatus,
 } from '../enum/common'
-import { Attendance } from './attendance'
-import { Leave } from './leave'
-import { Overtime } from './overtime'
-import { Position } from './position'
 
 export interface Board {
   id: string
@@ -182,11 +178,18 @@ export type Employee = {
   address?: Address[]
   employeeCompetency?: EmployeeCompetency[]
   certifications?: Certification[]
-  attendances?: Attendance[]
+  // attendances?: Attendance[]
   cashAdvances?: CashAdvance[]
-  leaves?: Leave[]
+  // leaves?: Leave[]
   statusTracks?: EmployeeStatusTrack[]
-  overtime?: Overtime[]
+  // overtime?: Overtime[]
+}
+
+type Position = {
+  id: number
+  name: string
+  description: string
+  color?: string
 }
 
 type EmployeeCompetency = {
