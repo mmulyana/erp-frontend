@@ -9,7 +9,7 @@ import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
 import { differenceInYears, parse } from 'date-fns'
 import { isString } from 'lodash'
-import { CircleUserRoundIcon } from 'lucide-react'
+import { CircleUserRoundIcon, SettingsIcon } from 'lucide-react'
 
 type TableEmployeeProps = {
   status?: EmployeeStatus
@@ -100,7 +100,12 @@ export default function TableEmployee({
           <CircleUserRoundIcon className='text-[#989CA8]' />
           <p className='text-dark font-medium'>{name}</p>
         </div>
-        <Button>Tambah</Button>
+        <div className='flex gap-2 items-center'>
+          <Button variant='secondary' className='w-8 p-0'>
+            <SettingsIcon className='w-4 h-4 text-dark/70' />
+          </Button>
+          <Button>Tambah</Button>
+        </div>
       </HeadTable>
       <FilterTable placeholder='Cari pegawai' />
       <DataTable
