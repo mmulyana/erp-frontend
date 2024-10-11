@@ -1,10 +1,15 @@
+import { RadioV1 } from '@/components/common/radio-v1'
 import { Stepper, StepperItem } from '@/components/common/stepper-v1'
 import UploadProfile from '@/components/common/upload-profile'
-import { Form } from '@/components/ui/form'
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
+import { Form, FormField } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { TabsContent, TabsList, TabsTrigger, Tabs } from '@/components/ui/tabs'
 import { cn } from '@/utils/cn'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 type Props = {
   open: boolean
@@ -15,8 +20,12 @@ export default function AddEmployee({ open, setOpen }: Props) {
   const form = useForm({
     defaultValues: {
       photo: null as File | null,
+      fullname: '',
+      joinedAt: '',
+      type: 'permanent',
     },
   })
+
   const onSubmit = async (data: any) => {
     console.log(data)
   }
@@ -32,7 +41,7 @@ export default function AddEmployee({ open, setOpen }: Props) {
               navigation={({ nextStep, prevStep, step, totalSteps }) => (
                 <div
                   className={cn(
-                    'mt-4 flex justify-between items-center',
+                    'mt-4 flex justify-between items-center px-4',
                     step === 0 && 'justify-end'
                   )}
                 >
@@ -70,13 +79,87 @@ export default function AddEmployee({ open, setOpen }: Props) {
               )}
             >
               <StepperItem label='Umum'>
-                <div className='flex flex-col gap-4'>
+                <div>
                   <StepHeader step={1} title='Umum' />
-                  <UploadProfile
-                    name='photo'
-                    preview={preview}
-                    setPreview={setPreview}
-                  />
+                  <ScrollArea className='h-[56vh] px-4'>
+                    <div className='flex flex-col gap-4 pt-4'>
+                      <UploadProfile
+                        name='photo'
+                        preview={preview}
+                        setPreview={setPreview}
+                      />
+                      <FormField
+                        label='Nama Lengkap'
+                        control={form.control}
+                        name='fullname'
+                        render={({ field }) => <Input {...field} />}
+                      />
+                      <Tabs defaultValue='date'>
+                        <TabsList>
+                          <TabsTrigger value='date'>Tanggal</TabsTrigger>
+                          <TabsTrigger value='year'>Tahun</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value='date'>
+                          <FormField
+                            control={form.control}
+                            name='joinedAt'
+                            label='Tanggal bergabung'
+                            render={({ field }) => (
+                              <Input className='block' type='date' {...field} />
+                            )}
+                          />
+                        </TabsContent>
+                        <TabsContent value='year'>
+                          <FormField
+                            control={form.control}
+                            name='joinedAt'
+                            label='Tahun bergabung'
+                            render={({ field }) => (
+                              <Input type='number' {...field} />
+                            )}
+                          />
+                        </TabsContent>
+                      </Tabs>
+                      <Controller
+                        name='type'
+                        control={form.control}
+                        rules={{ required: 'Please select a gender' }}
+                        render={({ field, fieldState: { error } }) => (
+                          <div className='space-y-2'>
+                            <Label>Status Pegawai</Label>
+                            <div className='flex justify-between gap-4'>
+                              <RadioV1
+                                {...field}
+                                value='permanent'
+                                checked={field.value === 'permanent'}
+                              >
+                                Tetap
+                              </RadioV1>
+                              <RadioV1
+                                {...field}
+                                value='contract'
+                                checked={field.value === 'contract'}
+                              >
+                                Kontrak
+                              </RadioV1>
+                              <RadioV1
+                                {...field}
+                                value='partime'
+                                checked={field.value === 'partime'}
+                              >
+                                Partime
+                              </RadioV1>
+                            </div>
+                            {error && (
+                              <p className='text-red-500 text-sm'>
+                                {error.message}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      />
+                    </div>
+                  </ScrollArea>
                 </div>
               </StepperItem>
               <StepperItem label='Gaji'>
@@ -99,9 +182,11 @@ export default function AddEmployee({ open, setOpen }: Props) {
 
 function StepHeader({ step, title }: { step: number; title: string }) {
   return (
-    <div className='mt-8 pb-1.5 border-b border-line'>
-      <p className='text-sm text-dark/50'>Tahap {step}</p>
-      <p className='text-dark font-semibold mt-2'>{title}</p>
+    <div className='mt-4 px-4'>
+      <div className='pb-1.5 border-b border-line'>
+        <p className='text-sm text-dark/50'>Tahap {step}</p>
+        <p className='text-dark font-semibold mt-2'>{title}</p>
+      </div>
     </div>
   )
 }
