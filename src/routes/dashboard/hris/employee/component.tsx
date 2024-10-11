@@ -1,12 +1,5 @@
 import { Input } from '@/components/ui/input'
-import {
-  ChevronDown,
-  ListIcon,
-  PencilIcon,
-  Search,
-  Table,
-  TrashIcon,
-} from 'lucide-react'
+import { ChevronDown, PencilIcon, Search, Table, TrashIcon } from 'lucide-react'
 import {
   DropdownMenuSeparator,
   DropdownMenu,
@@ -63,6 +56,7 @@ import {
 } from '@/components/ui/chart'
 import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
 import { Label, Pie, PieChart } from 'recharts'
+import Overlay from '@/components/common/overlay'
 
 const positionSchema = z.object({
   name: z.string(),
@@ -265,15 +259,32 @@ export const columns: ColumnDef<Data>[] = [
     header: 'Nama',
     cell: ({ cell }) => {
       return (
-        <Link
-          to={generatePath(PATH.EMPLOYEE_DETAIL, {
-            detail: `${cell.row.original.name.split(' ').join('-')}-${
-              cell.row.original.id
-            }`,
-          })}
+        <Overlay
+          className='w-full'
+          overlay={
+            <Link
+              className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+              to={generatePath(PATH.EMPLOYEE_DETAIL, {
+                detail: `${cell.row.original.name.split(' ').join('-')}-${
+                  cell.row.original.id
+                }`,
+              })}
+            >
+              Lihat
+            </Link>
+          }
         >
-          {cell.row.original.name}
-        </Link>
+          <Link
+            className='hover:text-dark'
+            to={generatePath(PATH.EMPLOYEE_DETAIL, {
+              detail: `${cell.row.original.name.split(' ').join('-')}-${
+                cell.row.original.id
+              }`,
+            })}
+          >
+            {cell.row.original.name}
+          </Link>
+        </Overlay>
       )
     },
   },
@@ -443,7 +454,7 @@ export function CardStatusEmployee() {
   return (
     <Card>
       <CardHead>
-        <p className='text-dark text-sm font-semibold'>Jumlah pegawai</p>
+        <p className='text-dark text-sm font-semibold'>Status pegawai</p>
       </CardHead>
       <Cardbody className='pt-0'>
         <ChartContainer

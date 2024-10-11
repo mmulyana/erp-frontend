@@ -8,7 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Settings, SlashIcon } from 'lucide-react'
+import { ChevronRight, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { cn } from '@/utils/cn'
@@ -39,7 +39,7 @@ export default function Header() {
       )}
     >
       <BreadCrumbWrapper>
-        <BreadcrumbList>
+        <BreadcrumbList className='flex items-center'>
           {links.map((link, index) => {
             const lastIndex = links.length - 1
 
@@ -61,7 +61,7 @@ export default function Header() {
                 </BreadcrumbItem>
                 {index !== lastIndex && (
                   <BreadcrumbSeparator>
-                    <SlashIcon className='w-[10px] h-[10px] text-[#989CA8]' />
+                    <ChevronRight className='w-2 h-2 text-[#989CA8]' />
                   </BreadcrumbSeparator>
                 )}
               </React.Fragment>
@@ -78,7 +78,7 @@ export default function Header() {
         </Button>
         <Button
           variant='secondary'
-          className='w-8 h-8 rounded-full bg-[#FFF] border border-[#2A9D90] p-0.5 relative'
+          className='w-8 h-8 rounded-full bg-[#FFF] border-[1.5px] border-[#2A9D90] p-0.5 relative'
         >
           <div className='w-full h-full rounded-full bg-gray-400'></div>
           <div className='w-3 h-3 rounded-full border-2 border-white bg-[#2A9D90] absolute -right-0.5 -bottom-0.5'></div>

@@ -15,7 +15,7 @@ export default function Sidebar({ open, setOpen }: Props) {
           className='h-12 w-12 fixed flex items-center justify-center border-r border-[#EFF0F2]'
           onClick={() => setOpen(!open)}
         >
-          <div className='rounded h-6 w-6 bg-[#365EFF] flex justify-center items-center'>
+          <div className='rounded h-6 w-6 bg-[#5463E8] flex justify-center items-center'>
             <span className='uppercase text-white'>B</span>
           </div>
         </button>
@@ -33,7 +33,7 @@ export default function Sidebar({ open, setOpen }: Props) {
         >
           <div className='h-12 w-full border-b border-[#EFF0F2] flex items-center'>
             <div className='h-12 w-12 flex items-center justify-center'>
-              <div className='rounded h-6 w-6 bg-[#365EFF] flex justify-center items-center'>
+              <div className='rounded h-6 w-6 bg-[#5463E8] flex justify-center items-center'>
                 <span className='uppercase text-white'>B</span>
               </div>
             </div>
@@ -52,7 +52,7 @@ export default function Sidebar({ open, setOpen }: Props) {
       )}
     >
       <div className='px-4 h-12 w-full border-b border-[#EFF0F2] flex items-center gap-2'>
-        <div className='rounded h-6 w-6 bg-[#365EFF] flex justify-center items-center'>
+        <div className='rounded h-6 w-6 bg-[#5463E8] flex justify-center items-center'>
           <span className='uppercase text-white'>B</span>
         </div>
         <p className='text-[#3D556B] font-semibold'>BJS ERP</p>
