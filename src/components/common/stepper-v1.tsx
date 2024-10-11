@@ -36,8 +36,8 @@ export const Stepper = ({ children, navigation }: StepperProps) => {
   const prevStep = () => goToStep(currentStep - 1)
 
   return (
-    <div className='w-full max-w-2xl mx-auto p-4'>
-      <div className='flex justify-between items-center'>
+    <div className='w-full max-w-2xl mx-auto'>
+      <div className='flex justify-between items-center px-4 pt-4'>
         {steps.map((step, index) => (
           <Fragment key={index}>
             <StepIndicator
