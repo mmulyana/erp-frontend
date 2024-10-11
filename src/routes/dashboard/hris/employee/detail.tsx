@@ -7,7 +7,13 @@ import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import TableEmployee from './_component/detail/table-employee'
 import { links } from './_component/links'
+import { useState } from 'react'
+import AddEmployee from './_component/detail/add-employee'
 
+export type DialogEmployee = {
+  add: boolean
+  delete: boolean
+}
 export default function Detail() {
   const { detail } = useParams()
   const { link } = useDetailName(PATH.EMPLOYEE_DETAIL, detail)
@@ -15,11 +21,24 @@ export default function Detail() {
 
   const positionId = detail?.split('-').pop()
 
+  // HANDLE DRAWER
+  const [dialog, setDialog] = useState<DialogEmployee>({
+    add: false,
+    delete: false,
+  })
+  const handleDialog = (type: keyof DialogEmployee, val?: boolean) => {
+    setDialog((prev) => ({ ...prev, [type]: val || false }))
+  }
+
   return (
     <DashboardLayout>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
         <div>
-          <TableEmployee positionId={positionId} name={link?.name} />
+          <TableEmployee
+            positionId={positionId}
+            name={link?.name}
+            onAddEmployee={() => handleDialog('add', true)}
+          />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line px-4 py-2 space-y-4'>
           <Card>
@@ -72,6 +91,7 @@ export default function Detail() {
           </Card>
         </div>
       </div>
+      <AddEmployee open={dialog.add} setOpen={() => handleDialog('add')} />
     </DashboardLayout>
   )
 }
