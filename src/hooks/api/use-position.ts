@@ -8,11 +8,17 @@ export const usePosition = () => {
   return useQuery({ queryKey: [KEYS.HRIS_POSITION], queryFn: fetcherPosition })
 }
 
-export const useDetailPosition = (id?: number) => {
+export const useDetailPosition = ({
+  id,
+  enabled,
+}: {
+  id?: number
+  enabled: boolean
+}) => {
   return useQuery({
     queryKey: [KEYS.HRIS_POSITION, id],
     queryFn: () => fetcherDetailPosition({ id }),
-    enabled: !!id,
+    enabled,
   })
 }
 
