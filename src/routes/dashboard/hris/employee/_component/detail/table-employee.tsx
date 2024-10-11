@@ -1,10 +1,11 @@
 import DropdownEdit from '@/components/common/dropdown-edit'
+import StatusChips from '@/components/common/status-chips'
 import { DataTable } from '@/components/data-table'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { Button } from '@/components/ui/button'
 import { useEmployees } from '@/hooks/api/use-employee'
 import { EmployeeStatus } from '@/utils/enum/common'
-import { Employee } from '@/utils/types/employee'
+import { Employee } from '@/utils/types/api'
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
 import { differenceInYears, parse } from 'date-fns'
@@ -24,9 +25,9 @@ export default function TableEmployee({
   const [url] = useUrlState({ name: '', page: '' })
   const { isLoading, data } = useEmployees(
     {
-      ...(!!status ? { status } : undefined),
+      ...(status ? { status } : undefined),
       ...(isString(url.name) ? { name: url.name } : undefined),
-      ...(!!positionId ? { positionId } : undefined),
+      ...(positionId ? { positionId } : undefined),
       ...(isString(url.page) ? { page: url.page } : undefined),
     },
     {}
@@ -79,6 +80,9 @@ export default function TableEmployee({
     {
       accessorKey: 'status',
       header: 'Status',
+      cell: ({ row }) => (
+        <StatusChips status={row.original.status === 'active'} />
+      ),
     },
     {
       id: 'action',
