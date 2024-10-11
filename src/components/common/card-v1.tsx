@@ -6,7 +6,7 @@ type CardProps = React.PropsWithChildren & {
 }
 export function Card({ className, children }: CardProps) {
   return (
-    <div className={cn('border border-[#EFF0F2] rounded-[16px]', className)}>
+    <div className={cn('border border-[#EFF0F2] rounded-lg', className)}>
       {children}
     </div>
   )
