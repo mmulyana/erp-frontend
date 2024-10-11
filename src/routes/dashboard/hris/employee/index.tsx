@@ -1,27 +1,17 @@
 import { DataTable } from '@/components/data-table'
-import {
-  CardStatusEmployee,
-  CardTotalEmployee,
-  chartData1,
-  columns,
-  Data,
-  links,
-} from './component'
+import { columns, Data, links } from './component'
 import { usePosition } from '@/hooks/api/use-position'
 import { useTitle } from '../../_component/header'
 import { DashboardLayout } from '../../_component/layout'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { NetworkIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useMemo } from 'react'
+import CardStatusEmployee from './_component/index/card-status-employee'
+import CardTotalEmployee from './_component/index/card-total-employee'
 
 export default function Employee() {
   const { data, isLoading } = usePosition()
   useTitle(links)
-
-  const totalEmployees = useMemo(() => {
-    return chartData1.reduce((acc, curr) => acc + curr.count, 0)
-  }, [])
 
   return (
     <DashboardLayout>
@@ -34,7 +24,7 @@ export default function Employee() {
             </div>
             <Button>Tambah</Button>
           </HeadTable>
-          <FilterTable />
+          <FilterTable placeholder='Cari jabatan' />
           <DataTable
             data={data?.data?.data || tableData}
             columns={columns}
@@ -43,7 +33,7 @@ export default function Employee() {
           />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>
-          <CardTotalEmployee total={totalEmployees} />
+          <CardTotalEmployee />
           <CardStatusEmployee />
         </div>
       </div>
