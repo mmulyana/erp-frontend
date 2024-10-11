@@ -110,7 +110,7 @@ export default function TableEmployee({
           <Button variant='secondary' className='w-8 p-0'>
             <SettingsIcon className='w-4 h-4 text-dark/70' />
           </Button>
-          <Button onClick={onAddEmployee}>Tambah</Button>
+          <Button onClick={onAddEmployee}>Pegawai Baru</Button>
         </div>
       </HeadTable>
       <FilterTable placeholder='Cari pegawai' />
