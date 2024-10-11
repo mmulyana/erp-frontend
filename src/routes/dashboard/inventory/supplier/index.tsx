@@ -23,7 +23,7 @@ import Modal from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useTag } from '@/hooks/api/use-tag'
-import MultiSelectV1 from '@/components/common/select/mult-select-v1'
+import MultiSelectV1 from '@/components/common/select/multi-select-v1'
 import { Textarea } from '@/components/ui/textarea'
 import {
   DropdownMenu,
