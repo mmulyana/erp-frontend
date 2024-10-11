@@ -11,7 +11,7 @@ type ParamsLeaves = Pagination & {
 }
 export const useCashAdvance = (params: ParamsLeaves) => {
   return useQuery({
-    queryKey: [KEYS.LEAVES, params],
+    queryKey: [KEYS.CASH_ADVANCES, params],
     queryFn: async () => {
       return await http.request({
         method: 'GET',
@@ -30,8 +30,24 @@ export const useCreateCashAdvance = () => {
       return await http.post(URLS.CASH_ADVANCES, data)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.LEAVES] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.CASH_ADVANCES] })
       toast.success(data.data.message)
+    },
+  })
+}
+
+export const useDeleteCashAdvances = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      return await http.delete(`${URLS.CASH_ADVANCES}/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.CASH_ADVANCES],
+      })
+      toast.success(data?.data?.message)
     },
   })
 }
