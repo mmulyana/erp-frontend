@@ -5,8 +5,8 @@ import { DashboardLayout } from '@/routes/dashboard/_component/layout'
 import { useDetailName } from '@/hooks/use-detail-name'
 import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { links } from './component'
 import TableEmployee from './_component/detail/table-employee'
+import { links } from './_component/links'
 
 export default function Detail() {
   const { detail } = useParams()
@@ -22,26 +22,6 @@ export default function Detail() {
           <TableEmployee positionId={positionId} name={link?.name} />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line px-4 py-2 space-y-4'>
-          <div className='grid grid-cols-2 gap-4'>
-            <Card className='h-fit rounded-lg'>
-              <CardHead className='px-3 border-none h-fit py-1.5'>
-                <p className='text-dark text-sm'>Total pegawai</p>
-              </CardHead>
-              <Cardbody></Cardbody>
-            </Card>
-            <Card className='h-fit rounded-lg'>
-              <CardHead className='px-3 border-none h-fit py-1.5'>
-                <p className='text-dark text-sm'>Pegawai aktif</p>
-              </CardHead>
-              <Cardbody></Cardbody>
-            </Card>
-            <Card className='h-fit rounded-lg'>
-              <CardHead className='px-3 border-none h-fit py-1.5'>
-                <p className='text-dark text-sm'>Pegawai Nonaktif</p>
-              </CardHead>
-              <Cardbody></Cardbody>
-            </Card>
-          </div>
           <Card>
             <CardHead className='px-3'>
               <p className='text-dark text-sm'>

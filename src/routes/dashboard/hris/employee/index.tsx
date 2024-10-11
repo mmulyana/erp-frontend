@@ -1,18 +1,91 @@
 import { DataTable } from '@/components/data-table'
-import { columns, Data, links } from './component'
 import { usePosition } from '@/hooks/api/use-position'
 import { useTitle } from '../../_component/header'
 import { DashboardLayout } from '../../_component/layout'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
-import { NetworkIcon } from 'lucide-react'
+import { NetworkIcon, PencilIcon, TrashIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import CardStatusEmployee from './_component/index/card-status-employee'
 import CardTotalEmployee from './_component/index/card-total-employee'
+import { ColumnDef } from '@tanstack/react-table'
+import Overlay from '@/components/common/overlay'
+import { PATH } from '@/utils/constant/_paths'
+import DropdownEdit from '@/components/common/dropdown-edit'
+import {
+  DropdownMenuGroup,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
+import { links } from './_component/links'
+import { createLinkDetail } from '@/utils/create-link-detail'
+import { Link } from 'react-router-dom'
 
 export default function Employee() {
   const { data, isLoading } = usePosition()
   useTitle(links)
 
+  // COLUMNS POSITION
+  const columns: ColumnDef<{
+    name: string
+    id: string
+    description?: string
+  }>[] = [
+    {
+      accessorKey: 'name',
+      header: 'Nama',
+      cell: ({ cell }) => {
+        const { name, id } = cell.row.original
+        return (
+          <Overlay
+            className='w-full'
+            overlay={
+              <Link
+                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
+              >
+                Lihat
+              </Link>
+            }
+          >
+            <Link
+              className='hover:text-dark'
+              to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
+            >
+              {cell.row.original.name}
+            </Link>
+          </Overlay>
+        )
+      },
+    },
+    {
+      accessorKey: 'description',
+      header: 'Deskripsi',
+    },
+    {
+      id: 'action',
+      accessorKey: 'id',
+      header: '',
+      size: 24,
+      cell: () => {
+        return (
+          <div className='flex justify-end w-full'>
+            <DropdownEdit>
+              <DropdownMenuGroup>
+                <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+                  <PencilIcon className='w-3.5 h-3.5 text-dark/50' />
+                  Ubah
+                </DropdownMenuItem>
+                <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+                  <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
+                  Hapus
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownEdit>
+          </div>
+        )
+      },
+    },
+  ]
+  // COLUMNS
   return (
     <DashboardLayout>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
@@ -26,7 +99,7 @@ export default function Employee() {
           </HeadTable>
           <FilterTable placeholder='Cari jabatan' />
           <DataTable
-            data={data?.data?.data || tableData}
+            data={data?.data?.data || []}
             columns={columns}
             withLoading
             isLoading={isLoading}
@@ -37,14 +110,12 @@ export default function Employee() {
           <CardStatusEmployee />
         </div>
       </div>
+      {/* <ModalAdd id={cell.row.original.id} open={isEdit} setOpen={setIsEdit} />
+      <ModalDelete
+        id={cell.row.original.id}
+        open={isDelete}
+        setOpen={setIsDelete}
+      /> */}
     </DashboardLayout>
   )
 }
-
-const tableData: Data[] = [
-  {
-    id: 1,
-    name: 'Staf',
-    description: '',
-  },
-]
