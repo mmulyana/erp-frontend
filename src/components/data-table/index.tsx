@@ -52,14 +52,10 @@ export function DataTable<TData, TValue>({
               key={cell.id}
               className={cn(
                 'text-dark/70 font-normal text-sm h-10 py-0',
-                index !== row.getVisibleCells().length - 1 &&
+                index !== 0 &&
+                  index !== row.getVisibleCells().length - 1 &&
                   'border-l border-line'
               )}
-              // style={{
-              //   width: `${cell.column.columnDef.size}px`,
-              //   minWidth: `${cell.column.columnDef.size}px`,
-              //   maxWidth: `${cell.column.columnDef.size}px`,
-              // }}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
@@ -88,13 +84,14 @@ export function DataTable<TData, TValue>({
                   key={header.id}
                   className={cn(
                     'text-[#313951] font-normal text-sm h-9',
-                    index !== headerGroup.headers.length - 1 &&
+                    index !== 0 &&
+                      index !== headerGroup.headers.length - 1 &&
                       'border-l border-line'
                   )}
                   style={{
                     width: `${header.column.columnDef.size}px`,
-                    minWidth: `${header.column.columnDef.size}px`,
-                    maxWidth: `${header.column.columnDef.size}px`,
+                    // minWidth: `${header.column.columnDef.size}px`,
+                    // maxWidth: `${header.column.columnDef.size}px`,
                   }}
                 >
                   {flexRender(

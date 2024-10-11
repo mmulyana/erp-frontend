@@ -4,7 +4,7 @@ import { columns, Data } from './component'
 import { usePosition } from '@/hooks/api/use-position'
 import { useTitle } from '../../_component/header'
 import { DashboardLayout } from '../../_component/layout'
-import { FilterTable, TopTable } from '@/components/data-table/component'
+import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { NetworkIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -27,13 +27,13 @@ export default function Employee() {
     <DashboardLayout>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
         <div>
-          <TopTable>
+          <HeadTable>
             <div className='flex gap-4 items-center'>
               <NetworkIcon className='text-dark' />
               <p className='text-dark font-medium'>Jabatan</p>
             </div>
             <Button>Tambah</Button>
-          </TopTable>
+          </HeadTable>
           <FilterTable />
           <DataTable
             data={data?.data?.data || tableData}

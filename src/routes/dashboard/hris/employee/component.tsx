@@ -251,16 +251,6 @@ function ModalDelete({ id, open, setOpen }: ModalProps) {
 
 export const columns: ColumnDef<Data>[] = [
   {
-    id: 'counter',
-    size: 40,
-    header: () => (
-      <div className='flex justify-center items-center'>
-        <ListIcon className='w-5 h-5 text-dark/50' />
-      </div>
-    ),
-    cell: (info) => <div className='text-center'>{info.row.index + 1}</div>,
-  },
-  {
     accessorKey: 'name',
     header: 'Nama',
     cell: ({ cell }) => {
@@ -291,7 +281,7 @@ export const columns: ColumnDef<Data>[] = [
       const [isDelete, setIsDelete] = useState(false)
 
       return (
-        <div className='flex justify-end w-full pr-2'>
+        <div className='flex justify-end w-full'>
           <DropdownEdit>
             <DropdownMenuGroup>
               <DropdownMenuItem

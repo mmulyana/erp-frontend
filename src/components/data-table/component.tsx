@@ -127,7 +127,7 @@ export function FilterTable({ className }: FilterProps) {
   return (
     <div
       className={cn(
-        'bg-[#F9FAFB] py-2 px-6 border-x border-line flex gap-4 items-center',
+        'bg-[#F9FAFB] py-2 px-4 flex gap-4 items-center',
         className
       )}
     >
@@ -139,11 +139,11 @@ export function FilterTable({ className }: FilterProps) {
 type TopTableProps = React.PropsWithChildren & {
   className?: string
 }
-export function TopTable({ children, className }: TopTableProps) {
+export function HeadTable({ children, className }: TopTableProps) {
   return (
     <div
       className={cn(
-        'px-6 h-12 flex justify-between items-center border border-line',
+        'px-4 h-12 flex justify-between items-center border-b border-line',
         className
       )}
     >
