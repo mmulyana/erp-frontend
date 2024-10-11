@@ -39,23 +39,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   })
 
-  const renderSkeletonRows = () => {
-    return Array(3)
-      .fill(0)
-      .map((_, index) => (
-        <TableRow key={`skeleton-${index}`}>
-          <TableCell>
-            <div className='h-4 w-full bg-gray-200 rounded animate-pulse'></div>
-          </TableCell>
-        </TableRow>
-      ))
-  }
-
   const renderTableBody = () => {
-    if (withLoading && isLoading) {
-      return renderSkeletonRows()
-    }
-
     if (table.getRowModel().rows?.length) {
       return table.getRowModel().rows.map((row) => (
         <TableRow
@@ -71,6 +55,11 @@ export function DataTable<TData, TValue>({
                 index !== row.getVisibleCells().length - 1 &&
                   'border-l border-line'
               )}
+              // style={{
+              //   width: `${cell.column.columnDef.size}px`,
+              //   minWidth: `${cell.column.columnDef.size}px`,
+              //   maxWidth: `${cell.column.columnDef.size}px`,
+              // }}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
@@ -99,9 +88,14 @@ export function DataTable<TData, TValue>({
                   key={header.id}
                   className={cn(
                     'text-[#313951] font-normal text-sm h-9',
-                    index !== headerGroup.headers.length - 1  &&
+                    index !== headerGroup.headers.length - 1 &&
                       'border-l border-line'
                   )}
+                  style={{
+                    width: `${header.column.columnDef.size}px`,
+                    minWidth: `${header.column.columnDef.size}px`,
+                    maxWidth: `${header.column.columnDef.size}px`,
+                  }}
                 >
                   {flexRender(
                     header.column.columnDef.header,

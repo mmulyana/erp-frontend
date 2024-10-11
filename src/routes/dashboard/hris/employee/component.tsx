@@ -1,7 +1,6 @@
 import { Input } from '@/components/ui/input'
 import {
   ChevronDown,
-  Ellipsis,
   ListIcon,
   PencilIcon,
   Search,
@@ -53,6 +52,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { generatePath, Link } from 'react-router-dom'
 import { PATH } from '@/utils/constant/_paths'
+import DropdownEdit from '@/components/common/dropdown-edit'
 
 const positionSchema = z.object({
   name: z.string(),
@@ -252,14 +252,13 @@ function ModalDelete({ id, open, setOpen }: ModalProps) {
 export const columns: ColumnDef<Data>[] = [
   {
     id: 'counter',
+    size: 40,
     header: () => (
       <div className='flex justify-center items-center'>
         <ListIcon className='w-5 h-5 text-dark/50' />
       </div>
     ),
-    cell: (info) => (
-      <div className='px-0 text-center'>{info.row.index + 1}</div>
-    ),
+    cell: (info) => <div className='text-center'>{info.row.index + 1}</div>,
   },
   {
     accessorKey: 'name',
@@ -285,7 +284,6 @@ export const columns: ColumnDef<Data>[] = [
   {
     id: 'action',
     accessorKey: 'id',
-
     header: '',
     size: 24,
     cell: ({ cell }) => {
@@ -293,35 +291,25 @@ export const columns: ColumnDef<Data>[] = [
       const [isDelete, setIsDelete] = useState(false)
 
       return (
-        <div className='flex justify-end w-full'>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              asChild
-              className='border-transparent hover:border-gray-200'
-            >
-              <Button variant='outline' className='p-0 h-fit rounded px-0.5'>
-                <Ellipsis className='w-6 h-6 text-[#313951]/70' />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className='!min-w-[48px] right-0'>
-              <DropdownMenuGroup>
-                <DropdownMenuItem
-                  onClick={() => setIsEdit(true)}
-                  className='flex items-center gap-2 cursor-pointer'
-                >
-                  <PencilIcon className='w-4 h-4 text-blue-400' />
-                  Ubah
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => setIsDelete(true)}
-                  className='flex items-center gap-2 cursor-pointer'
-                >
-                  <TrashIcon className='w-4 h-4 text-red-500' />
-                  Hapus
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className='flex justify-end w-full pr-2'>
+          <DropdownEdit>
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                onClick={() => setIsEdit(true)}
+                className='flex items-center gap-2 cursor-pointer'
+              >
+                <PencilIcon className='w-4 h-4 text-blue-400' />
+                Ubah
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setIsDelete(true)}
+                className='flex items-center gap-2 cursor-pointer'
+              >
+                <TrashIcon className='w-4 h-4 text-red-500' />
+                Hapus
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownEdit>
           <ModalAdd
             id={cell.row.original.id}
             open={isEdit}

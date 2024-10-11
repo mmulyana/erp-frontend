@@ -1,9 +1,12 @@
 import { DataTable } from '@/components/data-table'
 import { PATH } from '@/utils/constant/_paths'
-import { columns, Data, TableHeader } from './component'
+import { columns, Data } from './component'
 import { usePosition } from '@/hooks/api/use-position'
 import { useTitle } from '../../_component/header'
 import { DashboardLayout } from '../../_component/layout'
+import { FilterTable, TopTable } from '@/components/data-table/component'
+import { NetworkIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 const links = [
   {
@@ -24,7 +27,14 @@ export default function Employee() {
     <DashboardLayout>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
         <div>
-          <TableHeader />
+          <TopTable>
+            <div className='flex gap-4 items-center'>
+              <NetworkIcon className='text-dark' />
+              <p className='text-dark font-medium'>Jabatan</p>
+            </div>
+            <Button>Tambah</Button>
+          </TopTable>
+          <FilterTable />
           <DataTable
             data={data?.data?.data || tableData}
             columns={columns}

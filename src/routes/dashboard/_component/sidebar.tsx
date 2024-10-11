@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import SidebarMenus from '@/utils/constant/sidebar-menus'
-import LinkGroup from './link-group'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { cn } from '@/utils/cn'
 
@@ -9,7 +6,6 @@ type Props = {
   setOpen: (val: boolean) => void
 }
 export default function Sidebar({ open, setOpen }: Props) {
-  const [openMenu, setOpenMenu] = useState('')
   const isSmall = useMediaQuery('only screen and (max-width : 768px)')
 
   if (isSmall) {
@@ -43,9 +39,7 @@ export default function Sidebar({ open, setOpen }: Props) {
             </div>
             <p className='text-[#3D556B] font-semibold'>BJS ERP</p>
           </div>
-          <div className='p-4 flex flex-col gap-2'>
-           
-          </div>
+          <div className='p-4 flex flex-col gap-2'></div>
         </div>
       </>
     )
@@ -63,9 +57,7 @@ export default function Sidebar({ open, setOpen }: Props) {
         </div>
         <p className='text-[#3D556B] font-semibold'>BJS ERP</p>
       </div>
-      <div className='p-4 flex flex-col gap-2'>
-        
-      </div>
+      <div className='p-4 flex flex-col gap-2'></div>
     </div>
   )
 }

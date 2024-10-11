@@ -9,6 +9,7 @@ import {
 } from '../ui/select'
 import { cn } from '@/utils/cn'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Search from '../common/search'
 
 interface PaginationProps {
   totalPages: number
@@ -116,5 +117,37 @@ export function Limit({ limit }: LimitProps) {
         </SelectGroup>
       </SelectContent>
     </Select>
+  )
+}
+
+type FilterProps = {
+  className?: string
+}
+export function FilterTable({ className }: FilterProps) {
+  return (
+    <div
+      className={cn(
+        'bg-[#F9FAFB] py-2 px-6 border-x border-line flex gap-4 items-center',
+        className
+      )}
+    >
+      <Search placeholder='Cari jabatan' />
+    </div>
+  )
+}
+
+type TopTableProps = React.PropsWithChildren & {
+  className?: string
+}
+export function TopTable({ children, className }: TopTableProps) {
+  return (
+    <div
+      className={cn(
+        'px-6 h-12 flex justify-between items-center border border-line',
+        className
+      )}
+    >
+      {children}
+    </div>
   )
 }
