@@ -218,8 +218,55 @@ export default function AddEmployee({ open, setOpen }: Props) {
                 </div>
               </StepperItem>
               <StepperItem label='Gaji'>
-                <div className='flex flex-col'>
-                  <StepHeader step={2} title='Gaji' />
+                <div>
+                  <StepHeader step={1} title='Gaji' />
+                  <ScrollArea className='h-[56vh] px-2'>
+                    <div className='flex flex-col gap-4 pt-4 mb-4 px-2'>
+                      <FormField
+                        control={form.control}
+                        name='basic_salary'
+                        label='Gaji pokok'
+                        render={(field) => <Input type='text' {...field} />}
+                      />
+                      <Controller
+                        name='type_salary'
+                        control={form.control}
+                        rules={{ required: 'Pilih salah satu' }}
+                        render={({ field, fieldState: { error } }) => (
+                          <div className='space-y-2'>
+                            <FormLabel>Tipe gaji</FormLabel>
+                            <div className='flex justify-between gap-4'>
+                              <RadioV1
+                                {...field}
+                                value='daily'
+                                checked={field.value === 'daily'}
+                              >
+                                Harian
+                              </RadioV1>
+                              <RadioV1
+                                {...field}
+                                value='monthly'
+                                checked={field.value === 'monthly'}
+                              >
+                                Bulanan
+                              </RadioV1>
+                            </div>
+                            {error && (
+                              <p className='text-red-500 text-sm'>
+                                {error.message}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name='overtime_salary'
+                        label='Overtime'
+                        render={(field) => <Input type='text' {...field} />}
+                      />
+                    </div>
+                  </ScrollArea>
                 </div>
               </StepperItem>
               <StepperItem label='Sertifikat'>
