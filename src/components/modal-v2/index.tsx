@@ -34,7 +34,7 @@ function CustomClose({ setOpen }: CloseProps) {
   return (
     <div className='absolute top-0 right-2 h-10 flex items-center'>
       <button
-        className='h-7 w-7  bg-[#ececed] border border-[#EFF0F2] flex justify-center items-center rounded'
+        className='h-7 w-7 flex justify-center items-center rounded'
         onClick={() => setOpen(false)}
       >
         <X className='h-4 w-4' />
