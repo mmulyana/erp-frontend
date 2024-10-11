@@ -1,3 +1,4 @@
+import { XIcon } from 'lucide-react'
 import React, { useState, useRef, useEffect } from 'react'
 
 interface Option {
@@ -79,7 +80,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               }}
               className='ml-1 text-blue-800 font-bold'
             >
-              ×
+              <XIcon className='w-4 h-4 text-dark/50' />
             </button>
           </span>
         ))}
