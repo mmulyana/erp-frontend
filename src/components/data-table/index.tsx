@@ -23,6 +23,7 @@ interface DataTableProps<TData, TValue> {
   withLoading?: boolean
   withPagination?: boolean
   totalPages?: number
+  styleFooter?: string
 }
 
 export function DataTable<TData, TValue>({
@@ -32,6 +33,7 @@ export function DataTable<TData, TValue>({
   withLoading = false,
   withPagination,
   totalPages,
+  styleFooter,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -105,7 +107,12 @@ export function DataTable<TData, TValue>({
         </TableHeader>
         <TableBody>{renderTableBody()}</TableBody>
       </Table>
-      <div className='bg-[#F9FAFB] px-3 border-y border-line w-full h-12 flex justify-between items-center'>
+      <div
+        className={cn(
+          'bg-[#F9FAFB] px-3 border-y border-line w-full h-12 flex justify-between items-center',
+          styleFooter
+        )}
+      >
         {!!withPagination && <Pagination totalPages={totalPages ?? 1} />}
       </div>
     </div>
