@@ -17,6 +17,10 @@ module.exports = {
           blue: '#4154FA',
           'dark-blue': '#2B3EDF',
         },
+        blue: {
+          primary: '#5463E8',
+          darker: '#4550B9',
+        },
         common: {
           neutral: '#83858A',
           background: {
@@ -29,7 +33,7 @@ module.exports = {
           primary: '#2A9D90',
         },
         red: {
-          primary: '#D92E31'
+          primary: '#D92E31',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
