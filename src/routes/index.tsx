@@ -1,9 +1,9 @@
 import LoadingScreen from '@/components/loading-screen'
 import { Routes, Route } from 'react-router-dom'
 import { Suspense } from 'react'
-import { authRoutes } from './auth'
-import { commonRoutes } from './common'
-import { dashboardRoutes } from './dashboard/routes'
+import { authRoutes } from './auth/_routes'
+import { commonRoutes } from './common/_routes'
+import { dashboardRoutes } from './dashboard/_routes'
 import ProtectedRoute from '@/utils/protected-route'
 
 export const routes = [

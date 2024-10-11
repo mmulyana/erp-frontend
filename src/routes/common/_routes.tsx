@@ -1,7 +1,7 @@
 import { PATH } from '@/utils/constant/_paths.ts'
 import { lazy } from 'react'
 
-const NotFound = lazy(() => import('./not-found/index.tsx'))
+const NotFound = lazy(() => import('./not-found.tsx'))
 
 export const commonRoutes = [
   {
