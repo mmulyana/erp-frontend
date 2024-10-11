@@ -39,6 +39,9 @@ export default function AddEmployee({ open, setOpen }: Props) {
       birthDate: '',
       marital_status: '',
       religion: '',
+      basic_salary: '',
+      type_salary: '',
+      overtime_salary: '',
     },
   })
 
