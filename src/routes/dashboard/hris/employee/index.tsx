@@ -1,27 +1,27 @@
 import { DataTable } from '@/components/data-table'
-import { PATH } from '@/utils/constant/_paths'
-import { columns, Data } from './component'
+import {
+  CardStatusEmployee,
+  CardTotalEmployee,
+  chartData1,
+  columns,
+  Data,
+  links,
+} from './component'
 import { usePosition } from '@/hooks/api/use-position'
 import { useTitle } from '../../_component/header'
 import { DashboardLayout } from '../../_component/layout'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { NetworkIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-const links = [
-  {
-    name: 'Dashboard',
-    path: PATH.DASHBOARD_OVERVIEW,
-  },
-  {
-    name: 'Pegawai',
-    path: PATH.EMPLOYEE,
-  },
-]
+import { useMemo } from 'react'
 
 export default function Employee() {
   const { data, isLoading } = usePosition()
   useTitle(links)
+
+  const totalEmployees = useMemo(() => {
+    return chartData1.reduce((acc, curr) => acc + curr.count, 0)
+  }, [])
 
   return (
     <DashboardLayout>
@@ -29,7 +29,7 @@ export default function Employee() {
         <div>
           <HeadTable>
             <div className='flex gap-4 items-center'>
-              <NetworkIcon className='text-dark' />
+              <NetworkIcon className='text-[#989CA8]' />
               <p className='text-dark font-medium'>Jabatan</p>
             </div>
             <Button>Tambah</Button>
@@ -42,7 +42,10 @@ export default function Employee() {
             isLoading={isLoading}
           />
         </div>
-        <div className='h-[calc(100vh-48px)] border-l border-line'></div>
+        <div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>
+          <CardTotalEmployee total={totalEmployees} />
+          <CardStatusEmployee />
+        </div>
       </div>
     </DashboardLayout>
   )
