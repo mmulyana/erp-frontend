@@ -8,8 +8,8 @@ const Overview = lazy(() => import('./index.tsx'))
 
 // HRIS
 const Employee = lazy(() => import('./hris/employee/index.tsx'))
-const EmployeeByPosition = lazy(() => import('./hris/employee/detail/index.tsx'))
-const EmployeeCreate = lazy(() => import('./hris/employee/detail/create/index.tsx'))
+const EmployeeByPosition = lazy(() => import('./hris/employee/detail.tsx'))
+// const EmployeeCreate = lazy(() => import('./hris/employee/detail/create/index.tsx'))
 const Attendance = lazy(() => import('./hris/attendance/index.tsx'))
 const AttendanceSummary = lazy(() => import('./hris/attendance/summary/index.tsx'))
 const CashAdvance = lazy(() => import('./hris/cash-advance/index.tsx'))
@@ -54,10 +54,10 @@ export const dashboardRoutes = [
     path: PATH.EMPLOYEE_DETAIL,
     element: <EmployeeByPosition />,
   },
-  {
-    path: PATH.EMPLOYEE_ADD,
-    element: <EmployeeCreate />,
-  },
+  // {
+  //   path: PATH.EMPLOYEE_ADD,
+  //   element: <EmployeeCreate />,
+  // },
   {
     path: PATH.EMPLOYEE_ATTENDANCE,
     element: <Attendance />,
