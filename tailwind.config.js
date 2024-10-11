@@ -25,6 +25,12 @@ module.exports = {
         },
         dark: '#313951',
         line: '#EFF0F2',
+        green: {
+          primary: '#2A9D90',
+        },
+        red: {
+          primary: '#D92E31'
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
