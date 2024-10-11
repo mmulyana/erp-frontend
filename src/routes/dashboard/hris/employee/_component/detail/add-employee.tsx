@@ -1,10 +1,20 @@
 import { RadioV1 } from '@/components/common/radio-v1'
-import { Stepper, StepperItem } from '@/components/common/stepper-v1'
+import {
+  navigationParams,
+  Stepper,
+  StepperItem,
+} from '@/components/common/stepper-v1'
 import UploadProfile from '@/components/common/upload-profile'
-import { Form, FormField } from '@/components/ui/form'
+import { Form, FormField, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { TabsContent, TabsList, TabsTrigger, Tabs } from '@/components/ui/tabs'
 import { cn } from '@/utils/cn'
@@ -23,6 +33,12 @@ export default function AddEmployee({ open, setOpen }: Props) {
       fullname: '',
       joinedAt: '',
       type: 'permanent',
+      last_education: '',
+      gender: '',
+      birthLocation: '',
+      birthDate: '',
+      marital_status: '',
+      religion: '',
     },
   })
 
@@ -37,52 +53,12 @@ export default function AddEmployee({ open, setOpen }: Props) {
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Stepper
-              navigation={({ nextStep, prevStep, step, totalSteps }) => (
-                <div
-                  className={cn(
-                    'mt-4 flex justify-between items-center px-4',
-                    step === 0 && 'justify-end'
-                  )}
-                >
-                  {step > 0 && (
-                    <button
-                      type='button'
-                      onClick={prevStep}
-                      disabled={step === 0}
-                      className='py-2 px-3 h-fit border border-line text-dark rounded-lg text-sm bg-white'
-                    >
-                      Sebelumnya
-                    </button>
-                  )}
-                  <div className='flex gap-2 items-center justify-end'>
-                    <button
-                      className={cn(
-                        'py-2 px-3 h-fit text-dark rounded-lg text-sm bg-dark/10 border border-transparent',
-                        step === totalSteps &&
-                          'bg-blue-primary border-blue-darker text-white'
-                      )}
-                    >
-                      Simpan
-                    </button>
-                    {step !== totalSteps && (
-                      <button
-                        type='button'
-                        onClick={nextStep}
-                        className='py-2 px-3 h-fit border border-blue-darker text-white bg-blue-primary rounded-lg text-sm'
-                      >
-                        Selanjutnya
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
-            >
+            <Stepper navigation={(params) => <Navigation {...params} />}>
               <StepperItem label='Umum'>
                 <div>
                   <StepHeader step={1} title='Umum' />
-                  <ScrollArea className='h-[56vh] px-4'>
-                    <div className='flex flex-col gap-4 pt-4'>
+                  <ScrollArea className='h-[56vh] px-2'>
+                    <div className='flex flex-col gap-4 pt-4 mb-4 px-2'>
                       <UploadProfile
                         name='photo'
                         preview={preview}
@@ -126,7 +102,7 @@ export default function AddEmployee({ open, setOpen }: Props) {
                         rules={{ required: 'Please select a gender' }}
                         render={({ field, fieldState: { error } }) => (
                           <div className='space-y-2'>
-                            <Label>Status Pegawai</Label>
+                            <FormLabel>Status Pegawai</FormLabel>
                             <div className='flex justify-between gap-4'>
                               <RadioV1
                                 {...field}
@@ -158,6 +134,82 @@ export default function AddEmployee({ open, setOpen }: Props) {
                           </div>
                         )}
                       />
+                      <div className='grid grid-cols-2 gap-4'>
+                        <div className='space-y-2'>
+                          <FormLabel>Pend. Terakhir</FormLabel>
+                          <Select
+                            onValueChange={(val) =>
+                              form.setValue('last_education', val)
+                            }
+                          >
+                            <SelectTrigger className='w-full h-10 rounded-xl shadow-sm'>
+                              <SelectValue placeholder='Pilih pend. terakhir' />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value='SD'>SD</SelectItem>
+                              <SelectItem value='SMP'>SMP</SelectItem>
+                              <SelectItem value='SMA/SMK'>SMA/SMK</SelectItem>
+                              <SelectItem value='D1'>Diploma 1</SelectItem>
+                              <SelectItem value='D2'>Diploma 2</SelectItem>
+                              <SelectItem value='D3'>Diploma 3</SelectItem>
+                              <SelectItem value='D4/S1'>
+                                Diploma 4/Strata 1
+                              </SelectItem>
+                              <SelectItem value='S2'>Strata 2</SelectItem>
+                              <SelectItem value='S3'>Strata 3</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <FormField
+                          control={form.control}
+                          name='gender'
+                          label='Jenis kelamin'
+                          render={(field) => <Input type='text' {...field} />}
+                        />
+                      </div>
+                      <div className='grid grid-cols-2 gap-4'>
+                        <FormField
+                          control={form.control}
+                          name='birthLocation'
+                          label='Tempat lahir'
+                          render={(field) => <Input type='text' {...field} />}
+                        />
+                        <FormField
+                          control={form.control}
+                          name='birthDate'
+                          label='Tanggal lahir'
+                          render={(field) => (
+                            <Input type='date' className='block' {...field} />
+                          )}
+                        />
+                      </div>
+                      <div className='grid grid-cols-2 gap-4'>
+                        <div className='space-y-2'>
+                          <FormLabel>Status Pernikahan</FormLabel>
+                          <Select
+                            onValueChange={(val) =>
+                              form.setValue('marital_status', val)
+                            }
+                          >
+                            <SelectTrigger className='w-full h-10 rounded-xl shadow-sm'>
+                              <SelectValue placeholder='Pilih status' />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value='single'>
+                                belum menikah
+                              </SelectItem>
+                              <SelectItem value='married'>menikah</SelectItem>
+                              <SelectItem value='divorced'>cerai</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <FormField
+                          control={form.control}
+                          name='religion'
+                          label='Agama'
+                          render={(field) => <Input type='text' {...field} />}
+                        />
+                      </div>
                     </div>
                   </ScrollArea>
                 </div>
@@ -186,6 +238,53 @@ function StepHeader({ step, title }: { step: number; title: string }) {
       <div className='pb-1.5 border-b border-line'>
         <p className='text-sm text-dark/50'>Tahap {step}</p>
         <p className='text-dark font-semibold mt-2'>{title}</p>
+      </div>
+    </div>
+  )
+}
+
+function Navigation({
+  nextStep,
+  prevStep,
+  step,
+  totalSteps,
+}: navigationParams) {
+  return (
+    <div
+      className={cn(
+        'mt-4 flex justify-between items-center px-4',
+        step === 0 && 'justify-end'
+      )}
+    >
+      {step > 0 && (
+        <button
+          type='button'
+          onClick={prevStep}
+          disabled={step === 0}
+          className='py-2 px-3 h-fit border border-line text-dark rounded-lg text-sm bg-white'
+        >
+          Sebelumnya
+        </button>
+      )}
+      <div className='flex gap-2 items-center justify-end'>
+        <button
+          className={cn(
+            'py-2 px-3 h-fit text-dark rounded-lg text-sm bg-dark/10 border border-transparent',
+            step === totalSteps &&
+              'bg-blue-primary border-blue-darker text-white'
+          )}
+        >
+          Simpan
+        </button>
+        {step !== totalSteps && (
+          <button
+            type='button'
+            onClick={nextStep}
+            className='py-2 px-3 h-fit border border-blue-darker text-white bg-blue-primary rounded-lg text-sm'
+          >
+            Selanjutnya
+          </button>
+        )}
       </div>
     </div>
   )
