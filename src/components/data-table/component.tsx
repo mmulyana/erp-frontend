@@ -122,8 +122,9 @@ export function Limit({ limit }: LimitProps) {
 
 type FilterProps = {
   className?: string
+  placeholder?: string
 }
-export function FilterTable({ className }: FilterProps) {
+export function FilterTable({ className, placeholder }: FilterProps) {
   return (
     <div
       className={cn(
@@ -131,7 +132,7 @@ export function FilterTable({ className }: FilterProps) {
         className
       )}
     >
-      <Search placeholder='Cari jabatan' />
+      <Search placeholder={placeholder} />
     </div>
   )
 }
