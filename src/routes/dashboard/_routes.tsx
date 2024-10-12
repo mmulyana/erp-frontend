@@ -21,10 +21,7 @@ const ProjectClient = lazy(() => import('./project/client.tsx'))
 
 // INVENTORY
 const Inventory = lazy(() => import('./inventory/index.tsx'))
-const InventorySupplier = lazy(() => import('./inventory/supplier/index.tsx'))
-const InventorySupplierEmployee = lazy(
-  () => import('./inventory/supplier/employee.tsx')
-)
+const InventorySupplier = lazy(() => import('./inventory/supplier.tsx'))
 const InventorySetting = lazy(() => import('./inventory/setting/index.tsx'))
 const InventoryStock = lazy(() => import('./inventory/stock.tsx'))
 
@@ -72,10 +69,6 @@ export const dashboardRoutes = [
   {
     path: PATH.INVENTORY_SUPPLIER,
     element: <InventorySupplier />,
-  },
-  {
-    path: PATH.INVENTORY_SUPPLIER_EMPLOYEE,
-    element: <InventorySupplierEmployee />,
   },
   {
     path: PATH.INVENTORY_SETTING,
