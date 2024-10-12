@@ -20,7 +20,7 @@ export default function Search({ placeholder }: Props) {
         id='SearchV1'
         value={url.name}
         onChange={(e) => setUrl({ name: e.target.value })}
-        placeholder={placeholder || 'search'}
+        placeholder={placeholder || 'Search'}
         className='pl-8 text-sm h-8 py-2 shadow-md shadow-gray-100 border border-[#e3e4e7] rounded-[8px] max-w-32'
       />
     </div>
