@@ -45,10 +45,17 @@ export interface Count {
 export interface Client {
   name: string
   company: Company
+  contact?: string
+  email?: string
+  position?: string
 }
 
 export interface Company {
   logo: string
+  name: string
+  address?: string
+  contact?: string
+  email?: string
 }
 
 export interface Comment {
