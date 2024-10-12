@@ -1,13 +1,20 @@
+import { cn } from '@/utils/cn'
 import { Transaction } from '@/utils/types/api'
 import { format } from 'date-fns'
-import { PackageMinus, PackagePlus } from 'lucide-react'
+import { Package, PackageMinus, PackagePlus, PackageSearch } from 'lucide-react'
 
 type Props = Transaction & {
   isLast?: boolean
+  isFirst?: boolean
 }
-export default function CardActivity({ type, isLast, ...props}: Props) {
+export default function CardActivity({
+  type,
+  isLast,
+  isFirst,
+  ...props
+}: Props) {
   return (
-    <div className='grid grid-cols-[40px_1fr] gap-4'>
+    <div className={cn('grid grid-cols-[40px_1fr] gap-4', isFirst && 'mt-4')}>
       <div className='relative'>
         <div className='w-full h-10 rounded-full bg-white border border-[#EFF0F2] flex items-center justify-center'>
           <TransactionIcon type={type} />
@@ -21,7 +28,9 @@ export default function CardActivity({ type, isLast, ...props}: Props) {
         <p className='text-sm text-[#313951]'>
           Produk {props.qty} kini tersedia, masuk stok sebanyak 10 pcs!
         </p>
-        <p className='text-sm text-[#313951]/50'>{format(props.date, 'dd MMMM yyyy')}</p>
+        <p className='text-sm text-[#313951]/50'>
+          {format(props.date, 'dd MMMM yyyy')}
+        </p>
       </div>
     </div>
   )
@@ -55,5 +64,9 @@ function TransactionIcon({ type }: Pick<Props, 'type'>) {
   if (type == 'out') {
     return <PackageMinus className='w-5 h-5 text-[#313951]' />
   }
-  return null
+  if (type == 'opname') {
+    return <PackageSearch className='w-5 h-5 text-[#313951]' />
+  }
+
+  return <Package className='w-5 h-5 text-[#313951]' />
 }
