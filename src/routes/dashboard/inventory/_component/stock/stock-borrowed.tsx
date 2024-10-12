@@ -17,6 +17,37 @@ import InputFile from '@/components/common/input-file'
 import { Textarea } from '@/components/ui/textarea'
 import { useProject } from '@/hooks/api/use-project'
 import { FilterTable } from '@/components/data-table/component'
+import { ChartConfig } from '@/components/ui/chart'
+import CardBarMultiple from '@/components/chart/bar-multiple'
+import CardBarHorizontal from '@/components/chart/bar-horizontal'
+
+const reportData = [
+  { month: 'April', borrowed: 73, returned: 190 },
+  { month: 'May', borrowed: 209, returned: 130 },
+  { month: 'June', borrowed: 214, returned: 140 },
+]
+const reportConfig = {
+  borrowed: {
+    label: 'Dipinjam',
+    color: 'hsl(var(--chart-1))',
+  },
+  returned: {
+    label: 'Returned',
+    color: 'hsl(var(--chart-2))',
+  },
+} satisfies ChartConfig
+
+const stockData = [
+  { goods: 'Helm', total: 186 },
+  { goods: 'Sepatu', total: 305 },
+  { goods: 'Masker', total: 237 },
+]
+const stockConfig = {
+  total: {
+    label: 'Total',
+    color: '#2A9D90',
+  },
+} satisfies ChartConfig
 
 export default function StockBorrowed() {
   const queryTransaction = useTransaction({ type: 'borrowed' })
@@ -83,6 +114,23 @@ export default function StockBorrowed() {
           isLoading={queryTransaction.isLoading || queryTransaction.isFetching}
           withLoading
           withPagination
+        />
+      </div>
+      <div className='h-[calc(100vh-141px)] border-l border-line p-4 space-y-4'>
+        <CardBarMultiple
+          title='Laporan Peminjaman Bulanan'
+          config={reportConfig}
+          data={reportData}
+          dataKeyBar1='borrowed'
+          dataKeyBar2='returned'
+          dataKeyX='month'
+        />
+        <CardBarHorizontal
+          title='Laporan Stok Dipinjam'
+          config={stockConfig}
+          data={stockData}
+          dataKeyBar='total'
+          dataKeyX='goods'
         />
       </div>
       <Modal title='Tambah peminjaman' open={open} setOpen={setOpen}>
