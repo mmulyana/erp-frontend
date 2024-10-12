@@ -1,4 +1,4 @@
-import LoadingScreen from '@/components/loading-screen'
+import LoadingScreen from '@/components/common/loading-screen'
 import { Routes, Route } from 'react-router-dom'
 import { Suspense } from 'react'
 import { authRoutes } from './auth/_routes'
