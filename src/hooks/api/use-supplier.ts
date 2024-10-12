@@ -24,6 +24,16 @@ export const useSupplier = (params: supplierParams) => {
   })
 }
 
+export const useDetailSupplier = (id: number | null) => {
+  return useQuery({
+    queryKey: [KEYS.SUPPLIER, id],
+    queryFn: async () => {
+      return await http(`${URLS.INVENTORY_SUPPLIER}/${id}`)
+    },
+    enabled: !!id,
+  })
+}
+
 export const useCreateSupplier = () => {
   const queryClient = useQueryClient()
 
