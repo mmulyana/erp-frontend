@@ -1,17 +1,21 @@
-import { buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
-import { Link } from 'react-router-dom'
 
-export default function ButtonLink() {
+type Props = {
+  onClick?: (...val: any) => void
+  className?: string
+}
+export default function ButtonLink({ onClick, className }: Props) {
   return (
-    <Link
+    <Button
       className={cn(
-        buttonVariants({ variant: 'secondary' }),
-        'text-sm rounded-full px-3 py-1 h-fit'
+        'text-sm rounded-full px-3 py-1 h-fit text-dark font-normal',
+        className
       )}
-      to='#'
+      variant='secondary'
+      onClick={onClick}
     >
       Lihat
-    </Link>
+    </Button>
   )
 }
