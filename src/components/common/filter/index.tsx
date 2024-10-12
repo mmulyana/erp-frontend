@@ -13,8 +13,17 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer'
 import React, { useState } from 'react'
+import { cn } from '@/utils/cn'
 
-export default function Filter({ children }: { children?: React.ReactNode }) {
+export default function Filter({
+  children,
+  styleFilter,
+  fill,
+}: {
+  children?: React.ReactNode
+  styleFilter?: string
+  fill?: string
+}) {
   const [open, setOpen] = useState(false)
   const isSmall = useMediaQuery('only screen and (max-width : 768px)')
 
@@ -26,7 +35,10 @@ export default function Filter({ children }: { children?: React.ReactNode }) {
           className='h-8 flex gap-1 items-center border border-[#EFF0F2] rounded-[8px] shadow-md shadow-gray-100'
           onClick={() => setOpen(true)}
         >
-          <FilterIcon className='w-4 h-4 text-[#7277F6]' />
+          <FilterIcon
+            fill={fill || '#DCE1EB'}
+            className={cn('w-4 h-4 text-[#DCE1EB]', styleFilter)}
+          />
           <p className='text-sm text-[#313951]'>Filter</p>
         </Button>
         <Drawer open={open} onOpenChange={setOpen}>
@@ -49,7 +61,10 @@ export default function Filter({ children }: { children?: React.ReactNode }) {
             variant='outline'
             className='h-8 flex gap-1 items-center border border-[#EFF0F2] rounded-[8px] shadow-md shadow-gray-100 pl-1.5 pr-2.5'
           >
-            <FilterIcon fill='#DCE1EB' className='w-4 h-4 text-[#DCE1EB]' />
+            <FilterIcon
+              fill={fill || '#DCE1EB'}
+              className={cn('w-4 h-4 text-[#DCE1EB]', styleFilter)}
+            />
             <p className='text-sm text-[#313951]'>Filter</p>
           </Button>
         </DropdownMenuTrigger>
