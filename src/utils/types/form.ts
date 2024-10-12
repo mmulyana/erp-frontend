@@ -27,3 +27,19 @@ export type CreateTransaction = {
   isReturned?: string
   photo?: File | null
 }
+
+export type CreateClient = {
+  name: string
+  companyId?: number
+  contact?: string
+  email?: string
+  position?: string
+}
+
+export type CreateClientCompany = {
+  photo?: File
+  name: string
+  address?: string
+  contact?: string
+  email?: string
+}
