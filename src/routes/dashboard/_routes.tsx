@@ -17,7 +17,7 @@ const CashAdvance = lazy(() => import('./hris/cash-advance/index.tsx'))
 
 // PROJECT
 const ProjectOverview = lazy(() => import('./project/overview.tsx'))
-const ProjectView = lazy(() => import('./project/view/index.tsx'))
+const ProjectView = lazy(() => import('./project/manage.tsx'))
 
 // INVENTORY
 const Inventory = lazy(() => import('./inventory/index.tsx'))
