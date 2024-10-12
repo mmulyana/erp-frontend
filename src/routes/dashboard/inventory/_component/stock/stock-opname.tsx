@@ -16,6 +16,23 @@ import { Input } from '@/components/ui/input'
 import InputFile from '@/components/common/input-file'
 import { Textarea } from '@/components/ui/textarea'
 import { FilterTable } from '@/components/data-table/component'
+import { ChartConfig } from '@/components/ui/chart'
+import CardBar from '@/components/chart/bar'
+
+const reportData = [
+  { month: 'Januari', total: 186 },
+  { month: 'Februari', total: 305 },
+  { month: 'Maret', total: 237 },
+  { month: 'April', total: 73 },
+  { month: 'Mei', total: 209 },
+  { month: 'Juni', total: 214 },
+]
+const reportConfig = {
+  total: {
+    label: 'Total',
+    color: '#2A9D90',
+  },
+} satisfies ChartConfig
 
 export default function StockOpname() {
   const queryTransaction = useTransaction({ type: 'opname' })
@@ -73,6 +90,15 @@ export default function StockOpname() {
           isLoading={queryTransaction.isLoading || queryTransaction.isFetching}
           withLoading
           withPagination
+        />
+      </div>
+      <div className='h-[calc(100vh-141px)] border-l border-line p-4 space-y-4'>
+        <CardBar
+          title='Laporan Opname Bulanan'
+          config={reportConfig}
+          data={reportData}
+          dataKeyBar='total'
+          dataKeyX='month'
         />
       </div>
       <Modal title='Tambah barang opname' open={open} setOpen={setOpen}>
