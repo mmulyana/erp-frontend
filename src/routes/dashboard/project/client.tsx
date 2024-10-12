@@ -19,6 +19,8 @@ import { DataTable } from '@/components/data-table'
 import { useState } from 'react'
 import DialogAddClient from './_component/client/dialog-add-client'
 import DialogAddCompany from './_component/client/dialog-add-company'
+import DialogDeleteCompany from './_component/client/dialog-delete-company'
+import DialogDeleteClient from './_component/client/dialog-delete-client'
 
 export default function Client() {
   const qClient = useClient()
@@ -57,11 +59,17 @@ export default function Client() {
     },
     {
       id: 'action',
-      cell: () => (
+      cell: ({ row }) => (
         <div className='flex justify-end'>
-          <DropdownEdit className='-translate-x-4'>
+          <DropdownEdit className='-translate-x-3'>
             <DropdownMenuGroup>
-              <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+              <DropdownMenuItem
+                className='flex items-center gap-2 cursor-pointer'
+                onClick={() => {
+                  setSelectedId(row.original.id)
+                  handleDialog('clientDelete', true)
+                }}
+              >
                 <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
                 Hapus
               </DropdownMenuItem>
@@ -100,11 +108,17 @@ export default function Client() {
     },
     {
       id: 'action',
-      cell: () => (
+      cell: ({ row }) => (
         <div className='flex justify-end'>
-          <DropdownEdit>
+          <DropdownEdit className='-translate-x-3'>
             <DropdownMenuGroup>
-              <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+              <DropdownMenuItem
+                className='flex items-center gap-2 cursor-pointer'
+                onClick={() => {
+                  setSelectedId(row.original.id)
+                  handleDialog('companyDelete', true)
+                }}
+              >
                 <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
                 Hapus
               </DropdownMenuItem>
@@ -130,8 +144,12 @@ export default function Client() {
     companyDelete: false,
     dropdown: false,
   })
+  const [selectedId, setSelectedId] = useState<number | null>(null)
   const handleDialog = (type: keyof Dialog, val?: boolean) => {
     setDialog((prev) => ({ ...prev, [type]: val || false }))
+    if (!val && selectedId !== null) {
+      setSelectedId(null)
+    }
   }
 
   return (
@@ -205,6 +223,16 @@ export default function Client() {
       <DialogAddCompany
         open={dialog.companyAdd}
         setOpen={(val) => handleDialog('companyAdd', val)}
+      />
+      <DialogDeleteCompany
+        id={selectedId}
+        open={dialog.companyDelete}
+        setOpen={(val) => handleDialog('companyDelete', val)}
+      />
+      <DialogDeleteClient
+        id={selectedId}
+        open={dialog.clientDelete}
+        setOpen={(val) => handleDialog('clientDelete', val)}
       />
     </DashboardLayout>
   )
