@@ -18,6 +18,8 @@ export const URLS = {
   ATTENDANCE: V1 + '/hris/attendance',
   OVERTIME: V1 + '/hris/overtime',
   PROJECT: V1 + '/project',
+  PROJECT_CLIENT: V1 + '/project/client',
+  PROJECT_CLIENT_COMPANY: V1 + '/project/client/company',
 
   // INVENTORY
   INVENTORY_GOODS: V1 + '/inventory/goods',
