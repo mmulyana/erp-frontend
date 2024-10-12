@@ -1,5 +1,5 @@
 import { XIcon } from 'lucide-react'
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 interface Option {
   value: string
@@ -12,11 +12,11 @@ interface MultiSelectProps {
   options: Option[]
 }
 
-const MultiSelect: React.FC<MultiSelectProps> = ({
+export default function MultiSelect({
   onChange,
   placeholder = 'Select options...',
   options,
-}) => {
+}: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -130,5 +130,3 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     </div>
   )
 }
-
-export default MultiSelect
