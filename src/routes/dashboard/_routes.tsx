@@ -1,9 +1,6 @@
 import { PATH } from '@/utils/constant/_paths.ts'
 import { lazy } from 'react'
 
-// const Permission = lazy(() => import('./account/permission/index.tsx'))
-// const Account = lazy(() => import('./account/account/index.tsx'))
-// const Roles = lazy(() => import('./account/roles/index.tsx'))
 const Overview = lazy(() => import('./index.tsx'))
 
 // HRIS
@@ -30,30 +27,12 @@ const InventorySupplierEmployee = lazy(
 )
 const InventorySetting = lazy(() => import('./inventory/setting/index.tsx'))
 const InventoryStock = lazy(() => import('./inventory/stock.tsx'))
-const InventoryStockIn = lazy(() => import('./inventory/_component/stock/stock-in.tsx'))
-const InventoryStockOut = lazy(() => import('./inventory/_component/stock/stock-out.tsx'))
-const InventoryStockOpname = lazy(() => import('./inventory/_component/stock/stock-opname.tsx'))
-const InventoryStockBorrowed = lazy(
-  () => import('./inventory/_component/stock/stock-borrowed.tsx')
-)
 
 export const dashboardRoutes = [
   {
     path: PATH.DASHBOARD_OVERVIEW,
     element: <Overview />,
   },
-  // {
-  //   path: PATH.ACCOUNT,
-  //   element: <Account />,
-  // },
-  // {
-  //   path: PATH.ROLES,
-  //   element: <Roles />,
-  // },
-  // {
-  //   path: PATH.ROLES_PERMISSION,
-  //   element: <Permission />,
-  // },
   {
     path: PATH.EMPLOYEE,
     element: <Employee />,
@@ -62,10 +41,6 @@ export const dashboardRoutes = [
     path: PATH.EMPLOYEE_DETAIL,
     element: <EmployeeByPosition />,
   },
-  // {
-  //   path: PATH.EMPLOYEE_ADD,
-  //   element: <EmployeeCreate />,
-  // },
   {
     path: PATH.EMPLOYEE_ATTENDANCE,
     element: <Attendance />,
@@ -78,10 +53,6 @@ export const dashboardRoutes = [
     path: PATH.EMPLOYEE_CASH_ADVANCES,
     element: <CashAdvance />,
   },
-  // {
-  //   path: PATH.EMPLOYEE_PAID_LEAVE,
-  //   element: <Leave />,
-  // },
   {
     path: PATH.PROJECT_INDEX,
     element: <ProjectOverview />,
@@ -113,21 +84,5 @@ export const dashboardRoutes = [
   {
     path: PATH.INVENTORY_STOCK,
     element: <InventoryStock />,
-  },
-  {
-    path: PATH.INVENTORY_STOCK_IN,
-    element: <InventoryStockIn />,
-  },
-  {
-    path: PATH.INVENTORY_STOCK_OUT,
-    element: <InventoryStockOut />,
-  },
-  {
-    path: PATH.INVENTORY_STOCK_OPNAME,
-    element: <InventoryStockOpname />,
-  },
-  {
-    path: PATH.INVENTORY_STOCK_BORROWED,
-    element: <InventoryStockBorrowed />,
   },
 ]

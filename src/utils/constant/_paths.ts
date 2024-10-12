@@ -24,11 +24,5 @@ export const PATH = {
   INVENTORY_SUPPLIER: '/dashboard/inventory/supplier',
   INVENTORY_SUPPLIER_EMPLOYEE: '/dashboard/inventory/supplier/:detail',
   INVENTORY_SETTING: '/dashboard/inventory/setting',
-
   INVENTORY_STOCK: '/dashboard/inventory/manage',
-  INVENTORY_STOCK_IN: '/dashboard/inventory/manage/in',
-  INVENTORY_STOCK_OUT: '/dashboard/inventory/manage/out',
-  INVENTORY_STOCK_OPNAME: '/dashboard/inventory/manage/opname',
-  INVENTORY_STOCK_BORROWED: '/dashboard/inventory/manage/borrowed',
-  INVENTORY_STOCK_DETAIL: "/dashboard/inventory/detail/:detail"
 }
