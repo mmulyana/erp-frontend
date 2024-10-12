@@ -101,6 +101,8 @@ export default function Employee() {
     },
   ]
   // COLUMNS
+
+  // HANDLE DIALOG
   type Dialog = { add: boolean; delete: boolean }
   const [dialog, setDialog] = useState<Dialog>({
     add: false,
