@@ -18,6 +18,7 @@ const CashAdvance = lazy(() => import('./hris/cash-advance/index.tsx'))
 // PROJECT
 const ProjectOverview = lazy(() => import('./project/overview.tsx'))
 const ProjectView = lazy(() => import('./project/manage.tsx'))
+const ProjectClient = lazy(() => import('./project/client.tsx'))
 
 // INVENTORY
 const Inventory = lazy(() => import('./inventory/index.tsx'))
@@ -79,8 +80,12 @@ export const dashboardRoutes = [
     element: <ProjectOverview />,
   },
   {
-    path: PATH.PROJECT_VIEW,
+    path: PATH.PROJECT_MANAGE,
     element: <ProjectView />,
+  },
+  {
+    path: PATH.PROJECT_CLIENT,
+    element: <ProjectClient />,
   },
   {
     path: PATH.INVENTORY_INDEX,
