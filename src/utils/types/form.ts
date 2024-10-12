@@ -37,7 +37,7 @@ export type CreateClient = {
 }
 
 export type CreateClientCompany = {
-  photo?: File
+  photo?: File | null
   name: string
   address?: string
   contact?: string
