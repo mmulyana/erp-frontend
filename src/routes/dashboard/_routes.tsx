@@ -11,7 +11,9 @@ const Employee = lazy(() => import('./hris/employee/index.tsx'))
 const EmployeeByPosition = lazy(() => import('./hris/employee/detail.tsx'))
 // const EmployeeCreate = lazy(() => import('./hris/employee/detail/create/index.tsx'))
 const Attendance = lazy(() => import('./hris/attendance/index.tsx'))
-const AttendanceSummary = lazy(() => import('./hris/attendance/summary/index.tsx'))
+const AttendanceSummary = lazy(
+  () => import('./hris/attendance/summary/index.tsx')
+)
 const CashAdvance = lazy(() => import('./hris/cash-advance/index.tsx'))
 // const Leave = lazy(() => import('./hris/leave/index.tsx'))
 
@@ -23,12 +25,17 @@ const ProjectClient = lazy(() => import('./project/client.tsx'))
 // INVENTORY
 const Inventory = lazy(() => import('./inventory/index.tsx'))
 const InventorySupplier = lazy(() => import('./inventory/supplier/index.tsx'))
-const InventorySupplierEmployee = lazy(() => import('./inventory/supplier/employee.tsx'))
+const InventorySupplierEmployee = lazy(
+  () => import('./inventory/supplier/employee.tsx')
+)
 const InventorySetting = lazy(() => import('./inventory/setting/index.tsx'))
-const InventoryStockIn = lazy(() => import('./inventory/manage/stock-in.tsx'))
-const InventoryStockOut = lazy(() => import('./inventory/manage/stock-out.tsx'))
-const InventoryStockOpname = lazy(() => import('./inventory/manage/stock-opname.tsx'))
-const InventoryStockBorrowed = lazy(() => import('./inventory/manage/stock-borrowed.tsx'))
+const InventoryStock = lazy(() => import('./inventory/stock.tsx'))
+const InventoryStockIn = lazy(() => import('./inventory/_component/stock/stock-in.tsx'))
+const InventoryStockOut = lazy(() => import('./inventory/_component/stock/stock-out.tsx'))
+const InventoryStockOpname = lazy(() => import('./inventory/_component/stock/stock-opname.tsx'))
+const InventoryStockBorrowed = lazy(
+  () => import('./inventory/_component/stock/stock-borrowed.tsx')
+)
 
 export const dashboardRoutes = [
   {
@@ -102,6 +109,10 @@ export const dashboardRoutes = [
   {
     path: PATH.INVENTORY_SETTING,
     element: <InventorySetting />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK,
+    element: <InventoryStock />,
   },
   {
     path: PATH.INVENTORY_STOCK_IN,

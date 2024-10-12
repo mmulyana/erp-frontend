@@ -2,14 +2,10 @@ import {
   useCreateTransaction,
   useTransaction,
 } from '@/hooks/api/use-transaction'
-import { DashboardLayout } from '../../_component/layout'
 import { useMemo, useState } from 'react'
-import Container from '../../_component/container'
 import { DataTable } from '@/components/data-table'
-import { column } from './_component/column'
-import TopHeader from '../_component/top-header'
+import { column } from './column'
 import { useGoods } from '@/hooks/api/use-goods'
-import { useSupplier } from '@/hooks/api/use-supplier'
 import { useForm } from 'react-hook-form'
 import { CreateTransaction } from '@/utils/types/form'
 import Modal, { ModalContainer } from '@/components/modal-v2'
@@ -19,9 +15,11 @@ import { CommandItem } from '@/components/ui/command'
 import { Input } from '@/components/ui/input'
 import InputFile from '@/components/common/input-file'
 import { Textarea } from '@/components/ui/textarea'
+import { useProject } from '@/hooks/api/use-project'
+import { FilterTable } from '@/components/data-table/component'
 
-export default function StockOut() {
-  const queryTransaction = useTransaction({ type: 'out' })
+export default function StockBorrowed() {
+  const queryTransaction = useTransaction({ type: 'borrowed' })
   const data = useMemo(
     () => queryTransaction.data?.data?.data,
     [queryTransaction.isLoading, queryTransaction.isFetching]
@@ -32,6 +30,12 @@ export default function StockOut() {
     () => queryGoods.data?.data.data || [],
     [queryGoods.isLoading, queryGoods.isFetching]
   )
+  const queryProject = useProject()
+  const projects = useMemo(
+    () => queryProject.data?.data.data || [],
+    [queryProject.isLoading, queryProject.isFetching]
+  )
+  console.log(projects)
 
   // HANDLE FORM
   const { mutate } = useCreateTransaction()
@@ -41,11 +45,11 @@ export default function StockOut() {
       date: '',
       description: '',
       goodsId: '',
+      projectId: '',
       isReturned: '',
       photo: null as File | null,
-      price: '',
       qty: '',
-      type: 'out',
+      type: 'borrowed',
     },
   })
 
@@ -64,20 +68,24 @@ export default function StockOut() {
 
   const [open, setOpen] = useState(false)
   const [openGoods, setOpenGoods] = useState(false)
+  const [openProject, setOpenProject] = useState(false)
 
   return (
-    <DashboardLayout>
-      <Container className='flex flex-col gap-4'>
-        <TopHeader title='Barang keluar' onClick={() => setOpen(true)} />
+    <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
+      <div>
+        {/* <TopHeader title='Peminjaman' onClick={() => setOpen(true)} /> */}
+        <FilterTable />
         <DataTable
-          columns={column.filter((col) => col.id !== 'supplier')}
+          columns={column.filter(
+            (col) => col.id !== 'supplier' && col.id !== 'price'
+          )}
           data={data || []}
           isLoading={queryTransaction.isLoading || queryTransaction.isFetching}
           withLoading
           withPagination
         />
-      </Container>
-      <Modal title='Tambah barang keluar' open={open} setOpen={setOpen}>
+      </div>
+      <Modal title='Tambah peminjaman' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <ModalContainer setOpen={setOpen}>
@@ -105,20 +113,36 @@ export default function StockOut() {
                   </CommandItem>
                 ))}
               </SelectV1>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                <FormField
-                  label='Kuantitas'
-                  control={form.control}
-                  name='qty'
-                  render={({ field }) => <Input type='number' {...field} />}
-                />
-                <FormField
-                  label='Harga'
-                  control={form.control}
-                  name='price'
-                  render={({ field }) => <Input type='number' {...field} />}
-                />
-              </div>
+              <SelectV1
+                open={openProject}
+                setOpen={setOpenProject}
+                name='projectId'
+                placeholder='Pilih proyek'
+                preview={(val) => (
+                  <span>
+                    {projects.find((s: any) => s.id === Number(val))?.name}
+                  </span>
+                )}
+              >
+                {projects.map((item: any) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.id.toString()}
+                    onSelect={(value) => {
+                      form.setValue('projectId', value)
+                      setOpenProject(false)
+                    }}
+                  >
+                    <span>{item.name}</span>
+                  </CommandItem>
+                ))}
+              </SelectV1>
+              <FormField
+                label='Kuantitas'
+                control={form.control}
+                name='qty'
+                render={({ field }) => <Input type='number' {...field} />}
+              />
               <FormField
                 label='Tanggal'
                 control={form.control}
@@ -138,6 +162,6 @@ export default function StockOut() {
           </form>
         </Form>
       </Modal>
-    </DashboardLayout>
+    </div>
   )
 }

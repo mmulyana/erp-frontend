@@ -2,26 +2,23 @@ import {
   useCreateTransaction,
   useTransaction,
 } from '@/hooks/api/use-transaction'
-import { DashboardLayout } from '../../_component/layout'
 import { useMemo, useState } from 'react'
-import Container from '../../_component/container'
 import { DataTable } from '@/components/data-table'
-import { column } from './_component/column'
-import TopHeader from '../_component/top-header'
+import { column } from './column'
+import { useGoods } from '@/hooks/api/use-goods'
 import { useForm } from 'react-hook-form'
 import { CreateTransaction } from '@/utils/types/form'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
+import SelectV1 from '@/components/common/select/select-v1'
+import { CommandItem } from '@/components/ui/command'
 import { Input } from '@/components/ui/input'
 import InputFile from '@/components/common/input-file'
-import { useGoods } from '@/hooks/api/use-goods'
-import { CommandItem } from '@/components/ui/command'
 import { Textarea } from '@/components/ui/textarea'
-import { useSupplier } from '@/hooks/api/use-supplier'
-import Select from '@/components/common/select/select-v1'
+import { FilterTable } from '@/components/data-table/component'
 
-export default function StockIn() {
-  const queryTransaction = useTransaction({ type: 'in' })
+export default function StockOpname() {
+  const queryTransaction = useTransaction({ type: 'opname' })
   const data = useMemo(
     () => queryTransaction.data?.data?.data,
     [queryTransaction.isLoading, queryTransaction.isFetching]
@@ -32,11 +29,6 @@ export default function StockIn() {
     () => queryGoods.data?.data.data || [],
     [queryGoods.isLoading, queryGoods.isFetching]
   )
-  const querySupplier = useSupplier({})
-  const suppliers = useMemo(
-    () => querySupplier.data?.data.data || [],
-    [querySupplier.isLoading, querySupplier.isFetching]
-  )
 
   // HANDLE FORM
   const { mutate } = useCreateTransaction()
@@ -46,12 +38,9 @@ export default function StockIn() {
       date: '',
       description: '',
       goodsId: '',
-      isReturned: '',
       photo: null as File | null,
-      price: '',
       qty: '',
-      supplierId: '',
-      type: 'in',
+      type: 'opname',
     },
   })
 
@@ -70,25 +59,27 @@ export default function StockIn() {
 
   const [open, setOpen] = useState(false)
   const [openGoods, setOpenGoods] = useState(false)
-  const [openSupplier, setOpenSupplier] = useState(false)
 
   return (
-    <DashboardLayout>
-      <Container className='flex flex-col gap-4'>
-        <TopHeader title='Barang masuk' onClick={() => setOpen(true)} />
+    <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
+      <div>
+        {/* <TopHeader title='Opname' onClick={() => setOpen(true)} /> */}
+        <FilterTable />
         <DataTable
-          columns={column}
+          columns={column.filter(
+            (col) => col.id !== 'supplier' && col.id !== 'price'
+          )}
           data={data || []}
-          isLoading={queryTransaction.isLoading || queryGoods.isFetching}
+          isLoading={queryTransaction.isLoading || queryTransaction.isFetching}
           withLoading
           withPagination
         />
-      </Container>
-      <Modal title='Tambah barang masuk' open={open} setOpen={setOpen}>
+      </div>
+      <Modal title='Tambah barang opname' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <ModalContainer setOpen={setOpen}>
-              <Select
+              <SelectV1
                 open={openGoods}
                 setOpen={setOpenGoods}
                 name='goodsId'
@@ -111,46 +102,13 @@ export default function StockIn() {
                     <span>{item.name}</span>
                   </CommandItem>
                 ))}
-              </Select>
-              <Select
-                open={openSupplier}
-                setOpen={setOpenSupplier}
-                name='supplierId'
-                placeholder='Pilih toko'
-                preview={(val) => (
-                  <span>
-                    {suppliers.find((s: any) => s.id === Number(val))?.name}
-                  </span>
-                )}
-              >
-                {goods.map((item: any) => (
-                  <CommandItem
-                    key={item.id}
-                    value={item.id.toString()}
-                    onSelect={(value) => {
-                      form.setValue('supplierId', value)
-                      setOpenSupplier(false)
-                    }}
-                  >
-                    <span>{item.name}</span>
-                  </CommandItem>
-                ))}
-              </Select>
-
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                <FormField
-                  label='Kuantitas'
-                  control={form.control}
-                  name='qty'
-                  render={({ field }) => <Input type='number' {...field} />}
-                />
-                <FormField
-                  label='Harga'
-                  control={form.control}
-                  name='price'
-                  render={({ field }) => <Input type='number' {...field} />}
-                />
-              </div>
+              </SelectV1>
+              <FormField
+                label='Kuantitas'
+                control={form.control}
+                name='qty'
+                render={({ field }) => <Input type='number' {...field} />}
+              />
               <FormField
                 label='Tanggal'
                 control={form.control}
@@ -170,6 +128,6 @@ export default function StockIn() {
           </form>
         </Form>
       </Modal>
-    </DashboardLayout>
+    </div>
   )
 }

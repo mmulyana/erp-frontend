@@ -2,26 +2,24 @@ import {
   useCreateTransaction,
   useTransaction,
 } from '@/hooks/api/use-transaction'
-import { DashboardLayout } from '../../_component/layout'
 import { useMemo, useState } from 'react'
-import Container from '../../_component/container'
 import { DataTable } from '@/components/data-table'
-import { column } from './_component/column'
-import TopHeader from '../_component/top-header'
-import { useGoods } from '@/hooks/api/use-goods'
+import { column } from './column'
 import { useForm } from 'react-hook-form'
 import { CreateTransaction } from '@/utils/types/form'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
-import SelectV1 from '@/components/common/select/select-v1'
-import { CommandItem } from '@/components/ui/command'
 import { Input } from '@/components/ui/input'
 import InputFile from '@/components/common/input-file'
+import { useGoods } from '@/hooks/api/use-goods'
+import { CommandItem } from '@/components/ui/command'
 import { Textarea } from '@/components/ui/textarea'
-import { useProject } from '@/hooks/api/use-project'
+import { useSupplier } from '@/hooks/api/use-supplier'
+import Select from '@/components/common/select/select-v1'
+import { FilterTable } from '@/components/data-table/component'
 
-export default function StockBorrowed() {
-  const queryTransaction = useTransaction({ type: 'borrowed' })
+export default function StockIn() {
+  const queryTransaction = useTransaction({ type: 'in' })
   const data = useMemo(
     () => queryTransaction.data?.data?.data,
     [queryTransaction.isLoading, queryTransaction.isFetching]
@@ -32,12 +30,11 @@ export default function StockBorrowed() {
     () => queryGoods.data?.data.data || [],
     [queryGoods.isLoading, queryGoods.isFetching]
   )
-  const queryProject = useProject()
-  const projects = useMemo(
-    () => queryProject.data?.data.data || [],
-    [queryProject.isLoading, queryProject.isFetching]
+  const querySupplier = useSupplier({})
+  const suppliers = useMemo(
+    () => querySupplier.data?.data.data || [],
+    [querySupplier.isLoading, querySupplier.isFetching]
   )
-  console.log(projects)
 
   // HANDLE FORM
   const { mutate } = useCreateTransaction()
@@ -47,11 +44,12 @@ export default function StockBorrowed() {
       date: '',
       description: '',
       goodsId: '',
-      projectId: '',
       isReturned: '',
-      photo: null as File | null,
+      photo: undefined,
+      price: '',
       qty: '',
-      type: 'borrowed',
+      supplierId: '',
+      type: 'in',
     },
   })
 
@@ -70,27 +68,26 @@ export default function StockBorrowed() {
 
   const [open, setOpen] = useState(false)
   const [openGoods, setOpenGoods] = useState(false)
-  const [openProject, setOpenProject] = useState(false)
+  const [openSupplier, setOpenSupplier] = useState(false)
 
   return (
-    <DashboardLayout>
-      <Container className='flex flex-col gap-4'>
-        <TopHeader title='Peminjaman' onClick={() => setOpen(true)} />
+    <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
+      <div>
+        <FilterTable />
+        {/* <TopHeader title='Barang masuk' onClick={() => setOpen(true)} /> */}
         <DataTable
-          columns={column.filter(
-            (col) => col.id !== 'supplier' && col.id !== 'price'
-          )}
+          columns={column}
           data={data || []}
-          isLoading={queryTransaction.isLoading || queryTransaction.isFetching}
+          isLoading={queryTransaction.isLoading || queryGoods.isFetching}
           withLoading
           withPagination
         />
-      </Container>
-      <Modal title='Tambah peminjaman' open={open} setOpen={setOpen}>
+      </div>
+      <Modal title='Tambah barang masuk' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <ModalContainer setOpen={setOpen}>
-              <SelectV1
+              <Select
                 open={openGoods}
                 setOpen={setOpenGoods}
                 name='goodsId'
@@ -113,37 +110,46 @@ export default function StockBorrowed() {
                     <span>{item.name}</span>
                   </CommandItem>
                 ))}
-              </SelectV1>
-              <SelectV1
-                open={openProject}
-                setOpen={setOpenProject}
-                name='projectId'
-                placeholder='Pilih proyek'
+              </Select>
+              <Select
+                open={openSupplier}
+                setOpen={setOpenSupplier}
+                name='supplierId'
+                placeholder='Pilih toko'
                 preview={(val) => (
                   <span>
-                    {projects.find((s: any) => s.id === Number(val))?.name}
+                    {suppliers.find((s: any) => s.id === Number(val))?.name}
                   </span>
                 )}
               >
-                {projects.map((item: any) => (
+                {goods.map((item: any) => (
                   <CommandItem
                     key={item.id}
                     value={item.id.toString()}
                     onSelect={(value) => {
-                      form.setValue('projectId', value)
-                      setOpenProject(false)
+                      form.setValue('supplierId', value)
+                      setOpenSupplier(false)
                     }}
                   >
                     <span>{item.name}</span>
                   </CommandItem>
                 ))}
-              </SelectV1>
-              <FormField
-                label='Kuantitas'
-                control={form.control}
-                name='qty'
-                render={({ field }) => <Input type='number' {...field} />}
-              />
+              </Select>
+
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <FormField
+                  label='Kuantitas'
+                  control={form.control}
+                  name='qty'
+                  render={({ field }) => <Input type='number' {...field} />}
+                />
+                <FormField
+                  label='Harga'
+                  control={form.control}
+                  name='price'
+                  render={({ field }) => <Input type='number' {...field} />}
+                />
+              </div>
               <FormField
                 label='Tanggal'
                 control={form.control}
@@ -163,6 +169,6 @@ export default function StockBorrowed() {
           </form>
         </Form>
       </Modal>
-    </DashboardLayout>
+    </div>
   )
 }

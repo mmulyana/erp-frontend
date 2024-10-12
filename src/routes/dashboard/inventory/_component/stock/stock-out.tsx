@@ -2,12 +2,9 @@ import {
   useCreateTransaction,
   useTransaction,
 } from '@/hooks/api/use-transaction'
-import { DashboardLayout } from '../../_component/layout'
 import { useMemo, useState } from 'react'
-import Container from '../../_component/container'
 import { DataTable } from '@/components/data-table'
-import { column } from './_component/column'
-import TopHeader from '../_component/top-header'
+import { column } from './column'
 import { useGoods } from '@/hooks/api/use-goods'
 import { useForm } from 'react-hook-form'
 import { CreateTransaction } from '@/utils/types/form'
@@ -18,9 +15,10 @@ import { CommandItem } from '@/components/ui/command'
 import { Input } from '@/components/ui/input'
 import InputFile from '@/components/common/input-file'
 import { Textarea } from '@/components/ui/textarea'
+import { FilterTable } from '@/components/data-table/component'
 
-export default function StockOpname() {
-  const queryTransaction = useTransaction({ type: 'opname' })
+export default function StockOut() {
+  const queryTransaction = useTransaction({ type: 'out' })
   const data = useMemo(
     () => queryTransaction.data?.data?.data,
     [queryTransaction.isLoading, queryTransaction.isFetching]
@@ -40,9 +38,11 @@ export default function StockOpname() {
       date: '',
       description: '',
       goodsId: '',
+      isReturned: '',
       photo: null as File | null,
+      price: '',
       qty: '',
-      type: 'opname',
+      type: 'out',
     },
   })
 
@@ -63,20 +63,19 @@ export default function StockOpname() {
   const [openGoods, setOpenGoods] = useState(false)
 
   return (
-    <DashboardLayout>
-      <Container className='flex flex-col gap-4'>
-        <TopHeader title='Opname' onClick={() => setOpen(true)} />
+    <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
+      <div>
+        {/* <TopHeader title='Barang keluar' onClick={() => setOpen(true)} /> */}
+        <FilterTable />
         <DataTable
-          columns={column.filter(
-            (col) => col.id !== 'supplier' && col.id !== 'price'
-          )}
+          columns={column.filter((col) => col.id !== 'supplier')}
           data={data || []}
           isLoading={queryTransaction.isLoading || queryTransaction.isFetching}
           withLoading
           withPagination
         />
-      </Container>
-      <Modal title='Tambah barang opname' open={open} setOpen={setOpen}>
+      </div>
+      <Modal title='Tambah barang keluar' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <ModalContainer setOpen={setOpen}>
@@ -104,12 +103,20 @@ export default function StockOpname() {
                   </CommandItem>
                 ))}
               </SelectV1>
-              <FormField
-                label='Kuantitas'
-                control={form.control}
-                name='qty'
-                render={({ field }) => <Input type='number' {...field} />}
-              />
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <FormField
+                  label='Kuantitas'
+                  control={form.control}
+                  name='qty'
+                  render={({ field }) => <Input type='number' {...field} />}
+                />
+                <FormField
+                  label='Harga'
+                  control={form.control}
+                  name='price'
+                  render={({ field }) => <Input type='number' {...field} />}
+                />
+              </div>
               <FormField
                 label='Tanggal'
                 control={form.control}
@@ -129,6 +136,6 @@ export default function StockOpname() {
           </form>
         </Form>
       </Modal>
-    </DashboardLayout>
+    </div>
   )
 }
