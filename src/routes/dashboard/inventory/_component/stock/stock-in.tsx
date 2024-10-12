@@ -115,7 +115,7 @@ export default function StockIn() {
       </div>
       <div className='h-[calc(100vh-141px)] border-l border-line p-4 space-y-4'>
         <CardBar
-          title='Laporan Stok Masuk Bulanan'
+          title='Laporan Total Stok Masuk Bulanan'
           config={reportConfig}
           data={reportData}
           dataKeyBar='total'
