@@ -9,10 +9,16 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Client as ClientType, Company } from '@/utils/types/api'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import {
+  DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
+import { useState } from 'react'
+import DialogAddClient from './_component/client/dialog-add-client'
+import DialogAddCompany from './_component/client/dialog-add-company'
 
 export default function Client() {
   const qClient = useClient()
@@ -53,7 +59,7 @@ export default function Client() {
       id: 'action',
       cell: () => (
         <div className='flex justify-end'>
-          <DropdownEdit>
+          <DropdownEdit className='-translate-x-4'>
             <DropdownMenuGroup>
               <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
                 <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
@@ -108,6 +114,26 @@ export default function Client() {
       ),
     },
   ]
+
+  // HANDLE DIALOG
+  type Dialog = {
+    clientAdd: boolean
+    clientDelete: boolean
+    companyAdd: boolean
+    companyDelete: boolean
+    dropdown: boolean
+  }
+  const [dialog, setDialog] = useState<Dialog>({
+    clientAdd: false,
+    clientDelete: false,
+    companyAdd: false,
+    companyDelete: false,
+    dropdown: false,
+  })
+  const handleDialog = (type: keyof Dialog, val?: boolean) => {
+    setDialog((prev) => ({ ...prev, [type]: val || false }))
+  }
+
   return (
     <DashboardLayout>
       <TitlePage className='mb-2'>
@@ -116,7 +142,38 @@ export default function Client() {
           <p className='text-dark font-medium'>Klien</p>
         </div>
         <div className='flex gap-2 items-center'>
-          <Button>Tambah</Button>
+          <DropdownMenu
+            open={dialog.dropdown}
+            onOpenChange={(val) => handleDialog('dropdown', val)}
+          >
+            <DropdownMenuTrigger>
+              <Button>Tambah</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              side='bottom'
+              sideOffset={2}
+              className='min-w-full -translate-x-[16px] px-0 py-0.5'
+            >
+              <DropdownMenuItem
+                className='rounded-none cursor-pointer'
+                onClick={() => {
+                  handleDialog('clientAdd', true)
+                  handleDialog('dropdown')
+                }}
+              >
+                User baru
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className='rounded-none cursor-pointer'
+                onClick={() => {
+                  handleDialog('companyAdd', true)
+                  handleDialog('dropdown')
+                }}
+              >
+                Perusahaan baru
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </TitlePage>
       <Tabs>
@@ -141,6 +198,14 @@ export default function Client() {
           />
         </Tab>
       </Tabs>
+      <DialogAddClient
+        open={dialog.clientAdd}
+        setOpen={(val) => handleDialog('clientAdd', val)}
+      />
+      <DialogAddCompany
+        open={dialog.companyAdd}
+        setOpen={(val) => handleDialog('companyAdd', val)}
+      />
     </DashboardLayout>
   )
 }
