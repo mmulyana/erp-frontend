@@ -11,6 +11,8 @@ import { DataTable } from '@/components/data-table'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { BriefcaseBusiness } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useState } from 'react'
+import AddProject from './_component/add-project'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
@@ -52,6 +54,21 @@ export default function Dashboard() {
     },
   ]
 
+  // handle dialog
+  type Dialog = { add: boolean; delete: boolean }
+  const [dialog, setDialog] = useState<Dialog>({
+    add: false,
+    delete: false,
+  })
+  const [selectedId, setSelectedId] = useState<number | null>(null)
+
+  const handleDialog = (type: keyof Dialog, val?: boolean) => {
+    setDialog((prev) => ({ ...prev, [type]: val || false }))
+    if (!val && selectedId !== null) {
+      setSelectedId(null)
+    }
+  }
+
   return (
     <DashboardLayout>
       <div className='p-6 grid grid-cols-1 md:grid-cols-3 gap-6'>
@@ -64,7 +81,10 @@ export default function Dashboard() {
               <BriefcaseBusiness className='text-[#989CA8]' />
               <p className='text-dark font-medium'>Proyek</p>
             </div>
-            <div className='flex gap-2 items-center'>
+            <div
+              className='flex gap-2 items-center'
+              onClick={() => handleDialog('add', true)}
+            >
               <Button>Proyek Baru</Button>
             </div>
           </HeadTable>
@@ -79,6 +99,10 @@ export default function Dashboard() {
           />
         </div>
       </div>
+      <AddProject
+        open={dialog.add}
+        setOpen={(val) => handleDialog('add', val)}
+      />
     </DashboardLayout>
   )
 }
