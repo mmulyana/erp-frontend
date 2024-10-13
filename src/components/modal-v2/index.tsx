@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import { Dialog, DialogContent } from '../ui/dialog'
 import { Button } from '../ui/button'
+import { cn } from '@/utils/cn'
 
 type Props = {
   open: boolean
@@ -11,7 +12,7 @@ type Props = {
 }
 export default function Modal({ open, setOpen, title, icon, children }: Props) {
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal>
       <DialogContent
         className='p-0 border-none gap-0'
         showClose={false}
@@ -47,11 +48,12 @@ function CustomClose({ setOpen }: CloseProps) {
 type ModalProps = {
   children: React.ReactNode
   setOpen: (val: boolean) => void
+  className?: string
 }
-export function ModalContainer({ children, setOpen }: ModalProps) {
+export function ModalContainer({ children, setOpen, className }: ModalProps) {
   return (
     <>
-      <div className='p-4 space-y-4'>{children}</div>
+      <div className={cn('p-4 space-y-4', className)}>{children}</div>
       <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
         <Button
           type='button'
