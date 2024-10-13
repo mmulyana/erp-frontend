@@ -21,6 +21,7 @@ type Props = {
   name: string
   preview: (val: string) => React.ReactNode
   placeholder?: string
+  customPlaceholder?: React.ReactNode
   children: React.ReactNode
   onSearch?: (value: string) => void
   emptyComponent?: (searchValue: string) => React.ReactNode
@@ -39,6 +40,7 @@ export default function SelectV1({
   emptyComponent,
   classNameBtn,
   side,
+  customPlaceholder,
 }: Props) {
   const form = useFormContext()
   const [searchValue, setSearchValue] = useState('')
@@ -56,22 +58,21 @@ export default function SelectV1({
       control={form.control}
       render={({ field }) => (
         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger className='w-full'>
-            <Button
-              size='sm'
-              variant="outline"
-              className={cn(
-                'w-full justify-start',
-                classNameBtn
-              )}
-              type='button'
-            >
-              {field.value ? (
-                preview(field.value)
-              ) : (
+          <PopoverTrigger>
+            {field.value ? (
+              preview(field.value)
+            ) : customPlaceholder ? (
+              customPlaceholder
+            ) : (
+              <Button
+                size='sm'
+                variant='outline'
+                className={cn('w-full justify-start', classNameBtn)}
+                type='button'
+              >
                 <span>{placeholder ?? 'Select data'}</span>
-              )}
-            </Button>
+              </Button>
+            )}
           </PopoverTrigger>
           <PopoverContent className='p-0' side={side || 'bottom'} align='start'>
             <Command>
