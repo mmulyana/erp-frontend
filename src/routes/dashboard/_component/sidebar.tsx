@@ -1,5 +1,7 @@
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { cn } from '@/utils/cn'
+import { PATH } from '@/utils/constant/_paths'
+import { Link } from 'react-router-dom'
 
 type Props = {
   open: boolean
@@ -57,7 +59,94 @@ export default function Sidebar({ open, setOpen }: Props) {
         </div>
         <p className='text-[#3D556B] font-semibold'>BJS ERP</p>
       </div>
-      <div className='p-4 flex flex-col gap-2'></div>
+      <div className='p-4 flex flex-col gap-2'>
+        {menus.map((menu) => (
+          <div key={`menus-${menu.name}`}>
+            {menu.path ? (
+              <Link to={menu.path} className='text-dark'>
+                {menu.name}
+              </Link>
+            ) : (
+              <p className='text-dark/50 text-xs'>{menu.name}</p>
+            )}
+            {menu.submenus && (
+              <div className='mt-3 flex flex-col gap-3'>
+                {menu.submenus.map((submenu) => (
+                  <Link
+                    key={`submenu-${submenu.name}`}
+                    to={submenu.path}
+                    className='text-dark text-sm'
+                  >
+                    {submenu.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
+
+const menus = [
+  {
+    name: 'Dashboard',
+    path: PATH.DASHBOARD_OVERVIEW,
+    submenus: null,
+  },
+  {
+    name: 'HRIS',
+    path: null,
+    submenus: [
+      {
+        name: 'Pegawai',
+        path: PATH.EMPLOYEE,
+      },
+      {
+        name: 'Absen',
+        path: PATH.EMPLOYEE_ATTENDANCE,
+      },
+      {
+        name: 'Kasbon',
+        path: PATH.EMPLOYEE_CASH_ADVANCES,
+      },
+    ],
+  },
+  {
+    name: 'Proyek',
+    path: null,
+    submenus: [
+      {
+        name: 'Ringkasan',
+        path: PATH.PROJECT_INDEX,
+      },
+      {
+        name: 'Kelola',
+        path: PATH.PROJECT_MANAGE,
+      },
+      {
+        name: 'Klien',
+        path: PATH.PROJECT_CLIENT,
+      },
+    ],
+  },
+  {
+    name: 'Inventaris',
+    path: null,
+    submenus: [
+      {
+        name: 'Dashboard',
+        path: PATH.INVENTORY_INDEX,
+      },
+      {
+        name: 'Kelola',
+        path: PATH.INVENTORY_STOCK,
+      },
+      {
+        name: 'Supplier',
+        path: PATH.INVENTORY_SUPPLIER,
+      },
+    ],
+  },
+]
