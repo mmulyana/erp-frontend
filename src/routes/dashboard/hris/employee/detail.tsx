@@ -91,7 +91,11 @@ export default function Detail() {
           </Card>
         </div>
       </div>
-      <AddEmployee open={dialog.add} setOpen={() => handleDialog('add')} />
+      <AddEmployee
+        open={dialog.add}
+        setOpen={() => handleDialog('add')}
+        id={positionId}
+      />
     </DashboardLayout>
   )
 }
