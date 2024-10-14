@@ -35,7 +35,7 @@ export default function AddEmployee({ open, setOpen }: Props) {
       type: 'permanent',
       last_education: '',
       gender: '',
-      birthLocation: '',
+      place_of_birth: '',
       birthDate: '',
       marital_status: '',
       religion: '',
@@ -173,7 +173,7 @@ export default function AddEmployee({ open, setOpen }: Props) {
                       <div className='grid grid-cols-2 gap-4'>
                         <FormField
                           control={form.control}
-                          name='birthLocation'
+                          name='place_of_birth'
                           label='Tempat lahir'
                           render={(field) => <Input type='text' {...field} />}
                         />
