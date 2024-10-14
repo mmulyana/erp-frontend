@@ -4,6 +4,7 @@ import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { toast } from 'sonner'
+import { objectToFormData } from '@/utils/ObjectToFormData'
 
 type ParamsEmployee = {
   search?: string
@@ -49,8 +50,15 @@ export const useCreateEmployee = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: any) => {
-      return await http.post(URLS.EMPLOYEE, data)
+    mutationFn: async (payload: any) => {
+      // return await http.post(URLS.EMPLOYEE, data)
+      const formData = objectToFormData(payload.data)
+
+      return await http.post(URLS.EMPLOYEE, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
