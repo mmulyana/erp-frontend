@@ -13,9 +13,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { useEmployees } from '@/hooks/api/use-employee'
 import { useCreateOvertime } from '@/hooks/api/use-overtime'
 import { Employee } from '@/utils/types/api'
+import useUrlState from '@ahooksjs/use-url-state'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
-import { useState } from 'react'
+import { format, parse } from 'date-fns'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -29,9 +30,16 @@ export const overtimeSchema = z.object({
 
 export function AddOvertime() {
   const [isOpen, setIsOpen] = useState(false)
-
+  const [url] = useUrlState({ date: '' })
   const { data: employees } = useEmployees({}, { enabled: isOpen })
   const { mutate } = useCreateOvertime()
+
+  useEffect(() => {
+    if (url.date !== '') {
+      const parsedDate = parse(url.date, 'dd-MM-yyyy', new Date())
+      form.setValue('date', format(parsedDate, 'yyyy-MM-dd'))
+    }
+  }, [url.date])
 
   const form = useForm<OvertimeSchema>({
     resolver: zodResolver(overtimeSchema),
@@ -47,7 +55,7 @@ export function AddOvertime() {
       {
         ...data,
         employeeId: Number(data.employeeId),
-        date: new Date(format(data.date, 'yyyy-MM-dd')),
+        date: format(data.date, 'dd-MM-yyyy'),
       },
       {
         onSuccess: async () => {
