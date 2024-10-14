@@ -3,23 +3,35 @@ import Search from '@/components/common/search'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
+  DropdownMenuGroup,
+  DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
 import { useOvertime } from '@/hooks/api/use-overtime'
 import { Employee } from '@/utils/types/api'
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
-import { format } from 'date-fns'
-import { Ellipsis } from 'lucide-react'
+import { format, parse } from 'date-fns'
+import { CalendarDaysIcon, PencilIcon, TrashIcon } from 'lucide-react'
 import { AddOvertime } from './add-overtime'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { cn } from '@/utils/cn'
+import { id } from 'date-fns/locale'
+import { Calendar } from '@/components/ui/calendar'
+import DropdownEdit from '@/components/common/dropdown-edit'
 
 export function Overtime() {
-  const [url] = useUrlState({ name: '', date: '' })
+  const [url, setUrl] = useUrlState({ name: '', date: '' })
   const { data, isLoading } = useOvertime({
     name: url.name,
-    ...(url.date !== '' ? { date: format(url.date, 'yyyy-dd-MM') } : undefined),
+    ...(url.date !== ''
+      ? {
+          date: format(parse(url.date, 'dd-MM-yyyy', new Date()), 'dd-MM-yyyy'),
+        }
+      : undefined),
   })
 
   // COLUMNS
@@ -64,30 +76,70 @@ export function Overtime() {
       id: 'action',
       cell: () => (
         <div className='flex justify-end w-full'>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              asChild
-              className='border-transparent hover:border-gray-200'
-            >
-              <Button variant='outline' className='p-0 h-fit rounded px-0.5'>
-                <Ellipsis className='w-6 h-6 text-[#313951]/70' />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className='w-full right-0'></DropdownMenuContent>
-          </DropdownMenu>
+          <DropdownEdit className='-translate-x-3'>
+            <DropdownMenuGroup>
+              <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+                <PencilIcon className='w-3.5 h-3.5 text-dark/50' />
+                Ubah
+              </DropdownMenuItem>
+              <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+                <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
+                Hapus
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownEdit>
         </div>
       ),
     },
   ]
 
   return (
-    <>
-      <div className='flex justify-between items-center mb-4'>
+    <div>
+      <div className='flex justify-between items-center p-4 bg-[#F9FAFB]'>
         <div className='flex gap-4'>
-          <div className='max-w-[180px]'>
-            <Search />
-          </div>
+          <Search />
           <Filter />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={'outline'}
+                className={cn(
+                  'w-fit pl-3 gap-2 text-left font-normal text-dark'
+                )}
+              >
+                <CalendarDaysIcon className='h-4 w-4 text-[#2A9D90]' />
+                {url.date ? (
+                  format(
+                    parse(url.date, 'dd-MM-yyyy', new Date()),
+                    'EEEE, dd MMM yyyy',
+                    {
+                      locale: id,
+                    }
+                  )
+                ) : (
+                  <span>Pilih tanggal</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className='w-auto p-0' align='start'>
+              <Calendar
+                mode='single'
+                selected={
+                  url.date
+                    ? parse(url.date, 'dd-MM-yyyy', new Date())
+                    : undefined
+                }
+                onSelect={(val) => {
+                  const originalDate = new Date(val as Date)
+                  const formattedDate = format(originalDate, 'dd-MM-yyyy')
+                  setUrl((prev) => ({ ...prev, date: formattedDate }))
+                }}
+                disabled={(date) =>
+                  date > new Date() || date < new Date('2024-01-01')
+                }
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         <AddOvertime />
       </div>
@@ -97,6 +149,6 @@ export function Overtime() {
         withLoading
         isLoading={isLoading}
       />
-    </>
+    </div>
   )
 }
