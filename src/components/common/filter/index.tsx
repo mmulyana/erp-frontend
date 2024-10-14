@@ -36,10 +36,10 @@ export default function Filter({
           onClick={() => setOpen(true)}
         >
           <FilterIcon
-            fill={fill || '#DCE1EB'}
-            className={cn('w-4 h-4 text-[#DCE1EB]', styleFilter)}
+            fill={fill || '#F9A861'}
+            className={cn('w-4 h-4 text-[#F9A861]', styleFilter)}
           />
-          <p className='text-sm text-[#313951]'>Filter</p>
+          <p className='text-sm text-dark font-normal'>Filter</p>
         </Button>
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerContent>
@@ -63,9 +63,9 @@ export default function Filter({
           >
             <FilterIcon
               fill={fill || '#DCE1EB'}
-              className={cn('w-4 h-4 text-[#DCE1EB]', styleFilter)}
+              className={cn('w-4 h-4 text-[#F9A861] fill-[#F9A861]', styleFilter)}
             />
-            <p className='text-sm text-[#313951]'>Filter</p>
+            <p className='text-sm text-dark font-normal'>Filter</p>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='max-w-[400px] p-0'>
