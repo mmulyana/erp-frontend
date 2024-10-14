@@ -1,10 +1,4 @@
-import {
-  AddressType,
-  ContactType,
-  EmployeeStatus,
-  Gender,
-  MaritalStatus,
-} from '../enum/common'
+import { AddressType, ContactType, EmployeeStatus } from '../enum/common'
 
 export interface Board {
   id: string
@@ -163,49 +157,72 @@ export type Transaction = {
 }
 
 // HRIS API
-// EMPLOYEE
 export type Employee = {
-  id?: number
+  id: number
+  photo?: string
   fullname: string
-  nickname?: string
-  hireDate?: Date
-  salary_per_month?: number
-  salary_per_day?: number
-  salary_per_hour?: number
-  status?: EmployeeStatus
+  joined_at?: string
+  joined_type?: 'date' | 'year'
+  basic_salary?: number
+  overtime_salary?: number
+  pay_type?: 'daily' | 'monthly'
+  employment_type?: 'permanent' | 'contract' | 'partime'
+  status: 'active' | 'nonactive'
   place_of_birth?: string
   birthdate?: string
-  gender?: Gender
-  marital_status?: MaritalStatus
-  nik?: string
-  kk?: string
+  gender?: 'male' | 'female'
+  marital_status?: 'single' | 'merried' | 'divorced'
   religion?: string
   positionId?: number
-  last_education?: string
   position?: Position
-  contact?: Contact[]
-  address?: Address[]
-  employeeCompetency?: EmployeeCompetency[]
-  certifications?: Certification[]
-  // attendances?: Attendance[]
-  cashAdvances?: CashAdvance[]
-  // leaves?: Leave[]
-  statusTracks?: EmployeeStatusTrack[]
-  // overtime?: Overtime[]
+  attendances: Attendance[]
+  cashAdvances: CashAdvance[]
+  contacts: Contact[]
+  addresses: Address[]
+  statusTracks: EmployeeStatusTrack[]
+  competencies: EmployeeCompetency[]
+  certifications: Certification[]
+  overtime: Overtime[]
+  EmployeeAssigned: EmployeeAssigned[]
+}
+
+type EmployeeAssigned = {
+  id: number
+  projectId: number
+  employeeId: number
+  project: Project
+  employee: Employee
+}
+
+type Attendance = {
+  id: number
+  employee: Employee
+  employeeId: number
+  date: string
+  total_hour: number
+  type: 'presence' | 'absent'
+}
+
+type Overtime = {
+  id: number
+  employeeId: number
+  employee: Employee
+  date: string
+  total_hour: number
+  description?: number
 }
 
 type Position = {
   id: number
   name: string
-  description: string
   color?: string
+  description: string
 }
 
 type EmployeeCompetency = {
   id: number
   employeeId: number
   competencyId: number
-  certificationId: number
   employee: Employee
   competency: Competency
 }
@@ -238,14 +255,7 @@ type Contact = {
 type Address = {
   id: number
   type: AddressType
-  rt?: string
-  rw?: string
-  kampung?: string
-  desa?: string
-  kecamatan?: string
-  kebupaten?: string
-  provinsi?: string
-  kodePos?: number
+  value: string
   employeeId: number
   employee: Employee
 }
@@ -254,9 +264,8 @@ type EmployeeStatusTrack = {
   id: number
   date: Date
   status: EmployeeStatus
+  description?: string
   employeeId: number
-  competencyId?: number
-  comptency?: Competency
   employee: Employee
 }
 
