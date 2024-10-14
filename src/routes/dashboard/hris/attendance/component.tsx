@@ -1,16 +1,14 @@
-import { addDays, format, isValid, subDays, parse, isToday } from 'date-fns'
+import { format, isValid, subDays, parse, isToday } from 'date-fns'
 import {
-  Check,
-  ChevronLeft,
-  ChevronRight,
+  CalendarIcon,
+  CheckIcon,
   Ellipsis,
-  TriangleAlert,
-  X,
+  XIcon,
 } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { Button } from '@/components/ui/button'
 import { id } from 'date-fns/locale'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Search from '@/components/common/search'
 import Filter from '@/components/common/filter'
 import { ColumnDef } from '@tanstack/react-table'
@@ -26,8 +24,6 @@ import {
   useCreateAttendance,
   useUpdateAttendance,
 } from '@/hooks/api/use-attendance'
-import { Employee } from '@/utils/types/employee'
-import ResponsiveModal from '@/components/modal-responsive'
 import { useEmployees } from '@/hooks/api/use-employee'
 import { useCreateOvertime, useOvertime } from '@/hooks/api/use-overtime'
 import { useForm } from 'react-hook-form'
@@ -43,69 +39,26 @@ import {
 } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { Employee } from '@/utils/types/api'
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Calendar } from '@/components/ui/calendar'
 
 type AttendanceType = 'presence' | 'absent' | 'leave' | 'not_yet'
 
-export function Header() {
-  const [url, setUrl] = useUrlState({ date: '' })
-  const [currDate, setCurrDate] = useState(() => {
-    if (url.date && url.date !== '') {
-      const parsedDate = parse(url.date, 'dd-MM-yyyy', new Date())
-      if (isValid(parsedDate)) {
-        return parsedDate
-      } else {
-        console.warn(
-          `Invalid date format: ${url.date}. Using current date instead.`
-        )
-        return new Date()
-      }
-    }
-    return new Date()
-  })
-
-  const formatDate = (date: Date): string => {
-    return format(date, 'dd MMMM yyyy', { locale: id })
-  }
-
-  const formatDay = (date: Date): string => {
-    return format(date, 'EEEE', { locale: id })
-  }
-
-  const nextDate = () => {
-    setCurrDate((prev) => addDays(prev, 1))
-    setUrl({ date: format(addDays(currDate, 1), 'dd-MM-yyy') })
-  }
-
-  const prevDate = () => {
-    setCurrDate((prev) => subDays(prev, 1))
-    setUrl({ date: format(subDays(currDate, 1), 'dd-MM-yyyy') })
-  }
-
-  return (
-    <div className='flex justify-between items-center'>
-      <div>
-        <div className='flex'>
-          <p className='text-lg text-[#021328] font-medium'>
-            {formatDay(currDate)},{' '}
-            <span className='opacity-50'>{formatDate(currDate)}</span>
-          </p>
-        </div>
-      </div>
-      <div>
-        <Button variant='ghost' onClick={prevDate}>
-          <ChevronLeft className='w-4 h-4' />
-        </Button>
-        <Button variant='ghost' onClick={nextDate} disabled={isToday(currDate)}>
-          <ChevronRight className='w-4 h-4' />
-        </Button>
-      </div>
-    </div>
-  )
-}
-
 export function Regular() {
-  const [url] = useUrlState({ name: '', date: '' })
-  const { data, isLoading } = useAttendances({
+  const [url, setUrl] = useUrlState({ name: '', date: '' })
+  const { mutate } = useCreateAttendance()
+
+  const {
+    data: employees,
+    isLoading,
+    isFetching,
+  } = useAttendances({
     name: url.name,
     ...(url.date !== ''
       ? {
@@ -113,23 +66,147 @@ export function Regular() {
         }
       : undefined),
   })
+  const data = useMemo(
+    () => employees?.data.data || [],
+    [isLoading, isFetching]
+  )
+
   return (
-    <>
+    <div className='bg-[#F9FAFB] p-4 h-[calc(100vh-141px)]'>
       <div className='flex justify-between items-center mb-4'>
         <div className='flex gap-4'>
           <div className='max-w-[180px]'>
             <Search />
           </div>
           <Filter />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={'outline'}
+                className={cn('w-[240px] pl-3 text-left font-normal')}
+              >
+                {url.date ? (
+                  format(
+                    parse(url.date, 'dd-MM-yyyy', new Date()),
+                    'EEEE, dd MMM yyyy'
+                  )
+                ) : (
+                  <span>Pick a date</span>
+                )}
+                <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className='w-auto p-0' align='start'>
+              <Calendar
+                mode='single'
+                // selected={field.value}
+                onSelect={(val) => {
+                  const originalDate = new Date(val as Date)
+                  const formattedDate = format(originalDate, 'dd-MM-yyyy')
+                  setUrl((prev) => ({ ...prev, date: formattedDate }))
+                }}
+                // disabled={(date) =>
+                //   date > new Date() || date < new Date('1900-01-01')
+                // }
+              />
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
-      <DataTable
-        columns={columnsRegular}
-        data={data?.data?.data || []}
-        withLoading
-        isLoading={isLoading}
-      />
-    </>
+      <div className='grid grid-cols-2 md:grid-cols-4 gap-2'>
+        {!!data.length &&
+          data?.map((item: any) => (
+            <div
+              key={'employee-' + item.id}
+              className='bg-white w-full h-fit pb-3 px-3 pt-6 flex flex-col items-center border border-line hover:shadow-lg'
+            >
+              <img
+                src={item.photo}
+                className='w-20 h-20 rounded-full border'
+              ></img>
+              <p className='mt-4 text-dark'>{item.fullname}</p>
+              <div className='mt-6 grid grid-cols-2 gap-3.5 w-full'>
+                <button
+                  className={cn(
+                    'border py-3 border-line flex justify-center items-center gap-2 w-full flex-nowrap',
+                    item.attendances.length &&
+                      item.attendances[0].type == 'presence' &&
+                      'bg-green-primary border-green-primary text-white'
+                  )}
+                  onClick={() => {
+                    mutate({
+                      date:
+                        url.date !== ''
+                          ? url.date
+                          : format(new Date(), 'dd-MM-yyyy'),
+                      employeeId: item.id,
+                      total_hour: 1,
+                      type: 'presence',
+                    })
+                  }}
+                >
+                  <CheckIcon
+                    className={cn(
+                      'w-4 h-4 text-green-primary stroke-[3px]',
+                      item.attendances.length &&
+                        item.attendances[0].type == 'presence' &&
+                        ' text-white'
+                    )}
+                  />
+                  <p
+                    className={cn(
+                      'text-dark text-sm',
+                      item.attendances.length &&
+                        item.attendances[0].type == 'presence' &&
+                        ' text-white'
+                    )}
+                  >
+                    Hadir
+                  </p>
+                </button>
+                <button
+                  className={cn(
+                    'border py-3 border-line flex justify-center items-center gap-2 w-full flex-nowrap',
+                    item.attendances.length &&
+                      item.attendances[0].type == 'absent' &&
+                      'bg-[#C95F61] border-[#C95F61]'
+                  )}
+                  onClick={() => {
+                    mutate({
+                      date:
+                        url.date !== ''
+                          ? url.date
+                          : format(new Date(), 'dd-MM-yyyy'),
+                      employeeId: item.id,
+                      total_hour: 0,
+                      type: 'absent',
+                    })
+                  }}
+                >
+                  <XIcon
+                    className={cn(
+                      'w-4 h-4 text-[#C95F61] stroke-[3px]',
+                      item.attendances.length &&
+                        item.attendances[0].type == 'absent' &&
+                        ' text-white'
+                    )}
+                  />
+                  <p
+                    className={cn(
+                      'text-dark text-sm',
+                      item.attendances.length &&
+                        item.attendances[0].type == 'absent' &&
+                        ' text-white'
+                    )}
+                  >
+                    Tdk. Hadir
+                  </p>
+                </button>
+              </div>
+            </div>
+          ))}
+      </div>
+    </div>
   )
 }
 
@@ -160,85 +237,6 @@ export function Overtime() {
     </>
   )
 }
-
-// ATTENDANCE
-const useAttendanceActions = (employeeId: number, id?: number) => {
-  const { mutate: create } = useCreateAttendance()
-  const { mutate: update } = useUpdateAttendance()
-  const [url] = useUrlState({ date: '' })
-
-  const createAttendance = (
-    type: AttendanceType,
-    mode: 'create' | 'update',
-    total_hour?: number
-  ) => {
-    const date =
-      url.date !== '' ? parse(url.date, 'dd-MM-yyyy', new Date()) : new Date()
-
-    if (mode === 'update') {
-      if (!id) return
-
-      update({
-        id: id,
-        payload: {
-          date: new Date(format(date, 'dd-MM-yyyy')).toISOString(),
-          total_hour: total_hour || 0,
-          type,
-        },
-      })
-      return
-    }
-
-    create({
-      date: date.toISOString(),
-      employeeId,
-      total_hour: total_hour || 0,
-      type,
-    })
-  }
-
-  return {
-    onPresence: (total_hour: number) =>
-      createAttendance('presence', 'create', total_hour),
-    onAbsent: () => createAttendance('absent', 'create'),
-    onLeave: () => createAttendance('leave', 'create'),
-    onUpdate: (type: 'presence' | 'absent' | 'leave', total_hour: number) =>
-      createAttendance(type, 'update', total_hour),
-  }
-}
-
-type AttendanceButtonProps = {
-  type: AttendanceType
-  onClick: () => void
-  children: React.ReactNode
-  currentAttendance: AttendanceType
-}
-const AttendanceButton = ({
-  type,
-  onClick,
-  children,
-  currentAttendance,
-}: AttendanceButtonProps) => (
-  <Button
-    className={cn(
-      'p-0 h-7 w-7 rounded-full border border-[#EFF0F2] bg-[#F9FAFB] text-[#747C94]',
-      type === 'presence' &&
-        currentAttendance === 'presence' &&
-        'bg-green-600 disabled:bg-emerald-600 disabled:border-emerald-900 text-white',
-      type === 'absent' &&
-        currentAttendance === 'absent' &&
-        'bg-red-600 text-white disabled:bg-red-700 disabled:border-red-900',
-      type === 'leave' &&
-        currentAttendance === 'leave' &&
-        'bg-amber-500 text-white disabled:bg-amber-700 disabled:border-amber-900'
-    )}
-    variant='ghost'
-    disabled={currentAttendance === type}
-    onClick={onClick}
-  >
-    {children}
-  </Button>
-)
 
 // OVERTIME
 export function ModalAdd() {
@@ -276,141 +274,79 @@ export function ModalAdd() {
       <Button className='h-8' onClick={() => setIsOpen(true)}>
         Tambah data
       </Button>
-      <ResponsiveModal title='' isOpen={isOpen} setIsOpen={setIsOpen}>
+      <Modal title='Lemburan' open={isOpen} setOpen={setIsOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(submit)}>
-            <FormField
-              control={form.control}
-              name='employeeId'
-              render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  value={field?.value?.toString()}
-                >
-                  <SelectTrigger className='w-full rounded-xl shadow-sm shadow-gray-950/10 border border-[#DEE0E3]'>
-                    <SelectValue placeholder='Pilih pegawai' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {employees?.data?.data?.map(
-                      (emp: Employee & { id: number }) => (
-                        <SelectItem key={emp.id} value={emp?.id?.toString()}>
-                          {emp.fullname}
-                        </SelectItem>
-                      )
-                    )}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='date'
-              render={({ field }) => (
-                <Input {...field} className='block' type='date' />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='total_hour'
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type='number'
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                  onBlur={(e) => {
-                    field.onBlur()
-                    if (isNaN(e.target.valueAsNumber)) {
-                      form.setValue('total_hour', 0)
-                    }
-                  }}
-                />
-              )}
-            />
+            <ModalContainer setOpen={setIsOpen}>
+              <FormField
+                control={form.control}
+                name='employeeId'
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field?.value?.toString()}
+                  >
+                    <SelectTrigger className='w-full rounded-xl shadow-sm shadow-gray-950/10 border border-[#DEE0E3]'>
+                      <SelectValue placeholder='Pilih pegawai' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {employees?.data?.data?.map(
+                        (emp: Employee & { id: number }) => (
+                          <SelectItem key={emp.id} value={emp?.id?.toString()}>
+                            {emp.fullname}
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='date'
+                render={({ field }) => (
+                  <Input {...field} className='block' type='date' />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='total_hour'
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type='number'
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    onBlur={(e) => {
+                      field.onBlur()
+                      if (isNaN(e.target.valueAsNumber)) {
+                        form.setValue('total_hour', 0)
+                      }
+                    }}
+                  />
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name='description'
-              render={({ field }) => (
-                <Textarea placeholder='Keterangan' {...field} />
-              )}
-            />
-            <Button type='submit'>Buat</Button>
+              <FormField
+                control={form.control}
+                name='description'
+                render={({ field }) => (
+                  <Textarea placeholder='Keterangan' {...field} />
+                )}
+              />
+            </ModalContainer>
           </form>
         </Form>
-      </ResponsiveModal>
+      </Modal>
     </>
   )
 }
 
 // COLUMNS
-const columnsRegular: ColumnDef<
-  Employee & { id: number; attendances?: { id: number }[] }
->[] = [
-  {
-    accessorKey: 'fullname',
-    header: 'Nama',
-  },
-  {
-    id: 'jabatan',
-    header: 'Jabatan',
-    cell: ({ cell }) => {
-      return <p>{cell.row.original?.position?.name}</p>
-    },
-  },
-  {
-    id: 'Status',
-    header: () => <div className='flex justify-end pr-24'>Status</div>,
-    cell: ({ row }) => {
-      const attendance = (
-        !!row.original.attendances?.length
-          ? row.original?.attendances[0]?.type
-          : 'not_yet'
-      ) as AttendanceType
-
-      const { onPresence, onAbsent, onLeave, onUpdate } = useAttendanceActions(
-        row.original.id,
-        !!row.original.attendances?.length
-          ? row.original.attendances[0].id
-          : undefined
-      )
-
-      return (
-        <div className='flex justify-end gap-4 items-center'>
-          <AttendanceButton
-            type='presence'
-            currentAttendance={attendance}
-            onClick={() => {
-              attendance == 'not_yet' ? onPresence(1) : onUpdate('presence', 1)
-            }}
-          >
-            <Check className='w-4 h-4' />
-          </AttendanceButton>
-          <AttendanceButton
-            type='absent'
-            currentAttendance={attendance}
-            onClick={() => {
-              attendance == 'not_yet' ? onAbsent() : onUpdate('absent', 0)
-            }}
-          >
-            <X className='w-4 h-4' />
-          </AttendanceButton>
-          <AttendanceButton
-            type='leave'
-            currentAttendance={attendance}
-            onClick={() => {
-              attendance == 'not_yet' ? onLeave() : onUpdate('leave', 0)
-            }}
-          >
-            <TriangleAlert className='w-4 h-4' />
-          </AttendanceButton>
-        </div>
-      )
-    },
-  },
-]
-
 const columnOvertime: ColumnDef<
-  Employee & { id: number; overtime?: { id: number }[] }
+  Employee & {
+    id: number
+    overtime?: { id: number; total_hour?: number; description?: string }[]
+  }
 >[] = [
   {
     accessorKey: 'fullname',
