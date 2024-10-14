@@ -49,7 +49,7 @@ export const useUpdateAttendance = () => {
       payload,
     }: {
       id: number
-      payload: Omit<createAttendance, 'employeeId'>
+      payload: Partial<createAttendance>
     }) => {
       return await http.patch(`${URLS.ATTENDANCE}/${id}`, payload)
     },
