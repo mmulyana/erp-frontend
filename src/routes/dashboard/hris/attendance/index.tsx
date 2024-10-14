@@ -1,11 +1,11 @@
 import { PATH } from '@/utils/constant/_paths'
 import { Tab, Tabs } from '@/components/tab'
-import { Overtime, Regular } from './component'
 import { useTitle } from '../../_component/header'
-import Container from '../../_component/container'
 import { DashboardLayout } from '../../_component/layout'
 import TitlePage from '../../_component/title-page'
 import { FilePenIcon } from 'lucide-react'
+import { Regular } from './_component/regular'
+import { Overtime } from './_component/overtime'
 
 const links = [
   {
@@ -34,9 +34,7 @@ export default function Page() {
           <Regular />
         </Tab>
         <Tab label='Lembur'>
-          <Container>
-            <Overtime />
-          </Container>
+          <Overtime />
         </Tab>
       </Tabs>
     </DashboardLayout>
