@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { TabsContent, TabsList, TabsTrigger, Tabs } from '@/components/ui/tabs'
+import { useCreateEmployee } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -24,33 +25,42 @@ import { Controller, useForm } from 'react-hook-form'
 type Props = {
   open: boolean
   setOpen: (val: boolean) => void
+  id?: string
 }
-export default function AddEmployee({ open, setOpen }: Props) {
+export default function AddEmployee({ open, setOpen, id }: Props) {
   const [preview, setPreview] = useState<string | null>(null)
+
+  // HANDLE FORM
+  const { mutate } = useCreateEmployee()
+  const [newUser, setNewUser] = useState<any>(null)
+
   const form = useForm({
     defaultValues: {
       photo: null as File | null,
       fullname: '',
-      joinedAt: '',
-      type: 'permanent',
+      joined_at: '',
+      joined_type: 'date',
+      employment_type: 'permanent',
       last_education: '',
       gender: '',
       place_of_birth: '',
-      birthDate: '',
+      birth_date: '',
       marital_status: '',
       religion: '',
       basic_salary: '',
-      type_salary: '',
+      pay_type: 'daily',
       overtime_salary: '',
+      positionId: id,
     },
   })
+  console.log(newUser)
 
   const onSubmit = async (data: any) => {
-    console.log(data)
+    mutate({ data }, { onSuccess: (data) => setNewUser(data.data.data) })
   }
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className='max-w-[512px] p-0'>
+      <SheetContent className='w-[512px] max-w-full p-0'>
         <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
           <p className='text-sm text-dark'>Pegawai baru</p>
         </div>
@@ -60,7 +70,7 @@ export default function AddEmployee({ open, setOpen }: Props) {
               <StepperItem label='Umum'>
                 <div>
                   <StepHeader step={1} title='Umum' />
-                  <ScrollArea className='h-[56vh] px-2'>
+                  <ScrollArea className='h-[calc(100vh-244px)] border px-2'>
                     <div className='flex flex-col gap-4 pt-4 mb-4 px-2'>
                       <UploadProfile
                         name='photo'
@@ -81,29 +91,41 @@ export default function AddEmployee({ open, setOpen }: Props) {
                         <TabsContent value='date'>
                           <FormField
                             control={form.control}
-                            name='joinedAt'
+                            name='joined_at'
                             label='Tanggal bergabung'
                             render={({ field }) => (
-                              <Input className='block' type='date' {...field} />
+                              <Input
+                                className='block'
+                                onFocus={() => {
+                                  form.setValue('joined_type', 'date')
+                                }}
+                                type='date'
+                                {...field}
+                              />
                             )}
                           />
                         </TabsContent>
                         <TabsContent value='year'>
                           <FormField
                             control={form.control}
-                            name='joinedAt'
+                            name='joined_at'
                             label='Tahun bergabung'
                             render={({ field }) => (
-                              <Input type='number' {...field} />
+                              <Input
+                                type='number'
+                                onFocus={() => {
+                                  form.setValue('joined_type', 'year')
+                                }}
+                                {...field}
+                              />
                             )}
                           />
                         </TabsContent>
                       </Tabs>
                       <Controller
-                        name='type'
+                        name='employment_type'
                         control={form.control}
-                        rules={{ required: 'Please select a gender' }}
-                        render={({ field, fieldState: { error } }) => (
+                        render={({ field }) => (
                           <div className='space-y-2'>
                             <FormLabel>Status Pegawai</FormLabel>
                             <div className='flex justify-between gap-4'>
@@ -129,11 +151,6 @@ export default function AddEmployee({ open, setOpen }: Props) {
                                 Partime
                               </RadioV1>
                             </div>
-                            {error && (
-                              <p className='text-red-500 text-sm'>
-                                {error.message}
-                              </p>
-                            )}
                           </div>
                         )}
                       />
@@ -167,7 +184,9 @@ export default function AddEmployee({ open, setOpen }: Props) {
                           control={form.control}
                           name='gender'
                           label='Jenis kelamin'
-                          render={(field) => <Input type='text' {...field} />}
+                          render={({ field }) => (
+                            <Input type='text' {...field} />
+                          )}
                         />
                       </div>
                       <div className='grid grid-cols-2 gap-4'>
@@ -175,13 +194,15 @@ export default function AddEmployee({ open, setOpen }: Props) {
                           control={form.control}
                           name='place_of_birth'
                           label='Tempat lahir'
-                          render={(field) => <Input type='text' {...field} />}
+                          render={({ field }) => (
+                            <Input type='text' {...field} />
+                          )}
                         />
                         <FormField
                           control={form.control}
-                          name='birthDate'
+                          name='birth_date'
                           label='Tanggal lahir'
-                          render={(field) => (
+                          render={({ field }) => (
                             <Input type='date' className='block' {...field} />
                           )}
                         />
@@ -210,7 +231,9 @@ export default function AddEmployee({ open, setOpen }: Props) {
                           control={form.control}
                           name='religion'
                           label='Agama'
-                          render={(field) => <Input type='text' {...field} />}
+                          render={({ field }) => (
+                            <Input type='text' {...field} />
+                          )}
                         />
                       </div>
                     </div>
@@ -226,13 +249,13 @@ export default function AddEmployee({ open, setOpen }: Props) {
                         control={form.control}
                         name='basic_salary'
                         label='Gaji pokok'
-                        render={(field) => <Input type='text' {...field} />}
+                        render={({ field }) => <Input type='text' {...field} />}
                       />
                       <Controller
-                        name='type_salary'
+                        name='pay_type'
                         control={form.control}
                         rules={{ required: 'Pilih salah satu' }}
-                        render={({ field, fieldState: { error } }) => (
+                        render={({ field }) => (
                           <div className='space-y-2'>
                             <FormLabel>Tipe gaji</FormLabel>
                             <div className='flex justify-between gap-4'>
@@ -251,11 +274,6 @@ export default function AddEmployee({ open, setOpen }: Props) {
                                 Bulanan
                               </RadioV1>
                             </div>
-                            {error && (
-                              <p className='text-red-500 text-sm'>
-                                {error.message}
-                              </p>
-                            )}
                           </div>
                         )}
                       />
@@ -263,7 +281,7 @@ export default function AddEmployee({ open, setOpen }: Props) {
                         control={form.control}
                         name='overtime_salary'
                         label='Overtime'
-                        render={(field) => <Input type='text' {...field} />}
+                        render={({ field }) => <Input type='text' {...field} />}
                       />
                     </div>
                   </ScrollArea>
@@ -302,7 +320,7 @@ function Navigation({
   return (
     <div
       className={cn(
-        'mt-4 flex justify-between items-center px-4',
+        'mt-4 flex justify-between items-center px-4 absolute bottom-0 left-0 w-full py-4 border-t border-line',
         step === 0 && 'justify-end'
       )}
     >
