@@ -66,3 +66,62 @@ export const useCreateEmployee = () => {
     },
   })
 }
+
+export const useCreateCertifEmployee = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (payload: {
+      employeeId: number
+      data: {
+        certif_name: string
+        certif_file: File | null
+        issuing_organization?: string
+        issue_year?: string
+        issue_month?: string
+        expiry_year?: string
+        competencyId?: string
+      }[]
+    }) => {
+      const formData = new FormData()
+
+      payload.data.forEach((item, index) => {
+        Object.entries(item).forEach(([key, value]) => {
+          if (key === 'certif_file') {
+            if (value instanceof File) {
+              formData.append(
+                `${key}[${index}]`,
+                value,
+                value.name
+              )
+            } else if (value === null || value === undefined) {
+              console.log(
+                `certif_file is null or undefined for certification ${index}`
+              )
+            } else {
+              console.warn(
+                `Unexpected value for certif_file in certification ${index}`
+              )
+            }
+          } else {
+            formData.append(`${key}[${index}]`, value as string)
+          }
+        })
+      })
+
+      return await http.post(
+        URLS.EMPLOYEE + `/certification/${payload.employeeId}?file_name=sertifikat-`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
+  })
+}
