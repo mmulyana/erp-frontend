@@ -682,7 +682,7 @@ function Navigation({
         </button>
         {step !== totalSteps && (
           <button
-            type='button'
+            type={step === 1 ? 'submit' : 'button'}
             onClick={nextStep}
             className='py-2 px-3 h-fit border border-blue-darker text-white bg-blue-primary rounded-lg text-sm'
           >
