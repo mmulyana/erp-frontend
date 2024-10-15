@@ -12,8 +12,14 @@ const chartData = [
   { month: 'February', total: 200 },
   { month: 'March', total: 120 },
   { month: 'April', total: 190 },
-  { month: 'May', total: 130 },
+  { month: 'May', total: 10 },
   { month: 'June', total: 140 },
+  { month: 'July', total: 140 },
+  { month: 'August', total: 140 },
+  { month: 'September', total: 10 },
+  { month: 'October', total: 140 },
+  { month: 'November', total: null },
+  { month: 'December', total: null },
 ]
 const chartConfig = {
   total: {
@@ -24,12 +30,12 @@ const chartConfig = {
 
 export default function InfoRevenue() {
   return (
-    <Card>
+    <Card className='col-span-1 md:col-span-2'>
       <CardHead className='border-none'>
         <p className='text-sm text-dark'>Estimasi pendapatan bruto</p>
       </CardHead>
       <Cardbody>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} className='h-48 w-full'>
           <AreaChart
             accessibilityLayer
             data={chartData}
