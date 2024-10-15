@@ -35,15 +35,13 @@ export default function TableEmployee({
   onSelect,
 }: TableEmployeeProps) {
   const [url] = useUrlState({ name: '', page: '' })
-  const { isLoading, data } = useEmployees(
-    {
-      ...(status ? { status } : undefined),
-      ...(isString(url.name) ? { name: url.name } : undefined),
-      ...(positionId ? { positionId } : undefined),
-      ...(isString(url.page) ? { page: url.page } : undefined),
-    },
-    {}
-  )
+  const { isLoading, data } = useEmployees({
+    ...(status ? { status } : undefined),
+    ...(isString(url.name) ? { name: url.name } : undefined),
+    ...(positionId ? { positionId } : undefined),
+    ...(isString(url.page) ? { page: url.page } : undefined),
+    enabled: positionId !== null,
+  })
 
   // COLUMNS EMPLOYEE
   const columns: ColumnDef<Employee>[] = [
