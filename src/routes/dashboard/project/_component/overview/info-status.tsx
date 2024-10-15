@@ -8,13 +8,9 @@ import {
 } from '@/components/ui/chart'
 
 const chartData = [
-  { month: 'Januari', project: 18 },
-  { month: 'Februari', project: 5 },
-  { month: 'Maret', project: 7 },
-  { month: 'April', project: 3 },
-  { month: 'Mei', project: 20 },
-  { month: 'Juni', project: 14 },
-  { month: 'Juli', project: 24 },
+  { month: 'Agustus', project: 4 },
+  { month: 'Junu', project: 2 },
+  { month: 'Juli', project: 14 },
   { month: 'Agustus', project: 4 },
   { month: 'September', project: 24 },
   { month: 'Oktober', project: 16 },
@@ -32,8 +28,8 @@ export default function InfoStatus() {
       <CardHead className='border-none'>
         <p className='text-sm text-dark'>Tren Proyek perbulan</p>
       </CardHead>
-      <Cardbody>
-        <ChartContainer config={chartConfig}>
+      <Cardbody className='px-2'>
+        <ChartContainer config={chartConfig} className='h-48 w-full'>
           <BarChart
             accessibilityLayer
             data={chartData}
