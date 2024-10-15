@@ -169,7 +169,7 @@ export type Employee = {
   employment_type?: 'permanent' | 'contract' | 'partime'
   status: 'active' | 'nonactive'
   place_of_birth?: string
-  birthdate?: string
+  birth_date?: string
   gender?: 'male' | 'female'
   marital_status?: 'single' | 'merried' | 'divorced'
   religion?: string
@@ -230,6 +230,7 @@ type EmployeeCompetency = {
 type Competency = {
   id: number
   name: string
+  color: string
   EmployeeCompetency: EmployeeCompetency[]
 }
 
