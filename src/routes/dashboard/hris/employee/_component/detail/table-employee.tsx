@@ -1,9 +1,14 @@
 import DropdownEdit from '@/components/common/dropdown-edit'
 import Label from '@/components/common/label'
+import Overlay from '@/components/common/overlay'
 import StatusChips from '@/components/common/status-chips'
 import { DataTable } from '@/components/data-table'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenuGroup,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
 import { useEmployees } from '@/hooks/api/use-employee'
 import { EmployeeStatus } from '@/utils/enum/common'
 import { Employee } from '@/utils/types/api'
@@ -18,12 +23,16 @@ type TableEmployeeProps = {
   positionId?: string
   name?: string
   onAddEmployee: () => void
+  onDetailEmployee: (val: boolean) => void
+  onSelect: (val: number) => void
 }
 export default function TableEmployee({
   status,
   positionId,
   name,
   onAddEmployee,
+  onDetailEmployee,
+  onSelect,
 }: TableEmployeeProps) {
   const [url] = useUrlState({ name: '', page: '' })
   const { isLoading, data } = useEmployees(
@@ -42,11 +51,36 @@ export default function TableEmployee({
       accessorKey: 'fullname',
       header: 'Nama',
       cell: ({ row }) => {
-        const { fullname } = row.original
+        const { fullname, id } = row.original
         return (
-          <div className='flex gap-2 items-center w-[140px]'>
-            <p>{fullname}</p>
-          </div>
+          // <div className='flex gap-2 items-center w-[140px]'>
+          //   <p>{fullname}</p>
+          // </div>
+          <Overlay
+            className='w-full'
+            overlay={
+              <button
+                onClick={() => {
+                  onSelect(id)
+                  onDetailEmployee(true)
+                }}
+                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+              >
+                Lihat
+              </button>
+            }
+          >
+            <div className='hover:text-dark'>
+              <button
+                onClick={() => {
+                  onSelect(id)
+                  onDetailEmployee(true)
+                }}
+              >
+                {fullname}
+              </button>
+            </div>
+          </Overlay>
         )
       },
     },
@@ -101,7 +135,19 @@ export default function TableEmployee({
       cell: () => {
         return (
           <div className='flex justify-end w-full'>
-            <DropdownEdit />
+            <DropdownEdit className='-translate-x-3'>
+              <DropdownMenuGroup>
+                <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
+                  Nonaktifkan
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer'
+                  onClick={() => {}}
+                >
+                  Hapus
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownEdit>
           </div>
         )
       },
@@ -130,7 +176,7 @@ export default function TableEmployee({
         withPagination
         withLoading
         isLoading={isLoading}
-        totalPages={data?.data?.total || 0}
+        totalPages={data?.data?.total_pages || 0}
       />
     </>
   )
