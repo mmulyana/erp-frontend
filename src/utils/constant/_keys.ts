@@ -23,4 +23,5 @@ export const KEYS = {
   LOCATION: 'location',
   TAG: 'tag',
   MEASUREMENT: 'measurement',
+  COMPETENCY: 'competency',
 }
