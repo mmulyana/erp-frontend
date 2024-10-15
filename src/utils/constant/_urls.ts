@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_BASE_URL
+export const BASE_URL = import.meta.env.VITE_BASE_URL
 const V1 = BASE_URL + '/api/v1'
 
 export const URLS = {
@@ -13,10 +13,11 @@ export const URLS = {
   PERMISSION: V1 + '/permission',
   HRIS_POSITION: V1 + '/hris/position',
   EMPLOYEE: V1 + '/hris/employee',
-  LEAVES: V1 + '/hris/leave',
   CASH_ADVANCES: V1 + '/hris/cash-advance',
   ATTENDANCE: V1 + '/hris/attendance',
   OVERTIME: V1 + '/hris/overtime',
+  COMPETENCY: V1 + '/hris/competency',
+
   PROJECT: V1 + '/project',
   PROJECT_LABEL: V1 + '/project/label',
   PROJECT_CLIENT: V1 + '/project/client',
