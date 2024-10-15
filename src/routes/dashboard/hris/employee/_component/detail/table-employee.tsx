@@ -1,4 +1,5 @@
 import DropdownEdit from '@/components/common/dropdown-edit'
+import Label from '@/components/common/label'
 import StatusChips from '@/components/common/status-chips'
 import { DataTable } from '@/components/data-table'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
@@ -40,8 +41,13 @@ export default function TableEmployee({
     {
       accessorKey: 'fullname',
       header: 'Nama',
-      cell: ({ cell }) => {
-        return <p>{cell.row.original.fullname}</p>
+      cell: ({ row }) => {
+        const { fullname } = row.original
+        return (
+          <div className='flex gap-2 items-center w-[140px]'>
+            <p>{fullname}</p>
+          </div>
+        )
       },
     },
     {
@@ -49,9 +55,9 @@ export default function TableEmployee({
       size: 80,
       header: () => <p className='text-center'>Usia</p>,
       cell: ({ cell }) => {
-        if (!cell.row.original.birthdate) return null
+        if (!cell.row.original.birth_date) return null
         const birtdate = parse(
-          cell.row.original.birthdate,
+          cell.row.original.birth_date,
           'yyyy-MM-dd',
           new Date()
         )
@@ -68,14 +74,18 @@ export default function TableEmployee({
       accessorKey: 'employeeCompetency',
       header: 'Kompetensi',
       cell: ({ cell }) => {
-        const competencies = cell.row.original.employeeCompetency
+        const competencies = cell.row.original.competencies
         return (
-          <p>
+          <div className='flex gap-2 max-w-fit'>
             {!!competencies?.length &&
               competencies?.map((item) => (
-                <p key={item.id}>{item.competency.name}</p>
+                <Label
+                  key={item.id}
+                  name={item.competency.name}
+                  color={item.competency.color}
+                />
               ))}
-          </p>
+          </div>
         )
       },
     },
@@ -120,6 +130,7 @@ export default function TableEmployee({
         withPagination
         withLoading
         isLoading={isLoading}
+        totalPages={data?.data?.total || 0}
       />
     </>
   )
