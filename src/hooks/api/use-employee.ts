@@ -36,7 +36,7 @@ export const useEmployees = (
   })
 }
 
-export const useEmployee = (id?: number) => {
+export const useEmployee = (id?: number | null) => {
   return useQuery({
     queryKey: [KEYS.EMPLOYEE, id],
     queryFn: async () => {
