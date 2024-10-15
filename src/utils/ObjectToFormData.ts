@@ -4,7 +4,7 @@ export function objectToFormData(
   const formData = new FormData()
 
   Object.entries(obj).forEach(([key, value]) => {
-    if (value != null) {
+    if (value != null && value !== '') {
       if (Array.isArray(value)) {
         value.forEach((item, index) => {
           if (item != null) {
