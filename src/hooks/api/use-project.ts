@@ -1,7 +1,8 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 type Params = {
   id?: string
@@ -18,6 +19,20 @@ export const useProject = (params?: Params) => {
         url: URLS.PROJECT,
         params,
       })
+    },
+  })
+}
+
+export const useCreateProject = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ payload }: { payload: any }) => {
+      return await http.post(URLS.PROJECT, payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      toast.success(data.data.message)
     },
   })
 }
