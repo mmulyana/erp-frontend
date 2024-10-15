@@ -23,6 +23,8 @@ export const URLS = {
   PROJECT_CLIENT: V1 + '/project/client',
   PROJECT_CLIENT_COMPANY: V1 + '/project/client/company',
 
+  KANBAN_BOARDD: V1 + '/project/board',
+
   // INVENTORY
   INVENTORY_GOODS: V1 + '/inventory/goods',
   INVENTORY_CATEGORY: V1 + '/inventory/category',
