@@ -9,10 +9,12 @@ import TableEmployee from './_component/detail/table-employee'
 import { links } from './_component/links'
 import { useState } from 'react'
 import AddEmployee from './_component/detail/add-employee'
+import DetailEmployee from './_component/detail/detail-employee'
 
 export type DialogEmployee = {
   add: boolean
   delete: boolean
+  detail: boolean
 }
 export default function Detail() {
   const { detail } = useParams()
@@ -25,9 +27,14 @@ export default function Detail() {
   const [dialog, setDialog] = useState<DialogEmployee>({
     add: false,
     delete: false,
+    detail: false,
   })
+  const [selectedId, setSelectedId] = useState<null | number>(null)
   const handleDialog = (type: keyof DialogEmployee, val?: boolean) => {
     setDialog((prev) => ({ ...prev, [type]: val || false }))
+    if (!val && selectedId !== null) {
+      setSelectedId(null)
+    }
   }
 
   return (
@@ -38,6 +45,8 @@ export default function Detail() {
             positionId={positionId}
             name={link?.name}
             onAddEmployee={() => handleDialog('add', true)}
+            onSelect={setSelectedId}
+            onDetailEmployee={(val) => handleDialog('detail', val)}
           />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line px-4 py-2 space-y-4'>
@@ -95,6 +104,11 @@ export default function Detail() {
         open={dialog.add}
         setOpen={() => handleDialog('add')}
         id={positionId}
+      />
+      <DetailEmployee
+        open={dialog.detail}
+        setOpen={() => handleDialog('detail')}
+        id={selectedId}
       />
     </DashboardLayout>
   )
