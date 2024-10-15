@@ -24,4 +24,5 @@ export const KEYS = {
   TAG: 'tag',
   MEASUREMENT: 'measurement',
   COMPETENCY: 'competency',
+  KANBAN_BOARD: 'board',
 }
