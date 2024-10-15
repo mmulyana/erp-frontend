@@ -26,12 +26,12 @@ export default function Dashboard() {
     {
       id: 'user',
       header: 'User',
-      cell: ({ row }) => <p>{row.original.client.name}</p>,
+      cell: ({ row }) => <p>{row.original?.client?.name}</p>,
     },
     {
       id: 'pic',
       header: 'Penangung Jawab',
-      cell: '-',
+      // cell: ({ row }) => <p>{row?.employee?.fullname}</p>,
     },
     {
       id: 'status',
@@ -73,7 +73,6 @@ export default function Dashboard() {
     <DashboardLayout>
       <div className='p-6 grid grid-cols-1 md:grid-cols-3 gap-6'>
         <InfoRevenue />
-        <InfoExpense />
         <InfoStatus />
         <div className='col-span-1 md:col-span-3 border border-line rounded-xl overflow-hidden'>
           <HeadTable>
