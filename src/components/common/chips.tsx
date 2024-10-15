@@ -2,10 +2,16 @@ import { cn } from '@/utils/cn'
 
 type Props = {
   status: 'active' | 'nonactive'
+  className?: string
 }
-export default function Chips({ status }: Props) {
+export default function Chips({ status, className }: Props) {
   return (
-    <div className='text-sm pl-2 pr-[9px] py-0.5 rounded-[6px] border border-[#EFF0F2] inline-flex items-center gap-1'>
+    <div
+      className={cn(
+        'text-sm pl-2 pr-[9px] py-0.5 rounded-[6px] border border-[#EFF0F2] inline-flex items-center gap-1 w-fit',
+        className
+      )}
+    >
       <div
         className={cn(
           'w-1 h-1 rounded-full',
