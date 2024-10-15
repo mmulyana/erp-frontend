@@ -10,14 +10,9 @@ type ParamsEmployee = {
   search?: string
   positionId?: string
   status?: EmployeeStatus
-}
-type AdditionalEmployee = {
   enabled?: boolean
 }
-export const useEmployees = (
-  params: ParamsEmployee,
-  additional: AdditionalEmployee
-) => {
+export const useEmployees = (params?: ParamsEmployee) => {
   return useQuery({
     queryKey: [KEYS.EMPLOYEE, params],
     queryFn: async () => {
@@ -32,7 +27,7 @@ export const useEmployees = (
           throw err
         })
     },
-    enabled: additional.enabled,
+    enabled: params?.enabled || false,
   })
 }
 
@@ -89,11 +84,7 @@ export const useCreateCertifEmployee = () => {
         Object.entries(item).forEach(([key, value]) => {
           if (key === 'certif_file') {
             if (value instanceof File) {
-              formData.append(
-                `${key}[${index}]`,
-                value,
-                value.name
-              )
+              formData.append(`${key}[${index}]`, value, value.name)
             } else if (value === null || value === undefined) {
               console.log(
                 `certif_file is null or undefined for certification ${index}`
@@ -110,7 +101,8 @@ export const useCreateCertifEmployee = () => {
       })
 
       return await http.post(
-        URLS.EMPLOYEE + `/certification/${payload.employeeId}?file_name=sertifikat-`,
+        URLS.EMPLOYEE +
+          `/certification/${payload.employeeId}?file_name=sertifikat-`,
         formData,
         {
           headers: {
