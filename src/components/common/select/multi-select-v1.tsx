@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn'
 import { XIcon } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 
@@ -10,12 +11,14 @@ interface MultiSelectProps {
   onChange?: (selectedValues: string[]) => void
   placeholder?: string
   options: Option[]
+  label?: string
 }
 
 export default function MultiSelect({
   onChange,
   placeholder = 'Select options...',
   options,
+  label,
 }: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([])
@@ -63,14 +66,15 @@ export default function MultiSelect({
 
   return (
     <div className='relative w-full' ref={containerRef}>
+      {label && <p className='text-sm text-dark/80 mb-1 font-medium'>{label}</p>}
       <div
-        className='border border-gray-300 rounded-md p-2 flex flex-wrap items-center cursor-text'
+        className='flex min-h-10 w-full rounded-xl border border-[#DEE0E3] bg-background px-1 py-1 text-sm flex-wrap gap-1'
         onClick={() => setIsOpen(true)}
       >
         {selectedOptions.map((option) => (
           <span
             key={option.value}
-            className='bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded'
+            className='border border-dark/10 text-sm font-semibold px-2.5 py-1 flex items-center h-full rounded-lg gap-1.5'
           >
             {option.label}
             <button
@@ -78,9 +82,9 @@ export default function MultiSelect({
                 e.stopPropagation()
                 removeOption(option)
               }}
-              className='ml-1 text-blue-800 font-bold'
+              className=' font-bold'
             >
-              <XIcon className='w-4 h-4 text-dark/50' />
+              <XIcon className='w-4 h-4 text-dark stroke-2' />
             </button>
           </span>
         ))}
@@ -88,16 +92,19 @@ export default function MultiSelect({
           ref={searchRef}
           type='text'
           placeholder={selectedOptions.length === 0 ? placeholder : ''}
-          className='outline-none flex-grow'
+          className={cn(
+            'outline-none max-w-24',
+            !selectedOptions.length && 'ml-2.5'
+          )}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setIsOpen(true)}
         />
       </div>
       {isOpen && (
-        <ul className='absolute z-10 w-full bg-white border border-gray-300 mt-1 rounded-md max-h-60 overflow-auto'>
+        <ul className='absolute z-10 w-full bg-white border border-dark/10 mt-1 rounded-xl max-h-60 overflow-auto p-2 space-y-1'>
           {filteredOptions.length === 0 ? (
-            <li className='px-4 py-2 text-gray-500'>No options found</li>
+            <li className='px-3 py-2 text-gray-500'>No options found</li>
           ) : (
             filteredOptions.map((option) => (
               <li
@@ -106,12 +113,12 @@ export default function MultiSelect({
                   toggleOption(option)
                   searchRef.current?.focus()
                 }}
-                className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
-                  selectedOptions.some((item) => item.value === option.value)
-                    ? 'bg-blue-50'
-                    : ''
-                }`}
-                aria-label='options'
+                className={cn(
+                  'px-3 py-2 cursor-pointer hover:bg-gray-100 flex justify-between rounded-lg text-sm',
+                  selectedOptions.some((item) => item.value === option.value) &&
+                    'bg-blue-50'
+                )}
+                aria-label='input'
               >
                 {option.label}
                 <input
@@ -120,7 +127,7 @@ export default function MultiSelect({
                     (item) => item.value === option.value
                   )}
                   onChange={() => {}}
-                  className='mr-2'
+                  className={cn(!selectedOptions.length && 'ml-2.5')}
                 />
               </li>
             ))
