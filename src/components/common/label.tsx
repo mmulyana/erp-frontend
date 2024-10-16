@@ -4,7 +4,7 @@ type Props = {
 }
 export default function Label({ name, color }: Props) {
   return (
-    <div className='py-0.5 px-1.5 text-sm w-fit relative'>
+    <div className='py-0.5 pb-1 px-2.5 text-sm w-fit relative'>
       <p className='z-[1] text-nowrap' style={{ color, opacity: '100' }}>
         {name}
       </p>
