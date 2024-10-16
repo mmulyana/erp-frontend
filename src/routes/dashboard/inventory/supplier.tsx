@@ -51,7 +51,7 @@ export default function Supplier() {
       cell: ({ row }) => {
         return (
           <Overlay
-            className='w-[140px]'
+            className='min-w-[140px]'
             overlay={
               <button
                 onClick={() => {
@@ -88,6 +88,7 @@ export default function Supplier() {
     {
       accessorKey: 'address',
       header: 'Alamat',
+      cell: ({row}) => <div className='w-[200px]'>{row.original.address}</div>
     },
     {
       id: 'tag',
