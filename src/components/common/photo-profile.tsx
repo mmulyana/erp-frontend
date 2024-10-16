@@ -1,4 +1,4 @@
-import { useState, useRef, ChangeEvent } from 'react'
+import { useState, useRef, ChangeEvent, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ImageIcon, X } from 'lucide-react'
 
@@ -15,6 +15,14 @@ export default function PhotoProfile({
   const [preview, setPreview] = useState<string | null>(defaultPreview)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (defaultPreview) {
+      setPreview(defaultPreview)
+    }
+
+    return () => setPreview(null)
+  }, [defaultPreview])
 
   const validateFileSize = (file: File | null) => {
     if (!file) return true
