@@ -34,7 +34,7 @@ export default function Header() {
   return (
     <div
       className={cn(
-        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12',
+        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12 bg-white sticky top-0 left-0 w-full z-20',
         isSmall && 'pl-[calc(48px+8px)]'
       )}
     >
