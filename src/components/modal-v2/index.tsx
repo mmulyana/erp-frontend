@@ -14,7 +14,7 @@ export default function Modal({ open, setOpen, title, icon, children }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal>
       <DialogContent
-        className='p-0 border-none gap-0'
+        className='p-0 border-none gap-0 rounded-lg'
         showClose={false}
         close={<CustomClose setOpen={setOpen} />}
       >
