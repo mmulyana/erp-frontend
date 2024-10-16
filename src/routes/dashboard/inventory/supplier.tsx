@@ -51,7 +51,7 @@ export default function Supplier() {
       cell: ({ row }) => {
         return (
           <Overlay
-            className='w-full'
+            className='w-[140px]'
             overlay={
               <button
                 onClick={() => {
@@ -80,6 +80,10 @@ export default function Supplier() {
     {
       accessorKey: 'phone',
       header: 'No. Telp',
+    },
+    {
+      accessorKey: 'email',
+      header: 'Email',
     },
     {
       accessorKey: 'address',
