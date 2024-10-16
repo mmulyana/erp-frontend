@@ -39,8 +39,8 @@ export interface Count {
 export interface Client {
   id: number
   name: string
-  company: Company
-  contact?: string
+  company?: Company
+  phone?: string
   email?: string
   position?: string
 }
@@ -50,7 +50,7 @@ export interface Company {
   logo: string
   name: string
   address?: string
-  contact?: string
+  phone?: string
   email?: string
 }
 
