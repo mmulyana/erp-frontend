@@ -1,4 +1,3 @@
-import UploadProfile from '@/components/common/upload-profile'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { useClientCompany, useCreateClient } from '@/hooks/api/use-client'
 import { Form, FormField, FormLabel } from '@/components/ui/form'
@@ -10,11 +9,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import SelectV1 from '@/components/common/select/select-v1'
 import { CommandItem } from '@/components/ui/command'
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/utils/cn'
 
 const clientSchema = z.object({
   name: z.string(),
   position: z.string().optional(),
-  contact: z.string().optional(),
+  phone: z.string().optional(),
   email: z.string().optional(),
   companyId: z.string().optional(),
   photo: z.instanceof(File).optional().nullable(),
@@ -26,12 +28,13 @@ type ModalProps = {
   setOpen: (val: boolean) => void
 }
 export default function DialogAddClient({ open, setOpen }: ModalProps) {
-  const [preview, setPreview] = useState<string | null>(null)
+  useFixPointerEvent(open)
 
-  // HANDLE SELECT COMPANY
+  // START OF HANDLE SELECT COMPANY
   const qCompany = useClientCompany()
   const [selectOpen, setSelectOpen] = useState(false)
-  // HANDLE SELECT COMPANY
+  console.log(qCompany.data?.data?.data)
+  // END OF HANDLE SELECT COMPANY
 
   // HANDLE FORM
   const { mutate } = useCreateClient()
@@ -41,10 +44,9 @@ export default function DialogAddClient({ open, setOpen }: ModalProps) {
     defaultValues: {
       name: '',
       position: '',
-      contact: '',
+      phone: '',
       email: '',
       companyId: '',
-      photo: null,
     },
   })
 
@@ -70,11 +72,6 @@ export default function DialogAddClient({ open, setOpen }: ModalProps) {
             className='w-full flex flex-col gap-4 px-1 pb-8 md:pb-0'
           >
             <ModalContainer setOpen={setOpen}>
-              <UploadProfile
-                name='photo'
-                preview={preview}
-                setPreview={setPreview}
-              />
               <FormField
                 control={form.control}
                 name='name'
@@ -90,7 +87,7 @@ export default function DialogAddClient({ open, setOpen }: ModalProps) {
               <div className='grid grid-cols-2 gap-4'>
                 <FormField
                   control={form.control}
-                  name='contact'
+                  name='phone'
                   label='Kontak'
                   render={({ field }) => <Input {...field} />}
                 />
@@ -101,7 +98,7 @@ export default function DialogAddClient({ open, setOpen }: ModalProps) {
                   render={({ field }) => <Input {...field} />}
                 />
               </div>
-              <div className='space-y-2'>
+              <div className='flex flex-col gap-2'>
                 <FormLabel>Perusahaan</FormLabel>
                 <SelectV1
                   open={selectOpen}
@@ -110,13 +107,18 @@ export default function DialogAddClient({ open, setOpen }: ModalProps) {
                   placeholder='Pilih perusahaan'
                   side='bottom'
                   preview={(val) => (
-                    <span>
+                    <Button
+                      size='sm'
+                      variant='outline'
+                      className={cn('w-full justify-start')}
+                      type='button'
+                    >
                       {
                         qCompany?.data?.data.data.find(
                           (s: any) => s.id === Number(val)
                         )?.name
                       }
-                    </span>
+                    </Button>
                   )}
                 >
                   {qCompany?.data?.data.data.map((item: any) => (
