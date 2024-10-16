@@ -61,10 +61,18 @@ export default function AddProject({ open, setOpen }: Props) {
   const submit = async (data: any) => {
     mutate(
       {
-        payload: { ...data, containerId: qBoards.data?.data.data[0].id },
+        payload: {
+          ...data,
+          containerId: qBoards.data?.data.data.find(
+            (item: any) => item.name === 'Penawaran'
+          ).id,
+        },
       },
       {
-        onSuccess: () => setOpen(false),
+        onSuccess: () => {
+          setOpen(false)
+          form.reset()
+        },
       }
     )
   }
