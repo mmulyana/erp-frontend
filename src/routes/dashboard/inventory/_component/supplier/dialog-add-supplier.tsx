@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateSupplier } from '@/hooks/api/use-supplier'
 import { useTag } from '@/hooks/api/use-tag'
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -14,6 +15,8 @@ type Props = {
   setOpen: (val: boolean) => void
 }
 export default function DialogAddSupplier({ open, setOpen }: Props) {
+  useFixPointerEvent(open)
+
   const [preview, setPreview] = useState<null | string>(null)
 
   //  GET DATA TAG
@@ -34,8 +37,8 @@ export default function DialogAddSupplier({ open, setOpen }: Props) {
     defaultValues: {
       name: '',
       phone: '',
-      email: '',
       address: '',
+      email: '',
       tags: [] as string[],
       photo: null as File | null,
     },
@@ -57,10 +60,10 @@ export default function DialogAddSupplier({ open, setOpen }: Props) {
   }
   return (
     <Modal title='Supplier baru' open={open} setOpen={setOpen}>
-      <ModalContainer setOpen={setOpen}>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className='p-4 space-y-4'>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <ModalContainer setOpen={setOpen}>
+            <div className='space-y-4'>
               <UploadProfile
                 name='photo'
                 preview={preview}
@@ -73,12 +76,20 @@ export default function DialogAddSupplier({ open, setOpen }: Props) {
                 name='name'
                 render={({ field }) => <Input {...field} />}
               />
-              <FormField
-                label='No. Telp'
-                control={form.control}
-                name='phone'
-                render={({ field }) => <Input {...field} />}
-              />
+              <div className='grid grid-cols-2 gap-4'>
+                <FormField
+                  label='No. Telp'
+                  control={form.control}
+                  name='phone'
+                  render={({ field }) => <Input {...field} />}
+                />
+                <FormField
+                  label='Email'
+                  control={form.control}
+                  name='email'
+                  render={({ field }) => <Input {...field} />}
+                />
+              </div>
               <FormField
                 label='Alamat'
                 control={form.control}
@@ -87,9 +98,9 @@ export default function DialogAddSupplier({ open, setOpen }: Props) {
               />
               <MultiSelect options={tags} onChange={handleTags} />
             </div>
-          </form>
-        </Form>
-      </ModalContainer>
+          </ModalContainer>
+        </form>
+      </Form>
     </Modal>
   )
 }
