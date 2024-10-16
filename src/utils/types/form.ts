@@ -40,6 +40,6 @@ export type CreateClientCompany = {
   photo?: File | null
   name: string
   address?: string
-  contact?: string
+  phone?: string
   email?: string
 }
