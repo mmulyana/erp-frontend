@@ -87,7 +87,7 @@ export default function Kanban() {
       <div className={cn('h-full flex gap-2 relative')}>
         <DragDropContext onDragEnd={onDragEnd}>
           {containers.map((container) => (
-            <div className='bg-[#F6F7F9] rounded-xl w-[264px] relative overflow-hidden'>
+            <div key={container.id} className='bg-[#F6F7F9] rounded-xl w-[264px] relative overflow-hidden'>
               <Droppable droppableId={container.id}>
                 {(provided, snapshot) => (
                   <div
