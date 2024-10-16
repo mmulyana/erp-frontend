@@ -53,6 +53,30 @@ export const useCreateSupplier = () => {
     },
   })
 }
+export const useUpdateSupplier = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: number
+      payload: Partial<CreateSupplier>
+    }) => {
+      return await http.patch(`${URLS.INVENTORY_SUPPLIER}/${id}`, payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.SUPPLIER, data.data.data.id],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.SUPPLIER],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
 
 export const useDeleteSupplier = () => {
   const queryClient = useQueryClient()
