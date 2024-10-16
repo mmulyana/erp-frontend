@@ -21,6 +21,7 @@ import DialogAddClient from './_component/client/dialog-add-client'
 import DialogAddCompany from './_component/client/dialog-add-company'
 import DialogDeleteCompany from './_component/client/dialog-delete-company'
 import DialogDeleteClient from './_component/client/dialog-delete-client'
+import { BASE_URL } from '@/utils/constant/_urls'
 
 export default function Client() {
   const qClient = useClient()
@@ -41,16 +42,20 @@ export default function Client() {
       header: 'Perusahaan',
       cell: ({ row }) => (
         <div className='flex gap-1 items-center'>
-          <img
-            className='w-4 h-4 rounded-full object-cover object-center'
-            src={row.original.company.logo}
-          />
-          <p className='text-dark/70'>{row.original.company.name}</p>
+          {row.original.company && (
+            <>
+              <img
+                className='w-6 h-6 rounded-full object-cover object-center shadow'
+                src={BASE_URL + '/img/' + row.original?.company.logo}
+              />
+              <p className='text-dark/70'>{row.original.company.name}</p>
+            </>
+          )}
         </div>
       ),
     },
     {
-      accessorKey: 'contact',
+      accessorKey: 'phone',
       header: 'Kontak',
     },
     {
@@ -87,8 +92,8 @@ export default function Client() {
       cell: ({ row }) => (
         <div className='flex gap-1 items-center'>
           <img
-            className='w-4 h-4 rounded-full object-cover object-center'
-            src={row.original.logo}
+            className='w-6 h-6 rounded-full object-cover object-center shadow'
+            src={BASE_URL + '/img/' + row.original.logo}
           />
           <p className='text-dark/70'>{row.original.name}</p>
         </div>
@@ -99,7 +104,7 @@ export default function Client() {
       header: 'Alamat',
     },
     {
-      accessorKey: 'contact',
+      accessorKey: 'phone',
       header: 'Kontak',
     },
     {
