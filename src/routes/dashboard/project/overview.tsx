@@ -1,9 +1,7 @@
-import { useProject } from '@/hooks/api/use-project'
 import { useTitle } from '../_component/header'
 import { PATH } from '@/utils/constant/_paths'
 import { DashboardLayout } from '../_component/layout'
 import InfoRevenue from './_component/overview/info-revenue'
-import InfoExpense from './_component/overview/info-expense'
 import InfoStatus from './_component/overview/info-status'
 import { ColumnDef } from '@tanstack/react-table'
 import { Project } from '@/utils/types/api'
@@ -13,15 +11,47 @@ import { BriefcaseBusiness } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import AddProject from './_component/add-project'
+import { useProjects } from '@/hooks/api/use-project'
+import DetailProject from './_component/detail-project'
+import Overlay from '@/components/common/overlay'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
 
-  const { data, isLoading } = useProject()
+  const { data, isLoading } = useProjects()
   const columns: ColumnDef<Project>[] = [
     {
       accessorKey: 'name',
       header: 'Nama',
+      cell: ({ cell }) => {
+        const { name, id } = cell.row.original
+        return (
+          <Overlay
+            className='w-[200px]'
+            overlay={
+              <Button
+                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                onClick={() => {
+                  handleDialog('detail', true)
+                  setSelectedId(id)
+                }}
+              >
+                Lihat
+              </Button>
+            }
+          >
+            <p
+              className='hover:text-dark'
+              onClick={() => {
+                handleDialog('detail', true)
+                setSelectedId(id)
+              }}
+            >
+              {name}
+            </p>
+          </Overlay>
+        )
+      },
     },
     {
       id: 'user',
@@ -55,10 +85,11 @@ export default function Dashboard() {
   ]
 
   // handle dialog
-  type Dialog = { add: boolean; delete: boolean }
+  type Dialog = { add: boolean; delete: boolean; detail: boolean }
   const [dialog, setDialog] = useState<Dialog>({
     add: false,
     delete: false,
+    detail: false,
   })
   const [selectedId, setSelectedId] = useState<number | null>(null)
 
@@ -101,6 +132,11 @@ export default function Dashboard() {
       <AddProject
         open={dialog.add}
         setOpen={(val) => handleDialog('add', val)}
+      />
+      <DetailProject
+        id={selectedId}
+        open={dialog.detail}
+        setOpen={(val) => handleDialog('detail', val)}
       />
     </DashboardLayout>
   )
