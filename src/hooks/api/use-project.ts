@@ -10,7 +10,7 @@ type Params = {
   labelId?: number
   clientId?: number
 }
-export const useProject = (params?: Params) => {
+export const useProjects = (params?: Params) => {
   return useQuery({
     queryKey: [KEYS.PROJECT, params],
     queryFn: async () => {
@@ -20,6 +20,16 @@ export const useProject = (params?: Params) => {
         params,
       })
     },
+  })
+}
+
+export const useProject = (id?: number | null) => {
+  return useQuery({
+    queryKey: [KEYS.PROJECT, id],
+    queryFn: async () => {
+      return await http(`${URLS.PROJECT}?id=${id}`)
+    },
+    enabled: !!id,
   })
 }
 
