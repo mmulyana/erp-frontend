@@ -42,13 +42,13 @@ export default function CardProject(props: any) {
 
       <div className='flex justify-between items-center mt-4'>
         <div className='flex gap-2 items-center'>
-          {!!props?.employees.length && (
+          {props.employees && !!props?.employees.length && (
             <div className='flex gap-1 items-center'>
               <Users2Icon className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props?._count.employees}</p>
             </div>
           )}
-          {!!props?.comments.length && (
+          {props.comments && !!props?.comments.length && (
             <div className='flex gap-1 items-center'>
               <MessageCircle className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props?._count.comments}</p>
@@ -59,7 +59,7 @@ export default function CardProject(props: any) {
             <p className='text-sm text-dark'>4</p>
           </div>
         </div>
-        <CircularProgress progress={40} />
+        <CircularProgress progress={props.progress || 10} />
       </div>
     </div>
   )
