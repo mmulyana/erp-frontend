@@ -14,7 +14,7 @@ import { CreateClientCompany } from '@/utils/types/form'
 const companySchema = z.object({
   name: z.string(),
   address: z.string().optional(),
-  contact: z.string().optional(),
+  phone: z.string().optional(),
   email: z.string().optional(),
   photo: z.instanceof(File).optional().nullable(),
 })
@@ -33,7 +33,7 @@ export default function DialogAddCompany({ open, setOpen }: ModalProps) {
     resolver: zodResolver(companySchema),
     defaultValues: {
       name: '',
-      contact: '',
+      phone: '',
       email: '',
       address: '',
       photo: null,
@@ -43,13 +43,17 @@ export default function DialogAddCompany({ open, setOpen }: ModalProps) {
   const onSubmit = async (data: CreateClientCompany) => {
     mutate(data, {
       onSuccess: () => {
+        setPreview(null)
         delay(400).then(() => setOpen(false))
       },
     })
   }
 
   useEffect(() => {
-    if (!open) form.reset()
+    if (!open) {
+      form.reset()
+      setPreview(null)
+    }
   }, [open])
   // HANDLE FORM
 
@@ -59,7 +63,7 @@ export default function DialogAddCompany({ open, setOpen }: ModalProps) {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className='w-full flex flex-col gap-4 px-1 pb-8 md:pb-0'
+            className='w-full flex flex-col gap-4 px-1 pb-0'
           >
             <ModalContainer setOpen={setOpen}>
               <UploadProfile
@@ -76,7 +80,7 @@ export default function DialogAddCompany({ open, setOpen }: ModalProps) {
               <div className='grid grid-cols-2 gap-4'>
                 <FormField
                   control={form.control}
-                  name='contact'
+                  name='phone'
                   label='Kontak'
                   render={({ field }) => <Input {...field} />}
                 />
