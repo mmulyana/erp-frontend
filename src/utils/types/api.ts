@@ -1,5 +1,10 @@
 import { AddressType, ContactType, EmployeeStatus } from '../enum/common'
 
+export interface IApi<T = void> {
+  data?: T
+  message: string
+}
+
 export interface Board {
   id: string
   name: string
