@@ -16,20 +16,14 @@ const chartData1 = [
   { position: 'helper', count: 28, fill: '#F4A462' },
 ]
 const chartConfig1 = {
-  visitors: {
-    label: 'Pegawai',
-  },
   staff: {
     label: 'Staff',
-    color: 'hsl(var(--chart-1))',
   },
   tukang: {
     label: 'Tukang',
-    color: 'hsl(var(--chart-2))',
   },
   helper: {
     label: 'Helper',
-    color: 'hsl(var(--chart-3))',
   },
 } satisfies ChartConfig
 
