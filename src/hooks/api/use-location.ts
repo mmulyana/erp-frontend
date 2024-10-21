@@ -1,17 +1,40 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
+import { GoodsLocation, IApi } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
-type Params = Pagination & {}
+type Params = Pagination & {
+  name?: string
+}
 export const useLocation = (params: Params) => {
   return useQuery({
-    queryFn: async () => {
-      return await http(URLS.INVENTORY_LOCATION)
+    queryFn: async (): Promise<AxiosResponse<IApi<GoodsLocation[]>>> => {
+      return await http.request({
+        method: 'GET',
+        url: URLS.INVENTORY_LOCATION,
+        params,
+      })
     },
     queryKey: [KEYS.LOCATION, params],
+  })
+}
+export const useDetailLocation = ({
+  id,
+  enabled,
+}: {
+  id?: number | null
+  enabled?: boolean
+}) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<GoodsLocation>>> => {
+      return await http(`${URLS.INVENTORY_LOCATION}/${id}`)
+    },
+    queryKey: [KEYS.LOCATION, id],
+    enabled,
   })
 }
 
@@ -27,6 +50,44 @@ export const useCreateLocation = () => {
       }
     }) => {
       return await http.post(URLS.INVENTORY_LOCATION, payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.LOCATION] })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useUpdateLocation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      payload,
+    }: {
+      payload: {
+        name: string
+        id: number
+      }
+    }): Promise<AxiosResponse<IApi<GoodsLocation>>> => {
+      return await http.patch(`${URLS.INVENTORY_LOCATION}/${payload.id}`, {
+        name: payload.name,
+      })
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.LOCATION] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.LOCATION, data.data.data?.id],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useDeleteLocation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      return await http.delete(`${URLS.INVENTORY_LOCATION}/${id}`)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.LOCATION] })
