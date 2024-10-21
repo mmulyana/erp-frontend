@@ -15,7 +15,7 @@ import { Check, ChevronLeft, Pencil, Trash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-type Competency = {
+type Label = {
   name: string
   color: string
 }
@@ -50,14 +50,14 @@ export default function MenuProjectLabel() {
   })
   const competencies = allQuery?.data?.data.data || []
 
-  const form = useForm<Competency>({
+  const form = useForm<Label>({
     defaultValues: {
       name: '',
       color: '',
     },
   })
 
-  const submit = async (data: Competency) => {
+  const submit = async (data: Label) => {
     if (!!selectedId) {
       update(
         { payload: { id: selectedId, ...data } },
@@ -122,7 +122,12 @@ export default function MenuProjectLabel() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(submit)}>
               <div className='flex flex-col gap-4 max-w-sm'>
-                <p className='text-dark font-medium'>Buat Kompetensi Baru</p>
+                <p className='text-dark font-medium'>
+                  {selectedId
+                    ? 'Update label proyek'
+                    : 'Buat label proyek baru'}
+                </p>
+
                 <FormField
                   control={form.control}
                   name='name'
