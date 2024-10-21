@@ -10,11 +10,13 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
 import { useEmployees } from '@/hooks/api/use-employee'
+import { settingConfig } from '@/routes/dashboard/_component/setting/setting'
 import { EmployeeStatus } from '@/utils/enum/common'
 import { Employee } from '@/utils/types/api'
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
 import { differenceInYears, parse } from 'date-fns'
+import { useSetAtom } from 'jotai'
 import { isString } from 'lodash'
 import { CircleUserRoundIcon, SettingsIcon } from 'lucide-react'
 
@@ -34,7 +36,10 @@ export default function TableEmployee({
   onDetailEmployee,
   onSelect,
 }: TableEmployeeProps) {
+  const setConfig = useSetAtom(settingConfig)
+
   const [url] = useUrlState({ name: '', page: '' })
+
   const { isLoading, data } = useEmployees({
     ...(status ? { status } : undefined),
     ...(isString(url.name) ? { name: url.name } : undefined),
@@ -161,7 +166,13 @@ export default function TableEmployee({
           <p className='text-dark font-medium'>{name}</p>
         </div>
         <div className='flex gap-2 items-center'>
-          <Button variant='secondary' className='w-8 p-0'>
+          <Button
+            variant='secondary'
+            className='w-8 p-0'
+            onClick={() =>
+              setConfig({ open: true, default: 'hris_competency' })
+            }
+          >
             <SettingsIcon className='w-4 h-4 text-dark/70' />
           </Button>
           <Button onClick={onAddEmployee}>Pegawai Baru</Button>
