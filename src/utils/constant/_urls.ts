@@ -33,7 +33,7 @@ export const URLS = {
   INVENTORY_MEASUREMENT: V1 + '/inventory/measurement',
   INVENTORY_SUPPLIER: V1 + '/inventory/supplier',
   INVENTORY_SUPPLIER_EMPLOYEE: V1 + '/inventory/supplier/employee',
-  INVENTORY_LABEL: V1 + '/inventory/label',
+  INVENTORY_SUPPLIER_LABEL: V1 + '/inventory/supplier-label',
   INVENTORY_BRAND: V1 + '/inventory/brand',
   INVENTORY_TRANSACTION: V1 + '/inventory/transaction',
 }
