@@ -1,15 +1,25 @@
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '../ui/form'
 import { Input } from '../ui/input'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type Props = {
   name: string
   label: string
+  defaultPreview?: string | null
 }
-export default function InputFile({ name, label }: Props) {
-  const { control, setValue } = useFormContext()
+export default function InputFile({
+  name,
+  label,
+  defaultPreview = null,
+}: Props) {
+  useEffect(() => {
+    if (defaultPreview !== null && defaultPreview !== '') {
+      setPreview(defaultPreview)
+    }
+  }, [defaultPreview])
 
+  const { control, setValue } = useFormContext()
   const [preview, setPreview] = useState<string | null>(null)
 
   const validateFileSize = (file: File | null) => {
