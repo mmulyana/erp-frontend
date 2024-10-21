@@ -43,3 +43,8 @@ export type CreateClientCompany = {
   phone?: string
   email?: string
 }
+
+export type createLabel = {
+  name: string
+  color: string
+}
