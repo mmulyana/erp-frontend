@@ -97,6 +97,9 @@ export type GoodsBrand = {
   id: number
   name: string
   photoUrl?: string
+  _count?: {
+    goods?: number
+  }
 }
 
 export type GoodsCategory = {
