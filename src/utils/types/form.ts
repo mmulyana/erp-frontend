@@ -48,3 +48,8 @@ export type createLabel = {
   name: string
   color: string
 }
+
+export type createBrand = {
+  name: string
+  photo?: File | null
+}
