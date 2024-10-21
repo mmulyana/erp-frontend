@@ -3,6 +3,7 @@ import Header from './header'
 import Sidebar from './sidebar'
 import { cn } from '@/utils/cn'
 import { useState } from 'react'
+import Setting from './setting/setting'
 
 export function DashboardLayout({ children }: React.PropsWithChildren) {
   const [open, setOpen] = useState(false)
@@ -15,6 +16,7 @@ export function DashboardLayout({ children }: React.PropsWithChildren) {
         <Header />
         <div>{children}</div>
       </div>
+      <Setting />
     </>
   )
 }
