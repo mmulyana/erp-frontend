@@ -122,7 +122,10 @@ export default function MenuCompetency() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(submit)}>
               <div className='flex flex-col gap-4 max-w-sm'>
-                <p className='text-dark font-medium'>Buat Kompetensi Baru</p>
+                <p className='text-dark font-medium'>
+                  {selectedId ? 'Update kompetensi' : 'Buat kompetensi baru'}
+                </p>
+
                 <FormField
                   control={form.control}
                   name='name'
