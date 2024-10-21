@@ -9,7 +9,7 @@ import { useBoards } from '@/hooks/api/use-board'
 import { useClient } from '@/hooks/api/use-client'
 import { useEmployees } from '@/hooks/api/use-employee'
 import { useCreateProject } from '@/hooks/api/use-project'
-import { useProjectLabel } from '@/hooks/api/use-project-label'
+import { useProjectLabels } from '@/hooks/api/use-project-label'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 import { BoxIcon, UserIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -24,13 +24,13 @@ export default function AddProject({ open, setOpen }: Props) {
 
   const { mutate } = useCreateProject()
 
-  const qLabels = useProjectLabel()
+  const qLabels = useProjectLabels()
   const qUsers = useClient()
   const qEmployees = useEmployees({ enabled: true })
   const qBoards = useBoards()
   const labels = useMemo(
     () =>
-      qLabels?.data?.data?.data.map((item: any) => ({
+      qLabels?.data?.data?.data?.map((item: any) => ({
         ...item,
         value: item.id,
         label: item.name,
@@ -50,7 +50,7 @@ export default function AddProject({ open, setOpen }: Props) {
   })
   const employees = useMemo(
     () =>
-      qEmployees?.data?.data?.data.map((item: any) => ({
+      qEmployees?.data?.data?.data?.map((item: any) => ({
         ...item,
         value: item.id,
         label: item.fullname,
@@ -184,7 +184,7 @@ export default function AddProject({ open, setOpen }: Props) {
 
                     <span className='text-sm text-dark'>
                       {
-                        qEmployees?.data?.data.data.find(
+                        qEmployees?.data?.data?.data?.find(
                           (s: any) => s.id === Number(val)
                         )?.fullname
                       }
@@ -192,7 +192,7 @@ export default function AddProject({ open, setOpen }: Props) {
                   </div>
                 )}
               >
-                {qEmployees?.data?.data.data.map((item: any) => (
+                {qEmployees?.data?.data?.data?.map((item: any) => (
                   <CommandItem
                     key={item.id}
                     className='hover:bg-red-400'
