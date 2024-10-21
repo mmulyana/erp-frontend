@@ -6,7 +6,7 @@ import http from '@/utils/http'
 import { toast } from 'sonner'
 import { objectToFormData } from '@/utils/ObjectToFormData'
 import { AxiosResponse } from 'axios'
-import { Employee, IApi } from '@/utils/types/api'
+import { Employee, IApi, IApiPagination } from '@/utils/types/api'
 
 type ParamsEmployee = {
   search?: string
@@ -17,7 +17,9 @@ type ParamsEmployee = {
 export const useEmployees = (params?: ParamsEmployee) => {
   return useQuery({
     queryKey: [KEYS.EMPLOYEE, params],
-    queryFn: async (): Promise<AxiosResponse<IApi<Employee[]>>> => {
+    queryFn: async (): Promise<
+      AxiosResponse<IApiPagination<Employee[]>>
+    > => {
       return await http
         .request({
           method: 'GET',
