@@ -22,7 +22,7 @@ export interface Project {
   boardItemsId: string
   clientId: number
   boardItems: Item
-  labels: LabelElement[]
+  labels: ProjectToLabel[]
   employees: Partial<Employee>[]
   comments: Comment[]
   client: Client
@@ -63,14 +63,17 @@ export interface Comment {
   comment: string
 }
 
-export interface LabelElement {
-  label: LabelLabel
+export interface ProjectToLabel {
+  label: ProjectLabel
 }
 
-export interface LabelLabel {
+export interface ProjectLabel {
   id: number
   name: string
   color: string
+  _count?: {
+    projects?: number
+  }
 }
 
 export type Goods = {
@@ -232,11 +235,15 @@ type EmployeeCompetency = {
   competency: Competency
 }
 
-type Competency = {
+export type Competency = {
   id: number
   name: string
   color: string
-  EmployeeCompetency: EmployeeCompetency[]
+  EmployeeCompetency?: EmployeeCompetency[]
+  _count?: {
+    EmployeeCompetency?: number
+    Certification?: number
+  }
 }
 
 type Certification = {
