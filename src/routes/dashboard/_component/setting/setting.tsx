@@ -14,6 +14,9 @@ import MenuPassword from './menu-password'
 import { X } from 'lucide-react'
 import MenuCompetency from './menu-competency'
 import MenuProjectLabel from './menu-project-label'
+import MenuInventoryLabel from './menu-inventory-label'
+import MenuInventoryLocation from './menu-inventory-location'
+import MenuInventoryMeasurement from './menu-inventory-measurement'
 
 const MENUS = {
   account_myaccount: 'Akun',
@@ -105,6 +108,9 @@ export default function Setting() {
     account_password: <MenuPassword />,
     hris_competency: <MenuCompetency />,
     project_label: <MenuProjectLabel />,
+    inventory_label: <MenuInventoryLabel />,
+    inventory_location: <MenuInventoryLocation />,
+    inventory_measurument: <MenuInventoryMeasurement />,
   }
 
   return (
