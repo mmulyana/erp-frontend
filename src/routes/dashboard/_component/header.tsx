@@ -12,6 +12,7 @@ import { ChevronRight, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { cn } from '@/utils/cn'
+import { settingConfig } from './setting/setting'
 
 export type Title = {
   name: string
@@ -28,7 +29,9 @@ export const useTitle = (title: Title[]) => {
   }, [title])
 }
 export default function Header() {
+  const setSettingConfig = useSetAtom(settingConfig)
   const links = useAtomValue(titleAtom)
+
   const isSmall = useMediaQuery('only screen and (max-width : 768px)')
 
   return (
@@ -73,6 +76,9 @@ export default function Header() {
         <Button
           variant='secondary'
           className='w-8 h-8 p-0 rounded-full bg-[#EFF0F2]'
+          onClick={() => {
+            setSettingConfig({ open: true })
+          }}
         >
           <Settings className='w-5 h-5 text-[#313951]/70' />
         </Button>
