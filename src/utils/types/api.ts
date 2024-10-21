@@ -107,11 +107,17 @@ export type GoodsCategory = {
 export type GoodsLocation = {
   id: number
   name: string
+  _count?: {
+    goods?: number
+  }
 }
 
 export type GoodsMeasurement = {
   id: number
   name: string
+  _count?: {
+    goods?: number
+  }
 }
 
 export type Supplier = {
@@ -138,13 +144,16 @@ export type SupplierToTag = {
   id: number
   supplierId: number
   tagId: number
-  tag: SupplierTag
+  tag: SupplierLabel
 }
 
-export type SupplierTag = {
+export type SupplierLabel = {
   id: number
   name: string
   color: string
+  _count?: {
+    supplier?: number
+  }
 }
 
 export type Transaction = {
