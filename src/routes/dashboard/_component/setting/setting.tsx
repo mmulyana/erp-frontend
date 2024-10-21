@@ -11,12 +11,22 @@ import React from 'react'
 import MenuAccount from './menu-account'
 import { cn } from '@/utils/cn'
 import MenuPassword from './menu-password'
-import { X } from 'lucide-react'
+import {
+  Award,
+  Lock,
+  Map,
+  Puzzle,
+  Ruler,
+  Tag,
+  UserCircle,
+  X,
+} from 'lucide-react'
 import MenuCompetency from './menu-competency'
 import MenuProjectLabel from './menu-project-label'
 import MenuInventoryLabel from './menu-inventory-label'
 import MenuInventoryLocation from './menu-inventory-location'
 import MenuInventoryMeasurement from './menu-inventory-measurement'
+import MenuInventoryBrand from './menu-inventory-brand'
 
 const MENUS = {
   account_myaccount: 'Akun',
@@ -35,6 +45,7 @@ type SideMenus = {
   menus: {
     name: string
     value: MenuKey
+    icon: React.ReactNode
   }[]
 }[]
 
@@ -45,10 +56,12 @@ const SIDE_MENUS: SideMenus = [
       {
         name: 'Akun saya',
         value: 'account_myaccount',
+        icon: <UserCircle className='w-3.5 h-3.5' />,
       },
       {
         name: 'Password',
         value: 'account_password',
+        icon: <Lock className='w-3.5 h-3.5' />,
       },
     ],
   },
@@ -58,6 +71,7 @@ const SIDE_MENUS: SideMenus = [
       {
         name: 'Kompetensi',
         value: 'hris_competency',
+        icon: <Award className='w-3.5 h-3.5' />,
       },
     ],
   },
@@ -67,6 +81,7 @@ const SIDE_MENUS: SideMenus = [
       {
         name: 'Label',
         value: 'project_label',
+        icon: <Tag className='w-3.5 h-3.5' />,
       },
     ],
   },
@@ -76,18 +91,22 @@ const SIDE_MENUS: SideMenus = [
       {
         name: 'Label',
         value: 'inventory_label',
+        icon: <Tag className='w-3.5 h-3.5' />,
       },
       {
         name: 'Lokasi',
         value: 'inventory_location',
+        icon: <Map className='w-3.5 h-3.5' />,
       },
       {
         name: 'Ukuran',
         value: 'inventory_measurument',
+        icon: <Ruler className='w-3.5 h-3.5' />,
       },
       {
         name: 'Merek',
         value: 'inventory_brand',
+        icon: <Puzzle className='w-3.5 h-3.5' />,
       },
     ],
   },
@@ -111,6 +130,7 @@ export default function Setting() {
     inventory_label: <MenuInventoryLabel />,
     inventory_location: <MenuInventoryLocation />,
     inventory_measurument: <MenuInventoryMeasurement />,
+    inventory_brand: <MenuInventoryBrand />,
   }
 
   return (
@@ -123,7 +143,7 @@ export default function Setting() {
         <div className='bg-[#F6F6F6] border-r border-[#E8EBF0] p-6 flex flex-col gap-5'>
           {SIDE_MENUS.map((menu, index) => (
             <div key={`${menu}-${index}`}>
-              <p className='text-sm text-dark/50 mb-3'>{menu.name}</p>
+              <p className='text-sm text-dark/50 mb-2'>{menu.name}</p>
               <div className='flex flex-col gap-2'>
                 {menu.menus.map((item) => (
                   <button
@@ -132,11 +152,12 @@ export default function Setting() {
                       setConfig((prev) => ({ ...prev, default: item.value }))
                     }
                     className={cn(
-                      'py-0 justify-start flex text-dark text-sm',
+                      'py-0 justify-start flex text-dark items-center gap-2 text-sm',
                       item.value === (config.default || 'account_myaccount') &&
                         'text-blue-primary'
                     )}
                   >
+                    {item.icon}
                     {item.name}
                   </button>
                 ))}
