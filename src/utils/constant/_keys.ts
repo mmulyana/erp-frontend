@@ -17,6 +17,7 @@ export const KEYS = {
   GOODS: 'goods',
   TRANSACTION: 'transaction',
   SUPPLIER: 'supplier',
+  SUPPLIER_LABEL: 'supplier-label',
   SUPPLIER_EMPLOYEE: 'supplier-employee',
   BRAND: 'brand',
   CATEGORY: 'category',
