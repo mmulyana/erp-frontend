@@ -134,7 +134,7 @@ export default function Setting() {
   }
 
   return (
-    <Dialog open={true} onOpenChange={onClose} modal>
+    <Dialog open={config.open} onOpenChange={onClose} modal>
       <DialogContent
         showClose={false}
         close={<CustomClose setOpen={onClose} />}
@@ -172,7 +172,7 @@ export default function Setting() {
             </DialogTitle>
             <DialogDescription className='hidden' />
           </DialogHeader>
-          {content[(config.default as MenuKey) || 'hris_competency']}
+          {content[(config.default as MenuKey) || 'account_myaccount']}
         </div>
       </DialogContent>
     </Dialog>
