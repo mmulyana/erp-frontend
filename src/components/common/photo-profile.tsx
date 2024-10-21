@@ -6,11 +6,13 @@ type Props = {
   defaultPreview: string | null
   onUpdate?: (val: File) => void
   onRemove?: () => void
+  size?: number
 }
 export default function PhotoProfile({
   defaultPreview,
   onUpdate,
   onRemove,
+  size = 80,
 }: Props) {
   const [preview, setPreview] = useState<string | null>(defaultPreview)
   const [error, setError] = useState<string | null>(null)
@@ -71,10 +73,20 @@ export default function PhotoProfile({
           <img
             src={preview}
             alt='Preview'
-            className='w-20 h-20 rounded-full object-cover'
+            className='rounded-full object-cover'
+            style={{
+              width: size + 'px',
+              height: size + 'px',
+            }}
           />
         ) : (
-          <div className='w-20 h-20 rounded-full flex justify-center items-center bg-[#EBECEE]'>
+          <div
+            className='rounded-full flex justify-center items-center bg-[#EBECEE]'
+            style={{
+              width: size + 'px',
+              height: size + 'px',
+            }}
+          >
             <ImageIcon className='w-6 h-6 text-dark/70' />
           </div>
         )}
