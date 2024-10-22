@@ -1,5 +1,4 @@
-export type createEmployee = {
-  photo: File | null
+export type payloadCreateEmployee = {
   fullname: string
   joined_at?: string
   joined_type?: string
@@ -19,7 +18,10 @@ export type createEmployee = {
   email?: string
   addressess?: createAddress[]
   phoneNumbers?: createPhone[]
+}
 
+export type createEmployee = payloadCreateEmployee & {
+  photo: File | null
   certif_file?: File | null
   certif_name: string
   issuing_organization?: string
@@ -28,8 +30,12 @@ export type createEmployee = {
   expiry_year?: string
   expiry_month?: string
   competencyId?: string
-
   certifications: createCertif[]
+}
+
+export type payloadUploadPhoto = {
+  id: number
+  photo: File
 }
 
 export type createCertif = {
