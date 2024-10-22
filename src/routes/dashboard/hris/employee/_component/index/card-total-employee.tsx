@@ -7,30 +7,20 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useChartEmployeeByPosition } from '@/hooks/api/use-chart'
 import { useMemo } from 'react'
 import { Label, Pie, PieChart } from 'recharts'
 
-const chartData1 = [
-  { position: 'staff', count: 8, fill: '#274754' },
-  { position: 'tukang', count: 20, fill: '#2A9D90' },
-  { position: 'helper', count: 28, fill: '#F4A462' },
-]
-const chartConfig1 = {
-  staff: {
-    label: 'Staff',
-  },
-  tukang: {
-    label: 'Tukang',
-  },
-  helper: {
-    label: 'Helper',
-  },
-} satisfies ChartConfig
-
 export default function CardTotalEmployee() {
+  const ByPositionQuery = useChartEmployeeByPosition()
+
   const total = useMemo(() => {
-    return chartData1.reduce((acc, curr) => acc + curr.count, 0)
-  }, [])
+    return ByPositionQuery.data?.data.data?.chartData.reduce(
+      (acc, curr) => acc + curr.count,
+      0
+    )
+  }, [ByPositionQuery.data, ByPositionQuery.isLoading])
+
   return (
     <Card>
       <CardHead>
@@ -38,7 +28,9 @@ export default function CardTotalEmployee() {
       </CardHead>
       <Cardbody className='pt-0'>
         <ChartContainer
-          config={chartConfig1}
+          config={
+            (ByPositionQuery.data?.data.data?.chartConfig as ChartConfig) || {}
+          }
           className='mx-auto aspect-square max-h-[250px]'
         >
           <PieChart>
@@ -47,10 +39,10 @@ export default function CardTotalEmployee() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData1}
+              data={ByPositionQuery.data?.data.data?.chartData || []}
               dataKey='count'
               nameKey='position'
-              innerRadius={60}
+              innerRadius={50}
               strokeWidth={5}
             >
               <Label
@@ -68,7 +60,7 @@ export default function CardTotalEmployee() {
                           y={viewBox.cy}
                           className='fill-foreground text-3xl font-bold'
                         >
-                          {total.toLocaleString()}
+                          {total?.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
@@ -83,7 +75,7 @@ export default function CardTotalEmployee() {
                 }}
               />
             </Pie>
-            <ChartLegend content={<ChartLegendContent />} />
+            <ChartLegend className='flex flex-wrap justify-center' content={<ChartLegendContent />} />
           </PieChart>
         </ChartContainer>
       </Cardbody>
