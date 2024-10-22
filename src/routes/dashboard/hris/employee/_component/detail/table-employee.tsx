@@ -26,6 +26,7 @@ type TableEmployeeProps = {
   name?: string
   onAddEmployee: () => void
   onDetailEmployee: (val: boolean) => void
+  onDeleteEmployee: (val: boolean) => void
   onSelect: (val: number) => void
 }
 export default function TableEmployee({
@@ -34,6 +35,7 @@ export default function TableEmployee({
   name,
   onAddEmployee,
   onDetailEmployee,
+  onDeleteEmployee,
   onSelect,
 }: TableEmployeeProps) {
   const setConfig = useSetAtom(settingConfig)
@@ -56,9 +58,6 @@ export default function TableEmployee({
       cell: ({ row }) => {
         const { fullname, id } = row.original
         return (
-          // <div className='flex gap-2 items-center w-[140px]'>
-          //   <p>{fullname}</p>
-          // </div>
           <Overlay
             className='w-full'
             overlay={
@@ -135,7 +134,8 @@ export default function TableEmployee({
     },
     {
       id: 'action',
-      cell: () => {
+      cell: ({ row }) => {
+        const { id } = row.original
         return (
           <div className='flex justify-end w-full'>
             <DropdownEdit className='-translate-x-3'>
@@ -145,7 +145,10 @@ export default function TableEmployee({
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className='flex items-center gap-2 cursor-pointer'
-                  onClick={() => {}}
+                  onClick={() => {
+                    onSelect(id)
+                    onDeleteEmployee(true)
+                  }}
                 >
                   Hapus
                 </DropdownMenuItem>
