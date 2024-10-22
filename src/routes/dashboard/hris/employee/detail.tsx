@@ -1,15 +1,16 @@
-import { useParams } from 'react-router-dom'
-import { PATH } from '@/utils/constant/_paths'
 import { Title, useTitle } from '@/routes/dashboard/_component/header'
 import { DashboardLayout } from '@/routes/dashboard/_component/layout'
-import { useDetailName } from '@/hooks/use-detail-name'
 import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import DetailEmployee from './_component/detail/detail-employee'
+import DeleteEmployee from './_component/detail/delete-employee'
 import TableEmployee from './_component/detail/table-employee'
+import AddEmployee from './_component/detail/add-employee'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { useDetailName } from '@/hooks/use-detail-name'
+import { PATH } from '@/utils/constant/_paths'
+import { useParams } from 'react-router-dom'
 import { links } from './_component/links'
 import { useState } from 'react'
-import AddEmployee from './_component/detail/add-employee'
-import DetailEmployee from './_component/detail/detail-employee'
 
 export type DialogEmployee = {
   add: boolean
@@ -44,9 +45,10 @@ export default function Detail() {
           <TableEmployee
             positionId={positionId}
             name={link?.name}
-            onAddEmployee={() => handleDialog('add', true)}
             onSelect={setSelectedId}
+            onAddEmployee={() => handleDialog('add', true)}
             onDetailEmployee={(val) => handleDialog('detail', val)}
+            onDeleteEmployee={(val) => handleDialog('delete', val)}
           />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line px-4 py-2 space-y-4'>
@@ -108,6 +110,11 @@ export default function Detail() {
       <DetailEmployee
         open={dialog.detail}
         setOpen={() => handleDialog('detail')}
+        id={selectedId}
+      />
+      <DeleteEmployee
+        open={dialog.delete}
+        setOpen={() => handleDialog('delete')}
         id={selectedId}
       />
     </DashboardLayout>
