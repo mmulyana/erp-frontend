@@ -13,7 +13,7 @@ type Params = Pagination & {
 }
 export const usePosition = (params?: Params) => {
   return useQuery({
-    queryKey: [KEYS.HRIS_POSITION],
+    queryKey: [KEYS.HRIS_POSITION, params],
     queryFn: async (): Promise<AxiosResponse<IApi<Position[]>>> => {
       return await http.request({
         method: 'GET',
