@@ -1,11 +1,27 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { createPosition } from '@/utils/types/form'
+import { IApi, Position } from '@/utils/types/api'
+import { Pagination } from '@/utils/types/common'
 import { KEYS } from '../../utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
-import http from '@/utils/http'
 import { toast } from 'sonner'
+import http from '@/utils/http'
+import { AxiosResponse } from 'axios'
 
-export const usePosition = () => {
-  return useQuery({ queryKey: [KEYS.HRIS_POSITION], queryFn: fetcherPosition })
+type Params = Pagination & {
+  name?: string
+}
+export const usePosition = (params?: Params) => {
+  return useQuery({
+    queryKey: [KEYS.HRIS_POSITION],
+    queryFn: async (): Promise<AxiosResponse<IApi<Position[]>>> => {
+      return await http.request({
+        method: 'GET',
+        url: URLS.HRIS_POSITION,
+        params,
+      })
+    },
+  })
 }
 
 export const useDetailPosition = ({
@@ -17,7 +33,9 @@ export const useDetailPosition = ({
 }) => {
   return useQuery({
     queryKey: [KEYS.HRIS_POSITION, id],
-    queryFn: () => fetcherDetailPosition({ id }),
+    queryFn: async (): Promise<AxiosResponse<IApi<Position>>> => {
+      return await http(`${URLS.HRIS_POSITION}/${id}`)
+    },
     enabled,
   })
 }
@@ -26,10 +44,15 @@ export const useCreatePosition = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: fetcherCreatePosition,
+    mutationFn: async (payload: createPosition) => {
+      return await http.post(URLS.HRIS_POSITION, payload)
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.HRIS_POSITION],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE_TOTAL],
       })
       toast.success(data?.data?.message)
     },
@@ -40,10 +63,15 @@ export const useUpdatePosition = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: fetcherUpdatePosition,
+    mutationFn: async (payload: createPosition & { id: number }) => {
+      return await http.patch(`${URLS.HRIS_POSITION}/${payload.id}`, payload)
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.HRIS_POSITION],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE_TOTAL],
       })
       toast.success(data?.data?.message)
     },
@@ -54,38 +82,17 @@ export const useDeletePosition = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: fetcherDeletePosition,
+    mutationFn: async (payload: { id: number }) => {
+      return await http.delete(`${URLS.HRIS_POSITION}/${payload.id}`)
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.HRIS_POSITION],
       })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE_TOTAL],
+      })
       toast.success(data?.data?.message)
     },
   })
-}
-
-export const fetcherPosition = async () => {
-  return await http(URLS.HRIS_POSITION)
-}
-export const fetcherDetailPosition = async (payload: { id?: number }) => {
-  return await http(`${URLS.HRIS_POSITION}/${payload.id}`)
-}
-
-type Payload = {
-  name: string
-  description?: string
-}
-
-export const fetcherCreatePosition = async (payload: Payload) => {
-  return await http.post(URLS.HRIS_POSITION, payload)
-}
-
-export const fetcherUpdatePosition = async (
-  payload: Payload & { id: number }
-) => {
-  return await http.patch(`${URLS.HRIS_POSITION}/${payload.id}`, payload)
-}
-
-export const fetcherDeletePosition = async (payload: { id: number }) => {
-  return await http.delete(`${URLS.HRIS_POSITION}/${payload.id}`)
 }
