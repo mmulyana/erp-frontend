@@ -21,9 +21,14 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import ModalAdd from './_component/index/add-position'
 import ModalDelete from './_component/index/modal-delete'
+import useUrlState from '@ahooksjs/use-url-state'
 
 export default function Employee() {
-  const positionQuery = usePosition()
+  const [url] = useUrlState({ name: '' })
+
+  const positionQuery = usePosition({
+    ...(url.name !== '' ? { name: url.name } : undefined),
+  })
 
   useTitle(links)
 
@@ -132,9 +137,9 @@ export default function Employee() {
           <FilterTable placeholder='Cari jabatan' />
           <DataTable
             data={positionQuery.data?.data?.data || []}
+            isLoading={positionQuery.isLoading}
             columns={columns}
             withLoading
-            isLoading={positionQuery.isLoading}
           />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>
