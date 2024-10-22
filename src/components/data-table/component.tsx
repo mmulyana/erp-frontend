@@ -9,7 +9,7 @@ import {
 } from '../ui/select'
 import { cn } from '@/utils/cn'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import Search from '../common/search'
+import SearchUrl from '../common/search-url'
 
 interface PaginationProps {
   totalPages: number
@@ -132,7 +132,7 @@ export function FilterTable({ className, placeholder }: FilterProps) {
         className
       )}
     >
-      <Search placeholder={placeholder} />
+      <SearchUrl placeholder={placeholder} />
     </div>
   )
 }
