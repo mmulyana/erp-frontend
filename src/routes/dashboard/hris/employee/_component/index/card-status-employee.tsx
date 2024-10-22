@@ -7,27 +7,12 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useChartEmployeeByStatus } from '@/hooks/api/use-chart'
 import { Pie, PieChart } from 'recharts'
 
-const chartData2 = [
-  { status: 'active', count: 42, fill: '#5463E8' },
-  { status: 'nonactive', count: 8, fill: '#274754' },
-]
-const chartConfig2 = {
-  visitors: {
-    label: 'Pegawai',
-  },
-  active: {
-    label: 'Aktif',
-    color: 'hsl(var(--chart-1))',
-  },
-  nonactive: {
-    label: 'Tidak Aktif',
-    color: 'hsl(var(--chart-2))',
-  },
-} satisfies ChartConfig
-
 export default function CardStatusEmployee() {
+  const ByStatusQuery = useChartEmployeeByStatus()
+
   return (
     <Card>
       <CardHead>
@@ -35,7 +20,9 @@ export default function CardStatusEmployee() {
       </CardHead>
       <Cardbody className='pt-0'>
         <ChartContainer
-          config={chartConfig2}
+          config={
+            (ByStatusQuery.data?.data.data?.chartConfig as ChartConfig) || {}
+          }
           className='mx-auto aspect-square max-h-[250px]'
         >
           <PieChart>
@@ -44,7 +31,7 @@ export default function CardStatusEmployee() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData2}
+              data={ByStatusQuery.data?.data.data?.chartData || []}
               dataKey='count'
               nameKey='status'
               innerRadius={60}
