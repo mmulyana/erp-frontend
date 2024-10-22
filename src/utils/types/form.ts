@@ -53,3 +53,9 @@ export type createBrand = {
   name: string
   photo?: File | null
 }
+
+export type createPosition = {
+  name: string
+  color: string
+  description?: string
+}
