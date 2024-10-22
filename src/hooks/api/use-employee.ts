@@ -4,9 +4,13 @@ import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { toast } from 'sonner'
-import { objectToFormData } from '@/utils/ObjectToFormData'
 import { AxiosResponse } from 'axios'
-import { Employee, IApiPagination } from '@/utils/types/api'
+import { Employee, IApi, IApiPagination } from '@/utils/types/api'
+import {
+  createCertif,
+  payloadCreateEmployee,
+  payloadUploadPhoto,
+} from '@/utils/types/form'
 
 type ParamsEmployee = {
   search?: string
@@ -47,15 +51,35 @@ export const useCreateEmployee = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (payload: any) => {
-      // return await http.post(URLS.EMPLOYEE, data)
-      const formData = objectToFormData(payload.data)
+    mutationFn: async (
+      payload: payloadCreateEmployee
+    ): Promise<AxiosResponse<IApi<Employee>>> => {
+      return await http.post(URLS.EMPLOYEE, payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
+  })
+}
 
-      return await http.post(URLS.EMPLOYEE, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+export const useUploadPhoto = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (payload: payloadUploadPhoto) => {
+      const formData = new FormData()
+      formData.append('photo', payload.photo)
+
+      return await http.patch(
+        `${URLS.EMPLOYEE}/update-photo/${payload.id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
@@ -87,15 +111,7 @@ export const useCreateCertifEmployee = () => {
   return useMutation({
     mutationFn: async (payload: {
       employeeId: number
-      data: {
-        certif_name: string
-        certif_file: File | null
-        issuing_organization?: string
-        issue_year?: string
-        issue_month?: string
-        expiry_year?: string
-        competencyId?: string
-      }[]
+      data: createCertif[]
     }) => {
       const formData = new FormData()
 
