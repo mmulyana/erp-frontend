@@ -1,3 +1,4 @@
+import InputV1 from '@/components/common/input-v1'
 import Label from '@/components/common/label'
 import { RadioV1 } from '@/components/common/radio-v1'
 import MultiSelect from '@/components/common/select/multi-select-v1'
@@ -20,6 +21,7 @@ import {
 } from '@/components/ui/select'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { TabsContent, TabsList, TabsTrigger, Tabs } from '@/components/ui/tabs'
+import { Textarea } from '@/components/ui/textarea'
 import { useCompetency } from '@/hooks/api/use-competency'
 import {
   useCreateCertifEmployee,
@@ -28,7 +30,7 @@ import {
 import { cn } from '@/utils/cn'
 import { months } from '@/utils/constant/months'
 import { createEmployee } from '@/utils/types/form'
-import { File, Plus, X } from 'lucide-react'
+import { File, Mail, Phone, Plus, Trash, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 
@@ -76,16 +78,21 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       pay_type: 'daily',
       overtime_salary: '',
       positionId: id,
+      email: '',
+      safety_induction_date: '',
       competencies: [],
       addressess: [
         {
           type: 'domicile',
           value: '',
         },
-      ],
-      contacts: [
         {
-          type: 'phone',
+          type: 'origin',
+          value: '',
+        },
+      ],
+      phoneNumbers: [
+        {
           value: '',
         },
       ],
@@ -128,6 +135,14 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
   const addressField = useFieldArray({
     control: form.control,
     name: 'addressess',
+  })
+  const addressess = form.watch('addressess')
+  // HANDLE ADDRESS
+
+  // HANDLE ADDRESS
+  const phoneField = useFieldArray({
+    control: form.control,
+    name: 'phoneNumbers',
   })
   // HANDLE ADDRESS
 
@@ -347,11 +362,121 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                           )}
                         />
                       </div>
-                      <MultiSelect
-                        options={labels}
-                        onChange={handleCompetencies}
-                        placeholder='Pilih Kompetensi'
+                      <div className='space-y-2'>
+                        <FormLabel>Kompetensi</FormLabel>
+                        <MultiSelect
+                          options={labels}
+                          onChange={handleCompetencies}
+                          placeholder='Pilih Kompetensi'
+                        />
+                      </div>
+                      <div className='space-y-3'>
+                        {phoneField.fields.map((_, index) => (
+                          <div key={index} className='pr-9 relative'>
+                            <InputV1
+                              name={`phoneNumbers.${index}.value`}
+                              label={
+                                index > 0
+                                  ? 'Nomor Telepon alternatif'
+                                  : 'Nomor Telepon'
+                              }
+                              suffix={
+                                <Phone
+                                  size={16}
+                                  strokeWidth={2}
+                                  aria-hidden='true'
+                                />
+                              }
+                            />
+                            {index > 0 && (
+                              <button
+                                type='button'
+                                className='absolute top-[72%] -translate-y-1/2 right-0 text-dark/80 hover:bg-dark/10 h-8 w-8 flex justify-center items-center rounded'
+                                onClick={() => {
+                                  phoneField.remove(index)
+                                }}
+                              >
+                                <Trash size={16} />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                        <Button
+                          variant='ghost'
+                          type='button'
+                          className='text-blue-500 pl-2 pr-3.5 hover:bg-blue-500/10 text-sm hover:text-blue-500 font-normal gap-1'
+                          onClick={() => {
+                            phoneField.append({ value: '' })
+                          }}
+                        >
+                          <Plus size={16} strokeWidth={3} />
+                          Tambah No. Telp
+                        </Button>
+                      </div>
+                      <InputV1
+                        name='email'
+                        label='Email'
+                        suffix={
+                          <Mail size={16} strokeWidth={2} aria-hidden='true' />
+                        }
                       />
+                      <div className='space-y-5'>
+                        {addressField.fields.map((_, index) => (
+                          <FormField
+                            key={index}
+                            control={form.control}
+                            label={
+                              index > 1
+                                ? 'Alamat alternatife'
+                                : index > 0
+                                ? 'Alamat asal'
+                                : 'Alamat domisili'
+                            }
+                            name={`addressess.${index}.value`}
+                            render={({ field }) => (
+                              <div className='relative'>
+                                <Textarea {...field} />
+                                {index > 0 && (
+                                  <button
+                                    type='button'
+                                    className='absolute -top-5 -translate-y-1/2 right-0 text-dark/80 hover:bg-dark/10 h-8 w-8 flex justify-center items-center rounded'
+                                    onClick={() => {
+                                      addressField.remove(index)
+                                    }}
+                                  >
+                                    <Trash size={16} />
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          />
+                        ))}
+                        <Button
+                          variant='ghost'
+                          type='button'
+                          className='text-blue-500 pl-2 pr-3.5 hover:bg-blue-500/10 text-sm hover:text-blue-500 font-normal gap-1'
+                          onClick={() => {
+                            if (addressess && addressess?.length > 1) {
+                              addressField.append({
+                                value: '',
+                                type: 'alternative',
+                              })
+                              return
+                            } else if (addressess && addressess?.length > 0) {
+                              addressField.append({ value: '', type: 'origin' })
+                            }
+                          }}
+                        >
+                          <Plus size={16} strokeWidth={3} />
+                          {addressess
+                            ? addressess?.length > 1
+                              ? 'Tambah alamat alternatif'
+                              : addressess?.length > 0
+                              ? 'Tambah alamat asal'
+                              : null
+                            : null}
+                        </Button>
+                      </div>
                     </div>
                   </ScrollArea>
                 </div>
