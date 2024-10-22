@@ -1,3 +1,57 @@
+export type createEmployee = {
+  photo: File | null
+  fullname: string
+  joined_at?: string
+  joined_type?: string
+  employment_type?: string
+  last_education?: string
+  gender?: string
+  place_of_birth?: string
+  birth_date?: string
+  marital_status?: string
+  religion?: string
+  basic_salary?: string
+  pay_type?: string
+  overtime_salary?: string
+  positionId?: string
+  competencies: string[]
+  safety_induction_date?: string
+  addressess?: createAddress[]
+  contacts?: createContact[]
+
+  certif_file?: File | null
+  certif_name: string
+  issuing_organization?: string
+  issue_year?: string
+  issue_month?: string
+  expiry_year?: string
+  expiry_month?: string
+  competencyId?: string
+
+  certifications: createCertif[]
+}
+
+export type createCertif = {
+  certif_file?: File | null
+  certif_name: string
+  issuing_organization?: string
+  issue_year?: string
+  issue_month?: string
+  expiry_year?: string
+  expiry_month?: string
+  competencyId?: string
+}
+
+export type createAddress = {
+  type: 'domicile' | 'origin' | 'alternative'
+  value: string
+}
+
+export type createContact = {
+  type: 'email' | 'phone' | 'etc'
+  value: string
+}
+
 export type CreateSupplier = {
   name: string
   phone?: string
