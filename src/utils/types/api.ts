@@ -239,11 +239,15 @@ type Overtime = {
   description?: number
 }
 
-type Position = {
+export type Position = {
   id: number
   name: string
   color?: string
   description: string
+  _count: {
+    employees: number
+  }
+  employees?: Employee[]
 }
 
 type EmployeeCompetency = {
@@ -308,4 +312,17 @@ export type CashAdvance = {
   requestDate: string
   employee: Employee
   description?: string
+}
+
+export type Chart = {
+  chartData: {
+    position: string
+    count: number
+    fill: string
+  }[]
+  chartConfig: {
+    [key: string]: {
+      label: string
+    }[]
+  }
 }
