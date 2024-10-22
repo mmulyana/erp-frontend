@@ -26,10 +26,15 @@ import { useCompetency } from '@/hooks/api/use-competency'
 import {
   useCreateCertifEmployee,
   useCreateEmployee,
+  useUploadPhoto,
 } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
 import { months } from '@/utils/constant/months'
-import { createEmployee } from '@/utils/types/form'
+import {
+  createEmployee,
+  payloadCreateEmployee,
+  createCertif as createCertifType,
+} from '@/utils/types/form'
 import { File, Mail, Phone, Plus, Trash, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
@@ -58,6 +63,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
   // HANDLE FORM
   const { mutate: createEmployee } = useCreateEmployee()
   const { mutate: createCertif } = useCreateCertifEmployee()
+  const { mutate: uploadPhoto } = useUploadPhoto()
 
   const [newUser, setNewUser] = useState<any>(null)
 
@@ -79,7 +85,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       overtime_salary: '',
       positionId: id,
       email: '',
-      safety_induction_date: '',
+      // safety_induction_date: '',
       competencies: [],
       addressess: [
         {
@@ -146,12 +152,14 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
   })
   // HANDLE ADDRESS
 
-  const onSubmit = async (data: any) => {
+  const photo = form.watch('photo')
+
+  const onSubmit = async (data: createEmployee) => {
     if (newUser) {
       const payload = data.certifications
       createCertif(
         {
-          data: payload,
+          data: payload as createCertifType[],
           employeeId: newUser.id,
         },
         {
@@ -160,10 +168,14 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       )
       return
     }
-    createEmployee(
-      { data },
-      { onSuccess: (data) => setNewUser(data.data.data) }
-    )
+    createEmployee(data as payloadCreateEmployee, {
+      onSuccess: (data) => {
+        setNewUser(data.data.data)
+        if (data.data.data?.id && photo) {
+          uploadPhoto({ id: data.data.data.id, photo })
+        }
+      },
+    })
   }
 
   const handleCompetencies = (ids: any) => {
