@@ -93,7 +93,7 @@ export default function MultiSelect({
           type='text'
           placeholder={selectedOptions.length === 0 ? placeholder : ''}
           className={cn(
-            'outline-none max-w-24',
+            'outline-none',
             !selectedOptions.length && 'ml-2.5'
           )}
           value={searchTerm}
