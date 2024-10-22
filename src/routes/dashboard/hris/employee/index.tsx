@@ -19,11 +19,12 @@ import { links } from './_component/links'
 import { createLinkDetail } from '@/utils/create-link-detail'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
-import ModalAdd from './_component/index/modal-add'
+import ModalAdd from './_component/index/add-position'
 import ModalDelete from './_component/index/modal-delete'
 
 export default function Employee() {
-  const { data, isLoading } = usePosition()
+  const positionQuery = usePosition()
+
   useTitle(links)
 
   // COLUMNS POSITION
@@ -130,10 +131,10 @@ export default function Employee() {
           </HeadTable>
           <FilterTable placeholder='Cari jabatan' />
           <DataTable
-            data={data?.data?.data || []}
+            data={positionQuery.data?.data?.data || []}
             columns={columns}
             withLoading
-            isLoading={isLoading}
+            isLoading={positionQuery.isLoading}
           />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>
