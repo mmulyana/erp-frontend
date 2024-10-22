@@ -16,8 +16,9 @@ export type createEmployee = {
   positionId?: string
   competencies: string[]
   safety_induction_date?: string
+  email?: string
   addressess?: createAddress[]
-  contacts?: createContact[]
+  phoneNumbers?: createPhone[]
 
   certif_file?: File | null
   certif_name: string
@@ -47,8 +48,7 @@ export type createAddress = {
   value: string
 }
 
-export type createContact = {
-  type: 'email' | 'phone' | 'etc'
+export type createPhone = {
   value: string
 }
 
