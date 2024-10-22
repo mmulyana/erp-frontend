@@ -27,8 +27,9 @@ import {
 } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
 import { months } from '@/utils/constant/months'
+import { createEmployee } from '@/utils/types/form'
 import { File, Plus, X } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 
 type Props = {
@@ -37,26 +38,14 @@ type Props = {
   id?: string
 }
 
-type Certifications = {
-  certif_file: File | null
-  certif_name: string
-  issuing_organization: string
-  issue_year: string
-  issue_month: string
-  expiry_year: string
-  expiry_month: string
-  competencyId: string
-}
-
 export default function AddEmployee({ open, setOpen, id }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [preview, setPreview] = useState<string | null>(null)
-  const [openNew, setOpenNew] = useState(false)
 
   const { data, isLoading } = useCompetency()
   const labels = useMemo(
     () =>
-      data?.data.data.map((item: any) => ({
+      data?.data.data?.map((item: any) => ({
         ...item,
         label: item.name,
         value: item.id,
@@ -70,7 +59,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
 
   const [newUser, setNewUser] = useState<any>(null)
 
-  const form = useForm({
+  const form = useForm<createEmployee>({
     defaultValues: {
       photo: null as File | null,
       fullname: '',
@@ -87,9 +76,21 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       pay_type: 'daily',
       overtime_salary: '',
       positionId: id,
-      competencies: [] as string[],
+      competencies: [],
+      addressess: [
+        {
+          type: 'domicile',
+          value: '',
+        },
+      ],
+      contacts: [
+        {
+          type: 'phone',
+          value: '',
+        },
+      ],
 
-      certif_file: null as File | null,
+      certif_file: null,
       certif_name: '',
       issuing_organization: '',
       issue_year: '',
@@ -98,14 +99,37 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       expiry_month: '',
       competencyId: '',
 
-      certifications: [] as Certifications[],
+      certifications: [],
     },
   })
 
-  const { fields, remove, append } = useFieldArray({
+  // HANDLE CERTIFICATION
+  const [openNew, setOpenNew] = useState(false)
+
+  const onCloseAddCertif = () => {
+    form.resetField('certif_file')
+    form.resetField('certif_name')
+    form.resetField('issuing_organization')
+    form.resetField('issue_month')
+    form.resetField('issue_year')
+    form.resetField('expiry_month')
+    form.resetField('expiry_year')
+    form.resetField('competencyId')
+    setOpenNew(false)
+  }
+
+  const certifFields = useFieldArray({
     control: form.control,
     name: 'certifications',
   })
+  // HANDLE CERTIFICATION
+
+  // HANDLE ADDRESS
+  const addressField = useFieldArray({
+    control: form.control,
+    name: 'addressess',
+  })
+  // HANDLE ADDRESS
 
   const onSubmit = async (data: any) => {
     if (newUser) {
@@ -131,6 +155,11 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
     const selected = ids.map((item: any) => item.toString())
     form.setValue('competencies', selected)
   }
+
+  useEffect(() => {
+    if (!open) form.reset()
+  }, [open])
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className='w-[512px] max-w-full p-0'>
@@ -321,6 +350,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                       <MultiSelect
                         options={labels}
                         onChange={handleCompetencies}
+                        placeholder='Pilih Kompetensi'
                       />
                     </div>
                   </ScrollArea>
@@ -515,26 +545,13 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                           </div>
                         )}
                         <div className='flex justify-end gap-4'>
-                          <Button
-                            variant='outline'
-                            onClick={() => {
-                              form.resetField('certif_file')
-                              form.resetField('certif_name')
-                              form.resetField('issuing_organization')
-                              form.resetField('issue_month')
-                              form.resetField('issue_year')
-                              form.resetField('expiry_month')
-                              form.resetField('expiry_year')
-                              form.resetField('competencyId')
-                              setOpenNew(false)
-                            }}
-                          >
+                          <Button variant='outline' onClick={onCloseAddCertif}>
                             Batal
                           </Button>
                           <Button
                             variant='secondary'
                             onClick={() => {
-                              append({
+                              certifFields.append({
                                 certif_file: form.getValues('certif_file'),
                                 certif_name: form.getValues('certif_name'),
                                 issuing_organization: form.getValues(
@@ -546,15 +563,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                                 expiry_month: form.getValues('expiry_month'),
                                 competencyId: form.getValues('competencyId'),
                               })
-                              form.resetField('certif_file')
-                              form.resetField('certif_name')
-                              form.resetField('issuing_organization')
-                              form.resetField('issue_month')
-                              form.resetField('issue_year')
-                              form.resetField('expiry_month')
-                              form.resetField('expiry_year')
-                              form.resetField('competencyId')
-                              setOpenNew(false)
+                              onCloseAddCertif()
                             }}
                           >
                             Tambah
@@ -563,7 +572,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                       </div>
                     ) : (
                       <div className='px-2 mt-2'>
-                        {fields.map((item, index) => {
+                        {certifFields.fields.map((item, index) => {
                           const label = labels.filter(
                             (t: any) => t.id === Number(item.competencyId)
                           )
@@ -607,7 +616,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                                 </p>
                               </div>
                               <button
-                                onClick={() => remove(index)}
+                                onClick={() => certifFields.remove(index)}
                                 className='absolute top-0 right-0 bg-line h-7 w-7 flex justify-center items-center'
                               >
                                 <X className='w-5 h-5 text-dark' />
@@ -671,22 +680,22 @@ function Navigation({
         </button>
       )}
       <div className='flex gap-2 items-center justify-end'>
-        <button
-          className={cn(
-            'py-2 px-3 h-fit text-dark rounded-lg text-sm bg-dark/10 border border-transparent',
-            step === totalSteps &&
-              'bg-blue-primary border-blue-darker text-white'
-          )}
-        >
-          Simpan
-        </button>
-        {step !== totalSteps && (
+        {step === 0 && (
           <button
-            type={step === 1 ? 'submit' : 'button'}
+            type='submit'
             onClick={nextStep}
             className='py-2 px-3 h-fit border border-blue-darker text-white bg-blue-primary rounded-lg text-sm'
           >
             Selanjutnya
+          </button>
+        )}
+        {step > 0 && (
+          <button
+            type='submit'
+            onClick={nextStep}
+            className='py-2 px-3 h-fit border border-blue-darker text-white bg-blue-primary rounded-lg text-sm'
+          >
+            {step !== totalSteps ? 'Selanjutnya' : 'Simpan'}
           </button>
         )}
       </div>
