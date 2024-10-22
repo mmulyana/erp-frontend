@@ -20,7 +20,7 @@ import { createLinkDetail } from '@/utils/create-link-detail'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import ModalAdd from './_component/index/add-position'
-import ModalDelete from './_component/index/modal-delete'
+import ModalDelete from './_component/index/delete-position'
 import useUrlState from '@ahooksjs/use-url-state'
 
 export default function Employee() {
