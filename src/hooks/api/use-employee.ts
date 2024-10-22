@@ -6,7 +6,7 @@ import http from '@/utils/http'
 import { toast } from 'sonner'
 import { objectToFormData } from '@/utils/ObjectToFormData'
 import { AxiosResponse } from 'axios'
-import { Employee, IApi, IApiPagination } from '@/utils/types/api'
+import { Employee, IApiPagination } from '@/utils/types/api'
 
 type ParamsEmployee = {
   search?: string
@@ -17,9 +17,7 @@ type ParamsEmployee = {
 export const useEmployees = (params?: ParamsEmployee) => {
   return useQuery({
     queryKey: [KEYS.EMPLOYEE, params],
-    queryFn: async (): Promise<
-      AxiosResponse<IApiPagination<Employee[]>>
-    > => {
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<Employee[]>>> => {
       return await http
         .request({
           method: 'GET',
@@ -61,6 +59,23 @@ export const useCreateEmployee = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
+  })
+}
+
+export const useDeleteEmployee = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      return await http.delete(`${URLS.EMPLOYEE}/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE_TOTAL],
+      })
       toast.success(data.data.message)
     },
   })
