@@ -257,7 +257,7 @@ export type Position = {
   employees?: Employee[]
 }
 
-type EmployeeCompetency = {
+export type EmployeeCompetency = {
   id: number
   employeeId: number
   competencyId: number
@@ -276,14 +276,20 @@ export type Competency = {
   }
 }
 
-type Certification = {
-  id?: number
-  name: string
-  issuingOrganization: string
-  issueDate: string
-  expiryDate: string
+export type Certification = {
+  id: number
+  certif_name: string
+  certif_file?: number
+  issuing_organization?: string
+  issue_year?: number
+  issue_month?: number
+  expiry_year?: number
+  expiry_month?: number
+  expire_at?: number
   employeeId: number
-  employee?: Employee
+  competencyId: number
+  competency: Competency
+  employee: Employee
 }
 
 type Contact = {
