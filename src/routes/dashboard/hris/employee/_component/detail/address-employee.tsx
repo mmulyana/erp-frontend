@@ -7,7 +7,7 @@ import {
   useUpdatePhone,
 } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
-import { PhoneNumber } from '@/utils/types/api'
+import { Address } from '@/utils/types/api'
 import { Copy, Eye, EyeOff, Pencil, Phone, Plus, Trash } from 'lucide-react'
 import { KeyboardEvent, useRef, useState, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -15,10 +15,10 @@ import { toast } from 'sonner'
 
 type Props = {
   id?: number | null
-  phones: PhoneNumber[]
+  addresses: Address[]
 }
 
-export default function PhoneEmployee({ id, phones }: Props) {
+export default function AddressEmployee({ id, addresses }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -47,8 +47,8 @@ export default function PhoneEmployee({ id, phones }: Props) {
   const onEdit = (id: number) => {
     setSelectedId(id)
     setIsPhone(true)
-    const index = phones.findIndex((item) => item.id === id)
-    form.setValue('value', phones[index].value)
+    const index = addresses.findIndex((item) => item.id === id)
+    form.setValue('value', addresses[index].value)
   }
 
   const reset = () => {
@@ -94,7 +94,7 @@ export default function PhoneEmployee({ id, phones }: Props) {
 
   return (
     <div className='space-y-2' ref={containerRef}>
-      {phones.length > 0 ? (
+      {addresses.length > 0 ? (
         <div
           className={cn(
             'flex gap-2 flex-wrap items-start flex-col',
@@ -103,20 +103,20 @@ export default function PhoneEmployee({ id, phones }: Props) {
         >
           {open ? (
             <>
-              {phones?.map((phone, index) => (
+              {addresses?.map((address, index) => (
                 <div key={index} className='relative group'>
-                  <p className='text-dark/50 text-sm'>{phone.value}</p>
+                  <p className='text-dark/50 text-sm'>{address.value}</p>
                   <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                      onClick={() => onCopy(phone.value)}
+                      onClick={() => onCopy(address.value)}
                     >
                       <Copy size={12} />
                     </button>
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                       onClick={() => {
-                        remove({ id: phone.id })
+                        remove({ id: address.id })
                       }}
                     >
                       <Trash size={12} />
@@ -124,7 +124,7 @@ export default function PhoneEmployee({ id, phones }: Props) {
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                       onClick={() => {
-                        onEdit(phone.id)
+                        onEdit(address.id)
                       }}
                     >
                       <Pencil size={12} />
@@ -150,18 +150,18 @@ export default function PhoneEmployee({ id, phones }: Props) {
           ) : (
             <>
               <div className='relative group gap-2 flex items-center'>
-                <p className='text-dark'>{phones[0].value}</p>
+                <p className='text-dark'>{addresses[0].value}</p>
                 <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                   <button
                     className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                    onClick={() => onCopy(phones[0].value)}
+                    onClick={() => onCopy(addresses[0].value)}
                   >
                     <Copy size={12} />
                   </button>
                   <button
                     className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                     onClick={() => {
-                      remove({ id: phones[0].id })
+                      remove({ id: addresses[0].id })
                     }}
                   >
                     <Trash size={12} />
@@ -169,14 +169,14 @@ export default function PhoneEmployee({ id, phones }: Props) {
                   <button
                     className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                     onClick={() => {
-                      onEdit(phones[0].id)
+                      onEdit(addresses[0].id)
                     }}
                   >
                     <Pencil size={12} />
                   </button>
                 </div>
               </div>
-              {phones.length > 1 && (
+              {addresses.length > 1 && (
                 <Button
                   type='submit'
                   variant='secondary'
@@ -188,7 +188,7 @@ export default function PhoneEmployee({ id, phones }: Props) {
                     className='absolute left-2 top-[56%] -translate-y-1/2'
                   />
                   Lihat
-                  <span>{phones?.length - 1}</span>
+                  <span>{addresses?.length - 1}</span>
                   nomor lainnya
                 </Button>
               )}
