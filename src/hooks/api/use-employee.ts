@@ -63,6 +63,26 @@ export const useCreateEmployee = () => {
   })
 }
 
+export const useUpdateEmployee = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      payload,
+      id,
+    }: {
+      payload: Partial<payloadCreateEmployee>
+      id: number
+    }): Promise<AxiosResponse<IApi<Employee>>> => {
+      return await http.patch(`${URLS.EMPLOYEE}/${id}`, payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
+  })
+}
+
 export const useUploadPhoto = () => {
   const queryClient = useQueryClient()
 
@@ -115,22 +135,14 @@ export const useCreateCertifEmployee = () => {
     }) => {
       const formData = new FormData()
 
-      payload.data.forEach((item, index) => {
+      payload.data.forEach((item) => {
         Object.entries(item).forEach(([key, value]) => {
           if (key === 'certif_file') {
             if (value instanceof File) {
-              formData.append(`${key}[${index}]`, value, value.name)
-            } else if (value === null || value === undefined) {
-              console.log(
-                `certif_file is null or undefined for certification ${index}`
-              )
-            } else {
-              console.warn(
-                `Unexpected value for certif_file in certification ${index}`
-              )
+              formData.append(key, value)
             }
           } else {
-            formData.append(`${key}[${index}]`, value as string)
+            formData.append(key, value as string)
           }
         })
       })
