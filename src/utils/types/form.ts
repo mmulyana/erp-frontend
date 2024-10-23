@@ -9,9 +9,9 @@ export type payloadCreateEmployee = {
   birth_date?: string
   marital_status?: string
   religion?: string
-  basic_salary?: string
+  basic_salary?: string | undefined
   pay_type?: string
-  overtime_salary?: string
+  overtime_salary?: string | undefined
   positionId?: string
   competencies: string[]
   safety_induction_date?: string
@@ -41,12 +41,12 @@ export type payloadUploadPhoto = {
 export type createCertif = {
   certif_file?: File | null
   certif_name: string
-  issuing_organization?: string
+  issuing_organization?: string 
   issue_year?: string
   issue_month?: string
   expiry_year?: string
   expiry_month?: string
-  competencyId?: string
+  competencyId?: string | null
 }
 
 export type createAddress = {
