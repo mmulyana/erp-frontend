@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import {
   useCreatePhone,
   useDeletePhone,
@@ -8,10 +8,9 @@ import {
 } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
 import { Address } from '@/utils/types/api'
-import { Copy, Eye, EyeOff, Pencil, Phone, Plus, Trash } from 'lucide-react'
+import { Eye, EyeOff, Pencil, Plus, Trash } from 'lucide-react'
 import { KeyboardEvent, useRef, useState, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 type Props = {
   id?: number | null
@@ -19,7 +18,7 @@ type Props = {
 }
 
 export default function AddressEmployee({ id, addresses }: Props) {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const { mutate: create } = useCreatePhone()
@@ -32,33 +31,33 @@ export default function AddressEmployee({ id, addresses }: Props) {
     },
   })
 
-  const [isPhone, setIsPhone] = useState(false)
+  const [isAddress, setIsAddress] = useState(false)
   const [open, setOpen] = useState(false)
   const [selectedId, setSelectedId] = useState<number | null>(null)
 
   useEffect(() => {
-    if (isPhone && inputRef.current) {
+    if (isAddress && inputRef.current) {
       setTimeout(() => {
         inputRef.current?.focus()
       }, 0)
     }
-  }, [isPhone])
+  }, [isAddress])
 
   const onEdit = (id: number) => {
     setSelectedId(id)
-    setIsPhone(true)
+    setIsAddress(true)
     const index = addresses.findIndex((item) => item.id === id)
     form.setValue('value', addresses[index].value)
   }
 
   const reset = () => {
-    setIsPhone(false)
+    setIsAddress(false)
     form.reset()
     containerRef.current?.focus()
     setSelectedId(null)
   }
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       if (!id) return
       if (selectedId) {
@@ -83,13 +82,6 @@ export default function AddressEmployee({ id, addresses }: Props) {
     }
   }
 
-  const onCopy = async (text: string) => {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text)
-      toast.success('Nomor berhasil disalin')
-    }
-  }
-
   if (!id) return null
 
   return (
@@ -109,12 +101,6 @@ export default function AddressEmployee({ id, addresses }: Props) {
                   <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                      onClick={() => onCopy(address.value)}
-                    >
-                      <Copy size={12} />
-                    </button>
-                    <button
-                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                       onClick={() => {
                         remove({ id: address.id })
                       }}
@@ -132,7 +118,7 @@ export default function AddressEmployee({ id, addresses }: Props) {
                   </div>
                 </div>
               ))}
-              {!isPhone && (
+              {!isAddress && (
                 <Button
                   type='submit'
                   variant='secondary'
@@ -152,12 +138,6 @@ export default function AddressEmployee({ id, addresses }: Props) {
               <div className='relative group gap-2 flex items-center'>
                 <p className='text-dark'>{addresses[0].value}</p>
                 <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
-                  <button
-                    className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                    onClick={() => onCopy(addresses[0].value)}
-                  >
-                    <Copy size={12} />
-                  </button>
                   <button
                     className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                     onClick={() => {
@@ -189,14 +169,14 @@ export default function AddressEmployee({ id, addresses }: Props) {
                   />
                   Lihat
                   <span>{addresses?.length - 1}</span>
-                  nomor lainnya
+                  alamat lainnya
                 </Button>
               )}
             </>
           )}
         </div>
       ) : null}
-      {isPhone ? (
+      {isAddress ? (
         <Form {...form}>
           <div className='flex gap-2 pt-2 flex-col'>
             <div className='relative'>
@@ -204,17 +184,14 @@ export default function AddressEmployee({ id, addresses }: Props) {
                 control={form.control}
                 name='value'
                 render={({ field }) => (
-                  <Input
+                  <Textarea
                     {...field}
                     onKeyDown={handleKeyDown}
-                    className='pl-6 [direction:inherit] h-7 w-full rounded-md'
+                    className='w-full rounded-md'
                     ref={inputRef}
                   />
                 )}
               />
-              <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center pl-1 text-muted-foreground/80 peer-disabled:opacity-50'>
-                <Phone size={14} strokeWidth={2} aria-hidden='true' />
-              </div>
             </div>
             <div className='flex justify-end gap-2'>
               <Button
@@ -222,7 +199,7 @@ export default function AddressEmployee({ id, addresses }: Props) {
                 variant='ghost'
                 className='h-7 font-normal text-sm rounded-md p-0 px-2 text-red-400 hover:text-red-600'
                 onClick={() => {
-                  setIsPhone(false)
+                  setIsAddress(false)
                   setSelectedId(null)
                   containerRef.current?.focus()
                   form.reset()
@@ -267,11 +244,11 @@ export default function AddressEmployee({ id, addresses }: Props) {
           variant='ghost'
           className='font-normal hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mt-1'
           onClick={() => {
-            setIsPhone(true)
+            setIsAddress(true)
           }}
         >
           <Plus size={14} />
-          Tambah No.telp
+          Tambah alamat
         </Button>
       )}
     </div>
