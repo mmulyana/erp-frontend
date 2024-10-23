@@ -202,7 +202,7 @@ export type Employee = {
   religion?: string
   last_education?: string
   email?: string
-  phoneNumbers?: { value: string }[]
+  phoneNumbers?: PhoneNumber[]
   address: Address[]
   positionId?: number
   position?: Position
@@ -215,6 +215,11 @@ export type Employee = {
   certifications: Certification[]
   overtime: Overtime[]
   EmployeeAssigned: EmployeeAssigned[]
+}
+
+export type PhoneNumber = {
+  id: number
+  value: string
 }
 
 type EmployeeAssigned = {
