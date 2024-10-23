@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select'
 type Props<C extends React.ElementType> = {
   isEdit: string | null
   keyData: string
-  type?: 'text' | 'select'
+  type?: 'text' | 'select' | 'date' | 'custom'
   as?: C
   defaultData?: string | number | null
   className?: string
@@ -16,8 +16,9 @@ type Props<C extends React.ElementType> = {
   onUpdate?: (val: string | number) => void
   onEdit?: (val: string | null) => void
   customData?: (val: string | number) => React.ReactNode
+  customEdit?: React.ReactNode
   options?: {
-    label: string
+    name: string
     value: string
   }[]
 } & React.ComponentPropsWithoutRef<C>
@@ -44,9 +45,8 @@ export const Editable = <C extends React.ElementType = 'p'>({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (!data || !onUpdate || !onEdit) return
-      if (onUpdate) {
-        onUpdate(data as string | number)
-      }
+
+      onUpdate?.(data as string | number)
       handleBlur()
     }
   }
@@ -78,8 +78,34 @@ export const Editable = <C extends React.ElementType = 'p'>({
 
   const Component = as || 'p'
 
-  const FormType = (type: 'text' | 'select') => {
+  const FormType = (type: 'text' | 'select' | 'date' | 'custom') => {
     switch (type) {
+      case 'date':
+        return (
+          <div className='flex gap-2 items-center'>
+            <Input
+              onChange={(e) => setData(e.target.value)}
+              value={data || ''}
+              onKeyDown={handleKeyDown}
+              className={cn(
+                'shadow-none h-fit block p-0 pl-1 rounded-md border-blue-primary w-[104px]',
+                classNameInput
+              )}
+              ref={ref}
+              type='date'
+            />
+            <Button
+              variant='secondary'
+              className='h-6 font-normal text-sm rounded-md p-0 px-2'
+              onClick={() => {
+                onUpdate?.(data as string)
+                handleBlur()
+              }}
+            >
+              Simpan
+            </Button>
+          </div>
+        )
       case 'select':
         return (
           <Select
@@ -94,14 +120,14 @@ export const Editable = <C extends React.ElementType = 'p'>({
             <SelectTrigger className='h-fit p-0 border-none bg-gray-50 py-1 pr-3'>
               <Button
                 variant='ghost'
-                className={cn('shadow-none h-6 p-0 pl-3', classNameInput)}
+                className={cn('shadow-none h-fit p-0 pl-2', classNameInput)}
               >
-                {defaultData ?? 'Pilih'}
+                Pilih
               </Button>
             </SelectTrigger>
             <SelectContent>
               {options?.map((option) => (
-                <SelectItem value={option.value}>{option.label}</SelectItem>
+                <SelectItem value={option.value}>{option.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
