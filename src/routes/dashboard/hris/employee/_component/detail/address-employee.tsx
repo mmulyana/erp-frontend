@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import {
-  useCreatePhone,
-  useDeletePhone,
-  useUpdatePhone,
+  useCreateAddress,
+  useDeleteAddress,
+  useUpdateAddress,
 } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
 import { Address } from '@/utils/types/api'
@@ -21,9 +21,9 @@ export default function AddressEmployee({ id, addresses }: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const { mutate: create } = useCreatePhone()
-  const { mutate: remove } = useDeletePhone()
-  const { mutate: update } = useUpdatePhone()
+  const { mutate: create } = useCreateAddress()
+  const { mutate: remove } = useDeleteAddress()
+  const { mutate: update } = useUpdateAddress()
 
   const form = useForm<{ value: string }>({
     defaultValues: {
@@ -96,9 +96,14 @@ export default function AddressEmployee({ id, addresses }: Props) {
           {open ? (
             <>
               {addresses?.map((address, index) => (
-                <div key={index} className='relative group'>
-                  <p className='text-dark/50 text-sm'>{address.value}</p>
-                  <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
+                <div
+                  key={index}
+                  className='relative group pb-2 border-b border-dark/20 w-full'
+                >
+                  <p className='text-dark/50 text-sm w-36 break-words'>
+                    {address.value}
+                  </p>
+                  <div className='absolute right-0 top-0 flex gap-2 items-center'>
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                       onClick={() => {
