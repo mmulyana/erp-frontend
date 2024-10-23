@@ -2,12 +2,14 @@ import { cn } from '@/utils/cn'
 
 type Props = {
   status: boolean
+  className?: string
 }
-export default function StatusChips({ status }: Props) {
+export default function StatusChips({ status, className }: Props) {
   return (
     <div
       className={cn(
-        'pl-2 pr-[9px] py-0.5 rounded-[6px] border border-line inline-flex gap-1 items-center'
+        'pl-2 pr-[9px] py-0.5 rounded-[6px] border border-line inline-flex gap-1 items-center',
+        className
       )}
     >
       <div
