@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { EmployeeStatus } from '@/utils/enum/common'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
@@ -15,7 +14,6 @@ import {
 type ParamsEmployee = {
   search?: string
   positionId?: string
-  status?: EmployeeStatus
   enabled?: boolean
 }
 export const useEmployees = (params?: ParamsEmployee) => {
@@ -147,8 +145,7 @@ export const useDeleteEmployee = () => {
     },
   })
 }
-
-export const useCreateCertifEmployee = () => {
+export const useCreateMultipleCertif = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -164,8 +161,10 @@ export const useCreateCertifEmployee = () => {
             if (value instanceof File) {
               formData.append(key, value)
             }
-          } else {
-            formData.append(key, value as string)
+          } else if (typeof value == 'number') {
+            formData.append(key, String(value))
+          } else if (value !== null && typeof value == 'string') {
+            formData.append(key, value)
           }
         })
       })
@@ -183,6 +182,99 @@ export const useCreateCertifEmployee = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useCreateCertif = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (payload: { employeeId: number; data: createCertif }) => {
+      const formData = new FormData()
+
+      Object.entries(payload.data).forEach(([key, value]) => {
+        if (key === 'certif_file') {
+          if (value instanceof File) {
+            formData.append(key, value)
+          }
+        } else if (typeof value == 'number') {
+          formData.append(key, String(value))
+        } else if (value !== null && typeof value == 'string') {
+          formData.append(key, value)
+        }
+      })
+
+      return await http.post(
+        URLS.EMPLOYEE +
+          `/certification/single/${payload.employeeId}?file_name=sertifikat-`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useUpdateCertif = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (payload: {
+      id: number
+      data: createCertif
+    }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
+      const formData = new FormData()
+
+      Object.entries(payload.data).forEach(([key, value]) => {
+        if (key === 'certif_file') {
+          if (value instanceof File) {
+            formData.append(key, value)
+          }
+        } else if (typeof value == 'number') {
+          formData.append(key, String(value))
+        } else if (value !== null && typeof value == 'string') {
+          formData.append(key, value)
+        }
+      })
+
+      return await http.patch(
+        URLS.EMPLOYEE + `/certification/${payload.id}?file_name=sertifikat-`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useDeleteCertif = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (payload: {
+      id: number
+    }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
+      return await http.delete(URLS.EMPLOYEE + `/certification/${payload.id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
       toast.success(data.data.message)
     },
   })
@@ -278,7 +370,7 @@ export const useUpdateAddress = () => {
     mutationFn: async ({
       id,
       value,
-      type
+      type,
     }: {
       id: number
       value: string
