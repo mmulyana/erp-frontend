@@ -249,3 +249,66 @@ export const useDeletePhone = () => {
     },
   })
 }
+export const useCreateAddress = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      value,
+    }: {
+      id: number
+      value: string
+      type: string
+    }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
+      return await http.post(`${URLS.EMPLOYEE}/address/${id}`, { value })
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useUpdateAddress = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      value,
+    }: {
+      id: number
+      value: string
+      type: string
+    }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
+      return await http.patch(`${URLS.EMPLOYEE}/address/${id}`, { value })
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useDeleteAddress = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+    }: {
+      id: number
+    }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
+      return await http.delete(`${URLS.EMPLOYEE}/address/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
