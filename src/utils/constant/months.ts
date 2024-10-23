@@ -1,4 +1,6 @@
-export const months = [
+import { StatusItem, StatusObject } from '../types/common'
+
+export const months: StatusItem[] = [
   {
     value: 1,
     name: 'Januari',
@@ -48,3 +50,8 @@ export const months = [
     name: 'Desember',
   },
 ]
+
+export const MONTHS_OBJ = months.reduce<StatusObject>((acc, item) => {
+  acc[item.value] = item.name
+  return acc
+}, {})
