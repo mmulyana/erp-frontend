@@ -41,7 +41,7 @@ export default function PhotoProfile({
           setPreview(reader.result as string)
         }
         reader.readAsDataURL(selectedFile)
-        onUpdate && onUpdate(selectedFile)
+        onUpdate?.(selectedFile)
         setError(null)
       } else {
         setError('File size must be less than 5MB')
@@ -58,12 +58,12 @@ export default function PhotoProfile({
   }
 
   const handleRemovePhoto = () => {
+    onRemove?.()
     setPreview(null)
     setError(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
-    onRemove && onRemove()
   }
 
   return (
