@@ -1,15 +1,18 @@
 import Chips from '@/components/common/chips'
+import DataSheet from '@/components/common/data-sheet'
 import { Editable } from '@/components/common/editable'
 import Label from '@/components/common/label'
 import PhotoProfile from '@/components/common/photo-profile'
 import { Tab, Tabs } from '@/components/tab'
+import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { useEmployee, useUpdateEmployee } from '@/hooks/api/use-employee'
 import { BASE_URL } from '@/utils/constant/_urls'
+import { Employee } from '@/utils/types/api'
 import { format, parseISO } from 'date-fns'
 import { id as indonesia } from 'date-fns/locale'
-import { File, Paperclip, X } from 'lucide-react'
+import { File, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -30,7 +33,7 @@ type TMaritalStatus = 'single' | 'married' | 'divorced'
 export default function DetailEmployee({ open, setOpen, id }: Props) {
   const { mutate: update } = useUpdateEmployee()
   const { data, isLoading, isFetching } = useEmployee(id)
-  const employee = useMemo(
+  const employee: Employee = useMemo(
     () => data?.data.data || {},
     [data, isLoading, isFetching]
   )
@@ -45,7 +48,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
   )
 
   useEffect(() => {
-    if(!open) {
+    if (!open) {
       setEdit(null)
     }
   }, [open])
@@ -57,7 +60,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
           <p className='text-sm text-dark'>Detail Pegawai</p>
         </div>
         <ScrollArea className='h-[calc(100vh-48px)]'>
-          <div className='mt-4 px-4'>
+          <div className='mt-4 px-4 mb-8'>
             <PhotoProfile
               defaultPreview={
                 employee?.photo ? BASE_URL + '/img/' + employee?.photo : null
@@ -75,96 +78,43 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                 update({ id, payload: { fullname: val as string } })
               }}
             />
-            <div className='grid grid-cols-[140px_1fr] gap-4 mt-2 gap-y-3'>
-              <p className='text-dark/50'>Status</p>
-              <Chips
-                status={employee?.status ?? false}
-                className='rounded-full'
-              />
-              <p className='text-dark/50'>Tipe</p>
-              <Editable
-                isEdit={isEdit}
-                onEdit={onEdit}
-                keyData='employment_type'
-                type='select'
-                defaultData={employee?.employment_type}
-                className='capitalize'
-                options={[
-                  { label: 'Tetap', value: 'permanent' },
-                  { value: 'contract', label: 'Kontrak' },
-                  { value: 'partime', label: 'Partime' },
-                ]}
-                onUpdate={(val) => {
-                  if (!id) return
-                  update({ id, payload: { employment_type: val as string } })
-                }}
-              />
-              <p className='text-dark/50'>Bergabung sejak</p>
-              <Editable
-                isEdit={isEdit}
-                keyData='joined_at'
-                defaultData={employee?.joined_at}
-                className='capitalize'
-                customData={(val) => {
-                  if (typeof val == 'string') {
-                    return (
-                      <p>
-                        {format(parseISO(val), 'EEEE, MMMM d yyyy', {
-                          locale: indonesia,
-                        })}
-                      </p>
-                    )
-                  }
-                }}
-              />
-
-              <p className='text-dark/50'>Kompetensi</p>
-              <div className='flex gap-1 flex-wrap'>
-                {employee?.competencies &&
-                  !!employee?.competencies.length &&
-                  employee?.competencies.map((item: any, index: number) => (
-                    <Label
-                      color={item.competency.color}
-                      name={item.competency.name}
-                      key={`label-${index}`}
-                    />
-                  ))}
-              </div>
-            </div>
-            <div className='mt-6 mb-8'>
-              <div className='flex gap-2 items-center '>
-                <Paperclip className='w-3.5 h-3.5 text-dark/50' />
-                <p className='text-dark text-sm'>Lampiran</p>
-                {employee?._count?.certifications && (
-                  <p className='text-dark font-medium text-sm'>
-                    ({employee?._count?.certifications})
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-          <Tabs>
-            <Tab label='Umum'>
-              <div className='grid grid-cols-[140px_1fr] gap-4 mt-2 gap-y-3 px-4 pb-5'>
-                <p className='text-dark/50'>Pend. Terakhir</p>
-                <Editable
-                  isEdit={isEdit}
-                  keyData='last_education'
-                  defaultData={employee?.last_education}
-                  className='capitalize'
+            <div className='flex flex-col gap-4 w-fit mt-2'>
+              <DataSheet>
+                <p className='text-dark/50'>Status</p>
+                <Chips
+                  status={employee?.status ?? false}
+                  className='rounded-full'
                 />
-                <p className='text-dark/50'>Tempat lahir</p>
+              </DataSheet>
+              <DataSheet>
+                <p className='text-dark/50'>Tipe</p>
                 <Editable
                   isEdit={isEdit}
-                  keyData='place_of_birth'
-                  defaultData={employee?.place_of_birth}
+                  onEdit={onEdit}
+                  keyData='employment_type'
+                  type='select'
+                  defaultData={employee?.employment_type}
                   className='capitalize'
+                  options={[
+                    { label: 'Tetap', value: 'permanent' },
+                    { value: 'contract', label: 'Kontrak' },
+                    { value: 'partime', label: 'Partime' },
+                  ]}
+                  onUpdate={(val) => {
+                    if (!id) return
+                    update({
+                      id,
+                      payload: { employment_type: val as string },
+                    })
+                  }}
                 />
-                <p className='text-dark/50'>Tanggal lahir</p>
+              </DataSheet>
+              <DataSheet>
+                <p className='text-dark/50'>Bergabung sejak</p>
                 <Editable
                   isEdit={isEdit}
-                  keyData='birth_date'
-                  defaultData={employee?.birth_date}
+                  keyData='joined_at'
+                  defaultData={employee?.joined_at}
                   className='capitalize'
                   customData={(val) => {
                     if (typeof val == 'string') {
@@ -178,37 +128,143 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     }
                   }}
                 />
-                <p className='text-dark/50'>Jenis kelamin</p>
-                <Editable
-                  isEdit={isEdit}
-                  keyData='gender'
-                  defaultData={employee?.gender}
-                  className='capitalize'
-                  customData={(val) => {
-                    if (typeof val == 'string') {
-                      return <p>{val == 'male' ? 'Laki-laki' : 'Perempuan'}</p>
-                    }
-                  }}
-                />
-                <p className='text-dark/50'>Status pernikahan</p>
-                <Editable
-                  isEdit={isEdit}
-                  keyData='marital_status'
-                  defaultData={employee?.marital_status}
-                  className='capitalize'
-                  customData={(val: any) => {
-                    if (typeof val == 'string') {
-                      return <p>{MARITAL_STATUS[val as TMaritalStatus]}</p>
-                    }
-                  }}
-                />
-                <p className='text-dark/50'>Agama</p>
-                <Editable
-                  isEdit={isEdit}
-                  keyData='religion'
-                  defaultData={employee?.religion}
-                  className='capitalize'
-                />
+              </DataSheet>
+              <DataSheet>
+                <p className='text-dark/50'>Kompetensi</p>
+                <div className='flex gap-1 flex-wrap'>
+                  {employee?.competencies &&
+                    !!employee?.competencies.length &&
+                    employee?.competencies.map((item: any, index: number) => (
+                      <Label
+                        color={item.competency.color}
+                        name={item.competency.name}
+                        key={`label-${index}`}
+                      />
+                    ))}
+                </div>
+              </DataSheet>
+            </div>
+          </div>
+          <Tabs>
+            <Tab label='Umum'>
+              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB]'>
+                <DataSheet>
+                  <p className='text-dark/50'>Pend. Terakhir</p>
+                  <Editable
+                    isEdit={isEdit}
+                    keyData='last_education'
+                    defaultData={employee?.last_education}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Tempat lahir</p>
+                  <Editable
+                    isEdit={isEdit}
+                    keyData='place_of_birth'
+                    defaultData={employee?.place_of_birth}
+                    onEdit={onEdit}
+                    onUpdate={(val) => {
+                      if (!id) return
+                      update({ id, payload: { place_of_birth: val as string } })
+                    }}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Tanggal lahir</p>
+                  <Editable
+                    isEdit={isEdit}
+                    keyData='birth_date'
+                    defaultData={employee?.birth_date}
+                    className='capitalize'
+                    customData={(val) => {
+                      if (typeof val == 'string') {
+                        return (
+                          <p>
+                            {format(parseISO(val), 'EEEE, MMMM d yyyy', {
+                              locale: indonesia,
+                            })}
+                          </p>
+                        )
+                      }
+                    }}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Jenis kelamin</p>
+                  <Editable
+                    isEdit={isEdit}
+                    keyData='gender'
+                    defaultData={employee?.gender}
+                    customData={(val) => {
+                      if (typeof val == 'string') {
+                        return (
+                          <p>{val == 'male' ? 'Laki-laki' : 'Perempuan'}</p>
+                        )
+                      }
+                    }}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Status pernikahan</p>
+                  <Editable
+                    isEdit={isEdit}
+                    keyData='marital_status'
+                    defaultData={employee?.marital_status}
+                    className='capitalize'
+                    customData={(val: any) => {
+                      if (typeof val == 'string') {
+                        return <p>{MARITAL_STATUS[val as TMaritalStatus]}</p>
+                      }
+                    }}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Agama</p>
+                  <Editable
+                    isEdit={isEdit}
+                    keyData='religion'
+                    defaultData={employee?.religion}
+                    className='capitalize'
+                    onEdit={onEdit}
+                    onUpdate={(val) => {
+                      if (!id) return
+                      update({ id, payload: { religion: val as string } })
+                    }}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Email</p>
+                  <Editable
+                    isEdit={isEdit}
+                    keyData='email'
+                    defaultData={employee?.email}
+                    className='text-dark'
+                    onEdit={onEdit}
+                    onUpdate={(val) => {
+                      if (!id) return
+                      update({ id, payload: { email: val as string } })
+                    }}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Nomor Telepon</p>
+                  <div className='flex gap-2 flex-wrap'>
+                    {employee?.phoneNumbers?.map((phone, index) => (
+                      <div
+                        key={index}
+                        className='px-2 py-0.5 rounded-full border border-line text-dark/50'
+                      >
+                        {phone.value}
+                      </div>
+                    ))}
+                    <Button
+                      variant='ghost'
+                      className='font-normal p-0 hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit px-2 py-0.5 relative border text-sm'
+                    >
+                      Tambah No. Telp
+                    </Button>
+                  </div>
+                </DataSheet>
               </div>
             </Tab>
             <Tab label='Sertifikat'>
