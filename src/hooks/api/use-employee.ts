@@ -78,6 +78,7 @@ export const useUpdateEmployee = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE, data.data.data?.id] })
       toast.success(data.data.message)
     },
   })
