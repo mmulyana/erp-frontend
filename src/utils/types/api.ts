@@ -203,7 +203,6 @@ export type Employee = {
   last_education?: string
   email?: string
   phoneNumbers?: PhoneNumber[]
-  address: Address[]
   positionId?: number
   position?: Position
   attendances: Attendance[]
@@ -295,12 +294,12 @@ type Contact = {
   employee: Employee
 }
 
-type Address = {
+export type Address = {
   id: number
   type: AddressType
   value: string
-  employeeId: number
-  employee: Employee
+  employeeId?: number
+  employee?: Employee
 }
 
 type EmployeeStatusTrack = {
