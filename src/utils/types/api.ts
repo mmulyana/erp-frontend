@@ -1,4 +1,4 @@
-import { AddressType, ContactType, EmployeeStatus } from '../enum/common'
+import { AddressType, EmployeeStatus } from '../enum/common'
 
 export interface IApi<T = void> {
   data?: T
@@ -200,6 +200,10 @@ export type Employee = {
   gender?: 'male' | 'female'
   marital_status?: 'single' | 'merried' | 'divorced'
   religion?: string
+  last_education?: string
+  email?: string
+  phoneNumbers?: { value: string }[]
+  address: Address[]
   positionId?: number
   position?: Position
   attendances: Attendance[]
@@ -281,10 +285,8 @@ type Certification = {
 
 type Contact = {
   id: number
-  type: ContactType
   value: string
   employeeId: number
-  isPrimary: boolean
   employee: Employee
 }
 
