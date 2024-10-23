@@ -278,12 +278,13 @@ export const useUpdateAddress = () => {
     mutationFn: async ({
       id,
       value,
+      type
     }: {
       id: number
       value: string
       type: string
     }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
-      return await http.patch(`${URLS.EMPLOYEE}/address/${id}`, { value })
+      return await http.patch(`${URLS.EMPLOYEE}/address/${id}`, { value, type })
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
