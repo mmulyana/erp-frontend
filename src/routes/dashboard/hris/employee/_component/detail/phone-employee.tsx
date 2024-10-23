@@ -188,8 +188,9 @@ export default function PhoneEmployee({ id, phones }: Props) {
                     size={12}
                     className='absolute left-2 top-[56%] -translate-y-1/2'
                   />
-                  Lihat semua nomor
+                  Lihat
                   <span>{phones?.length - 1}</span>
+                  nomor lainnya
                 </Button>
               )}
             </>
