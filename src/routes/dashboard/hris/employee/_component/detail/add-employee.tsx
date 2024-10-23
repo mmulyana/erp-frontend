@@ -31,6 +31,10 @@ import {
 } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
 import { months } from '@/utils/constant/months'
+import { EDUCATIONS } from '@/utils/data/educations'
+import { EMPLOYEMENT_TYPE } from '@/utils/data/employment-type'
+import { GENDER } from '@/utils/data/gender'
+import { MARITAL_STATUS } from '@/utils/data/marital-status'
 import {
   createEmployee,
   payloadCreateEmployee,
@@ -157,7 +161,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
 
   const onSubmit = async (data: createEmployee) => {
     if (newUser) {
-      const payload = data.certifications.map((item) => ({...item, }))
+      const payload = data.certifications.map((item) => ({ ...item }))
       createCertif(
         {
           data: payload as createCertifType[],
@@ -263,27 +267,16 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                           <div className='space-y-2'>
                             <FormLabel>Status Pegawai</FormLabel>
                             <div className='flex justify-between gap-4'>
-                              <RadioV1
-                                {...field}
-                                value='permanent'
-                                checked={field.value === 'permanent'}
-                              >
-                                Tetap
-                              </RadioV1>
-                              <RadioV1
-                                {...field}
-                                value='contract'
-                                checked={field.value === 'contract'}
-                              >
-                                Kontrak
-                              </RadioV1>
-                              <RadioV1
-                                {...field}
-                                value='partime'
-                                checked={field.value === 'partime'}
-                              >
-                                Partime
-                              </RadioV1>
+                              {EMPLOYEMENT_TYPE.map((item) => (
+                                <RadioV1
+                                  key={item.value}
+                                  {...field}
+                                  value={item.value}
+                                  checked={field.value === item.value}
+                                >
+                                  {item.name}
+                                </RadioV1>
+                              ))}
                             </div>
                           </div>
                         )}
@@ -300,16 +293,11 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                               <SelectValue placeholder='Pilih' />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value='SD'>SD</SelectItem>
-                              <SelectItem value='SMP'>SMP</SelectItem>
-                              <SelectItem value='SMA/SMK'>SMA/SMK</SelectItem>
-                              <SelectItem value='D1'>Diploma 1</SelectItem>
-                              <SelectItem value='D2'>Diploma 2</SelectItem>
-                              <SelectItem value='D3'>Diploma 3</SelectItem>
-                              <SelectItem value='D4/S1'>Diploma 4</SelectItem>
-                              <SelectItem value='S1'>Strata 1</SelectItem>
-                              <SelectItem value='S2'>Strata 2</SelectItem>
-                              <SelectItem value='S3'>Strata 3</SelectItem>
+                              {EDUCATIONS.map((item) => (
+                                <SelectItem value={item} key={item}>
+                                  {item}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
@@ -325,8 +313,11 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                               <SelectValue placeholder='Pilih' />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value='male'>Laki-laki</SelectItem>
-                              <SelectItem value='female'>Perempuan</SelectItem>
+                              {GENDER.map((item) => (
+                                <SelectItem value={item.value} key={item.value}>
+                                  {item.name}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
@@ -362,11 +353,11 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                               <SelectValue placeholder='Pilih status' />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value='single'>
-                                belum menikah
-                              </SelectItem>
-                              <SelectItem value='married'>menikah</SelectItem>
-                              <SelectItem value='divorced'>cerai</SelectItem>
+                              {MARITAL_STATUS.map((item) => (
+                                <SelectItem value={item.value} key={item.value}>
+                                  {item.name}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
