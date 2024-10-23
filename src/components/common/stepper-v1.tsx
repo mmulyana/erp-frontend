@@ -3,7 +3,7 @@ import { Check } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { atom, useAtom, useAtomValue } from 'jotai'
 
-const stepperAtom = atom<number>(0)
+export const stepperAtom = atom<number>(0)
 
 export type navigationParams = {
   setStep: (val: number) => void
