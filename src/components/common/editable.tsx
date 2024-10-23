@@ -18,7 +18,7 @@ type Props = {
   customEdit?: React.ReactNode
   options?: {
     name: string
-    value: string
+    value: string | number
   }[]
 }
 
