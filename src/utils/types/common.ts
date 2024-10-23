@@ -5,9 +5,9 @@ export type Pagination = {
 
 export type StatusItem = {
   name: string
-  value: string
+  value: string | number
 }
 
 export type StatusObject = {
-  [key: string]: string
+  [key: string | number]: string
 }
