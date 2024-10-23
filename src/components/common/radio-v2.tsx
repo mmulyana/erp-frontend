@@ -5,7 +5,7 @@ interface Props
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'children'> {
   children: (checked?: boolean) => React.ReactNode
   className?: string
-  background: string
+  background?: string
   customChecked?: React.ReactNode
 }
 
