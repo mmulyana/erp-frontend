@@ -9,7 +9,7 @@ import {
 import { cn } from '@/utils/cn'
 import { PhoneNumber } from '@/utils/types/api'
 import { Copy, Eye, EyeOff, Pencil, Phone, Plus, Trash } from 'lucide-react'
-import { KeyboardEvent, useRef, useState } from 'react'
+import { KeyboardEvent, useRef, useState, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -17,6 +17,7 @@ type Props = {
   id?: number | null
   phones: PhoneNumber[]
 }
+
 export default function PhoneEmployee({ id, phones }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -33,18 +34,22 @@ export default function PhoneEmployee({ id, phones }: Props) {
 
   const [isPhone, setIsPhone] = useState(false)
   const [open, setOpen] = useState(false)
-
-  // HANDLE EDIT
   const [selectedId, setSelectedId] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (isPhone && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 0)
+    }
+  }, [isPhone])
 
   const onEdit = (id: number) => {
     setSelectedId(id)
     setIsPhone(true)
     const index = phones.findIndex((item) => item.id === id)
     form.setValue('value', phones[index].value)
-    inputRef.current?.focus()
   }
-  // HANDLE EDIT
 
   const reset = () => {
     setIsPhone(false)
@@ -96,11 +101,12 @@ export default function PhoneEmployee({ id, phones }: Props) {
             open && 'gap-4'
           )}
         >
+          {/* ... Rest of your existing JSX for displaying phones ... */}
           {open ? (
             <>
               {phones?.map((phone, index) => (
-                <div key={index} className='text-dark/50 relative group'>
-                  {phone.value}
+                <div key={index} className='relative group'>
+                  <p className='text-dark/50 text-sm'>{phone.value}</p>
                   <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
@@ -144,30 +150,30 @@ export default function PhoneEmployee({ id, phones }: Props) {
             </>
           ) : (
             <>
-              <div className='text-dark/50 relative group gap-2 flex items-center'>
-                {phones[0]?.value}
+              <div className='relative group gap-2 flex items-center'>
+                <p className='text-dark'>{phones[0].value}</p>
                 <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                   <button
-                    className='w-6 h-6 rounded-full text-dark flex items-center justify-center'
+                    className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                     onClick={() => onCopy(phones[0].value)}
                   >
-                    <Copy size={14} />
+                    <Copy size={12} />
                   </button>
                   <button
-                    className='w-6 h-6 rounded-full text-dark flex items-center justify-center'
+                    className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                     onClick={() => {
                       remove({ id: phones[0].id })
                     }}
                   >
-                    <Trash size={14} />
+                    <Trash size={12} />
                   </button>
                   <button
-                    className='w-6 h-6 rounded-full text-dark flex items-center justify-center'
+                    className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                     onClick={() => {
                       onEdit(phones[0].id)
                     }}
                   >
-                    <Pencil size={14} />
+                    <Pencil size={12} />
                   </button>
                 </div>
               </div>
@@ -199,9 +205,9 @@ export default function PhoneEmployee({ id, phones }: Props) {
                 name='value'
                 render={({ field }) => (
                   <Input
+                    {...field}
                     onKeyDown={handleKeyDown}
                     className='pl-6 [direction:inherit] h-7 w-full rounded-md'
-                    {...field}
                     ref={inputRef}
                   />
                 )}
@@ -244,10 +250,9 @@ export default function PhoneEmployee({ id, phones }: Props) {
       ) : (
         <Button
           variant='ghost'
-          className='font-normal  hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mt-1'
+          className='font-normal hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mt-1'
           onClick={() => {
             setIsPhone(true)
-            inputRef.current?.focus()
           }}
         >
           <Plus size={14} />
