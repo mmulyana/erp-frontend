@@ -193,7 +193,11 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
   }
 
   useEffect(() => {
-    if (!open) form.reset()
+    if (!open) {
+      form.reset()
+      setNewUser(null)
+      setCurrentStep(0)
+    }
   }, [open])
 
   return (
