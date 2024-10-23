@@ -16,7 +16,7 @@ export type payloadCreateEmployee = {
   competencies: string[]
   safety_induction_date?: string
   email?: string
-  addressess?: createAddress[]
+  addresses?: createAddress[]
   phoneNumbers?: createPhone[]
 }
 
