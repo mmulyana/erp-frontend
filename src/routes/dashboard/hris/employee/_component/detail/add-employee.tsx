@@ -25,8 +25,8 @@ import { TabsContent, TabsList, TabsTrigger, Tabs } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { useCompetency } from '@/hooks/api/use-competency'
 import {
-  useCreateCertifEmployee,
   useCreateEmployee,
+  useCreateMultipleCertif,
   useUploadPhoto,
 } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
@@ -69,7 +69,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
 
   // HANDLE FORM
   const { mutate: createEmployee } = useCreateEmployee()
-  const { mutate: createCertif } = useCreateCertifEmployee()
+  const { mutate: createCertif } = useCreateMultipleCertif()
   const { mutate: uploadPhoto } = useUploadPhoto()
 
   const [newUser, setNewUser] = useState<any>(null)
@@ -84,11 +84,12 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       last_education: '',
       gender: 'male',
       place_of_birth: '',
+      marital_status: undefined,
       birth_date: '',
       religion: '',
-      basic_salary: '',
+      basic_salary: undefined,
       pay_type: 'daily',
-      overtime_salary: '',
+      overtime_salary: undefined,
       positionId: id,
       email: '',
       competencies: [],
