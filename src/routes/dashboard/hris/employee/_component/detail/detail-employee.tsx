@@ -28,6 +28,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PhoneEmployee from './phone-employee'
 import AddressEmployee from './address-employee'
+import { PAY_TIPE, PAY_TIPE_OBJ } from '@/utils/data/pay-tipe'
+import { formatToRupiah } from '@/utils/formatCurrency'
 
 type Props = {
   open: boolean
@@ -69,7 +71,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className='p-0'>
+      <SheetContent className='p-0 min-w-[400px] max-w-full'>
         <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
           <p className='text-sm text-dark'>Detail Pegawai</p>
         </div>
@@ -162,7 +164,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
           </div>
           <Tabs>
             <Tab label='Umum'>
-              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB]'>
+              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB] h-[calc(100vh-422px)]'>
                 <DataSheet>
                   <p className='text-dark/50'>Pend. Terakhir</p>
                   <Editable
@@ -282,7 +284,62 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                 </DataSheet>
                 <DataSheet className='items-start mt-4'>
                   <p className='text-dark/50'>Alamat</p>
-                  <AddressEmployee id={id} addresses={employee?.addresses || []} />
+                  <AddressEmployee
+                    id={id}
+                    addresses={employee?.addresses || []}
+                  />
+                </DataSheet>
+              </div>
+            </Tab>
+            <Tab label='Gaji'>
+              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB] h-[calc(100vh-422px)]'>
+                <DataSheet>
+                  <p className='text-dark/50'>Gaji Pokok</p>
+                  <Editable
+                    isEdit={isEdit}
+                    onEdit={onEdit}
+                    keyData='basic_salary'
+                    defaultData={employee?.basic_salary}
+                    customData={(val) => <p>{formatToRupiah(val as number)}</p>}
+                    onUpdate={(val) => {
+                      update({ id, payload: { basic_salary: val as string } })
+                    }}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Tipe gaji</p>
+                  <Editable
+                    isEdit={isEdit}
+                    onEdit={onEdit}
+                    keyData='pay_type'
+                    type='select'
+                    defaultData={employee?.pay_type}
+                    className='capitalize'
+                    options={PAY_TIPE}
+                    customData={(val) => <p>{PAY_TIPE_OBJ[val]}</p>}
+                    onUpdate={(val) => {
+                      update({
+                        id,
+                        payload: { pay_type: val as string },
+                      })
+                    }}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Gaji Overtime</p>
+                  <Editable
+                    isEdit={isEdit}
+                    onEdit={onEdit}
+                    keyData='overtime_salary'
+                    defaultData={employee?.overtime_salary}
+                    customData={(val) => <p>{formatToRupiah(val as number)}</p>}
+                    onUpdate={(val) => {
+                      update({
+                        id,
+                        payload: { overtime_salary: val as string },
+                      })
+                    }}
+                  />
                 </DataSheet>
               </div>
             </Tab>
