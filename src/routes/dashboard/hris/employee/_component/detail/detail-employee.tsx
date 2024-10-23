@@ -5,12 +5,12 @@ import PhotoProfile from '@/components/common/photo-profile'
 import { Tab, Tabs } from '@/components/tab'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { useEmployee } from '@/hooks/api/use-employee'
+import { useEmployee, useUpdateEmployee } from '@/hooks/api/use-employee'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { format, parseISO } from 'date-fns'
 import { id as indonesia } from 'date-fns/locale'
 import { File, Paperclip, X } from 'lucide-react'
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 type Props = {
@@ -28,11 +28,27 @@ const MARITAL_STATUS = {
 type TMaritalStatus = 'single' | 'married' | 'divorced'
 
 export default function DetailEmployee({ open, setOpen, id }: Props) {
+  const { mutate: update } = useUpdateEmployee()
   const { data, isLoading, isFetching } = useEmployee(id)
   const employee = useMemo(
     () => data?.data.data || {},
     [data, isLoading, isFetching]
   )
+
+  const [edit, setEdit] = useState<string | null>('')
+  const isEdit = useMemo(() => edit, [edit])
+  const onEdit = useCallback(
+    (val: string | null) => {
+      setEdit(val)
+    },
+    [edit]
+  )
+
+  useEffect(() => {
+    if(!open) {
+      setEdit(null)
+    }
+  }, [open])
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -48,10 +64,16 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               }
             />
             <Editable
-              isEdit={false}
+              isEdit={isEdit}
               keyData='fullname'
+              onEdit={onEdit}
               defaultData={employee?.fullname}
-              className='mt-4 text-lg font-medium'
+              className='text-lg font-medium text-dark mt-4 py-1 px-1'
+              classNameInput='text-lg font-medium text-dark mt-4 py-1 px-1'
+              onUpdate={(val) => {
+                if (!id) return
+                update({ id, payload: { fullname: val as string } })
+              }}
             />
             <div className='grid grid-cols-[140px_1fr] gap-4 mt-2 gap-y-3'>
               <p className='text-dark/50'>Status</p>
@@ -61,14 +83,25 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               />
               <p className='text-dark/50'>Tipe</p>
               <Editable
-                isEdit={false}
+                isEdit={isEdit}
+                onEdit={onEdit}
                 keyData='employment_type'
+                type='select'
                 defaultData={employee?.employment_type}
                 className='capitalize'
+                options={[
+                  { label: 'Tetap', value: 'permanent' },
+                  { value: 'contract', label: 'Kontrak' },
+                  { value: 'partime', label: 'Partime' },
+                ]}
+                onUpdate={(val) => {
+                  if (!id) return
+                  update({ id, payload: { employment_type: val as string } })
+                }}
               />
               <p className='text-dark/50'>Bergabung sejak</p>
               <Editable
-                isEdit={false}
+                isEdit={isEdit}
                 keyData='joined_at'
                 defaultData={employee?.joined_at}
                 className='capitalize'
@@ -115,21 +148,21 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               <div className='grid grid-cols-[140px_1fr] gap-4 mt-2 gap-y-3 px-4 pb-5'>
                 <p className='text-dark/50'>Pend. Terakhir</p>
                 <Editable
-                  isEdit={false}
+                  isEdit={isEdit}
                   keyData='last_education'
                   defaultData={employee?.last_education}
                   className='capitalize'
                 />
                 <p className='text-dark/50'>Tempat lahir</p>
                 <Editable
-                  isEdit={false}
+                  isEdit={isEdit}
                   keyData='place_of_birth'
                   defaultData={employee?.place_of_birth}
                   className='capitalize'
                 />
                 <p className='text-dark/50'>Tanggal lahir</p>
                 <Editable
-                  isEdit={false}
+                  isEdit={isEdit}
                   keyData='birth_date'
                   defaultData={employee?.birth_date}
                   className='capitalize'
@@ -147,7 +180,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                 />
                 <p className='text-dark/50'>Jenis kelamin</p>
                 <Editable
-                  isEdit={false}
+                  isEdit={isEdit}
                   keyData='gender'
                   defaultData={employee?.gender}
                   className='capitalize'
@@ -159,7 +192,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                 />
                 <p className='text-dark/50'>Status pernikahan</p>
                 <Editable
-                  isEdit={false}
+                  isEdit={isEdit}
                   keyData='marital_status'
                   defaultData={employee?.marital_status}
                   className='capitalize'
@@ -171,7 +204,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                 />
                 <p className='text-dark/50'>Agama</p>
                 <Editable
-                  isEdit={false}
+                  isEdit={isEdit}
                   keyData='religion'
                   defaultData={employee?.religion}
                   className='capitalize'
