@@ -78,7 +78,9 @@ export const useUpdateEmployee = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
-      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE, data.data.data?.id] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.id],
+      })
       toast.success(data.data.message)
     },
   })
@@ -104,6 +106,26 @@ export const useUploadPhoto = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
+  })
+}
+
+export const useRemovePhoto = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+    }: {
+      id: number
+    }): Promise<AxiosResponse<IApi<{ id: number; photo?: null | string }>>> => {
+      return await http.patch(`${URLS.EMPLOYEE}/delete-photo/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.id],
+      })
       toast.success(data.data.message)
     },
   })
@@ -158,6 +180,22 @@ export const useCreateCertifEmployee = () => {
           },
         }
       )
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      toast.success(data.data.message)
+    },
+  })
+}
+
+export const useCreatePhone = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (
+      payload: payloadCreateEmployee
+    ): Promise<AxiosResponse<IApi<Employee>>> => {
+      return await http.post(URLS.EMPLOYEE, payload)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
