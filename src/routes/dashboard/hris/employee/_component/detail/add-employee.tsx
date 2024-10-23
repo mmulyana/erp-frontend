@@ -92,7 +92,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       positionId: id,
       email: '',
       competencies: [],
-      addressess: [
+      addresses: [
         {
           type: 'domicile',
           value: '',
@@ -145,9 +145,9 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
   // HANDLE ADDRESS
   const addressField = useFieldArray({
     control: form.control,
-    name: 'addressess',
+    name: 'addresses',
   })
-  const addressess = form.watch('addressess')
+  const addressess = form.watch('addresses')
   // HANDLE ADDRESS
 
   // HANDLE ADDRESS
@@ -177,6 +177,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       )
       return
     }
+    console.log(data)
     createEmployee(data as payloadCreateEmployee, {
       onSuccess: (data) => {
         setNewUser(data.data.data)
@@ -444,7 +445,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                                 ? 'Alamat asal'
                                 : 'Alamat domisili'
                             }
-                            name={`addressess.${index}.value`}
+                            name={`addresses.${index}.value`}
                             render={({ field }) => (
                               <div className='relative'>
                                 <Textarea {...field} />
