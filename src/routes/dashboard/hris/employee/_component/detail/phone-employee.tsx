@@ -11,6 +11,7 @@ import { PhoneNumber } from '@/utils/types/api'
 import { Copy, Eye, EyeOff, Pencil, Phone, Plus, Trash } from 'lucide-react'
 import { KeyboardEvent, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 type Props = {
   id?: number | null
@@ -77,6 +78,13 @@ export default function PhoneEmployee({ id, phones }: Props) {
     }
   }
 
+  const onCopy = async (text: string) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text)
+      toast.success('Nomor berhasil disalin')
+    }
+  }
+
   if (!id) return null
 
   return (
@@ -94,7 +102,10 @@ export default function PhoneEmployee({ id, phones }: Props) {
                 <div key={index} className='text-dark/50 relative group'>
                   {phone.value}
                   <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
-                    <button className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'>
+                    <button
+                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                      onClick={() => onCopy(phone.value)}
+                    >
                       <Copy size={12} />
                     </button>
                     <button
@@ -136,7 +147,10 @@ export default function PhoneEmployee({ id, phones }: Props) {
               <div className='text-dark/50 relative group gap-2 flex items-center'>
                 {phones[0]?.value}
                 <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
-                  <button className='w-6 h-6 rounded-full text-dark flex items-center justify-center'>
+                  <button
+                    className='w-6 h-6 rounded-full text-dark flex items-center justify-center'
+                    onClick={() => onCopy(phones[0].value)}
+                  >
                     <Copy size={14} />
                   </button>
                   <button
