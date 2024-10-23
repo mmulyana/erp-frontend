@@ -23,13 +23,12 @@ import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
 import { Employee } from '@/utils/types/api'
 import { format, parseISO } from 'date-fns'
 import { id as indonesia } from 'date-fns/locale'
-import { File, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import PhoneEmployee from './phone-employee'
 import AddressEmployee from './address-employee'
 import { PAY_TIPE, PAY_TIPE_OBJ } from '@/utils/data/pay-tipe'
 import { formatToRupiah } from '@/utils/formatCurrency'
+import CertifEmployee from './certif-employee'
 
 type Props = {
   open: boolean
@@ -164,7 +163,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
           </div>
           <Tabs>
             <Tab label='Umum'>
-              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB] h-[calc(100vh-422px)]'>
+              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB] min-h-[calc(100vh-422px)]'>
                 <DataSheet>
                   <p className='text-dark/50'>Pend. Terakhir</p>
                   <Editable
@@ -292,7 +291,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               </div>
             </Tab>
             <Tab label='Gaji'>
-              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB] h-[calc(100vh-422px)]'>
+              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB] min-h-[calc(100vh-422px)]'>
                 <DataSheet>
                   <p className='text-dark/50'>Gaji Pokok</p>
                   <Editable
@@ -344,57 +343,11 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               </div>
             </Tab>
             <Tab label='Sertifikat'>
-              <div className='px-4 pb-5 space-y-2 mt-2'>
-                {employee.certifications &&
-                  !!employee.certifications.length &&
-                  employee.certifications.map((item: any, index: number) => {
-                    return (
-                      <div
-                        key={`certifications+${index}`}
-                        className='relative w-full border p-4 rounded-md overflow-hidden'
-                      >
-                        <p className='text-dark font-medium'>
-                          {item.certif_name}
-                        </p>
-                        <p className='text-dark/70'>
-                          {item?.issuing_organization}
-                        </p>
-                        {(item.issue_month || item.issue_year) && (
-                          <p className='text-sm text-dark/70'>
-                            Terbit sejak{' '}
-                            <span className='text-dark'>
-                              {item.issue_month} {item.issue_year}
-                            </span>{' '}
-                            sampai{' '}
-                            <span className='text-dark'>
-                              {item.expiry_month} {item.expiry_year}
-                            </span>
-                          </p>
-                        )}
-                        {item.competencyId && (
-                          <div className='space-y-1 mt-2'>
-                            <p className='text-dark/70'>Terkait dengan</p>
-                            <Label
-                              name={item.competency.name}
-                              color={item.competency.color}
-                            />
-                          </div>
-                        )}
-                        <div className='flex gap-2 items-center mt-3'>
-                          <File className='w-5 h-5 text-dark/40' />
-                          <Link
-                            to={`${BASE_URL}/files/${item.certif_file}`}
-                            target='_blank'
-                          >
-                            Lihat sertifikat
-                          </Link>
-                        </div>
-                        <button className='absolute top-0 right-0 bg-line h-7 w-7 flex justify-center items-center'>
-                          <X className='w-5 h-5 text-dark' />
-                        </button>
-                      </div>
-                    )
-                  })}
+              <div className='flex flex-col gap-3 px-4 pb-10 pt-4 bg-[#FBFBFB] min-h-[calc(100vh-422px)]'>
+                <CertifEmployee
+                  certifications={employee?.certifications || []}
+                  id={id}
+                />
               </div>
             </Tab>
           </Tabs>
