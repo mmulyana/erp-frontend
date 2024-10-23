@@ -59,7 +59,7 @@ export default function Sidebar({ open, setOpen }: Props) {
         </div>
         <p className='text-[#3D556B] font-semibold'>BJS ERP</p>
       </div>
-      <div className='p-4 flex flex-col gap-2'>
+      <div className='p-4 flex flex-col gap-4'>
         {menus.map((menu) => (
           <div key={`menus-${menu.name}`}>
             {menu.path ? (
