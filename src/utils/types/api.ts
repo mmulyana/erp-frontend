@@ -1,4 +1,4 @@
-import { AddressType, EmployeeStatus } from '../enum/common'
+import { EmployeeStatus } from '../enum/common'
 
 export interface IApi<T = void> {
   data?: T
@@ -296,7 +296,7 @@ type Contact = {
 
 export type Address = {
   id: number
-  type: AddressType
+  type: string
   value: string
   employeeId?: number
   employee?: Employee
