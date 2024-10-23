@@ -4,10 +4,14 @@ import { Editable } from '@/components/common/editable'
 import Label from '@/components/common/label'
 import PhotoProfile from '@/components/common/photo-profile'
 import { Tab, Tabs } from '@/components/tab'
-import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { useEmployee, useUpdateEmployee } from '@/hooks/api/use-employee'
+import {
+  useEmployee,
+  useRemovePhoto,
+  useUpdateEmployee,
+  useUploadPhoto,
+} from '@/hooks/api/use-employee'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { EDUCATIONS, EDUCATIONS_OBJ } from '@/utils/data/educations'
 import {
@@ -22,6 +26,7 @@ import { id as indonesia } from 'date-fns/locale'
 import { File, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import PhoneEmployee from './phone-employee'
 
 type Props = {
   open: boolean
@@ -31,12 +36,18 @@ type Props = {
 
 export default function DetailEmployee({ open, setOpen, id }: Props) {
   const { mutate: update } = useUpdateEmployee()
+  const { mutate: uploadPhoto } = useUploadPhoto()
+  const { mutate: removePhoto } = useRemovePhoto()
+
+  // HANDLE DATA DETAIL
   const { data, isLoading, isFetching } = useEmployee(id)
   const employee: Employee = useMemo(
     () => data?.data.data || {},
     [data, isLoading, isFetching]
   )
+  // HANDLE DATA DETAIL
 
+  // HANDLE EDIT
   const [edit, setEdit] = useState<string | null>('')
   const isEdit = useMemo(() => edit, [edit])
   const onEdit = useCallback(
@@ -51,6 +62,9 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
       setEdit(null)
     }
   }, [open])
+  // HANDLE EDIT
+
+  if (!id) return null
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -64,6 +78,12 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               defaultPreview={
                 employee?.photo ? BASE_URL + '/img/' + employee?.photo : null
               }
+              onUpdate={(photo) => {
+                uploadPhoto({ id, photo })
+              }}
+              onRemove={() => {
+                removePhoto({ id })
+              }}
             />
             <Editable
               isEdit={isEdit}
@@ -73,7 +93,6 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               className='text-lg font-medium text-dark mt-4 py-1 px-1'
               classNameInput='text-lg font-medium text-dark mt-4 py-1 px-1'
               onUpdate={(val) => {
-                if (!id) return
                 update({ id, payload: { fullname: val as string } })
               }}
             />
@@ -97,7 +116,6 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   options={EMPLOYEMENT_TYPE}
                   customData={(val) => <p>{EMPLOYEMENT_TYPE_OBJ[val]}</p>}
                   onUpdate={(val) => {
-                    if (!id) return
                     update({
                       id,
                       payload: { employment_type: val as string },
@@ -155,7 +173,6 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     options={EDUCATIONS}
                     customData={(val) => <p>{EDUCATIONS_OBJ[val]}</p>}
                     onUpdate={(val) => {
-                      if (!id) return
                       update({ id, payload: { last_education: val as string } })
                     }}
                   />
@@ -168,7 +185,6 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     defaultData={employee?.place_of_birth}
                     onEdit={onEdit}
                     onUpdate={(val) => {
-                      if (!id) return
                       update({ id, payload: { place_of_birth: val as string } })
                     }}
                   />
@@ -210,7 +226,6 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     options={GENDER}
                     type='select'
                     onUpdate={(val) => {
-                      if (!id) return
                       update({ id, payload: { gender: val as string } })
                     }}
                   />
@@ -227,7 +242,6 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     type='select'
                     options={MARITAL_STATUS}
                     onUpdate={(val) => {
-                      if (!id) return
                       update({ id, payload: { marital_status: val as string } })
                     }}
                   />
@@ -241,7 +255,6 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     className='capitalize'
                     onEdit={onEdit}
                     onUpdate={(val) => {
-                      if (!id) return
                       update({ id, payload: { religion: val as string } })
                     }}
                   />
@@ -255,29 +268,16 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     className='text-dark'
                     onEdit={onEdit}
                     onUpdate={(val) => {
-                      if (!id) return
                       update({ id, payload: { email: val as string } })
                     }}
                   />
                 </DataSheet>
                 <DataSheet>
                   <p className='text-dark/50'>Nomor Telepon</p>
-                  <div className='flex gap-2 flex-wrap'>
-                    {employee?.phoneNumbers?.map((phone, index) => (
-                      <div
-                        key={index}
-                        className='px-2 py-0.5 rounded-full border border-line text-dark/50'
-                      >
-                        {phone.value}
-                      </div>
-                    ))}
-                    <Button
-                      variant='ghost'
-                      className='font-normal p-0 hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit px-2 py-0.5 relative border text-sm'
-                    >
-                      Tambah No. Telp
-                    </Button>
-                  </div>
+                  <PhoneEmployee
+                    id={id}
+                    phones={employee?.phoneNumbers || []}
+                  />
                 </DataSheet>
               </div>
             </Tab>
