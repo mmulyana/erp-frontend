@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useEmployees } from '@/hooks/api/use-employee'
 import { settingConfig } from '@/routes/dashboard/_component/setting/setting'
+import { EDUCATIONS_OBJ } from '@/utils/data/educations'
 import { EmployeeStatus } from '@/utils/enum/common'
 import { Employee } from '@/utils/types/api'
 import useUrlState from '@ahooksjs/use-url-state'
@@ -80,7 +81,7 @@ export default function TableEmployee({
                 }}
                 className='justify-start flex'
               >
-                <span className='break-words w-[120px] text-left'>
+                <span className='break-words max-w-[120px] text-left'>
                   {fullname}
                 </span>
               </button>
@@ -108,6 +109,9 @@ export default function TableEmployee({
     {
       accessorKey: 'last_education',
       header: 'Pend. terakhir',
+      cell: ({ row }) => (
+        <p>{EDUCATIONS_OBJ[row.original.last_education as string]}</p>
+      ),
     },
     {
       accessorKey: 'employeeCompetency',
@@ -132,7 +136,10 @@ export default function TableEmployee({
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => (
-        <StatusChips status={row.original.status === 'active'} />
+        <StatusChips
+          status={row.original.status === 'active'}
+          className='rounded-full'
+        />
       ),
     },
     {
