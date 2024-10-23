@@ -88,7 +88,7 @@ export const Editable = <C extends React.ElementType = 'p'>({
               value={data || ''}
               onKeyDown={handleKeyDown}
               className={cn(
-                'shadow-none h-fit block p-0 pl-1 rounded-md border-blue-primary w-[104px]',
+                'shadow-none h-fit block p-0 pl-1 rounded-md border-blue-primary w-[112px]',
                 classNameInput
               )}
               ref={ref}
