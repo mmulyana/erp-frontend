@@ -6,9 +6,9 @@ export function objectToFormData(
   Object.entries(obj).forEach(([key, value]) => {
     if (value != null && value !== '') {
       if (Array.isArray(value)) {
-        value.forEach((item, index) => {
+        value.forEach((item) => {
           if (item != null) {
-            formData.append(`${key}[${index}]`, item)
+            formData.append(key, item)
           }
         })
       } else {
