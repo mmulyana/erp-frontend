@@ -104,9 +104,9 @@ export default function PhoneEmployee({ id, phones }: Props) {
           {open ? (
             <>
               {phones?.map((phone, index) => (
-                <div key={index} className='relative group'>
-                  <p className='text-dark/50 text-sm'>{phone.value}</p>
-                  <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
+                <div key={index} className='relative group w-full'>
+                  <p className='text-dark'>{phone.value}</p>
+                  <div className='absolute right-0 top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                       onClick={() => onCopy(phone.value)}
@@ -149,9 +149,9 @@ export default function PhoneEmployee({ id, phones }: Props) {
             </>
           ) : (
             <>
-              <div className='relative group gap-2 flex items-center'>
+              <div className='relative group gap-2 flex items-center w-full'>
                 <p className='text-dark'>{phones[0].value}</p>
-                <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
+                <div className='absolute right-0 top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                   <button
                     className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
                     onClick={() => onCopy(phones[0].value)}
