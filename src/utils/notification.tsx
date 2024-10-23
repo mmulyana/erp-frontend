@@ -6,7 +6,7 @@ export default function NotificationWrapper({
   return (
     <>
       {children}
-      <Toaster richColors theme='light'/>
+      <Toaster richColors theme='light' position='top-center'/>
     </>
   )
 }
