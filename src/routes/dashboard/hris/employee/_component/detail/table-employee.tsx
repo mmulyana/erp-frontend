@@ -58,33 +58,34 @@ export default function TableEmployee({
       cell: ({ row }) => {
         const { fullname, id } = row.original
         return (
-          <div className='w-[120px]'>
-            <Overlay
-              className='w-full'
-              overlay={
-                <button
-                  onClick={() => {
-                    onSelect(id)
-                    onDetailEmployee(true)
-                  }}
-                  className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-                >
-                  Lihat
-                </button>
-              }
-            >
-              <div className='hover:text-dark'>
-                <button
-                  onClick={() => {
-                    onSelect(id)
-                    onDetailEmployee(true)
-                  }}
-                >
+          <Overlay
+            className='w-fit pr-14'
+            overlay={
+              <button
+                onClick={() => {
+                  onSelect(id)
+                  onDetailEmployee(true)
+                }}
+                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+              >
+                Lihat
+              </button>
+            }
+          >
+            <div className='hover:text-dark'>
+              <button
+                onClick={() => {
+                  onSelect(id)
+                  onDetailEmployee(true)
+                }}
+                className='justify-start flex'
+              >
+                <span className='break-words w-[120px] text-left'>
                   {fullname}
-                </button>
-              </div>
-            </Overlay>
-          </div>
+                </span>
+              </button>
+            </div>
+          </Overlay>
         )
       },
     },
