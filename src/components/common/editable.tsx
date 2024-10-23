@@ -44,7 +44,9 @@ export const Editable = <C extends React.ElementType = 'p'>({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (!data || !onUpdate || !onEdit) return
-
+      if (onUpdate) {
+        onUpdate(data as string | number)
+      }
       handleBlur()
     }
   }
@@ -68,9 +70,6 @@ export const Editable = <C extends React.ElementType = 'p'>({
   }, [isEdit, keyData])
 
   const handleBlur = () => {
-    if (onUpdate) {
-      onUpdate(data as string | number)
-    }
     if (onEdit) {
       onEdit(null)
     }
@@ -152,14 +151,19 @@ type renderProps = {
 }
 function RenderData({ customData, defaultData, keyData, onEdit }: renderProps) {
   if (customData && defaultData) {
-    return customData?.(defaultData)
+    return (
+      <div className='flex gap-2 items-center group'>
+        {customData?.(defaultData)}
+        <Pencil size={14} className='text-gray-400 hidden group-hover:block' />
+      </div>
+    )
   }
 
   if (defaultData) {
     return (
-      <div className='flex gap-2 items-center'>
+      <div className='flex gap-2 items-center group'>
         {defaultData}
-        <Pencil size={14} className='text-gray-400' />
+        <Pencil size={14} className='text-gray-400 hidden group-hover:block' />
       </div>
     )
   }
@@ -170,7 +174,7 @@ function RenderData({ customData, defaultData, keyData, onEdit }: renderProps) {
       className='font-normal p-0 hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary text-base h-fit pl-4 relative'
       onClick={() => onEdit?.(keyData)}
     >
-      <Plus size={12} className='absolute left-0 top-[56%] -translate-y-1/2'/>
+      <Plus size={12} className='absolute left-0 top-[56%] -translate-y-1/2' />
       Tambah
     </Button>
   )
