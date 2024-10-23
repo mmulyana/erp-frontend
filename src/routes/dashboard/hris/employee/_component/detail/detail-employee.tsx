@@ -9,6 +9,13 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { useEmployee, useUpdateEmployee } from '@/hooks/api/use-employee'
 import { BASE_URL } from '@/utils/constant/_urls'
+import { EDUCATIONS, EDUCATIONS_OBJ } from '@/utils/data/educations'
+import {
+  EMPLOYEMENT_TYPE,
+  EMPLOYEMENT_TYPE_OBJ,
+} from '@/utils/data/employment-type'
+import { GENDER, GENDER_OBJ } from '@/utils/data/gender'
+import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
 import { Employee } from '@/utils/types/api'
 import { format, parseISO } from 'date-fns'
 import { id as indonesia } from 'date-fns/locale'
@@ -21,14 +28,6 @@ type Props = {
   setOpen: (val: boolean) => void
   id?: number | null
 }
-
-const MARITAL_STATUS = {
-  single: 'Belum menikah',
-  married: 'Menikah',
-  divorced: 'Cerai',
-}
-
-type TMaritalStatus = 'single' | 'married' | 'divorced'
 
 export default function DetailEmployee({ open, setOpen, id }: Props) {
   const { mutate: update } = useUpdateEmployee()
@@ -95,11 +94,8 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   type='select'
                   defaultData={employee?.employment_type}
                   className='capitalize'
-                  options={[
-                    { label: 'Tetap', value: 'permanent' },
-                    { value: 'contract', label: 'Kontrak' },
-                    { value: 'partime', label: 'Partime' },
-                  ]}
+                  options={EMPLOYEMENT_TYPE}
+                  customData={(val) => <p>{EMPLOYEMENT_TYPE_OBJ[val]}</p>}
                   onUpdate={(val) => {
                     if (!id) return
                     update({
@@ -152,8 +148,16 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   <p className='text-dark/50'>Pend. Terakhir</p>
                   <Editable
                     isEdit={isEdit}
+                    onEdit={onEdit}
                     keyData='last_education'
                     defaultData={employee?.last_education}
+                    type='select'
+                    options={EDUCATIONS}
+                    customData={(val) => <p>{EDUCATIONS_OBJ[val]}</p>}
+                    onUpdate={(val) => {
+                      if (!id) return
+                      update({ id, payload: { last_education: val as string } })
+                    }}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -173,6 +177,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   <p className='text-dark/50'>Tanggal lahir</p>
                   <Editable
                     isEdit={isEdit}
+                    onEdit={onEdit}
                     keyData='birth_date'
                     defaultData={employee?.birth_date}
                     className='capitalize'
@@ -180,12 +185,17 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                       if (typeof val == 'string') {
                         return (
                           <p>
-                            {format(parseISO(val), 'EEEE, MMMM d yyyy', {
+                            {format(parseISO(val), 'd/MM/yyyy', {
                               locale: indonesia,
                             })}
                           </p>
                         )
                       }
+                    }}
+                    type='date'
+                    onUpdate={(val) => {
+                      if (!id) return
+                      update({ id, payload: { birth_date: val as string } })
                     }}
                   />
                 </DataSheet>
@@ -193,14 +203,15 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   <p className='text-dark/50'>Jenis kelamin</p>
                   <Editable
                     isEdit={isEdit}
+                    onEdit={onEdit}
                     keyData='gender'
                     defaultData={employee?.gender}
-                    customData={(val) => {
-                      if (typeof val == 'string') {
-                        return (
-                          <p>{val == 'male' ? 'Laki-laki' : 'Perempuan'}</p>
-                        )
-                      }
+                    customData={(val) => <p>{GENDER_OBJ[val]}</p>}
+                    options={GENDER}
+                    type='select'
+                    onUpdate={(val) => {
+                      if (!id) return
+                      update({ id, payload: { gender: val as string } })
                     }}
                   />
                 </DataSheet>
@@ -208,13 +219,16 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   <p className='text-dark/50'>Status pernikahan</p>
                   <Editable
                     isEdit={isEdit}
+                    onEdit={onEdit}
                     keyData='marital_status'
                     defaultData={employee?.marital_status}
                     className='capitalize'
-                    customData={(val: any) => {
-                      if (typeof val == 'string') {
-                        return <p>{MARITAL_STATUS[val as TMaritalStatus]}</p>
-                      }
+                    customData={(val) => <p>{MARITAL_STATUS_OBJ[val]}</p>}
+                    type='select'
+                    options={MARITAL_STATUS}
+                    onUpdate={(val) => {
+                      if (!id) return
+                      update({ id, payload: { marital_status: val as string } })
                     }}
                   />
                 </DataSheet>
