@@ -272,7 +272,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     }}
                   />
                 </DataSheet>
-                <DataSheet>
+                <DataSheet className='items-start'>
                   <p className='text-dark/50'>Nomor Telepon</p>
                   <PhoneEmployee
                     id={id}
