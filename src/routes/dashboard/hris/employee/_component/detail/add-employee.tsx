@@ -294,8 +294,8 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                             </SelectTrigger>
                             <SelectContent>
                               {EDUCATIONS.map((item) => (
-                                <SelectItem value={item} key={item}>
-                                  {item}
+                                <SelectItem value={item.value} key={item.value}>
+                                  {item.name}
                                 </SelectItem>
                               ))}
                             </SelectContent>
