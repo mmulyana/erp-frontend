@@ -27,6 +27,7 @@ import { File, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PhoneEmployee from './phone-employee'
+import AddressEmployee from './address-employee'
 
 type Props = {
   open: boolean
@@ -272,12 +273,16 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     }}
                   />
                 </DataSheet>
-                <DataSheet className='items-start'>
+                <DataSheet className='items-start mt-4'>
                   <p className='text-dark/50'>Nomor Telepon</p>
                   <PhoneEmployee
                     id={id}
                     phones={employee?.phoneNumbers || []}
                   />
+                </DataSheet>
+                <DataSheet className='items-start mt-4'>
+                  <p className='text-dark/50'>Alamat</p>
+                  <AddressEmployee id={id} addresses={employee?.addresses || []} />
                 </DataSheet>
               </div>
             </Tab>
