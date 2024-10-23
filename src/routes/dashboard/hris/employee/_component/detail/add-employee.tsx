@@ -5,6 +5,7 @@ import MultiSelect from '@/components/common/select/multi-select-v1'
 import {
   navigationParams,
   Stepper,
+  stepperAtom,
   StepperItem,
 } from '@/components/common/stepper-v1'
 import UploadProfile from '@/components/common/upload-profile'
@@ -35,6 +36,7 @@ import {
   payloadCreateEmployee,
   createCertif as createCertifType,
 } from '@/utils/types/form'
+import { useSetAtom } from 'jotai'
 import { File, Mail, Phone, Plus, Trash, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
@@ -48,6 +50,7 @@ type Props = {
 export default function AddEmployee({ open, setOpen, id }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  const setCurrentStep = useSetAtom(stepperAtom)
 
   const { data, isLoading } = useCompetency()
   const labels = useMemo(
@@ -78,14 +81,12 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       gender: 'male',
       place_of_birth: '',
       birth_date: '',
-      marital_status: '',
       religion: '',
       basic_salary: '',
       pay_type: 'daily',
       overtime_salary: '',
       positionId: id,
       email: '',
-      // safety_induction_date: '',
       competencies: [],
       addressess: [
         {
@@ -156,14 +157,18 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
 
   const onSubmit = async (data: createEmployee) => {
     if (newUser) {
-      const payload = data.certifications
+      const payload = data.certifications.map((item) => ({...item, }))
       createCertif(
         {
           data: payload as createCertifType[],
           employeeId: newUser.id,
         },
         {
-          onSuccess: () => setOpen(false),
+          onSuccess: () => {
+            setOpen(false)
+            form.reset()
+            setCurrentStep(0)
+          },
         }
       )
       return
