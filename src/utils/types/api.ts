@@ -1,5 +1,3 @@
-import { EmployeeStatus } from '../enum/common'
-
 export interface IApi<T = void> {
   data?: T
   message: string
@@ -205,6 +203,7 @@ export type Employee = {
   phoneNumbers?: PhoneNumber[]
   positionId?: number
   position?: Position
+  isHidden?: boolean
   attendances: Attendance[]
   cashAdvances: CashAdvance[]
   contacts: Contact[]
@@ -305,7 +304,7 @@ export type Address = {
 type EmployeeStatusTrack = {
   id: number
   date: Date
-  status: EmployeeStatus
+  status: boolean
   description?: string
   employeeId: number
   employee: Employee
