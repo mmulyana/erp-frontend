@@ -198,7 +198,7 @@ export default function PhoneEmployee({ id, phones }: Props) {
       ) : null}
       {isPhone ? (
         <Form {...form}>
-          <div className='flex gap-2 items-center'>
+          <div className='flex gap-2 pt-2 flex-col'>
             <div className='relative'>
               <Controller
                 control={form.control}
@@ -216,35 +216,50 @@ export default function PhoneEmployee({ id, phones }: Props) {
                 <Phone size={14} strokeWidth={2} aria-hidden='true' />
               </div>
             </div>
-            <Button
-              type='submit'
-              variant='secondary'
-              className='h-7 font-normal text-sm rounded-md p-0 px-2'
-              onClick={() => {
-                if (!id) return
-                if (selectedId) {
-                  update(
-                    { id: selectedId, value: form.getValues('value') },
+            <div className='flex justify-end gap-2'>
+              <Button
+                type='submit'
+                variant='ghost'
+                className='h-7 font-normal text-sm rounded-md p-0 px-2 text-red-400 hover:text-red-600'
+                onClick={() => {
+                  setIsPhone(false)
+                  setSelectedId(null)
+                  containerRef.current?.focus()
+                  form.reset()
+                }}
+              >
+                Batal
+              </Button>
+              <Button
+                type='submit'
+                variant='secondary'
+                className='h-7 font-normal text-sm rounded-md p-0 px-2'
+                onClick={() => {
+                  if (!id) return
+                  if (selectedId) {
+                    update(
+                      { id: selectedId, value: form.getValues('value') },
+                      {
+                        onSuccess: () => {
+                          reset()
+                        },
+                      }
+                    )
+                    return
+                  }
+                  create(
+                    { id, value: form.getValues('value') },
                     {
                       onSuccess: () => {
                         reset()
                       },
                     }
                   )
-                  return
-                }
-                create(
-                  { id, value: form.getValues('value') },
-                  {
-                    onSuccess: () => {
-                      reset()
-                    },
-                  }
-                )
-              }}
-            >
-              Simpan
-            </Button>
+                }}
+              >
+                Simpan
+              </Button>
+            </div>
           </div>
         </Form>
       ) : (
