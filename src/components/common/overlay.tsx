@@ -11,7 +11,7 @@ export default function Overlay({ children, overlay, className }: Props) {
 
   return (
     <div
-      className={cn('relative', className)}
+      className={cn('relative w-full', className)}
       onMouseEnter={() => setIsSHow(true)}
       onMouseLeave={() => setIsSHow(false)}
     >
