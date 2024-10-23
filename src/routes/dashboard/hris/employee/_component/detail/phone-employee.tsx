@@ -7,12 +7,14 @@ import {
   useUpdatePhone,
 } from '@/hooks/api/use-employee'
 import { cn } from '@/utils/cn'
+import { formatPhone } from '@/utils/format-phone'
 import { PhoneNumber } from '@/utils/types/api'
 import { Copy, Eye, EyeOff, Pencil, Phone, Plus, Trash } from 'lucide-react'
 import { KeyboardEvent, useRef, useState, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
+type TForm = { value: string }
 type Props = {
   id?: number | null
   phones: PhoneNumber[]
@@ -26,10 +28,11 @@ export default function PhoneEmployee({ id, phones }: Props) {
   const { mutate: remove } = useDeletePhone()
   const { mutate: update } = useUpdatePhone()
 
-  const form = useForm<{ value: string }>({
+  const form = useForm<TForm>({
     defaultValues: {
       value: '',
     },
+    mode: 'onChange',
   })
 
   const [isPhone, setIsPhone] = useState(false)
@@ -60,26 +63,8 @@ export default function PhoneEmployee({ id, phones }: Props) {
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (!id) return
-      if (selectedId) {
-        update(
-          { id: selectedId, value: form.getValues('value') },
-          {
-            onSuccess: () => {
-              reset()
-            },
-          }
-        )
-        return
-      }
-      create(
-        { id, value: form.getValues('value') },
-        {
-          onSuccess: () => {
-            reset()
-          },
-        }
-      )
+      e.preventDefault()
+      form.handleSubmit(submit)()
     }
   }
 
@@ -88,6 +73,29 @@ export default function PhoneEmployee({ id, phones }: Props) {
       await navigator.clipboard.writeText(text)
       toast.success('Nomor berhasil disalin')
     }
+  }
+
+  const submit = async (data: TForm) => {
+    if (!id) return
+    if (selectedId) {
+      update(
+        { id: selectedId, value: data.value },
+        {
+          onSuccess: () => {
+            reset()
+          },
+        }
+      )
+      return
+    }
+    create(
+      { id, value: data.value },
+      {
+        onSuccess: () => {
+          reset()
+        },
+      }
+    )
   }
 
   if (!id) return null
@@ -105,7 +113,7 @@ export default function PhoneEmployee({ id, phones }: Props) {
             <>
               {phones?.map((phone, index) => (
                 <div key={index} className='relative group w-full'>
-                  <p className='text-dark'>{phone.value}</p>
+                  <p className='text-dark lg'>{formatPhone(phone.value)}</p>
                   <div className='absolute right-0 top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
@@ -150,7 +158,7 @@ export default function PhoneEmployee({ id, phones }: Props) {
           ) : (
             <>
               <div className='relative group gap-2 flex items-center w-full'>
-                <p className='text-dark'>{phones[0].value}</p>
+                <p className='text-dark'>{formatPhone(phones[0].value)}</p>
                 <div className='absolute right-0 top-1/2 -translate-y-1/2 flex gap-2 items-center'>
                   <button
                     className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
@@ -198,69 +206,75 @@ export default function PhoneEmployee({ id, phones }: Props) {
       ) : null}
       {isPhone ? (
         <Form {...form}>
-          <div className='flex gap-2 pt-2 flex-col'>
-            <div className='relative'>
+          <form onSubmit={form.handleSubmit(submit)}>
+            <div className='flex gap-2 pt-2 flex-col'>
               <Controller
                 control={form.control}
                 name='value'
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    onKeyDown={handleKeyDown}
-                    className='pl-6 [direction:inherit] h-7 w-full rounded-md'
-                    ref={inputRef}
-                  />
+                rules={{
+                  required: 'Phone number is required',
+                  minLength: {
+                    value: 10,
+                    message: 'Phone number must be at least 10 digits',
+                  },
+                  maxLength: {
+                    value: 12,
+                    message: 'Phone number cannot exceed 12 digits',
+                  },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: 'Only numbers are allowed',
+                  },
+                }}
+                render={({ field, fieldState: { error } }) => (
+                  <div>
+                    <div className='relative'>
+                      <Input
+                        {...field}
+                        onKeyDown={handleKeyDown}
+                        className='pl-6 [direction:inherit] h-7 w-full rounded-md'
+                        ref={inputRef}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, '')
+                          field.onChange(value)
+                        }}
+                      />
+                      <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center pl-1 text-muted-foreground/80 peer-disabled:opacity-50'>
+                        <Phone size={14} strokeWidth={2} aria-hidden='true' />
+                      </div>
+                    </div>
+                    {error && (
+                      <span className='text-red-500 text-sm mt-1'>
+                        {error.message}
+                      </span>
+                    )}
+                  </div>
                 )}
               />
-              <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center pl-1 text-muted-foreground/80 peer-disabled:opacity-50'>
-                <Phone size={14} strokeWidth={2} aria-hidden='true' />
+              <div className='flex justify-end gap-2'>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  className='h-7 font-normal text-sm rounded-md p-0 px-2 text-red-400 hover:text-red-600'
+                  onClick={() => {
+                    setIsPhone(false)
+                    setSelectedId(null)
+                    containerRef.current?.focus()
+                    form.reset()
+                  }}
+                >
+                  Batal
+                </Button>
+                <Button
+                  type='submit'
+                  variant='secondary'
+                  className='h-7 font-normal text-sm rounded-md p-0 px-2'
+                >
+                  Simpan
+                </Button>
               </div>
             </div>
-            <div className='flex justify-end gap-2'>
-              <Button
-                type='submit'
-                variant='ghost'
-                className='h-7 font-normal text-sm rounded-md p-0 px-2 text-red-400 hover:text-red-600'
-                onClick={() => {
-                  setIsPhone(false)
-                  setSelectedId(null)
-                  containerRef.current?.focus()
-                  form.reset()
-                }}
-              >
-                Batal
-              </Button>
-              <Button
-                type='submit'
-                variant='secondary'
-                className='h-7 font-normal text-sm rounded-md p-0 px-2'
-                onClick={() => {
-                  if (!id) return
-                  if (selectedId) {
-                    update(
-                      { id: selectedId, value: form.getValues('value') },
-                      {
-                        onSuccess: () => {
-                          reset()
-                        },
-                      }
-                    )
-                    return
-                  }
-                  create(
-                    { id, value: form.getValues('value') },
-                    {
-                      onSuccess: () => {
-                        reset()
-                      },
-                    }
-                  )
-                }}
-              >
-                Simpan
-              </Button>
-            </div>
-          </div>
+          </form>
         </Form>
       ) : (
         <Button
