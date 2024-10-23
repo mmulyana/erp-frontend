@@ -1,5 +1,6 @@
+import { RadioV2 } from '@/components/common/radio-v2'
 import { Button } from '@/components/ui/button'
-import { Form } from '@/components/ui/form'
+import { Form, FormLabel } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import {
   useCreateAddress,
@@ -25,9 +26,10 @@ export default function AddressEmployee({ id, addresses }: Props) {
   const { mutate: remove } = useDeleteAddress()
   const { mutate: update } = useUpdateAddress()
 
-  const form = useForm<{ value: string }>({
+  const form = useForm<{ value: string; type: string }>({
     defaultValues: {
       value: '',
+      type: '',
     },
   })
 
@@ -44,10 +46,12 @@ export default function AddressEmployee({ id, addresses }: Props) {
   }, [isAddress])
 
   const onEdit = (id: number) => {
+    form.reset()
     setSelectedId(id)
     setIsAddress(true)
     const index = addresses.findIndex((item) => item.id === id)
     form.setValue('value', addresses[index].value)
+    form.setValue('type', addresses[index].type)
   }
 
   const reset = () => {
@@ -62,7 +66,11 @@ export default function AddressEmployee({ id, addresses }: Props) {
       if (!id) return
       if (selectedId) {
         update(
-          { id: selectedId, value: form.getValues('value') },
+          {
+            id: selectedId,
+            value: form.getValues('value'),
+            type: form.getValues('type'),
+          },
           {
             onSuccess: () => {
               reset()
@@ -72,7 +80,7 @@ export default function AddressEmployee({ id, addresses }: Props) {
         return
       }
       create(
-        { id, value: form.getValues('value') },
+        { id, value: form.getValues('value'), type: form.getValues('type') },
         {
           onSuccess: () => {
             reset()
@@ -100,9 +108,7 @@ export default function AddressEmployee({ id, addresses }: Props) {
                   key={index}
                   className='relative group pb-2 border-b border-dark/20 w-full'
                 >
-                  <p className='text-dark/50 text-sm w-36 break-words'>
-                    {address.value}
-                  </p>
+                  <p className='text-dark'>{address.value}</p>
                   <div className='absolute right-0 top-0 flex gap-2 items-center'>
                     <button
                       className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
@@ -197,6 +203,71 @@ export default function AddressEmployee({ id, addresses }: Props) {
                   />
                 )}
               />
+              <Controller
+                control={form.control}
+                name='type'
+                render={({ field }) => (
+                  <div className='space-y-2 w-full mt-2'>
+                    <FormLabel>Tipe alamat</FormLabel>
+                    <div className='flex gap-1 items-center justify-between'>
+                      <RadioV2
+                        {...field}
+                        value='domicile'
+                        className='h-6 rounded-full flex items-center justify-center'
+                        checked={field.value === 'domicile'}
+                      >
+                        {(checked) => (
+                          <div className='flex gap-1 items-center'>
+                            <div
+                              className={cn(
+                                'w-3 h-3 rounded-full border-[4px] border-gray-200',
+                                checked && 'border-blue-primary'
+                              )}
+                            ></div>
+                            <p className='text-sm text-dark'>Domisili</p>
+                          </div>
+                        )}
+                      </RadioV2>
+                      <RadioV2
+                        {...field}
+                        value='origin'
+                        className='h-6 rounded-full flex items-center justify-center'
+                        checked={field.value === 'origin'}
+                      >
+                        {(checked) => (
+                          <div className='flex gap-1 items-center'>
+                            <div
+                              className={cn(
+                                'w-3 h-3 rounded-full border-[4px] border-gray-200',
+                                checked && 'border-blue-primary'
+                              )}
+                            ></div>
+                            <p className='text-sm text-dark'>Asal</p>
+                          </div>
+                        )}
+                      </RadioV2>
+                      <RadioV2
+                        {...field}
+                        value='alternative'
+                        className='h-6 rounded-full flex items-center justify-center'
+                        checked={field.value === 'alternative'}
+                      >
+                        {(checked) => (
+                          <div className='flex gap-1 items-center'>
+                            <div
+                              className={cn(
+                                'w-3 h-3 rounded-full border-[4px] border-gray-200',
+                                checked && 'border-blue-primary'
+                              )}
+                            ></div>
+                            <p className='text-sm text-dark'>Alternatif</p>
+                          </div>
+                        )}
+                      </RadioV2>
+                    </div>
+                  </div>
+                )}
+              />
             </div>
             <div className='flex justify-end gap-2'>
               <Button
@@ -220,7 +291,11 @@ export default function AddressEmployee({ id, addresses }: Props) {
                   if (!id) return
                   if (selectedId) {
                     update(
-                      { id: selectedId, value: form.getValues('value') },
+                      {
+                        id: selectedId,
+                        value: form.getValues('value'),
+                        type: form.getValues('type'),
+                      },
                       {
                         onSuccess: () => {
                           reset()
@@ -230,7 +305,11 @@ export default function AddressEmployee({ id, addresses }: Props) {
                     return
                   }
                   create(
-                    { id, value: form.getValues('value') },
+                    {
+                      id,
+                      value: form.getValues('value'),
+                      type: form.getValues('type'),
+                    },
                     {
                       onSuccess: () => {
                         reset()
