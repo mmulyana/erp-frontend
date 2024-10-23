@@ -5,11 +5,10 @@ import { Button } from '../ui/button'
 import { Pencil, Plus } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select'
 
-type Props<C extends React.ElementType> = {
+type Props = {
   isEdit: string | null
   keyData: string
   type?: 'text' | 'select' | 'date' | 'custom'
-  as?: C
   defaultData?: string | number | null
   className?: string
   classNameInput?: string
@@ -21,9 +20,9 @@ type Props<C extends React.ElementType> = {
     name: string
     value: string
   }[]
-} & React.ComponentPropsWithoutRef<C>
+}
 
-export const Editable = <C extends React.ElementType = 'p'>({
+export const Editable = ({
   isEdit,
   defaultData,
   className,
@@ -31,12 +30,11 @@ export const Editable = <C extends React.ElementType = 'p'>({
   onUpdate,
   onEdit,
   keyData,
-  as,
   type = 'text',
   customData,
   options,
   ...props
-}: Props<C>) => {
+}: Props) => {
   const [data, setData] = useState<null | string | number>(defaultData || null)
   const ref = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -76,8 +74,6 @@ export const Editable = <C extends React.ElementType = 'p'>({
     containerRef.current?.focus()
   }
 
-  const Component = as || 'p'
-
   const FormType = (type: 'text' | 'select' | 'date' | 'custom') => {
     switch (type) {
       case 'date':
@@ -96,7 +92,7 @@ export const Editable = <C extends React.ElementType = 'p'>({
             />
             <Button
               variant='secondary'
-              className='h-6 font-normal text-sm rounded-md p-0 px-2'
+              className='h-6 font-normal text-sm rounded-md p-0 px-2 bg-gray-200'
               onClick={() => {
                 onUpdate?.(data as string)
                 handleBlur()
@@ -120,14 +116,16 @@ export const Editable = <C extends React.ElementType = 'p'>({
             <SelectTrigger className='h-fit p-0 border-none bg-gray-50 py-1 pr-3'>
               <Button
                 variant='ghost'
-                className={cn('shadow-none h-fit p-0 pl-2', classNameInput)}
+                className={cn('shadow-none h-6 p-0 pl-2', classNameInput)}
               >
                 Pilih
               </Button>
             </SelectTrigger>
             <SelectContent>
               {options?.map((option) => (
-                <SelectItem value={option.value}>{option.name}</SelectItem>
+                <SelectItem key={option.value} value={option.value}>
+                  {option.name}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -139,7 +137,10 @@ export const Editable = <C extends React.ElementType = 'p'>({
             onChange={(e) => setData(e.target.value)}
             value={data || ''}
             onKeyDown={handleKeyDown}
-            className={cn('shadow-none h-fit', classNameInput)}
+            className={cn(
+              'shadow-none h-6 px-2 border border-blue-primary rounded-md',
+              classNameInput
+            )}
             onBlur={handleBlur}
             ref={ref}
           />
@@ -152,7 +153,7 @@ export const Editable = <C extends React.ElementType = 'p'>({
       {isEdit === keyData ? (
         FormType(type)
       ) : (
-        <Component
+        <div
           className={cn('text-dark cursor-pointer', className)}
           onClick={() => onEdit && onEdit(keyData)}
           {...props}
@@ -163,7 +164,7 @@ export const Editable = <C extends React.ElementType = 'p'>({
             keyData={keyData}
             onEdit={onEdit}
           />
-        </Component>
+        </div>
       )}
     </div>
   )
@@ -175,32 +176,36 @@ type renderProps = {
   keyData: string
   onEdit?: (val: string | null) => void
 }
+
 function RenderData({ customData, defaultData, keyData, onEdit }: renderProps) {
   if (customData && defaultData) {
     return (
-      <div className='flex gap-2 items-center group'>
+      <span className='inline-flex gap-2 items-center group'>
         {customData?.(defaultData)}
         <Pencil size={14} className='text-gray-400 hidden group-hover:block' />
-      </div>
+      </span>
     )
   }
 
   if (defaultData) {
     return (
-      <div className='flex gap-2 items-center group'>
+      <span className='inline-flex gap-2 items-center group'>
         {defaultData}
         <Pencil size={14} className='text-gray-400 hidden group-hover:block' />
-      </div>
+      </span>
     )
   }
 
   return (
     <Button
       variant='ghost'
-      className='font-normal p-0 hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary text-base h-fit pl-4 relative'
+      className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit pl-4 relative'
       onClick={() => onEdit?.(keyData)}
     >
-      <Plus size={12} className='absolute left-0 top-[56%] -translate-y-1/2' />
+      <Plus
+        size={12}
+        className='absolute left-0.5 top-[50%] -translate-y-1/2'
+      />
       Tambah
     </Button>
   )
