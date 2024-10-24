@@ -112,22 +112,22 @@ export default function CertifEmployee({
   if (!id) return null
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='flex flex-col gap-4 w-full overflow-hidden'>
       {!openForm &&
         certifications?.map((item, index: number) => {
           return (
             <div
               key={`certifications-${index}`}
-              className='relative w-full border pb-2 pt-3 px-4 rounded-lg overflow-hidden bg-white space-y-2'
+              className='relative max-w-full border pb-2 pt-3 px-4 rounded-lg overflow-hidden bg-white space-y-2'
             >
-              <div className='flex flex-wrap gap-2 items-center'>
-                <p className='text-dark font-medium'>{item.certif_name}</p>
+              <div className='flex flex-col gap-2 items-start overflow-hidden max-w-[270px]'>
+                <p className='text-dark font-medium truncate w-full'>{item.certif_name}</p>
                 <Link
                   to={`${BASE_URL}/files/${item.certif_file}`}
                   target='_blank'
-                  className='flex gap-2 items-center'
+                  className='flex gap-2 items-center bg-dark/10 rounded-full px-2 py-0.5 pl-3'
                 >
-                  <span className='text-sm text-dark/50'>Lihat sertifikat</span>
+                  <span className='text-sm text-dark'>Lihat sertifikat</span>
                   <ExternalLink size={14} />
                 </Link>
               </div>
