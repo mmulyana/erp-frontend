@@ -2,51 +2,51 @@ import { StatusItem, StatusObject } from '../types/common'
 
 export const months: StatusItem[] = [
   {
-    value: 1,
+    value: 0,
     name: 'Januari',
   },
   {
-    value: 2,
+    value: 1,
     name: 'Februari',
   },
   {
-    value: 3,
+    value: 2,
     name: 'Maret',
   },
   {
-    value: 4,
+    value: 3,
     name: 'April',
   },
   {
-    value: 5,
+    value: 4,
     name: 'Mei',
   },
   {
-    value: 6,
+    value: 5,
     name: 'Juni',
   },
   {
-    value: 7,
+    value: 6,
     name: 'Juli',
   },
   {
-    value: 8,
+    value: 7,
     name: 'Agustus',
   },
   {
-    value: 9,
+    value: 8,
     name: 'September',
   },
   {
-    value: 10,
+    value: 9,
     name: 'Oktober',
   },
   {
-    value: 11,
+    value: 10,
     name: 'November',
   },
   {
-    value: 12,
+    value: 11,
     name: 'Desember',
   },
 ]
