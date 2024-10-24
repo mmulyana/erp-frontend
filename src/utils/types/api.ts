@@ -192,6 +192,7 @@ export type Employee = {
   overtime_salary?: number
   pay_type?: 'daily' | 'monthly'
   employment_type?: 'permanent' | 'contract' | 'partime'
+  safety_induction_date?: string
   status: boolean
   place_of_birth?: string
   birth_date?: string
