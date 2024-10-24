@@ -494,3 +494,25 @@ export const useStatusEmployee = () => {
     },
   })
 }
+
+export const useSoftDeleteEmployee = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      return await http.patch(`${URLS.EMPLOYEE}/delete/soft/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE_TOTAL],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
