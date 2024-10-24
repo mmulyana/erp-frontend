@@ -45,6 +45,7 @@ import { Employee } from '@/utils/types/api'
 import { cn } from '@/utils/cn'
 
 import { Ellipsis } from 'lucide-react'
+import DeleteEmployee from './delete-employee'
 
 type Props = {
   open: boolean
@@ -83,9 +84,10 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
   }, [open])
   // HANDLE EDIT
 
-  // HANDLE ACTIVE/INACTIVE
+  // HANDLE ACTIVE/INACTIVE AND DExzLETE
   const [openActive, setOpenActive] = useState(false)
-  // HANDLE ACTIVE/INACTIVE
+  const [openDelete, setOpenDelete] = useState(false)
+  // HANDLE ACTIVE/INACTIVE AND DELETE
 
   if (!id) return null
 
@@ -134,7 +136,9 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     <DropdownMenuItem onClick={() => setOpenActive(true)}>
                       {employee?.status ? 'Nonaktifkan' : 'Aktifkan'}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>Hapus</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setOpenDelete(true)}>
+                      Hapus
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -398,6 +402,11 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
             open={openActive}
             setOpen={setOpenActive}
             employee={{ ...employee }}
+          />
+          <DeleteEmployee
+            open={openDelete}
+            setOpen={setOpenDelete}
+            id={employee.id}
           />
         </ScrollArea>
       </SheetContent>
