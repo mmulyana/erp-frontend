@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn'
 
 type Props = {
-  status: 'active' | 'nonactive'
+  status: boolean
   className?: string
 }
 export default function Chips({ status, className }: Props) {
@@ -15,15 +15,15 @@ export default function Chips({ status, className }: Props) {
       <div
         className={cn(
           'w-1 h-1 rounded-full',
-          status === 'active' ? 'bg-[#36B062]' : 'bg-[#D64E44]'
+          status ? 'bg-[#36B062]' : 'bg-[#D64E44]'
         )}
       ></div>
       <p
         className={cn(
-          status === 'active' ? 'text-[#36B062]' : 'text-[#D64E44]'
+          status ? 'text-[#36B062]' : 'text-[#D64E44]'
         )}
       >
-        {status == 'active' ? 'Aktif' : 'Nonaktif'}
+        {status ? 'Aktif' : 'Nonaktif'}
       </p>
     </div>
   )
