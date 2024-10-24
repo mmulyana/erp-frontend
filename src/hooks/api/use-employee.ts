@@ -500,7 +500,7 @@ export const useSoftDeleteEmployee = () => {
 
   return useMutation({
     mutationFn: async ({ id }: { id: number }) => {
-      return await http.patch(`${URLS.EMPLOYEE}/delete/soft/${id}`)
+      return await http.patch(`${URLS.EMPLOYEE}/soft-delete/${id}`)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
