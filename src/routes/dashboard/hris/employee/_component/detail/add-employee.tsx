@@ -597,7 +597,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                                     {months.map((item) => (
                                       <SelectItem
                                         key={`month-${item.value}`}
-                                        value={item.name}
+                                        value={item.value}
                                       >
                                         {item.name}
                                       </SelectItem>
@@ -635,7 +635,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                                     {months.map((item) => (
                                       <SelectItem
                                         key={`month-${item.value}`}
-                                        value={item.name}
+                                        value={item.value}
                                       >
                                         {item.name}
                                       </SelectItem>
