@@ -141,7 +141,7 @@ export const Editable = ({
             value={data || ''}
             onKeyDown={handleKeyDown}
             className={cn(
-              'shadow-none h-6 px-2 border border-blue-primary rounded-md',
+              'shadow-none h-fit py-1 px-2 border border-blue-primary rounded-md',
               classNameInput
             )}
             onBlur={handleBlur}
