@@ -29,6 +29,8 @@ import AddressEmployee from './address-employee'
 import { PAY_TIPE, PAY_TIPE_OBJ } from '@/utils/data/pay-tipe'
 import { formatToRupiah } from '@/utils/formatCurrency'
 import CertifEmployee from './certif-employee'
+import JoinedEmployee from './joined-employee'
+import { cn } from '@/utils/cn'
 
 type Props = {
   open: boolean
@@ -125,23 +127,32 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   }}
                 />
               </DataSheet>
-              <DataSheet>
+              <DataSheet className={cn(isEdit == 'joined_at' && 'items-start')}>
                 <p className='text-dark/50'>Bergabung sejak</p>
+                <JoinedEmployee
+                  id={id}
+                  isEdit={isEdit}
+                  onEdit={onEdit}
+                  joined_at={employee.joined_at}
+                  joined_type={employee.joined_type}
+                />
+              </DataSheet>
+              <DataSheet>
+                <p className='text-dark/50'>Safety Induction</p>
                 <Editable
                   isEdit={isEdit}
-                  keyData='joined_at'
-                  defaultData={employee?.joined_at}
-                  className='capitalize'
-                  customData={(val) => {
-                    if (typeof val == 'string') {
-                      return (
-                        <p>
-                          {format(parseISO(val), 'EEEE, MMMM d yyyy', {
-                            locale: indonesia,
-                          })}
-                        </p>
-                      )
-                    }
+                  onEdit={onEdit}
+                  keyData='safety_induction_date'
+                  type='date'
+                  defaultData={employee?.safety_induction_date}
+                  customData={(val) => (
+                    <p>{format(val, 'd MMMM yyyy', { locale: indonesia })}</p>
+                  )}
+                  onUpdate={(val) => {
+                    update({
+                      id,
+                      payload: { safety_induction_date: new Date(val) as Date },
+                    })
                   }}
                 />
               </DataSheet>
