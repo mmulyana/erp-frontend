@@ -1,3 +1,15 @@
+import {
+  useEmployee,
+  useRemovePhoto,
+  useStatusEmployee,
+  useUpdateEmployee,
+  useUploadPhoto,
+} from '@/hooks/api/use-employee'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { id as indonesia } from 'date-fns/locale'
+import { format, parseISO } from 'date-fns'
+
+import { cn } from '@/utils/cn'
 import Chips from '@/components/common/chips'
 import DataSheet from '@/components/common/data-sheet'
 import { Editable } from '@/components/common/editable'
@@ -5,12 +17,6 @@ import PhotoProfile from '@/components/common/photo-profile'
 import { Tab, Tabs } from '@/components/tab'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
-import {
-  useEmployee,
-  useRemovePhoto,
-  useUpdateEmployee,
-  useUploadPhoto,
-} from '@/hooks/api/use-employee'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { EDUCATIONS, EDUCATIONS_OBJ } from '@/utils/data/educations'
 import {
@@ -20,17 +26,22 @@ import {
 import { GENDER, GENDER_OBJ } from '@/utils/data/gender'
 import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
 import { Employee } from '@/utils/types/api'
-import { format, parseISO } from 'date-fns'
-import { id as indonesia } from 'date-fns/locale'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import PhoneEmployee from './phone-employee'
 import AddressEmployee from './address-employee'
 import { PAY_TIPE, PAY_TIPE_OBJ } from '@/utils/data/pay-tipe'
 import { formatToRupiah } from '@/utils/formatCurrency'
 import CertifEmployee from './certif-employee'
 import JoinedEmployee from './joined-employee'
-import { cn } from '@/utils/cn'
 import CompetenciesEmployee from './competencies-employee'
+import { Ellipsis } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 type Props = {
   open: boolean
@@ -68,6 +79,13 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
   }, [open])
   // HANDLE EDIT
 
+  // HANDLE ACTIVE/INACTIVE
+  const { mutate: changeStatus } = useStatusEmployee()
+
+  const [openActive, setOpenActive] = useState(false)
+
+  // HANDLE ACTIVE/INACTIVE
+
   if (!id) return null
 
   return (
@@ -76,7 +94,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
         <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
           <p className='text-sm text-dark'>Detail Pegawai</p>
         </div>
-        <ScrollArea className='h-[calc(100vh-48px)]'>
+        <ScrollArea className='h-[calc(100vh-48px)] relative'>
           <div className='mt-4 px-4 mb-8'>
             <PhotoProfile
               defaultPreview={
@@ -89,17 +107,37 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                 removePhoto({ id })
               }}
             />
-            <Editable
-              isEdit={isEdit}
-              keyData='fullname'
-              onEdit={onEdit}
-              defaultData={employee?.fullname}
-              className='text-lg font-medium text-dark mt-4 py-1 px-1'
-              classNameInput='text-lg font-medium text-dark mt-4 py-1 px-1'
-              onUpdate={(val) => {
-                update({ id, payload: { fullname: val as string } })
-              }}
-            />
+            <div className='relative pr-7'>
+              <Editable
+                isEdit={isEdit}
+                keyData='fullname'
+                onEdit={onEdit}
+                defaultData={employee?.fullname}
+                className='text-lg font-medium text-dark mt-4 py-1 px-1'
+                classNameInput='text-lg font-medium text-dark mt-4 py-1 px-1'
+                onUpdate={(val) => {
+                  update({ id, payload: { fullname: val as string } })
+                }}
+              />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant='outline'
+                    className='absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-0 w-6 h-6 p-0'
+                  >
+                    <Ellipsis size={14} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className='min-w-fit -translate-x-4'>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={() => setOpenActive(true)}>
+                      {employee?.status ? 'Nonaktifkan' : 'Aktifkan'}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Hapus</DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <div className='flex flex-col gap-4 w-fit mt-2'>
               <DataSheet>
                 <p className='text-dark/50'>Status</p>
@@ -355,6 +393,38 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               </div>
             </Tab>
           </Tabs>
+          {!!openActive && (
+            <div className='w-full h-screen absolute top-0 left-0 bg-white/50 backdrop-blur-md z-10 flex items-center justify-center px-8'>
+              <div className='w-full p-8 flex flex-col justify-center items-center'>
+                <p className='text-lg text-center font-medium text-dark'>
+                  {employee.status ? 'Nonaktifkan' : 'Aktifkan'} pegawai ini
+                </p>
+                <div className='flex gap-4 items-center mt-4'>
+                  <Button
+                    variant='secondary'
+                    onClick={() => setOpenActive(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button
+                    variant='default'
+                    onClick={() => {
+                      changeStatus(
+                        { id, status: employee?.status },
+                        {
+                          onSuccess: () => {
+                            setOpenActive(false)
+                          },
+                        }
+                      )
+                    }}
+                  >
+                    Lanjutkan
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </ScrollArea>
       </SheetContent>
     </Sheet>
