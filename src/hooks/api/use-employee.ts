@@ -519,12 +519,30 @@ export const useSoftDeleteEmployee = () => {
 
 export const useExpireCertification = ({ enabled }: { enabled?: boolean }) => {
   return useQuery({
-    queryKey: [KEYS.EMPLOYEE_CERTIFICATION],
-    queryFn: async (): Promise<AxiosResponse<IApiPagination<Employee[]>>> => {
+    queryKey: [KEYS.EXPIRE_CERTIFICATION],
+    queryFn: async (): Promise<AxiosResponse<IApi<{data: any[]}>>> => {
       return await http
         .request({
           method: 'GET',
-          url: `${URLS.EMPLOYEE}//expiring/certification`,
+          url: `${URLS.EMPLOYEE}/expiring/certification`,
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err
+        })
+    },
+    enabled: enabled || false,
+  })
+}
+
+export const useExpireSafety = ({ enabled }: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: [KEYS.EXPIRE_SAFETY],
+    queryFn: async () => {
+      return await http
+        .request({
+          method: 'GET',
+          url: `${URLS.EMPLOYEE}/expiring/safety`,
         })
         .then((res) => res.data)
         .catch((err) => {
