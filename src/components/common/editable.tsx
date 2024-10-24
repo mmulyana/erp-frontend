@@ -32,6 +32,7 @@ export const Editable = ({
   keyData,
   type = 'text',
   customData,
+  customEdit,
   options,
   ...props
 }: Props) => {
@@ -76,6 +77,8 @@ export const Editable = ({
 
   const FormType = (type: 'text' | 'select' | 'date' | 'custom') => {
     switch (type) {
+      case 'custom':
+        return customEdit
       case 'date':
         return (
           <div className='flex gap-2 items-center'>
