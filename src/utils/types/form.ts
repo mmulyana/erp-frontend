@@ -14,7 +14,7 @@ export type payloadCreateEmployee = {
   overtime_salary?: string | undefined
   positionId?: string
   competencies: string[]
-  safety_induction_date?: string
+  safety_induction_date?: string | Date
   email?: string
   addresses?: createAddress[]
   phoneNumbers?: createPhone[]
@@ -41,7 +41,7 @@ export type payloadUploadPhoto = {
 export type createCertif = {
   certif_file?: File | null
   certif_name: string
-  issuing_organization?: string 
+  issuing_organization?: string
   issue_year?: string
   issue_month?: string
   expiry_year?: string
