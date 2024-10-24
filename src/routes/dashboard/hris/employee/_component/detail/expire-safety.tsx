@@ -2,6 +2,7 @@ import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useExpireSafety } from '@/hooks/api/use-employee'
 import { BASE_URL } from '@/utils/constant/_urls'
+import { UserCircle } from 'lucide-react'
 
 type Props = {
   positionId?: string
@@ -19,9 +20,9 @@ export default function ExpireSafety({ positionId }: Props) {
       </CardHead>
       <CardBody className='p-0'>
         <ScrollArea className='h-48 flex flex-col gap-4'>
-          {data?.data?.map((item: any) => (
+          {data?.data?.map((item: any, index: number) => (
             <div
-              key={item}
+              key={index}
               className='px-3 py-3.5 grid grid-cols-[24px_1fr] gap-4 border-b border-line'
             >
               {item.photo ? (
@@ -30,7 +31,9 @@ export default function ExpireSafety({ positionId }: Props) {
                   src={BASE_URL + '/img/' + item.photo}
                 />
               ) : (
-                <div className='w-6 h-6 rounded-full bg-gray-400'></div>
+                <div className='w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center'>
+                  <UserCircle size={16} />
+                </div>
               )}
               <p className='text-sm text-dark/50'>
                 <span className='text-dark font-medium'>{item.fullname}</span>
