@@ -12,7 +12,6 @@ import {
 import { useEmployees } from '@/hooks/api/use-employee'
 import { settingConfig } from '@/routes/dashboard/_component/setting/setting'
 import { EDUCATIONS_OBJ } from '@/utils/data/educations'
-import { EmployeeStatus } from '@/utils/enum/common'
 import { Employee } from '@/utils/types/api'
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
@@ -22,7 +21,7 @@ import { isString } from 'lodash'
 import { CircleUserRoundIcon, SettingsIcon } from 'lucide-react'
 
 type TableEmployeeProps = {
-  status?: EmployeeStatus
+  status?: boolean
   positionId?: string
   name?: string
   onAddEmployee: () => void
@@ -137,7 +136,7 @@ export default function TableEmployee({
       header: 'Status',
       cell: ({ row }) => (
         <StatusChips
-          status={row.original.status === 'active'}
+          status={row.original.status}
           className='rounded-full'
         />
       ),
