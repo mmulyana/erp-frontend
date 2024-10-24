@@ -1,6 +1,8 @@
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useExpireCertification } from '@/hooks/api/use-employee'
+import { BASE_URL } from '@/utils/constant/_urls'
+import { UserCircle } from 'lucide-react'
 
 type Props = {
   positionId?: string
@@ -9,7 +11,6 @@ export default function ExpireCertif({ positionId }: Props) {
   const { data } = useExpireCertification({
     enabled: positionId !== null,
   })
-  console.log(data)
   return (
     <Card>
       <CardHead className='px-3'>
@@ -17,16 +18,39 @@ export default function ExpireCertif({ positionId }: Props) {
       </CardHead>
       <CardBody className='p-0'>
         <ScrollArea className='h-48 flex flex-col gap-4'>
-          {[0, 1, 2, 3, 4].map((item) => (
+          {data?.data?.map((item: any, index: number) => (
             <div
-              key={item}
+              key={index}
               className='px-3 py-3.5 grid grid-cols-[24px_1fr] gap-4 border-b border-line'
             >
-              <div className='w-6 h-6 rounded-full bg-gray-400'></div>
+              {item.employee.photo ? (
+                <img
+                  className='h-6 w-6 rounded-full object-cover object-center'
+                  src={BASE_URL + '/img/' + item.employee.photo}
+                />
+              ) : (
+                <div className='w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center'>
+                  <UserCircle size={16} />
+                </div>
+              )}
               <p className='text-sm text-dark/50'>
-                Sertifikat <span className='text-dark'>TKBT</span>{' '}
-                <span className='text-dark'>Muhamad Mulyana</span> akan
-                kedaluwarsa dalam <span className='text-dark'>10 hari</span>
+                Sertifikat{' '}
+                <span className='text-dark font-medium'>
+                  {item.certif_name}
+                </span>
+                {' milik '}
+                <span className='text-dark font-medium'>
+                  {item.employee.fullname}
+                </span>
+                {item.daysUntilExpiry < 0
+                  ? ' sudah kadaluwarsa sejak '
+                  : ' akan kedaluwarsa dalam '}
+                <span className='text-dark font-medium'>
+                  {item.daysUntilExpiry < 0
+                    ? item.daysUntilExpiry * -1
+                    : item.daysUntilExpiry}{' '}
+                  hari
+                </span>
               </p>
             </div>
           ))}
