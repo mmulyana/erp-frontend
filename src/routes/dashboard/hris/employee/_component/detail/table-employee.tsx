@@ -119,14 +119,13 @@ export default function TableEmployee({
         const competencies = cell.row.original.competencies
         return (
           <div className='flex gap-2 max-w-fit'>
-            {!!competencies?.length &&
-              competencies?.map((item) => (
-                <Label
-                  key={item.id}
-                  name={item.competency.name}
-                  color={item.competency.color}
-                />
-              ))}
+            {competencies?.map((item) => (
+              <Label
+                key={`competency-${cell.row.original.id}-${item.id}`}
+                name={item.competency.name}
+                color={item.competency.color}
+              />
+            ))}
           </div>
         )
       },
@@ -135,10 +134,7 @@ export default function TableEmployee({
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => (
-        <StatusChips
-          status={row.original.status}
-          className='rounded-full'
-        />
+        <StatusChips status={row.original.status} className='rounded-full' />
       ),
     },
     {
