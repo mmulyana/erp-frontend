@@ -405,3 +405,31 @@ export const useDeleteAddress = () => {
     },
   })
 }
+
+export const useAddCompetency = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: number
+      payload: { competencyId: number }
+    }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
+      return await http.post(
+        `${URLS.EMPLOYEE}/competency/single/${id}`,
+        payload
+      )
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
