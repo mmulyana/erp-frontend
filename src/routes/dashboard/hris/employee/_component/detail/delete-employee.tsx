@@ -1,4 +1,4 @@
-import { useDeleteEmployee } from '@/hooks/api/use-employee'
+import { useSoftDeleteEmployee } from '@/hooks/api/use-employee'
 import { buttonVariants } from '@/components/ui/button'
 import {
   AlertDialog,
@@ -19,7 +19,7 @@ type ModalProps = {
   setOpen: (val: boolean) => void
 }
 export default function DeleteEmployee({ id, open, setOpen }: ModalProps) {
-  const { mutate } = useDeleteEmployee()
+  const { mutate } = useSoftDeleteEmployee()
   const onDelete = async () => {
     if (!id) return
     mutate(
@@ -35,7 +35,7 @@ export default function DeleteEmployee({ id, open, setOpen }: ModalProps) {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Hapus pegawai ini?</AlertDialogTitle>
+          <AlertDialogTitle>Hapus pegawai</AlertDialogTitle>
           <AlertDialogDescription>
             Pegawai ini akan dihapus dari sistem
           </AlertDialogDescription>
