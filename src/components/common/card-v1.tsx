@@ -25,6 +25,6 @@ export function CardHead({ children, className }: HeadProps) {
   )
 }
 
-export function Cardbody({ children, className }: HeadProps) {
+export function CardBody({ children, className }: HeadProps) {
   return <div className={cn('p-4', className)}>{children}</div>
 }
