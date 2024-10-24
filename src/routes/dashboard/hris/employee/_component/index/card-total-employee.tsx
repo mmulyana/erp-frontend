@@ -1,4 +1,4 @@
-import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import {
   ChartConfig,
   ChartContainer,
@@ -26,7 +26,7 @@ export default function CardTotalEmployee() {
       <CardHead>
         <p className='text-dark text-sm font-semibold'>Jumlah pegawai</p>
       </CardHead>
-      <Cardbody className='pt-0'>
+      <CardBody className='pt-0'>
         <ChartContainer
           config={
             (ByPositionQuery.data?.data.data?.chartConfig as ChartConfig) || {}
@@ -78,7 +78,7 @@ export default function CardTotalEmployee() {
             <ChartLegend className='flex flex-wrap justify-center' content={<ChartLegendContent />} />
           </PieChart>
         </ChartContainer>
-      </Cardbody>
+      </CardBody>
     </Card>
   )
 }
