@@ -1,7 +1,6 @@
 import {
   useEmployee,
   useRemovePhoto,
-  useStatusEmployee,
   useUpdateEmployee,
   useUploadPhoto,
 } from '@/hooks/api/use-employee'
@@ -9,32 +8,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { id as indonesia } from 'date-fns/locale'
 import { format, parseISO } from 'date-fns'
 
-import { cn } from '@/utils/cn'
-import Chips from '@/components/common/chips'
-import DataSheet from '@/components/common/data-sheet'
-import { Editable } from '@/components/common/editable'
-import PhotoProfile from '@/components/common/photo-profile'
-import { Tab, Tabs } from '@/components/tab'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { BASE_URL } from '@/utils/constant/_urls'
-import { EDUCATIONS, EDUCATIONS_OBJ } from '@/utils/data/educations'
-import {
-  EMPLOYEMENT_TYPE,
-  EMPLOYEMENT_TYPE_OBJ,
-} from '@/utils/data/employment-type'
-import { GENDER, GENDER_OBJ } from '@/utils/data/gender'
-import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
-import { Employee } from '@/utils/types/api'
-import PhoneEmployee from './phone-employee'
-import AddressEmployee from './address-employee'
-import { PAY_TIPE, PAY_TIPE_OBJ } from '@/utils/data/pay-tipe'
-import { formatToRupiah } from '@/utils/formatCurrency'
-import CertifEmployee from './certif-employee'
-import JoinedEmployee from './joined-employee'
-import CompetenciesEmployee from './competencies-employee'
-import { Ellipsis } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +15,36 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import Chips from '@/components/common/chips'
+import DataSheet from '@/components/common/data-sheet'
+import PhotoProfile from '@/components/common/photo-profile'
+import { Editable } from '@/components/common/editable'
+import { Button } from '@/components/ui/button'
+import { Tab, Tabs } from '@/components/tab'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
+
+import CompetenciesEmployee from './employee/competencies-employee'
+import StatusEmployee from './employee/status-employee'
+import AddressEmployee from './employee/address-employee'
+import CertifEmployee from './employee/certif-employee'
+import JoinedEmployee from './employee/joined-employee'
+import PhoneEmployee from './employee/phone-employee'
+
+import { BASE_URL } from '@/utils/constant/_urls'
+import { EDUCATIONS, EDUCATIONS_OBJ } from '@/utils/data/educations'
+import {
+  EMPLOYEMENT_TYPE,
+  EMPLOYEMENT_TYPE_OBJ,
+} from '@/utils/data/employment-type'
+import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
+import { PAY_TIPE, PAY_TIPE_OBJ } from '@/utils/data/pay-tipe'
+import { GENDER, GENDER_OBJ } from '@/utils/data/gender'
+import { formatToRupiah } from '@/utils/formatCurrency'
+import { Employee } from '@/utils/types/api'
+import { cn } from '@/utils/cn'
+
+import { Ellipsis } from 'lucide-react'
 
 type Props = {
   open: boolean
@@ -75,15 +78,13 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
   useEffect(() => {
     if (!open) {
       setEdit(null)
+      setOpenActive(false)
     }
   }, [open])
   // HANDLE EDIT
 
   // HANDLE ACTIVE/INACTIVE
-  const { mutate: changeStatus } = useStatusEmployee()
-
   const [openActive, setOpenActive] = useState(false)
-
   // HANDLE ACTIVE/INACTIVE
 
   if (!id) return null
@@ -393,38 +394,11 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               </div>
             </Tab>
           </Tabs>
-          {!!openActive && (
-            <div className='w-full h-screen absolute top-0 left-0 bg-white/50 backdrop-blur-md z-10 flex items-center justify-center px-8'>
-              <div className='w-full p-8 flex flex-col justify-center items-center'>
-                <p className='text-lg text-center font-medium text-dark'>
-                  {employee.status ? 'Nonaktifkan' : 'Aktifkan'} pegawai ini
-                </p>
-                <div className='flex gap-4 items-center mt-4'>
-                  <Button
-                    variant='secondary'
-                    onClick={() => setOpenActive(false)}
-                  >
-                    Batal
-                  </Button>
-                  <Button
-                    variant='default'
-                    onClick={() => {
-                      changeStatus(
-                        { id, status: employee?.status },
-                        {
-                          onSuccess: () => {
-                            setOpenActive(false)
-                          },
-                        }
-                      )
-                    }}
-                  >
-                    Lanjutkan
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
+          <StatusEmployee
+            open={openActive}
+            setOpen={setOpenActive}
+            employee={{ ...employee }}
+          />
         </ScrollArea>
       </SheetContent>
     </Sheet>
