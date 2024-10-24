@@ -433,3 +433,26 @@ export const useAddCompetency = () => {
     },
   })
 }
+
+export const useRemoveCompetency = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+    }: {
+      id: number
+    }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
+      return await http.delete(`${URLS.EMPLOYEE}/competency/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
