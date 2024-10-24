@@ -456,3 +456,32 @@ export const useRemoveCompetency = () => {
     },
   })
 }
+
+export const useStatusEmployee = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      status,
+    }: {
+      id: number
+      status: boolean
+    }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
+      if (status) {
+        return await http.patch(`${URLS.EMPLOYEE}/status/inactive/${id}`)
+      } else {
+        return await http.patch(`${URLS.EMPLOYEE}/status/active/${id}`)
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
