@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { useSoftDeleteEmployee } from '@/hooks/api/use-employee'
 
 type Props = {
   open: boolean
@@ -7,6 +8,8 @@ type Props = {
 }
 
 export default function StatusEmployee({ open, setOpen, id }: Props) {
+  const { mutate: softDelete } = useSoftDeleteEmployee()
+
   if (!open) return null
 
   return (
@@ -28,7 +31,14 @@ export default function StatusEmployee({ open, setOpen, id }: Props) {
           <Button
             variant='default'
             onClick={() => {
-              setOpen(false)
+              softDelete(
+                { id },
+                {
+                  onSuccess: () => {
+                    setOpen(false)
+                  },
+                }
+              )
             }}
           >
             Hapus
