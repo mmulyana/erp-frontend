@@ -6,6 +6,8 @@ export const KEYS = {
   PERMISSION_CHECK: 'permission_check',
   HRIS_POSITION: 'hris_position',
   EMPLOYEE: 'employee',
+  EXPIRE_CERTIFICATION: 'expire-certification',
+  EXPIRE_SAFETY: 'expire-safety',
   EMPLOYEE_TOTAL: 'employee-total',
   EMPLOYEE_STATUS: 'employee-status',
   EMPLOYEE_CERTIF_EXPIRE: 'employee-certif-expire',
