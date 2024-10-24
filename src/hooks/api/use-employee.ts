@@ -464,17 +464,26 @@ export const useStatusEmployee = () => {
     mutationFn: async ({
       id,
       status,
+      description,
     }: {
       id: number
       status: boolean
+      description?: string
     }): Promise<AxiosResponse<IApi<{ employeeId: number }>>> => {
       if (status) {
-        return await http.patch(`${URLS.EMPLOYEE}/status/inactive/${id}`)
+        return await http.patch(`${URLS.EMPLOYEE}/status/inactive/${id}`, {
+          description,
+        })
       } else {
-        return await http.patch(`${URLS.EMPLOYEE}/status/active/${id}`)
+        return await http.patch(`${URLS.EMPLOYEE}/status/active/${id}`, {
+          description,
+        })
       }
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EMPLOYEE_STATUS],
+      })
       queryClient.invalidateQueries({
         queryKey: [KEYS.EMPLOYEE],
       })
