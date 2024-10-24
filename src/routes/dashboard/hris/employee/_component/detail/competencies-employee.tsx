@@ -16,14 +16,14 @@ import {
 import { useCompetency } from '@/hooks/api/use-competency'
 import { cn } from '@/utils/cn'
 import { EmployeeCompetency } from '@/utils/types/api'
-import { Plus } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import Label from '@/components/common/label'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { useAddCompetency } from '@/hooks/api/use-employee'
+import { useAddCompetency, useRemoveCompetency } from '@/hooks/api/use-employee'
 
 const formSchema = z.object({
   competencyId: z.number({
@@ -40,7 +40,8 @@ type Props = {
 
 export default function CompetenciesEmployee({ id, competencies }: Props) {
   const { data } = useCompetency()
-  const { mutate } = useAddCompetency()
+  const { mutate: add } = useAddCompetency()
+  const { mutate: remove } = useRemoveCompetency()
 
   const [search, setSearch] = useState('')
   const [open, setOpen] = useState(false)
@@ -75,7 +76,7 @@ export default function CompetenciesEmployee({ id, competencies }: Props) {
 
   const handleSubmit = (data: FormValues) => {
     if (!id) return
-    mutate(
+    add(
       { id, payload: data },
       {
         onSuccess: () => {
@@ -96,6 +97,18 @@ export default function CompetenciesEmployee({ id, competencies }: Props) {
             color={item.competency.color}
             name={item.competency.name}
             key={`label-${index}`}
+            suffix={
+              <Button
+                variant='ghost'
+                className='border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
+                style={{ color: item.competency.color }}
+                onClick={() => {
+                  remove({ id: item.id })
+                }}
+              >
+                <X size={14} strokeWidth={3} />
+              </Button>
+            }
           />
         ))}
         <Form {...form}>
