@@ -56,6 +56,9 @@ export const useCreateEmployee = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EXPIRE_CERTIFICATION],
+      })
       toast.success(data.data.message)
     },
   })
@@ -78,6 +81,12 @@ export const useUpdateEmployee = () => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
       queryClient.invalidateQueries({
         queryKey: [KEYS.EMPLOYEE, data.data.data?.id],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EXPIRE_CERTIFICATION],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EXPIRE_SAFETY],
       })
       toast.success(data.data.message)
     },
@@ -182,6 +191,9 @@ export const useCreateMultipleCertif = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EXPIRE_CERTIFICATION],
+      })
       toast.success(data.data.message)
     },
   })
@@ -218,6 +230,9 @@ export const useCreateCertif = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EXPIRE_CERTIFICATION],
+      })
       toast.success(data.data.message)
     },
   })
@@ -258,6 +273,9 @@ export const useUpdateCertif = () => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
       })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EXPIRE_CERTIFICATION],
+      })
       toast.success(data.data.message)
     },
   })
@@ -274,6 +292,9 @@ export const useDeleteCertif = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.EXPIRE_CERTIFICATION],
       })
       toast.success(data.data.message)
     },
@@ -520,7 +541,7 @@ export const useSoftDeleteEmployee = () => {
 export const useExpireCertification = ({ enabled }: { enabled?: boolean }) => {
   return useQuery({
     queryKey: [KEYS.EXPIRE_CERTIFICATION],
-    queryFn: async (): Promise<AxiosResponse<IApi<{data: any[]}>>> => {
+    queryFn: async () => {
       return await http
         .request({
           method: 'GET',
