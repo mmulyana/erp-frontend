@@ -1,7 +1,6 @@
 import Chips from '@/components/common/chips'
 import DataSheet from '@/components/common/data-sheet'
 import { Editable } from '@/components/common/editable'
-import Label from '@/components/common/label'
 import PhotoProfile from '@/components/common/photo-profile'
 import { Tab, Tabs } from '@/components/tab'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -31,6 +30,7 @@ import { formatToRupiah } from '@/utils/formatCurrency'
 import CertifEmployee from './certif-employee'
 import JoinedEmployee from './joined-employee'
 import { cn } from '@/utils/cn'
+import CompetenciesEmployee from './competencies-employee'
 
 type Props = {
   open: boolean
@@ -156,19 +156,12 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   }}
                 />
               </DataSheet>
-              <DataSheet>
+              <DataSheet className='items-start'>
                 <p className='text-dark/50'>Kompetensi</p>
-                <div className='flex gap-1 flex-wrap'>
-                  {employee?.competencies &&
-                    !!employee?.competencies.length &&
-                    employee?.competencies.map((item: any, index: number) => (
-                      <Label
-                        color={item.competency.color}
-                        name={item.competency.name}
-                        key={`label-${index}`}
-                      />
-                    ))}
-                </div>
+                <CompetenciesEmployee
+                  id={id}
+                  competencies={employee?.competencies || []}
+                />
               </DataSheet>
             </div>
           </div>
