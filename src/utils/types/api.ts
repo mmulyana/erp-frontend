@@ -46,13 +46,14 @@ export type Project = {
     }
   }[]
   client?: {
+    id: number
     name: string
   } | null
-  lead: {
+  lead?: {
     id: number
     fullname: string
     photo: string | null
-  } | null
+  }
   _count: {
     employees: number
   }
