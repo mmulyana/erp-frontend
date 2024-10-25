@@ -1,7 +1,7 @@
 import { PATH } from '@/utils/constant/_paths'
 import { useTitle } from './_component/header'
 import { DashboardLayout } from './_component/layout'
-import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import {
   BriefcaseBusiness,
   ChevronLeft,
@@ -36,7 +36,7 @@ export default function Dashboard() {
                 </button>
               </div>
             </CardHead>
-            <Cardbody className='p-4 bg-[#EFF0F2]' />
+            <CardBody className='p-4 bg-[#EFF0F2]' />
           </Card>
         </div>
         <Card>
@@ -51,7 +51,7 @@ export default function Dashboard() {
               </label>
             </div>
           </CardHead>
-          <Cardbody></Cardbody>
+          <CardBody></CardBody>
         </Card>
         <Card>
           <CardHead>
@@ -60,7 +60,7 @@ export default function Dashboard() {
               <p className='text-dark font-medium'>Sertifikasi Pegawai</p>
             </div>
           </CardHead>
-          <Cardbody></Cardbody>
+          <CardBody></CardBody>
         </Card>
         <Card>
           <CardHead>
@@ -69,7 +69,7 @@ export default function Dashboard() {
               <p className='text-dark font-medium'>Inventory</p>
             </div>
           </CardHead>
-          <Cardbody></Cardbody>
+          <CardBody></CardBody>
         </Card>
         <Card>
           <CardHead>
@@ -77,7 +77,7 @@ export default function Dashboard() {
               <p className='text-dark font-medium'>Absensi</p>
             </div>
           </CardHead>
-          <Cardbody></Cardbody>
+          <CardBody></CardBody>
         </Card>
       </div>
     </DashboardLayout>
