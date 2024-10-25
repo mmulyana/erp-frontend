@@ -71,7 +71,7 @@ export default function EmployeeProject({ id, data: { employees } }: Props) {
   }, [employees, search, dataEmployees])
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2 mt-2'>
       <div className='w-full pb-2 border-b border-line flex justify-between items-center'>
         <p className='text-dark/50'>Pegawai</p>
         <Form {...form}>
