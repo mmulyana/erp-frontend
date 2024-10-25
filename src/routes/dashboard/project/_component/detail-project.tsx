@@ -4,13 +4,14 @@ import { Editable } from '@/components/common/editable'
 import { Tab, Tabs } from '@/components/tab'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { useProject } from '@/hooks/api/use-project'
+import { useProject, useUpdateProject } from '@/hooks/api/use-project'
 import { cn } from '@/utils/cn'
 import { ProjectDetail } from '@/utils/types/api'
 import { useCallback, useMemo, useState } from 'react'
 import LabelProject from './detail/label-project'
 import UserProject from './detail/user-project'
 import LeadProject from './detail/lead-project'
+import { formatToRupiah } from '@/utils/formatCurrency'
 
 type Props = {
   open: boolean
@@ -19,6 +20,8 @@ type Props = {
 }
 
 export default function DetailProject({ open, setOpen, id }: Props) {
+  const { mutate: update } = useUpdateProject()
+
   const { data, isLoading, isFetching } = useProject(id)
   const project: ProjectDetail | null = useMemo(
     () => data?.data.data || null,
@@ -51,6 +54,9 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                 keyData='name'
                 defaultData={project?.name}
                 className='text-xl font-medium text-dark'
+                onUpdate={(val) => {
+                  update({ id, payload: { name: val as string } })
+                }}
               />
               <Editable
                 isEdit={isEdit}
@@ -58,9 +64,12 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                 keyData='description'
                 defaultData={project?.description}
                 className='text-dark/50'
+                onUpdate={(val) => {
+                  update({ id, payload: { description: val as string } })
+                }}
               />
             </div>
-            <div className='flex mt-4 justify-between flex-col gap-4'>
+            <div className='flex mt-4 flex-col gap-4'>
               <DataSheet>
                 <p className='text-dark/50'>Status</p>
                 <Chips
@@ -87,16 +96,63 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                 <p className='text-dark/50'>Penanggung Jawab</p>
                 <LeadProject id={id} data={{ lead: project?.lead }} />
               </DataSheet>
+              <DataSheet>
+                <p className='text-dark/50'>Progress</p>
+                <Editable
+                  isEdit={isEdit}
+                  onEdit={onEdit}
+                  keyData='progress'
+                  defaultData={project?.progress}
+                  customData={(val) => <p>{val} %</p>}
+                  onUpdate={(val) => {
+                    update({ id, payload: { progress: Number(val) } })
+                  }}
+                />
+              </DataSheet>
             </div>
           </div>
           <Tabs>
+            <Tab label='Info'>
+              <div className='px-6 pb-10 pt-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
+                <div className='flex flex-col gap-4'>
+                  <DataSheet>
+                    <p className='text-dark/50'>Nilai Proyek</p>
+                    <Editable
+                      isEdit={isEdit}
+                      onEdit={onEdit}
+                      keyData='net_value'
+                      defaultData={project?.net_value}
+                      customData={(val) => (
+                        <p>{formatToRupiah(val as number)}</p>
+                      )}
+                      onUpdate={(val) => {
+                        update({ id, payload: { net_value: Number(val) } })
+                      }}
+                    />
+                  </DataSheet>
+                  <DataSheet>
+                    <p className='text-dark/50'>Status Pembayaran</p>
+                    <Editable
+                      isEdit={isEdit}
+                      onEdit={onEdit}
+                      keyData='payment_status'
+                      defaultData={project?.payment_status}
+                      customData={(val) => <p>{val} %</p>}
+                      onUpdate={(val) => {
+                        update({ id, payload: { payment_status: Number(val) } })
+                      }}
+                    />
+                  </DataSheet>
+                </div>
+              </div>
+            </Tab>
             <Tab label='Aktivitas'>
-              <div className='px-6 py-4 bg-[#FBFBFB]'>
+              <div className='px-6 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
                 <p>Aktivitas</p>
               </div>
             </Tab>
             <Tab label='Estimasi pengeluaran'>
-              <div className='px-6 py-4'>
+              <div className='px-6 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
                 <p>Estimasi</p>
               </div>
             </Tab>
