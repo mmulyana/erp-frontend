@@ -86,11 +86,15 @@
     @apply bg-background text-foreground;
   }
 }
-
+.textarea {
+  field-sizing: content;
+  min-height: calc(24px * 4);
+  min-height: 1lh;
+}
 .loader {
   height: 4px;
   width: 130px;
-  --c: no-repeat linear-gradient(#4154FA 0 0);
+  --c: no-repeat linear-gradient(#4154fa 0 0);
   background: var(--c), var(--c), #dadada;
   background-size: 60% 100%;
   animation: l16 3s infinite;
