@@ -6,7 +6,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { useProject } from '@/hooks/api/use-project'
 import { format } from 'date-fns'
 import { id as indonesia } from 'date-fns/locale'
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 type Props = {
   open: boolean
@@ -21,6 +21,15 @@ export default function DetailProject({ open, setOpen, id }: Props) {
     [data, isLoading, isFetching]
   )
 
+  const [edit, setEdit] = useState<string | null>('')
+  const isEdit = useMemo(() => edit, [edit])
+  const onEdit = useCallback(
+    (val: string | null) => {
+      setEdit(val)
+    },
+    [edit]
+  )
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className='p-0 max-w-full min-w-full sm:min-w-[480px]'>
@@ -30,13 +39,15 @@ export default function DetailProject({ open, setOpen, id }: Props) {
         <ScrollArea className='h-[calc(100vh-48px)]'>
           <div className='px-6 pt-4 mb-8'>
             <Editable
-              isEdit={false}
+              isEdit={isEdit}
+              onEdit={onEdit}
               keyData='name'
               defaultData={project?.name}
               className='text-lg font-medium text-dark'
             />
             <Editable
-              isEdit={false}
+              isEdit={isEdit}
+              onEdit={onEdit}
               keyData='description'
               defaultData={project?.description}
               className='text-sm text-dark/50'
@@ -194,7 +205,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
           </div>
           <Tabs>
             <Tab label='Aktivitas'>
-                <div className='px-6 py-4 bg-[#FBFBFB]'>
+              <div className='px-6 py-4 bg-[#FBFBFB]'>
                 <p>Aktivitas</p>
               </div>
             </Tab>
