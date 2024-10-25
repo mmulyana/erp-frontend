@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import {
@@ -51,6 +51,10 @@ export default function SelectV1({
       onSearch(value)
     }
   }
+
+  useEffect(() => {
+    if (!open) setSearchValue('')
+  }, [open])
 
   return (
     <Controller
