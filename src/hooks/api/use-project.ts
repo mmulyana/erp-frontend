@@ -2,6 +2,7 @@ import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { IApi, IApiPagination, Project, ProjectDetail } from '@/utils/types/api'
+import { updateProject } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
@@ -44,6 +45,28 @@ export const useCreateProject = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useUpdateProject = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: number
+      payload: updateProject
+    }): Promise<AxiosResponse<IApi<{ id: number }>>> => {
+      return await http.patch(`${URLS.PROJECT}/${id}`, payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT, data.data.data?.id],
+      })
       toast.success(data.data.message)
     },
   })
