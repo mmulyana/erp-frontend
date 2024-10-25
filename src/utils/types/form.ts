@@ -119,3 +119,19 @@ export type createPosition = {
   color: string
   description?: string
 }
+
+export type createProject = {
+  name: string
+  containerId: string
+  progress?: number
+  payment_status?: number
+  description?: string
+  date_started?: string
+  date_ended?: string
+  isArchive?: boolean
+  net_value?: number
+  leadId?: number
+  clientId?: number
+}
+
+export type updateProject = Partial<createProject>
