@@ -16,6 +16,7 @@ import { format } from 'date-fns'
 import { id as indonesia } from 'date-fns/locale'
 import EmployeeProject from './detail/employee-project'
 import AttachmentProject from './detail/attachment-project'
+import ActivityProject from './detail/activity-project'
 
 type Props = {
   open: boolean
@@ -209,10 +210,10 @@ export default function DetailProject({ open, setOpen, id }: Props) {
             </Tab>
             <Tab label='Aktivitas'>
               <div className='px-6 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
-                <p>Aktivitas</p>
+                <ActivityProject />
               </div>
             </Tab>
-            <Tab label='Estimasi pengeluaran'>
+            <Tab label='Estimasi'>
               <div className='px-6 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
                 <p>Estimasi</p>
               </div>
