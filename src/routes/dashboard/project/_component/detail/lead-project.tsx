@@ -14,10 +14,11 @@ import {
 } from '@/components/ui/popover'
 import { useEmployees } from '@/hooks/api/use-employee'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { cn } from '@/utils/cn'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { ProjectDetail } from '@/utils/types/api'
 import { Command } from 'cmdk'
-import { User2, UserCircle } from 'lucide-react'
+import { Pencil, User2, UserCircle } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -52,12 +53,11 @@ export default function LeadProject({ id, data: { lead } }: Props) {
   }
 
   //   GET CLIENT
-  const { data } = useEmployees()
+  const { data } = useEmployees({ enabled: open })
   const leads = useMemo(() => data?.data.data || [], [data])
 
   const filteredClient = useMemo(() => {
     const availableClients = leads.filter((item) => item.id !== lead?.id)
-
     if (!search) {
       return availableClients
     }
@@ -69,7 +69,6 @@ export default function LeadProject({ id, data: { lead } }: Props) {
 
   return (
     <div className='flex gap-2 flex-wrap items-center'>
-      {lead && <div className='flex items-center gap-2'>{lead?.fullname}</div>}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
@@ -82,10 +81,21 @@ export default function LeadProject({ id, data: { lead } }: Props) {
                     <PopoverTrigger asChild>
                       <Button
                         variant='ghost'
-                        className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative gap-2'
+                        className={cn(
+                          'font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 h-fit relative gap-2',
+                          lead && 'text-dark'
+                        )}
                       >
                         {lead ? (
-                          'Ganti'
+                          <>
+                            <div className='flex items-center gap-2 group'>
+                              {lead?.fullname}
+                              <Pencil
+                                size={14}
+                                className='text-gray-400 hidden group-hover:block'
+                              />
+                            </div>
+                          </>
                         ) : (
                           <>
                             <User2 size={14} />
@@ -94,7 +104,7 @@ export default function LeadProject({ id, data: { lead } }: Props) {
                         )}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className='p-0 w-[160px]' align='start'>
+                    <PopoverContent className='p-0 w-[200px]' align='start'>
                       <Command>
                         <CommandInput
                           placeholder='Cari...'
