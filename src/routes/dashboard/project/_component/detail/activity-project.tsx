@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { format } from 'date-fns'
 import { Camera, MessageCircle, SendHorizonal, ThumbsUp } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function ActivityProject() {
   return (
@@ -18,17 +19,39 @@ type MessageProps = {
   type: 'textarea' | 'input'
 }
 function MessageForm({ type }: MessageProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState(0)
+
+  useEffect(() => {
+    if (ref.current) {
+      const elementWidth = ref.current.clientWidth
+      setWidth(elementWidth)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (ref.current) {
+        setWidth(ref.current.clientWidth)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   if (type == 'textarea') {
     return (
-      <div className='w-full relative'>
-        <div>
-          <Textarea className='rounded-xl w-[335px] textarea' />
+      <div className='w-full relative' ref={ref}>
+        <div className='w-full'>
+          <Textarea
+            className='rounded-xl textarea'
+            style={{ maxWidth: width + 'px' }}
+          />
         </div>
         <div className='flex justify-between items-center gap-2 mt-2'>
           <div className='flex items-center gap-2'>
             <div className='flex gap-1.5'>
-              <div className='w-8 h-8 rounded-md bg-gray-200'></div>
-              <div className='w-8 h-8 rounded-md bg-gray-200'></div>
               <div className='w-8 h-8 rounded-md bg-gray-200'></div>
             </div>
             <button className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'>
@@ -55,14 +78,13 @@ function MessageItem() {
         <p className='text-dark/50 text-sm'>Muhamad Mulyana</p>
         <p className='text-dark'>Progress pekerjaan di line 5</p>
         <div className='flex gap-1.5 items-center mt-1'>
-          <div className='w-16 h-16 rounded-lg bg-gray-200'></div>
-          <div className='w-16 h-16 rounded-lg bg-gray-200'></div>
-          <div className='w-16 h-16 rounded-lg bg-gray-200'></div>
-          <div className='w-16 h-16 rounded-lg bg-gray-100 flex justify-center items-center'>
+          <div className='w-14 h-14 rounded-lg bg-gray-200'></div>
+          <div className='w-14 h-14 rounded-lg bg-gray-200'></div>
+          <div className='w-14 h-14 rounded-lg bg-gray-100 flex justify-center items-center'>
             <p className='text-dark font-medium'>2+</p>
           </div>
         </div>
-        <div className='flex justify-between items-center mt-2'>
+        <div className='flex justify-between items-start md:items-center mt-2 flex-col md:flex-row gap-2'>
           <div className='flex gap-2 items-center'>
             <Button
               className='px-2 gap-1.5 border-dark/10 rounded-full h-fit py-1'
