@@ -9,6 +9,8 @@ import { cn } from '@/utils/cn'
 import { ProjectDetail } from '@/utils/types/api'
 import { useCallback, useMemo, useState } from 'react'
 import LabelProject from './detail/label-project'
+import UserProject from './detail/user-project'
+import LeadProject from './detail/lead-project'
 
 type Props = {
   open: boolean
@@ -79,7 +81,11 @@ export default function DetailProject({ open, setOpen, id }: Props) {
               </DataSheet>
               <DataSheet>
                 <p className='text-dark/50'>User</p>
-                <p></p>
+                <UserProject id={id} data={{ client: project?.client }} />
+              </DataSheet>
+              <DataSheet>
+                <p className='text-dark/50'>Penanggung Jawab</p>
+                <LeadProject id={id} data={{ lead: project?.lead }} />
               </DataSheet>
             </div>
           </div>
