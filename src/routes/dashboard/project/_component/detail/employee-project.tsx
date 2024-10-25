@@ -72,7 +72,74 @@ export default function EmployeeProject({ id, data: { employees } }: Props) {
 
   return (
     <div className='flex flex-col gap-2'>
-      <p className='text-dark/50'>Pegawai</p>
+      <div className='w-full pb-2 border-b border-line flex justify-between items-center'>
+        <p className='text-dark/50'>Pegawai</p>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <FormField
+              control={form.control}
+              name='employeeId'
+              render={({ field }) => (
+                <FormItem className='flex-1'>
+                  <FormControl>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant='secondary'
+                          className='text-sm text-dark font-normal'
+                        >
+                          Tambah
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className='p-0 w-[160px]' align='start'>
+                        <Command>
+                          <CommandInput
+                            placeholder='Cari...'
+                            value={search}
+                            onValueChange={handleSearch}
+                          />
+                          <CommandList>
+                            <CommandEmpty>
+                              {filteredEmployees.length
+                                ? `Tidak ditemukan ${search}`
+                                : 'Kosong'}
+                            </CommandEmpty>
+                            <CommandGroup>
+                              {filteredEmployees.map((item, index) => (
+                                <CommandItem
+                                  key={`client-${index}`}
+                                  value={String(item.id)}
+                                  onSelect={() => {
+                                    field.onChange(item.id)
+                                    form.handleSubmit(handleSubmit)()
+                                  }}
+                                >
+                                  <div className='space-y-2'>
+                                    <div className='flex gap-2 items-center'>
+                                      <p className='text-dark'>
+                                        {item.fullname}{' '}
+                                      </p>
+                                      {item.position && (
+                                        <span className='text-dark/50'>
+                                          {item.position.name}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
       <div className='flex gap-2 items-center flex-wrap'>
         {employees.map(({ employee }) => (
           <div
@@ -93,72 +160,6 @@ export default function EmployeeProject({ id, data: { employees } }: Props) {
           </div>
         ))}
       </div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <FormField
-            control={form.control}
-            name='employeeId'
-            render={({ field }) => (
-              <FormItem className='flex-1'>
-                <FormControl>
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant='ghost'
-                        className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative gap-2'
-                      >
-                        <Plus size={14} />
-                        Tambah
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='p-0 w-[160px]' align='start'>
-                      <Command>
-                        <CommandInput
-                          placeholder='Cari...'
-                          value={search}
-                          onValueChange={handleSearch}
-                        />
-                        <CommandList>
-                          <CommandEmpty>
-                            {filteredEmployees.length
-                              ? `Tidak ditemukan ${search}`
-                              : 'Kosong'}
-                          </CommandEmpty>
-                          <CommandGroup>
-                            {filteredEmployees.map((item, index) => (
-                              <CommandItem
-                                key={`client-${index}`}
-                                value={String(item.id)}
-                                onSelect={() => {
-                                  field.onChange(item.id)
-                                  form.handleSubmit(handleSubmit)()
-                                }}
-                              >
-                                <div className='space-y-2'>
-                                  <div className='flex gap-2 items-center'>
-                                    <p className='text-dark'>
-                                      {item.fullname}{' '}
-                                    </p>
-                                    {item.position && (
-                                      <span className='text-dark/50'>
-                                        {item.position.name}
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
     </div>
   )
 }
