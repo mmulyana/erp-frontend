@@ -1,4 +1,4 @@
-import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts'
 import {
   ChartConfig,
@@ -28,7 +28,7 @@ export default function InfoStatus() {
       <CardHead className='border-none'>
         <p className='text-sm text-dark'>Tren Proyek perbulan</p>
       </CardHead>
-      <Cardbody className='px-2'>
+      <CardBody className='px-2'>
         <ChartContainer config={chartConfig} className='h-48 w-full'>
           <BarChart
             accessibilityLayer
@@ -61,7 +61,7 @@ export default function InfoStatus() {
             </Bar>
           </BarChart>
         </ChartContainer>
-      </Cardbody>
+      </CardBody>
     </Card>
   )
 }

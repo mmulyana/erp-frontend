@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 
 const chartData = [
   { month: 'January', total: 80 },
@@ -34,7 +34,7 @@ export default function InfoRevenue() {
       <CardHead className='border-none'>
         <p className='text-sm text-dark'>Estimasi pendapatan bruto</p>
       </CardHead>
-      <Cardbody>
+      <CardBody>
         <ChartContainer config={chartConfig} className='h-48 w-full'>
           <AreaChart
             accessibilityLayer
@@ -77,7 +77,7 @@ export default function InfoRevenue() {
             />
           </AreaChart>
         </ChartContainer>
-      </Cardbody>
+      </CardBody>
     </Card>
   )
 }
