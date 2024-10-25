@@ -46,12 +46,12 @@ export default function DetailProject({ open, setOpen, id }: Props) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className='p-0 max-w-full min-w-[447=8px]'>
+      <SheetContent className='w-full sm:min-w-[448px] p-0'>
         <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
           <p className='text-sm text-dark'>Detail Proyek</p>
         </div>
         <ScrollArea className='h-[calc(100vh-48px)]'>
-          <div className='px-6 pt-4 mb-8'>
+          <div className='px-4 pt-4 mb-8'>
             <div className='space-y-2'>
               <Editable
                 isEdit={isEdit}
@@ -118,7 +118,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
           </div>
           <Tabs>
             <Tab label='Info'>
-              <div className='px-6 pb-10 pt-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
+              <div className='px-4 pb-10 pt-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
                 <div className='flex flex-col gap-4'>
                   <DataSheet>
                     <p className='text-dark/50'>Nilai Proyek</p>
@@ -209,7 +209,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
               </div>
             </Tab>
             <Tab label='Aktivitas'>
-              <div className='px-6 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
+              <div className='px-4 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
                 <ActivityProject />
               </div>
             </Tab>
