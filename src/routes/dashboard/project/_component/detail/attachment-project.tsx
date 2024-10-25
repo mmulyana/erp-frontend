@@ -10,9 +10,9 @@ import { Download, Ellipsis, FileSpreadsheet } from 'lucide-react'
 
 export default function AttachmentProject() {
   return (
-    <div className='mt-2'>
+    <div className='mt-4'>
       <div className='w-full pb-2 border-b border-line flex justify-between items-center'>
-        <p className='text-dark'>Lampiran</p>
+        <p className='text-dark/50'>Lampiran</p>
         <Button variant='secondary' className='text-sm text-dark font-normal'>
           Tambah
         </Button>
