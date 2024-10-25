@@ -1,7 +1,7 @@
+import Chips from '@/components/common/chips'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import Label from '@/components/common/label'
 import Overlay from '@/components/common/overlay'
-import StatusChips from '@/components/common/status-chips'
 import { DataTable } from '@/components/data-table'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { Button } from '@/components/ui/button'
@@ -134,7 +134,7 @@ export default function TableEmployee({
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => (
-        <StatusChips status={row.original.status} className='rounded-full' />
+        <Chips status={row.original.status} className='rounded-full' />
       ),
     },
     {
