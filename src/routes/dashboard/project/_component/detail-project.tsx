@@ -12,6 +12,10 @@ import LabelProject from './detail/label-project'
 import UserProject from './detail/user-project'
 import LeadProject from './detail/lead-project'
 import { formatToRupiah } from '@/utils/formatCurrency'
+import { format } from 'date-fns'
+import { id as indonesia } from 'date-fns/locale'
+import { X } from 'lucide-react'
+import EmployeeProject from './detail/employee-project'
 
 type Props = {
   open: boolean
@@ -143,6 +147,62 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                       }}
                     />
                   </DataSheet>
+                  <DataSheet>
+                    <p className='text-dark/50'>Tanggal dibuat</p>
+                    {project?.date_created ? (
+                      <p className='text-dark'>
+                        {format(project?.date_created, 'dd/MM/yy', {
+                          locale: indonesia,
+                        })}
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                  </DataSheet>
+                  <DataSheet>
+                    <p className='text-dark/50'>Tanggal mulai</p>
+                    <Editable
+                      isEdit={isEdit}
+                      onEdit={onEdit}
+                      keyData='date_started'
+                      type='date'
+                      defaultData={project?.date_started}
+                      customData={(val) => (
+                        <p>
+                          {format(val, 'dd/MM/yy', {
+                            locale: indonesia,
+                          })}
+                        </p>
+                      )}
+                      onUpdate={(val) => {
+                        update({ id, payload: { date_started: val as string } })
+                      }}
+                    />
+                  </DataSheet>
+                  <DataSheet>
+                    <p className='text-dark/50'>Tanggal berakhir</p>
+                    <Editable
+                      isEdit={isEdit}
+                      onEdit={onEdit}
+                      keyData='date_ended'
+                      type='date'
+                      defaultData={project?.date_ended}
+                      customData={(val) => (
+                        <p>
+                          {format(val, 'dd/MM/yy', {
+                            locale: indonesia,
+                          })}
+                        </p>
+                      )}
+                      onUpdate={(val) => {
+                        update({ id, payload: { date_ended: val as string } })
+                      }}
+                    />
+                  </DataSheet>
+                  <EmployeeProject
+                    id={id}
+                    data={{ employees: project?.employees || [] }}
+                  />
                 </div>
               </div>
             </Tab>
