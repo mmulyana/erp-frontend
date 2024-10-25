@@ -14,8 +14,8 @@ import LeadProject from './detail/lead-project'
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { format } from 'date-fns'
 import { id as indonesia } from 'date-fns/locale'
-import { X } from 'lucide-react'
 import EmployeeProject from './detail/employee-project'
+import AttachmentProject from './detail/attachment-project'
 
 type Props = {
   open: boolean
@@ -203,6 +203,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                     id={id}
                     data={{ employees: project?.employees || [] }}
                   />
+                  <AttachmentProject />
                 </div>
               </div>
             </Tab>
