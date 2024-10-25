@@ -18,20 +18,56 @@ export interface Board {
   items: Item[]
 }
 
-export interface Project {
+export type Project = {
   id: number
   name: string
-  startDate: null
-  budget: string
-  priority: string
   boardItemsId: string
-  clientId: number
-  boardItems: Item
-  labels: ProjectToLabel[]
-  employees: Partial<Employee>[]
-  comments: Comment[]
-  client: Client
-  _count: Count
+  clientId: number | null
+  leadId: number | null
+  progress: number
+  net_value: number | null
+  boardItems: {
+    container: {
+      color: string
+      name: string
+    }
+  }
+  labels: {
+    label: {
+      id: number
+      name: string
+      color: string
+    }
+  }[]
+  employees: {
+    employee: {
+      fullname: string
+      photo: string
+    }
+  }[]
+  client?: {
+    name: string
+  } | null
+  lead: {
+    id: number
+    fullname: string
+    photo: string | null
+  } | null
+  _count: {
+    employees: number
+  }
+}
+export type ProjectDetail = Project & {
+  description?: string
+  payment_status: number
+  date_created: string
+  date_started: string | null
+  date_ended: string | null
+  isArchive: boolean
+  _count: {
+    employees: number
+    attachments: number
+  }
 }
 
 export interface Item {
