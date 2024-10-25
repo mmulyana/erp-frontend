@@ -43,6 +43,7 @@ export type Project = {
     employee: {
       fullname: string
       photo: string
+      id: number
     }
   }[]
   client?: {
@@ -61,7 +62,7 @@ export type Project = {
 export type ProjectDetail = Project & {
   description?: string
   payment_status: number
-  date_created: string
+  date_created: Date
   date_started: string | null
   date_ended: string | null
   isArchive: boolean
