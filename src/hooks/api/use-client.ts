@@ -2,15 +2,17 @@ import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { objectToFormData } from '@/utils/ObjectToFormData'
+import { Client, Company, IApiPagination } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { CreateClient, CreateClientCompany } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 type Params = Pagination & {}
 export const useClient = (params?: Params) => {
   return useQuery({
-    queryFn: async () => {
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<Client[]>>> => {
       return await http.request({
         method: 'GET',
         url: URLS.PROJECT_CLIENT,
@@ -73,7 +75,7 @@ export const useDeleteClient = () => {
 type CompanyParams = Pagination & {}
 export const useClientCompany = (params?: CompanyParams) => {
   return useQuery({
-    queryFn: async () => {
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<Company[]>>> => {
       return await http.request({
         method: 'GET',
         url: URLS.PROJECT_CLIENT_COMPANY,
