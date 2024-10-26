@@ -27,7 +27,7 @@ export default function Dashboard() {
         const { name, id } = cell.row.original
         return (
           <Overlay
-            className='w-[200px]'
+            className='w-fit pr-14'
             overlay={
               <Button
                 className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
