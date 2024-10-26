@@ -17,6 +17,7 @@ import { id as indonesia } from 'date-fns/locale'
 import EmployeeProject from './detail/employee-project'
 import AttachmentProject from './detail/attachment-project'
 import ActivityProject from './detail/activity-project'
+import EstimateProject from './detail/estimate-project'
 
 type Props = {
   open: boolean
@@ -46,7 +47,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className='w-full sm:min-w-[448px] p-0'>
+      <SheetContent className='w-full p-0'>
         <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
           <p className='text-sm text-dark'>Detail Proyek</p>
         </div>
@@ -214,8 +215,8 @@ export default function DetailProject({ open, setOpen, id }: Props) {
               </div>
             </Tab>
             <Tab label='Estimasi'>
-              <div className='px-6 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
-                <p>Estimasi</p>
+              <div className='p-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
+                <EstimateProject />
               </div>
             </Tab>
           </Tabs>
