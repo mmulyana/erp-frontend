@@ -60,3 +60,28 @@ export const useCreateActivity = () => {
     },
   })
 }
+
+export const useDeleteActivity = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      id,
+    }: {
+      id: number
+    }): Promise<AxiosResponse<IApi<{ projectId: number; replyId?: number }>>> => {
+      return await http.delete(`${URLS.PROJECT_ACTIVITY}/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
+          KEYS.ACTIVITY,
+          data.data.data?.projectId,
+          data.data.data?.replyId,
+        ],
+      })
+    },
+  })
+}
