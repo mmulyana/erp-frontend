@@ -135,3 +135,10 @@ export type createProject = {
 }
 
 export type updateProject = Partial<createProject>
+
+export type createActivity = {
+  userId: number
+  comment: string
+  projectId: number
+  replyId?: number | null
+}
