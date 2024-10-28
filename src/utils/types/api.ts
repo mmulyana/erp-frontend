@@ -387,4 +387,8 @@ export type Activity = {
   replyId: number
   userId: number
   user: User
+  replies: Activity[]
+  created_at: string
+  updated_at: string
+  likes: any[]
 }
