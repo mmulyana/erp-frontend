@@ -1,3 +1,5 @@
+import { User } from './user'
+
 export interface IApi<T = void> {
   data?: T
   message: string
@@ -375,4 +377,14 @@ export type Chart = {
       label: string
     }[]
   }
+}
+
+export type Activity = {
+  attachments?: any[]
+  comment: string
+  id: number
+  projectId: number
+  replyId: number
+  userId: number
+  user: User
 }
