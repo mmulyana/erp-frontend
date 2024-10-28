@@ -211,7 +211,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
             </Tab>
             <Tab label='Aktivitas'>
               <div className='px-4 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
-                <ActivityProject />
+                <ActivityProject id={project?.id} />
               </div>
             </Tab>
             <Tab label='Estimasi'>
