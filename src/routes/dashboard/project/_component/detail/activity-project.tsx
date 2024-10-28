@@ -9,6 +9,7 @@ import { useAtomValue } from 'jotai'
 import { Camera, MessageCircle, SendHorizonal, ThumbsUp } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import ActivityDetail from './activity-detail'
 
 type Props = {
   id?: number | null
@@ -16,16 +17,32 @@ type Props = {
 export default function ActivityProject({ id }: Props) {
   const { data } = useActivity({
     enabled: !!id,
-    id: Number(id),
+    projectId: id,
   })
   console.log(data)
+  const [selectedActivity, setSelectedActivity] = useState<
+    null | (Activity & { open: boolean })
+  >(null)
+
   return (
-    <div className='flex flex-col gap-6'>
-      <MessageForm type='textarea' id={id} />
-      {data?.data.data?.map((item) => (
-        <MessageItem key={`message-` + item.id} {...item} />
-      ))}
-    </div>
+    <>
+      <div className='flex flex-col gap-6'>
+        <MessageForm type='textarea' id={id} />
+        {data?.data.data?.map((item) => (
+          <MessageItem
+            key={`message-` + item.id}
+            {...item}
+            onSelectActivity={setSelectedActivity}
+          />
+        ))}
+      </div>
+      <ActivityDetail
+        open={selectedActivity?.open ?? false}
+        setOpen={() => setSelectedActivity(null)}
+        id={selectedActivity?.id}
+        projectId={id}
+      />
+    </>
   )
 }
 
@@ -113,13 +130,22 @@ function MessageForm({ type, id }: MessageProps) {
   return null
 }
 
-function MessageItem(props: Activity) {
+function MessageItem(
+  props: Activity & {
+    onSelectActivity: (val: Activity & { open: boolean }) => void
+  }
+) {
   return (
     <div className='grid grid-cols-[28px_1fr] gap-2'>
       <div className='w-7 h-7 rounded-full bg-gray-200'></div>
       <div className='flex flex-col gap-0.5 pt-1'>
         <p className='text-dark/50 text-sm'>{props.user.name}</p>
-        <p className='text-dark'>{props.comment}</p>
+        <p
+          className='text-dark'
+          onClick={() => props.onSelectActivity({ ...props, open: true })}
+        >
+          {props.comment}
+        </p>
         <div className='flex gap-1.5 items-center mt-1'>
           <div className='w-14 h-14 rounded-lg bg-gray-200'></div>
           <div className='w-14 h-14 rounded-lg bg-gray-200'></div>
@@ -136,17 +162,20 @@ function MessageItem(props: Activity) {
               <ThumbsUp size={15} strokeWidth={2} className='text-gray-400' />
               <p className='text-dark leading-none'>12</p>
             </Button>
-            <Button
-              className='px-2 gap-1.5 border-dark/10 rounded-full h-fit py-1'
-              variant='outline'
-            >
-              <MessageCircle
-                size={15}
-                strokeWidth={2}
-                className='text-gray-400'
-              />
-              <p className='text-dark leading-none'>2</p>
-            </Button>
+            {!!props?.replies.length && (
+              <Button
+                className='px-2 gap-1.5 border-dark/10 rounded-full h-fit py-1'
+                variant='outline'
+                onClick={() => props.onSelectActivity({ ...props, open: true })}
+              >
+                <MessageCircle
+                  size={15}
+                  strokeWidth={2}
+                  className='text-gray-400'
+                />
+                <p className='text-dark leading-none'>{props.replies.length}</p>
+              </Button>
+            )}
           </div>
 
           <p className='text-sm text-dark/50'>
