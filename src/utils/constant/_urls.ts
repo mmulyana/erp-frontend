@@ -22,7 +22,7 @@ export const URLS = {
   PROJECT_LABEL: V1 + '/project/label',
   PROJECT_CLIENT: V1 + '/project/client',
   PROJECT_CLIENT_COMPANY: V1 + '/project/client/company',
-
+  PROJECT_ACTIVITY: V1 + '/project/activity',
   KANBAN_BOARDD: V1 + '/project/board',
 
   // INVENTORY
