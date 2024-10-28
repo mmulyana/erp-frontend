@@ -1,24 +1,40 @@
+import { userAtom } from '@/atom/auth'
 import { Button } from '@/components/ui/button'
+import { Form, FormField } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { useActivity, useCreateActivity } from '@/hooks/api/use-activity'
+import { Activity } from '@/utils/types/api'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { Camera, MessageCircle, SendHorizonal, ThumbsUp } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
-export default function ActivityProject() {
+type Props = {
+  id?: number | null
+}
+export default function ActivityProject({ id }: Props) {
+  const { data } = useActivity({
+    enabled: !!id,
+    id: Number(id),
+  })
+  console.log(data)
   return (
     <div className='flex flex-col gap-6'>
-      <MessageForm type='textarea' />
-      <MessageItem />
-      <MessageItem />
-      <MessageItem />
+      <MessageForm type='textarea' id={id} />
+      {data?.data.data?.map((item) => (
+        <MessageItem key={`message-` + item.id} {...item} />
+      ))}
     </div>
   )
 }
 
-type MessageProps = {
+type MessageProps = Props & {
   type: 'textarea' | 'input'
 }
-function MessageForm({ type }: MessageProps) {
+function MessageForm({ type, id }: MessageProps) {
+  const user = useAtomValue(userAtom)
+
   const ref = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
 
@@ -40,43 +56,70 @@ function MessageForm({ type }: MessageProps) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // HANDLE FORM
+  const { mutate } = useCreateActivity()
+  const form = useForm<{ comment: string }>()
+
+  const submit = async (data: any) => {
+    if (!id || !user) return
+
+    mutate({ projectId: id, comment: data.comment, userId: user?.id })
+  }
+
   if (type == 'textarea') {
     return (
-      <div className='w-full relative' ref={ref}>
-        <div className='w-full'>
-          <Textarea
-            className='rounded-xl textarea'
-            style={{ maxWidth: width + 'px' }}
-          />
-        </div>
-        <div className='flex justify-between items-center gap-2 mt-2'>
-          <div className='flex items-center gap-2'>
-            <div className='flex gap-1.5'>
-              <div className='w-8 h-8 rounded-md bg-gray-200'></div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(submit)}>
+          <div className='w-full relative' ref={ref}>
+            <div className='w-full'>
+              <FormField
+                control={form.control}
+                name='comment'
+                render={({ field }) => (
+                  <Textarea
+                    className='rounded-xl textarea'
+                    style={{ maxWidth: width + 'px' }}
+                    {...field}
+                  />
+                )}
+              />
             </div>
-            <button className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'>
-              <Camera size={20} />
-            </button>
+            <div className='flex justify-between items-center gap-2 mt-2'>
+              <div className='flex items-center gap-2'>
+                <div className='flex gap-1.5'>
+                  <div className='w-8 h-8 rounded-md bg-gray-200'></div>
+                </div>
+                <button
+                  type='button'
+                  className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
+                >
+                  <Camera size={20} />
+                </button>
+              </div>
+              <Button
+                type='submit'
+                className='p-0 w-fit px-2 pl-3 gap-1 h-8 rounded-full'
+              >
+                Kirim
+                <SendHorizonal size={16} />
+              </Button>
+            </div>
           </div>
-          <Button className='p-0 w-fit px-2 pl-3 gap-1 h-8 rounded-full'>
-            Kirim
-            <SendHorizonal size={16} />
-          </Button>
-        </div>
-      </div>
+        </form>
+      </Form>
     )
   }
 
   return null
 }
 
-function MessageItem() {
+function MessageItem(props: Activity) {
   return (
     <div className='grid grid-cols-[28px_1fr] gap-2'>
       <div className='w-7 h-7 rounded-full bg-gray-200'></div>
       <div className='flex flex-col gap-0.5 pt-1'>
-        <p className='text-dark/50 text-sm'>Muhamad Mulyana</p>
-        <p className='text-dark'>Progress pekerjaan di line 5</p>
+        <p className='text-dark/50 text-sm'>{props.user.name}</p>
+        <p className='text-dark'>{props.comment}</p>
         <div className='flex gap-1.5 items-center mt-1'>
           <div className='w-14 h-14 rounded-lg bg-gray-200'></div>
           <div className='w-14 h-14 rounded-lg bg-gray-200'></div>
