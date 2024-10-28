@@ -114,14 +114,14 @@ export default function DialogAddClient({ open, setOpen }: ModalProps) {
                       type='button'
                     >
                       {
-                        qCompany?.data?.data.data.find(
+                        qCompany?.data?.data.data?.find(
                           (s: any) => s.id === Number(val)
                         )?.name
                       }
                     </Button>
                   )}
                 >
-                  {qCompany?.data?.data.data.map((item: any) => (
+                  {qCompany?.data?.data.data?.map((item: any) => (
                     <CommandItem
                       key={item.id}
                       value={item.id.toString()}
