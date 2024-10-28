@@ -4,17 +4,24 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/common/accordion'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/utils/cn'
 import { formatToRupiah } from '@/utils/formatCurrency'
-import { Triangle, X } from 'lucide-react'
+import { Plus, Triangle, X } from 'lucide-react'
 
 export default function EstimateProject() {
   return (
     <div className='flex flex-col gap-6'>
       <div className='rounded-lg bg-white py-2 w-full border border-line'>
-        <div className='flex justify-between items-center px-4'>
+        <div className='flex justify-between items-center px-4 pt-1.5 pb-1'>
           <p className='text-dark/60 text-sm'>Manpower</p>
+          <Button
+            variant='outline'
+            className='text-sm font-normal px-2 py-1 h-fit gap-1 text-gray-800'
+          >
+            Tambah
+          </Button>
         </div>
         <div className='grid grid-cols-[2fr_40px_2fr] pr-4 mt-2'>
           <div className='grid grid-cols-[32px_1fr] items-center gap-2'>
@@ -35,7 +42,7 @@ export default function EstimateProject() {
                   <div className='grid grid-cols-[32px_1fr] items-center gap-2'>
                     <button className='flex justify-center' onClick={() => {}}>
                       <Triangle
-                        size={12}
+                        size={10}
                         className={cn('fill-dark/80', !isOpen && 'rotate-180')}
                         strokeWidth={0}
                       />
@@ -64,7 +71,7 @@ export default function EstimateProject() {
                   <div className='grid grid-cols-[32px_1fr] items-center gap-2'>
                     <button className='flex justify-center' onClick={() => {}}>
                       <Triangle
-                        size={12}
+                        size={10}
                         className={cn('fill-dark/80', !isOpen && 'rotate-180')}
                         strokeWidth={0}
                       />
