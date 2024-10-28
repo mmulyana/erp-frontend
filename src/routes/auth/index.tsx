@@ -171,17 +171,6 @@ export default function Login() {
               Sign In
             </Button>
           </form>
-          <div className='text-center mt-3 mb-4'>
-            <p className='text-common-neutral'>
-              Belum punya akun?{' '}
-              <Link
-                to={PATH.REGISTER}
-                className='text-brand-blue underline underline-offset-2'
-              >
-                Daftar
-              </Link>
-            </p>
-          </div>
         </Form>
       </Layout>
     </Protected>
