@@ -9,7 +9,7 @@ import ProtectedRoute from '@/utils/protected-route'
 export const routes = [
   { path: '/', children: authRoutes, auth: false },
   { path: '/', children: commonRoutes, auth: false },
-  { path: '/dashboard/*', children: dashboardRoutes, auth: false },
+  { path: '/dashboard/*', children: dashboardRoutes, auth: true },
 ]
 
 export default function Router() {
