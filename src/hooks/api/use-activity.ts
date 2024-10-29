@@ -42,13 +42,20 @@ export const useCreateActivity = () => {
     mutationFn: async (
       payload: createActivity
     ): Promise<
-      AxiosResponse<IApi<{ projectId: number; replyId?: number }>>
+      AxiosResponse<IApi<{ id: number; projectId: number; replyId?: number }>>
     > => {
       return await http.post(URLS.PROJECT_ACTIVITY, payload)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
+          KEYS.ACTIVITY,
+          data.data.data?.projectId,
+          data.data.data?.id,
+        ],
       })
       queryClient.invalidateQueries({
         queryKey: [
@@ -68,7 +75,9 @@ export const useDeleteActivity = () => {
       id,
     }: {
       id: number
-    }): Promise<AxiosResponse<IApi<{ projectId: number; replyId?: number }>>> => {
+    }): Promise<
+      AxiosResponse<IApi<{ projectId: number; replyId?: number }>>
+    > => {
       return await http.delete(`${URLS.PROJECT_ACTIVITY}/${id}`)
     },
     onSuccess: (data) => {
@@ -80,6 +89,71 @@ export const useDeleteActivity = () => {
           KEYS.ACTIVITY,
           data.data.data?.projectId,
           data.data.data?.replyId,
+        ],
+      })
+    },
+  })
+}
+
+export const useToggleLikeActivity = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (payload: {
+      activityId: number
+      userId: number
+    }): Promise<
+      AxiosResponse<
+        IApi<{ activityId: number; activity: { projectId: number } }>
+      >
+    > => {
+      return await http.post(URLS.PROJECT_ACTIVITY + '/toggle/like', payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACTIVITY, data.data.data?.activity.projectId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
+          KEYS.ACTIVITY,
+          data.data.data?.activity.projectId,
+          data.data.data?.activityId,
+        ],
+      })
+    },
+  })
+}
+
+export const useUploadPhotosActivity = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (payload: {
+      photos: File[] | null
+      id: number
+    }): Promise<AxiosResponse<IApi<{ id: number; projectId: number }>>> => {
+      const formData = new FormData()
+      payload.photos?.forEach((item) => {
+        formData.append('photos', item)
+      })
+
+      return await http.post(
+        `${URLS.PROJECT_ACTIVITY}/${payload.id}/upload/photo`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
+          KEYS.ACTIVITY,
+          data.data.data?.projectId,
+          data.data.data?.id,
         ],
       })
     },
