@@ -66,7 +66,9 @@ export default function ActivityProject({ id }: Props) {
                     if (!!newAttachments.length) {
                       upload({ id, photos: newAttachments })
                     }
-                    removeAttachment(deletedAttachments)
+                    if (!!deletedAttachments.length) {
+                      removeAttachment(deletedAttachments)
+                    }
                     reset()
                   },
                 }
