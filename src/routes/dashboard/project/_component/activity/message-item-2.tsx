@@ -28,6 +28,7 @@ type MessageItemProps = Activity & {
     }
   ) => void
   nameKey: string
+  hideReply?: boolean
 }
 
 export default function MessageItem2({
@@ -36,6 +37,7 @@ export default function MessageItem2({
   onToggle,
   onUpdate,
   nameKey,
+  hideReply = false,
   ...props
 }: MessageItemProps) {
   const currentUser = useAtomValue(userAtom)
@@ -108,7 +110,7 @@ export default function MessageItem2({
   if (edit === editKey) {
     return (
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(submit)}>
+        <form onSubmit={form.handleSubmit(submit)} className='p-2.5'>
           <div className='w-full relative'>
             <div className='w-full'>
               <FormField
@@ -185,7 +187,7 @@ export default function MessageItem2({
                   type='submit'
                   className='p-0 w-fit px-2 pl-3 gap-1 h-8 rounded-full'
                 >
-                  Kirim
+                  Perbarui
                   <SendHorizonal size={16} />
                 </Button>
               </div>
@@ -279,20 +281,22 @@ export default function MessageItem2({
                   <p className='text-dark leading-none'>{props.likes.length}</p>
                 )}
               </Button>
-              <Button
-                className='px-2 gap-1.5 border-dark/10 rounded h-fit py-1 bg-transparent text-dark'
-                variant='outline'
-                onClick={() => {
-                  onSelectActivity?.({ id: props.id, open: true })
-                }}
-              >
-                <MessageCircle size={15} strokeWidth={2} />
-                {!!props.replies?.length && (
-                  <p className='text-dark leading-none'>
-                    {props.replies.length}
-                  </p>
-                )}
-              </Button>
+              {!hideReply && (
+                <Button
+                  className='px-2 gap-1.5 border-dark/10 rounded h-fit py-1 bg-transparent text-dark'
+                  variant='outline'
+                  onClick={() => {
+                    onSelectActivity?.({ id: props.id, open: true })
+                  }}
+                >
+                  <MessageCircle size={15} strokeWidth={2} />
+                  {!!props.replies?.length && (
+                    <p className='text-dark leading-none'>
+                      {props.replies.length}
+                    </p>
+                  )}
+                </Button>
+              )}
             </div>
           </div>
         </div>
