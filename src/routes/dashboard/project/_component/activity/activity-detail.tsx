@@ -1,4 +1,8 @@
-import { useDeleteActivity, useDetailActivity } from '@/hooks/api/use-activity'
+import {
+  useDeleteActivity,
+  useDetailActivity,
+  useToggleLikeActivity,
+} from '@/hooks/api/use-activity'
 import MessageItem from './message-item'
 import {
   Dialog,
@@ -26,6 +30,7 @@ export default function ActivityDetail({
     id,
   })
   const { mutate: remove } = useDeleteActivity()
+  const { mutate: toggle } = useToggleLikeActivity()
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -43,6 +48,9 @@ export default function ActivityDetail({
             withReplies
             onDelete={(id) => {
               remove({ id })
+            }}
+            onToggle={(userId, activityId) => {
+              toggle({ activityId, userId })
             }}
           />
         )}
