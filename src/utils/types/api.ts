@@ -380,7 +380,11 @@ export type Chart = {
 }
 
 export type Activity = {
-  attachments?: any[]
+  attachments?: {
+    activityId: number
+    attachment: string
+    id: number
+  }[]
   comment: string
   id: number
   projectId: number
