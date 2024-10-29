@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/dialog'
 import { X } from 'lucide-react'
 import MessageItem2 from './message-item-2'
+import MessageForm from './message-form'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 type Props = {
   open: boolean
@@ -48,38 +50,100 @@ export default function ActivityDetail({
         <DialogHeader className='py-1 px-4 border'>
           <DialogTitle className='text-base font-normal'>Detail</DialogTitle>
         </DialogHeader>
-        {data && data.data.data && (
-          <MessageItem2
-            nameKey='detail'
-            {...data?.data.data}
-            onDelete={(id) => {
-              remove({ id })
-            }}
-            onToggle={(userId, activityId) => {
-              toggle({ activityId, userId })
-            }}
-            onUpdate={({ id, comment, newAttachments, deletedAttachments, reset }) => {
-              if (!id) return
-              update(
-                {
-                  id,
-                  payload: {
-                    comment: comment,
+        <div className='bg-white border-b border-dark/20'>
+          {data && data.data.data && (
+            <MessageItem2
+              nameKey='detail'
+              {...data?.data.data}
+              onDelete={(id) => {
+                remove({ id })
+              }}
+              onToggle={(userId, activityId) => {
+                toggle({ activityId, userId })
+              }}
+              onUpdate={({
+                id,
+                comment,
+                newAttachments,
+                deletedAttachments,
+                reset,
+              }) => {
+                if (!id) return
+                update(
+                  {
+                    id,
+                    payload: {
+                      comment: comment,
+                    },
                   },
-                },
-                {
-                  onSuccess: () => {
-                    if (!!newAttachments.length) {
-                      upload({ id, photos: newAttachments })
-                    }
-                    removeAttachment(deletedAttachments)
-                    reset()
-                  },
-                }
-              )
-            }}
-          />
-        )}
+                  {
+                    onSuccess: () => {
+                      if (!!newAttachments.length) {
+                        upload({ id, photos: newAttachments })
+                      }
+                      if (!!deletedAttachments.length) {
+                        removeAttachment(deletedAttachments)
+                      }
+                      reset()
+                    },
+                  }
+                )
+              }}
+            />
+          )}
+          <ScrollArea className='h-56 px-2 bg-[#F5F5F5] relative'>
+            <div className='w-full flex flex-col gap-4 pt-4 pb-10 px-2'>
+              <MessageForm
+                type='input'
+                id={data?.data.data?.id}
+                projectId={data?.data.data?.projectId}
+              />
+              {data &&
+                data.data.data?.replies.map((reply) => (
+                  <MessageItem2
+                    hideReply
+                    nameKey='detail-reply'
+                    key={'detail-reply-' + reply.id}
+                    {...reply}
+                    onDelete={(id) => {
+                      remove({ id })
+                    }}
+                    onToggle={(userId, activityId) => {
+                      toggle({ activityId, userId })
+                    }}
+                    onUpdate={({
+                      id,
+                      comment,
+                      newAttachments,
+                      deletedAttachments,
+                      reset,
+                    }) => {
+                      if (!id) return
+                      update(
+                        {
+                          id,
+                          payload: {
+                            comment: comment,
+                          },
+                        },
+                        {
+                          onSuccess: () => {
+                            if (!!newAttachments.length) {
+                              upload({ id, photos: newAttachments })
+                            }
+                            if (!!deletedAttachments.length) {
+                              removeAttachment(deletedAttachments)
+                            }
+                            reset()
+                          },
+                        }
+                      )
+                    }}
+                  />
+                ))}
+            </div>
+          </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   )
