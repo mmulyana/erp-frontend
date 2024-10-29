@@ -195,3 +195,38 @@ export const useUpdateActivity = () => {
     },
   })
 }
+export const useRemovePhotoActivity = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (
+      payload: number[]
+    ): Promise<
+      AxiosResponse<IApi<{ id: number; projectId: number; replyId?: number }>>
+    > => {
+      return await http.delete(`${URLS.PROJECT_ACTIVITY}/photo/remove`, {
+        data: {
+          ids: payload,
+        },
+      })
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
+          KEYS.ACTIVITY,
+          data.data.data?.projectId,
+          data.data.data?.id,
+        ],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
+          KEYS.ACTIVITY,
+          data.data.data?.projectId,
+          data.data.data?.replyId,
+        ],
+      })
+    },
+  })
+}

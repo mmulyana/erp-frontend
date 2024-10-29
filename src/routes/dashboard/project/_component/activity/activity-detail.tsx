@@ -1,9 +1,11 @@
 import {
   useDeleteActivity,
   useDetailActivity,
+  useRemovePhotoActivity,
   useToggleLikeActivity,
+  useUpdateActivity,
+  useUploadPhotosActivity,
 } from '@/hooks/api/use-activity'
-import MessageItem from './message-item'
 import {
   Dialog,
   DialogContent,
@@ -11,6 +13,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { X } from 'lucide-react'
+import MessageItem2 from './message-item-2'
 
 type Props = {
   open: boolean
@@ -29,8 +32,11 @@ export default function ActivityDetail({
     projectId,
     id,
   })
-  const { mutate: remove } = useDeleteActivity()
+  const { mutate: removeAttachment } = useRemovePhotoActivity()
+  const { mutate: upload } = useUploadPhotosActivity()
   const { mutate: toggle } = useToggleLikeActivity()
+  const { mutate: remove } = useDeleteActivity()
+  const { mutate: update } = useUpdateActivity()
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -43,14 +49,34 @@ export default function ActivityDetail({
           <DialogTitle className='text-base font-normal'>Detail</DialogTitle>
         </DialogHeader>
         {data && data.data.data && (
-          <MessageItem
+          <MessageItem2
+            nameKey='detail'
             {...data?.data.data}
-            withReplies
             onDelete={(id) => {
               remove({ id })
             }}
             onToggle={(userId, activityId) => {
               toggle({ activityId, userId })
+            }}
+            onUpdate={({ id, comment, newAttachments, deletedAttachments, reset }) => {
+              if (!id) return
+              update(
+                {
+                  id,
+                  payload: {
+                    comment: comment,
+                  },
+                },
+                {
+                  onSuccess: () => {
+                    if (!!newAttachments.length) {
+                      upload({ id, photos: newAttachments })
+                    }
+                    removeAttachment(deletedAttachments)
+                    reset()
+                  },
+                }
+              )
             }}
           />
         )}

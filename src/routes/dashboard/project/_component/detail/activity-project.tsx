@@ -1,9 +1,16 @@
 import ActivityDetail from '../activity/activity-detail'
-import { useActivity, useDeleteActivity, useToggleLikeActivity } from '@/hooks/api/use-activity'
+import {
+  useActivity,
+  useDeleteActivity,
+  useRemovePhotoActivity,
+  useToggleLikeActivity,
+  useUpdateActivity,
+  useUploadPhotosActivity,
+} from '@/hooks/api/use-activity'
 import MessageForm from '../activity/message-form'
-import MessageItem from '../activity/message-item'
 import { Activity } from '@/utils/types/api'
 import { useState } from 'react'
+import MessageItem2 from '../activity/message-item-2'
 
 type Props = {
   id?: number | null
@@ -19,14 +26,18 @@ export default function ActivityProject({ id }: Props) {
 
   const { mutate: remove } = useDeleteActivity()
   const { mutate: toggle } = useToggleLikeActivity()
+  const { mutate: update } = useUpdateActivity()
+  const { mutate: removeAttachment } = useRemovePhotoActivity()
+  const { mutate: upload } = useUploadPhotosActivity()
 
   return (
     <>
       <div className='flex flex-col gap-6'>
         <MessageForm type='textarea' projectId={id} />
         {data?.data.data?.map((item) => (
-          <MessageItem
+          <MessageItem2
             key={`message-` + item.id}
+            nameKey='activity'
             {...item}
             onSelectActivity={setSelectedActivity}
             onDelete={(id) => {
@@ -34,6 +45,32 @@ export default function ActivityProject({ id }: Props) {
             }}
             onToggle={(userId, activityId) => {
               toggle({ activityId, userId })
+            }}
+            onUpdate={({
+              id,
+              comment,
+              newAttachments,
+              deletedAttachments,
+              reset,
+            }) => {
+              if (!id) return
+              update(
+                {
+                  id,
+                  payload: {
+                    comment: comment,
+                  },
+                },
+                {
+                  onSuccess: () => {
+                    if (!!newAttachments.length) {
+                      upload({ id, photos: newAttachments })
+                    }
+                    removeAttachment(deletedAttachments)
+                    reset()
+                  },
+                }
+              )
             }}
           />
         ))}
