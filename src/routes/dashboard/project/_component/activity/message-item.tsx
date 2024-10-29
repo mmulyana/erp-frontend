@@ -1,22 +1,28 @@
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { MessageCircle, ThumbsUp } from 'lucide-react'
+import { Camera, MessageCircle, SendHorizonal, ThumbsUp, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Activity } from '@/utils/types/api'
 import MessageForm from './message-form'
 import { userAtom } from '@/atom/auth'
-import { useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue } from 'jotai'
 import { format } from 'date-fns'
 import { cn } from '@/utils/cn'
 import { BASE_URL } from '@/utils/constant/_urls'
+import { useMemo, useRef } from 'react'
+import { useFieldArray, useForm } from 'react-hook-form'
+import { Form, FormField } from '@/components/ui/form'
+import { Textarea } from '@/components/ui/textarea'
+import { PreviewPhoto } from './preview-photo'
+
+const editAtom = atom<number | null>(null)
 
 type MessageContentProps = Activity & {
   isOwnMessage: boolean
   onSelectActivity?: (val: Partial<Activity> & { open: boolean }) => void
   onDelete?: (val: number) => void
   onToggle?: (userId: number, activityId: number) => void
-  userId?: number | null
   showReplyButton?: boolean
 }
 
@@ -29,6 +35,151 @@ function MessageContent({
   showReplyButton = true,
   ...props
 }: MessageContentProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleCameraClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const [edit, setEdit] = useAtom(editAtom)
+
+  const existingPhotos = useMemo(
+    () =>
+      props.attachments?.map((item) => ({
+        attachment: item.attachment,
+        id: item.id,
+      })),
+    [props.attachments]
+  )
+
+  const form = useForm({
+    defaultValues: {
+      comment: props.comment,
+      existingPhotos,
+      deletedPhotos: [],
+      photos: [] as File[],
+    },
+  })
+
+  const existPhotos = useFieldArray({
+    control: form.control,
+    name: 'existingPhotos',
+  })
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || [])
+    const currentPhotos = form.getValues('photos') || []
+    form.setValue('photos', [...currentPhotos, ...files])
+  }
+
+  const removeFile = (index: number) => {
+    const currentPhotos = form.getValues('photos')
+    form.setValue(
+      'photos',
+      currentPhotos.filter((_, i) => i !== index)
+    )
+  }
+
+  const onUpdate = (data: any) => {
+    console.log(data)
+  }
+
+  if (edit == props.id) {
+    return (
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onUpdate)}>
+          <div className='w-full relative'>
+            <div className='w-full'>
+              <FormField
+                control={form.control}
+                name='comment'
+                render={({ field }) => (
+                  <Textarea className='rounded-xl w-full' {...field} />
+                )}
+              />
+              <div className='flex gap-2 mt-2 flex-wrap'>
+                {existPhotos.fields.map((item, index) => {
+                  return (
+                    <div className='relative' key={`exist-photo-` + index}>
+                      <img
+                        src={BASE_URL + '/img/' + item.attachment}
+                        className='w-20 h-20 object-cover rounded-lg'
+                      />
+                      <button
+                        type='button'
+                        className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1'
+                        onClick={() => {
+                          const deletedValues = form.getValues('deletedPhotos')
+                          form.setValue('deletedPhotos', [
+                            ...deletedValues,
+                            item.id,
+                          ])
+                          existPhotos.remove(index)
+                        }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  )
+                })}
+                <FormField
+                  control={form.control}
+                  name='photos'
+                  render={({ field }) => (
+                    <>
+                      {field.value?.length > 0 &&
+                        field.value.map((file, index) => (
+                          <PreviewPhoto
+                            key={index}
+                            photo={file}
+                            onRemove={() => removeFile(index)}
+                          />
+                        ))}
+                      <input
+                        type='file'
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        multiple
+                        accept='image/*'
+                        className='hidden'
+                        name={field.name}
+                      />
+                    </>
+                  )}
+                />
+              </div>
+            </div>
+            <div className='flex justify-between items-center border mt-2.5'>
+              <Button
+                className='p-0 w-fit px-2 gap-1 h-8 rounded-full'
+                variant='secondary'
+                onClick={() => setEdit(null)}
+              >
+                Batal
+              </Button>
+              <div className='flex items-center gap-2'>
+                <button
+                  type='button'
+                  onClick={handleCameraClick}
+                  className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
+                >
+                  <Camera size={20} />
+                </button>
+                <Button
+                  type='submit'
+                  className='p-0 w-fit px-2 pl-3 gap-1 h-8 rounded-full'
+                >
+                  Kirim
+                  <SendHorizonal size={16} />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Form>
+    )
+  }
+
   return (
     <div className='flex flex-col gap-0.5'>
       <div className='flex justify-between items-center'>
@@ -45,7 +196,16 @@ function MessageContent({
         </div>
         {isOwnMessage && (
           <DropdownEdit>
-            <DropdownMenuItem className='text-sm'>Edit</DropdownMenuItem>
+            {isOwnMessage && (
+              <DropdownMenuItem
+                className='text-sm'
+                onClick={() => {
+                  setEdit(props.id)
+                }}
+              >
+                Edit
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               className='text-sm'
               onClick={() => onDelete?.(props.id)}
