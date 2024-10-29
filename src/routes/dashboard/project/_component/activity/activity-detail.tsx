@@ -1,4 +1,4 @@
-import { useDetailActivity } from '@/hooks/api/use-activity'
+import { useDeleteActivity, useDetailActivity } from '@/hooks/api/use-activity'
 import MessageItem from './message-item'
 import {
   Dialog,
@@ -25,6 +25,8 @@ export default function ActivityDetail({
     projectId,
     id,
   })
+  const { mutate: remove } = useDeleteActivity()
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -35,7 +37,15 @@ export default function ActivityDetail({
         <DialogHeader className='py-1 px-4 border'>
           <DialogTitle className='text-base font-normal'>Detail</DialogTitle>
         </DialogHeader>
-        {data && data.data.data && <MessageItem {...data?.data.data} withReplies />}
+        {data && data.data.data && (
+          <MessageItem
+            {...data?.data.data}
+            withReplies
+            onDelete={(id) => {
+              remove({ id })
+            }}
+          />
+        )}
       </DialogContent>
     </Dialog>
   )
