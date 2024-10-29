@@ -19,7 +19,7 @@ export default function DropdownEdit({
       >
         <Button
           variant='outline'
-          className='p-0 h-5 w-5 border border-line rounded px-0.5'
+          className='p-0 h-5 w-5 border border-line rounded px-0.5 bg-transparent'
         >
           <Ellipsis className='w-4 h-4 text-[#313951]' />
         </Button>
