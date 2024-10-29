@@ -159,3 +159,39 @@ export const useUploadPhotosActivity = () => {
     },
   })
 }
+
+export const useUpdateActivity = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: number
+      payload: Partial<createActivity>
+    }): Promise<
+      AxiosResponse<IApi<{ id: number; projectId: number; replyId?: number }>>
+    > => {
+      return await http.patch(`${URLS.PROJECT_ACTIVITY}/${id}`, payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
+          KEYS.ACTIVITY,
+          data.data.data?.projectId,
+          data.data.data?.id,
+        ],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [
+          KEYS.ACTIVITY,
+          data.data.data?.projectId,
+          data.data.data?.replyId,
+        ],
+      })
+    },
+  })
+}
