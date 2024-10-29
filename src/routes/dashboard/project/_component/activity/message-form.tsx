@@ -1,21 +1,32 @@
-import { userAtom } from '@/atom/auth'
-import { Button } from '@/components/ui/button'
+import {
+  useCreateActivity,
+  useUploadPhotosActivity,
+} from '@/hooks/api/use-activity'
 import { Form, FormField } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { useCreateActivity } from '@/hooks/api/use-activity'
-import { useAtomValue } from 'jotai'
 import { Camera, SendHorizonal } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useForm } from 'react-hook-form'
+import { userAtom } from '@/atom/auth'
+import { useAtomValue } from 'jotai'
+import { PreviewPhoto } from './preview-photo'
 
 type MessageProps = {
   type: 'textarea' | 'input'
   id?: number | null
   projectId?: number | null
 }
+
+interface FormInputs {
+  comment: string
+  photos: File[]
+}
+
 export default function MessageForm({ type, id, projectId }: MessageProps) {
   const user = useAtomValue(userAtom)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const ref = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
@@ -40,11 +51,28 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
 
   // HANDLE FORM
   const { mutate } = useCreateActivity()
-  const form = useForm<{ comment: string }>({
+  const { mutate: upload } = useUploadPhotosActivity()
+
+  const form = useForm<FormInputs>({
     defaultValues: {
       comment: '',
+      photos: [],
     },
   })
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || [])
+    const currentPhotos = form.getValues('photos') || []
+    form.setValue('photos', [...currentPhotos, ...files])
+  }
+
+  const removeFile = (index: number) => {
+    const currentPhotos = form.getValues('photos')
+    form.setValue(
+      'photos',
+      currentPhotos.filter((_, i) => i !== index)
+    )
+  }
 
   const submit = async (data: any) => {
     if (!user || !projectId) return
@@ -57,11 +85,16 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
         replyId: id ?? null,
       },
       {
-        onSuccess: () => {
-          form.reset({ comment: '' })
+        onSuccess: (res) => {
+          upload({ id: res.data.data?.id as number, photos: data.photos })
+          form.reset({ comment: '', photos: [] })
         },
       }
     )
+  }
+
+  const handleCameraClick = () => {
+    fileInputRef.current?.click()
   }
 
   if (type == 'textarea') {
@@ -81,19 +114,43 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
                   />
                 )}
               />
+              <FormField
+                control={form.control}
+                name='photos'
+                render={({ field }) => (
+                  <>
+                    {field.value?.length > 0 && (
+                      <div className='flex gap-2 mt-2 flex-wrap'>
+                        {field.value.map((file, index) => (
+                          <PreviewPhoto
+                            key={index}
+                            photo={file}
+                            onRemove={() => removeFile(index)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                    <input
+                      type='file'
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      multiple
+                      accept='image/*'
+                      className='hidden'
+                      name={field.name}
+                    />
+                  </>
+                )}
+              />
             </div>
-            <div className='flex justify-between items-center gap-2 mt-2'>
-              <div className='flex items-center gap-2'>
-                <div className='flex gap-1.5'>
-                  <div className='w-8 h-8 rounded-md bg-gray-200'></div>
-                </div>
-                <button
-                  type='button'
-                  className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
-                >
-                  <Camera size={20} />
-                </button>
-              </div>
+            <div className='flex justify-end items-center gap-2 mt-2'>
+              <button
+                type='button'
+                onClick={handleCameraClick}
+                className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
+              >
+                <Camera size={20} />
+              </button>
               <Button
                 type='submit'
                 className='p-0 w-fit px-2 pl-3 gap-1 h-8 rounded-full'
@@ -123,9 +180,38 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
                     placeholder='tulis pesan disini'
                     {...field}
                   />
+                  <FormField
+                    control={form.control}
+                    name='photos'
+                    render={({ field }) => (
+                      <>
+                        {field.value?.length > 0 && (
+                          <div className='flex gap-2 mt-2 flex-wrap'>
+                            {field.value.map((file, index) => (
+                              <PreviewPhoto
+                                key={index}
+                                photo={file}
+                                onRemove={() => removeFile(index)}
+                              />
+                            ))}
+                          </div>
+                        )}
+                        <input
+                          type='file'
+                          ref={fileInputRef}
+                          onChange={handleFileChange}
+                          multiple
+                          accept='image/*'
+                          className='hidden'
+                          name={field.name}
+                        />
+                      </>
+                    )}
+                  />
                   <div className='flex justify-between items-center gap-2 absolute top-1/2 -translate-y-1/2 right-1'>
                     <button
                       type='button'
+                      onClick={handleCameraClick}
                       className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
                     >
                       <Camera size={20} />
