@@ -63,6 +63,7 @@ export type Project = {
   attachments: Attachment[]
 }
 export type ProjectDetail = Project & {
+  ProjectEstimate: Estimate[]
   description?: string
   payment_status: number
   date_created: Date
