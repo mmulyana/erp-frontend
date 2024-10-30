@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn'
 import { createContext, useContext, useState, ReactNode } from 'react'
 
 type AccordionContextType = {
@@ -37,13 +38,15 @@ const useAccordionItem = () => {
 type AccordionGroupProps = {
   children: ReactNode
   allowMultiple?: boolean
+  defaultOpen?: string[]
 }
 
 export const AccordionGroup = ({
   children,
   allowMultiple = false,
+  defaultOpen,
 }: AccordionGroupProps) => {
-  const [openItems, setOpenItems] = useState<string[]>([])
+  const [openItems, setOpenItems] = useState<string[]>(defaultOpen ?? [])
 
   const toggleItem = (id: string) => {
     setOpenItems((prev) => {
@@ -80,7 +83,7 @@ export const AccordionItem = ({ children, id }: AccordionItemProps) => {
 }
 
 type AccordionTriggerProps = {
-  children: (isOpen?: boolean) => ReactNode
+  children: (isOpen: boolean, toggle: () => void) => ReactNode
 }
 
 export const AccordionTrigger = ({ children }: AccordionTriggerProps) => {
@@ -88,22 +91,24 @@ export const AccordionTrigger = ({ children }: AccordionTriggerProps) => {
   const { id, isOpen } = useAccordionItem()
 
   return (
-    <div className='w-full relative' onClick={() => toggleItem(id)}>
-      {children(isOpen)}
+    <div className='w-full relative'>
+      {children(isOpen, () => toggleItem(id))}
     </div>
   )
 }
 
 type AccordionContentProps = {
   children: ReactNode
+  className?: string
 }
 
-export const AccordionContent = ({ children }: AccordionContentProps) => {
+export const AccordionContent = ({
+  children,
+  className,
+}: AccordionContentProps) => {
   const { isOpen } = useAccordionItem()
 
   if (!isOpen) return null
 
-  return (
-    <div className='px-4 py-3 border-t border-line bg-gray-50'>{children}</div>
-  )
+  return <div className={cn('px-4 py-3 bg-gray-50', className)}>{children}</div>
 }
