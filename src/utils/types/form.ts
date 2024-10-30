@@ -142,3 +142,19 @@ export type createActivity = {
   projectId: number
   replyId?: number | null
 }
+
+export type createAttachment = {
+  name: string
+  file: File
+  type?: string
+  uploaded_by?: number | null
+  projectId: number
+  isSecret: boolean
+}
+
+export type createEstimate = {
+  name: string
+  price?: number | null
+  qty?: number | null
+  projectId: number
+}
