@@ -153,8 +153,8 @@ export type createAttachment = {
 }
 
 export type createEstimate = {
+  id: number | null
   name: string
-  price?: number | null
-  qty?: number | null
-  projectId: number
+  price: number
+  qty: number
 }
