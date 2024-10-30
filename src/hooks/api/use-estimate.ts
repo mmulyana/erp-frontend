@@ -7,36 +7,17 @@ import { AxiosResponse } from 'axios'
 import http from '@/utils/http'
 import { toast } from 'sonner'
 
-export const useCreateEstimate = () => {
+export const useSaveEstimate = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (
-      payload: createEstimate
-    ): Promise<AxiosResponse<IApi<Estimate>>> => {
-      return await http.post(URLS.PROJECT_ESTIMATE, payload)
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [KEYS.PROJECT, data.data.data?.projectId],
+    mutationFn: async (payload: {
+      items: createEstimate[]
+      projectId: number
+    }): Promise<AxiosResponse<IApi<{ projectId: number }>>> => {
+      return await http.post(`${URLS.PROJECT_ESTIMATE}/${payload.projectId}`, {
+        items: payload.items,
       })
-      toast.success(data.data.message)
-    },
-  })
-}
-
-export const useUpdateEstimate = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async ({
-      payload,
-      id,
-    }: {
-      payload: Partial<createEstimate>
-      id: number
-    }): Promise<AxiosResponse<IApi<Estimate>>> => {
-      return await http.patch(`${URLS.PROJECT_ESTIMATE}/${id}`, payload)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
@@ -51,8 +32,14 @@ export const useDeleteEstimate = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (id: number): Promise<AxiosResponse<IApi<Estimate>>> => {
-      return await http.delete(`${URLS.PROJECT_ESTIMATE}/${id}`)
+    mutationFn: async ({
+      ids,
+    }: {
+      ids: number[]
+    }): Promise<AxiosResponse<IApi<Estimate>>> => {
+      return await http.delete(`${URLS.PROJECT_ESTIMATE}`, {
+        data: { ids },
+      })
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
