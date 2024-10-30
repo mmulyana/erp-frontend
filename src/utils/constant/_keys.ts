@@ -33,4 +33,6 @@ export const KEYS = {
   COMPETENCY: 'competency',
   KANBAN_BOARD: 'board',
   ACTIVITY: 'activity',
+  ATTACHMENT: 'attachment',
+  ESTIMATE: 'estimate'
 }
