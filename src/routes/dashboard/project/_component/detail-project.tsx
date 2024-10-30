@@ -219,7 +219,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
             </Tab>
             <Tab label='Estimasi'>
               <div className='p-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
-                <EstimateProject />
+                <EstimateProject projectId={project?.id} />
               </div>
             </Tab>
           </Tabs>
