@@ -60,6 +60,7 @@ export type Project = {
   _count: {
     employees: number
   }
+  attachments: Attachment[]
 }
 export type ProjectDetail = Project & {
   description?: string
@@ -395,4 +396,23 @@ export type Activity = {
   created_at: string
   updated_at: string
   likes: any[]
+}
+
+export type Attachment = {
+  id: number
+  file: string
+  type?: string
+  name: string
+  uploaded_by?: number | null
+  uploaded_at: string
+  projectId: number
+  isSecret: boolean
+}
+
+export type Estimate = {
+  id: number
+  name: string
+  price?: number | null
+  qty?: number | null
+  projectId: number
 }
