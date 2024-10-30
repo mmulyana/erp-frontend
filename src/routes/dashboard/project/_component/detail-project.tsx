@@ -205,7 +205,10 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                     id={id}
                     data={{ employees: project?.employees || [] }}
                   />
-                  <AttachmentProject />
+                  <AttachmentProject
+                    projectId={project?.id}
+                    attachments={project?.attachments}
+                  />
                 </div>
               </div>
             </Tab>
