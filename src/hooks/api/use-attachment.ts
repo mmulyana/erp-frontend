@@ -56,27 +56,18 @@ export const useUpdateAttachment = () => {
       payload: Partial<createAttachment>
       id: number
     }): Promise<AxiosResponse<IApi<Attachment>>> => {
-      const formData = new FormData()
+      // const formData = new FormData()
+      // Object.entries(payload).forEach(([key, value]) => {
+      //   if (key === 'file') {
+      //     formData.append(key, value as File)
+      //   } else if (typeof value == 'number') {
+      //     formData.append(key, String(value))
+      //   } else if (value !== null && typeof value == 'string') {
+      //     formData.append(key, value)
+      //   }
+      // })
 
-      Object.entries(payload).forEach(([key, value]) => {
-        if (key === 'file') {
-          formData.append(key, value as File)
-        } else if (typeof value == 'number') {
-          formData.append(key, String(value))
-        } else if (value !== null && typeof value == 'string') {
-          formData.append(key, value)
-        }
-      })
-
-      return await http.patch(
-        `${URLS.PROJECT_ATTACHMENT}/${id}` + `?file_name=lampiran-`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      )
+      return await http.patch(`${URLS.PROJECT_ATTACHMENT}/${id}`, payload)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
@@ -118,7 +109,7 @@ export const useDetailAttachment = ({
 }) => {
   return useQuery({
     queryKey: [KEYS.ATTACHMENT, id],
-    queryFn: async () => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Attachment>>> => {
       return await http(`${URLS.PROJECT_ATTACHMENT}/${id}`)
     },
     enabled,
