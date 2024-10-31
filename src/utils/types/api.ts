@@ -35,6 +35,7 @@ export type Project = {
     }
   }
   labels: {
+    id: number
     label: {
       id: number
       name: string
