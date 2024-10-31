@@ -2,7 +2,7 @@ import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { objectToFormData } from '@/utils/ObjectToFormData'
-import { Client, Company, IApiPagination } from '@/utils/types/api'
+import { Client, Company, IApi, IApiPagination } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { CreateClient, CreateClientCompany } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -19,7 +19,22 @@ export const useClient = (params?: Params) => {
         params,
       })
     },
-    queryKey: [KEYS.CLIENT, params],
+    queryKey: [KEYS.CLIENT],
+  })
+}
+export const useDetailClient = ({
+  id,
+  enabled,
+}: {
+  id?: number | null
+  enabled?: boolean
+}) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<Client>>> => {
+      return await http(`${URLS.PROJECT_CLIENT}/${id}`)
+    },
+    queryKey: [KEYS.CLIENT, id],
+    enabled,
   })
 }
 
@@ -82,7 +97,22 @@ export const useClientCompany = (params?: CompanyParams) => {
         params,
       })
     },
-    queryKey: [KEYS.CLIENT_COMPANY, params],
+    queryKey: [KEYS.CLIENT_COMPANY],
+  })
+}
+export const useDetailClientCompany = ({
+  id,
+  enabled,
+}: {
+  id?: number | null
+  enabled?: boolean
+}) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<Company>>> => {
+      return await http(`${URLS.PROJECT_CLIENT_COMPANY}/${id}`)
+    },
+    queryKey: [KEYS.CLIENT_COMPANY, id],
+    enabled,
   })
 }
 
