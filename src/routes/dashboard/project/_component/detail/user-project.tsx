@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import {
+  Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -12,13 +13,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useClient } from '@/hooks/api/use-client'
-import { useUpdateProject } from '@/hooks/api/use-project'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useUpdateProject } from '@/hooks/api/use-project'
+import { useClient } from '@/hooks/api/use-client'
 import { Project } from '@/utils/types/api'
-import { Command } from 'cmdk'
-import { User2 } from 'lucide-react'
+import { cn } from '@/utils/cn'
+
 import { useEffect, useMemo, useState } from 'react'
+import { Pencil, User2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
 type FormValues = {
@@ -80,7 +82,6 @@ export default function UserProject({ id, data: { client } }: Props) {
 
   return (
     <div className='flex gap-2 items-center flex-wrap'>
-      {client && <div className='flex items-center gap-2'>{client?.name}</div>}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
@@ -93,14 +94,25 @@ export default function UserProject({ id, data: { client } }: Props) {
                     <PopoverTrigger asChild>
                       <Button
                         variant='ghost'
-                        className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative gap-2'
+                        className={cn(
+                          'font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 h-fit relative gap-2',
+                          client && 'text-dark'
+                        )}
                       >
                         {client ? (
-                          'Ganti'
+                          <>
+                            <div className='flex items-center gap-2 group'>
+                              {client.name}
+                              <Pencil
+                                size={14}
+                                className='text-gray-400 hidden group-hover:block'
+                              />
+                            </div>
+                          </>
                         ) : (
                           <>
                             <User2 size={14} />
-                            Pilih user
+                            Pilih klien
                           </>
                         )}
                       </Button>
