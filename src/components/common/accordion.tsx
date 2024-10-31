@@ -1,5 +1,8 @@
 import { cn } from '@/utils/cn'
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { atom, useAtom } from 'jotai'
+import { createContext, useContext, ReactNode } from 'react'
+
+export const accordionAtom = atom<string[]>([])
 
 type AccordionContextType = {
   openItems: string[]
@@ -38,15 +41,13 @@ const useAccordionItem = () => {
 type AccordionGroupProps = {
   children: ReactNode
   allowMultiple?: boolean
-  defaultOpen?: string[]
 }
 
 export const AccordionGroup = ({
   children,
   allowMultiple = false,
-  defaultOpen,
 }: AccordionGroupProps) => {
-  const [openItems, setOpenItems] = useState<string[]>(defaultOpen ?? [])
+  const [openItems, setOpenItems] = useAtom<string[]>(accordionAtom)
 
   const toggleItem = (id: string) => {
     setOpenItems((prev) => {
