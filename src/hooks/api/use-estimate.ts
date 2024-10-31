@@ -8,8 +8,6 @@ import http from '@/utils/http'
 import { toast } from 'sonner'
 
 export const useSaveEstimate = () => {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: async (payload: {
       items: createEstimate[]
@@ -20,9 +18,9 @@ export const useSaveEstimate = () => {
       })
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [KEYS.PROJECT, data.data.data?.projectId],
-      })
+      // queryClient.invalidateQueries({
+      //   queryKey: [KEYS.PROJECT, data.data.data?.projectId],
+      // })
       toast.success(data.data.message)
     },
   })
