@@ -61,6 +61,8 @@ export type Project = {
   }
   _count: {
     employees: number
+    activities: number
+    attachments: number
   }
   attachments: Attachment[]
 }
@@ -97,6 +99,7 @@ export interface Client {
   phone?: string
   email?: string
   position?: string
+  companyId: number
 }
 
 export interface Company {
