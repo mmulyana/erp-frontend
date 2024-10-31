@@ -21,7 +21,7 @@ export const URLS = {
   PROJECT: V1 + '/project/index',
   PROJECT_LABEL: V1 + '/project/label',
   PROJECT_CLIENT: V1 + '/project/client',
-  PROJECT_CLIENT_COMPANY: V1 + '/project/client/company',
+  PROJECT_CLIENT_COMPANY: V1 + '/project/client-company',
   PROJECT_ACTIVITY: V1 + '/project/activity',
   PROJECT_ESTIMATE: V1 + '/project/estimate',
   PROJECT_ATTACHMENT: V1 + '/project/attachment',
