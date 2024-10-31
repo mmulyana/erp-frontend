@@ -206,7 +206,10 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                   </DataSheet>
                   <EmployeeProject
                     id={id}
-                    data={{ employees: project?.employees || [] }}
+                    data={{
+                      employees: project?.employees || [],
+                      leadId: project?.leadId || null,
+                    }}
                   />
                   <AttachmentProject
                     projectId={project?.id}
