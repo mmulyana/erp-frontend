@@ -6,8 +6,9 @@ import {
   Users2Icon,
 } from 'lucide-react'
 import CircularProgress from '../common/circular-progress'
+import { Project } from '@/utils/types/api'
 
-export default function CardProject(props: any) {
+export default function CardProject(props: Project) {
   return (
     <div
       className={cn(
@@ -42,24 +43,26 @@ export default function CardProject(props: any) {
 
       <div className='flex justify-between items-center mt-4'>
         <div className='flex gap-2 items-center'>
-          {props.employees && !!props?.employees.length && (
+          {props._count.employees && (
             <div className='flex gap-1 items-center'>
               <Users2Icon className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props?._count.employees}</p>
             </div>
           )}
-          {props.comments && !!props?.comments.length && (
+          {props._count.activities && (
             <div className='flex gap-1 items-center'>
               <MessageCircle className='w-4 h-4 text-[#CBCDD3]' />
-              <p className='text-sm text-dark'>{props?._count.comments}</p>
+              <p className='text-sm text-dark'>{props?._count.activities}</p>
             </div>
           )}
-          <div className='flex gap-1 items-center'>
-            <Paperclip className='w-4 h-4 text-[#CBCDD3]' />
-            <p className='text-sm text-dark'>4</p>
-          </div>
+          {props._count.attachments && (
+            <div className='flex gap-1 items-center'>
+              <Paperclip className='w-4 h-4 text-[#CBCDD3]' />
+              <p className='text-sm text-dark'>{props._count.attachments}</p>
+            </div>
+          )}
         </div>
-        <CircularProgress progress={props.progress || 10} />
+        <CircularProgress progress={props.progress || 0} />
       </div>
     </div>
   )
