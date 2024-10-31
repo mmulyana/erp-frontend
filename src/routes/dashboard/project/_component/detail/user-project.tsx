@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useClient } from '@/hooks/api/use-client'
+import { useUpdateProject } from '@/hooks/api/use-project'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 import { Project } from '@/utils/types/api'
 import { Command } from 'cmdk'
@@ -21,7 +22,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 type FormValues = {
-  userId?: number | null
+  clientId?: number | null
 }
 type Props = {
   id: number
@@ -41,13 +42,24 @@ export default function UserProject({ id, data: { client } }: Props) {
   const [open, setOpen] = useState(false)
   useFixPointerEvent(open)
 
+  const { mutate: update } = useUpdateProject()
+
   const form = useForm<FormValues>({
     defaultValues: {
-      userId: null,
+      clientId: null,
     },
   })
   const handleSubmit = (data: FormValues) => {
-    console.log(data)
+    if (!id || !data.clientId) return
+
+    update(
+      { id, payload: { clientId: data.clientId } },
+      {
+        onSuccess: () => {
+          setOpen(false)
+        },
+      }
+    )
   }
 
   //   GET CLIENT
@@ -73,7 +85,7 @@ export default function UserProject({ id, data: { client } }: Props) {
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
             control={form.control}
-            name='userId'
+            name='clientId'
             render={({ field }) => (
               <FormItem className='flex-1'>
                 <FormControl>
