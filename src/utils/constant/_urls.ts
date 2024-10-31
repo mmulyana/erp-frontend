@@ -18,7 +18,7 @@ export const URLS = {
   OVERTIME: V1 + '/hris/overtime',
   COMPETENCY: V1 + '/hris/competency',
 
-  PROJECT: V1 + '/project',
+  PROJECT: V1 + '/project/index',
   PROJECT_LABEL: V1 + '/project/label',
   PROJECT_CLIENT: V1 + '/project/client',
   PROJECT_CLIENT_COMPANY: V1 + '/project/client/company',
