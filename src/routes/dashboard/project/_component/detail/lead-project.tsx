@@ -111,7 +111,7 @@ export default function LeadProject({ id, data: { lead } }: Props) {
                         ) : (
                           <>
                             <User2 size={14} />
-                            Pilih Penanggung jawab
+                            Pilih PJ
                           </>
                         )}
                       </Button>
