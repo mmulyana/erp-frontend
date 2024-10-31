@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 
 const chartData = [
   { month: 'Januari', total: 186 },
@@ -30,7 +30,7 @@ export default function CardMonthly() {
           Laporan kasbon bulanan
         </p>
       </CardHead>
-      <Cardbody>
+      <CardBody>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
@@ -48,7 +48,7 @@ export default function CardMonthly() {
             <Bar dataKey='total' fill='var(--color-total)' radius={8} />
           </BarChart>
         </ChartContainer>
-      </Cardbody>
+      </CardBody>
     </Card>
   )
 }

@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 
 type Props = {
   title: string
@@ -28,7 +28,7 @@ export default function CardBarStacked({
       <CardHead>
         <p className='text-dark text-sm font-semibold'>{title}</p>
       </CardHead>
-      <Cardbody>
+      <CardBody>
         <ChartContainer config={config}>
           <BarChart accessibilityLayer data={data}>
             <CartesianGrid vertical={false} />
@@ -54,7 +54,7 @@ export default function CardBarStacked({
             />
           </BarChart>
         </ChartContainer>
-      </Cardbody>
+      </CardBody>
     </Card>
   )
 }

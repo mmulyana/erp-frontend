@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 
 type Props = {
   title: string
@@ -26,7 +26,7 @@ export default function CardBarHorizontal({
       <CardHead>
         <p className='text-dark text-sm font-semibold'>{title}</p>
       </CardHead>
-      <Cardbody>
+      <CardBody>
         <ChartContainer config={config}>
           <BarChart accessibilityLayer data={data} layout='vertical'>
             <XAxis type='number' dataKey={dataKeyBar} hide />
@@ -49,7 +49,7 @@ export default function CardBarHorizontal({
             />
           </BarChart>
         </ChartContainer>
-      </Cardbody>
+      </CardBody>
     </Card>
   )
 }

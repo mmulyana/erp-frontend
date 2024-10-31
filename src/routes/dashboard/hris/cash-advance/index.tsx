@@ -15,7 +15,7 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { CashAdvance } from '@/utils/types/api'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import { DropdownMenuGroup } from '@radix-ui/react-dropdown-menu'
-import { Card, Cardbody, CardHead } from '@/components/common/card-v1'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import CardMonthly from './_component/card-monthly'
 import { ModalAdd } from './_component/modal-add'
 import ModalDelete from './_component/modal-delete'
@@ -142,7 +142,7 @@ export default function Page() {
                 Total kasbon bln. oktober
               </p>
             </CardHead>
-            <Cardbody></Cardbody>
+            <CardBody></CardBody>
           </Card>
           <CardMonthly />
         </div>
