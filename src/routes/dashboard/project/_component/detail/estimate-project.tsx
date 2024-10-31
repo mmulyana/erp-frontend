@@ -1,4 +1,5 @@
 import {
+  accordionAtom,
   AccordionContent,
   AccordionGroup,
   AccordionItem,
@@ -8,8 +9,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useDeleteEstimate, useSaveEstimate } from '@/hooks/api/use-estimate'
 import { cn } from '@/utils/cn'
+import { KEYS } from '@/utils/constant/_keys'
 import { formatToRupiah } from '@/utils/formatCurrency'
+import { Estimate } from '@/utils/types/api'
+import { useQueryClient } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 import { Trash, Triangle } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 
 interface EstimateItem {
@@ -26,22 +32,20 @@ interface FormValues {
 
 type Props = {
   projectId?: number | null
+  estimation?: Estimate[]
 }
-export default function EstimateProject({ projectId }: Props) {
+export default function EstimateProject({ projectId, estimation }: Props) {
+  const queryClient = useQueryClient()
+
+  const setAccordion = useSetAtom(accordionAtom)
+
   const { mutate: save } = useSaveEstimate()
   const { mutate: removeEstimate } = useDeleteEstimate()
 
-  const { register, control, handleSubmit, watch, setValue } =
+  const { register, control, handleSubmit, watch, setValue, reset } =
     useForm<FormValues>({
       defaultValues: {
-        items: [
-          {
-            id: null,
-            name: 'Mulyana',
-            price: 1200000,
-            qty: 2,
-          },
-        ],
+        items: [],
         deletedIds: [],
       },
     })
@@ -56,7 +60,20 @@ export default function EstimateProject({ projectId }: Props) {
       removeEstimate({ ids: data.deletedIds })
     }
     if (!projectId) return
-    save({ items: data.items, projectId })
+    save(
+      {
+        items: data.items.map((item) => ({
+          ...item,
+          price: Number(item.price),
+        })),
+        projectId,
+      },
+      {
+        onSuccess: () => {
+          setAccordion([])
+        },
+      }
+    )
   }
 
   const watchItems = watch('items')
@@ -71,6 +88,32 @@ export default function EstimateProject({ projectId }: Props) {
     remove(index)
   }
 
+  useEffect(() => {
+    if (estimation?.length) {
+      const formattedItems = estimation.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price || 0,
+        qty: item.qty || 0,
+      }))
+
+      reset({
+        items: formattedItems,
+        deletedIds: [],
+      })
+    }
+  }, [estimation, reset])
+
+  useEffect(() => {
+    const unsubscribe = () => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT, projectId],
+      })
+    }
+
+    return () => unsubscribe()
+  }, [])
+
   return (
     <div className='flex flex-col gap-6'>
       <form
@@ -83,7 +126,10 @@ export default function EstimateProject({ projectId }: Props) {
             type='button'
             variant='outline'
             className='text-sm font-normal px-2 py-1 h-fit gap-1 text-gray-800'
-            onClick={() => append({ id: null, name: '', price: 0, qty: 1 })}
+            onClick={() => {
+              append({ id: null, name: '', price: 0, qty: 1 })
+              setAccordion([`item-${watchItems.length}`])
+            }}
           >
             Tambah
           </Button>
@@ -99,7 +145,7 @@ export default function EstimateProject({ projectId }: Props) {
             <p className='text-dark/50 text-sm'>Harga</p>
           </div>
         </div>
-        <AccordionGroup defaultOpen={['item-1']}>
+        <AccordionGroup>
           {fields.map((field, index) => (
             <AccordionItem key={field.id} id={`item-${index}`}>
               <AccordionTrigger>
@@ -121,7 +167,7 @@ export default function EstimateProject({ projectId }: Props) {
                         />
                       </button>
                       <p className='text-dark text-sm'>
-                        {watchItems[index]?.name || '-'}
+                        {watchItems[index]?.name}
                       </p>
                     </div>
                     <div className='text-center'>
