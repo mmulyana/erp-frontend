@@ -14,6 +14,9 @@ import AddProject from './_component/add-project'
 import { useProjects } from '@/hooks/api/use-project'
 import DetailProject from './_component/detail-project'
 import Overlay from '@/components/common/overlay'
+import Chips from '@/components/common/chips'
+import { formatToRupiah } from '@/utils/formatCurrency'
+import DropdownEdit from '@/components/common/dropdown-edit'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
@@ -21,6 +24,7 @@ export default function Dashboard() {
   const { data, isLoading } = useProjects()
   const columns: ColumnDef<Project>[] = [
     {
+      id: 'name',
       accessorKey: 'name',
       header: 'Nama',
       cell: ({ cell }) => {
@@ -61,17 +65,38 @@ export default function Dashboard() {
     {
       id: 'pic',
       header: 'Penangung Jawab',
-      // cell: ({ row }) => <p>{row?.employee?.fullname}</p>,
+      cell: ({ row }) => (
+        <div className='w-[120px]'>
+          <p>{row?.original.lead?.fullname}</p>
+        </div>
+      ),
     },
     {
       id: 'status',
       header: 'Status',
-      cell: '-',
+      cell: ({ row }) => (
+        <Chips
+          background={row.original.boardItems.container.color}
+          text={row.original?.boardItems?.container.name}
+        />
+      ),
     },
     {
       id: 'progress',
       header: 'Progress',
-      cell: '-',
+      cell: ({ row }) => (
+        <div className='w-[120px] grid grid-cols-[80px_1fr] items-center gap-2'>
+          <div className='w-full relative rounded-full overflow-hidden bg-gray-200 h-2'>
+            <div
+              className='absolute left-0 bg-blue-primary h-full'
+              style={{ width: row.original.progress ?? '0' + '%' }}
+            ></div>
+          </div>
+          <p className='font-semibold text-sm pb-0.5'>
+            {row.original.progress ?? 0}%
+          </p>
+        </div>
+      ),
     },
     {
       id: 'employee_count',
@@ -79,8 +104,19 @@ export default function Dashboard() {
       cell: ({ row }) => <p>{row.original._count.employees}</p>,
     },
     {
-      accessorKey: 'budget',
-      header: 'Nilai',
+      id: 'net_value',
+      accessorKey: 'net_value',
+      header: 'Net value',
+      cell: ({ row }) => {
+        if (row.original.net_value) {
+          return <p>{formatToRupiah(row.original.net_value)}</p>
+        }
+      },
+    },
+    {
+      id: 'action',
+      header: '',
+      cell: () => <DropdownEdit></DropdownEdit>,
     },
   ]
 
@@ -103,8 +139,8 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       <div className='p-6 grid grid-cols-1 md:grid-cols-3 gap-6'>
-        <InfoRevenue />
-        <InfoStatus />
+        {/* <InfoRevenue />
+        <InfoStatus /> */}
         <div className='col-span-1 md:col-span-3 border border-line rounded-xl overflow-hidden'>
           <HeadTable>
             <div className='flex gap-4 items-center'>
