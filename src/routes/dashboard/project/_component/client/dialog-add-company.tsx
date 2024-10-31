@@ -1,15 +1,19 @@
 import UploadProfile from '@/components/common/upload-profile'
 import Modal, { ModalContainer } from '@/components/modal-v2'
-import { useCreateClientCompany } from '@/hooks/api/use-client'
+import { CreateClientCompany } from '@/utils/types/form'
 import { Form, FormField } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { delay } from '@/utils/delay'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Textarea } from '@/components/ui/textarea'
+import { BASE_URL } from '@/utils/constant/_urls'
+import { Input } from '@/components/ui/input'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Textarea } from '@/components/ui/textarea'
-import { CreateClientCompany } from '@/utils/types/form'
+import {
+  useCreateClientCompany,
+  useDetailClientCompany,
+  useUpdateClientCompany,
+} from '@/hooks/api/use-client'
 
 const companySchema = z.object({
   name: z.string(),
@@ -22,12 +26,40 @@ const companySchema = z.object({
 type ModalProps = {
   open: boolean
   setOpen: (val: boolean) => void
+  selectedId?: number | null
 }
-export default function DialogAddCompany({ open, setOpen }: ModalProps) {
+export default function DialogAddCompany({
+  open,
+  setOpen,
+  selectedId: id,
+}: ModalProps) {
   const [preview, setPreview] = useState<string | null>(null)
 
+  // HANDLE DETAIL COMPANY FOR EDIT
+  const qCompany = useDetailClientCompany({
+    enabled: open && !!id,
+    id,
+  })
+  useEffect(() => {
+    if (qCompany?.data?.data.data && !qCompany.isLoading && open) {
+      const { logo, name, address, email, phone } = qCompany?.data.data?.data
+
+      form.reset({
+        address,
+        email,
+        name,
+        phone: phone ? String(phone) : '',
+      })
+
+      if (logo) {
+        setPreview(BASE_URL + '/img/' + logo)
+      }
+    }
+  }, [qCompany.isLoading, qCompany.data, open])
+
   // HANDLE FORM
-  const { mutate } = useCreateClientCompany()
+  const { mutate: add } = useCreateClientCompany()
+  const { mutate: update } = useUpdateClientCompany()
 
   const form = useForm<CreateClientCompany>({
     resolver: zodResolver(companySchema),
@@ -41,10 +73,25 @@ export default function DialogAddCompany({ open, setOpen }: ModalProps) {
   })
 
   const onSubmit = async (data: CreateClientCompany) => {
-    mutate(data, {
+    if (id) {
+      update(
+        { id, payload: data },
+        {
+          onSuccess: () => {
+            setPreview(null)
+            form.reset()
+            setOpen(false)
+          },
+        }
+      )
+      return
+    }
+
+    add(data, {
       onSuccess: () => {
         setPreview(null)
-        delay(400).then(() => setOpen(false))
+        form.reset()
+        setOpen(false)
       },
     })
   }
@@ -63,7 +110,7 @@ export default function DialogAddCompany({ open, setOpen }: ModalProps) {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className='w-full flex flex-col gap-4 px-1 pb-0'
+            className='w-full flex flex-col gap-4 px-1'
           >
             <ModalContainer setOpen={setOpen}>
               <UploadProfile
