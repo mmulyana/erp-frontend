@@ -142,7 +142,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                       isEdit={isEdit}
                       onEdit={onEdit}
                       keyData='payment_status'
-                      defaultData={project?.payment_status}
+                      defaultData={project?.payment_status ?? 0}
                       customData={(val) => <p>{val} %</p>}
                       onUpdate={(val) => {
                         update({ id, payload: { payment_status: Number(val) } })
@@ -153,7 +153,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                     <p className='text-dark/50'>Tanggal dibuat</p>
                     {project?.date_created ? (
                       <p className='text-dark'>
-                        {format(project?.date_created, 'dd/MM/yy', {
+                        {format(project?.date_created, 'EEEE, dd MMM yyyy', {
                           locale: indonesia,
                         })}
                       </p>
@@ -171,13 +171,16 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                       defaultData={project?.date_started}
                       customData={(val) => (
                         <p>
-                          {format(val, 'dd/MM/yy', {
+                          {format(val, 'EEEE, dd MMM yyyy', {
                             locale: indonesia,
                           })}
                         </p>
                       )}
                       onUpdate={(val) => {
-                        update({ id, payload: { date_started: val as string } })
+                        update({
+                          id,
+                          payload: { date_started: new Date(val) },
+                        })
                       }}
                     />
                   </DataSheet>
@@ -191,13 +194,13 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                       defaultData={project?.date_ended}
                       customData={(val) => (
                         <p>
-                          {format(val, 'dd/MM/yy', {
+                          {format(val, 'EEEE, dd MMM yyyy', {
                             locale: indonesia,
                           })}
                         </p>
                       )}
                       onUpdate={(val) => {
-                        update({ id, payload: { date_ended: val as string } })
+                        update({ id, payload: { date_ended: new Date(val) } })
                       }}
                     />
                   </DataSheet>
@@ -219,7 +222,10 @@ export default function DetailProject({ open, setOpen, id }: Props) {
             </Tab>
             <Tab label='Estimasi'>
               <div className='p-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
-                <EstimateProject projectId={project?.id} />
+                <EstimateProject
+                  projectId={project?.id}
+                  estimation={project?.ProjectEstimate}
+                />
               </div>
             </Tab>
           </Tabs>
