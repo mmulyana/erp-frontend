@@ -4,7 +4,7 @@ import {
 } from '@/hooks/api/use-activity'
 import { Form, FormField } from '@/components/ui/form'
 import { Camera, SendHorizonal } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -27,27 +27,6 @@ interface FormInputs {
 export default function MessageForm({ type, id, projectId }: MessageProps) {
   const user = useAtomValue(userAtom)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const ref = useRef<HTMLDivElement>(null)
-  const [width, setWidth] = useState(0)
-
-  useEffect(() => {
-    if (ref.current) {
-      const elementWidth = ref.current.clientWidth
-      setWidth(elementWidth)
-    }
-  }, [])
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (ref.current) {
-        setWidth(ref.current.clientWidth)
-      }
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   // HANDLE FORM
   const { mutate } = useCreateActivity()
@@ -101,17 +80,13 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
     return (
       <Form {...form}>
         <form onSubmit={form.handleSubmit(submit)}>
-          <div className='w-full relative' ref={ref}>
+          <div className='w-full relative'>
             <div className='w-full'>
               <FormField
                 control={form.control}
                 name='comment'
                 render={({ field }) => (
-                  <Textarea
-                    className='rounded-xl textarea'
-                    style={{ maxWidth: width + 'px' }}
-                    {...field}
-                  />
+                  <Textarea className='rounded-xl w-full' {...field} />
                 )}
               />
               <FormField
@@ -168,7 +143,7 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(submit)}>
-        <div className='w-full relative' ref={ref}>
+        <div className='w-full relative'>
           <div className='w-full'>
             <FormField
               control={form.control}
