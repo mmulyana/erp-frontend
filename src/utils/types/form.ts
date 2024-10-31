@@ -90,7 +90,7 @@ export type CreateTransaction = {
 
 export type CreateClient = {
   name: string
-  companyId?: number
+  companyId?: number | null
   contact?: string
   email?: string
   position?: string
