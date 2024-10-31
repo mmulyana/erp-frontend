@@ -71,3 +71,95 @@ export const useUpdateProject = () => {
     },
   })
 }
+
+export const useAssigneEmployee = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      projectId,
+      employeeId,
+    }: {
+      projectId: number
+      employeeId: number
+    }): Promise<AxiosResponse<IApi<{ projectId: number }>>> => {
+      return await http.patch(`${URLS.PROJECT}/employee/add/${projectId}`, {
+        employeeId,
+      })
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT, data.data.data?.projectId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
+
+export const useUnassigneEmployee = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+    }: {
+      id: number
+    }): Promise<AxiosResponse<IApi<{ projectId: number }>>> => {
+      return await http.patch(`${URLS.PROJECT}/employee/remove/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT, data.data.data?.projectId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
+
+export const useAddLabelProject = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      projectId,
+      labelId,
+    }: {
+      projectId: number
+      labelId: number
+    }): Promise<AxiosResponse<IApi<{ projectId: number }>>> => {
+      return await http.patch(`${URLS.PROJECT}/label/add/${projectId}`, {
+        labelId,
+      })
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT, data.data.data?.projectId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
+
+export const useRemoveLabelProject = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+    }: {
+      id: number
+    }): Promise<AxiosResponse<IApi<{ projectId: number }>>> => {
+      return await http.patch(`${URLS.PROJECT}/label/remove/${id}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT, data.data.data?.projectId],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
