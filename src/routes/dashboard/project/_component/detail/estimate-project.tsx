@@ -15,7 +15,7 @@ import { Estimate } from '@/utils/types/api'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 import { Trash, Triangle } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 
 interface EstimateItem {
