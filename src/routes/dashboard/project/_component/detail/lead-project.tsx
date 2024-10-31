@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useEmployees } from '@/hooks/api/use-employee'
+import { useUpdateProject } from '@/hooks/api/use-project'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 import { cn } from '@/utils/cn'
 import { BASE_URL } from '@/utils/constant/_urls'
@@ -43,13 +44,24 @@ export default function LeadProject({ id, data: { lead } }: Props) {
   const [open, setOpen] = useState(false)
   useFixPointerEvent(open)
 
+  const { mutate: update } = useUpdateProject()
+
   const form = useForm<FormValues>({
     defaultValues: {
       leadId: null,
     },
   })
   const handleSubmit = (data: FormValues) => {
-    console.log(data)
+    if(!id || !data.leadId) return
+    
+    update(
+      { id, payload: { leadId: data.leadId } },
+      {
+        onSuccess: () => {
+          setOpen(false)
+        },
+      }
+    )
   }
 
   //   GET CLIENT
