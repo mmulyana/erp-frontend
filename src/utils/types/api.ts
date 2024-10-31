@@ -43,6 +43,7 @@ export type Project = {
     }
   }[]
   employees: {
+    id: number
     employee: {
       fullname: string
       photo: string
