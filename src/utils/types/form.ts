@@ -126,8 +126,8 @@ export type createProject = {
   progress?: number
   payment_status?: number
   description?: string
-  date_started?: string
-  date_ended?: string
+  date_started?: string | Date
+  date_ended?: string | Date
   isArchive?: boolean
   net_value?: number
   leadId?: number
