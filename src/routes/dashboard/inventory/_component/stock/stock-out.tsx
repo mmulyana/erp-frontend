@@ -95,8 +95,7 @@ export default function StockOut() {
   return (
     <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
       <div>
-        {/* <TopHeader title='Barang keluar' onClick={() => setOpen(true)} /> */}
-        <FilterTable />
+        <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column.filter((col) => col.id !== 'supplier')}
           data={data || []}

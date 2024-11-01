@@ -20,6 +20,7 @@ import { FilterTable } from '@/components/data-table/component'
 import { ChartConfig } from '@/components/ui/chart'
 import CardBar from '@/components/chart/bar'
 import CardBarHorizontal from '@/components/chart/bar-horizontal'
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 
 const reportData = [
   { month: 'Januari', total: 186 },
@@ -100,11 +101,12 @@ export default function StockIn() {
   const [openGoods, setOpenGoods] = useState(false)
   const [openSupplier, setOpenSupplier] = useState(false)
 
+  useFixPointerEvent(openGoods || openSupplier)
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
       <div>
-        <FilterTable />
-        {/* <TopHeader title='Barang masuk' onClick={() => setOpen(true)} /> */}
+        <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column}
           data={data || []}

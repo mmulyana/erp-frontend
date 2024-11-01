@@ -80,8 +80,7 @@ export default function StockOpname() {
   return (
     <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
       <div>
-        {/* <TopHeader title='Opname' onClick={() => setOpen(true)} /> */}
-        <FilterTable />
+        <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column.filter(
             (col) => col.id !== 'supplier' && col.id !== 'price'

@@ -15,7 +15,7 @@ import { CommandItem } from '@/components/ui/command'
 import { Input } from '@/components/ui/input'
 import InputFile from '@/components/common/input-file'
 import { Textarea } from '@/components/ui/textarea'
-import { useProject } from '@/hooks/api/use-project'
+import { useProjects } from '@/hooks/api/use-project'
 import { FilterTable } from '@/components/data-table/component'
 import { ChartConfig } from '@/components/ui/chart'
 import CardBarMultiple from '@/components/chart/bar-multiple'
@@ -52,7 +52,7 @@ const stockConfig = {
 export default function StockBorrowed() {
   const queryTransaction = useTransaction({ type: 'borrowed' })
   const data = useMemo(
-    () => queryTransaction.data?.data?.data,
+    () => queryTransaction.data?.data?.data || [],
     [queryTransaction.isLoading, queryTransaction.isFetching]
   )
 
@@ -61,7 +61,7 @@ export default function StockBorrowed() {
     () => queryGoods.data?.data.data || [],
     [queryGoods.isLoading, queryGoods.isFetching]
   )
-  const queryProject = useProject()
+  const queryProject = useProjects()
   const projects = useMemo(
     () => queryProject.data?.data.data || [],
     [queryProject.isLoading, queryProject.isFetching]
@@ -105,7 +105,7 @@ export default function StockBorrowed() {
     <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
       <div>
         {/* <TopHeader title='Peminjaman' onClick={() => setOpen(true)} /> */}
-        <FilterTable />
+        <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column.filter(
             (col) => col.id !== 'supplier' && col.id !== 'price'
