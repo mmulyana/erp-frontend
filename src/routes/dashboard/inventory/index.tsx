@@ -50,40 +50,40 @@ export const links = [
 export default function Index() {
   useTitle(links)
 
-  const queryGoods = useGoods({})
+  const queryGoods = useGoods()
   const data = useMemo(
     () => queryGoods.data?.data?.data,
     [queryGoods.isLoading, queryGoods.isFetching]
   )
 
-  const queryBrand = useBrand({})
+  const queryBrand = useBrand()
   const brands = useMemo(
-    () => queryBrand.data?.data?.data,
-    [queryBrand.isLoading]
+    () => queryBrand.data?.data?.data || [],
+    [queryBrand.isLoading, queryBrand.data]
   )
 
-  const queryMeasurement = useMeasurement({})
+  const queryMeasurement = useMeasurement()
   const measurements = useMemo(
-    () => queryMeasurement.data?.data?.data,
-    [queryMeasurement.isLoading]
+    () => queryMeasurement.data?.data?.data || [],
+    [queryMeasurement.isLoading, queryMeasurement.data]
   )
 
-  const queryLocation = useLocation({})
+  const queryLocation = useLocation()
   const locations = useMemo(
-    () => queryLocation.data?.data?.data,
-    [queryLocation.isLoading]
+    () => queryLocation.data?.data?.data || [],
+    [queryLocation.isLoading, queryLocation.data]
   )
 
-  const queryCategory = useCategory({})
+  const queryCategory = useCategory()
   const categories = useMemo(
-    () => queryCategory.data?.data?.data,
-    [queryCategory.isLoading]
+    () => queryCategory.data?.data?.data || [],
+    [queryCategory.isLoading, queryCategory.data]
   )
 
-  const queryTransaction = useTransaction({})
+  const queryTransaction = useTransaction()
   const transactions = useMemo(
-    () => queryTransaction.data?.data?.data,
-    [queryTransaction.isLoading, queryTransaction.isFetching]
+    () => queryTransaction.data?.data?.data || [],
+    [queryTransaction.isLoading, queryTransaction.data]
   )
 
   // START OF COLUMNS
