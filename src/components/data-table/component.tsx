@@ -10,6 +10,7 @@ import {
 import { cn } from '@/utils/cn'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import SearchUrl from '../common/search-url'
+import { Button } from '../ui/button'
 
 interface PaginationProps {
   totalPages: number
@@ -123,16 +124,18 @@ export function Limit({ limit }: LimitProps) {
 type FilterProps = {
   className?: string
   placeholder?: string
+  onAdd?: () => void
 }
-export function FilterTable({ className, placeholder }: FilterProps) {
+export function FilterTable({ className, placeholder, onAdd }: FilterProps) {
   return (
     <div
       className={cn(
-        'bg-[#F9FAFB] py-2 px-4 flex gap-4 items-center',
+        'bg-[#F9FAFB] py-2 px-4 flex gap-4 items-center justify-between',
         className
       )}
     >
       <SearchUrl placeholder={placeholder} />
+      {onAdd && <Button onClick={onAdd}>Tambah</Button>}
     </div>
   )
 }
