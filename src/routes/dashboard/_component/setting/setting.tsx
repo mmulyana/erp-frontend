@@ -27,6 +27,7 @@ import MenuInventoryLabel from './menu-inventory-label'
 import MenuInventoryLocation from './menu-inventory-location'
 import MenuInventoryMeasurement from './menu-inventory-measurement'
 import MenuInventoryBrand from './menu-inventory-brand'
+import MenuInventoryCategory from './menu-inventory-category'
 
 const MENUS = {
   account_myaccount: 'Akun',
@@ -37,6 +38,7 @@ const MENUS = {
   inventory_location: 'Lokasi',
   inventory_measurument: 'Ukuran',
   inventory_brand: 'Merek',
+  inventory_category: 'Kategori',
 } as const
 type MenuKey = keyof typeof MENUS
 
@@ -108,6 +110,11 @@ const SIDE_MENUS: SideMenus = [
         value: 'inventory_brand',
         icon: <Puzzle className='w-3.5 h-3.5' />,
       },
+      {
+        name: 'Kategori',
+        value: 'inventory_category',
+        icon: <Puzzle className='w-3.5 h-3.5' />,
+      },
     ],
   },
 ]
@@ -131,6 +138,7 @@ export default function Setting() {
     inventory_location: <MenuInventoryLocation />,
     inventory_measurument: <MenuInventoryMeasurement />,
     inventory_brand: <MenuInventoryBrand />,
+    inventory_category: <MenuInventoryCategory />,
   }
 
   return (
