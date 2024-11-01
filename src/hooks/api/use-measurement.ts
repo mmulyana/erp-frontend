@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 type Params = Pagination & {
   name?: string
 }
-export const useMeasurement = (params: Params) => {
+export const useMeasurement = (params?: Params) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsMeasurement[]>>> => {
       return await http.request({

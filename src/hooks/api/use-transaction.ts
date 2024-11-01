@@ -12,7 +12,7 @@ import { toast } from 'sonner'
 type Params = Pagination & {
   type?: 'in' | 'out' | 'borrowed' | 'returned' | 'opname'
 }
-export const useTransaction = (params: Params) => {
+export const useTransaction = (params?: Params) => {
   return useQuery({
     queryFn: async (): Promise<
       AxiosResponse<{
@@ -25,7 +25,7 @@ export const useTransaction = (params: Params) => {
         params,
       })
     },
-    queryKey: [KEYS.TRANSACTION, params.type, params],
+    queryKey: [KEYS.TRANSACTION, params?.type, params],
   })
 }
 

@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 type brandParams = Pagination & {
   name?: string
 }
-export const useBrand = (params: brandParams) => {
+export const useBrand = (params?: brandParams) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsBrand[]>>> => {
       return await http.request({
