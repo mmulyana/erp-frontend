@@ -157,6 +157,9 @@ export type GoodsBrand = {
 export type GoodsCategory = {
   id: number
   name: string
+  _count?: {
+    goods?: number
+  }
 }
 
 export type GoodsLocation = {
