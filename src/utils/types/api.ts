@@ -12,6 +12,11 @@ export interface IApiPagination<T = void> extends IApi<T> {
   total_pages: number
 }
 
+export interface ApiError {
+  message: string
+  status: number
+}
+
 export interface Board {
   id: string
   name: string
