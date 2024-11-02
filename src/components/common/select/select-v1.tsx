@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
+import { ChevronsUpDown } from 'lucide-react'
+import React, { useState } from 'react'
 import {
   Popover,
   PopoverContent,
@@ -16,8 +17,8 @@ import {
 import { cn } from '@/utils/cn'
 
 type Props = {
-  open: boolean
-  setOpen: (val: boolean) => void
+  open?: boolean
+  setOpen?: (val: boolean) => void
   name: string
   preview: (val: string) => React.ReactNode
   placeholder?: string
@@ -30,8 +31,6 @@ type Props = {
 }
 
 export default function SelectV1({
-  open,
-  setOpen,
   name,
   preview,
   placeholder,
@@ -40,7 +39,6 @@ export default function SelectV1({
   emptyComponent,
   classNameBtn,
   side,
-  customPlaceholder,
 }: Props) {
   const form = useFormContext()
   const [searchValue, setSearchValue] = useState('')
@@ -52,31 +50,28 @@ export default function SelectV1({
     }
   }
 
-  useEffect(() => {
-    if (!open) setSearchValue('')
-  }, [open])
-
   return (
     <Controller
       name={name}
       control={form.control}
       render={({ field }) => (
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger>
-            {field.value ? (
-              preview(field.value)
-            ) : customPlaceholder ? (
-              customPlaceholder
-            ) : (
-              <Button
-                size='sm'
-                variant='outline'
-                className={cn('w-full justify-start', classNameBtn)}
-                type='button'
-              >
-                <span>{placeholder ?? 'Select data'}</span>
-              </Button>
-            )}
+        <Popover modal>
+          <PopoverTrigger asChild>
+            <Button
+              variant='outline'
+              className={cn(
+                'w-full justify-between items-center font-normal h-9 text-dark px-2.5',
+                classNameBtn
+              )}
+              type='button'
+            >
+              <span>
+                {field.value
+                  ? preview(field.value)
+                  : placeholder ?? 'Pilih data'}
+              </span>
+              <ChevronsUpDown size={14} className='text-gray-400' />
+            </Button>
           </PopoverTrigger>
           <PopoverContent className='p-0' side={side || 'bottom'} align='start'>
             <Command>
