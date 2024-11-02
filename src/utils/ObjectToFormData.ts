@@ -1,5 +1,5 @@
 export function objectToFormData(
-  obj: Record<string, string | File | string[] | null>
+  obj: Record<string, string | File | string[] | number | null>
 ) {
   const formData = new FormData()
 
@@ -12,7 +12,7 @@ export function objectToFormData(
           }
         })
       } else {
-        formData.append(key, value)
+        formData.append(key, String(value))
       }
     }
   })
