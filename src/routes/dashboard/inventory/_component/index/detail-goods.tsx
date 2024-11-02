@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import DataSheet from '@/components/common/data-sheet'
 
 export const selectedGoodAtom = atom<{
   open: boolean
@@ -97,6 +98,18 @@ export default function DetailGoods() {
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
+            </div>
+
+            <div className='flex flex-col gap-4 w-fit mt-2'>
+              <DataSheet>
+                <p className='text-dark/50'>Minimum</p>
+                <Editable
+                  isEdit={isEdit}
+                  onEdit={onEdit}
+                  keyData='minimum'
+                  defaultData={good?.minimum}
+                />
+              </DataSheet>
             </div>
           </div>
         </ScrollArea>
