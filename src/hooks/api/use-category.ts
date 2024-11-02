@@ -48,7 +48,11 @@ export const useCreateCategory = () => {
       return await http.post(URLS.INVENTORY_CATEGORY, payload)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CATEGORY] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.CATEGORY],
+        refetchType: 'all',
+        exact: false,
+      })
     },
   })
 }
@@ -69,7 +73,11 @@ export const useUpdateCategory = () => {
       return await http.patch(`${URLS.INVENTORY_CATEGORY}/${id}`, payload)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CATEGORY] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.CATEGORY],
+        refetchType: 'all',
+        exact: false,
+      })
       queryClient.invalidateQueries({
         queryKey: [KEYS.CATEGORY, data.data.data?.id],
       })
@@ -84,7 +92,11 @@ export const useDeleteCategory = () => {
       return await http.delete(`${URLS.INVENTORY_CATEGORY}/${id}`)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CATEGORY] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.CATEGORY],
+        refetchType: 'all',
+        exact: false,
+      })
     },
   })
 }
