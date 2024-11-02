@@ -1,87 +1,56 @@
+import { Form, FormField, FormLabel } from '@/components/ui/form'
+import { FilterTable } from '@/components/data-table/component'
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import Select from '@/components/common/select/select-v1'
+import { useForm, useFieldArray } from 'react-hook-form'
+import { useSupplier } from '@/hooks/api/use-supplier'
+import { CommandItem } from '@/components/ui/command'
+import { DataTable } from '@/components/data-table'
+import { useGoods } from '@/hooks/api/use-goods'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useMemo, useState } from 'react'
+import { column } from './column'
 import {
   useCreateTransaction,
   useTransaction,
 } from '@/hooks/api/use-transaction'
-import { useMemo, useState } from 'react'
-import { DataTable } from '@/components/data-table'
-import { column } from './column'
-import { useForm } from 'react-hook-form'
+import { Plus, X } from 'lucide-react'
 import { CreateTransaction } from '@/utils/types/form'
-import Modal, { ModalContainer } from '@/components/modal-v2'
-import { Form, FormField } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import InputFile from '@/components/common/input-file'
-import { useGoods } from '@/hooks/api/use-goods'
-import { CommandItem } from '@/components/ui/command'
-import { Textarea } from '@/components/ui/textarea'
-import { useSupplier } from '@/hooks/api/use-supplier'
-import Select from '@/components/common/select/select-v1'
-import { FilterTable } from '@/components/data-table/component'
-import { ChartConfig } from '@/components/ui/chart'
-import CardBar from '@/components/chart/bar'
-import CardBarHorizontal from '@/components/chart/bar-horizontal'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-
-const reportData = [
-  { month: 'Januari', total: 186 },
-  { month: 'Februari', total: 305 },
-  { month: 'Maret', total: 237 },
-  { month: 'April', total: 73 },
-  { month: 'Mei', total: 209 },
-  { month: 'Juni', total: 214 },
-]
-const reportConfig = {
-  total: {
-    label: 'Total',
-    color: '#2A9D90',
-  },
-} satisfies ChartConfig
-
-const stockData = [
-  { goods: 'Helm', total: 186 },
-  { goods: 'Sepatu', total: 305 },
-  { goods: 'Masker', total: 237 },
-]
-const stockConfig = {
-  total: {
-    label: 'Total',
-    color: '#2A9D90',
-  },
-} satisfies ChartConfig
 
 export default function StockIn() {
-  const queryTransaction = useTransaction({ type: 'in' })
+  const qTransaction = useTransaction({ type: 'in' })
   const data = useMemo(
-    () => queryTransaction.data?.data?.data,
-    [queryTransaction.isLoading, queryTransaction.isFetching]
+    () => qTransaction.data?.data?.data,
+    [qTransaction.isLoading, qTransaction.isFetching, qTransaction.data]
   )
 
-  const queryGoods = useGoods({})
+  const qGoods = useGoods()
   const goods = useMemo(
-    () => queryGoods.data?.data.data || [],
-    [queryGoods.isLoading, queryGoods.isFetching]
-  )
-  const querySupplier = useSupplier({})
-  const suppliers = useMemo(
-    () => querySupplier.data?.data.data || [],
-    [querySupplier.isLoading, querySupplier.isFetching]
+    () => qGoods.data?.data.data || [],
+    [qGoods.isLoading, qGoods.isFetching, qGoods.data]
   )
 
-  // HANDLE FORM
+  const qSupplier = useSupplier()
+  const suppliers = useMemo(
+    () => qSupplier.data?.data.data || [],
+    [qSupplier.isLoading, qSupplier.isFetching, qSupplier.data]
+  )
+
   const { mutate } = useCreateTransaction()
+  const [open, setOpen] = useState(false)
 
   const form = useForm<CreateTransaction>({
     defaultValues: {
       date: '',
-      description: '',
-      goodsId: '',
-      isReturned: '',
-      photo: undefined,
-      price: '',
-      qty: '',
       supplierId: '',
-      type: 'in',
+      items: [{ goodsId: '', qty: '', price: '', type: 'in' }],
     },
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'items',
   })
 
   const onSubmit = async (data: CreateTransaction) => {
@@ -89,7 +58,6 @@ export default function StockIn() {
       { payload: data },
       {
         onSuccess: () => {
-          queryTransaction.refetch()
           setOpen(false)
           form.reset()
         },
@@ -97,122 +65,169 @@ export default function StockIn() {
     )
   }
 
-  const [open, setOpen] = useState(false)
-  const [openGoods, setOpenGoods] = useState(false)
-  const [openSupplier, setOpenSupplier] = useState(false)
-
-  useFixPointerEvent(openGoods || openSupplier)
-
   return (
-    <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
-      <div>
+    <div className='p-4'>
+      <div className='rounded-lg border overflow-hidden'>
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column}
           data={data || []}
-          isLoading={queryTransaction.isLoading || queryGoods.isFetching}
+          isLoading={qTransaction.isLoading}
           withLoading
           withPagination
+          styleFooter='border-b-0 border-t'
         />
       </div>
-      <div className='h-[calc(100vh-141px)] border-l border-line p-4 space-y-4'>
-        <CardBar
-          title='Laporan Total Stok Masuk Bulanan'
-          config={reportConfig}
-          data={reportData}
-          dataKeyBar='total'
-          dataKeyX='month'
-        />
-        <CardBarHorizontal
-          title='Laporan Stok Masuk'
-          config={stockConfig}
-          data={stockData}
-          dataKeyBar='total'
-          dataKeyX='goods'
-        />
-      </div>
+
       <Modal title='Tambah barang masuk' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <ModalContainer setOpen={setOpen}>
-              <Select
-                open={openGoods}
-                setOpen={setOpenGoods}
-                name='goodsId'
-                placeholder='Pilih barang'
-                preview={(val) => (
-                  <span>
-                    {goods.find((s: any) => s.id === Number(val))?.name}
-                  </span>
-                )}
-              >
-                {goods.map((item: any) => (
-                  <CommandItem
-                    key={item.id}
-                    value={item.id.toString()}
-                    onSelect={(value) => {
-                      form.setValue('goodsId', value)
-                      setOpenGoods(false)
-                    }}
-                  >
-                    <span>{item.name}</span>
-                  </CommandItem>
-                ))}
-              </Select>
-              <Select
-                open={openSupplier}
-                setOpen={setOpenSupplier}
-                name='supplierId'
-                placeholder='Pilih toko'
-                preview={(val) => (
-                  <span>
-                    {suppliers.find((s: any) => s.id === Number(val))?.name}
-                  </span>
-                )}
-              >
-                {goods.map((item: any) => (
-                  <CommandItem
-                    key={item.id}
-                    value={item.id.toString()}
-                    onSelect={(value) => {
-                      form.setValue('supplierId', value)
-                      setOpenSupplier(false)
-                    }}
-                  >
-                    <span>{item.name}</span>
-                  </CommandItem>
-                ))}
-              </Select>
+              {fields.map((field, index) => (
+                <div key={field.id}>
+                  <div className='flex justify-between items-center bg-[#F1F5F9] pl-2 rounded-t-lg h-10 border-b border-[#E5EBF1]'>
+                    <h3 className='text-sm font-medium text-dark'>
+                      Barang ke-{index + 1}
+                    </h3>
+                    {index > 0 && (
+                      <Button
+                        type='button'
+                        variant='ghost'
+                        size='sm'
+                        className='text-slate-600 hover:text-red-400 hover:bg-transparent'
+                        onClick={() => remove(index)}
+                      >
+                        <X className='w-4 h-4' strokeWidth={3} />
+                      </Button>
+                    )}
+                  </div>
+                  <div className='p-4 bg-[#F8FAFC] rounded-b-lg'>
+                    <div className='grid grid-cols-3 gap-4'>
+                      <div className='flex flex-col gap-3'>
+                        <FormLabel>Barang</FormLabel>
+                        <Select
+                          name={`items.${index}.goodsId`}
+                          placeholder='Pilih barang'
+                          preview={(val) => (
+                            <span>
+                              {
+                                goods.find((s: any) => s.id === Number(val))
+                                  ?.name
+                              }
+                            </span>
+                          )}
+                        >
+                          {goods.map((item: any) => (
+                            <CommandItem
+                              key={item.id}
+                              value={item.id.toString()}
+                              onSelect={(value) => {
+                                form.setValue(`items.${index}.goodsId`, value)
+                              }}
+                            >
+                              <span>{item.name}</span>
+                            </CommandItem>
+                          ))}
+                        </Select>
+                      </div>
 
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                      <FormField
+                        label='Kuantitas'
+                        control={form.control}
+                        name={`items.${index}.qty`}
+                        render={({ field }) => (
+                          <div className='relative'>
+                            <Input type='number' {...field} className='h-9' />
+                            {field.value && (
+                              <div className='absolute top-0 right-0 bg-gray-100 h-full px-2 rounded-r-lg flex items-center border text-dark/50 capitalize text-sm'>
+                                {
+                                  goods.find(
+                                    (s) =>
+                                      s.id ===
+                                      Number(
+                                        form.watch(`items.${index}.goodsId`)
+                                      )
+                                  )?.measurement.name
+                                }
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      />
+
+                      <FormField
+                        label='Harga beli'
+                        control={form.control}
+                        name={`items.${index}.price`}
+                        render={({ field }) => (
+                          <Input type='number' {...field} className='h-9' />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  {index === fields.length - 1 && (
+                    <div className='pt-2'>
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        size='sm'
+                        className='pl-2.5 pr-4 text-slate-600 font-normal gap-1'
+                        onClick={() =>
+                          append({
+                            goodsId: '',
+                            qty: '',
+                            price: '',
+                            type: 'in',
+                          })
+                        }
+                      >
+                        <Plus
+                          size={14}
+                          strokeWidth={2}
+                          className='text-slate-500'
+                        />
+                        Tambah Item
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-center pt-4 mt-4 border-t border-line border-dashed'>
+                <div className='flex flex-col gap-3'>
+                  <FormLabel>Supplier</FormLabel>
+                  <Select
+                    name='supplierId'
+                    placeholder='Pilih supplier'
+                    preview={(val) => (
+                      <span>
+                        {suppliers.find((s: any) => s.id === Number(val))?.name}
+                      </span>
+                    )}
+                  >
+                    {suppliers.map((item: any) => (
+                      <CommandItem
+                        key={item.id}
+                        value={item.id.toString()}
+                        onSelect={(value) => {
+                          form.setValue('supplierId', value)
+                        }}
+                      >
+                        <span>{item.name}</span>
+                      </CommandItem>
+                    ))}
+                  </Select>
+                </div>
+
                 <FormField
-                  label='Kuantitas'
+                  label='Tanggal'
                   control={form.control}
-                  name='qty'
-                  render={({ field }) => <Input type='number' {...field} />}
-                />
-                <FormField
-                  label='Harga'
-                  control={form.control}
-                  name='price'
-                  render={({ field }) => <Input type='number' {...field} />}
+                  name='date'
+                  render={({ field }) => (
+                    <Input type='date' {...field} className='h-9 block' />
+                  )}
                 />
               </div>
-              <FormField
-                label='Tanggal'
-                control={form.control}
-                name='date'
-                render={({ field }) => (
-                  <Input type='date' {...field} className='block' />
-                )}
-              />
-              <InputFile name='photo' label='Photo' />
-              <FormField
-                label='Keterangan'
-                control={form.control}
-                name='description'
-                render={({ field }) => <Textarea {...field} />}
-              />
             </ModalContainer>
           </form>
         </Form>
