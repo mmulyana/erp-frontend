@@ -34,5 +34,8 @@ export const KEYS = {
   KANBAN_BOARD: 'board',
   ACTIVITY: 'activity',
   ATTACHMENT: 'attachment',
-  ESTIMATE: 'estimate'
+  ESTIMATE: 'estimate',
+  TRANSACTION_BORROWED: 'transaction-borrowed',
+  STOCK_LOW: 'stock-low',
+  STOCK_OUT: 'stock-out',
 }
