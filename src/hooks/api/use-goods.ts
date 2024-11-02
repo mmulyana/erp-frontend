@@ -1,7 +1,7 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { Goods, IApi } from '@/utils/types/api'
+import { Goods, IApi, IApiPagination } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
@@ -13,7 +13,7 @@ type goodsParams = Pagination & {
 }
 export const useGoods = (params?: goodsParams) => {
   return useQuery({
-    queryFn: async () => {
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<Goods[]>>> => {
       return await http(URLS.INVENTORY_GOODS, { params })
     },
     queryKey: [KEYS.GOODS, params],

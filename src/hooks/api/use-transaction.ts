@@ -1,12 +1,11 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { CreateTransaction } from '@/utils/types/form'
+import { IApi, Transaction } from '@/utils/types/api'
+import { Pagination } from '@/utils/types/common'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
-import { Pagination } from '@/utils/types/common'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import http from '@/utils/http'
-import { Transaction } from '@/utils/types/api'
 import { AxiosResponse } from 'axios'
-import { objectToFormData } from '@/utils/ObjectToFormData'
-import { CreateTransaction } from '@/utils/types/form'
+import http from '@/utils/http'
 import { toast } from 'sonner'
 
 type Params = Pagination & {
@@ -33,16 +32,18 @@ export const useCreateTransaction = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ payload }: { payload: CreateTransaction }) => {
-      const formData = objectToFormData(payload)
-      return await http.post(URLS.INVENTORY_TRANSACTION, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+    mutationFn: async ({
+      payload,
+    }: {
+      payload: CreateTransaction
+    }): Promise<AxiosResponse<IApi<{ type: string }>>> => {
+      return await http.post(URLS.INVENTORY_TRANSACTION, payload)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.SUPPLIER] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.TRANSACTION] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.TRANSACTION, data.data.data?.type],
+      })
       toast.success(data.data.message)
     },
   })

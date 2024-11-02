@@ -11,7 +11,7 @@ type supplierParams = Pagination & {
   name?: string
   tag?: string
 }
-export const useSupplier = (params: supplierParams) => {
+export const useSupplier = (params?: supplierParams) => {
   return useQuery({
     queryFn: async () => {
       return await http.request({
