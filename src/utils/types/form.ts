@@ -156,3 +156,16 @@ export type createEstimate = {
   price: number
   qty: number
 }
+
+export type createGoods = {
+  name: string
+  qty: number
+  available: number
+  minimum: number
+  photo?: File
+  photoUrl?: string | null
+  locationId: number
+  measurementId: number
+  categoryId: number
+  brandId: number
+}
