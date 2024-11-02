@@ -125,7 +125,7 @@ export default function AddProject({ open, setOpen }: Props) {
               <SelectV1
                 open={dialog.user}
                 setOpen={(val) => handleDialog('user', val)}
-                classNameBtn='flex-1'
+                className='flex-1'
                 name='clientId'
                 customPlaceholder={
                   <div className='inline-flex gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
@@ -139,14 +139,14 @@ export default function AddProject({ open, setOpen }: Props) {
 
                     <span className='text-sm text-dark'>
                       {
-                        qUsers?.data?.data.data.find((s: any) => s.id === val)
+                        qUsers?.data?.data.data?.find((s: any) => s.id === val)
                           ?.name
                       }
                     </span>
                   </div>
                 )}
               >
-                {qUsers?.data?.data.data.map((item: any) => (
+                {qUsers?.data?.data.data?.map((item: any) => (
                   <CommandItem
                     key={item.id}
                     className='hover:bg-red-400'
@@ -168,7 +168,7 @@ export default function AddProject({ open, setOpen }: Props) {
               <SelectV1
                 open={dialog.lead}
                 setOpen={(val) => handleDialog('lead', val)}
-                classNameBtn='flex-1'
+                className='flex-1'
                 name='leadId'
                 customPlaceholder={
                   <div className='inline-flex flex-1 gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>

@@ -178,7 +178,6 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
       )
       return
     }
-    console.log(data)
     createEmployee(data as payloadCreateEmployee, {
       onSuccess: (data) => {
         setNewUser(data.data.data)

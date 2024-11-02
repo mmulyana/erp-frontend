@@ -101,7 +101,7 @@ export function AddOvertime() {
               <SelectV1
                 open={openSelect}
                 setOpen={setOpenSelect}
-                classNameBtn='flex-1'
+                className='flex-1'
                 name='employeeId'
                 customPlaceholder={
                   <div className='inline-flex flex-1 gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
