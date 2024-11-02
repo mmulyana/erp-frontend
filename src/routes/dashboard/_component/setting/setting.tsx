@@ -13,6 +13,7 @@ import { cn } from '@/utils/cn'
 import MenuPassword from './menu-password'
 import {
   Award,
+  ComponentIcon,
   Lock,
   Map,
   Puzzle,
@@ -113,7 +114,7 @@ const SIDE_MENUS: SideMenus = [
       {
         name: 'Kategori',
         value: 'inventory_category',
-        icon: <Puzzle className='w-3.5 h-3.5' />,
+        icon: <ComponentIcon className='w-3.5 h-3.5' />,
       },
     ],
   },
