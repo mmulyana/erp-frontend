@@ -1,11 +1,14 @@
-import { Package } from 'lucide-react'
-import { DashboardLayout } from '../_component/layout'
-import TitlePage from '../_component/title-page'
-import { Tab, Tabs } from '@/components/tab'
-import StockIn from './_component/stock/stock-in'
-import StockOut from './_component/stock/stock-out'
 import StockBorrowed from './_component/stock/stock-borrowed'
 import StockOpname from './_component/stock/stock-opname'
+import { DashboardLayout } from '../_component/layout'
+import StockOut from './_component/stock/stock-out'
+import StockIn from './_component/stock/stock-in'
+import TitlePage from '../_component/title-page'
+import { Tab, Tabs } from '@/components/tab'
+import { Package } from 'lucide-react'
+import { atom } from 'jotai'
+
+export const selectedAtom = atom<{ open: boolean; id: number } | null>(null)
 
 export default function Stock() {
   return (
