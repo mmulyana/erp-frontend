@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CreateTransaction } from '@/utils/types/form'
-import { IApi, Transaction } from '@/utils/types/api'
+import { ApiError, IApi, Transaction } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import http from '@/utils/http'
 import { toast } from 'sonner'
 
@@ -45,6 +45,21 @@ export const useCreateTransaction = () => {
         queryKey: [KEYS.TRANSACTION, data.data.data?.type],
       })
       toast.success(data.data.message)
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response) {
+        const errorMessage =
+          error.response.data.message || 'Terjadi kesalahan pada server'
+        if (errorMessage.includes('tidak mencukupi')) {
+          toast.error(errorMessage)
+        } else {
+          toast.error(errorMessage)
+        }
+      } else if (error.request) {
+        toast.error('Tidak dapat terhubung ke server')
+      } else {
+        toast.error('Terjadi kesalahan pada aplikasi')
+      }
     },
   })
 }
