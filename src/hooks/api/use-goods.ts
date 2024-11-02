@@ -1,8 +1,10 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
+import { objectToFormData } from '@/utils/ObjectToFormData'
 import { Goods, IApi, IApiPagination } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
+import { createGoods } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
@@ -28,7 +30,7 @@ export const useDetailGoods = ({
   enabled: boolean
 }) => {
   return useQuery({
-    queryFn: async () => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Goods>>> => {
       return await http(`${URLS.INVENTORY_GOODS}/${id}`)
     },
     queryKey: [KEYS.GOODS, id],
@@ -40,8 +42,22 @@ export const useCreateGoods = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ payload }: { payload: Goods }) => {
-      return await http.post(URLS.INVENTORY_GOODS, payload)
+    mutationFn: async ({ payload }: { payload: createGoods }) => {
+      const formData = new FormData()
+      Object.entries(payload).forEach(([key, value]) => {
+        if (key === 'photo') {
+          formData.append(key, value as File)
+        } else if (typeof value == 'number') {
+          formData.append(key, String(value))
+        } else if (value !== null && typeof value == 'string') {
+          formData.append(key, value)
+        }
+      })
+      return await http.post(URLS.INVENTORY_GOODS, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.GOODS] })
@@ -58,9 +74,24 @@ export const useUpdateGoods = () => {
       payload,
     }: {
       id: Number
-      payload: Partial<Goods>
+      payload: Partial<createGoods>
     }): Promise<AxiosResponse<IApi<Goods>>> => {
-      return await http.patch(`${URLS.INVENTORY_GOODS}/${id}`, payload)
+      const formData = new FormData()
+
+      Object.entries(payload).forEach(([key, value]) => {
+        if (key === 'photo') {
+          formData.append(key, value as File)
+        } else if (typeof value == 'number') {
+          formData.append(key, String(value))
+        } else if (value !== null && typeof value == 'string') {
+          formData.append(key, value)
+        }
+      })
+      return await http.patch(`${URLS.INVENTORY_GOODS}/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.GOODS] })
