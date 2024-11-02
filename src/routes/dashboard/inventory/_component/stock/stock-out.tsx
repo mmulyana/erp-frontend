@@ -100,7 +100,7 @@ export default function StockOut() {
         />
       </div>
 
-      <Modal title='Tambah barang masuk' open={open} setOpen={setOpen}>
+      <Modal title='Barang keluar' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <ModalContainer setOpen={setOpen}>
