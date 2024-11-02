@@ -38,7 +38,9 @@ import CardHighlight from './_component/index/card-highlight'
 import CardActivity from './_component/index/card-activity'
 import ButtonLink from './_component/button-link'
 import Overlay from '@/components/common/overlay'
-import Modal from '@/components/modal-v2'
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import DetailGoods, { selectedGoodAtom } from './_component/index/detail-goods'
+import { useSetAtom } from 'jotai'
 
 export const links = [
   {
@@ -49,6 +51,8 @@ export const links = [
 
 export default function Index() {
   useTitle(links)
+
+  const setSelected = useSetAtom(selectedGoodAtom)
 
   const queryGoods = useGoods()
   const data = useMemo(
@@ -95,17 +99,29 @@ export default function Index() {
         <Overlay
           className='w-full'
           overlay={
-            <Link
+            <Button
               className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-              to={`/inventory/detail/${row.original.id}`}
+              onClick={() => {
+                setSelected({
+                  id: row.original.id,
+                  open: true,
+                })
+              }}
             >
               Lihat
-            </Link>
+            </Button>
           }
         >
-          <Link to={`/inventory/detail/${row.original.id}`}>
+          <p
+            onClick={() => {
+              setSelected({
+                id: row.original.id,
+                open: true,
+              })
+            }}
+          >
             {row.original.name}
-          </Link>
+          </p>
         </Overlay>
       ),
     },
@@ -207,9 +223,9 @@ export default function Index() {
             <ScrollArea className='h-[calc(100vh-104px)] px-4'>
               {transactions?.map((item, index) => (
                 <CardActivity
+                  key={'activity-' + index}
                   {...item}
                   isFirst={index === 0}
-                  key={item.id}
                   isLast={index === transactions?.length - 1}
                 />
               ))}
@@ -217,119 +233,61 @@ export default function Index() {
           </div>
         </div>
       </DashboardLayout>
-      <Modal open={open} setOpen={setOpen} title='Add data'>
+      <DetailGoods />
+      <Modal open={open} setOpen={setOpen} title='Barang baru'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className='px-4 py-4 space-y-4'>
-              <FormField
-                label='Nama'
-                control={form.control}
-                name='name'
-                render={({ field }) => <Input {...field} />}
-              />
-              <FormField
-                label='Kuantitas'
-                control={form.control}
-                name='qty'
-                render={({ field }) => <Input {...field} />}
-              />
-              <FormField
-                label='Batas minimum'
-                control={form.control}
-                name='minimum'
-                render={({ field }) => <Input {...field} />}
-              />
+            <ModalContainer setOpen={setOpen}>
+              <div className='space-y-4'>
+                <FormField
+                  label='Nama'
+                  control={form.control}
+                  name='name'
+                  render={({ field }) => <Input {...field} />}
+                />
+                <div className='grid grid-cols-2 gap-4'>
+                  <FormField
+                    label='Kuantitas'
+                    control={form.control}
+                    name='qty'
+                    render={({ field }) => <Input {...field} />}
+                  />
+                  <FormField
+                    label='Batas minimum'
+                    control={form.control}
+                    name='minimum'
+                    render={({ field }) => <Input {...field} />}
+                  />
+                </div>
 
-              <Controller
-                name='categoryId'
-                control={form.control}
-                render={({ field }) => (
-                  <Popover open={openCategory} onOpenChange={setOpenCategory}>
-                    <PopoverTrigger className='w-full'>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='w-full justify-start'
-                        type='button'
-                      >
-                        {field.value ? (
-                          <span>
-                            {
-                              categories.find(
-                                (s: any) => s.id === Number(field.value)
-                              )?.name
-                            }
-                          </span>
-                        ) : (
-                          <span>Pilih kategori</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='p-0' side='right' align='start'>
-                      <Command>
-                        <CommandInput placeholder='Change status...' />
-                        <CommandList>
-                          <CommandEmpty>No results found.</CommandEmpty>
-                          <CommandGroup>
-                            {categories.map((brand: any) => (
-                              <CommandItem
-                                key={brand.id}
-                                value={brand.id.toString()}
-                                onSelect={(value) => {
-                                  form.setValue('categoryId', value as string)
-                                  setOpenCategory(false)
-                                }}
-                              >
-                                <span>{brand.name}</span>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                )}
-              />
-
-              <div className='flex gap-2 items-center flex-wrap'>
                 <Controller
-                  name='brandId'
+                  name='categoryId'
                   control={form.control}
                   render={({ field }) => (
-                    <Popover open={openBrand} onOpenChange={setOpenBrand}>
-                      <PopoverTrigger>
+                    <Popover open={openCategory} onOpenChange={setOpenCategory}>
+                      <PopoverTrigger className='w-full' asChild>
                         <Button
                           variant='outline'
                           size='sm'
-                          className='w-[150px] justify-start'
+                          className='w-full justify-start'
                           type='button'
                         >
                           {field.value ? (
-                            <>
-                              <img
-                                src={
-                                  import.meta.env.VITE_BASE_URL +
-                                  '/img/' +
-                                  brands.find(
-                                    (s: any) => s.id === Number(field.value)
-                                  )?.photoUrl
-                                }
-                                className='mr-2 h-4 w-4 rounded-full'
-                              />
+                            <span>
                               {
-                                brands.find(
+                                categories.find(
                                   (s: any) => s.id === Number(field.value)
                                 )?.name
                               }
-                            </>
+                            </span>
                           ) : (
-                            <span>Pilih merek</span>
+                            <span>Pilih kategori</span>
                           )}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent
                         className='p-0'
-                        side='bottom'
+                        side='right'
                         align='start'
                       >
                         <Command>
@@ -337,23 +295,15 @@ export default function Index() {
                           <CommandList>
                             <CommandEmpty>No results found.</CommandEmpty>
                             <CommandGroup>
-                              {brands.map((brand: any) => (
+                              {categories.map((brand: any) => (
                                 <CommandItem
                                   key={brand.id}
                                   value={brand.id.toString()}
                                   onSelect={(value) => {
-                                    form.setValue('brandId', value as string)
-                                    setOpenBrand(false)
+                                    form.setValue('categoryId', value as string)
+                                    setOpenCategory(false)
                                   }}
                                 >
-                                  <img
-                                    src={
-                                      import.meta.env.VITE_BASE_URL +
-                                      '/img/' +
-                                      brand.photoUrl
-                                    }
-                                    className='h-4 w-4 rounded'
-                                  />
                                   <span>{brand.name}</span>
                                 </CommandItem>
                               ))}
@@ -365,133 +315,204 @@ export default function Index() {
                   )}
                 />
 
-                <Controller
-                  name='measurementId'
-                  control={form.control}
-                  render={({ field }) => (
-                    <Popover
-                      open={openMeasurement}
-                      onOpenChange={setOpenMeasurement}
-                    >
-                      <PopoverTrigger>
-                        <Button
-                          variant='outline'
-                          size='sm'
-                          className='w-[150px] justify-start'
-                          type='button'
+                <div className='flex gap-2 items-center flex-wrap'>
+                  <Controller
+                    name='brandId'
+                    control={form.control}
+                    render={({ field }) => (
+                      <Popover open={openBrand} onOpenChange={setOpenBrand}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            className='w-[150px] justify-start'
+                            type='button'
+                          >
+                            {field.value ? (
+                              <>
+                                <img
+                                  src={
+                                    import.meta.env.VITE_BASE_URL +
+                                    '/img/' +
+                                    brands.find(
+                                      (s: any) => s.id === Number(field.value)
+                                    )?.photoUrl
+                                  }
+                                  className='mr-2 h-4 w-4 rounded-full'
+                                />
+                                {
+                                  brands.find(
+                                    (s: any) => s.id === Number(field.value)
+                                  )?.name
+                                }
+                              </>
+                            ) : (
+                              <span>Pilih merek</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className='p-0'
+                          side='bottom'
+                          align='start'
                         >
-                          {field.value ? (
-                            <span>
-                              {
-                                measurements.find(
-                                  (s: any) => s.id === Number(field.value)
-                                )?.name
-                              }
-                            </span>
-                          ) : (
-                            <span>Pilih jenis ukuran</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className='p-0'
-                        side='right'
-                        align='start'
-                      >
-                        <Command>
-                          <CommandInput placeholder='Change status...' />
-                          <CommandList>
-                            <CommandEmpty>No results found.</CommandEmpty>
-                            <CommandGroup>
-                              {measurements.map((item: any) => (
-                                <CommandItem
-                                  key={item.id}
-                                  value={item.id.toString()}
-                                  onSelect={(value) => {
-                                    form.setValue(
-                                      'measurementId',
-                                      value as string
-                                    )
-                                    setOpenMeasurement(false)
-                                  }}
-                                >
-                                  <span>{item.name}</span>
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                  )}
-                />
+                          <Command>
+                            <CommandInput placeholder='Change status...' />
+                            <CommandList>
+                              <CommandEmpty>No results found.</CommandEmpty>
+                              <CommandGroup>
+                                {brands.map((brand: any) => (
+                                  <CommandItem
+                                    key={brand.id}
+                                    value={brand.id.toString()}
+                                    onSelect={(value) => {
+                                      form.setValue('brandId', value as string)
+                                      setOpenBrand(false)
+                                    }}
+                                  >
+                                    <img
+                                      src={
+                                        import.meta.env.VITE_BASE_URL +
+                                        '/img/' +
+                                        brand.photoUrl
+                                      }
+                                      className='h-4 w-4 rounded'
+                                    />
+                                    <span>{brand.name}</span>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                  />
 
-                <Controller
-                  name='locationId'
-                  control={form.control}
-                  render={({ field }) => (
-                    <Popover open={openLocation} onOpenChange={setOpenLocation}>
-                      <PopoverTrigger className='w-fit'>
-                        <Button
-                          variant='outline'
-                          size='sm'
-                          className='w-fit justify-start'
-                          type='button'
-                        >
-                          {field.value ? (
-                            <span>
-                              {
-                                locations.find(
-                                  (s: any) => s.id === Number(field.value)
-                                )?.name
-                              }
-                            </span>
-                          ) : (
-                            <span>Pilih lokasi penyimpanan</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className='p-0'
-                        side='right'
-                        align='start'
+                  <Controller
+                    name='measurementId'
+                    control={form.control}
+                    render={({ field }) => (
+                      <Popover
+                        open={openMeasurement}
+                        onOpenChange={setOpenMeasurement}
                       >
-                        <Command>
-                          <CommandInput placeholder='Change status...' />
-                          <CommandList>
-                            <CommandEmpty>No results found.</CommandEmpty>
-                            <CommandGroup>
-                              {locations.map((item: any) => (
-                                <CommandItem
-                                  key={item.id}
-                                  value={item.id.toString()}
-                                  onSelect={(value) => {
-                                    form.setValue('locationId', value as string)
-                                    setOpenLocation(false)
-                                  }}
-                                >
-                                  <span>{item.name}</span>
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                  )}
-                />
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            className='w-[150px] justify-start'
+                            type='button'
+                          >
+                            {field.value ? (
+                              <span>
+                                {
+                                  measurements.find(
+                                    (s: any) => s.id === Number(field.value)
+                                  )?.name
+                                }
+                              </span>
+                            ) : (
+                              <span>Pilih jenis ukuran</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className='p-0'
+                          side='right'
+                          align='start'
+                        >
+                          <Command>
+                            <CommandInput placeholder='Change status...' />
+                            <CommandList>
+                              <CommandEmpty>No results found.</CommandEmpty>
+                              <CommandGroup>
+                                {measurements.map((item: any) => (
+                                  <CommandItem
+                                    key={item.id}
+                                    value={item.id.toString()}
+                                    onSelect={(value) => {
+                                      form.setValue(
+                                        'measurementId',
+                                        value as string
+                                      )
+                                      setOpenMeasurement(false)
+                                    }}
+                                  >
+                                    <span>{item.name}</span>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                  />
+
+                  <Controller
+                    name='locationId'
+                    control={form.control}
+                    render={({ field }) => (
+                      <Popover
+                        open={openLocation}
+                        onOpenChange={setOpenLocation}
+                      >
+                        <PopoverTrigger className='w-fit' asChild>
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            className='w-fit justify-start'
+                            type='button'
+                          >
+                            {field.value ? (
+                              <span>
+                                {
+                                  locations.find(
+                                    (s: any) => s.id === Number(field.value)
+                                  )?.name
+                                }
+                              </span>
+                            ) : (
+                              <span>Pilih lokasi penyimpanan</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className='p-0'
+                          side='right'
+                          align='start'
+                        >
+                          <Command>
+                            <CommandInput placeholder='Change status...' />
+                            <CommandList>
+                              <CommandEmpty>No results found.</CommandEmpty>
+                              <CommandGroup>
+                                {locations.map((item: any) => (
+                                  <CommandItem
+                                    key={item.id}
+                                    value={item.id.toString()}
+                                    onSelect={(value) => {
+                                      form.setValue(
+                                        'locationId',
+                                        value as string
+                                      )
+                                      setOpenLocation(false)
+                                    }}
+                                  >
+                                    <span>{item.name}</span>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                  />
+                </div>
               </div>
-            </div>
-            <div className='rounded-b-md px-4 py-4 bg-[#F4F4F7] border-t border-[#EFF0F2] flex justify-end gap-2 items-center'>
-              <Button
-                type='button'
-                variant='secondary'
-                onClick={() => setOpen(false)}
-              >
-                Batal
-              </Button>
-              <Button>Simpan</Button>
-            </div>
+            </ModalContainer>
           </form>
         </Form>
       </Modal>
