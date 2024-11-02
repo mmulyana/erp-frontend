@@ -9,12 +9,20 @@ type Props = {
   icon?: React.ReactNode
   children: React.ReactNode
   title: string
+  className?: string
 }
-export default function Modal({ open, setOpen, title, icon, children }: Props) {
+export default function Modal({
+  open,
+  setOpen,
+  title,
+  icon,
+  children,
+  className,
+}: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal>
       <DialogContent
-        className='p-0 border-none gap-0 rounded-lg'
+        className={cn('p-0 border-none gap-0 rounded-lg', className)}
         showClose={false}
         close={<CustomClose setOpen={setOpen} />}
       >
