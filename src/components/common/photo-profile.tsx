@@ -1,20 +1,23 @@
 import { useState, useRef, ChangeEvent, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ImageIcon, X } from 'lucide-react'
+import { cn } from '@/utils/cn'
 
 type Props = {
   defaultPreview: string | null
   onUpdate?: (val: File) => void
   onRemove?: () => void
   size?: number
+  className?: string
 }
 export default function PhotoProfile({
   defaultPreview,
   onUpdate,
   onRemove,
   size = 80,
+  className,
 }: Props) {
-  const [preview, setPreview] = useState<string | null>(defaultPreview)
+const [preview, setPreview] = useState<string | null>(defaultPreview)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -73,7 +76,7 @@ export default function PhotoProfile({
           <img
             src={preview}
             alt='Preview'
-            className='rounded-full object-cover'
+            className={cn('rounded-full object-cover', className)}
             style={{
               width: size + 'px',
               height: size + 'px',
@@ -81,7 +84,10 @@ export default function PhotoProfile({
           />
         ) : (
           <div
-            className='rounded-full flex justify-center items-center bg-[#EBECEE]'
+            className={cn(
+              'rounded-full flex justify-center items-center bg-[#EBECEE]',
+              className
+            )}
             style={{
               width: size + 'px',
               height: size + 'px',
