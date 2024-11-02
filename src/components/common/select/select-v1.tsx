@@ -20,14 +20,15 @@ type Props = {
   open?: boolean
   setOpen?: (val: boolean) => void
   name: string
-  preview: (val: string) => React.ReactNode
+  preview?: (val: string) => React.ReactNode
   placeholder?: string
   customPlaceholder?: React.ReactNode
   children: React.ReactNode
   onSearch?: (value: string) => void
   emptyComponent?: (searchValue: string) => React.ReactNode
-  classNameBtn?: string
+  className?: string
   side?: 'top' | 'bottom' | 'right' | 'left'
+  prefix?: React.ReactNode
 }
 
 export default function SelectV1({
@@ -37,8 +38,9 @@ export default function SelectV1({
   children,
   onSearch,
   emptyComponent,
-  classNameBtn,
+  className,
   side,
+  prefix,
 }: Props) {
   const form = useFormContext()
   const [searchValue, setSearchValue] = useState('')
@@ -61,13 +63,14 @@ export default function SelectV1({
               variant='outline'
               className={cn(
                 'w-full justify-between items-center font-normal h-9 text-dark px-2.5',
-                classNameBtn
+                className
               )}
               type='button'
             >
+              {prefix && prefix}
               <span>
                 {field.value
-                  ? preview(field.value)
+                  ? preview?.(field.value)
                   : placeholder ?? 'Pilih data'}
               </span>
               <ChevronsUpDown size={14} className='text-gray-400' />
