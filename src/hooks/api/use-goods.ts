@@ -1,14 +1,12 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { objectToFormData } from '@/utils/ObjectToFormData'
 import { Goods, IApi, IApiPagination } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { createGoods } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
-import { z } from 'zod'
 
 type goodsParams = Pagination & {
   name?: string
@@ -116,14 +114,19 @@ export const useDeleteGoods = () => {
   })
 }
 
-export const goodsSchema = z.object({
-  name: z.string(),
-  minimum: z.string(),
-  qty: z.string(),
-  available: z.string(),
-  locationId: z.string(),
-  measurementId: z.string(),
-  categoryId: z.string(),
-  brandId: z.string(),
-})
-// export type Goods = z.infer<typeof goodsSchema>
+export const useGoodsLowStock = () => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<Goods[]>>> => {
+      return await http(URLS.INVENTORY_GOODS + '/data/low-stock')
+    },
+    queryKey: [KEYS.STOCK_LOW],
+  })
+}
+export const useGoodsOutOfStock = () => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<Goods[]>>> => {
+      return await http(URLS.INVENTORY_GOODS + '/data/out-of-stock')
+    },
+    queryKey: [KEYS.STOCK_OUT],
+  })
+}
