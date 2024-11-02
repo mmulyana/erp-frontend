@@ -76,16 +76,14 @@ export type CreateSupplierEmployee = {
 }
 
 export type CreateTransaction = {
-  goodsId: string
-  qty: string
-  price: string
+  items: {
+    goodsId: string
+    qty: string
+    price?: string
+    type: string
+  }[]
   supplierId?: string
   date: string
-  type: string
-  description?: string
-  projectId?: string
-  isReturned?: string
-  photo?: File | null
 }
 
 export type CreateClient = {
