@@ -168,31 +168,40 @@ export const Editable = memo(
           )
         case 'select':
           return (
-            <Select
-              open={open}
-              onOpenChange={setOpen}
-              onValueChange={(val) => {
-                onUpdate?.(val)
-                onEdit?.(null)
-                containerRef.current?.focus()
-              }}
-            >
-              <SelectTrigger className='h-fit p-0 border-none bg-gray-50 py-1 pr-3'>
-                <Button
-                  variant='ghost'
-                  className={cn('shadow-none h-6 p-0 pl-2', classNameInput)}
-                >
-                  Pilih
-                </Button>
-              </SelectTrigger>
-              <SelectContent>
-                {options?.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className='flex gap-2 items-center'>
+              <Select
+                open={open}
+                onOpenChange={setOpen}
+                onValueChange={(val) => {
+                  onUpdate?.(val)
+                  onEdit?.(null)
+                  containerRef.current?.focus()
+                }}
+              >
+                <SelectTrigger className='h-fit p-0 border-none bg-gray-50 py-1 pr-3'>
+                  <Button
+                    variant='ghost'
+                    className={cn('shadow-none h-6 p-0 pl-2', classNameInput)}
+                  >
+                    Pilih
+                  </Button>
+                </SelectTrigger>
+                <SelectContent>
+                  {options?.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant='ghost'
+                className='h-fit p-0 px-2'
+                onClick={() => onEdit?.(null)}
+              >
+                Batal
+              </Button>
+            </div>
           )
         case 'text':
         default:
