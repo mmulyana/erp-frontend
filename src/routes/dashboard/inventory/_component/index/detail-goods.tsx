@@ -207,7 +207,7 @@ export default function DetailGoods() {
                           name='brandId'
                           className='gap-2'
                           preview={(val) => {
-                            const selectedBrands = brands.find(
+                            const selectedBrands = brands?.find(
                               (item) => item.id === Number(val)
                             )
                             return <span>{selectedBrands?.name || ''}</span>
@@ -256,7 +256,7 @@ export default function DetailGoods() {
             </Tab>
             <Tab label='Laporan'>
               <div className='flex flex-col gap-6 p-4 pb-8'>
-                {transactions.map((item) => (
+                {transactions?.map((item) => (
                   <TransactionsData key={'transaction-' + item.id} {...item} />
                 ))}
               </div>
