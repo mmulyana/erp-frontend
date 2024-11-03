@@ -31,7 +31,7 @@ export const useDetailGoods = ({
     queryFn: async (): Promise<AxiosResponse<IApi<Goods>>> => {
       return await http(`${URLS.INVENTORY_GOODS}/${id}`)
     },
-    queryKey: [KEYS.GOODS, id],
+    queryKey: [KEYS.GOODS_DETAIL, id],
     enabled,
   })
 }
@@ -59,6 +59,8 @@ export const useCreateGoods = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.GOODS] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.STOCK_OUT] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.STOCK_LOW] })
       toast.success(data.data.message)
     },
   })
@@ -93,8 +95,10 @@ export const useUpdateGoods = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.GOODS] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.STOCK_OUT] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.STOCK_LOW] })
       queryClient.invalidateQueries({
-        queryKey: [KEYS.GOODS, data.data.data?.id],
+        queryKey: [KEYS.GOODS_DETAIL, data.data.data?.id],
       })
       toast.success(data.data.message)
     },
@@ -139,7 +143,9 @@ export const useGoodsTransaction = ({
   enabled: boolean
 }) => {
   return useQuery({
-    queryFn: async (): Promise<AxiosResponse<IApiPagination<Transaction[]>>> => {
+    queryFn: async (): Promise<
+      AxiosResponse<IApiPagination<Transaction[]>>
+    > => {
       return await http(URLS.INVENTORY_TRANSACTION, {
         params: {
           goodsId: id,
