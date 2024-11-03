@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CreateTransaction } from '@/utils/types/form'
+import { CreateTransaction, updateTransaction } from '@/utils/types/form'
 import { ApiError, IApi, IApiPagination, Transaction } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { KEYS } from '@/utils/constant/_keys'
@@ -85,7 +85,7 @@ export const useUpdateTransaction = () => {
       payload,
     }: {
       id: number
-      payload: Partial<CreateTransaction>
+      payload: Partial<updateTransaction>
     }): Promise<AxiosResponse<IApi<Transaction>>> => {
       return await http.patch(`${URLS.INVENTORY_TRANSACTION}/${id}`, payload)
     },
