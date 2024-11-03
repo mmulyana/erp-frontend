@@ -22,6 +22,7 @@ export const KEYS = {
   CLIENT_COMPANY: 'client-company',
   GOODS: 'goods',
   TRANSACTION: 'transaction',
+  TRANSACTION_DETAIL: 'transaction-detail',
   SUPPLIER: 'supplier',
   SUPPLIER_LABEL: 'supplier-label',
   SUPPLIER_EMPLOYEE: 'supplier-employee',
@@ -38,4 +39,5 @@ export const KEYS = {
   TRANSACTION_BORROWED: 'transaction-borrowed',
   STOCK_LOW: 'stock-low',
   STOCK_OUT: 'stock-out',
+  TRANSACTION_BY_GOODS: 'transaction-by-goods',
 }
