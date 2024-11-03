@@ -14,8 +14,8 @@ import { PATH } from '@/utils/constant/_paths'
 import { Goods } from '@/utils/types/api'
 import { Package } from 'lucide-react'
 import { useSetAtom } from 'jotai'
-import { useMemo } from 'react'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { useApiData } from '@/hooks/use-api-data'
 
 // import { ScrollArea } from '@/components/ui/scroll-area'
 // import CardActivity from './_component/index/card-activity'
@@ -36,17 +36,7 @@ export default function Index() {
   const setSelected = useSetAtom(selectedGoodAtom)
   const setOpen = useSetAtom(dialogGoodAtom)
 
-  const qGoods = useGoods()
-  const data = useMemo(
-    () => qGoods.data?.data?.data,
-    [qGoods.isLoading, qGoods.isFetching, qGoods.data]
-  )
-
-  // const queryTransaction = useTransaction()
-  // const transactions = useMemo(
-  //   () => queryTransaction.data?.data?.data || [],
-  //   [queryTransaction.isLoading, queryTransaction.data, queryTransaction.is]
-  // )
+  const { data, isLoading } = useApiData(useGoods())
 
   // START OF COLUMNS
   const columns: ColumnDef<Goods>[] = [
@@ -88,12 +78,12 @@ export default function Index() {
     {
       id: 'brand',
       header: 'Merek',
-      cell: ({ row }) => <p>{row.original.brand.name}</p>,
+      cell: ({ row }) => <p>{row.original?.brand?.name}</p>,
     },
     {
       id: 'measurement',
       header: 'Satuan',
-      cell: ({ row }) => <p>{row.original.measurement.name}</p>,
+      cell: ({ row }) => <p>{row.original?.measurement?.name}</p>,
     },
     {
       accessorKey: 'qty',
@@ -106,7 +96,7 @@ export default function Index() {
     {
       id: 'location',
       header: 'Lokasi',
-      cell: ({ row }) => <p>{row.original.location.name}</p>,
+      cell: ({ row }) => <p>{row.original?.location?.name}</p>,
     },
     {
       id: 'action',
@@ -143,7 +133,7 @@ export default function Index() {
               data={data || []}
               withLoading
               withPagination
-              isLoading={qGoods.isLoading}
+              isLoading={isLoading}
               styleFooter='border-t border-b-0'
             />
           </div>
