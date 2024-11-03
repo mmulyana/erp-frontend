@@ -12,7 +12,7 @@ export default function DropdownEdit({
   className,
 }: React.PropsWithChildren & { className?: string }) {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         asChild
         className='border-transparent hover:border-gray-200'
