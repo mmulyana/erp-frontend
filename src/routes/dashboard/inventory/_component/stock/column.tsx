@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useSetAtom } from 'jotai'
 import { dialogDetailTransaction } from './detail-transaction'
+import { dialogDeleteTransaction } from '../../stock'
 
 export const column: ColumnDef<Transaction>[] = [
   {
@@ -77,6 +78,8 @@ export const column: ColumnDef<Transaction>[] = [
     id: 'action',
     cell: ({ row }) => {
       const setSelected = useSetAtom(dialogDetailTransaction)
+      const setSelectedDelete = useSetAtom(dialogDeleteTransaction)
+
       return (
         <DropdownEdit className='flex justify-end'>
           <DropdownMenuGroup>
@@ -91,7 +94,15 @@ export const column: ColumnDef<Transaction>[] = [
             >
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem className='rounded-none text-sm text-dark/70 cursor-pointer'>
+            <DropdownMenuItem
+              className='rounded-none text-sm text-dark/70 cursor-pointer'
+              onClick={() => {
+                setSelectedDelete({
+                  id: row.original.id,
+                  open: true,
+                })
+              }}
+            >
               Hapus
             </DropdownMenuItem>
           </DropdownMenuGroup>
