@@ -1,5 +1,9 @@
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
-import { useDetailGoods, useUpdateGoods } from '@/hooks/api/use-goods'
+import {
+  useDetailGoods,
+  useGoodsTransaction,
+  useUpdateGoods,
+} from '@/hooks/api/use-goods'
 import PhotoProfile from '@/components/common/photo-profile'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Editable } from '@/components/common/editable'
@@ -7,7 +11,14 @@ import { useCallback, useMemo, useState } from 'react'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { createGoods } from '@/utils/types/form'
 import { Button } from '@/components/ui/button'
-import { Ellipsis } from 'lucide-react'
+import {
+  Ellipsis,
+  PackageCheck,
+  PackageMinus,
+  PackageOpen,
+  PackagePlus,
+  UserCircle,
+} from 'lucide-react'
 import { atom, useAtom } from 'jotai'
 import {
   DropdownMenu,
@@ -17,6 +28,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import DataSheet from '@/components/common/data-sheet'
+import { useInventoryData } from '../../_hook/use-inventory-data'
+import SelectV1 from '@/components/common/select/select-v1'
+import { CommandItem } from '@/components/ui/command'
+import { Tab, Tabs } from '@/components/tab'
+import { useApiData } from '@/hooks/use-api-data'
+import { Transaction } from '@/utils/types/api'
+import { format } from 'date-fns'
+import { formatToRupiah } from '@/utils/formatCurrency'
 
 export const selectedGoodAtom = atom<{
   open: boolean
@@ -27,11 +46,18 @@ export default function DetailGoods() {
   const [selected, setSelected] = useAtom(selectedGoodAtom)
   const { mutate: update } = useUpdateGoods()
 
+  const { measurementOptions, categoryOptions, locationOptions, brands } =
+    useInventoryData()
+
   const { data, isLoading } = useDetailGoods({
     id: selected?.id,
     enabled: selected?.open || false,
   })
   const good = useMemo(() => data?.data.data, [data, isLoading])
+
+  const { data: transactions } = useApiData(
+    useGoodsTransaction({ enabled: selected?.open || false, id: selected?.id })
+  )
 
   const [edit, setEdit] = useState<string | null>('')
   const isEdit = useMemo(() => edit, [edit])
@@ -54,14 +80,14 @@ export default function DetailGoods() {
 
   return (
     <Sheet open={selected?.open} onOpenChange={() => onClose()} modal>
-      <SheetContent className='max-w-[512px] p-0'>
+      <SheetContent className='max-w-[512px] p-0 bg-[#FBFBFB]'>
         <SheetTitle>
-          <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
+          <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4 bg-white'>
             <p className='text-sm text-dark font-normal'>Detail Barang</p>
           </div>
         </SheetTitle>
         <ScrollArea className='h-[calc(100vh-48px)]'>
-          <div className='mt-4 px-4 pb-8'>
+          <div className='pt-4 px-4 pb-8 bg-white'>
             <PhotoProfile
               defaultPreview={
                 good?.photoUrl ? BASE_URL + '/img/' + good?.photoUrl : null
@@ -99,21 +125,255 @@ export default function DetailGoods() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
-            <div className='flex flex-col gap-4 w-fit mt-2'>
+            <div className='space-y-4'>
               <DataSheet>
-                <p className='text-dark/50'>Minimum</p>
-                <Editable
-                  isEdit={isEdit}
-                  onEdit={onEdit}
-                  keyData='minimum'
-                  defaultData={good?.minimum}
-                />
+                <p className='text-dark/50'>Kuantitas</p>
+                <p className='text-dark'>{good?.qty}</p>
+              </DataSheet>
+              <DataSheet>
+                <p className='text-dark/50'>Tersedia</p>
+                <p className='text-dark'>{good?.available}</p>
               </DataSheet>
             </div>
           </div>
+
+          <Tabs className='bg-white'>
+            <Tab label='Umum'>
+              <div className='flex flex-col gap-4 w-fit p-4 pb-8'>
+                <DataSheet>
+                  <p className='text-dark/50'>Stok Minimum</p>
+                  <Editable
+                    isEdit={isEdit}
+                    onEdit={onEdit}
+                    keyData='minimum'
+                    defaultData={good?.minimum}
+                    onUpdate={(val) => handleUpdate({ minimum: Number(val) })}
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Ukuran</p>
+                  <Editable
+                    isEdit={isEdit}
+                    onEdit={onEdit}
+                    keyData='measurement'
+                    defaultData={good?.measurement?.name}
+                    type='select'
+                    options={measurementOptions}
+                    onUpdate={(val) =>
+                      handleUpdate({ measurementId: Number(val) })
+                    }
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Kategori</p>
+                  <Editable
+                    isEdit={isEdit}
+                    onEdit={onEdit}
+                    keyData='category'
+                    defaultData={good?.category?.name}
+                    type='select'
+                    options={categoryOptions}
+                    onUpdate={(val) =>
+                      handleUpdate({ categoryId: Number(val) })
+                    }
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Lokasi</p>
+                  <Editable
+                    isEdit={isEdit}
+                    onEdit={onEdit}
+                    keyData='location'
+                    defaultData={good?.location?.name}
+                    type='select'
+                    options={locationOptions}
+                    onUpdate={(val) =>
+                      handleUpdate({ locationId: Number(val) })
+                    }
+                  />
+                </DataSheet>
+                <DataSheet>
+                  <p className='text-dark/50'>Merek</p>
+                  <Editable
+                    isEdit={isEdit}
+                    onEdit={onEdit}
+                    keyData='brand'
+                    defaultData={good?.brand?.name}
+                    type='custom'
+                    customEdit={
+                      <div className='flex gap-2 items-center'>
+                        <SelectV1
+                          useFormMode={false}
+                          name='brandId'
+                          className='gap-2'
+                          preview={(val) => {
+                            const selectedBrands = brands.find(
+                              (item) => item.id === Number(val)
+                            )
+                            return <span>{selectedBrands?.name || ''}</span>
+                          }}
+                        >
+                          {brands?.map((item) => (
+                            <CommandItem
+                              key={item.id}
+                              className='hover:bg-red-400'
+                              value={String(item.id)}
+                              onSelect={(val: string) => {
+                                handleUpdate({ brandId: Number(val) })
+                              }}
+                            >
+                              <div className='px-2 py-0.5 flex gap-1 items-center'>
+                                {item.photoUrl ? (
+                                  <img
+                                    src={BASE_URL + '/img/' + item.photoUrl}
+                                    className='w-5 h-5 rounded-full object-center'
+                                  />
+                                ) : (
+                                  <div className='w-5 h-5 rounded-full flex items-center justify-center'>
+                                    <UserCircle size={14} />
+                                  </div>
+                                )}
+                                {item.name}
+                              </div>
+                            </CommandItem>
+                          ))}
+                        </SelectV1>
+                        <Button
+                          variant='ghost'
+                          className='h-fit p-0 px-2'
+                          onClick={() => onEdit(null)}
+                        >
+                          Batal
+                        </Button>
+                      </div>
+                    }
+                    onUpdate={(val) =>
+                      handleUpdate({ locationId: Number(val) })
+                    }
+                  />
+                </DataSheet>
+              </div>
+            </Tab>
+            <Tab label='Laporan'>
+              <div className='flex flex-col gap-6 p-4 pb-8'>
+                {transactions.map((item) => (
+                  <TransactionsData key={'transaction-' + item.id} {...item} />
+                ))}
+              </div>
+            </Tab>
+          </Tabs>
         </ScrollArea>
       </SheetContent>
     </Sheet>
+  )
+}
+
+export function TransactionsData({
+  date,
+  good,
+  type,
+  qty,
+  supplier,
+  price,
+  project,
+}: Transaction) {
+  if (type === 'borrowed') {
+    return (
+      <div className='flex gap-2 items-start'>
+        <div className='w-[40px] flex-shrink-0'>
+          <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
+            <PackageOpen size={18} className='text-purple-600' />
+          </div>
+        </div>
+        <div className='flex-grow flex flex-col justify-center'>
+          <p className='text-dark/70'>
+            <span className='text-dark font-medium'>
+              {qty} {good.measurement?.name} {good.name}
+            </span>
+            dipinjam {project && 'untuk proyek '}
+            <span className='text-dark font-medium'>{project?.name}</span>
+          </p>
+          <p className='text-dark/80 mt-0.5'>{format(date, 'dd MMM yyyy')}</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (type === 'opname') {
+    return (
+      <div className='flex gap-2 items-start'>
+        <div className='w-[40px] flex-shrink-0'>
+          <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
+            <PackageCheck size={18} className='text-green-primary/70' />
+          </div>
+        </div>
+        <div className='flex-grow flex flex-col justify-center'>
+          <p className='text-dark/70'>
+            Berhasil menyesuaikan stock{' '}
+            <span className='text-dark font-medium'>{good.name}</span> menjadi{' '}
+            <span className='text-dark font-medium'>
+              {qty} {good.measurement?.name}
+            </span>
+          </p>
+          <p className='text-dark/80 mt-0.5'>{format(date, 'dd MMM yyyy')}</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (type === 'out') {
+    return (
+      <div className='flex gap-2 items-start'>
+        <div className='w-[40px] flex-shrink-0'>
+          <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
+            <PackageMinus size={18} className='text-red-primary/70' />
+          </div>
+        </div>
+        <div className='flex-grow flex flex-col justify-center'>
+          <p className='text-dark/70'>
+            Stok berkurang:{' '}
+            <span className='text-dark font-medium'>
+              {qty} {good.measurement?.name} {good.name}
+            </span>
+            {price && (
+              <>
+                {' '}
+                dengan harga{' '}
+                <span className='text-dark font-medium'>
+                  {formatToRupiah(Number(price))}
+                </span>
+              </>
+            )}
+          </p>
+          <p className='text-dark/80 mt-0.5'>{format(date, 'dd MMM yyyy')}</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className='flex gap-2 items-start'>
+      <div className='w-[40px] flex-shrink-0'>
+        <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
+          <PackagePlus size={18} className='text-blue-primary/70' />
+        </div>
+      </div>
+      <div className='flex-grow flex flex-col justify-center'>
+        <p className='text-dark/70'>
+          Stok bertambah:{' '}
+          <span className='text-dark font-medium'>
+            {qty} {good.measurement?.name} {good.name}
+          </span>{' '}
+          ke{' '}
+          <span className='text-dark font-medium'>{good.location?.name}</span>{' '}
+          dari <span className='text-dark font-medium'>{supplier.name}</span>{' '}
+          dengan harga{' '}
+          <span className='text-dark font-medium'>
+            {formatToRupiah(Number(price))}
+          </span>
+        </p>
+        <p className='text-dark/80 mt-0.5'>{format(date, 'dd MMM yyyy')}</p>
+      </div>
+    </div>
   )
 }
