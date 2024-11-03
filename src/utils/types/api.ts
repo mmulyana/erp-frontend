@@ -224,11 +224,9 @@ export type Transaction = {
   goodsId: number
   qty: number
   price: string
-  photoUrl?: string
-  supplierId: 1
+  supplierId: number
   date: string
-  type: 'in' | 'out' | 'borrowed' | 'returned' | 'opname'
-  description?: string
+  type: 'in' | 'out' | 'borrowed' | 'opname'
   projectId?: number
   isReturned?: boolean
   project?: Partial<Project>
