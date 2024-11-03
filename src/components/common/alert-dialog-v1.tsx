@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { buttonVariants } from '../ui/button'
 
 type TProps = {
   open?: boolean
@@ -47,6 +48,7 @@ export default function AlertDialogV1({
             {cancelText ?? 'Batal'}
           </AlertDialogCancel>
           <AlertDialogAction
+            className={buttonVariants({ variant: 'destructive' })}
             onClick={() => {
               if (onConfirm) {
                 onConfirm()
