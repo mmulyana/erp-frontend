@@ -6,6 +6,8 @@ import http from '@/utils/http'
 import { CreateSupplier } from '@/utils/types/form'
 import { objectToFormData } from '@/utils/ObjectToFormData'
 import { toast } from 'sonner'
+import { AxiosResponse } from 'axios'
+import { IApi, Supplier } from '@/utils/types/api'
 
 type supplierParams = Pagination & {
   name?: string
@@ -13,7 +15,7 @@ type supplierParams = Pagination & {
 }
 export const useSupplier = (params?: supplierParams) => {
   return useQuery({
-    queryFn: async () => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Supplier[]>>> => {
       return await http.request({
         method: 'GET',
         url: URLS.INVENTORY_SUPPLIER,
