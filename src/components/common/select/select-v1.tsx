@@ -17,8 +17,6 @@ import {
 import { cn } from '@/utils/cn'
 
 type Props = {
-  open?: boolean
-  setOpen?: (val: boolean) => void
   name: string
   preview?: (val: string) => React.ReactNode
   placeholder?: string
@@ -29,10 +27,13 @@ type Props = {
   className?: string
   side?: 'top' | 'bottom' | 'right' | 'left'
   prefix?: React.ReactNode
+  value?: string
+  onChange?: (value: string) => void
+  useFormMode?: boolean
 }
 
-export default function SelectV1({
-  name,
+const SelectContent = ({
+  value,
   preview,
   placeholder,
   children,
@@ -41,8 +42,10 @@ export default function SelectV1({
   className,
   side,
   prefix,
-}: Props) {
-  const form = useFormContext()
+}: Omit<Props, 'name' | 'useFormMode'> & {
+  value: string
+  onChange: (value: string) => void
+}) => {
   const [searchValue, setSearchValue] = useState('')
 
   const handleSearch = (value: string) => {
@@ -53,47 +56,68 @@ export default function SelectV1({
   }
 
   return (
-    <Controller
-      name={name}
-      control={form.control}
-      render={({ field }) => (
-        <Popover modal>
-          <PopoverTrigger asChild>
-            <Button
-              variant='outline'
-              className={cn(
-                'w-full justify-between items-center font-normal h-9 text-dark px-2.5',
-                className
-              )}
-              type='button'
-            >
-              {prefix && prefix}
-              <span>
-                {field.value
-                  ? preview?.(field.value)
-                  : placeholder ?? 'Pilih data'}
-              </span>
-              <ChevronsUpDown size={14} className='text-gray-400' />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className='p-0' side={side || 'bottom'} align='start'>
-            <Command>
-              <CommandInput
-                placeholder='Search...'
-                onValueChange={handleSearch}
-              />
-              <CommandList>
-                <CommandEmpty>
-                  {emptyComponent
-                    ? emptyComponent(searchValue)
-                    : `No results found for "${searchValue}"`}
-                </CommandEmpty>
-                <CommandGroup>{children}</CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-      )}
+    <Popover modal>
+      <PopoverTrigger asChild>
+        <Button
+          variant='outline'
+          className={cn(
+            'w-full justify-between items-center font-normal h-10 text-dark px-2.5',
+            className
+          )}
+          type='button'
+        >
+          {prefix && prefix}
+          <span>{value ? preview?.(value) : placeholder ?? 'Pilih data'}</span>
+          <ChevronsUpDown size={14} className='text-gray-400' />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className='p-0' side={side || 'bottom'} align='start'>
+        <Command>
+          <CommandInput placeholder='Search...' onValueChange={handleSearch} />
+          <CommandList>
+            <CommandEmpty>
+              {emptyComponent
+                ? emptyComponent(searchValue)
+                : `No results found for "${searchValue}"`}
+            </CommandEmpty>
+            <CommandGroup>{children}</CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+export default function SelectV1({
+  name,
+  value: propValue,
+  onChange: propOnChange,
+  useFormMode = true,
+  ...rest
+}: Props) {
+  const formContext = useFormContext()
+
+  if (useFormMode && formContext) {
+    return (
+      <Controller
+        name={name}
+        control={formContext.control}
+        render={({ field }) => (
+          <SelectContent
+            value={field.value}
+            onChange={field.onChange}
+            {...rest}
+          />
+        )}
+      />
+    )
+  }
+
+  return (
+    <SelectContent
+      value={propValue || ''}
+      onChange={propOnChange || (() => {})}
+      {...rest}
     />
   )
 }
