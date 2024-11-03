@@ -11,7 +11,7 @@ export default function CardHighlight() {
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-3 rounded-[8px] border border-line h-fit'>
-      <div className='py-4 px-6 w-full h-full'>
+      <div className='py-4 px-6 w-full h-full border-b md:border-none border-line'>
         <div className='h-8 w-8 rounded-full bg-green-primary/10 flex justify-center items-center'>
           <Package className='w-5 h-5 text-green-primary' />
         </div>
@@ -24,7 +24,7 @@ export default function CardHighlight() {
         </div>
       </div>
 
-      <div className='py-4 px-6 w-full h-full border-l border-line'>
+      <div className='py-4 px-6 w-full h-full border-b md:border-l border-line'>
         <div className='h-8 w-8 rounded-full bg-[#E09F54]/10 flex justify-center items-center'>
           <Package className='w-5 h-5 text-[#E09F54]' />
         </div>
@@ -36,7 +36,7 @@ export default function CardHighlight() {
           </div>
         </div>
       </div>
-      <div className='py-4 px-6 w-full h-full border-l border-line'>
+      <div className='py-4 px-6 w-full h-full border-none md:border-l border-line'>
         <div className='h-8 w-8 rounded-full bg-[#CE3E3E]/10 flex justify-center items-center'>
           <Package className='w-5 h-5 text-[#CE3E3E]' />
         </div>
