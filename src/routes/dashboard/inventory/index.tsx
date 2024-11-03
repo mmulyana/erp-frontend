@@ -53,35 +53,37 @@ export default function Index() {
     {
       accessorKey: 'name',
       header: 'Nama',
-      cell: ({ row }) => (
-        <Overlay
-          className='w-full'
-          overlay={
-            <Button
-              className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-              onClick={() => {
-                setSelected({
-                  id: row.original.id,
-                  open: true,
-                })
-              }}
-            >
-              Lihat
-            </Button>
-          }
-        >
-          <p
-            onClick={() => {
-              setSelected({
-                id: row.original.id,
-                open: true,
-              })
-            }}
+      cell: ({ row }) => {
+        const { name, id } = row.original
+        return (
+          <Overlay
+            className='w-fit pr-14'
+            overlay={
+              <button
+                onClick={() => {
+                  setSelected({ id, open: true })
+                }}
+                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+              >
+                Lihat
+              </button>
+            }
           >
-            {row.original.name}
-          </p>
-        </Overlay>
-      ),
+            <div className='hover:text-dark'>
+              <button
+                onClick={() => {
+                  setSelected({ id, open: true })
+                }}
+                className='justify-start flex'
+              >
+                <span className='break-words max-w-[120px] text-left'>
+                  {name}
+                </span>
+              </button>
+            </div>
+          </Overlay>
+        )
+      },
     },
     {
       id: 'brand',
