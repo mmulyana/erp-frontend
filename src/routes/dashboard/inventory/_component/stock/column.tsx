@@ -10,6 +10,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
+import { useSetAtom } from 'jotai'
+import { dialogDetailTransaction } from './detail-transaction'
 
 export const column: ColumnDef<Transaction>[] = [
   {
@@ -73,11 +75,20 @@ export const column: ColumnDef<Transaction>[] = [
   },
   {
     id: 'action',
-    cell: () => {
+    cell: ({ row }) => {
+      const setSelected = useSetAtom(dialogDetailTransaction)
       return (
         <DropdownEdit className='flex justify-end'>
           <DropdownMenuGroup>
-            <DropdownMenuItem className='rounded-none text-sm text-dark/70 cursor-pointer'>
+            <DropdownMenuItem
+              className='rounded-none text-sm text-dark/70 cursor-pointer'
+              onClick={() => {
+                setSelected({
+                  id: row.original.id,
+                  open: true,
+                })
+              }}
+            >
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem className='rounded-none text-sm text-dark/70 cursor-pointer'>
