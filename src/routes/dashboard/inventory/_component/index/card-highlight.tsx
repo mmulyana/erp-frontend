@@ -18,7 +18,7 @@ export default function CardHighlight() {
         <div className='mt-2.5 flex flex-col gap-3.5'>
           <p className='text-sm text-dark/50'>Stok dipinjam</p>
           <div className='w-full flex justify-between items-center'>
-            <p className='text-lg font-medium text-dark'>{borroweds.length}</p>
+            <p className='text-lg font-medium text-dark'>{borroweds?.length}</p>
             <ButtonLink />
           </div>
         </div>
@@ -31,7 +31,7 @@ export default function CardHighlight() {
         <div className='mt-2.5 flex flex-col gap-3.5'>
           <p className='text-sm text-dark/50'>Stok Hampir Habis</p>
           <div className='w-full flex justify-between items-center'>
-            <p className='text-lg font-medium text-dark'>{lowStocks.length}</p>
+            <p className='text-lg font-medium text-dark'>{lowStocks?.length}</p>
             <ButtonLink />
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function CardHighlight() {
           <p className='text-sm text-dark/50'>Stok Habis</p>
           <div className='w-full flex justify-between items-center'>
             <p className='text-lg font-medium text-dark'>
-              {outOfStocks.length}
+              {outOfStocks?.length}
             </p>
             <ButtonLink />
           </div>
