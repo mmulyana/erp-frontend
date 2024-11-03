@@ -1,7 +1,7 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { Goods, IApi, IApiPagination } from '@/utils/types/api'
+import { Goods, IApi, IApiPagination, Transaction } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { createGoods } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -128,5 +128,25 @@ export const useGoodsOutOfStock = () => {
       return await http(URLS.INVENTORY_GOODS + '/data/out-of-stock')
     },
     queryKey: [KEYS.STOCK_OUT],
+  })
+}
+
+export const useGoodsTransaction = ({
+  id,
+  enabled,
+}: {
+  id?: number | null
+  enabled: boolean
+}) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<Transaction[]>>> => {
+      return await http(URLS.INVENTORY_TRANSACTION, {
+        params: {
+          goodsId: id,
+        },
+      })
+    },
+    queryKey: [KEYS.TRANSACTION_BY_GOODS, id],
+    enabled,
   })
 }
