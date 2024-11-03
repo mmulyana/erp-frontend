@@ -64,8 +64,8 @@ export default function StockOpname() {
   const form = useForm<CreateTransaction>({
     defaultValues: {
       date: '',
-      supplierId: '',
-      items: [{ goodsId: '', qty: '', price: '', type: 'opname' }],
+      // supplierId: null,
+      items: [{ goodsId: null, qty: null, price: null, type: 'opname' }],
     },
   })
 
@@ -91,7 +91,7 @@ export default function StockOpname() {
       <div className='rounded-lg border overflow-hidden'>
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
-          columns={column.filter(item => item.id !== 'supplier')}
+          columns={column.filter((item) => item.id !== 'supplier')}
           data={data || []}
           isLoading={qTransaction.isLoading}
           withLoading
@@ -124,7 +124,7 @@ export default function StockOpname() {
                   </div>
                   <div className='p-4 bg-[#F8FAFC] rounded-b-lg'>
                     <div className='grid grid-cols-3 gap-4'>
-                      <div className='flex flex-col gap-3'>
+                      <div className='flex flex-col gap-3 col-span-2'>
                         <FormLabel>Barang</FormLabel>
                         <Select
                           name={`items.${index}.goodsId`}
@@ -143,7 +143,10 @@ export default function StockOpname() {
                               key={item.id}
                               value={item.id.toString()}
                               onSelect={(value) => {
-                                form.setValue(`items.${index}.goodsId`, value)
+                                form.setValue(
+                                  `items.${index}.goodsId`,
+                                  Number(value)
+                                )
                               }}
                             >
                               <span>{item.name}</span>
@@ -158,7 +161,16 @@ export default function StockOpname() {
                         name={`items.${index}.qty`}
                         render={({ field }) => (
                           <div className='relative'>
-                            <Input type='number' {...field} className='h-9' />
+                            <Input
+                              {...field}
+                              value={field.value ?? ''}
+                              onChange={(e) => {
+                                const value = e.target.value
+                                field.onChange(
+                                  value === '' ? null : Number(value)
+                                )
+                              }}
+                            />
                             {field.value && (
                               <div className='absolute top-0 right-0 bg-gray-100 h-full px-2 rounded-r-lg flex items-center border text-dark/50 capitalize text-sm'>
                                 {
@@ -175,15 +187,6 @@ export default function StockOpname() {
                           </div>
                         )}
                       />
-
-                      <FormField
-                        label='Harga jual'
-                        control={form.control}
-                        name={`items.${index}.price`}
-                        render={({ field }) => (
-                          <Input type='number' {...field} className='h-9' />
-                        )}
-                      />
                     </div>
                   </div>
                   {index === fields.length - 1 && (
@@ -195,10 +198,10 @@ export default function StockOpname() {
                         className='pl-2.5 pr-4 text-slate-600 font-normal gap-1'
                         onClick={() =>
                           append({
-                            goodsId: '',
-                            qty: '',
-                            price: '',
-                            type: 'out',
+                            goodsId: null,
+                            qty: null,
+                            price: null,
+                            type: 'opname',
                           })
                         }
                       >

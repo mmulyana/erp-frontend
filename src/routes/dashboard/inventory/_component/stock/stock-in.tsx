@@ -43,8 +43,8 @@ export default function StockIn() {
   const form = useForm<CreateTransaction>({
     defaultValues: {
       date: '',
-      supplierId: '',
-      items: [{ goodsId: '', qty: '', price: '', type: 'in' }],
+      supplierId: null,
+      items: [{ goodsId: null, qty: null, price: null, type: 'in' }],
     },
   })
 
@@ -122,7 +122,10 @@ export default function StockIn() {
                               key={item.id}
                               value={item.id.toString()}
                               onSelect={(value) => {
-                                form.setValue(`items.${index}.goodsId`, value)
+                                form.setValue(
+                                  `items.${index}.goodsId`,
+                                  Number(value)
+                                )
                               }}
                             >
                               <span>{item.name}</span>
@@ -137,7 +140,17 @@ export default function StockIn() {
                         name={`items.${index}.qty`}
                         render={({ field }) => (
                           <div className='relative'>
-                            <Input type='number' {...field} className='h-9' />
+                            <Input
+                              type='number'
+                              {...field}
+                              value={field.value ?? ''}
+                              onChange={(e) => {
+                                const value = e.target.value
+                                field.onChange(
+                                  value === '' ? null : Number(value)
+                                )
+                              }}
+                            />
                             {field.value && (
                               <div className='absolute top-0 right-0 bg-gray-100 h-full px-2 rounded-r-lg flex items-center border text-dark/50 capitalize text-sm'>
                                 {
@@ -160,7 +173,19 @@ export default function StockIn() {
                         control={form.control}
                         name={`items.${index}.price`}
                         render={({ field }) => (
-                          <Input type='number' {...field} className='h-9' />
+                          <div className='relative'>
+                            <Input
+                              type='number'
+                              {...field}
+                              value={field.value ?? ''}
+                              onChange={(e) => {
+                                const value = e.target.value
+                                field.onChange(
+                                  value === '' ? null : Number(value)
+                                )
+                              }}
+                            />
+                          </div>
                         )}
                       />
                     </div>
@@ -174,9 +199,9 @@ export default function StockIn() {
                         className='pl-2.5 pr-4 text-slate-600 font-normal gap-1'
                         onClick={() =>
                           append({
-                            goodsId: '',
-                            qty: '',
-                            price: '',
+                            goodsId: null,
+                            qty: null,
+                            price: null,
                             type: 'in',
                           })
                         }
@@ -210,7 +235,7 @@ export default function StockIn() {
                         key={item.id}
                         value={item.id.toString()}
                         onSelect={(value) => {
-                          form.setValue('supplierId', value)
+                          form.setValue('supplierId', Number(value))
                         }}
                       >
                         <span>{item.name}</span>
@@ -224,7 +249,7 @@ export default function StockIn() {
                   control={form.control}
                   name='date'
                   render={({ field }) => (
-                    <Input type='date' {...field} className='h-9 block' />
+                    <Input type='date' {...field} className='block' />
                   )}
                 />
               </div>

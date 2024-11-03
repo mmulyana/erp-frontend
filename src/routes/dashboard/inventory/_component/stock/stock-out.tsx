@@ -64,8 +64,8 @@ export default function StockOut() {
   const form = useForm<CreateTransaction>({
     defaultValues: {
       date: '',
-      supplierId: '',
-      items: [{ goodsId: '', qty: '', price: '', type: 'out' }],
+      supplierId: null,
+      items: [{ goodsId: null, qty: null, price: null, type: 'out' }],
     },
   })
 
@@ -91,7 +91,7 @@ export default function StockOut() {
       <div className='rounded-lg border overflow-hidden'>
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
-          columns={column.filter(item => item.id !== 'supplier')}
+          columns={column.filter((item) => item.id !== 'supplier')}
           data={data || []}
           isLoading={qTransaction.isLoading}
           withLoading
@@ -143,7 +143,10 @@ export default function StockOut() {
                               key={item.id}
                               value={item.id.toString()}
                               onSelect={(value) => {
-                                form.setValue(`items.${index}.goodsId`, value)
+                                form.setValue(
+                                  `items.${index}.goodsId`,
+                                  Number(value)
+                                )
                               }}
                             >
                               <span>{item.name}</span>
@@ -158,7 +161,17 @@ export default function StockOut() {
                         name={`items.${index}.qty`}
                         render={({ field }) => (
                           <div className='relative'>
-                            <Input type='number' {...field} className='h-9' />
+                            <Input
+                              type='number'
+                              {...field}
+                              value={field.value ?? ''}
+                              onChange={(e) => {
+                                const value = e.target.value
+                                field.onChange(
+                                  value === '' ? null : Number(value)
+                                )
+                              }}
+                            />
                             {field.value && (
                               <div className='absolute top-0 right-0 bg-gray-100 h-full px-2 rounded-r-lg flex items-center border text-dark/50 capitalize text-sm'>
                                 {
@@ -181,7 +194,16 @@ export default function StockOut() {
                         control={form.control}
                         name={`items.${index}.price`}
                         render={({ field }) => (
-                          <Input type='number' {...field} className='h-9' />
+                          <Input
+                            {...field}
+                            value={field.value ?? ''}
+                            onChange={(e) => {
+                              const value = e.target.value
+                              field.onChange(
+                                value === '' ? null : Number(value)
+                              )
+                            }}
+                          />
                         )}
                       />
                     </div>
@@ -195,9 +217,9 @@ export default function StockOut() {
                         className='pl-2.5 pr-4 text-slate-600 font-normal gap-1'
                         onClick={() =>
                           append({
-                            goodsId: '',
-                            qty: '',
-                            price: '',
+                            goodsId: null,
+                            qty: null,
+                            price: null,
                             type: 'out',
                           })
                         }
