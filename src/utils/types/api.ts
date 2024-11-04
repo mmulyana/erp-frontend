@@ -5,11 +5,15 @@ export interface IApi<T = void> {
   message: string
 }
 
-export interface IApiPagination<T = void> extends IApi<T> {
-  total: number
-  page: number
-  limit: number
-  total_pages: number
+export interface IApiPagination<T = void> {
+  data: {
+    total: number
+    page: number
+    limit: number
+    total_pages: number
+    data: T
+  }
+  message: string
 }
 
 export interface ApiError {
