@@ -20,7 +20,7 @@ export const useSupplierEmployee = (params: supplierParams) => {
         params,
       })
     },
-    queryKey: [KEYS.SUPPLIER_EMPLOYEE, params.id],
+    queryKey: [KEYS.SUPPLIER_EMPLOYEE, params.id, params.name],
     enabled: params.enabled,
   })
 }
