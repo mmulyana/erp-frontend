@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CreateTransaction, updateTransaction } from '@/utils/types/form'
-import { ApiError, IApi, IApiPagination, Transaction } from '@/utils/types/api'
+import { ApiError, IApi, Transaction } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
@@ -14,7 +14,7 @@ type Params = Pagination & {
 export const useTransaction = (params?: Params) => {
   return useQuery({
     queryFn: async (): Promise<
-      AxiosResponse<IApiPagination<Transaction[]>>
+      AxiosResponse<IApi<Transaction[]>>
     > => {
       return await http.request({
         method: 'GET',
