@@ -147,6 +147,7 @@ export default function DetailGoods() {
                     onEdit={onEdit}
                     keyData='minimum'
                     defaultData={good?.minimum}
+                    customData={(val) => <p>{val}</p>}
                     onUpdate={(val) => handleUpdate({ minimum: Number(val) })}
                   />
                 </DataSheet>
