@@ -21,6 +21,7 @@ export const KEYS = {
   CLIENT: 'client',
   CLIENT_COMPANY: 'client-company',
   GOODS: 'goods',
+  GOODS_ALL: 'goods-all',
   GOODS_DETAIL: 'goods-detail',
   TRANSACTION: 'transaction',
   TRANSACTION_DETAIL: 'transaction-detail',
