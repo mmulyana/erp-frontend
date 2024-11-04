@@ -1,28 +1,33 @@
-import { Editable } from '@/components/common/editable'
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
 import PhotoProfile from '@/components/common/photo-profile'
-import { Tab, Tabs } from '@/components/tab'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Editable } from '@/components/common/editable'
+import { Tab, Tabs } from '@/components/tab'
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-} from '@/components/ui/sheet'
-import { useDetailSupplier, useUpdateSupplier } from '@/hooks/api/use-supplier'
+  useSupplierTransaction,
+  useDetailSupplier,
+  useUpdateSupplier,
+} from '@/hooks/api/use-supplier'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { BASE_URL } from '@/utils/constant/_urls'
+import { formatToRupiah } from '@/utils/formatCurrency'
 import { useCallback, useMemo, useState } from 'react'
+import { BASE_URL } from '@/utils/constant/_urls'
+import { useApiData } from '@/hooks/use-api-data'
+import { Transaction } from '@/utils/types/api'
+import { PackagePlus } from 'lucide-react'
+import { format } from 'date-fns'
+import EmployeeSupplier from './employee-supplier'
 
 type Props = {
   open: boolean
   setOpen: (val: boolean) => void
-  id: number | null
+  id?: number | null
 }
 export default function DetailSupplier({ open, setOpen, id }: Props) {
-  const { data, isLoading } = useDetailSupplier(id)
   const { mutate: update } = useUpdateSupplier()
 
-  const supplier = useMemo(() => data?.data.data || {}, [data, isLoading])
+  const { data: supplier } = useApiData(useDetailSupplier(id))
+  const { data: transactions } = useApiData(useSupplierTransaction(id))
 
   const [edit, setEdit] = useState<string | null>('')
   const isEdit = useMemo(() => edit, [edit])
@@ -37,15 +42,14 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className='max-w-[512px] p-0'>
-        <SheetTitle>
+      <SheetContent className='max-w-[512px] p-0 bg-[#FBFBFB]'>
+        <SheetTitle className='bg-white'>
           <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
             <p className='text-sm text-dark font-normal'>Detail Supplier</p>
           </div>
         </SheetTitle>
-        <SheetDescription></SheetDescription>
         <ScrollArea className='h-[calc(100vh-48px)]'>
-          <div className='mt-4 px-4 mb-8'>
+          <div className='pt-4 px-4 pb-8 bg-white'>
             <PhotoProfile
               defaultPreview={
                 supplier?.photoUrl
@@ -128,16 +132,46 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
               </div>
             </div>
           </div>
-          <Tabs>
+          <Tabs className='bg-white'>
             <Tab label='Pegawai'>
-              <div className='p-4'></div>
+              <EmployeeSupplier id={id} />
             </Tab>
             <Tab label='Transaksi'>
-              <div className='p-4'></div>
+              <div className='p-4 space-y-6'>
+                {transactions?.map((item) => (
+                  <TransactionsData key={'transaction-' + item.id} {...item} />
+                ))}
+              </div>
             </Tab>
           </Tabs>
         </ScrollArea>
       </SheetContent>
     </Sheet>
+  )
+}
+
+export function TransactionsData({ date, good, qty, price }: Transaction) {
+  return (
+    <div className='flex gap-2 items-start'>
+      <div className='w-[40px] flex-shrink-0'>
+        <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
+          <PackagePlus size={18} className='text-blue-primary/70' />
+        </div>
+      </div>
+      <div className='flex-grow flex flex-col justify-center'>
+        <p className='text-dark/70'>
+          <span className='text-dark font-medium'>{good.name}</span> telah
+          dibeli sebanyak <span className='text-dark font-medium'>{qty} </span>
+          <span className='text-dark font-medium'>
+            {good?.measurement?.name}
+          </span>
+          <span className='text-dark font-medium'>
+            {formatToRupiah(Number(price))}
+          </span>
+          dengan harga satuan
+        </p>
+        <p className='text-dark/80 mt-0.5'>{format(date, 'dd MMM yyyy')}</p>
+      </div>
+    </div>
   )
 }
