@@ -1,15 +1,14 @@
 import { Form, FormField, FormLabel } from '@/components/ui/form'
+import { useInventoryData } from '../../_hook/use-inventory-data'
 import { FilterTable } from '@/components/data-table/component'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import Select from '@/components/common/select/select-v1'
 import { useForm, useFieldArray } from 'react-hook-form'
-import { useSupplier } from '@/hooks/api/use-supplier'
 import { CommandItem } from '@/components/ui/command'
 import { DataTable } from '@/components/data-table'
-import { useGoods } from '@/hooks/api/use-goods'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { column } from './column'
 import {
   useCreateTransaction,
@@ -17,25 +16,14 @@ import {
 } from '@/hooks/api/use-transaction'
 import { Plus, X } from 'lucide-react'
 import { CreateTransaction } from '@/utils/types/form'
+import { useApiData } from '@/hooks/use-api-data'
 
 export default function StockIn() {
-  const qTransaction = useTransaction({ type: 'in' })
-  const data = useMemo(
-    () => qTransaction.data?.data?.data,
-    [qTransaction.isLoading, qTransaction.isFetching, qTransaction.data]
+  const { data: transactions, isLoading } = useApiData(
+    useTransaction({ type: 'in' })
   )
 
-  const qGoods = useGoods()
-  const goods = useMemo(
-    () => qGoods.data?.data.data || [],
-    [qGoods.isLoading, qGoods.isFetching, qGoods.data]
-  )
-
-  const qSupplier = useSupplier()
-  const suppliers = useMemo(
-    () => qSupplier.data?.data.data || [],
-    [qSupplier.isLoading, qSupplier.isFetching, qSupplier.data]
-  )
+  const { goods, suppliers } = useInventoryData()
 
   const { mutate } = useCreateTransaction()
   const [open, setOpen] = useState(false)
@@ -71,8 +59,8 @@ export default function StockIn() {
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column}
-          data={data || []}
-          isLoading={qTransaction.isLoading}
+          data={transactions || []}
+          isLoading={isLoading}
           withLoading
           withPagination
           styleFooter='border-b-0 border-t'
@@ -111,13 +99,13 @@ export default function StockIn() {
                           preview={(val) => (
                             <span>
                               {
-                                goods.find((s: any) => s.id === Number(val))
+                                goods?.find((s: any) => s.id === Number(val))
                                   ?.name
                               }
                             </span>
                           )}
                         >
-                          {goods.map((item: any) => (
+                          {goods?.map((item: any) => (
                             <CommandItem
                               key={item.id}
                               value={item.id.toString()}
@@ -141,7 +129,6 @@ export default function StockIn() {
                         render={({ field }) => (
                           <div className='relative'>
                             <Input
-                              type='number'
                               {...field}
                               value={field.value ?? ''}
                               onChange={(e) => {
@@ -152,16 +139,12 @@ export default function StockIn() {
                               }}
                             />
                             {field.value && (
-                              <div className='absolute top-0 right-0 bg-gray-100 h-full px-2 rounded-r-lg flex items-center border text-dark/50 capitalize text-sm'>
-                                {
-                                  goods.find(
-                                    (s) =>
-                                      s.id ===
-                                      Number(
-                                        form.watch(`items.${index}.goodsId`)
-                                      )
-                                  )?.measurement.name
-                                }
+                              <div className='absolute top-0 right-0 h-full pr-3 flex items-center text-dark capitalize text-sm font-medium'>
+                                {goods?.find(
+                                  (s) =>
+                                    s.id ===
+                                    Number(form.watch(`items.${index}.goodsId`))
+                                )?.measurement?.name || ''}
                               </div>
                             )}
                           </div>
@@ -226,11 +209,14 @@ export default function StockIn() {
                     placeholder='Pilih supplier'
                     preview={(val) => (
                       <span>
-                        {suppliers.find((s: any) => s.id === Number(val))?.name}
+                        {
+                          suppliers?.find((s: any) => s.id === Number(val))
+                            ?.name
+                        }
                       </span>
                     )}
                   >
-                    {suppliers.map((item: any) => (
+                    {suppliers?.map((item: any) => (
                       <CommandItem
                         key={item.id}
                         value={item.id.toString()}
