@@ -17,6 +17,7 @@ import { Transaction } from '@/utils/types/api'
 import { PackagePlus } from 'lucide-react'
 import { format } from 'date-fns'
 import EmployeeSupplier from './employee-supplier'
+import LabelSupplier from './label-supplier'
 
 type Props = {
   open: boolean
@@ -128,7 +129,12 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
                 <div className='w-[140px] flex-shrink-0'>
                   <p className='text-dark/50 text-sm'>Tag</p>
                 </div>
-                <div className='flex-grow'></div>
+                <div className='flex-grow'>
+                  <LabelSupplier
+                    id={id}
+                    data={{ tags: supplier?.tags || [] }}
+                  />
+                </div>
               </div>
             </div>
           </div>
