@@ -72,7 +72,6 @@ export type CreateSupplierEmployee = {
   name: string
   position?: string
   phone?: string
-  status: string
 }
 
 export type CreateTransaction = {
