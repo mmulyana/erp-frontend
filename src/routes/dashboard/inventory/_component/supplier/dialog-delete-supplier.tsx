@@ -25,6 +25,7 @@ export default function DialogDeleteSupplier({
       {
         onSuccess: () => {
           setId(null)
+          setOpen(false)
         },
       }
     )
@@ -46,7 +47,9 @@ export default function DialogDeleteSupplier({
         >
           Batal
         </Button>
-        <Button onClick={onDelete}>Hapus</Button>
+        <Button variant='destructive' onClick={onDelete}>
+          Hapus
+        </Button>
       </div>
     </Modal>
   )
