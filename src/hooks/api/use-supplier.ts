@@ -7,7 +7,12 @@ import { CreateSupplier } from '@/utils/types/form'
 import { objectToFormData } from '@/utils/ObjectToFormData'
 import { toast } from 'sonner'
 import { AxiosResponse } from 'axios'
-import { IApi, Supplier } from '@/utils/types/api'
+import {
+  IApi,
+  Supplier,
+  SupplierEmployee,
+  Transaction,
+} from '@/utils/types/api'
 
 type supplierParams = Pagination & {
   name?: string
@@ -25,11 +30,27 @@ export const useSupplier = (params?: supplierParams) => {
     queryKey: [KEYS.SUPPLIER, params],
   })
 }
+export const useSupplierTransaction = (id?: number | null) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<Transaction[]>>> => {
+      return await http(`${URLS.INVENTORY_SUPPLIER}/${id}/transaction`)
+    },
+    queryKey: [KEYS.SUPPLIER_TRANSACTION, id],
+  })
+}
+export const useSupplierEmployee = (id?: number | null) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<SupplierEmployee[]>>> => {
+      return await http(`${URLS.INVENTORY_SUPPLIER}/${id}/employee`)
+    },
+    queryKey: [KEYS.SUPPLIER_EMPLOYEE, id],
+  })
+}
 
-export const useDetailSupplier = (id: number | null) => {
+export const useDetailSupplier = (id?: number | null) => {
   return useQuery({
     queryKey: [KEYS.SUPPLIER, id],
-    queryFn: async () => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Supplier>>> => {
       return await http(`${URLS.INVENTORY_SUPPLIER}/${id}`)
     },
     enabled: !!id,
