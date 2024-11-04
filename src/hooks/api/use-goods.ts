@@ -20,6 +20,15 @@ export const useGoods = (params?: goodsParams) => {
   })
 }
 
+export const useGoodsAll = (params?: goodsParams) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<Goods[]>>> => {
+      return await http(URLS.INVENTORY_GOODS + '/data/all', { params })
+    },
+    queryKey: [KEYS.GOODS_ALL, params?.name],
+  })
+}
+
 export const useDetailGoods = ({
   id,
   enabled,
@@ -109,10 +118,12 @@ export const useDeleteGoods = () => {
 
   return useMutation({
     mutationFn: async ({ id }: { id: number }) => {
-      return await http.delete(`${URLS.INVENTORY_GOODS}/${id}`)
+      return await http.patch(`${URLS.INVENTORY_GOODS}/${id}/soft-delete`)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.GOODS] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.STOCK_OUT] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.STOCK_LOW] })
       toast.success(data.data.message)
     },
   })
@@ -143,9 +154,7 @@ export const useGoodsTransaction = ({
   enabled: boolean
 }) => {
   return useQuery({
-    queryFn: async (): Promise<
-      AxiosResponse<IApiPagination<Transaction[]>>
-    > => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Transaction[]>>> => {
       return await http(URLS.INVENTORY_TRANSACTION, {
         params: {
           goodsId: id,
