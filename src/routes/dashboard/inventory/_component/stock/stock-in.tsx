@@ -12,15 +12,21 @@ import { useState } from 'react'
 import { column } from './column'
 import {
   useCreateTransaction,
-  useTransaction,
+  useTransactionPagination,
 } from '@/hooks/api/use-transaction'
 import { Plus, X } from 'lucide-react'
 import { CreateTransaction } from '@/utils/types/form'
 import { useApiData } from '@/hooks/use-api-data'
+import useUrlState from '@ahooksjs/use-url-state'
 
 export default function StockIn() {
-  const { data: transactions, isLoading } = useApiData(
-    useTransaction({ type: 'in' })
+  const [url] = useUrlState({ page: '' })
+
+  const { data, isLoading } = useApiData(
+    useTransactionPagination({
+      type: 'in',
+      ...(url.page !== '' ? { page: url.page } : undefined),
+    })
   )
 
   const { goods, suppliers } = useInventoryData()
@@ -59,10 +65,11 @@ export default function StockIn() {
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column}
-          data={transactions || []}
+          data={data?.data || []}
           isLoading={isLoading}
           withLoading
           withPagination
+          totalPages={data?.total_pages}
           styleFooter='border-b-0 border-t'
         />
       </div>
