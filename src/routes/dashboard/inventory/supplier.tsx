@@ -1,20 +1,25 @@
-import { ColumnDef } from '@tanstack/react-table'
-import { DashboardLayout } from '../_component/layout'
-import { Supplier as SupplierType } from '@/utils/types/api'
-import { Button } from '@/components/ui/button'
-import { BoxIcon, TrashIcon } from 'lucide-react'
-import { useSupplier } from '@/hooks/api/use-supplier'
 import { useMemo, useState } from 'react'
+import { ColumnDef } from '@tanstack/react-table'
+
+import { useSupplier } from '@/hooks/api/use-supplier'
+
+import { Supplier as SupplierType } from '@/utils/types/api'
+import { PATH } from '@/utils/constant/_paths'
+
+import DialogDeleteSupplier from './_component/supplier/dialog-delete-supplier'
+import { FilterTable, HeadTable } from '@/components/data-table/component'
+import DialogAddSupplier from './_component/supplier/dialog-add-supplier'
+import DetailSupplier from './_component/supplier/detail-supplier'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import DropdownEdit from '@/components/common/dropdown-edit'
+import { DashboardLayout } from '../_component/layout'
 import { DataTable } from '@/components/data-table'
 import Overlay from '@/components/common/overlay'
-import { PATH } from '@/utils/constant/_paths'
 import { useTitle } from '../_component/header'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { FilterTable, HeadTable } from '@/components/data-table/component'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import DialogAddSupplier from './_component/supplier/dialog-add-supplier'
-import DialogDeleteSupplier from './_component/supplier/dialog-delete-supplier'
-import DetailSupplier from './_component/supplier/detail-supplier'
+import { Button } from '@/components/ui/button'
+
+import { BoxIcon } from 'lucide-react'
+import LabelSupplier from './_component/supplier/label-supplier'
 
 export const links = [
   {
@@ -80,6 +85,11 @@ export default function Supplier() {
     {
       accessorKey: 'phone',
       header: 'No. Telp',
+      cell: ({ row }) => (
+        <div className='w-[120px]'>
+          <p>{row.original.phone}</p>
+        </div>
+      ),
     },
     {
       accessorKey: 'email',
@@ -88,22 +98,20 @@ export default function Supplier() {
     {
       accessorKey: 'address',
       header: 'Alamat',
-      cell: ({row}) => <div className='w-[200px]'>{row.original.address}</div>
+      cell: ({ row }) => (
+        <div className='w-[200px]'>{row.original.address}</div>
+      ),
     },
     {
       id: 'tag',
       header: 'Tag',
       cell: ({ row }) => {
         return (
-          <div className='flex gap-2 flex-wrap items-center max-w-[180px]'>
-            {row.original.tags.map((item, index) => (
-              <div
-                key={index}
-                className='text-sm px-2 py-0.5 rounded-full bg-[#4EB4CA]/10 text-[#4EB4CA]'
-              >
-                {item.tag.name}
-              </div>
-            ))}
+          <div className='py-2 min-w-[200px]'>
+            <LabelSupplier
+              id={row.original.id}
+              data={{ tags: row.original.tags }}
+            />
           </div>
         )
       },
@@ -115,14 +123,13 @@ export default function Supplier() {
           <DropdownEdit className='-translate-x-3'>
             <DropdownMenuItem className='cursor-pointer p-0'>
               <Button
-                className='gap-1 justify-start px-2 flex items-center w-full border-none'
+                className='gap-1 justify-start flex items-center w-full border-none rounded-none'
                 variant='outline'
                 onClick={() => {
                   setSelectedId(row.original.id)
                   handleDialog('delete', true)
                 }}
               >
-                <TrashIcon className='w-4 h-4 text-red-400' />
                 Hapus
               </Button>
             </DropdownMenuItem>
