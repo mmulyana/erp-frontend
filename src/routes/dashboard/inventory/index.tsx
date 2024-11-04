@@ -1,13 +1,13 @@
 import DetailGoods, { selectedGoodAtom } from './_component/index/detail-goods'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
-import AddGood, { dialogGoodAtom } from './_component/add-good'
+import AddGood, { dialogGoodAtom } from './_component/index/add-good'
 import CardHighlight from './_component/index/card-highlight'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import { DashboardLayout } from '../_component/layout'
 import { DataTable } from '@/components/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import Overlay from '@/components/common/overlay'
-import { useGoods } from '@/hooks/api/use-goods'
+import { useDeleteGoods, useGoods } from '@/hooks/api/use-goods'
 import { Button } from '@/components/ui/button'
 import { useTitle } from '../_component/header'
 import { PATH } from '@/utils/constant/_paths'
@@ -16,6 +16,9 @@ import { Package } from 'lucide-react'
 import { useSetAtom } from 'jotai'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { useApiData } from '@/hooks/use-api-data'
+import { useState } from 'react'
+import AlertDialogV1 from '@/components/common/alert-dialog-v1'
+import useUrlState from '@ahooksjs/use-url-state'
 
 // import { ScrollArea } from '@/components/ui/scroll-area'
 // import CardActivity from './_component/index/card-activity'
@@ -33,10 +36,24 @@ export const links = [
 export default function Index() {
   useTitle(links)
 
+  // HANDLE DIALOG
   const setSelected = useSetAtom(selectedGoodAtom)
   const setOpen = useSetAtom(dialogGoodAtom)
+  const [selectedDelete, setSelectedDelete] = useState<{
+    id: number
+    open: boolean
+  } | null>(null)
 
-  const { data, isLoading } = useApiData(useGoods())
+  // HANDLE DATA
+const [url] = useUrlState({ page: '', name: '' })
+
+  const { mutate } = useDeleteGoods()
+  const { data, isLoading } = useApiData(
+    useGoods({
+      ...(url.page !== '' ? { page: url.page } : undefined),
+      ...(url.name !== '' ? { name: url.name } : undefined),
+    })
+  )
 
   // START OF COLUMNS
   const columns: ColumnDef<Goods>[] = [
@@ -100,10 +117,19 @@ export default function Index() {
     },
     {
       id: 'action',
-      cell: () => (
+      cell: ({ row }) => (
         <div className='flex justify-end'>
           <DropdownEdit>
-            <DropdownMenuItem>Hapus</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setSelectedDelete({
+                  id: row.original.id,
+                  open: true,
+                })
+              }}
+            >
+              Hapus
+            </DropdownMenuItem>
           </DropdownEdit>
         </div>
       ),
@@ -130,10 +156,11 @@ export default function Index() {
             <FilterTable placeholder='Cari barang' />
             <DataTable
               columns={columns}
-              data={data || []}
+              data={data?.data || []}
               withLoading
               withPagination
               isLoading={isLoading}
+              totalPages={data?.total_pages}
               styleFooter='border-t border-b-0'
             />
           </div>
@@ -141,6 +168,19 @@ export default function Index() {
       </DashboardLayout>
       <DetailGoods />
       <AddGood />
+      <AlertDialogV1
+        open={selectedDelete?.open}
+        setOpen={() => setSelectedDelete(null)}
+        title='Hati-hati! Tindakan ini tidak bisa dibatalkan'
+        body='Data barang akan dihapus dalam sistem'
+        onConfirm={() => {
+          if (!selectedDelete?.id) return
+          mutate(
+            { id: selectedDelete?.id },
+            { onSuccess: () => setSelectedDelete(null) }
+          )
+        }}
+      />
     </>
   )
 }
