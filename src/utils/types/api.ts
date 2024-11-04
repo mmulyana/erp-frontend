@@ -191,6 +191,7 @@ export type Supplier = {
   id: number
   name: string
   phone?: string
+  email?: string
   address?: string
   status: 'active' | 'nonactive'
   photoUrl?: string
@@ -203,7 +204,6 @@ export type SupplierEmployee = {
   name: string
   position?: string
   phone?: string
-  status: 'active' | 'nonactive'
   supplierId: number
 }
 
