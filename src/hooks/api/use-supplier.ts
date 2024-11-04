@@ -7,12 +7,7 @@ import { CreateSupplier } from '@/utils/types/form'
 import { objectToFormData } from '@/utils/ObjectToFormData'
 import { toast } from 'sonner'
 import { AxiosResponse } from 'axios'
-import {
-  IApi,
-  Supplier,
-  SupplierEmployee,
-  Transaction,
-} from '@/utils/types/api'
+import { IApi, Supplier, Transaction } from '@/utils/types/api'
 
 type supplierParams = Pagination & {
   name?: string
@@ -40,7 +35,7 @@ export const useSupplierTransaction = (id?: number | null) => {
 }
 export const useSupplierEmployee = (id?: number | null) => {
   return useQuery({
-    queryFn: async (): Promise<AxiosResponse<IApi<SupplierEmployee[]>>> => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Transaction[]>>> => {
       return await http(`${URLS.INVENTORY_SUPPLIER}/${id}/employee`)
     },
     queryKey: [KEYS.SUPPLIER_EMPLOYEE, id],
@@ -49,7 +44,7 @@ export const useSupplierEmployee = (id?: number | null) => {
 
 export const useDetailSupplier = (id?: number | null) => {
   return useQuery({
-    queryKey: [KEYS.SUPPLIER, id],
+    queryKey: [KEYS.SUPPLIER_DETAIL, id],
     queryFn: async (): Promise<AxiosResponse<IApi<Supplier>>> => {
       return await http(`${URLS.INVENTORY_SUPPLIER}/${id}`)
     },
@@ -87,11 +82,43 @@ export const useUpdateSupplier = () => {
       id: number
       payload: Partial<CreateSupplier>
     }) => {
-      return await http.patch(`${URLS.INVENTORY_SUPPLIER}/${id}`, payload)
+      const formData = objectToFormData(payload)
+
+      return await http.patch(`${URLS.INVENTORY_SUPPLIER}/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: [KEYS.SUPPLIER, data.data.data.id],
+        queryKey: [KEYS.SUPPLIER_DETAIL, data.data.data.id],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.SUPPLIER],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
+export const useUpdateTagSupplier = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: number
+      payload: {
+        tagIds: number[]
+      }
+    }) => {
+      return await http.patch(`${URLS.INVENTORY_SUPPLIER}/${id}/tags`, payload)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.SUPPLIER_DETAIL, data.data.data.id],
       })
       queryClient.invalidateQueries({
         queryKey: [KEYS.SUPPLIER],
