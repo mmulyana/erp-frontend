@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CreateTransaction, updateTransaction } from '@/utils/types/form'
-import { ApiError, IApi, Transaction } from '@/utils/types/api'
+import { ApiError, IApi, IApiPagination, Transaction } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
@@ -9,16 +9,33 @@ import http from '@/utils/http'
 import { toast } from 'sonner'
 
 type Params = Pagination & {
-  type?: 'in' | 'out' | 'borrowed' | 'returned' | 'opname'
+  type?: 'in' | 'out' | 'borrowed' | 'opname'
+  page?: string
+  limit?: string
+  goodsId?: string
+  supplierId?: string
+  startDate?: string
+  endDate?: string
+  projectId?: string
 }
 export const useTransaction = (params?: Params) => {
   return useQuery({
-    queryFn: async (): Promise<
-      AxiosResponse<IApi<Transaction[]>>
-    > => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Transaction[]>>> => {
       return await http.request({
         method: 'GET',
         url: URLS.INVENTORY_TRANSACTION,
+        params,
+      })
+    },
+    queryKey: [KEYS.TRANSACTION, params?.type, params],
+  })
+}
+export const useTransactionPagination = (params?: Params) => {
+  return useQuery({
+    queryFn: async (): Promise<
+      AxiosResponse<IApiPagination<Transaction[]>>
+    > => {
+      return await http(URLS.INVENTORY_TRANSACTION + '/list/pagination', {
         params,
       })
     },
@@ -149,7 +166,7 @@ export const useDeleteTransaction = () => {
 export const useTransactionBorrowed = () => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<Transaction[]>>> => {
-      return await http(URLS.INVENTORY_TRANSACTION + '/data/borrowed')
+      return await http(URLS.INVENTORY_TRANSACTION + '/list/borrowed')
     },
     queryKey: [KEYS.TRANSACTION_BORROWED],
   })
