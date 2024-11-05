@@ -18,6 +18,7 @@ import { PackagePlus } from 'lucide-react'
 import { format } from 'date-fns'
 import EmployeeSupplier from './employee-supplier'
 import LabelSupplier from './label-supplier'
+import { cn } from '@/utils/cn'
 
 type Props = {
   open: boolean
@@ -57,6 +58,14 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
                   ? BASE_URL + '/img/' + supplier?.photoUrl
                   : null
               }
+              onUpdate={(photo) => {
+                if (!id) return
+                update({ id, payload: { photo } })
+              }}
+              onRemove={() => {
+                if (!id) return
+                update({ id, payload: { photo: null } })
+              }}
             />
             <Editable
               isEdit={isEdit}
@@ -125,7 +134,12 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
                   />
                 </div>
               </div>
-              <div className='flex gap-2 items-center'>
+              <div
+                className={cn(
+                  'flex gap-2',
+                  !!supplier?.tags.length && 'items-start pt-2'
+                )}
+              >
                 <div className='w-[140px] flex-shrink-0'>
                   <p className='text-dark/50 text-sm'>Tag</p>
                 </div>
