@@ -80,7 +80,7 @@ export const useUpdateSupplier = () => {
       payload,
     }: {
       id: number
-      payload: Partial<CreateSupplier>
+      payload: Partial<Omit<CreateSupplier, 'photo'>> & { photo?: File | null }
     }) => {
       const formData = objectToFormData(payload)
 
