@@ -45,7 +45,7 @@ export default function Employee() {
         const { name, id } = cell.row.original
         return (
           <Overlay
-            className='w-full'
+            className='w-fit pr-14'
             overlay={
               <Link
                 className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
@@ -55,12 +55,16 @@ export default function Employee() {
               </Link>
             }
           >
-            <Link
-              className='hover:text-dark'
-              to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
-            >
-              {cell.row.original.name}
-            </Link>
+            <div className='hover:text-dark'>
+              <Link
+                to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
+                className='justify-start flex'
+              >
+                <span className='break-words max-w-[120px] text-left'>
+                  {name}
+                </span>
+              </Link>
+            </div>
           </Overlay>
         )
       },
