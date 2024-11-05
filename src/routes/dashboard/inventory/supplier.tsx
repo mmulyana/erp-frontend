@@ -7,19 +7,20 @@ import { Supplier as SupplierType } from '@/utils/types/api'
 import { PATH } from '@/utils/constant/_paths'
 
 import DialogDeleteSupplier from './_component/supplier/dialog-delete-supplier'
-import { FilterTable, HeadTable } from '@/components/data-table/component'
 import DialogAddSupplier from './_component/supplier/dialog-add-supplier'
 import DetailSupplier from './_component/supplier/detail-supplier'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import LabelSupplier from './_component/supplier/label-supplier'
 import DropdownEdit from '@/components/common/dropdown-edit'
+import Overlay from '@/components/common/overlay'
+
+import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DashboardLayout } from '../_component/layout'
 import { DataTable } from '@/components/data-table'
-import Overlay from '@/components/common/overlay'
 import { useTitle } from '../_component/header'
 import { Button } from '@/components/ui/button'
 
 import { BoxIcon } from 'lucide-react'
-import LabelSupplier from './_component/supplier/label-supplier'
 
 export const links = [
   {
@@ -56,28 +57,32 @@ export default function Supplier() {
       cell: ({ row }) => {
         return (
           <Overlay
-            className='min-w-[140px]'
+            className='w-fit pr-14'
             overlay={
               <button
                 onClick={() => {
                   setSelectedId(row.original.id)
                   handleDialog('detail', true)
                 }}
-                className='absolute right-0 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] top-1/2 -translate-y-1/2 bg-white hover:shadow-sm hover:shadow-gray-200'
+                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
               >
                 Lihat
               </button>
             }
           >
-            <button
-              className='appearance-none'
-              onClick={() => {
-                setSelectedId(row.original.id)
-                handleDialog('detail', true)
-              }}
-            >
-              {row?.original?.name}
-            </button>
+            <div className='hover:text-dark'>
+              <button
+                onClick={() => {
+                  setSelectedId(row.original.id)
+                  handleDialog('detail', true)
+                }}
+                className='justify-start flex'
+              >
+                <span className='break-words max-w-[120px] text-left'>
+                  {row.original.name}
+                </span>
+              </button>
+            </div>
           </Overlay>
         )
       },
