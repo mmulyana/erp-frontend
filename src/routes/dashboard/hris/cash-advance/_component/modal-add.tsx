@@ -11,12 +11,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateCashAdvance } from '@/hooks/api/use-cash-advance'
 import { useEmployees } from '@/hooks/api/use-employee'
-import {
-  cashAdvanceSchema,
-  CashAdvancesSchema,
-} from '@/utils/schema/cash-advances.schema'
 import { Employee } from '@/utils/types/api'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 
 import { useForm } from 'react-hook-form'
@@ -29,15 +24,14 @@ export function ModalAdd({ open, setOpen }: Props) {
   const { data: employees } = useEmployees({}, { enabled: open })
   const { mutate } = useCreateCashAdvance()
 
-  const form = useForm<CashAdvancesSchema>({
-    resolver: zodResolver(cashAdvanceSchema),
+  const form = useForm({
     defaultValues: {
       amount: 0,
       description: '',
     },
   })
 
-  const submit = async (data: CashAdvancesSchema) => {
+  const submit = async (data: any) => {
     mutate(
       { ...data, employeeId: Number(data.employeeId) },
       {
