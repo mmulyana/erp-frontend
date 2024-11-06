@@ -19,15 +19,15 @@ import {
 export default function CardProject({
   type = 'default',
   ...props
-}: Project & { type: 'default' | 'long' }) {
+}: Partial<Project> & { type?: 'default' | 'long' }) {
   if (type === 'long') {
     return (
       <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white flex-col md:flex-row gap-4'>
         <div className='flex flex-col gap-2'>
           <div className='flex gap-4 items-center flex-wrap'>
             <Chips
-              background={props.boardItems.container.color}
-              text={props.boardItems.container.name}
+              background={props?.boardItems?.container.color}
+              text={props?.boardItems?.container.name}
             />
             <p className='text-dark font-medium'>{props.name}</p>
             <div className={cn('flex gap-2')}>
@@ -54,7 +54,7 @@ export default function CardProject({
             <div className='w-1 h-1 rounded-full bg-dark/40'></div>
             <div className='flex gap-3 items-center'>
               <div className='flex gap-2 items-center'>
-                {props._count.employees && (
+                {props?._count?.employees && (
                   <div className='flex gap-1 items-center'>
                     <Users2Icon className='w-4 h-4 text-[#CBCDD3]' />
                     <p className='text-sm text-dark'>
@@ -62,7 +62,7 @@ export default function CardProject({
                     </p>
                   </div>
                 )}
-                {!!props._count.activities && (
+                {!!props?._count?.activities && (
                   <div className='flex gap-1 items-center'>
                     <MessageCircle className='w-4 h-4 text-[#CBCDD3]' />
                     <p className='text-sm text-dark'>
@@ -70,7 +70,7 @@ export default function CardProject({
                     </p>
                   </div>
                 )}
-                {!!props._count.attachments && (
+                {!!props?._count?.attachments && (
                   <div className='flex gap-1 items-center'>
                     <Paperclip className='w-4 h-4 text-[#CBCDD3]' />
                     <p className='text-sm text-dark'>
@@ -134,19 +134,19 @@ export default function CardProject({
 
       <div className='flex justify-between items-center mt-4'>
         <div className='flex gap-2 items-center'>
-          {props._count.employees && (
+          {props?._count?.employees && (
             <div className='flex gap-1 items-center'>
               <Users2Icon className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props?._count.employees}</p>
             </div>
           )}
-          {props._count.activities && (
+          {props?._count?.activities && (
             <div className='flex gap-1 items-center'>
               <MessageCircle className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props?._count.activities}</p>
             </div>
           )}
-          {props._count.attachments && (
+          {props?._count?.attachments && (
             <div className='flex gap-1 items-center'>
               <Paperclip className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props._count.attachments}</p>
