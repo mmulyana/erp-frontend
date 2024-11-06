@@ -1,5 +1,9 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import React, { useEffect } from 'react'
+
+import { cn } from '@/utils/cn'
+
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import {
   Breadcrumb as BreadCrumbWrapper,
   BreadcrumbItem,
@@ -8,11 +12,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { ChevronRight, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useMediaQuery } from '@uidotdev/usehooks'
-import { cn } from '@/utils/cn'
+
 import { settingConfig } from './setting/setting'
+
+import { ChevronRight, Settings } from 'lucide-react'
 
 export type Title = {
   name: string
@@ -32,46 +36,47 @@ export default function Header() {
   const setSettingConfig = useSetAtom(settingConfig)
   const links = useAtomValue(titleAtom)
 
-  const isSmall = useMediaQuery('only screen and (max-width : 768px)')
-
   return (
     <div
       className={cn(
-        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12 bg-white sticky top-0 left-0 w-full z-20',
-        isSmall && 'pl-[calc(48px+8px)]'
+        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12 bg-white sticky top-0 left-0 min-w-full z-20'
       )}
     >
-      <BreadCrumbWrapper>
-        <BreadcrumbList className='flex items-center'>
-          {links.map((link, index) => {
-            const lastIndex = links.length - 1
+      <div className='flex gap-2 items-center'>
+        <SidebarTrigger />
+        <BreadCrumbWrapper>
+          <BreadcrumbList className='flex items-center'>
+            {links.map((link, index) => {
+              const lastIndex = links.length - 1
 
-            return (
-              <React.Fragment key={index}>
-                <BreadcrumbItem>
-                  {index === lastIndex ? (
-                    <BreadcrumbPage className='text-[#021328] text-sm font-medium'>
-                      {link.name}
-                    </BreadcrumbPage>
-                  ) : (
-                    <BreadcrumbLink
-                      href={link.path}
-                      className='text-[#989CA8] text-sm'
-                    >
-                      {link.name}
-                    </BreadcrumbLink>
+              return (
+                <React.Fragment key={index}>
+                  <BreadcrumbItem>
+                    {index === lastIndex ? (
+                      <BreadcrumbPage className='text-[#021328] text-sm font-medium'>
+                        {link.name}
+                      </BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink
+                        href={link.path}
+                        className='text-[#989CA8] text-sm'
+                      >
+                        {link.name}
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                  {index !== lastIndex && (
+                    <BreadcrumbSeparator>
+                      <ChevronRight className='w-2 h-2 text-[#989CA8]' />
+                    </BreadcrumbSeparator>
                   )}
-                </BreadcrumbItem>
-                {index !== lastIndex && (
-                  <BreadcrumbSeparator>
-                    <ChevronRight className='w-2 h-2 text-[#989CA8]' />
-                  </BreadcrumbSeparator>
-                )}
-              </React.Fragment>
-            )
-          })}
-        </BreadcrumbList>
-      </BreadCrumbWrapper>
+                </React.Fragment>
+              )
+            })}
+          </BreadcrumbList>
+        </BreadCrumbWrapper>
+      </div>
+
       <div className='flex gap-2 items-center'>
         <Button
           variant='secondary'
