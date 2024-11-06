@@ -42,7 +42,7 @@ export default function CardTotalEmployee() {
               data={ByPositionQuery.data?.data.data?.chartData || []}
               dataKey='count'
               nameKey='position'
-              innerRadius={50}
+              innerRadius={72}
               strokeWidth={5}
             >
               <Label
