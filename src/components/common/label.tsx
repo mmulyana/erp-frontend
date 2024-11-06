@@ -4,13 +4,15 @@ type Props = {
   name: string
   color: string
   suffix?: React.ReactNode
+  className?: string
 }
-export default function Label({ name, color, suffix }: Props) {
+export default function Label({ name, color, suffix, className }: Props) {
   return (
     <div
       className={cn(
         'py-0.5 pb-1 px-2.5 text-sm w-fit relative flex items-center z-[1]',
-        suffix && 'pr-1 gap-1'
+        suffix && 'pr-1 gap-1',
+        className
       )}
     >
       <p className='z-[1] text-nowrap' style={{ color, opacity: '100' }}>
