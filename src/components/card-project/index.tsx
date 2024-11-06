@@ -1,4 +1,12 @@
+import CircularProgress from '../common/circular-progress'
+
+import { Project } from '@/utils/types/api'
 import { cn } from '@/utils/cn'
+
+import { Button } from '../ui/button'
+import Chips from '../common/chips'
+import Label from '../common/label'
+
 import {
   ChevronRight,
   MessageCircle,
@@ -7,11 +15,6 @@ import {
   UserRoundIcon,
   Users2Icon,
 } from 'lucide-react'
-import CircularProgress from '../common/circular-progress'
-import { Project } from '@/utils/types/api'
-import { Button } from '../ui/button'
-import Chips from '../common/chips'
-import Label from '../common/label'
 
 export default function CardProject({
   type = 'default',
@@ -19,7 +22,7 @@ export default function CardProject({
 }: Project & { type: 'default' | 'long' }) {
   if (type === 'long') {
     return (
-      <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white'>
+      <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white flex-col md:flex-row gap-4'>
         <div className='flex flex-col gap-2'>
           <div className='flex gap-4 items-center flex-wrap'>
             <Chips
@@ -31,6 +34,7 @@ export default function CardProject({
               {!!props?.labels?.length &&
                 props.labels.map((item, index) => (
                   <Label
+                    key={`label-${props.id}-${index}`}
                     color={item.label.color}
                     name={item.label.name}
                     className='text-[13px]'
@@ -83,7 +87,7 @@ export default function CardProject({
         </div>
         <Button
           variant='outline'
-          className='p-2 rounded-md text-dark/50 gap-1 pr-1.5'
+          className='p-2 rounded-md text-dark/50 gap-1 pr-1.5 ml-auto md:ml-0'
         >
           Lihat
           <ChevronRight
