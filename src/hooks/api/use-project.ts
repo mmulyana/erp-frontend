@@ -16,7 +16,7 @@ type Params = {
 export const useProjects = (params?: Params) => {
   return useQuery({
     queryKey: [KEYS.PROJECT, params],
-    queryFn: async (): Promise<AxiosResponse<IApiPagination<Project[]>>> => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Project[]>>> => {
       return await http.request({
         method: 'GET',
         url: URLS.PROJECT,
