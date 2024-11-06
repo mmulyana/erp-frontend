@@ -4,7 +4,7 @@ import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { toast } from 'sonner'
 import { AxiosResponse } from 'axios'
-import { Employee, IApi, IApiPagination } from '@/utils/types/api'
+import { Employee, ExpireCertif, ExpireSafety, IApi, IApiPagination } from '@/utils/types/api'
 import {
   createCertif,
   payloadCreateEmployee,
@@ -538,38 +538,32 @@ export const useSoftDeleteEmployee = () => {
   })
 }
 
-export const useExpireCertification = ({ enabled }: { enabled?: boolean }) => {
+export const useExpireCertification = (params?: { positionId?: string }) => {
   return useQuery({
     queryKey: [KEYS.EXPIRE_CERTIFICATION],
-    queryFn: async () => {
-      return await http
-        .request({
-          method: 'GET',
-          url: `${URLS.EMPLOYEE}/expiring/certification`,
-        })
-        .then((res) => res.data)
-        .catch((err) => {
-          throw err
-        })
+    queryFn: async (): Promise<AxiosResponse<IApi<ExpireCertif[]>>> => {
+      return await http(`${URLS.EMPLOYEE}/expiring/certification`, {
+        params: {
+          ...(params?.positionId !== ''
+            ? { positionId: params?.positionId }
+            : undefined),
+        },
+      })
     },
-    enabled: enabled || false,
   })
 }
 
-export const useExpireSafety = ({ enabled }: { enabled?: boolean }) => {
+export const useExpireSafety = (params?: { positionId?: string }) => {
   return useQuery({
     queryKey: [KEYS.EXPIRE_SAFETY],
-    queryFn: async () => {
-      return await http
-        .request({
-          method: 'GET',
-          url: `${URLS.EMPLOYEE}/expiring/safety`,
-        })
-        .then((res) => res.data)
-        .catch((err) => {
-          throw err
-        })
+    queryFn: async (): Promise<AxiosResponse<IApi<ExpireSafety[]>>> => {
+      return await http(`${URLS.EMPLOYEE}/expiring/safety`, {
+        params: {
+          ...(params?.positionId !== ''
+            ? { positionId: params?.positionId }
+            : undefined),
+        },
+      })
     },
-    enabled: enabled || false,
   })
 }
