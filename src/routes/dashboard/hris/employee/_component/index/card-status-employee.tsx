@@ -34,7 +34,7 @@ export default function CardStatusEmployee() {
               data={ByStatusQuery.data?.data.data?.chartData || []}
               dataKey='count'
               nameKey='status'
-              innerRadius={60}
+              innerRadius={72}
               strokeWidth={5}
             ></Pie>
             <ChartLegend content={<ChartLegendContent />} />
