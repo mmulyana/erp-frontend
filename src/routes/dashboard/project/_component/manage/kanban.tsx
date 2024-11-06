@@ -83,7 +83,7 @@ export default function Kanban() {
   }
 
   return (
-    <ScrollArea className='pb-3'>
+    <ScrollArea className='pb-3 w-[calc(100vw-18rem)]'>
       <div className={cn('h-full flex gap-2 relative')}>
         <DragDropContext onDragEnd={onDragEnd}>
           {containers.map((container) => (
