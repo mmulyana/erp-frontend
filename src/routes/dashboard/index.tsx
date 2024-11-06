@@ -1,85 +1,78 @@
 import { PATH } from '@/utils/constant/_paths'
-import { useTitle } from './_component/header'
+
 import { DashboardLayout } from './_component/layout'
-import { Card, CardBody, CardHead } from '@/components/common/card-v1'
-import {
-  BriefcaseBusiness,
-  ChevronLeft,
-  ChevronRight,
-  FileBadgeIcon,
-  PackageIcon,
-  SearchIcon,
-} from 'lucide-react'
+import { useTitle } from './_component/header'
+import Container from './_component/container'
+
+import { useApiData } from '@/hooks/use-api-data'
+import { useProjects } from '@/hooks/api/use-project'
+
+import { ClipboardList, HardHat, Users2 } from 'lucide-react'
+import CardProject from '@/components/card-project'
+import ExpireCertif from './hris/employee/_component/detail/expire-certif'
+import ExpireSafety from './hris/employee/_component/detail/expire-safety'
 
 export default function Dashboard() {
   useTitle([{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW }])
-  
+
+  const { data } = useApiData(useProjects())
+
   return (
     <DashboardLayout>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-6 p-4'>
-        <div className='col-span-1 md:col-span-2'>
-          <Card className='overflow-hidden'>
-            <CardHead className='h-14'>
-              <div className='flex gap-2 items-center'>
-                <BriefcaseBusiness className='w-5 h-5 text-[#989CA8]' />
-                <p className='text-dark font-medium'>Proyek</p>
-                <p className='text-dark text-base font-semibold'>
-                  4<span className='opacity-50 font-normal'>/5</span>
-                </p>
-              </div>
-              <div className='rounded-full h-7 flex gap-8 bg-[#EFF0F2] p-0.5'>
-                <button className='h-6 w-6 rounded-full bg-white flex items-center justify-center'>
-                  <ChevronLeft className='w-3.5 h-3.5 text-dark/70' />
-                </button>
-                <button className='h-6 w-6 rounded-full bg-white flex items-center justify-center'>
-                  <ChevronRight className='w-3.5 h-3.5 text-dark/70' />
-                </button>
-              </div>
-            </CardHead>
-            <CardBody className='p-4 bg-[#EFF0F2]' />
-          </Card>
-        </div>
-        <Card>
-          <CardHead>
-            <p className='text-dark font-medium'>Lampiran</p>
-            <div className='rounded-full h-7 flex bg-[#EFF0F2] p-0.5 pr-2.5'>
-              <label className='flex gap-1'>
-                <div className='h-6 w-6 rounded-full bg-white flex items-center justify-center'>
-                  <SearchIcon className='w-3.5 h-3.5 text-dark/70' />
+      <Container>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-5 gap-y-4'>
+          <div className='col-span-1 md:col-span-2 space-y-4'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
+                <div className='h-14 w-14 rounded-[10px] bg-green-primary/5 flex justify-center items-center'>
+                  <Users2 className='text-green-primary' size={24} />
                 </div>
-                <p className='text-dark/50'>Cari</p>
-              </label>
+                <div className='flex flex-col gap-1'>
+                  <p className='text-dark/50 leading-none text-sm'>
+                    Total Pegawai
+                  </p>
+                  <p className='text-dark font-medium text-2xl leading-none'>
+                    21
+                  </p>
+                </div>
+              </div>
+              <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
+                <div className='h-14 w-14 rounded-[10px] bg-blue-primary/5 flex justify-center items-center'>
+                  <HardHat className='text-blue-primary' size={24} />
+                </div>
+                <div className='flex flex-col gap-1'>
+                  <p className='text-dark/50 leading-none text-sm'>
+                    Total Pegawai
+                  </p>
+                  <p className='text-dark font-medium text-2xl leading-none'>
+                    21
+                  </p>
+                </div>
+              </div>
             </div>
-          </CardHead>
-          <CardBody></CardBody>
-        </Card>
-        <Card>
-          <CardHead>
-            <div className='flex gap-2 items-center'>
-              <FileBadgeIcon className='w-5 h-5 text-[#989CA8]' />
-              <p className='text-dark font-medium'>Sertifikasi Pegawai</p>
+            <div className='col-span-full bg-dark/5 rounded-2xl p-4'>
+              <div className='flex items-center gap-3 pb-4 border-b border-dark/20 border-dashed mb-4'>
+                <div className='h-10 w-10 rounded-[10px] border border-dark/20 flex justify-center items-center bg-white'>
+                  <ClipboardList size={24} className='text-dark' />
+                </div>
+                <div className='flex flex-col gap-1'>
+                  <p className='text-dark leading-none'>Proyek</p>
+                  <p className='text-sm text-dark/50 leading-none'>
+                    Daftar proyek aktif
+                  </p>
+                </div>
+              </div>
+              {data?.map((item) => (
+                <CardProject {...item} type='long' />
+              ))}
             </div>
-          </CardHead>
-          <CardBody></CardBody>
-        </Card>
-        <Card>
-          <CardHead>
-            <div className='flex gap-2 items-center'>
-              <PackageIcon className='w-5 h-5 text-[#989CA8]' />
-              <p className='text-dark font-medium'>Inventory</p>
-            </div>
-          </CardHead>
-          <CardBody></CardBody>
-        </Card>
-        <Card>
-          <CardHead>
-            <div className='flex gap-2 items-center'>
-              <p className='text-dark font-medium'>Absensi</p>
-            </div>
-          </CardHead>
-          <CardBody></CardBody>
-        </Card>
-      </div>
+          </div>
+          <div className='flex flex-col gap-4'>
+            <ExpireCertif />
+            <ExpireSafety />
+          </div>
+        </div>
+      </Container>
     </DashboardLayout>
   )
 }
