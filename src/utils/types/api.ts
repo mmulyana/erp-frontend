@@ -43,14 +43,7 @@ export type Project = {
       name: string
     }
   }
-  labels: {
-    id: number
-    label: {
-      id: number
-      name: string
-      color: string
-    }
-  }[]
+  labels: ProjectToLabel[]
   employees: {
     id: number
     employee: {
@@ -431,4 +424,19 @@ export type Estimate = {
   price?: number | null
   qty?: number | null
   projectId: number
+}
+
+export type ExpireCertif = {
+  certif_name: string
+  expire_at: string
+  employee: Pick<Employee, 'id' | 'fullname' | 'photo'>
+  daysUntilExpiry: number
+}
+
+export type ExpireSafety = Pick<
+  Employee,
+  'id' | 'fullname' | 'photo' | 'safety_induction_date'
+> & {
+  expire_at: string
+  daysUntilExpiry: number
 }
