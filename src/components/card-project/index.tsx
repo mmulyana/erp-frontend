@@ -1,14 +1,101 @@
 import { cn } from '@/utils/cn'
 import {
+  ChevronRight,
   MessageCircle,
   Paperclip,
+  User,
   UserRoundIcon,
   Users2Icon,
 } from 'lucide-react'
 import CircularProgress from '../common/circular-progress'
 import { Project } from '@/utils/types/api'
+import { Button } from '../ui/button'
+import Chips from '../common/chips'
+import Label from '../common/label'
 
-export default function CardProject(props: Project) {
+export default function CardProject({
+  type = 'default',
+  ...props
+}: Project & { type: 'default' | 'long' }) {
+  if (type === 'long') {
+    return (
+      <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white'>
+        <div className='flex flex-col gap-2'>
+          <div className='flex gap-4 items-center flex-wrap'>
+            <Chips
+              background={props.boardItems.container.color}
+              text={props.boardItems.container.name}
+            />
+            <p className='text-dark font-medium'>{props.name}</p>
+            <div className={cn('flex gap-2')}>
+              {!!props?.labels?.length &&
+                props.labels.map((item, index) => (
+                  <Label
+                    color={item.label.color}
+                    name={item.label.name}
+                    className='text-[13px]'
+                  />
+                ))}
+            </div>
+          </div>
+          <div className='flex gap-4 items-center'>
+            {props.client && (
+              <div className='flex gap-3 items-center'>
+                <User size={18} className='text-gray-400' />
+                <p className='text-dark/50 leading-tight'>
+                  {props.client?.name}
+                </p>
+              </div>
+            )}
+            <div className='w-1 h-1 rounded-full bg-dark/40'></div>
+            <div className='flex gap-3 items-center'>
+              <div className='flex gap-2 items-center'>
+                {props._count.employees && (
+                  <div className='flex gap-1 items-center'>
+                    <Users2Icon className='w-4 h-4 text-[#CBCDD3]' />
+                    <p className='text-sm text-dark'>
+                      {props?._count.employees}
+                    </p>
+                  </div>
+                )}
+                {!!props._count.activities && (
+                  <div className='flex gap-1 items-center'>
+                    <MessageCircle className='w-4 h-4 text-[#CBCDD3]' />
+                    <p className='text-sm text-dark'>
+                      {props?._count.activities}
+                    </p>
+                  </div>
+                )}
+                {!!props._count.attachments && (
+                  <div className='flex gap-1 items-center'>
+                    <Paperclip className='w-4 h-4 text-[#CBCDD3]' />
+                    <p className='text-sm text-dark'>
+                      {props._count.attachments}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className='w-1 h-1 rounded-full bg-dark/40'></div>
+
+            <CircularProgress progress={props.progress || 0} />
+          </div>
+        </div>
+        <Button
+          variant='outline'
+          className='p-2 rounded-md text-dark/50 gap-1 pr-1.5'
+        >
+          Lihat
+          <ChevronRight
+            size={16}
+            className='text-dark pt-0.5'
+            strokeWidth={2.5}
+          />
+        </Button>
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn(
