@@ -440,3 +440,10 @@ export type ExpireSafety = Pick<
   expire_at: string
   daysUntilExpiry: number
 }
+
+export type DashboardTotal = {
+  total: {
+    employee: number
+    project: number
+  }
+}
