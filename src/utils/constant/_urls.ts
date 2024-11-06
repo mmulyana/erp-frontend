@@ -11,6 +11,9 @@ export const URLS = {
   PERMISSION_GROUP: V1 + '/permission-group',
   PERMISSION_CHECK: V1 + '/permission/check',
   PERMISSION: V1 + '/permission',
+  DASHBOARD: V1 + '/dashboard',
+
+  // HRIS
   HRIS_POSITION: V1 + '/hris/position',
   EMPLOYEE: V1 + '/hris/employee',
   CASH_ADVANCES: V1 + '/hris/cash-advance',
