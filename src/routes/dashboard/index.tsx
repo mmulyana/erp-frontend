@@ -13,6 +13,7 @@ import ExpireCertif from './hris/employee/_component/detail/expire-certif'
 import ExpireSafety from './hris/employee/_component/detail/expire-safety'
 
 import { useDashboardTotal } from './_hook/use-dashboard'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function Dashboard() {
   useTitle([{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW }])
@@ -53,7 +54,7 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className='col-span-full bg-dark/5 rounded-2xl p-4'>
+            <div className='col-span-full bg-dark/5 rounded-2xl p-4 h-fit'>
               <div className='flex items-center gap-3 pb-4 border-b border-dark/20 border-dashed mb-4'>
                 <div className='h-10 w-10 rounded-[10px] border border-dark/20 flex justify-center items-center bg-white'>
                   <ClipboardList size={24} className='text-dark' />
@@ -65,9 +66,13 @@ export default function Dashboard() {
                   </p>
                 </div>
               </div>
-              {data?.map((item) => (
-                <CardProject {...item} type='long' />
-              ))}
+              <ScrollArea className='h-[calc(100vh-260px)]'>
+                <div className='flex flex-col gap-4 h-full'>
+                  {data?.map((item) => (
+                    <CardProject {...item} type='long' />
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           </div>
           <div className='flex flex-col gap-4'>
