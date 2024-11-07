@@ -44,43 +44,52 @@ export default function CardProject({
           </div>
           <div className='flex gap-4 items-center'>
             {props.client && (
-              <div className='flex gap-3 items-center'>
-                <User size={18} className='text-gray-400' />
-                <p className='text-dark/50 leading-tight'>
-                  {props.client?.name}
-                </p>
-              </div>
+              <>
+                <div className='flex gap-3 items-center'>
+                  <User size={18} className='text-gray-400' />
+                  <p className='text-dark/50 leading-tight'>
+                    {props.client?.name}
+                  </p>
+                </div>
+                <div className='w-1 h-1 rounded-full bg-dark/40'></div>
+              </>
             )}
-            <div className='w-1 h-1 rounded-full bg-dark/40'></div>
-            <div className='flex gap-3 items-center'>
-              <div className='flex gap-2 items-center'>
-                {props?._count?.employees && (
-                  <div className='flex gap-1 items-center'>
-                    <Users2Icon className='w-4 h-4 text-[#CBCDD3]' />
-                    <p className='text-sm text-dark'>
-                      {props?._count.employees}
-                    </p>
+            {(!!props._count?.activities ||
+              !!props._count?.employees ||
+              !!props._count?.attachments) && (
+              <>
+                <div className='flex gap-3 items-center'>
+                  <div className='flex gap-2 items-center'>
+                    {!!props?._count?.employees && (
+                      <div className='flex gap-1 items-center'>
+                        <Users2Icon className='w-4 h-4 text-[#CBCDD3]' />
+                        <p className='text-sm text-dark'>
+                          {props?._count.employees}
+                        </p>
+                      </div>
+                    )}
+                    {!!props?._count?.activities && (
+                      <div className='flex gap-1 items-center'>
+                        <MessageCircle className='w-4 h-4 text-[#CBCDD3]' />
+                        <p className='text-sm text-dark'>
+                          {props?._count.activities}
+                        </p>
+                      </div>
+                    )}
+                    {!!props?._count?.attachments && (
+                      <div className='flex gap-1 items-center'>
+                        <Paperclip className='w-4 h-4 text-[#CBCDD3]' />
+                        <p className='text-sm text-dark'>
+                          {props._count.attachments}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                )}
-                {!!props?._count?.activities && (
-                  <div className='flex gap-1 items-center'>
-                    <MessageCircle className='w-4 h-4 text-[#CBCDD3]' />
-                    <p className='text-sm text-dark'>
-                      {props?._count.activities}
-                    </p>
-                  </div>
-                )}
-                {!!props?._count?.attachments && (
-                  <div className='flex gap-1 items-center'>
-                    <Paperclip className='w-4 h-4 text-[#CBCDD3]' />
-                    <p className='text-sm text-dark'>
-                      {props._count.attachments}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='w-1 h-1 rounded-full bg-dark/40'></div>
+                </div>
+
+                <div className='w-1 h-1 rounded-full bg-dark/40'></div>
+              </>
+            )}
 
             <CircularProgress progress={props.progress || 0} />
           </div>
@@ -134,19 +143,19 @@ export default function CardProject({
 
       <div className='flex justify-between items-center mt-4'>
         <div className='flex gap-2 items-center'>
-          {props?._count?.employees && (
+          {!!props?._count?.employees && (
             <div className='flex gap-1 items-center'>
               <Users2Icon className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props?._count.employees}</p>
             </div>
           )}
-          {props?._count?.activities && (
+          {!!props?._count?.activities && (
             <div className='flex gap-1 items-center'>
               <MessageCircle className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props?._count.activities}</p>
             </div>
           )}
-          {props?._count?.attachments && (
+          {!!props?._count?.attachments && (
             <div className='flex gap-1 items-center'>
               <Paperclip className='w-4 h-4 text-[#CBCDD3]' />
               <p className='text-sm text-dark'>{props._count.attachments}</p>
