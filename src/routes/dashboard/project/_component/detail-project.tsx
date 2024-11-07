@@ -18,6 +18,8 @@ import EmployeeProject from './detail/employee-project'
 import AttachmentProject from './detail/attachment-project'
 import ActivityProject from './detail/activity-project'
 import EstimateProject from './detail/estimate-project'
+import { EditorDescription } from '@/components/tiptap/editor-description'
+import { Button } from '@/components/ui/button'
 
 type Props = {
   open: boolean
@@ -27,6 +29,8 @@ type Props = {
 
 export default function DetailProject({ open, setOpen, id }: Props) {
   const { mutate: update } = useUpdateProject()
+
+  const [content, setContent] = useState('')
 
   const { data, isLoading, isFetching } = useProject(id)
   const project: ProjectDetail | null = useMemo(
@@ -68,7 +72,39 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                 isEdit={isEdit}
                 onEdit={onEdit}
                 keyData='description'
+                classNameInput='w-full'
                 defaultData={project?.description}
+                type='custom'
+                customEdit={
+                  <div>
+                    <EditorDescription
+                      content={project?.description}
+                      onChange={setContent}
+                    />
+                    <div className='flex justify-end gap-2 mt-2'>
+                      <Button variant='secondary' onClick={() => onEdit(null)}>
+                        Batal
+                      </Button>
+                      <Button
+                        variant='default'
+                        onClick={() => {
+                          update(
+                            { id, payload: { description: content } },
+                            { onSuccess: () => onEdit(null) }
+                          )
+                        }}
+                      >
+                        Simpan
+                      </Button>
+                    </div>
+                  </div>
+                }
+                customData={(val) => (
+                  <div
+                    className='w-full px-4 border rounded py-2 border-line'
+                    dangerouslySetInnerHTML={{ __html: val }}
+                  />
+                )}
                 className='text-dark/50'
                 onUpdate={(val) => {
                   update({ id, payload: { description: val as string } })
