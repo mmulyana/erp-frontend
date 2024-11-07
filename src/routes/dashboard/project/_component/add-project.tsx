@@ -1,19 +1,30 @@
-import MultiSelect from '@/components/common/select/multi-select-v1'
-import SelectV1 from '@/components/common/select/select-v1'
-import Modal, { ModalContainer } from '@/components/modal-v2'
-import { CommandItem } from '@/components/ui/command'
-import { Form, FormField } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+import { useForm } from 'react-hook-form'
+
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useProjectLabels } from '@/hooks/api/use-project-label'
+import { useAllEmployees } from '@/hooks/api/use-employee'
+import { useCreateProject } from '@/hooks/api/use-project'
 import { useBoards } from '@/hooks/api/use-board'
 import { useClient } from '@/hooks/api/use-client'
-import { useEmployees } from '@/hooks/api/use-employee'
-import { useCreateProject } from '@/hooks/api/use-project'
-import { useProjectLabels } from '@/hooks/api/use-project-label'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { BoxIcon, UserIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useApiData } from '@/hooks/use-api-data'
+
+import { EditorDescription } from '@/components/tiptap/editor-description'
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import SelectV1 from '@/components/common/select/select-v1'
+import { Form, FormField } from '@/components/ui/form'
+import { CommandItem } from '@/components/ui/command'
+import { Input } from '@/components/ui/input'
+import Label from '@/components/common/label'
+import {
+  MultiSelector,
+  MultiSelectorContent,
+  MultiSelectorInput,
+  MultiSelectorItem,
+  MultiSelectorList,
+  MultiSelectorTrigger,
+} from '@/components/common/multi-select'
+
+import { BoxIcon, User, UserIcon } from 'lucide-react'
 
 type Props = {
   open: boolean
@@ -24,48 +35,42 @@ export default function AddProject({ open, setOpen }: Props) {
 
   const { mutate } = useCreateProject()
 
-  const qLabels = useProjectLabels()
-  const qUsers = useClient()
-  const qEmployees = useEmployees({ enabled: true })
-  const qBoards = useBoards()
-  const labels = useMemo(
-    () =>
-      qLabels?.data?.data?.data?.map((item: any) => ({
-        ...item,
-        value: item.id,
-        label: item.name,
-      })) || [],
-    [qLabels.data, qLabels.isLoading]
-  )
+  const { data: employees } = useApiData(useAllEmployees({ enabled: open }))
+  const employeeOptions = employees?.map((item) => ({
+    label: item.fullname,
+    value: String(item.id),
+  }))
+
+  const { data: labels } = useApiData(useProjectLabels())
+  const labelOptions = labels?.map((item) => ({
+    label: item.name,
+    value: String(item.id),
+  }))
+
+  const { data: clients } = useApiData(useClient())
+  const { data: boards } = useApiData(useBoards())
 
   const form = useForm({
     defaultValues: {
       name: '',
       description: '',
-      labels: [] as number[],
+      labels: [] as string[],
       clientId: null as number | null,
       leadId: null as number | null,
-      employees: [] as number[],
+      employees: [] as string[],
     },
   })
-  const employees = useMemo(
-    () =>
-      qEmployees?.data?.data?.data?.map((item: any) => ({
-        ...item,
-        value: item.id,
-        label: item.fullname,
-      })) || [],
-    [qEmployees.data, qEmployees.isLoading]
-  )
+
+  let leadId = form.watch('leadId')
 
   const submit = async (data: any) => {
     mutate(
       {
         payload: {
           ...data,
-          containerId: qBoards.data?.data.data.find(
-            (item: any) => item.name === 'Penawaran'
-          ).id,
+          labels: data.labels.map((item: any) => Number(item)),
+          employees: data.employees.map((item: any) => Number(item)),
+          containerId: boards?.find((item) => item.name === 'Penawaran')?.id,
         },
       },
       {
@@ -75,16 +80,6 @@ export default function AddProject({ open, setOpen }: Props) {
         },
       }
     )
-  }
-
-  // HANDLE POPOVER
-  type Dialog = { user: boolean; lead: boolean }
-  const [dialog, setDialog] = useState<Dialog>({
-    user: false,
-    lead: false,
-  })
-  const handleDialog = (type: keyof Dialog, val?: boolean) => {
-    setDialog((prev) => ({ ...prev, [type]: val || false }))
   }
 
   return (
@@ -109,24 +104,13 @@ export default function AddProject({ open, setOpen }: Props) {
                 />
               )}
             />
-            <FormField
-              control={form.control}
-              name='description'
-              render={({ field }) => (
-                <Textarea
-                  className='w-full min-h-6 p-0 outline-none ring-0 rounded-none border-none shadow-none placeholder:text-dark/50'
-                  placeholder='Tambah deskripsi pekerjaan'
-                  {...field}
-                />
-              )}
-            />
 
-            <div className='flex gap-2 items-center flex-wrap gap-y-4'>
+            <div className='flex gap-2 items-center flex-wrap'>
               <SelectV1
-                open={dialog.user}
-                setOpen={(val) => handleDialog('user', val)}
-                className='flex-1'
                 name='clientId'
+                placeholder='Pilih klien'
+                className='rounded-full w-fit gap-2'
+                prefix={<User size={14} />}
                 customPlaceholder={
                   <div className='inline-flex gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
                     <UserIcon className='w-4 h-4' />
@@ -134,26 +118,18 @@ export default function AddProject({ open, setOpen }: Props) {
                   </div>
                 }
                 preview={(val) => (
-                  <div className='inline-flex gap-1 items-center border border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
-                    <UserIcon className='w-4 h-4' />
-
-                    <span className='text-sm text-dark'>
-                      {
-                        qUsers?.data?.data.data?.find((s: any) => s.id === val)
-                          ?.name
-                      }
-                    </span>
-                  </div>
+                  <span className='text-sm text-dark'>
+                    {clients?.find((s: any) => s.id === val)?.name}
+                  </span>
                 )}
               >
-                {qUsers?.data?.data.data?.map((item: any) => (
+                {clients?.map((item: any) => (
                   <CommandItem
                     key={item.id}
                     className='hover:bg-red-400'
                     value={item.id.toString()}
                     onSelect={(value) => {
                       form.setValue('clientId', Number(value))
-                      handleDialog('user')
                     }}
                   >
                     <span className='px-2 py-0.5 flex gap-1 items-center'>
@@ -165,41 +141,31 @@ export default function AddProject({ open, setOpen }: Props) {
                   </CommandItem>
                 ))}
               </SelectV1>
+
               <SelectV1
-                open={dialog.lead}
-                setOpen={(val) => handleDialog('lead', val)}
-                className='flex-1'
                 name='leadId'
+                placeholder='Pilih Penanggung Jawab'
+                className='rounded-full w-fit gap-2'
+                prefix={<User size={14} />}
                 customPlaceholder={
-                  <div className='inline-flex flex-1 gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
+                  <div className='inline-flex gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
                     <UserIcon className='w-4 h-4' />
-                    <span className='text-sm text-dark/50'>
-                      Pilih Penanggung Jawab
-                    </span>
+                    <span className='text-sm text-dark/50'>Pilih user</span>
                   </div>
                 }
                 preview={(val) => (
-                  <div className='inline-flex flex-1 gap-1 items-center border border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
-                    <UserIcon className='w-4 h-4' />
-
-                    <span className='text-sm text-dark'>
-                      {
-                        qEmployees?.data?.data?.data?.find(
-                          (s: any) => s.id === Number(val)
-                        )?.fullname
-                      }
-                    </span>
-                  </div>
+                  <span className='text-sm text-dark'>
+                    {employees?.find((s: any) => s.id === val)?.fullname}
+                  </span>
                 )}
               >
-                {qEmployees?.data?.data?.data?.map((item: any) => (
+                {employees?.map((item) => (
                   <CommandItem
                     key={item.id}
                     className='hover:bg-red-400'
                     value={item.id.toString()}
                     onSelect={(value) => {
                       form.setValue('leadId', Number(value))
-                      handleDialog('lead')
                     }}
                   >
                     <span className='px-2 py-0.5 flex gap-1 items-center'>
@@ -211,25 +177,75 @@ export default function AddProject({ open, setOpen }: Props) {
                   </CommandItem>
                 ))}
               </SelectV1>
-              <MultiSelect
-                options={labels}
-                label='Label'
-                onChange={(val) =>
-                  form.setValue(
-                    'labels',
-                    val.map((item) => Number(item))
-                  )
-                }
+            </div>
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <EditorDescription
+                  content={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+            <div className='space-y-2'>
+              <FormField
+                control={form.control}
+                name='labels'
+                render={({ field }) => (
+                  <MultiSelector
+                    options={labelOptions || []}
+                    values={field.value}
+                    onValuesChange={field.onChange}
+                    loop
+                    // className='max-w-xs'
+                  >
+                    <MultiSelectorTrigger>
+                      <MultiSelectorInput placeholder='Pilih label' />
+                    </MultiSelectorTrigger>
+                    <MultiSelectorContent>
+                      <MultiSelectorList>
+                        {labels?.map((item) => (
+                          <MultiSelectorItem value={String(item.id)}>
+                            <Label color={item.color} name={item.name} />
+                          </MultiSelectorItem>
+                        ))}
+                      </MultiSelectorList>
+                    </MultiSelectorContent>
+                  </MultiSelector>
+                )}
               />
-              <MultiSelect
-                options={employees}
-                label='Pegawai'
-                onChange={(val) =>
-                  form.setValue(
-                    'employees',
-                    val.map((item) => Number(item))
-                  )
-                }
+              <FormField
+                control={form.control}
+                name='employees'
+                render={({ field }) => (
+                  <MultiSelector
+                    options={employeeOptions || []}
+                    values={field.value}
+                    onValuesChange={field.onChange}
+                    loop
+                  >
+                    <MultiSelectorTrigger>
+                      <MultiSelectorInput placeholder='Pilih Pegawai' />
+                    </MultiSelectorTrigger>
+                    <MultiSelectorContent>
+                      <MultiSelectorList>
+                        {employees
+                          ?.filter((item) => item.id !== Number(leadId))
+                          .map((item) => (
+                            <MultiSelectorItem value={String(item.id)}>
+                              <span className='px-2 py-0.5 flex gap-1 items-center'>
+                                <div className='w-5 h-5 rounded-full bg-blue-900 text-white text-sm flex items-center justify-center pb-0.5 uppercase'>
+                                  {item.fullname.at(0)}
+                                </div>
+                                {item.fullname}
+                              </span>
+                            </MultiSelectorItem>
+                          ))}
+                      </MultiSelectorList>
+                    </MultiSelectorContent>
+                  </MultiSelector>
+                )}
               />
             </div>
           </ModalContainer>
