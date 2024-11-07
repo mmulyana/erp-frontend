@@ -61,34 +61,36 @@ export default function TableEmployee({
       cell: ({ row }) => {
         const { fullname, id } = row.original
         return (
-          <Overlay
-            className='w-fit pr-14'
-            overlay={
-              <button
-                onClick={() => {
-                  onSelect(id)
-                  onDetailEmployee(true)
-                }}
-                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-              >
-                Lihat
-              </button>
-            }
-          >
-            <div className='hover:text-dark'>
-              <button
-                onClick={() => {
-                  onSelect(id)
-                  onDetailEmployee(true)
-                }}
-                className='justify-start flex'
-              >
-                <span className='break-words max-w-[120px] text-left'>
-                  {fullname}
-                </span>
-              </button>
-            </div>
-          </Overlay>
+          <div className='w-[200px]'>
+            <Overlay
+              className='w-fit pr-14'
+              overlay={
+                <button
+                  onClick={() => {
+                    onSelect(id)
+                    onDetailEmployee(true)
+                  }}
+                  className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                >
+                  Lihat
+                </button>
+              }
+            >
+              <div className='hover:text-dark'>
+                <button
+                  onClick={() => {
+                    onSelect(id)
+                    onDetailEmployee(true)
+                  }}
+                  className='justify-start flex'
+                >
+                  <span className='break-words max-w-[120px] text-left'>
+                    {fullname}
+                  </span>
+                </button>
+              </div>
+            </Overlay>
+          </div>
         )
       },
     },
@@ -110,7 +112,7 @@ export default function TableEmployee({
     },
     {
       accessorKey: 'last_education',
-      header: 'Pend. terakhir',
+      header: () => <p className='text-center'>Pend. terakhir</p>,
       cell: ({ row }) => (
         <p>{EDUCATIONS_OBJ[row.original.last_education as string]}</p>
       ),
