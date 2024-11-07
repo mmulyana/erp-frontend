@@ -1,7 +1,10 @@
 import { DataTable } from '@/components/data-table'
 import { PATH } from '@/utils/constant/_paths'
 import useUrlState from '@ahooksjs/use-url-state'
-import { useCashAdvance } from '@/hooks/api/use-cash-advance'
+import {
+  useCashAdvance,
+  useTotalCashAdvance,
+} from '@/hooks/api/use-cash-advance'
 import { useTitle } from '../../_component/header'
 import { DashboardLayout } from '../../_component/layout'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
@@ -19,6 +22,8 @@ import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import CardMonthly from './_component/card-monthly'
 import { ModalAdd } from './_component/modal-add'
 import ModalDelete from './_component/modal-delete'
+import { useApiData } from '@/hooks/use-api-data'
+import { formatToRupiah } from '@/utils/formatCurrency'
 
 const links = [
   {
@@ -41,6 +46,7 @@ export default function Page() {
     limit: url.limit,
     page: url.page,
   })
+  const { data: totalData } = useApiData(useTotalCashAdvance())
 
   // COLUMNS CASH ADVANCE
   const columns: ColumnDef<CashAdvance>[] = [
@@ -142,7 +148,9 @@ export default function Page() {
                 Total kasbon bln. oktober
               </p>
             </CardHead>
-            <CardBody></CardBody>
+            <CardBody>
+              <p>{formatToRupiah(totalData?.total || 0)}</p>
+            </CardBody>
           </Card>
           <CardMonthly />
         </div>
