@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useEmployees } from '@/hooks/api/use-employee'
+import { useAllEmployees } from '@/hooks/api/use-employee'
 import {
   useAssigneEmployee,
   useUnassigneEmployee,
@@ -74,7 +74,7 @@ export default function EmployeeProject({
   }
 
   //   GET EMPLOYEE
-  const { data } = useEmployees({ enabled: open })
+  const { data } = useAllEmployees({ enabled: open })
   const dataEmployees = useMemo(() => data?.data.data || [], [data])
 
   const filteredEmployees = useMemo(() => {
