@@ -5,12 +5,11 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
 import {
   Album,
@@ -27,7 +26,7 @@ import {
 
 export default function AppSidebar() {
   return (
-    <Sidebar collapsible='icon' variant='sidebar'>
+    <Sidebar variant='sidebar'>
       <SidebarHeader>
         <p>BJS</p>
       </SidebarHeader>
@@ -40,53 +39,53 @@ export default function AppSidebar() {
             </Link>
           </SidebarMenuButton>
 
-          <SidebarGroupLabel>HRIS</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
+          <SidebarMenuButton>
+            <User2 size={20} />
+            HRIS
+          </SidebarMenuButton>
+          <SidebarMenuSub>
+            <SidebarMenuSubItem>
               {hrisMenus.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon size={20} />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarMenuSubButton key={`submenu-${item.url}`} asChild>
+                  <Link to={item.url}>
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuSubButton>
               ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+            </SidebarMenuSubItem>
+          </SidebarMenuSub>
 
-          <SidebarGroupLabel>Project</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
+          <SidebarMenuButton>
+            <HardHat size={20} />
+            Proyek
+          </SidebarMenuButton>
+          <SidebarMenuSub>
+            <SidebarMenuSubItem>
               {ProjectMenus.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon size={20} />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarMenuSubButton key={`submenu-${item.url}`} asChild>
+                  <Link to={item.url}>
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuSubButton>
               ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+            </SidebarMenuSubItem>
+          </SidebarMenuSub>
 
-          <SidebarGroupLabel>Inventory</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
+          <SidebarMenuButton>
+            <BlocksIcon size={20} />
+            Inventory
+          </SidebarMenuButton>
+          <SidebarMenuSub>
+            <SidebarMenuSubItem>
               {InventoryMenus.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon size={20} />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarMenuSubButton key={`submenu-${item.url}`} asChild>
+                  <Link to={item.url}>
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuSubButton>
               ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+            </SidebarMenuSubItem>
+          </SidebarMenuSub>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
