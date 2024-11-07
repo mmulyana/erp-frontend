@@ -22,3 +22,12 @@ export const useChartEmployeeByStatus = () => {
     },
   })
 }
+
+export const useChartCashAdvance = (params?: { total: number }) => {
+  return useQuery({
+    queryKey: [KEYS.CASH_ADVANCES_CHART],
+    queryFn: async (): Promise<AxiosResponse<IApi<Chart>>> => {
+      return http(URLS.CASH_ADVANCES + '/data/total-by-month', { params })
+    },
+  })
+}
