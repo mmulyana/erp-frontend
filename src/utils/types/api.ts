@@ -448,3 +448,17 @@ export type DashboardTotal = {
     project: number
   }
 }
+
+export type TopClientChart = {
+  chartData: {
+    client: string
+    count: number
+    fill: string
+  }[]
+  chartConfig: {
+    [key: string]: {
+      label: string
+      color: string
+    }
+  }
+}
