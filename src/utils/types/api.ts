@@ -118,6 +118,7 @@ export interface Comment {
 }
 
 export interface ProjectToLabel {
+  id: number
   label: ProjectLabel
 }
 
@@ -369,11 +370,11 @@ type EmployeeStatusTrack = {
 
 export type CashAdvance = {
   id: number
+  amount: string
   employeeId: number
-  amount: number
   requestDate: string
-  employee: Employee
-  description?: string
+  description: string
+  employee: Pick<Employee, 'id' | 'fullname'>
 }
 
 export type Chart = {
