@@ -1,27 +1,44 @@
-import { useTitle } from '../_component/header'
-import { PATH } from '@/utils/constant/_paths'
-import { DashboardLayout } from '../_component/layout'
-import InfoRevenue from './_component/overview/info-revenue'
-import InfoStatus from './_component/overview/info-status'
-import { ColumnDef } from '@tanstack/react-table'
-import { Project } from '@/utils/types/api'
-import { DataTable } from '@/components/data-table'
-import { FilterTable, HeadTable } from '@/components/data-table/component'
-import { BriefcaseBusiness } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import AddProject from './_component/add-project'
-import { useProjects } from '@/hooks/api/use-project'
-import DetailProject from './_component/detail-project'
+import { ColumnDef } from '@tanstack/react-table'
+
+import { useProjects, useTotalProject } from '@/hooks/api/use-project'
+import { useClient } from '@/hooks/api/use-client'
+import { useApiData } from '@/hooks/use-api-data'
+
+import { formatToRupiah } from '@/utils/formatCurrency'
+import { PATH } from '@/utils/constant/_paths'
+import { Project } from '@/utils/types/api'
+
+import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
+
+import DropdownEdit from '@/components/common/dropdown-edit'
 import Overlay from '@/components/common/overlay'
 import Chips from '@/components/common/chips'
-import { formatToRupiah } from '@/utils/formatCurrency'
-import DropdownEdit from '@/components/common/dropdown-edit'
+
+import ProjectByStatusChart from './_component/overview/project-by-status'
+import TopClientChart from './_component/overview/top-client-chart'
+import DetailProject from './_component/detail-project'
+import AddProject from './_component/add-project'
+
+import { DashboardLayout } from '../_component/layout'
+import { useTitle } from '../_component/header'
+
+import {
+  BriefcaseBusiness,
+  HardHat,
+  ListChecks,
+  SquareUserRound,
+} from 'lucide-react'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
 
   const { data, isLoading } = useProjects()
+  const { data: totalproject } = useApiData(useTotalProject())
+  const { data: clients } = useApiData(useClient())
+
   const columns: ColumnDef<Project>[] = [
     {
       id: 'name',
@@ -139,8 +156,45 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       <div className='p-6 grid grid-cols-1 md:grid-cols-3 gap-6'>
-        {/* <InfoRevenue />
-        <InfoStatus /> */}
+        <div className='col-span-3 md:col-span-3 grid grid-cols-3 gap-4'>
+          <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
+            <div className='h-14 w-14 rounded-[10px] bg-blue-primary/5 flex justify-center items-center'>
+              <HardHat className='text-blue-primary' size={24} />
+            </div>
+            <div className='flex flex-col gap-1'>
+              <p className='text-dark/50 leading-none text-sm'>Total Proyek</p>
+              <p className='text-dark font-medium text-xl leading-none'>
+                {totalproject?.active}
+              </p>
+            </div>
+          </div>
+          <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
+            <div className='h-14 w-14 rounded-[10px] bg-green-primary/5 flex justify-center items-center'>
+              <ListChecks className='text-green-primary' size={24} />
+            </div>
+            <div className='flex flex-col gap-1'>
+              <p className='text-dark/50 leading-none text-sm'>
+                Total Proyek Selesai
+              </p>
+              <p className='text-dark font-medium text-xl leading-none'>
+                {totalproject?.done}
+              </p>
+            </div>
+          </div>
+          <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
+            <div className='h-14 w-14 rounded-[10px] bg-amber-50 flex justify-center items-center'>
+              <SquareUserRound className='text-amber-600' size={24} />
+            </div>
+            <div className='flex flex-col gap-1'>
+              <p className='text-dark/50 leading-none text-sm'>Total Klien</p>
+              <p className='text-dark font-medium text-xl leading-none'>
+                {clients?.length}
+              </p>
+            </div>
+          </div>
+        </div>
+        <TopClientChart />
+        <ProjectByStatusChart />
         <div className='col-span-1 md:col-span-3 border border-line rounded-xl overflow-hidden'>
           <HeadTable>
             <div className='flex gap-4 items-center'>
