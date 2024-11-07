@@ -6,16 +6,14 @@ import { jwtDecode } from 'jwt-decode'
 import { User } from './types/user'
 import { useSetAtom } from 'jotai'
 import { userAtom } from '@/atom/auth'
-import { useUserAccount } from '../hooks/api/use-account'
-import { permissionAtom } from '@/atom/permission'
+// import { permissionAtom } from '@/atom/permission'
 
 export default function ProtectedRoute({ children }: React.PropsWithChildren) {
   const navigate = useNavigate()
   const setUserAtom = useSetAtom(userAtom)
-  const setPermissionAtom = useSetAtom(permissionAtom)
+  // const setPermissionAtom = useSetAtom(permissionAtom)
 
-  const [id, setId] = useState<number | undefined>(undefined)
-  const { data: account } = useUserAccount(id)
+  const [_, setId] = useState<number | undefined>(undefined)
 
   useEffect(() => {
     const token = CookieStorage.get(CookieKeys.AuthToken)
@@ -29,10 +27,10 @@ export default function ProtectedRoute({ children }: React.PropsWithChildren) {
     return () => {}
   }, [])
 
-  useEffect(() => {
-    if (!account) return
-    setPermissionAtom(account?.permissions)
-  }, [account])
+  // useEffect(() => {
+  //   if (!account) return
+  //   setPermissionAtom(account?.permissions)
+  // }, [account])
 
   return <>{children}</>
 }
