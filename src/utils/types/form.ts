@@ -176,3 +176,10 @@ export type createGoods = {
   categoryId: number
   brandId: number
 }
+
+export type createCashAdvance = {
+  employeeId: number | null
+  amount: number
+  requestDate: Date | string
+  description?: string | null
+}
