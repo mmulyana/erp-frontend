@@ -1,28 +1,17 @@
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { useChartCashAdvance } from '@/hooks/api/use-chart'
+import { useApiData } from '@/hooks/use-api-data'
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { Card, CardBody, CardHead } from '@/components/common/card-v1'
-
-const chartData = [
-  { month: 'Januari', total: 186 },
-  { month: 'Februari', total: 305 },
-  { month: 'Maret', total: 237 },
-  { month: 'April', total: 73 },
-  { month: 'Mei', total: 209 },
-  { month: 'Juni', total: 214 },
-]
-const chartConfig = {
-  total: {
-    label: 'Total',
-    color: '#2A9D90',
-  },
-} satisfies ChartConfig
 
 export default function CardMonthly() {
+  const { data } = useApiData(useChartCashAdvance({ total: 3 }))
+
   return (
     <Card className='rounded-xl'>
       <CardHead>
@@ -31,8 +20,8 @@ export default function CardMonthly() {
         </p>
       </CardHead>
       <CardBody>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+        <ChartContainer config={(data?.chartConfig as ChartConfig) || {}}>
+          <BarChart accessibilityLayer data={data?.chartData || []}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey='month'
