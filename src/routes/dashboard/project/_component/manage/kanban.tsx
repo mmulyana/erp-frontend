@@ -5,9 +5,13 @@ import CardProject from '@/components/card-project'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { socket } from '@/utils/socket'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { useSidebar } from '@/components/ui/sidebar'
+import useScreenWidth from '@/hooks/use-screen-width'
 
 export default function Kanban() {
   const [containers, setContainers] = useState<Board[]>([])
+
+  const { state, isMobile } = useSidebar()
 
   useEffect(() => {
     socket.emit('request_board')
@@ -82,12 +86,25 @@ export default function Kanban() {
     socket.emit('update_order_items', { destination, source })
   }
 
+  const width = useScreenWidth()
+
   return (
-    <ScrollArea className='pb-3 w-[calc(100vw-18rem)]'>
+    <ScrollArea
+      className={cn(
+        'pb-3 w-[calc(100vw-18rem)]',
+        state === 'collapsed' && 'w-[calc(100vw-5rem)]'
+      )}
+      style={{
+        width: isMobile ? width - 32 + 'px' : '',
+      }}
+    >
       <div className={cn('h-full flex gap-2 relative')}>
         <DragDropContext onDragEnd={onDragEnd}>
           {containers.map((container) => (
-            <div key={container.id} className='bg-[#F6F7F9] rounded-xl w-[264px] relative overflow-hidden'>
+            <div
+              key={container.id}
+              className='bg-[#F6F7F9] rounded-xl w-[264px] relative overflow-hidden'
+            >
               <Droppable droppableId={container.id}>
                 {(provided, snapshot) => (
                   <div
