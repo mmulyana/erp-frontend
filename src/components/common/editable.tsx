@@ -43,7 +43,7 @@ const RenderData = memo(
       (typeof defaultData == 'number' && defaultData === 0)
     ) {
       return (
-        <span className='inline-flex gap-2 items-center group'>
+        <span className='inline-flex gap-2 items-start group w-full'>
           {customData?.(defaultData)}
           <Pencil
             size={14}
@@ -188,7 +188,7 @@ export const Editable = memo(
                 </SelectTrigger>
                 <SelectContent>
                   {options?.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
+                    <SelectItem key={option.value} value={String(option.value)}>
                       {option.name}
                     </SelectItem>
                   ))}
