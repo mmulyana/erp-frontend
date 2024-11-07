@@ -8,7 +8,7 @@ import {
 import { useTitle } from '../../_component/header'
 import { DashboardLayout } from '../../_component/layout'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
-import { FileOutputIcon, TrashIcon } from 'lucide-react'
+import { FileOutputIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
@@ -61,7 +61,7 @@ export default function Page() {
       accessorKey: 'amount',
       header: 'Jumlah',
       cell: ({ cell }) => {
-        return <p>Rp {cell.row.original.amount}</p>
+        return <p>{formatToRupiah(Number(cell.row.original.amount))}</p>
       },
     },
     {
@@ -90,11 +90,19 @@ export default function Page() {
               <DropdownMenuItem
                 className='flex items-center gap-2 cursor-pointer'
                 onClick={() => {
+                  handleDialog('add', true)
+                  setSelectedId(row.original.id)
+                }}
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className='flex items-center gap-2 cursor-pointer'
+                onClick={() => {
                   handleDialog('delete', true)
                   setSelectedId(row.original.id)
                 }}
               >
-                <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
                 Hapus
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -145,7 +153,7 @@ export default function Page() {
           <Card className='rounded-xl'>
             <CardHead>
               <p className='text-dark text-sm font-semibold'>
-                Total kasbon bln. oktober
+                Total kasbon bln. {format(new Date(), 'MMMM', { locale: id })}
               </p>
             </CardHead>
             <CardBody>
@@ -155,7 +163,11 @@ export default function Page() {
           <CardMonthly />
         </div>
       </div>
-      <ModalAdd open={dialog.add} setOpen={(val) => handleDialog('add', val)} />
+      <ModalAdd
+        id={selectedId}
+        open={dialog.add}
+        setOpen={(val) => handleDialog('add', val)}
+      />
       <ModalDelete
         open={dialog.delete}
         setOpen={(val) => handleDialog('delete', val)}
