@@ -14,6 +14,7 @@ export const KEYS = {
   EMPLOYEE_SAFETY_EXPIRE: 'employee-safety-expire',
   LEAVES: 'leaves',
   CASH_ADVANCES: 'cash_advances',
+  CASH_ADVANCES_TOTAL: 'cash_advances-total',
   ATTENDANCE: 'attendance',
   OVERTIME: 'overtime',
   PROJECT: 'project',
