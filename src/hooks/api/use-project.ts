@@ -163,3 +163,13 @@ export const useRemoveLabelProject = () => {
     },
   })
 }
+export const useTotalProject = () => {
+  return useQuery({
+    queryKey: [KEYS.PROJECT_TOTAL],
+    queryFn: async (): Promise<
+      AxiosResponse<IApi<{ done: number; active: number }>>
+    > => {
+      return http(URLS.PROJECT + '/data/total')
+    },
+  })
+}
