@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useEmployees } from '@/hooks/api/use-employee'
+import { useAllEmployees } from '@/hooks/api/use-employee'
 import { useUpdateProject } from '@/hooks/api/use-project'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 import { cn } from '@/utils/cn'
@@ -65,7 +65,7 @@ export default function LeadProject({ id, data: { lead } }: Props) {
   }
 
   //   GET CLIENT
-  const { data } = useEmployees({ enabled: open })
+  const { data } = useAllEmployees({ enabled: open })
   const leads = useMemo(() => data?.data.data || [], [data])
 
   const filteredClient = useMemo(() => {
