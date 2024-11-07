@@ -12,7 +12,7 @@ import { toast } from 'sonner'
 type Params = Pagination & {}
 export const useClient = (params?: Params) => {
   return useQuery({
-    queryFn: async (): Promise<AxiosResponse<IApiPagination<Client[]>>> => {
+    queryFn: async (): Promise<AxiosResponse<IApi<Client[]>>> => {
       return await http.request({
         method: 'GET',
         url: URLS.PROJECT_CLIENT,
