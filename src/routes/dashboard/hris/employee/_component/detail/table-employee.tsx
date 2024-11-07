@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
 import { useEmployees } from '@/hooks/api/use-employee'
+import { useApiData } from '@/hooks/use-api-data'
 import { settingConfig } from '@/routes/dashboard/_component/setting/setting'
 import { EDUCATIONS_OBJ } from '@/utils/data/educations'
 import { Employee } from '@/utils/types/api'
@@ -42,13 +43,15 @@ export default function TableEmployee({
 
   const [url] = useUrlState({ name: '', page: '' })
 
-  const { isLoading, data } = useEmployees({
-    ...(status ? { status } : undefined),
-    ...(isString(url.name) ? { name: url.name } : undefined),
-    ...(positionId ? { positionId } : undefined),
-    ...(isString(url.page) ? { page: url.page } : undefined),
-    enabled: positionId !== null,
-  })
+  const { isLoading, data } = useApiData(
+    useEmployees({
+      ...(status ? { status } : undefined),
+      ...(isString(url.name) ? { name: url.name } : undefined),
+      ...(positionId ? { positionId } : undefined),
+      ...(isString(url.page) ? { page: url.page } : undefined),
+      enabled: positionId !== null,
+    })
+  )
 
   // COLUMNS EMPLOYEE
   const columns: ColumnDef<Employee>[] = [
@@ -189,11 +192,11 @@ export default function TableEmployee({
       <FilterTable placeholder='Cari pegawai' />
       <DataTable
         columns={columns}
-        data={data?.data?.data || []}
+        data={data?.data || []}
         withPagination
         withLoading
         isLoading={isLoading}
-        totalPages={data?.data?.total_pages || 0}
+        totalPages={data?.total_pages || 0}
       />
     </>
   )
