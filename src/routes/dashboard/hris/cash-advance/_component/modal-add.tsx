@@ -10,7 +10,8 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateCashAdvance } from '@/hooks/api/use-cash-advance'
-import { useEmployees } from '@/hooks/api/use-employee'
+import { useAllEmployees } from '@/hooks/api/use-employee'
+import { useApiData } from '@/hooks/use-api-data'
 import { Employee } from '@/utils/types/api'
 import { useEffect } from 'react'
 
@@ -21,13 +22,15 @@ type Props = {
   setOpen: (val: boolean) => void
 }
 export function ModalAdd({ open, setOpen }: Props) {
-  const { data: employees } = useEmployees({}, { enabled: open })
+  const { data: employees } = useApiData(useAllEmployees({ enabled: open }))
   const { mutate } = useCreateCashAdvance()
 
   const form = useForm({
     defaultValues: {
       amount: 0,
       description: '',
+      employeeId: '',
+      requestDate: new Date().toDateString(),
     },
   })
 
@@ -66,13 +69,11 @@ export function ModalAdd({ open, setOpen }: Props) {
                       <SelectValue placeholder='Pilih pegawai' />
                     </SelectTrigger>
                     <SelectContent>
-                      {employees?.data?.data?.map(
-                        (emp: Employee & { id: number }) => (
-                          <SelectItem key={emp.id} value={emp?.id?.toString()}>
-                            {emp.fullname}
-                          </SelectItem>
-                        )
-                      )}
+                      {employees?.map((emp: Employee & { id: number }) => (
+                        <SelectItem key={emp.id} value={emp?.id?.toString()}>
+                          {emp.fullname}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
