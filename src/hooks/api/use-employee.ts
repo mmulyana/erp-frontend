@@ -4,7 +4,13 @@ import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { toast } from 'sonner'
 import { AxiosResponse } from 'axios'
-import { Employee, ExpireCertif, ExpireSafety, IApi, IApiPagination } from '@/utils/types/api'
+import {
+  Employee,
+  ExpireCertif,
+  ExpireSafety,
+  IApi,
+  IApiPagination,
+} from '@/utils/types/api'
 import {
   createCertif,
   payloadCreateEmployee,
@@ -20,16 +26,20 @@ export const useEmployees = (params?: ParamsEmployee) => {
   return useQuery({
     queryKey: [KEYS.EMPLOYEE, params],
     queryFn: async (): Promise<AxiosResponse<IApiPagination<Employee[]>>> => {
-      return await http
-        .request({
-          method: 'GET',
-          url: URLS.EMPLOYEE,
-          params,
-        })
-        .then((res) => res.data)
-        .catch((err) => {
-          throw err
-        })
+      return await http(URLS.EMPLOYEE + '/pagination', {
+        params,
+      })
+    },
+    enabled: params?.enabled || false,
+  })
+}
+export const useAllEmployees = (params?: ParamsEmployee) => {
+  return useQuery({
+    queryKey: [KEYS.EMPLOYEE, params],
+    queryFn: async (): Promise<AxiosResponse<IApi<Employee[]>>> => {
+      return await http(URLS.EMPLOYEE, {
+        params,
+      })
     },
     enabled: params?.enabled || false,
   })
