@@ -34,6 +34,7 @@ export const useCreateCashAdvance = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.CASH_ADVANCES] })
       queryClient.invalidateQueries({ queryKey: [KEYS.CASH_ADVANCES_TOTAL] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.CASH_ADVANCES_CHART] })
       toast.success(data.data.message)
     },
   })
@@ -50,6 +51,8 @@ export const useDeleteCashAdvances = () => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.CASH_ADVANCES],
       })
+      queryClient.invalidateQueries({ queryKey: [KEYS.CASH_ADVANCES_TOTAL] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.CASH_ADVANCES_CHART] })
       toast.success(data?.data?.message)
     },
   })
