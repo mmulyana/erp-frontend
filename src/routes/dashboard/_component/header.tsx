@@ -7,7 +7,6 @@ import { SidebarTrigger } from '@/components/ui/sidebar'
 import {
   Breadcrumb as BreadCrumbWrapper,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -17,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { settingConfig } from './setting/setting'
 
 import { ChevronRight, Settings } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export type Title = {
   name: string
@@ -57,12 +57,9 @@ export default function Header() {
                         {link.name}
                       </BreadcrumbPage>
                     ) : (
-                      <BreadcrumbLink
-                        href={link.path}
-                        className='text-[#989CA8] text-sm'
-                      >
+                      <Link to={link.path} className='text-[#989CA8] text-sm'>
                         {link.name}
-                      </BreadcrumbLink>
+                      </Link>
                     )}
                   </BreadcrumbItem>
                   {index !== lastIndex && (
