@@ -1,7 +1,7 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { IApi, IApiPagination, Project, ProjectDetail } from '@/utils/types/api'
+import { IApi, Project, ProjectDetail } from '@/utils/types/api'
 import { updateProject } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
