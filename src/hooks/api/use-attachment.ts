@@ -115,3 +115,16 @@ export const useDetailAttachment = ({
     enabled,
   })
 }
+
+export const useAttachments = (params?: { name?: string }) => {
+  return useQuery({
+    queryKey: [KEYS.ATTACHMENT, params?.name],
+    queryFn: async (): Promise<AxiosResponse<IApi<Attachment[]>>> => {
+      return await http(URLS.PROJECT_ATTACHMENT, {
+        params: {
+          name: params?.name,
+        },
+      })
+    },
+  })
+}
