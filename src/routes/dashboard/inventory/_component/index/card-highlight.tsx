@@ -24,7 +24,7 @@ export default function CardHighlight() {
         </div>
       </div>
 
-      <div className='py-4 px-6 w-full h-full border-b md:border-l border-line'>
+      <div className='py-4 px-6 w-full h-full border-b md:border-b-0 md:border-l border-line'>
         <div className='h-8 w-8 rounded-full bg-[#E09F54]/10 flex justify-center items-center'>
           <Package className='w-5 h-5 text-[#E09F54]' />
         </div>
