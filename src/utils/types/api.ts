@@ -228,8 +228,8 @@ export type Transaction = {
   date: string
   type: 'in' | 'out' | 'borrowed' | 'opname'
   projectId?: number
-  isReturned?: boolean
-  project?: Partial<Project>
+  is_returned?: boolean
+  project?: Pick<Project, 'name'>
   good: Partial<Goods>
   supplier: Partial<Supplier>
 }
