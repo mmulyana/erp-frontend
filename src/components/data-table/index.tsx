@@ -15,12 +15,12 @@ import {
 } from '@/components/ui/table'
 import { Pagination } from './component'
 import { cn } from '@/utils/cn'
+import LoadingState from '../common/loading-state'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   isLoading?: boolean
-  withLoading?: boolean
   withPagination?: boolean
   totalPages?: number
   styleFooter?: string
@@ -30,7 +30,6 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   isLoading,
-  withLoading = false,
   withPagination,
   totalPages,
   styleFooter,
@@ -42,6 +41,15 @@ export function DataTable<TData, TValue>({
   })
 
   const renderTableBody = () => {
+    if (isLoading) {
+      return (
+        <TableRow className='h-2 py-0 w-fit relative'>
+          <TableCell colSpan={columns.length} className='p-0'>
+            <LoadingState />
+          </TableCell>
+        </TableRow>
+      )
+    }
     if (table.getRowModel().rows?.length) {
       return table.getRowModel().rows.map((row) => (
         <TableRow
@@ -92,8 +100,8 @@ export function DataTable<TData, TValue>({
                   )}
                   style={{
                     width: `${header.column.columnDef.size}px`,
+                    maxWidth: `${header.column.columnDef.size}px`,
                     // minWidth: `${header.column.columnDef.size}px`,
-                    // maxWidth: `${header.column.columnDef.size}px`,
                   }}
                 >
                   {flexRender(
@@ -105,7 +113,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>{renderTableBody()}</TableBody>
+        <TableBody className='relative'>{renderTableBody()}</TableBody>
       </Table>
       <div
         className={cn(
@@ -113,7 +121,9 @@ export function DataTable<TData, TValue>({
           styleFooter
         )}
       >
-        {!!withPagination && <Pagination totalPages={totalPages ?? 1} />}
+        {!!withPagination && !isLoading && (
+          <Pagination totalPages={totalPages ?? 1} />
+        )}
       </div>
     </div>
   )

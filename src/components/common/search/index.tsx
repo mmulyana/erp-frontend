@@ -22,19 +22,20 @@ export default function Search({
 
   const debouncedSearch = useDebounce(search, debounceTime)
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value
-      setSearch(value)
-    },
-    [withoutUrl]
-  )
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearch(value)
+  }, [])
 
   useEffect(() => {
-    if (!withoutUrl && search !== '') {
-      setUrl({ name: debouncedSearch })
+    if (!withoutUrl) {
+      if (debouncedSearch === '') {
+        setUrl({ name: '' })
+      } else {
+        setUrl({ name: debouncedSearch })
+      }
     }
-  }, [debouncedSearch, withoutUrl, setUrl, search])
+  }, [debouncedSearch, withoutUrl, setUrl])
 
   useEffect(() => {
     if (onSearch) {

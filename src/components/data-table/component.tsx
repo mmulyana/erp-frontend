@@ -8,9 +8,10 @@ import {
   SelectValue,
 } from '../ui/select'
 import { cn } from '@/utils/cn'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import SearchUrl from '../common/search-url'
 import { Button } from '../ui/button'
+import Search from '../common/search'
 
 interface PaginationProps {
   totalPages: number
@@ -127,6 +128,7 @@ type FilterProps = {
   onAdd?: () => void
 }
 export function FilterTable({ className, placeholder, onAdd }: FilterProps) {
+  const [url, setUrl] = useUrlState({ name: '' })
   return (
     <div
       className={cn(
@@ -134,7 +136,26 @@ export function FilterTable({ className, placeholder, onAdd }: FilterProps) {
         className
       )}
     >
-      <SearchUrl placeholder={placeholder} />
+      <div className='flex gap-2 items-center'>
+        <Search debounceTime={500} placeholder={placeholder} />
+        {url.name !== '' && (
+          <Button
+            variant='outline'
+            className='font-normal flex items-center gap-1 relative px-3 pr-5'
+            onClick={() => {
+              setUrl(() => ({
+                name: '',
+              }))
+            }}
+          >
+            Hapus filter
+            <X
+              size={14}
+              className='text-red-primary/80 absolute top-[55%] right-1 -translate-y-1/2'
+            />
+          </Button>
+        )}
+      </div>
       {onAdd && <Button onClick={onAdd}>Tambah</Button>}
     </div>
   )

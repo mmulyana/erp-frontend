@@ -58,7 +58,7 @@ export default function Dashboard() {
       cell: ({ cell }) => {
         const { name, id } = cell.row.original
         return (
-          <div className='w-[200px]'>
+          <div className='w-[140px]'>
             <Overlay
               className='w-fit pr-14'
               overlay={
@@ -139,14 +139,13 @@ export default function Dashboard() {
       ),
     },
     {
-      id: 'employee_count',
-      header: 'Pegawai',
-      cell: ({ row }) => <p>{row.original._count.employees}</p>,
-    },
-    {
       id: 'action',
       header: '',
-      cell: () => <DropdownEdit></DropdownEdit>,
+      cell: () => (
+        <div className='flex justify-end'>
+          <DropdownEdit></DropdownEdit>
+        </div>
+      ),
     },
   ]
 
@@ -229,7 +228,6 @@ export default function Dashboard() {
                   data={data?.data || []}
                   isLoading={isLoading}
                   totalPages={data?.total_pages}
-                  withLoading
                   withPagination
                   styleFooter='border-t border-b-0'
                 />

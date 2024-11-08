@@ -1,4 +1,3 @@
-import DropdownEdit from '@/components/common/dropdown-edit'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Button } from '@/components/ui/button'
 import {
@@ -8,7 +7,13 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
@@ -26,10 +31,9 @@ import {
 import { useApiData } from '@/hooks/use-api-data'
 import { cn } from '@/utils/cn'
 import { KEYS } from '@/utils/constant/_keys'
-import { DropdownMenuGroup } from '@radix-ui/react-dropdown-menu'
 import { useQueryClient } from '@tanstack/react-query'
 import { Command } from 'cmdk'
-import { ChevronsUpDown, Undo2 } from 'lucide-react'
+import { ChevronsUpDown, Ellipsis, Undo2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -56,85 +60,87 @@ export default function BorrowedProject({ id }: Props) {
             Tambah
           </Button>
         </div>
-        <ScrollArea className='h-72 pb-0.5 border border-line rounded '>
-          {data?.map((item) => (
-            <div
-              key={`transaction-${item.id}`}
-              className='flex justify-between items-center border-b border-line p-2.5'
-            >
-              <div className='flex flex-col gap-1'>
-                <p
-                  className={cn(
-                    'text-dark font-medium',
-                    item.is_returned && 'line-through text-dark/50'
-                  )}
-                >
-                  {item.good.name}
-                </p>
-                <p
-                  className={cn(
-                    'text-sm text-dark/80',
-                    item.is_returned && 'line-through text-dark/50'
-                  )}
-                >
-                  Sebanyak{' '}
-                  <span
+        {!!data?.length && (
+          <ScrollArea className='max-h-72 pb-0.5 border border-line rounded '>
+            {data?.map((item) => (
+              <div
+                key={`transaction-${item.id}`}
+                className='flex justify-between items-center border-b border-line p-2.5'
+              >
+                <div className='flex flex-col gap-1'>
+                  <p
                     className={cn(
                       'text-dark font-medium',
-                      item.is_returned && 'text-inherit'
+                      item.is_returned && 'line-through text-dark/50'
                     )}
                   >
-                    {item.qty}
-                  </span>{' '}
-                  {item.good.measurement?.name}
-                </p>
-              </div>
-              <div className='flex gap-2 items-center'>
-                {!item.is_returned && (
-                  <Button
-                    className='bg-yellow-100 hover:bg-yellow-500 text-sm h-fit py-1 pr-2 pl-2.5 font-normal gap-1 group'
-                    variant='secondary'
-                    onClick={() => returned({ id: item.id })}
-                  >
-                    Kembalikan{' '}
-                    <Undo2
-                      size={16}
-                      className='text-yellow-600 group-hover:text-white'
-                    />
-                  </Button>
-                )}
-                <DropdownEdit>
-                  <DropdownMenuGroup>
-                    {!item.is_returned && (
-                      <DropdownMenuItem
-                        className='rounded-none text-sm text-dark/70 cursor-pointer'
-                        onClick={() => {
-                          //   setSelected({
-                          //     id: row.original.id,
-                          //     open: true,
-                          //   })
-                        }}
-                      >
-                        Edit
-                      </DropdownMenuItem>
+                    {item.good.name}
+                  </p>
+                  <p
+                    className={cn(
+                      'text-sm text-dark/80',
+                      item.is_returned && 'line-through text-dark/50'
                     )}
-                    <DropdownMenuItem
-                      className='rounded-none text-sm text-dark/70 cursor-pointer'
-                      onClick={() => {
-                        // setSelectedDelete({
-                        //   id: row.original.id,
-                        //   open: true,
-                        // })
-                      }}
+                  >
+                    Sebanyak{' '}
+                    <span
+                      className={cn(
+                        'text-dark font-medium',
+                        item.is_returned && 'text-inherit'
+                      )}
                     >
-                      Hapus
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownEdit>
+                      {item.qty}
+                    </span>{' '}
+                    {item.good.measurement?.name}
+                  </p>
+                </div>
+                <div className='flex gap-4 items-center'>
+                  {!item.is_returned && (
+                    <Button
+                      className='bg-yellow-100 hover:bg-yellow-500 h-8 rounded-full pl-3 pr-2'
+                      variant='secondary'
+                      onClick={() => returned({ id: item.id })}
+                    >
+                      Kembalikan
+                      <Undo2
+                        size={16}
+                        className='text-yellow-600 group-hover:text-white'
+                      />
+                    </Button>
+                  )}
+                  <DropdownMenu modal={false}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className='w-8 h-8 rounded-full border border-dark/[0.12] p-0'
+                        variant='outline'
+                      >
+                        <Ellipsis size={16} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuGroup>
+                        {!item.is_returned && (
+                          <DropdownMenuItem
+                            className='rounded-none text-sm text-dark/70 cursor-pointer'
+                            onClick={() => {}}
+                          >
+                            Edit
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem
+                          className='rounded-none text-sm text-dark/70 cursor-pointer'
+                          onClick={() => {}}
+                        >
+                          Hapus
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
-            </div>
-          ))}
-        </ScrollArea>
+            ))}
+          </ScrollArea>
+        )}
       </div>
 
       <DialogForm open={open} setOpen={setOpen} id={id} />
@@ -229,6 +235,7 @@ function DialogForm({
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent
+                          side='bottom'
                           className='p-0'
                           style={{
                             width: 'var(--radix-popover-trigger-width)',
@@ -242,7 +249,7 @@ function DialogForm({
                             />
                             <CommandList>
                               <CommandEmpty>tidak ditemukan</CommandEmpty>
-                              <CommandGroup>
+                              <CommandGroup className='h-48 overflow-auto'>
                                 {goods?.map((item) => (
                                   <CommandItem
                                     key={item.id}
@@ -251,7 +258,7 @@ function DialogForm({
                                     disabled={item.available === 0}
                                   >
                                     <div className='flex gap-2 items-center'>
-                                      <div className='w-20 h-20 rounded-lg bg-dark/5'></div>
+                                      <div className='w-16 h-16 rounded-lg bg-dark/5'></div>
                                       <div className='flex flex-col gap-1'>
                                         <p className='text-base text-dark'>
                                           {item.name}
