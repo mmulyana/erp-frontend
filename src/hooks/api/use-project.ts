@@ -28,7 +28,7 @@ export const useProjects = (params?: Params) => {
 }
 export const useProjectsPagination = (params?: Params & Pagination) => {
   return useQuery({
-    queryKey: [KEYS.PROJECT, { ...params }],
+    queryKey: [KEYS.PROJECT_PAGINATION, { ...params }],
     queryFn: async (): Promise<AxiosResponse<IApiPagination<Project[]>>> => {
       return await http(URLS.PROJECT + '/list/pagination', { params })
     },
@@ -37,7 +37,7 @@ export const useProjectsPagination = (params?: Params & Pagination) => {
 
 export const useProject = (id?: number | null) => {
   return useQuery({
-    queryKey: [KEYS.PROJECT, id],
+    queryKey: [KEYS.PROJECT_DETAIL, id],
     queryFn: async (): Promise<AxiosResponse<IApi<ProjectDetail>>> => {
       return await http(`${URLS.PROJECT}?id=${id}`)
     },
@@ -68,14 +68,17 @@ export const useUpdateProject = () => {
     }: {
       id: number
       payload: updateProject
-    }): Promise<AxiosResponse<IApi<{ id: number }>>> => {
+    }): Promise<AxiosResponse<IApi<{ id: number; update: boolean }>>> => {
       return await http.patch(`${URLS.PROJECT}/${id}`, payload)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
       queryClient.invalidateQueries({
-        queryKey: [KEYS.PROJECT, data.data.data?.id],
+        queryKey: [KEYS.PROJECT_DETAIL, data.data.data?.id],
       })
+      if (data.data.data?.update) {
+        queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT_PAGINATION] })
+        queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      }
       toast.success(data.data.message)
     },
   })

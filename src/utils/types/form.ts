@@ -139,7 +139,10 @@ export type createProject = {
   clientId?: number
 }
 
-export type updateProject = Partial<createProject>
+export type updateProject = Partial<createProject> & {
+  isHidden?: boolean
+  isDeleted?: boolean
+}
 
 export type createActivity = {
   userId: number

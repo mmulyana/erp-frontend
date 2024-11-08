@@ -20,6 +20,8 @@ export const KEYS = {
   ATTENDANCE: 'attendance',
   OVERTIME: 'overtime',
   PROJECT: 'project',
+  PROJECT_DETAIL: 'project',
+  PROJECT_PAGINATION: 'project',
   PROJECT_TOTAL: 'project-total',
   PROJECT_LABEL: 'project-label',
   PROJECT_CHART: 'project-chart',

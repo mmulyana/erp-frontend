@@ -20,6 +20,14 @@ import ActivityProject from './detail/activity-project'
 import EstimateProject from './detail/estimate-project'
 import { EditorDescription } from '@/components/tiptap/editor-description'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Ellipsis } from 'lucide-react'
 
 type Props = {
   open: boolean
@@ -58,16 +66,49 @@ export default function DetailProject({ open, setOpen, id }: Props) {
         <ScrollArea className='h-[calc(100vh-48px)]'>
           <div className='px-4 pt-4 mb-8'>
             <div className='space-y-2'>
-              <Editable
-                isEdit={isEdit}
-                onEdit={onEdit}
-                keyData='name'
-                defaultData={project?.name}
-                className='text-xl font-medium text-dark'
-                onUpdate={(val) => {
-                  update({ id, payload: { name: val as string } })
-                }}
-              />
+              <div className='flex justify-between items-center relative'>
+                <Editable
+                  isEdit={isEdit}
+                  onEdit={onEdit}
+                  keyData='name'
+                  defaultData={project?.name}
+                  className='text-xl font-medium text-dark'
+                  onUpdate={(val) => {
+                    update({ id, payload: { name: val as string } })
+                  }}
+                />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant='outline'
+                      className='absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-0 w-6 h-6 p-0'
+                    >
+                      <Ellipsis size={14} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='min-w-fit -translate-x-4'>
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          update({
+                            id,
+                            payload: { isArchive: !project?.isArchive },
+                          })
+                        }}
+                      >
+                        {project?.isArchive ? 'Batal' : 'Arsipkan'}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          update({ id, payload: { isDeleted: true } })
+                        }}
+                      >
+                        Hapus
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <Editable
                 isEdit={isEdit}
                 onEdit={onEdit}

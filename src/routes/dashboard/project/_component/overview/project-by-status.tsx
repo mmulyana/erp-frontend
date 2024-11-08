@@ -65,8 +65,9 @@ export default function ProjectByStatusChart() {
                 }}
               />
             </PolarRadiusAxis>
-            {Object.values(data.chartConfig).map(({ label, color }) => (
+            {Object.values(data.chartConfig).map(({ label, color }, index) => (
               <RadialBar
+                key={index}
                 dataKey={label}
                 stackId='a'
                 fill={color}

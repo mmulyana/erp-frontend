@@ -67,6 +67,8 @@ export type Project = {
     attachments: number
   }
   attachments: Attachment[]
+  isArchive: boolean
+  isDeleted: boolean
 }
 export type ProjectDetail = Project & {
   ProjectEstimate: Estimate[]
