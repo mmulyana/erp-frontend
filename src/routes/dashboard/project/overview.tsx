@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
+import { useState } from 'react'
 
-import { useProjects, useTotalProject } from '@/hooks/api/use-project'
+import { useProjectsPagination, useTotalProject } from '@/hooks/api/use-project'
 import { useClient } from '@/hooks/api/use-client'
 import { useApiData } from '@/hooks/use-api-data'
 
@@ -36,7 +37,15 @@ import {
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
 
-  const { data, isLoading } = useProjects()
+  const [url] = useUrlState({ page: '', limit: '', name: '' })
+
+  const { data, isLoading } = useApiData(
+    useProjectsPagination({
+      ...(url.limit !== '' ? { limit: url.limit } : undefined),
+      ...(url.page !== '' ? { page: url.page } : undefined),
+      ...(url.name !== '' ? { search: url.name } : undefined),
+    })
+  )
   const { data: totalproject } = useApiData(useTotalProject())
   const { data: clients } = useApiData(useClient())
 
@@ -156,42 +165,40 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      <div className='p-6 grid grid-cols-1 md:grid-cols-3 gap-6'>
-        <div className='col-span-3 md:col-span-3 grid grid-cols-3 gap-4'>
-          <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
-            <div className='h-14 w-14 rounded-[10px] bg-blue-primary/5 flex justify-center items-center'>
-              <HardHat className='text-blue-primary' size={24} />
-            </div>
-            <div className='flex flex-col gap-1'>
-              <p className='text-dark/50 leading-none text-sm'>Total Proyek</p>
-              <p className='text-dark font-medium text-xl leading-none'>
-                {totalproject?.active}
-              </p>
-            </div>
+      <div className='p-6 grid grid-cols-1 lg:grid-cols-3 gap-6'>
+        <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
+          <div className='h-14 w-14 rounded-[10px] bg-blue-primary/5 flex justify-center items-center'>
+            <HardHat className='text-blue-primary' size={24} />
           </div>
-          <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
-            <div className='h-14 w-14 rounded-[10px] bg-green-primary/5 flex justify-center items-center'>
-              <ListChecks className='text-green-primary' size={24} />
-            </div>
-            <div className='flex flex-col gap-1'>
-              <p className='text-dark/50 leading-none text-sm'>
-                Total Proyek Selesai
-              </p>
-              <p className='text-dark font-medium text-xl leading-none'>
-                {totalproject?.done}
-              </p>
-            </div>
+          <div className='flex flex-col gap-1'>
+            <p className='text-dark/50 leading-none text-sm'>Total Proyek</p>
+            <p className='text-dark font-medium text-xl leading-none'>
+              {totalproject?.active}
+            </p>
           </div>
-          <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
-            <div className='h-14 w-14 rounded-[10px] bg-amber-50 flex justify-center items-center'>
-              <SquareUserRound className='text-amber-600' size={24} />
-            </div>
-            <div className='flex flex-col gap-1'>
-              <p className='text-dark/50 leading-none text-sm'>Total Klien</p>
-              <p className='text-dark font-medium text-xl leading-none'>
-                {clients?.length}
-              </p>
-            </div>
+        </div>
+        <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
+          <div className='h-14 w-14 rounded-[10px] bg-green-primary/5 flex justify-center items-center'>
+            <ListChecks className='text-green-primary' size={24} />
+          </div>
+          <div className='flex flex-col gap-1'>
+            <p className='text-dark/50 leading-none text-sm'>
+              Total Proyek Selesai
+            </p>
+            <p className='text-dark font-medium text-xl leading-none'>
+              {totalproject?.done}
+            </p>
+          </div>
+        </div>
+        <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
+          <div className='h-14 w-14 rounded-[10px] bg-amber-50 flex justify-center items-center'>
+            <SquareUserRound className='text-amber-600' size={24} />
+          </div>
+          <div className='flex flex-col gap-1'>
+            <p className='text-dark/50 leading-none text-sm'>Total Klien</p>
+            <p className='text-dark font-medium text-xl leading-none'>
+              {clients?.length}
+            </p>
           </div>
         </div>
         <TopClientChart />
@@ -213,8 +220,9 @@ export default function Dashboard() {
           <FilterTable placeholder='Cari proyek' />
           <DataTable
             columns={columns}
-            data={data?.data?.data || []}
+            data={data?.data || []}
             isLoading={isLoading}
+            totalPages={data?.total_pages}
             withLoading
             withPagination
             styleFooter='border-t border-b-0'

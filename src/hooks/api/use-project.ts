@@ -1,7 +1,8 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { IApi, Project, ProjectDetail } from '@/utils/types/api'
+import { IApi, IApiPagination, Project, ProjectDetail } from '@/utils/types/api'
+import { Pagination } from '@/utils/types/common'
 import { updateProject } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
@@ -22,6 +23,14 @@ export const useProjects = (params?: Params) => {
         url: URLS.PROJECT,
         params,
       })
+    },
+  })
+}
+export const useProjectsPagination = (params?: Params & Pagination) => {
+  return useQuery({
+    queryKey: [KEYS.PROJECT, { ...params }],
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<Project[]>>> => {
+      return await http(URLS.PROJECT + '/list/pagination', { params })
     },
   })
 }
