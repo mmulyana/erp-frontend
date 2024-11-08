@@ -57,7 +57,21 @@ export const useDetailTransaction = ({
     enabled,
   })
 }
-
+export const useProjectTransaction = ({
+  id,
+  enabled,
+}: {
+  id?: number | null
+  enabled: boolean
+}) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApi<Transaction[]>>> => {
+      return await http(`${URLS.INVENTORY_TRANSACTION}/list/project/${id}`)
+    },
+    queryKey: [KEYS.TRANSACTION_PROJECT, id],
+    enabled,
+  })
+}
 export const useCreateTransaction = () => {
   const queryClient = useQueryClient()
 
@@ -145,21 +159,6 @@ export const useDeleteTransaction = () => {
       queryClient.invalidateQueries({ queryKey: [KEYS.TRANSACTION] })
       toast.success(data.data.message)
     },
-    onError: (_: AxiosError<ApiError>) => {
-      //   if (error.response) {
-      //     const errorMessage =
-      //       error.response.data.message || 'Terjadi kesalahan pada server'
-      //     if (errorMessage.includes('tidak mencukupi')) {
-      //       toast.error(errorMessage)
-      //     } else {
-      //       toast.error(errorMessage)
-      //     }
-      //   } else if (error.request) {
-      //     toast.error('Tidak dapat terhubung ke server')
-      //   } else {
-      //     toast.error('Terjadi kesalahan pada aplikasi')
-      //   }
-    },
   })
 }
 
@@ -169,5 +168,40 @@ export const useTransactionBorrowed = () => {
       return await http(URLS.INVENTORY_TRANSACTION + '/list/borrowed')
     },
     queryKey: [KEYS.TRANSACTION_BORROWED],
+  })
+}
+
+export const useReturnedTransaction = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+    }: {
+      id: number
+    }): Promise<AxiosResponse<IApi<{ id: number }>>> => {
+      return await http.patch(`${URLS.INVENTORY_TRANSACTION}/${id}/returned`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.TRANSACTION, 'borrowed'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.TRANSACTION_PROJECT, data.data.data?.id],
+      })
+      toast.success(data.data.message)
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response) {
+        const message =
+          error.response.data.message || 'Terjadi kesalahan pada server'
+
+        toast.error(message)
+      } else if (error.request) {
+        toast.error('Tidak dapat terhubung ke server')
+      } else {
+        toast.error('Terjadi kesalahan pada aplikasi')
+      }
+    },
   })
 }
