@@ -33,6 +33,7 @@ export const KEYS = {
   GOODS_DETAIL: 'goods-detail',
   TRANSACTION: 'transaction',
   TRANSACTION_DETAIL: 'transaction-detail',
+  TRANSACTION_PROJECT: 'transaction-project',
   SUPPLIER: 'supplier',
   SUPPLIER_DETAIL: 'supplier-detail',
   SUPPLIER_TRANSACTION: 'supplier-transaction',
