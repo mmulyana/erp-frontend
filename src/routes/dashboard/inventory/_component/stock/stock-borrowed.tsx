@@ -18,33 +18,7 @@ import {
   useTransaction,
 } from '@/hooks/api/use-transaction'
 
-// import { ChartConfig } from '@/components/ui/chart'
-// const reportData = [
-//   { month: 'Januari', total: 186 },
-//   { month: 'Februari', total: 305 },
-//   { month: 'Maret', total: 237 },
-//   { month: 'April', total: 73 },
-//   { month: 'Mei', total: 209 },
-//   { month: 'Juni', total: 214 },
-// ]
-// const reportConfig = {
-//   total: {
-//     label: 'Total',
-//     color: '#2A9D90',
-//   },
-// } satisfies ChartConfig
-
-// const stockData = [
-//   { goods: 'Helm', total: 186 },
-//   { goods: 'Sepatu', total: 305 },
-//   { goods: 'Masker', total: 237 },
-// ]
-// const stockConfig = {
-//   total: {
-//     label: 'Total',
-//     color: '#2A9D90',
-//   },
-// } satisfies ChartConfig
+const HIDE = ['supplier', 'price']
 
 export default function StockBorrowed() {
   const { data: transactions, isLoading } = useApiData(
@@ -85,7 +59,7 @@ export default function StockBorrowed() {
       <div className='rounded-lg border overflow-hidden'>
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
-          columns={column.filter((item) => item.id !== 'supplier')}
+          columns={column.filter((item) => !HIDE.includes(String(item.id)))}
           data={transactions || []}
           isLoading={isLoading}
           withLoading
