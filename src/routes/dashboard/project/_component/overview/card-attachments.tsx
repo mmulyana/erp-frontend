@@ -34,7 +34,7 @@ export default function CardAttachments() {
         />
       </CardHead>
       <CardBody className='p-0'>
-        <ScrollArea className='overflow-hidden h-48 p-2.5 rounded-md'>
+        <ScrollArea className='overflow-hidden h-48 px-2.5 pb-2.5 rounded-md'>
           <div className='flex flex-col gap-4 bg-dark/5 p-2'>
             {attachments?.map((item) => (
               <div
