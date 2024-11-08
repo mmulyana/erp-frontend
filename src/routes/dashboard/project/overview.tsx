@@ -33,6 +33,7 @@ import {
   ListChecks,
   SquareUserRound,
 } from 'lucide-react'
+import { Tab, Tabs } from '@/components/tab'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
@@ -57,31 +58,43 @@ export default function Dashboard() {
       cell: ({ cell }) => {
         const { name, id } = cell.row.original
         return (
-          <Overlay
-            className='w-fit pr-14'
-            overlay={
-              <Button
-                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+          <div className='w-[200px]'>
+            <Overlay
+              className='w-fit pr-14'
+              overlay={
+                <Button
+                  className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                  onClick={() => {
+                    handleDialog('detail', true)
+                    setSelectedId(id)
+                  }}
+                >
+                  Lihat
+                </Button>
+              }
+            >
+              <p
+                className='hover:text-dark'
                 onClick={() => {
                   handleDialog('detail', true)
                   setSelectedId(id)
                 }}
               >
-                Lihat
-              </Button>
-            }
-          >
-            <p
-              className='hover:text-dark'
-              onClick={() => {
-                handleDialog('detail', true)
-                setSelectedId(id)
-              }}
-            >
-              {name}
-            </p>
-          </Overlay>
+                {name}
+              </p>
+            </Overlay>
+          </div>
         )
+      },
+    },
+    {
+      id: 'net_value',
+      accessorKey: 'net_value',
+      header: 'Net value',
+      cell: ({ row }) => {
+        if (row.original.net_value) {
+          return <p>{formatToRupiah(row.original.net_value)}</p>
+        }
       },
     },
     {
@@ -131,16 +144,6 @@ export default function Dashboard() {
       cell: ({ row }) => <p>{row.original._count.employees}</p>,
     },
     {
-      id: 'net_value',
-      accessorKey: 'net_value',
-      header: 'Net value',
-      cell: ({ row }) => {
-        if (row.original.net_value) {
-          return <p>{formatToRupiah(row.original.net_value)}</p>
-        }
-      },
-    },
-    {
       id: 'action',
       header: '',
       cell: () => <DropdownEdit></DropdownEdit>,
@@ -165,7 +168,7 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      <div className='p-6 grid grid-cols-1 lg:grid-cols-3 gap-6'>
+      <div className='p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6'>
         <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
           <div className='h-14 w-14 rounded-[10px] bg-blue-primary/5 flex justify-center items-center'>
             <HardHat className='text-blue-primary' size={24} />
@@ -204,29 +207,38 @@ export default function Dashboard() {
         <TopClientChart />
         <ProjectByStatusChart />
         <CardAttachments />
-        <div className='col-span-1 md:col-span-3 border border-line rounded-xl overflow-hidden'>
-          <HeadTable>
-            <div className='flex gap-4 items-center'>
-              <BriefcaseBusiness className='text-[#989CA8]' />
-              <p className='text-dark font-medium'>Proyek</p>
-            </div>
-            <div
-              className='flex gap-2 items-center'
-              onClick={() => handleDialog('add', true)}
-            >
-              <Button>Proyek Baru</Button>
-            </div>
-          </HeadTable>
-          <FilterTable placeholder='Cari proyek' />
-          <DataTable
-            columns={columns}
-            data={data?.data || []}
-            isLoading={isLoading}
-            totalPages={data?.total_pages}
-            withLoading
-            withPagination
-            styleFooter='border-t border-b-0'
-          />
+        <div className='col-span-full'>
+          <Tabs className='px-0'>
+            <Tab label='Semua'>
+              <div className='col-span-full border border-line rounded-xl overflow-hidden mt-4'>
+                <HeadTable>
+                  <div className='flex gap-4 items-center'>
+                    <BriefcaseBusiness className='text-[#989CA8]' />
+                    <p className='text-dark font-medium'>Proyek</p>
+                  </div>
+                  <div
+                    className='flex gap-2 items-center'
+                    onClick={() => handleDialog('add', true)}
+                  >
+                    <Button>Proyek Baru</Button>
+                  </div>
+                </HeadTable>
+                <FilterTable placeholder='Cari proyek' />
+                <DataTable
+                  columns={columns}
+                  data={data?.data || []}
+                  isLoading={isLoading}
+                  totalPages={data?.total_pages}
+                  withLoading
+                  withPagination
+                  styleFooter='border-t border-b-0'
+                />
+              </div>
+            </Tab>
+            <Tab label='Arsip'>
+              <p>Arsip</p>
+            </Tab>
+          </Tabs>
         </div>
       </div>
       <AddProject
