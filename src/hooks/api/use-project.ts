@@ -5,7 +5,7 @@ import { IApi, IApiPagination, Project, ProjectDetail } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { updateProject } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 type Params = {
@@ -55,6 +55,11 @@ export const useCreateProject = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
       toast.success(data.data.message)
+    },
+    onError: (error: AxiosError) => {
+      if (error?.response?.data?.errors?.name?.message) {
+        toast.error(error?.response?.data?.errors?.name?.message)
+      }
     },
   })
 }
