@@ -19,6 +19,8 @@ import { CreateTransaction } from '@/utils/types/form'
 import { useApiData } from '@/hooks/use-api-data'
 import useUrlState from '@ahooksjs/use-url-state'
 
+const HIDE = ['project']
+
 export default function StockIn() {
   const [url] = useUrlState({ page: '' })
 
@@ -64,7 +66,7 @@ export default function StockIn() {
       <div className='rounded-lg border overflow-hidden'>
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
-          columns={column}
+          columns={column.filter((item) => !HIDE.includes(String(item.id)))}
           data={data?.data || []}
           isLoading={isLoading}
           withLoading
