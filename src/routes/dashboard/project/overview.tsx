@@ -22,7 +22,7 @@ import TopClientChart from './_component/overview/top-client-chart'
 import DetailProject from './_component/detail-project'
 import AddProject from './_component/add-project'
 
-import ProjectAttachments from './_component/overview/project-attachments'
+import CardAttachments from './_component/overview/card-attachments'
 import { DashboardLayout } from '../_component/layout'
 import { useTitle } from '../_component/header'
 
@@ -196,7 +196,7 @@ export default function Dashboard() {
         </div>
         <TopClientChart />
         <ProjectByStatusChart />
-        <ProjectAttachments />
+        <CardAttachments />
         <div className='col-span-1 md:col-span-3 border border-line rounded-xl overflow-hidden'>
           <HeadTable>
             <div className='flex gap-4 items-center'>
