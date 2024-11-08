@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Ellipsis } from 'lucide-react'
+import BorrowedProject from './detail/borrowed-project'
 
 type Props = {
   open: boolean
@@ -141,10 +142,12 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                   </div>
                 }
                 customData={(val) => (
-                  <div
-                    className='w-full px-4 border rounded py-2 border-line'
-                    dangerouslySetInnerHTML={{ __html: val }}
-                  />
+                  <div className='px-6 border rounded border-line w-full'>
+                    <div
+                      className='w-full py-2'
+                      dangerouslySetInnerHTML={{ __html: val }}
+                    />
+                  </div>
                 )}
                 className='text-dark/50'
                 onUpdate={(val) => {
@@ -292,6 +295,7 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                     projectId={project?.id}
                     attachments={project?.attachments}
                   />
+                  <BorrowedProject id={id} />
                 </div>
               </div>
             </Tab>
