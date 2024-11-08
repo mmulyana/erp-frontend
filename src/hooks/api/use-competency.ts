@@ -12,11 +12,7 @@ type Params = Pagination & { name?: string }
 export const useCompetency = (params?: Params) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<Competency[]>>> => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.COMPETENCY,
-        params,
-      })
+      return await http(URLS.COMPETENCY, { params })
     },
     queryKey: [KEYS.COMPETENCY, params],
   })

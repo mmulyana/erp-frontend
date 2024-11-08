@@ -14,6 +14,7 @@ export type navigationParams = {
 }
 type StepperProps = {
   children: React.ReactNode
+  hideStepper?: boolean
   navigation?: (params: navigationParams) => React.ReactNode
 }
 
@@ -22,7 +23,11 @@ type StepperItemProps = {
   children: React.ReactNode
 }
 
-export const Stepper = ({ children, navigation }: StepperProps) => {
+export const Stepper = ({
+  children,
+  navigation,
+  hideStepper,
+}: StepperProps) => {
   const [currentStep, setCurrentStep] = useAtom(stepperAtom)
 
   const steps = Children.toArray(children) as ReactElement<StepperItemProps>[]
@@ -38,20 +43,22 @@ export const Stepper = ({ children, navigation }: StepperProps) => {
 
   return (
     <div className='w-full max-w-2xl mx-auto'>
-      <div className='flex justify-between items-center px-4 pt-4'>
-        {steps.map((step, index) => (
-          <Fragment key={index}>
-            <StepIndicator
-              label={step.props.label}
-              stepIndex={index}
-              onClick={() => goToStep(index)}
-            />
-            {index < steps.length - 1 && (
-              <Connector completed={index < currentStep} />
-            )}
-          </Fragment>
-        ))}
-      </div>
+      {!hideStepper && (
+        <div className='flex justify-between items-center px-4 pt-4'>
+          {steps.map((step, index) => (
+            <Fragment key={index}>
+              <StepIndicator
+                label={step.props.label}
+                stepIndex={index}
+                onClick={() => goToStep(index)}
+              />
+              {index < steps.length - 1 && (
+                <Connector completed={index < currentStep} />
+              )}
+            </Fragment>
+          ))}
+        </div>
+      )}
       {steps[currentStep]}
       {navigation ? (
         navigation({

@@ -299,7 +299,10 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                             </SelectTrigger>
                             <SelectContent>
                               {EDUCATIONS.map((item) => (
-                                <SelectItem value={item.value} key={item.value}>
+                                <SelectItem
+                                  value={String(item.value)}
+                                  key={item.value}
+                                >
                                   {item.name}
                                 </SelectItem>
                               ))}
@@ -319,7 +322,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                             </SelectTrigger>
                             <SelectContent>
                               {GENDER.map((item) => (
-                                <SelectItem value={item.value} key={item.value}>
+                                <SelectItem value={String(item.value)} key={item.value}>
                                   {item.name}
                                 </SelectItem>
                               ))}
@@ -359,7 +362,10 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                             </SelectTrigger>
                             <SelectContent>
                               {MARITAL_STATUS.map((item) => (
-                                <SelectItem value={item.value} key={item.value}>
+                                <SelectItem
+                                  value={String(item.value)}
+                                  key={item.value}
+                                >
                                   {item.name}
                                 </SelectItem>
                               ))}
@@ -596,7 +602,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                                     {months.map((item) => (
                                       <SelectItem
                                         key={`month-${item.value}`}
-                                        value={item.value}
+                                        value={String(item.value)}
                                       >
                                         {item.name}
                                       </SelectItem>
@@ -634,7 +640,7 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
                                     {months.map((item) => (
                                       <SelectItem
                                         key={`month-${item.value}`}
-                                        value={item.value}
+                                        value={String(item.value)}
                                       >
                                         {item.name}
                                       </SelectItem>
