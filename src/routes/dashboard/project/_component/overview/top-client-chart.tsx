@@ -35,10 +35,10 @@ export default function TopClientChart() {
       <CardHead className='border-b border-line h-fit py-2 px-2'>
         <p className='text-sm text-dark'>User dengan proyek terbanyak</p>
       </CardHead>
-      <CardBody className='px-2'>
+      <CardBody className='px-2 h-48 overflow-auto'>
         <ChartContainer
           config={(data?.chartConfig as ChartConfig) || {}}
-          className='h-fit w-full'
+          className='h-fit max-w-[160px] mx-auto aspect-square'
         >
           <ResponsiveContainer width='100%' height='100%'>
             <BarChart

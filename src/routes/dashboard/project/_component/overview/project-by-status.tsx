@@ -24,10 +24,10 @@ export default function ProjectByStatusChart() {
       <CardHead className='border-b border-line h-fit py-2 px-2'>
         <p className='text-sm text-dark'>Proyek per status</p>
       </CardHead>
-      <CardBody className='px-2 h-28'>
+      <CardBody className='px-2 relative overflow-hidden h-48'>
         <ChartContainer
           config={data?.chartConfig}
-          className='mx-auto aspect-square w-full max-w-[250px]'
+          className='aspect-square w-full max-w-[250px] absolute top-[72%] left-1/2 -translate-x-1/2 -translate-y-1/2'
         >
           <RadialBarChart
             data={data?.chartData || []}
