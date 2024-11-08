@@ -82,7 +82,8 @@ export type CreateTransaction = {
     type: string
   }[]
   supplierId?: number | null
-  date: ''
+  date: string
+  projectId?: number | null
 }
 
 export type updateTransaction = {
