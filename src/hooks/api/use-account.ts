@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { AxiosResponse } from 'axios'
-import { IApi, User } from '@/utils/types/api'
+import { AxiosError, AxiosResponse } from 'axios'
+import { ApiError, IApi, User } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
-import { UpdateAccountSchema } from '@/utils/schema/account'
+import { UpdateAccountSchema, UpdatePasswordDto } from '@/utils/schema/account'
 import { objectToFormData } from '@/utils/ObjectToFormData'
 import { toast } from 'sonner'
 
@@ -59,6 +59,25 @@ export const useUpdateAccount = () => {
     onSuccess(data) {
       toast.success(data.data.message)
       queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNT] })
+    },
+  })
+}
+export const useUpdatePassword = () => {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: number
+      payload: UpdatePasswordDto
+    }) => {
+      return await http.patch(`${URLS.ACCOUNT}/${id}/password/update`, payload)
+    },
+    onSuccess: (data) => {
+      toast.success(data.data.message)
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      toast.error(error?.response?.data.message)
     },
   })
 }
