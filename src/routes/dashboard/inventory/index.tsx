@@ -1,30 +1,29 @@
-import DetailGoods, { selectedGoodAtom } from './_component/index/detail-goods'
-import { FilterTable, HeadTable } from '@/components/data-table/component'
-import AddGood, { dialogGoodAtom } from './_component/index/add-good'
-import CardHighlight from './_component/index/card-highlight'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import { DashboardLayout } from '../_component/layout'
-import { DataTable } from '@/components/data-table'
+import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
-import Overlay from '@/components/common/overlay'
+import { useSetAtom } from 'jotai'
+import { useState } from 'react'
+
 import { useDeleteGoods, useGoods } from '@/hooks/api/use-goods'
-import { Button } from '@/components/ui/button'
-import { useTitle } from '../_component/header'
+import { useApiData } from '@/hooks/use-api-data'
 import { PATH } from '@/utils/constant/_paths'
 import { Goods } from '@/utils/types/api'
-import { Package } from 'lucide-react'
-import { useSetAtom } from 'jotai'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { useApiData } from '@/hooks/use-api-data'
-import { useState } from 'react'
-import AlertDialogV1 from '@/components/common/alert-dialog-v1'
-import useUrlState from '@ahooksjs/use-url-state'
 
-// import { ScrollArea } from '@/components/ui/scroll-area'
-// import CardActivity from './_component/index/card-activity'
-// import ButtonLink from './_component/button-link'
-// import Container from '../_component/container'
-// import { Link } from 'react-router-dom'
+import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
+
+import AlertDialogV1 from '@/components/common/alert-dialog-v1'
+import DropdownEdit from '@/components/common/dropdown-edit'
+import Overlay from '@/components/common/overlay'
+
+import DetailGoods, { selectedGoodAtom } from './_component/index/detail-goods'
+import AddGood, { dialogGoodAtom } from './_component/index/add-good'
+import CardHighlight from './_component/index/card-highlight'
+import { DashboardLayout } from '../_component/layout'
+import { useTitle } from '../_component/header'
+
+import { Package } from 'lucide-react'
 
 export const links = [
   {
@@ -45,7 +44,7 @@ export default function Index() {
   } | null>(null)
 
   // HANDLE DATA
-const [url] = useUrlState({ page: '', name: '' })
+  const [url] = useUrlState({ page: '', name: '' })
 
   const { mutate } = useDeleteGoods()
   const { data, isLoading } = useApiData(
@@ -142,8 +141,7 @@ const [url] = useUrlState({ page: '', name: '' })
       <DashboardLayout>
         <div className='p-4 flex flex-col gap-4'>
           <CardHighlight />
-
-          <div className='rounded-lg border border-line overflow-hidden'>
+          <div className='rounded-lg border border-line overflow-auto'>
             <HeadTable>
               <div className='flex gap-4 items-center'>
                 <Package className='text-[#989CA8]' />
@@ -157,7 +155,6 @@ const [url] = useUrlState({ page: '', name: '' })
             <DataTable
               columns={columns}
               data={data?.data || []}
-              withLoading
               withPagination
               isLoading={isLoading}
               totalPages={data?.total_pages}
