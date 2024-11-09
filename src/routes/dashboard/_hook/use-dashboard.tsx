@@ -8,7 +8,7 @@ import http from '@/utils/http'
 
 export const useDashboardTotal = () => {
   return useQuery({
-    queryKey: [KEYS.ACCOUNT],
+    queryKey: [KEYS.DASHBOARD],
     queryFn: async (): Promise<AxiosResponse<IApi<DashboardTotal>>> => {
       return await http(URLS.DASHBOARD + '/total')
     },
