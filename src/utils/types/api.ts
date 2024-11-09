@@ -1,5 +1,3 @@
-import { User } from './user'
-
 export interface IApi<T = void> {
   data?: T
   message: string
@@ -21,7 +19,24 @@ export interface ApiError {
   status: number
 }
 
-export interface Board {
+export type User = {
+  id: number
+  email: string
+  name: string
+  phoneNumber: string
+  photo: string | null
+  roleId: number | null
+  employeeId: number | null
+  employee: Employee
+  role: {
+    id: number
+    name: string
+    description?: string
+  }
+  permissions: string[]
+}
+
+export type Board = {
   id: string
   name: string
   color: string

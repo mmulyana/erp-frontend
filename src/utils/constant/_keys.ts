@@ -54,6 +54,5 @@ export const KEYS = {
   STOCK_LOW: 'stock-low',
   STOCK_OUT: 'stock-out',
   TRANSACTION_BY_GOODS: 'transaction-by-goods',
-  DASHBOARD_TOTAL_EMPLOYEE: 'dashboard-total-employee',
-  DASHBOARD_TOTAL_PROJECT: 'dashboard-total-project',
+  DASHBOARD: 'dashboard',
 }

@@ -1,17 +1,21 @@
+import { useMemo, useState } from 'react'
+import { Package } from 'lucide-react'
+
 import { useGoodsLowStock, useGoodsOutOfStock } from '@/hooks/api/use-goods'
 import { useTransactionBorrowed } from '@/hooks/api/use-transaction'
 import { useApiData } from '@/hooks/use-api-data'
-import ButtonLink from '../button-link'
-import { Package } from 'lucide-react'
-import { useMemo, useState } from 'react'
-import Modal from '@/components/modal-v2'
+
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import Modal from '@/components/modal-v2'
+
+import ButtonLink from '../button-link'
 
 export default function CardHighlight() {
   const { data: borroweds } = useApiData(useTransactionBorrowed())
-  const { data: lowStocks } = useApiData(useGoodsLowStock())
   const { data: outOfStocks } = useApiData(useGoodsOutOfStock())
+  const { data: lowStocks } = useApiData(useGoodsLowStock())
 
   const totalBorrowed = useMemo(() => {
     if (!borroweds) return 0
