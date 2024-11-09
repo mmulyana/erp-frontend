@@ -43,7 +43,7 @@ export function DataTable<TData, TValue>({
   const renderTableBody = () => {
     if (isLoading) {
       return (
-        <TableRow className='h-2 py-0 w-fit relative'>
+        <TableRow className='h-28 py-0 w-fit relative'>
           <TableCell colSpan={columns.length} className='p-0'>
             <LoadingState />
           </TableCell>
@@ -76,7 +76,7 @@ export function DataTable<TData, TValue>({
 
     return (
       <TableRow>
-        <TableCell colSpan={columns.length} className='h-10 text-center'>
+        <TableCell colSpan={columns.length} className='h-28 text-center'>
           No results.
         </TableCell>
       </TableRow>
@@ -99,8 +99,8 @@ export function DataTable<TData, TValue>({
                       'border-l border-line'
                   )}
                   style={{
-                    width: `${header.column.columnDef.size}px`,
-                    maxWidth: `${header.column.columnDef.size}px`,
+                    // width: `${header.column.columnDef.size}px`,
+                    // maxWidth: `${header.column.columnDef.size}px`,
                     // minWidth: `${header.column.columnDef.size}px`,
                   }}
                 >
