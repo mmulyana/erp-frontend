@@ -3,17 +3,22 @@ import { CookieKeys, CookieStorage } from './cookie'
 import { useNavigate } from 'react-router-dom'
 import { PATH } from './constant/_paths'
 import { jwtDecode } from 'jwt-decode'
-import { User } from './types/user'
 import { useSetAtom } from 'jotai'
 import { userAtom } from '@/atom/auth'
-// import { permissionAtom } from '@/atom/permission'
+import { useApiData } from '@/hooks/use-api-data'
+import { useAccount } from '@/hooks/api/use-account'
+import { permissionAtom } from '@/atom/permission'
 
 export default function ProtectedRoute({ children }: React.PropsWithChildren) {
   const navigate = useNavigate()
   const setUserAtom = useSetAtom(userAtom)
-  // const setPermissionAtom = useSetAtom(permissionAtom)
+  const setPermissionAtom = useSetAtom(permissionAtom)
 
-  const [_, setId] = useState<number | undefined>(undefined)
+  const [id, setId] = useState<number | undefined>(undefined)
+
+  const { data: account, isLoading } = useApiData(
+    useAccount({ id, enabled: !!id })
+  )
 
   useEffect(() => {
     const token = CookieStorage.get(CookieKeys.AuthToken)
@@ -21,16 +26,19 @@ export default function ProtectedRoute({ children }: React.PropsWithChildren) {
       navigate(PATH.LOGIN, { replace: true })
       navigate(0)
     }
-    const user: User = jwtDecode(token)
+    const user: { id: number } = jwtDecode(token)
     setId(user.id)
-    setUserAtom(user)
     return () => {}
   }, [])
 
-  // useEffect(() => {
-  //   if (!account) return
-  //   setPermissionAtom(account?.permissions)
-  // }, [account])
+  console.log('account', account)
+
+  useEffect(() => {
+    if (account && !isLoading && !!id) {
+      setPermissionAtom(account?.permissions)
+      setUserAtom(account)
+    }
+  }, [account, isLoading, id])
 
   return <>{children}</>
 }
