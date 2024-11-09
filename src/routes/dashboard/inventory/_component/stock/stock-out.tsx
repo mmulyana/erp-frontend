@@ -14,15 +14,21 @@ import { column } from './column'
 import { useState } from 'react'
 import {
   useCreateTransaction,
-  useTransaction,
+  useTransactionPagination,
 } from '@/hooks/api/use-transaction'
 import { Plus, X } from 'lucide-react'
+import useUrlState from '@ahooksjs/use-url-state'
 
 const HIDE = ['supplier', 'project']
 
 export default function StockOut() {
+  const [url] = useUrlState({ page: '' })
+
   const { data: transactions, isLoading } = useApiData(
-    useTransaction({ type: 'out' })
+    useTransactionPagination({
+      type: 'out',
+      ...(url.page !== '' ? { page: url.page } : undefined),
+    })
   )
 
   const { goods } = useInventoryData()
@@ -61,10 +67,9 @@ export default function StockOut() {
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}
-          data={transactions || []}
+          data={transactions?.data || []}
           isLoading={isLoading}
-          withLoading
-          withPagination
+          totalPages={transactions?.total_pages}
           styleFooter='border-b-0 border-t'
         />
       </div>

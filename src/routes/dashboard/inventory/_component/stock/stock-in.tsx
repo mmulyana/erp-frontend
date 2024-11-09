@@ -69,8 +69,6 @@ export default function StockIn() {
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}
           data={data?.data || []}
           isLoading={isLoading}
-          withLoading
-          withPagination
           totalPages={data?.total_pages}
           styleFooter='border-b-0 border-t'
         />

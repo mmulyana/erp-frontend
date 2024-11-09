@@ -15,14 +15,20 @@ import { column } from './column'
 import { useState } from 'react'
 import {
   useCreateTransaction,
-  useTransaction,
+  useTransactionPagination,
 } from '@/hooks/api/use-transaction'
+import useUrlState from '@ahooksjs/use-url-state'
 
 const HIDE = ['supplier', 'price']
 
 export default function StockBorrowed() {
+  const [url] = useUrlState({ page: '' })
+
   const { data: transactions, isLoading } = useApiData(
-    useTransaction({ type: 'borrowed' })
+    useTransactionPagination({
+      type: 'borrowed',
+      ...(url.page !== '' ? { page: url.page } : undefined),
+    })
   )
 
   const { goods } = useInventoryData()
@@ -60,9 +66,9 @@ export default function StockBorrowed() {
         <FilterTable onAdd={() => setOpen(!open)} />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}
-          data={transactions || []}
+          data={transactions?.data || []}
           isLoading={isLoading}
-          withLoading
+          totalPages={transactions?.total_pages}
           withPagination
           styleFooter='border-b-0 border-t'
         />
