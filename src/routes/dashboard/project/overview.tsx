@@ -2,7 +2,11 @@ import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 
-import { useProjectsPagination, useTotalProject } from '@/hooks/api/use-project'
+import {
+  useProjectsPagination,
+  useTotalProject,
+  useUpdateProject,
+} from '@/hooks/api/use-project'
 import { useClient } from '@/hooks/api/use-client'
 import { useApiData } from '@/hooks/use-api-data'
 
@@ -34,11 +38,14 @@ import {
   SquareUserRound,
 } from 'lucide-react'
 import { Tab, Tabs } from '@/components/tab'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
 
   const [url] = useUrlState({ page: '', limit: '', name: '' })
+
+  const { mutate } = useUpdateProject()
 
   const { data, isLoading } = useApiData(
     useProjectsPagination({
@@ -141,9 +148,24 @@ export default function Dashboard() {
     {
       id: 'action',
       header: '',
-      cell: () => (
+      cell: ({ row }) => (
         <div className='flex justify-end'>
-          <DropdownEdit></DropdownEdit>
+          <DropdownEdit>
+            <DropdownMenuItem
+              onClick={() =>
+                mutate({ id: row.original.id, payload: { isArchive: true } })
+              }
+            >
+              Arsipkan
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                mutate({ id: row.original.id, payload: { isDeleted: true } })
+              }
+            >
+              Hapus
+            </DropdownMenuItem>
+          </DropdownEdit>
         </div>
       ),
     },
