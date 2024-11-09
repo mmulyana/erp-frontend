@@ -1,4 +1,4 @@
+import { User } from '@/utils/types/api'
 import { atom } from 'jotai'
-import { User } from '@/utils/types/user'
 
 export const userAtom = atom<User | null>(null)
