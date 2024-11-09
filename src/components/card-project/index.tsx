@@ -15,11 +15,15 @@ import {
   UserRoundIcon,
   Users2Icon,
 } from 'lucide-react'
+import { useSetAtom } from 'jotai'
+import { projectAtom } from '@/atom/project'
 
 export default function CardProject({
   type = 'default',
   ...props
 }: Partial<Project> & { type?: 'default' | 'long' }) {
+  const setSelectedProject = useSetAtom(projectAtom)
+
   if (type === 'long') {
     return (
       <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white flex-col md:flex-row gap-4'>
@@ -97,6 +101,9 @@ export default function CardProject({
         <Button
           variant='outline'
           className='p-2 rounded-md text-dark/50 gap-1 pr-1.5 ml-auto md:ml-0'
+          onClick={() =>
+            props.id && setSelectedProject({ id: props.id, open: true })
+          }
         >
           Lihat
           <ChevronRight
