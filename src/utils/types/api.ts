@@ -56,6 +56,7 @@ export type Project = {
     container: {
       color: string
       name: string
+      id: string
     }
   }
   labels: ProjectToLabel[]
@@ -152,6 +153,7 @@ export type Goods = {
   id: number
   name: string
   qty: number
+  description: string | null
   available: number
   minimum: number
   photoUrl?: string

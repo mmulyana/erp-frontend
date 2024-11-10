@@ -179,6 +179,7 @@ export type createGoods = {
   measurementId: number
   categoryId: number
   brandId: number
+  description?: string
 }
 
 export type createCashAdvance = {
