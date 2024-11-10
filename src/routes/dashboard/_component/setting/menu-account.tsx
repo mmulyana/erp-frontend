@@ -5,6 +5,7 @@ import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useUpdateAccount } from '@/hooks/api/use-account'
+import { BASE_URL } from '@/utils/constant/_urls'
 import { User } from '@/utils/types/api'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
@@ -35,18 +36,32 @@ export default function MenuAccount() {
         name: user.name,
         email: user.email,
         phoneNumber: user.phoneNumber,
-        photo: user.photo,
       })
     }
   }, [user])
 
+  console.log(user)
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(submit)}>
         <div className='flex flex-col gap-6 max-w-sm p-6'>
           <div>
             <Label className='mb-3 block font-normal text-dark/80'>Photo</Label>
-            <PhotoProfile defaultPreview={null} size={64} />
+            <PhotoProfile
+              size={64}
+              defaultPreview={
+                user?.photo ? BASE_URL + '/img/' + user?.photo : null
+              }
+              onUpdate={(photo) => {
+                if (!user?.id) return
+                update({ id: user?.id, payload: { photo } })
+              }}
+              onRemove={() => {
+                if (!user?.id) return
+                update({ id: user.id, payload: { photo: null } })
+              }}
+            />
           </div>
           <div>
             <FormField
