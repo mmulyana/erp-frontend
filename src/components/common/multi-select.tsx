@@ -250,7 +250,7 @@ const MultiSelectorTrigger = forwardRef<
         <Badge
           key={option.value}
           className={cn(
-            'px-1 rounded-xl flex items-center gap-1',
+            'pl-2.5 pr-1.5 rounded-xl flex items-center gap-1',
             activeIndex === index && 'ring-2 ring-muted-foreground'
           )}
           variant='secondary'
