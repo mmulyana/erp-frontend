@@ -31,8 +31,6 @@ export default function ProtectedRoute({ children }: React.PropsWithChildren) {
     return () => {}
   }, [])
 
-  console.log('account', account)
-
   useEffect(() => {
     if (account && !isLoading && !!id) {
       setPermissionAtom(account?.permissions)
