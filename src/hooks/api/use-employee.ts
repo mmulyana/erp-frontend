@@ -3,8 +3,9 @@ import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { toast } from 'sonner'
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import {
+  ApiError,
   Employee,
   ExpireCertif,
   ExpireSafety,
@@ -70,6 +71,11 @@ export const useCreateEmployee = () => {
         queryKey: [KEYS.EXPIRE_CERTIFICATION],
       })
       toast.success(data.data.message)
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data.errors?.fullname.message) {
+        toast.error(error.response?.data.errors?.fullname.message)
+      }
     },
   })
 }
