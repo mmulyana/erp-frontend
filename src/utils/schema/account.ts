@@ -13,7 +13,7 @@ const phoneNumberRegex =
 const passwordLength = 8
 
 const imageSchema = z.object({
-  image: z
+  photo: z
     .any()
     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
     .refine(
