@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { atom, useAtom } from 'jotai'
 import { useApiData } from '@/hooks/use-api-data'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { EditorDescription } from '@/components/tiptap/editor-description'
 
 export const dialogGoodAtom = atom<boolean>(false)
 
@@ -36,6 +37,7 @@ export default function AddGood() {
       measurementId: '',
       locationId: '',
       categoryId: '',
+      description: '',
       photo: null as null | File,
     },
   })
@@ -202,6 +204,17 @@ export default function AddGood() {
                   ))}
                 </SelectV1>
               </div>
+
+              <FormField
+                control={form.control}
+                name='description'
+                render={({ field }) => (
+                  <EditorDescription
+                    content={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
             </div>
           </ModalContainer>
         </form>
