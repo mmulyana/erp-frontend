@@ -36,6 +36,7 @@ import { useApiData } from '@/hooks/use-api-data'
 import { Transaction } from '@/utils/types/api'
 import { format } from 'date-fns'
 import { formatToRupiah } from '@/utils/formatCurrency'
+import { EditorDescription } from '@/components/tiptap/editor-description'
 
 export const selectedGoodAtom = atom<{
   open: boolean
@@ -45,6 +46,8 @@ export const selectedGoodAtom = atom<{
 export default function DetailGoods() {
   const [selected, setSelected] = useAtom(selectedGoodAtom)
   const { mutate: update } = useUpdateGoods()
+
+  const [content, setContent] = useState('')
 
   const { measurementOptions, categoryOptions, locationOptions, brands } =
     useInventoryData()
@@ -125,6 +128,53 @@ export default function DetailGoods() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+            <Editable
+              isEdit={isEdit}
+              onEdit={onEdit}
+              keyData='description'
+              classNameInput='w-full'
+              defaultData={good?.description}
+              type='custom'
+              customEdit={
+                <div>
+                  <EditorDescription
+                    content={good?.description || content}
+                    onChange={setContent}
+                  />
+                  <div className='flex justify-end gap-2 mt-2'>
+                    <Button variant='secondary' onClick={() => onEdit(null)}>
+                      Batal
+                    </Button>
+                    <Button
+                      variant='default'
+                      onClick={() => {
+                        if (!selected?.id) return
+
+                        update(
+                          {
+                            id: selected.id,
+                            payload: { description: content },
+                          },
+                          { onSuccess: () => onEdit(null) }
+                        )
+                      }}
+                    >
+                      Simpan
+                    </Button>
+                  </div>
+                </div>
+              }
+              customData={(val) => (
+                <div className='px-6 border rounded border-line w-full'>
+                  <div
+                    className='w-full py-2'
+                    dangerouslySetInnerHTML={{ __html: val }}
+                  />
+                </div>
+              )}
+              className='text-dark/50'
+            />
+
             <div className='space-y-4'>
               <DataSheet>
                 <p className='text-dark/50'>Kuantitas</p>
