@@ -21,7 +21,11 @@ import { projectAtom } from '@/atom/project'
 export default function CardProject({
   type = 'default',
   ...props
-}: Partial<Project> & { type?: 'default' | 'long' }) {
+}: Partial<Project> & {
+  type?: 'default' | 'long'
+  isDragging?: boolean
+  className?: string
+}) {
   const setSelectedProject = useSetAtom(projectAtom)
 
   if (type === 'long') {
@@ -119,7 +123,9 @@ export default function CardProject({
   return (
     <div
       className={cn(
-        'w-full h-fit rounded-[10px] border border-[#E6EAF1] bg-white p-3.5 mb-2'
+        'w-full h-fit rounded-[10px] border border-[#E6EAF1] bg-white p-3.5 mb-2',
+        !!props.isDragging && 'border-blue-primary',
+        props.className
       )}
     >
       {props.client && (

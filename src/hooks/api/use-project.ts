@@ -18,11 +18,7 @@ export const useProjects = (params?: Params) => {
   return useQuery({
     queryKey: [KEYS.PROJECT, params],
     queryFn: async (): Promise<AxiosResponse<IApi<Project[]>>> => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.PROJECT,
-        params,
-      })
+      return await http(URLS.PROJECT, { params })
     },
   })
 }
@@ -56,7 +52,7 @@ export const useCreateProject = () => {
       queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
       toast.success(data.data.message)
     },
-    onError: (error: AxiosError) => {
+    onError: (error: AxiosError<any>) => {
       if (error?.response?.data?.errors?.name?.message) {
         toast.error(error?.response?.data?.errors?.name?.message)
       }

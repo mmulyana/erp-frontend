@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils/cn'
-import { Board } from '@/utils/types/api'
+import { Board, Project } from '@/utils/types/api'
 import CardProject from '@/components/card-project'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { socket } from '@/utils/socket'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useSidebar } from '@/components/ui/sidebar'
 import useScreenWidth from '@/hooks/use-screen-width'
+import { useSetAtom } from 'jotai'
+import { projectAtom } from '@/atom/project'
 
 export default function Kanban() {
+  const setSelected = useSetAtom(projectAtom)
   const [containers, setContainers] = useState<Board[]>([])
 
   const { state, isMobile } = useSidebar()
@@ -86,6 +89,15 @@ export default function Kanban() {
     socket.emit('update_order_items', { destination, source })
   }
 
+  const handleClick = (
+    event: React.MouseEvent,
+    dragHandleProps: any,
+    project: Project
+  ) => {
+    setSelected({ id: project.id, open: true })
+    dragHandleProps.onClick(event)
+  }
+
   const width = useScreenWidth()
 
   return (
@@ -122,14 +134,25 @@ export default function Kanban() {
                           key={item.id}
                           draggableId={item.id}
                           index={index}
+                          isDragDisabled={false}
                         >
-                          {(provided) => (
+                          {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
+                              onClick={(e) =>
+                                handleClick(
+                                  e,
+                                  provided.dragHandleProps,
+                                  item.project as Project
+                                )
+                              }
                             >
-                              <CardProject {...item.project} />
+                              <CardProject
+                                {...item.project}
+                                isDragging={snapshot.isDragging}
+                              />
                             </div>
                           )}
                         </Draggable>

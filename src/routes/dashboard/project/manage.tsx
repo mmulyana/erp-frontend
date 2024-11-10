@@ -7,8 +7,13 @@ import Container from '../_component/container'
 import Kanban from './_component/manage/kanban'
 import Search from '@/components/common/search'
 import Filter from '@/components/common/filter'
+import DetailProject from './_component/detail-project'
+import { useAtom } from 'jotai'
+import { projectAtom } from '@/atom/project'
 
 export default function Manage() {
+  const [selected, setSelected] = useAtom(projectAtom)
+
   return (
     <DashboardLayout>
       <TitlePage className='mb-2'>
@@ -37,6 +42,11 @@ export default function Manage() {
           <p>Arsip</p>
         </Tab>
       </Tabs>
+      <DetailProject
+        id={selected?.id}
+        open={selected?.open || false}
+        setOpen={() => setSelected(null)}
+      />
     </DashboardLayout>
   )
 }
