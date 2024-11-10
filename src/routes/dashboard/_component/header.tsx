@@ -17,6 +17,8 @@ import { settingConfig } from './setting/setting'
 
 import { ChevronRight, Settings } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { userAtom } from '@/atom/auth'
+import { BASE_URL } from '@/utils/constant/_urls'
 
 export type Title = {
   name: string
@@ -33,6 +35,7 @@ export const useTitle = (title: Title[]) => {
   }, [title])
 }
 export default function Header() {
+  const user = useAtomValue(userAtom)
   const setSettingConfig = useSetAtom(settingConfig)
   const links = useAtomValue(titleAtom)
 
@@ -88,8 +91,16 @@ export default function Header() {
           variant='secondary'
           className='w-8 h-8 rounded-full bg-[#FFF] border-[1.5px] border-[#2A9D90] p-0.5 relative'
         >
-          <div className='w-full h-full rounded-full bg-gray-400'></div>
-          <div className='w-3 h-3 rounded-full border-2 border-white bg-[#2A9D90] absolute -right-0.5 -bottom-0.5'></div>
+          {user?.photo ? (
+            <img src={BASE_URL + '/img/' + user?.photo} className='h-full w-full rounded-full object-cover'/>
+          ) : (
+            <div className='w-full h-full rounded-full bg-blue-primary/20 flex justify-center items-center pb-0.5'>
+              <p className='text-sm uppercase text-blue-primary'>
+                {user?.name.at(0)}
+              </p>
+            </div>
+          )}
+          <div className='w-2.5 h-2.5 rounded-full border-2 border-white bg-[#2A9D90] absolute -right-[2px] -top-[1px]'></div>
         </Button>
       </div>
     </div>
