@@ -62,32 +62,34 @@ export default function Index() {
       cell: ({ row }) => {
         const { name, id } = row.original
         return (
-          <Overlay
-            className='w-fit pr-14'
-            overlay={
-              <button
-                onClick={() => {
-                  setSelected({ id, open: true })
-                }}
-                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-              >
-                Lihat
-              </button>
-            }
-          >
-            <div className='hover:text-dark'>
-              <button
-                onClick={() => {
-                  setSelected({ id, open: true })
-                }}
-                className='justify-start flex'
-              >
-                <span className='break-words max-w-[120px] text-left'>
-                  {name}
-                </span>
-              </button>
-            </div>
-          </Overlay>
+          <div className='max-w-[180px]'>
+            <Overlay
+              className='w-fit pr-2'
+              overlay={
+                <button
+                  onClick={() => {
+                    setSelected({ id, open: true })
+                  }}
+                  className='absolute left-full top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                >
+                  Lihat
+                </button>
+              }
+            >
+              <div className='hover:text-dark'>
+                <button
+                  onClick={() => {
+                    setSelected({ id, open: true })
+                  }}
+                  className='justify-start flex'
+                >
+                  <span className='break-words max-w-[200px] text-left'>
+                    {name}
+                  </span>
+                </button>
+              </div>
+            </Overlay>
+          </div>
         )
       },
     },
