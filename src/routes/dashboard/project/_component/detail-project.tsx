@@ -1,25 +1,25 @@
-import Chips from '@/components/common/chips'
-import DataSheet from '@/components/common/data-sheet'
-import { Editable } from '@/components/common/editable'
-import { Tab, Tabs } from '@/components/tab'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { useProject, useUpdateProject } from '@/hooks/api/use-project'
-import { cn } from '@/utils/cn'
-import { ProjectDetail } from '@/utils/types/api'
-import { useCallback, useMemo, useState } from 'react'
-import LabelProject from './detail/label-project'
-import UserProject from './detail/user-project'
-import LeadProject from './detail/lead-project'
 import { formatToRupiah } from '@/utils/formatCurrency'
-import { format } from 'date-fns'
+import { useCallback, useMemo, useState } from 'react'
 import { id as indonesia } from 'date-fns/locale'
-import EmployeeProject from './detail/employee-project'
-import AttachmentProject from './detail/attachment-project'
-import ActivityProject from './detail/activity-project'
-import EstimateProject from './detail/estimate-project'
+import { format } from 'date-fns'
+import { cn } from '@/utils/cn'
+
+import {
+  useProject,
+  useUpdateProject,
+  useUpdateStatusProject,
+} from '@/hooks/api/use-project'
+import { useApiData } from '@/hooks/use-api-data'
+import { useBoards } from '@/hooks/api/use-board'
+
 import { EditorDescription } from '@/components/tiptap/editor-description'
 import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Editable } from '@/components/common/editable'
+import { Tab, Tabs } from '@/components/tab'
+import DataSheet from '@/components/common/data-sheet'
+import Chips from '@/components/common/chips'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,8 +27,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Ellipsis } from 'lucide-react'
+
+import AttachmentProject from './detail/attachment-project'
 import BorrowedProject from './detail/borrowed-project'
+import EmployeeProject from './detail/employee-project'
+import ActivityProject from './detail/activity-project'
+import EstimateProject from './detail/estimate-project'
+import LabelProject from './detail/label-project'
+import UserProject from './detail/user-project'
+import LeadProject from './detail/lead-project'
+
+import { Ellipsis } from 'lucide-react'
 
 type Props = {
   open: boolean
@@ -38,14 +47,12 @@ type Props = {
 
 export default function DetailProject({ open, setOpen, id }: Props) {
   const { mutate: update } = useUpdateProject()
+  const { mutate: updateStatus } = useUpdateStatusProject()
 
   const [content, setContent] = useState('')
 
-  const { data, isLoading, isFetching } = useProject(id)
-  const project: ProjectDetail | null = useMemo(
-    () => data?.data.data || null,
-    [data, isLoading, isFetching]
-  )
+  const { data: project } = useApiData(useProject(id))
+  const { data: boards } = useApiData(useBoards())
 
   const [edit, setEdit] = useState<string | null>('')
   const isEdit = useMemo(() => edit, [edit])
@@ -158,9 +165,31 @@ export default function DetailProject({ open, setOpen, id }: Props) {
             <div className='flex mt-4 flex-col gap-4'>
               <DataSheet>
                 <p className='text-dark/50'>Status</p>
-                <Chips
-                  background={project?.boardItems?.container.color}
-                  text={project?.boardItems?.container.name}
+                <Editable
+                  isEdit={isEdit}
+                  onEdit={onEdit}
+                  keyData='status'
+                  type='select'
+                  options={boards?.map((item) => ({
+                    name: item.name,
+                    value: item.id,
+                  }))}
+                  defaultData={project?.boardItems.container.id}
+                  customData={(val) => {
+                    const index = boards?.findIndex((item) => item.id === val)
+
+                    if (!!boards?.length) {
+                      return (
+                        <Chips
+                          background={boards[index || 0]?.color || ''}
+                          text={boards[index || 0]?.name || ''}
+                        />
+                      )
+                    }
+                  }}
+                  onUpdate={(val) => {
+                    updateStatus({ id, containerId: val as string })
+                  }}
                 />
               </DataSheet>
               <DataSheet

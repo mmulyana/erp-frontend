@@ -198,7 +198,6 @@ export default function AddProject({ open, setOpen }: Props) {
                     values={field.value}
                     onValuesChange={field.onChange}
                     loop
-                    // className='max-w-xs'
                   >
                     <MultiSelectorTrigger>
                       <MultiSelectorInput placeholder='Pilih label' />
