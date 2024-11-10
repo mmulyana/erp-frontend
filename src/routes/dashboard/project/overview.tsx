@@ -47,13 +47,23 @@ export default function Dashboard() {
 
   const { mutate } = useUpdateProject()
 
-  const { data, isLoading } = useApiData(
+  const projectActive = useApiData(
     useProjectsPagination({
       ...(url.limit !== '' ? { limit: url.limit } : undefined),
       ...(url.page !== '' ? { page: url.page } : undefined),
       ...(url.name !== '' ? { search: url.name } : undefined),
     })
   )
+
+  const projectArchive = useApiData(
+    useProjectsPagination({
+      ...(url.limit !== '' ? { limit: url.limit } : undefined),
+      ...(url.page !== '' ? { page: url.page } : undefined),
+      ...(url.name !== '' ? { search: url.name } : undefined),
+      isArchive: 'true',
+    })
+  )
+
   const { data: totalproject } = useApiData(useTotalProject())
   const { data: clients } = useApiData(useClient())
 
@@ -153,10 +163,13 @@ export default function Dashboard() {
           <DropdownEdit>
             <DropdownMenuItem
               onClick={() =>
-                mutate({ id: row.original.id, payload: { isArchive: true } })
+                mutate({
+                  id: row.original.id,
+                  payload: { isArchive: !row.original.isArchive },
+                })
               }
             >
-              Arsipkan
+              {row.original.isArchive ? 'Kembalikan' : 'Arsipkan'}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -247,16 +260,32 @@ export default function Dashboard() {
                 <FilterTable placeholder='Cari proyek' />
                 <DataTable
                   columns={columns}
-                  data={data?.data || []}
-                  isLoading={isLoading}
-                  totalPages={data?.total_pages}
+                  data={projectActive.data?.data || []}
+                  isLoading={projectActive.isLoading}
+                  totalPages={projectActive.data?.total_pages}
                   withPagination
                   styleFooter='border-t border-b-0'
                 />
               </div>
             </Tab>
             <Tab label='Arsip'>
-              <p>Arsip</p>
+              <div className='col-span-full border border-line rounded-xl overflow-hidden mt-4'>
+                <HeadTable>
+                  <div className='flex gap-4 items-center'>
+                    <BriefcaseBusiness className='text-[#989CA8]' />
+                    <p className='text-dark font-medium'>Arsip proyek</p>
+                  </div>
+                </HeadTable>
+                <FilterTable placeholder='Cari proyek' />
+                <DataTable
+                  columns={columns}
+                  data={projectArchive?.data?.data || []}
+                  isLoading={projectArchive.isLoading}
+                  totalPages={projectArchive?.data?.total_pages}
+                  withPagination
+                  styleFooter='border-t border-b-0'
+                />
+              </div>
             </Tab>
           </Tabs>
         </div>

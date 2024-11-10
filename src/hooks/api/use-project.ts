@@ -13,10 +13,11 @@ type Params = {
   search?: string
   labelId?: number
   clientId?: number
+  isArchive?: string
 }
 export const useProjects = (params?: Params) => {
   return useQuery({
-    queryKey: [KEYS.PROJECT, params],
+    queryKey: [KEYS.PROJECT, params?.search, params?.isArchive],
     queryFn: async (): Promise<AxiosResponse<IApi<Project[]>>> => {
       return await http(URLS.PROJECT, { params })
     },
@@ -24,7 +25,13 @@ export const useProjects = (params?: Params) => {
 }
 export const useProjectsPagination = (params?: Params & Pagination) => {
   return useQuery({
-    queryKey: [KEYS.PROJECT_PAGINATION, { ...params }],
+    queryKey: [
+      KEYS.PROJECT_PAGINATION,
+      params?.search,
+      params?.page,
+      params?.limit,
+      params?.isArchive,
+    ],
     queryFn: async (): Promise<AxiosResponse<IApiPagination<Project[]>>> => {
       return await http(URLS.PROJECT + '/list/pagination', { params })
     },
@@ -49,7 +56,11 @@ export const useCreateProject = () => {
       return await http.post(URLS.PROJECT, payload)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT],
+        refetchType: 'all',
+        exact: false,
+      })
       toast.success(data.data.message)
     },
     onError: (error: AxiosError<any>) => {
@@ -77,8 +88,15 @@ export const useUpdateProject = () => {
         queryKey: [KEYS.PROJECT_DETAIL, data.data.data?.id],
       })
       if (data.data.data?.update) {
-        queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT_PAGINATION] })
-        queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+        console.log('update cuy')
+        queryClient.invalidateQueries({
+          queryKey: [KEYS.PROJECT_PAGINATION],
+          refetchType: 'all',
+        })
+        queryClient.invalidateQueries({
+          queryKey: [KEYS.PROJECT],
+          refetchType: 'all',
+        })
       }
       toast.success(data.data.message)
     },
