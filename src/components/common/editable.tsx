@@ -43,7 +43,7 @@ const RenderData = memo(
       (typeof defaultData == 'number' && defaultData === 0)
     ) {
       return (
-        <span className='inline-flex gap-2 items-start group w-full'>
+        <span className='inline-flex gap-2 items-center group w-full'>
           {customData?.(defaultData)}
           <Pencil
             size={14}
