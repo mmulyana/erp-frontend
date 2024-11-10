@@ -9,6 +9,7 @@ import { ItalicToolbar } from '@/components/toolbars/italic'
 import { BoldToolbar } from '@/components/toolbars/bold'
 import { CodeToolbar } from '@/components/toolbars/code'
 import { Separator } from '@radix-ui/react-separator'
+import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { UndoToolbar } from '../toolbars/undo'
 import { RedoToolbar } from '../toolbars/redo'
 import StarterKit from '@tiptap/starter-kit'
@@ -70,21 +71,26 @@ export const EditorDescription = ({ content = '', onChange }: Props) => {
   return (
     <div className='border w-full relative rounded-md overflow-hidden pb-3'>
       <div className='flex w-full items-center py-1 px-1 justify-between sticky top-0 left-0 bg-background'>
-        <ToolbarProvider editor={editor}>
-          <div className='flex items-center gap-1'>
-            <UndoToolbar />
-            <RedoToolbar />
-            <Separator orientation='vertical' className='w-0.5 bg-border h-5' />
-            <BoldToolbar />
-            <ItalicToolbar />
-            <StrikeThroughToolbar />
-            <BulletListToolbar />
-            <OrderedListToolbar />
-            <CodeToolbar />
-            <HorizontalRuleToolbar />
-            <BlockquoteToolbar />
-          </div>
-        </ToolbarProvider>
+        <TooltipProvider>
+          <ToolbarProvider editor={editor}>
+            <div className='flex items-center gap-1'>
+              <UndoToolbar />
+              <RedoToolbar />
+              <Separator
+                orientation='vertical'
+                className='w-0.5 bg-border h-5'
+              />
+              <BoldToolbar />
+              <ItalicToolbar />
+              <StrikeThroughToolbar />
+              <BulletListToolbar />
+              <OrderedListToolbar />
+              <CodeToolbar />
+              <HorizontalRuleToolbar />
+              <BlockquoteToolbar />
+            </div>
+          </ToolbarProvider>
+        </TooltipProvider>
       </div>
       <div
         onClick={() => {
