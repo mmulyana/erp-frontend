@@ -204,3 +204,26 @@ export const useTotalProject = () => {
     },
   })
 }
+
+export const useUpdateStatusProject = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      containerId,
+    }: {
+      id: number
+      containerId: string
+    }): Promise<AxiosResponse<IApi<{ id: number }>>> => {
+      return await http.patch(`${URLS.PROJECT}/${id}/status/${containerId}`)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT, data.data.data?.id],
+      })
+      toast.success(data.data.message)
+    },
+  })
+}
