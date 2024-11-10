@@ -1,37 +1,60 @@
-import { Form, FormField, FormLabel } from '@/components/ui/form'
-import { useInventoryData } from '../../_hook/use-inventory-data'
-import { FilterTable } from '@/components/data-table/component'
-import Modal, { ModalContainer } from '@/components/modal-v2'
-import Select from '@/components/common/select/select-v1'
 import { useForm, useFieldArray } from 'react-hook-form'
-import { CreateTransaction } from '@/utils/types/form'
-import { CommandItem } from '@/components/ui/command'
-import { DataTable } from '@/components/data-table'
+import useUrlState from '@ahooksjs/use-url-state'
+
+import { useProjects } from '@/hooks/api/use-project'
+import { useGoodsAll } from '@/hooks/api/use-goods'
 import { useApiData } from '@/hooks/use-api-data'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Plus, X } from 'lucide-react'
-import { column } from './column'
-import { useState } from 'react'
 import {
   useCreateTransaction,
   useTransactionPagination,
 } from '@/hooks/api/use-transaction'
-import useUrlState from '@ahooksjs/use-url-state'
+import { CreateTransaction } from '@/utils/types/form'
+
+import { Form, FormField } from '@/components/ui/form'
+import { FilterTable } from '@/components/data-table/component'
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import { DataTable } from '@/components/data-table'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { column } from './column'
+import { useState } from 'react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+
+import { Check, ChevronsUpDown, Plus, X } from 'lucide-react'
 
 const HIDE = ['supplier', 'price']
 
 export default function StockBorrowed() {
-  const [url] = useUrlState({ page: '' })
+  const [search, setSearch] = useState('')
+  const { data: projects } = useApiData(
+    useProjects({
+      search,
+    })
+  )
+  const [goodName, setGoodName] = useState('')
+  const { data: goods } = useApiData(
+    useGoodsAll({ ...(goodName !== '' ? { name: goodName } : undefined) })
+  )
 
+  const [url] = useUrlState({ page: '' })
   const { data: transactions, isLoading } = useApiData(
     useTransactionPagination({
       type: 'borrowed',
       ...(url.page !== '' ? { page: url.page } : undefined),
     })
   )
-
-  const { goods } = useInventoryData()
 
   const { mutate } = useCreateTransaction()
   const [open, setOpen] = useState(false)
@@ -48,9 +71,9 @@ export default function StockBorrowed() {
     name: 'items',
   })
 
-  const onSubmit = async (data: CreateTransaction) => {
+  const onSubmit = async (payload: CreateTransaction) => {
     mutate(
-      { payload: data },
+      { payload },
       {
         onSuccess: () => {
           setOpen(false)
@@ -98,35 +121,89 @@ export default function StockBorrowed() {
                   </div>
                   <div className='p-4 bg-[#F8FAFC] rounded-b-lg'>
                     <div className='grid grid-cols-3 gap-4'>
-                      <div className='flex flex-col gap-3 col-span-2'>
-                        <FormLabel>Barang</FormLabel>
-                        <Select
+                      <div className='col-span-2'>
+                        <FormField
+                          label='Barang'
                           name={`items.${index}.goodsId`}
-                          placeholder='Pilih barang'
-                          preview={(val) => (
-                            <span>
-                              {
-                                goods?.find((s: any) => s.id === Number(val))
-                                  ?.name
-                              }
-                            </span>
+                          control={form.control}
+                          render={({ field }) => (
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant='outline'
+                                  role='combobox'
+                                  aria-expanded={open}
+                                  className='w-full px-2 h-10 justify-between text-dark '
+                                >
+                                  {field.value
+                                    ? goods?.find(
+                                        (item) =>
+                                          item.id === Number(field.value)
+                                      )?.name
+                                    : 'Pilih barang'}
+                                  <ChevronsUpDown
+                                    size={16}
+                                    className='opacity-50'
+                                  />
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent
+                                side='bottom'
+                                className='p-0'
+                                style={{
+                                  width: 'var(--radix-popover-trigger-width)',
+                                }}
+                              >
+                                <Command shouldFilter={false}>
+                                  <CommandInput
+                                    placeholder='Cari...'
+                                    value={goodName}
+                                    onValueChange={setGoodName}
+                                  />
+                                  <CommandList>
+                                    <CommandEmpty>tidak ditemukan</CommandEmpty>
+                                    <CommandGroup className='h-48 overflow-auto'>
+                                      {goods?.map((item) => (
+                                        <CommandItem
+                                          key={item.id}
+                                          value={String(item.id)}
+                                          onSelect={(value) => {
+                                            form.setValue(
+                                              `items.${index}.goodsId`,
+                                              Number(value)
+                                            )
+                                          }}
+                                          disabled={item.available === 0}
+                                        >
+                                          <div className='flex gap-2 items-center'>
+                                            <div className='w-16 h-16 rounded-lg bg-dark/5'></div>
+                                            <div className='flex flex-col gap-1'>
+                                              <p className='text-base text-dark'>
+                                                {item.name}
+                                              </p>
+                                              <p className='text-dark/50'>
+                                                {!!item.available ? (
+                                                  <>
+                                                    Tersedia{' '}
+                                                    <span className='text-dark font-medium'>
+                                                      {item.available}
+                                                    </span>
+                                                  </>
+                                                ) : (
+                                                  'Persediaan Habis'
+                                                )}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </CommandItem>
+                                      ))}
+                                    </CommandGroup>
+                                  </CommandList>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
                           )}
-                        >
-                          {goods?.map((item: any) => (
-                            <CommandItem
-                              key={item.id}
-                              value={item.id.toString()}
-                              onSelect={(value) => {
-                                form.setValue(
-                                  `items.${index}.goodsId`,
-                                  Number(value)
-                                )
-                              }}
-                            >
-                              <span>{item.name}</span>
-                            </CommandItem>
-                          ))}
-                        </Select>
+                        />
                       </div>
 
                       <FormField
@@ -188,16 +265,82 @@ export default function StockBorrowed() {
               ))}
 
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-center pt-4 mt-4 border-t border-line border-dashed'>
-                <div className='col-start-2'>
-                  <FormField
-                    label='Tanggal'
-                    control={form.control}
-                    name='date'
-                    render={({ field }) => (
-                      <Input type='date' {...field} className='h-9 block' />
-                    )}
-                  />
-                </div>
+                <FormField
+                  label='Proyek'
+                  name='projectId'
+                  control={form.control}
+                  render={({ field }) => (
+                    <Popover>
+                      <PopoverTrigger className='border' asChild>
+                        <Button
+                          variant='outline'
+                          role='combobox'
+                          aria-expanded={open}
+                          className='w-full px-2 h-10 justify-between text-dark'
+                        >
+                          {field.value
+                            ? projects?.find(
+                                (item) => item.id === Number(field.value)
+                              )?.name
+                            : 'Pilih Proyek'}
+                          <ChevronsUpDown size={16} className='opacity-50' />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        side='bottom'
+                        className='p-0'
+                        style={{
+                          width: 'var(--radix-popover-trigger-width)',
+                        }}
+                      >
+                        <Command shouldFilter={false}>
+                          <CommandInput
+                            placeholder='Cari...'
+                            value={search}
+                            onValueChange={setSearch}
+                          />
+                          <CommandList>
+                            <CommandEmpty>tidak ditemukan</CommandEmpty>
+                            <CommandGroup className='h-48 overflow-auto'>
+                              {projects?.map((item) => (
+                                <CommandItem
+                                  key={item.id}
+                                  value={String(item.id)}
+                                  onSelect={(value) => {
+                                    form.setValue('projectId', Number(value))
+                                  }}
+                                >
+                                  <div className='flex justify-between items-center w-full'>
+                                    <p className='text-base text-dark'>
+                                      {item.name}
+                                    </p>
+                                    {Number(field.value) === item.id && (
+                                      <div className='w-4 h-4 rounded-full flex items-center justify-center bg-green-primary pr-0.5'>
+                                        <Check
+                                          size={12}
+                                          className='text-white'
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                />
+
+                <FormField
+                  label='Tanggal'
+                  control={form.control}
+                  name='date'
+                  render={({ field }) => (
+                    <Input type='date' {...field} className='block' />
+                  )}
+                />
               </div>
             </ModalContainer>
           </form>
