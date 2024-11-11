@@ -98,18 +98,10 @@ export default function Kanban() {
     dragHandleProps.onClick(event)
   }
 
-  const width = useScreenWidth()
+  // const width = useScreenWidth()
 
   return (
-    <ScrollArea
-      className={cn(
-        'pb-3 w-[calc(100vw-18rem)]',
-        state === 'collapsed' && 'w-[calc(100vw-5rem)]'
-      )}
-      style={{
-        width: isMobile ? width - 32 + 'px' : '',
-      }}
-    >
+    <ScrollArea className='pb-3'>
       <div className={cn('h-full flex gap-2 relative')}>
         <DragDropContext onDragEnd={onDragEnd}>
           {containers.map((container) => (
@@ -128,7 +120,7 @@ export default function Kanban() {
                     )}
                   >
                     <KanbanHead color={container.color} name={container.name} />
-                    <ScrollArea className={cn('h-[calc(100vh-272px)] px-0.5')}>
+                    <ScrollArea className={cn('h-[calc(100vh-232px)] px-0.5')}>
                       {container.items.map((item, index) => (
                         <Draggable
                           key={item.id}
