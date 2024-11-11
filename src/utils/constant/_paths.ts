@@ -10,6 +10,8 @@ export const PATH = {
   EMPLOYEE_PAID_LEAVE: '/dashboard/hris/paid-leave',
   EMPLOYEE_ATTENDANCE: '/dashboard/hris/attendance',
   EMPLOYEE_CASH_ADVANCES: '/dashboard/hris/cash-advances',
+  EMPLOYEE_RECAP: '/dashboard/hris/recap',
+  EMPLOYEE_RECAP_REPORT: '/dashboard/hris/recap/:id',
 
   PROJECT_INDEX: '/dashboard/project',
   PROJECT_MANAGE: '/dashboard/project/manage',
@@ -26,7 +28,7 @@ export const PATH = {
   INVENTORY_STOCK_OPNAME: '/dashboard/inventory/manage/opname',
   INVENTORY_STOCK_BORROWED: '/dashboard/inventory/manage/borrowed',
 
-  ADMIN_USER: "/dashboard/admin/users",
-  ADMIN_ROLE: "/dashboard/admin/role",
-  ADMIN_PERMISSION: "/dashboard/admin/permission"
+  ADMIN_USER: '/dashboard/admin/users',
+  ADMIN_ROLE: '/dashboard/admin/role',
+  ADMIN_PERMISSION: '/dashboard/admin/permission',
 }

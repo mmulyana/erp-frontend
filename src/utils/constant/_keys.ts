@@ -19,6 +19,7 @@ export const KEYS = {
   CASH_ADVANCES_CHART: 'cash_advances-chart',
   ATTENDANCE: 'attendance',
   OVERTIME: 'overtime',
+  OVERTIME_DETAIL: 'overtime-detail',
   PROJECT: 'project',
   PROJECT_DETAIL: 'project',
   PROJECT_PAGINATION: 'project',
@@ -55,4 +56,7 @@ export const KEYS = {
   STOCK_OUT: 'stock-out',
   TRANSACTION_BY_GOODS: 'transaction-by-goods',
   DASHBOARD: 'dashboard',
+  RECAP: "recap",
+  RECAP_DETAIL: "recap-detail",
+  RECAP_REPORT: "recap-report"
 }

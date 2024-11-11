@@ -20,6 +20,7 @@ export const URLS = {
   ATTENDANCE: V1 + '/hris/attendance',
   OVERTIME: V1 + '/hris/overtime',
   COMPETENCY: V1 + '/hris/competency',
+  RECAP: V1 + '/hris/recap',
 
   PROJECT: V1 + '/project/index',
   PROJECT_LABEL: V1 + '/project/label',
