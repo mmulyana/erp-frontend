@@ -13,6 +13,7 @@ import {
   useUpdateAttendance,
 } from '@/hooks/api/use-attendance'
 import { cn } from '@/utils/cn'
+import { BASE_URL } from '@/utils/constant/_urls'
 import useUrlState from '@ahooksjs/use-url-state'
 import { format, parse } from 'date-fns'
 import { id } from 'date-fns/locale'
@@ -21,7 +22,7 @@ import {
   CheckIcon,
   MinusIcon,
   PlusIcon,
-  XIcon,
+  X,
 } from 'lucide-react'
 import { useMemo } from 'react'
 
@@ -38,7 +39,7 @@ export function Regular() {
     name: url.name,
     ...(url.date !== ''
       ? {
-          date: format(parse(url.date, 'dd-MM-yyyy', new Date()), 'dd-MM-yyyy'),
+          date: url.date,
         }
       : undefined),
   })
@@ -56,7 +57,7 @@ export function Regular() {
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                variant={'outline'}
+                variant='outline'
                 className={cn(
                   'w-fit pl-3 gap-2 text-left font-normal text-dark'
                 )}
@@ -64,7 +65,7 @@ export function Regular() {
                 <CalendarDaysIcon className='h-4 w-4 text-[#2A9D90]' />
                 {url.date ? (
                   format(
-                    parse(url.date, 'dd-MM-yyyy', new Date()),
+                    parse(url.date, 'yyyy-MM-dd', new Date()),
                     'EEEE, dd MMM yyyy',
                     {
                       locale: id,
@@ -80,13 +81,14 @@ export function Regular() {
                 mode='single'
                 selected={
                   url.date
-                    ? parse(url.date, 'dd-MM-yyyy', new Date())
+                    ? parse(url.date, 'yyyy-MM-dd', new Date())
                     : undefined
                 }
                 onSelect={(val) => {
-                  const originalDate = new Date(val as Date)
-                  const formattedDate = format(originalDate, 'dd-MM-yyyy')
-                  setUrl((prev) => ({ ...prev, date: formattedDate }))
+                  if (val) {
+                    const formattedDate = format(val, 'yyyy-MM-dd')
+                    setUrl((prev) => ({ ...prev, date: formattedDate }))
+                  }
                 }}
                 disabled={(date) =>
                   date > new Date() || date < new Date('2024-01-01')
@@ -94,14 +96,29 @@ export function Regular() {
               />
             </PopoverContent>
           </Popover>
+          {(url.date !== '' || url.name !== '') && (
+            <Button
+              variant='ghost'
+              className='font-normal flex items-center gap-1 relative pl-3 pr-6'
+              onClick={() => {
+                setUrl({ date: undefined, name: undefined })
+              }}
+            >
+              Hapus filter
+              <X
+                size={14}
+                className='text-red-primary/80 absolute top-[55%] right-1.5 -translate-y-1/2'
+              />
+            </Button>
+          )}
         </div>
       </div>
-      <div>
+      <div className='space-y-4'>
         {!!data?.length &&
           data?.map((position: any) => (
             <div key={`position-${position.id}`}>
-              <p className='text-dark mb-4'>{position.name}</p>
-              <div className='grid grid-cols-2 md:grid-cols-4 gap-2'>
+              <p className='text-dark mb-4 font-medium'>{position.name}</p>
+              <div className='grid grid-cols-1 md:grid-cols-4 gap-2'>
                 {position?.employees?.map((item: any) => {
                   const isPresence =
                     !!item.attendances &&
@@ -117,17 +134,30 @@ export function Regular() {
                   return (
                     <div
                       key={'employee-' + item.id}
-                      className='bg-white w-full h-fit pb-3 px-3 pt-6 flex flex-col items-center border border-line group relative hover:z-20 hover:shadow-lg'
+                      className='bg-white w-full h-fit pb-3 px-3 pt-6 flex flex-row md:flex-col items-center border border-line group relative hover:z-20 hover:shadow-lg'
                     >
-                      <img
-                        src={item.photo}
-                        className='w-20 h-20 rounded-full border'
-                      ></img>
-                      <p className='mt-4 text-dark'>{item.fullname}</p>
-                      <div className='mt-6 grid grid-cols-2 gap-3.5 w-full'>
+                      <div className='flex flex-col justify-center items-center'>
+                        {item.photo ? (
+                          <img
+                            src={BASE_URL + '/img/' + item.photo}
+                            className='w-10 md:w-20 h-10 md:h-20 rounded-full border object-cover'
+                          />
+                        ) : (
+                          <div className='h-10 md:h-20 w-10 md:w-20 rounded-full bg-dark/5 flex justify-center items-center'>
+                            <p className='text-2xl text-dark uppercase'>
+                              {item.fullname.at(0)}
+                            </p>
+                          </div>
+                        )}
+                        <p className='mt-0 md:mt-4 text-dark'>
+                          {item.fullname}
+                        </p>
+                      </div>
+
+                      <div className='mt-0 md:mt-6 grid grid-cols-2 gap-3.5 w-fit md:w-full ml-auto'>
                         <button
                           className={cn(
-                            'border py-3 border-line flex justify-center items-center gap-2 w-full flex-nowrap',
+                            'border py-2 md:py-1 px-3 md:px-2 border-line flex justify-center items-center gap-2 w-full flex-nowrap rounded-full',
                             isPresence &&
                               'bg-green-primary border-green-primary text-white'
                           )}
@@ -141,7 +171,7 @@ export function Regular() {
                                   date:
                                     url.date !== ''
                                       ? url.date
-                                      : format(new Date(), 'dd-MM-yyyy'),
+                                      : format(new Date(), 'yyyy-MM-dd'),
                                 },
                               })
                               return
@@ -150,7 +180,7 @@ export function Regular() {
                               date:
                                 url.date !== ''
                                   ? url.date
-                                  : format(new Date(), 'dd-MM-yyyy'),
+                                  : format(new Date(), 'yyyy-MM-dd'),
                               employeeId: item.id,
                               total_hour: 1,
                               type: 'presence',
@@ -159,8 +189,9 @@ export function Regular() {
                           disabled={isPresence}
                         >
                           <CheckIcon
+                            size={16}
                             className={cn(
-                              'w-4 h-4 text-green-primary stroke-[3px]',
+                              'text-green-primary stroke-[3px]',
                               isPresence && ' text-white'
                             )}
                           />
@@ -175,7 +206,7 @@ export function Regular() {
                         </button>
                         <button
                           className={cn(
-                            'border py-3 border-line flex justify-center items-center gap-2 w-full flex-nowrap',
+                            'border py-2 px-3 md:px-2 md:py-1 border-line flex justify-center items-center gap-2 w-full flex-nowrap rounded-full',
                             isAbsent && 'bg-[#C95F61] border-[#C95F61]'
                           )}
                           disabled={isAbsent}
@@ -189,7 +220,7 @@ export function Regular() {
                                   date:
                                     url.date !== ''
                                       ? url.date
-                                      : format(new Date(), 'dd-MM-yyyy'),
+                                      : format(new Date(), 'yyyy-MM-dd'),
                                 },
                               })
                               return
@@ -198,16 +229,17 @@ export function Regular() {
                               date:
                                 url.date !== ''
                                   ? url.date
-                                  : format(new Date(), 'dd-MM-yyyy'),
+                                  : format(new Date(), 'yyyy-MM-dd'),
                               employeeId: item.id,
                               total_hour: 0,
                               type: 'absent',
                             })
                           }}
                         >
-                          <XIcon
+                          <X
+                            size={14}
                             className={cn(
-                              'w-4 h-4 text-[#C95F61] stroke-[3px]',
+                              'text-[#C95F61] stroke-[3px]',
                               isAbsent && ' text-white'
                             )}
                           />
@@ -217,7 +249,7 @@ export function Regular() {
                               isAbsent && ' text-white'
                             )}
                           >
-                            Tdk. Hadir
+                            Absen
                           </p>
                         </button>
                       </div>
