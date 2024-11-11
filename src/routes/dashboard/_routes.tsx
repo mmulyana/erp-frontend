@@ -8,6 +8,8 @@ const Employee = lazy(() => import('./hris/employee/index.tsx'))
 const EmployeeByPosition = lazy(() => import('./hris/employee/detail.tsx'))
 const Attendance = lazy(() => import('./hris/attendance/index.tsx'))
 const CashAdvance = lazy(() => import('./hris/cash-advance/index.tsx'))
+const Report = lazy(() => import('./hris/report/index.tsx'))
+const ReportDetail = lazy(() => import('./hris/report/detail.tsx'))
 
 // PROJECT
 const ProjectOverview = lazy(() => import('./project/overview.tsx'))
@@ -63,5 +65,13 @@ export const dashboardRoutes = [
   {
     path: PATH.INVENTORY_STOCK,
     element: <InventoryStock />,
+  },
+  {
+    path: PATH.EMPLOYEE_RECAP,
+    element: <Report />,
+  },
+  {
+    path: PATH.EMPLOYEE_RECAP_REPORT,
+    element: <ReportDetail />,
   },
 ]
