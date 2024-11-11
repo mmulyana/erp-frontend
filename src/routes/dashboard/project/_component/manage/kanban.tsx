@@ -1,20 +1,18 @@
-import { useEffect, useState } from 'react'
-import { cn } from '@/utils/cn'
-import { Board, Project } from '@/utils/types/api'
-import CardProject from '@/components/card-project'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { socket } from '@/utils/socket'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import { useSidebar } from '@/components/ui/sidebar'
-import useScreenWidth from '@/hooks/use-screen-width'
+import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai'
+
 import { projectAtom } from '@/atom/project'
+import { Board, Project } from '@/utils/types/api'
+import { socket } from '@/utils/socket'
+import { cn } from '@/utils/cn'
+
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import CardProject from '@/components/card-project'
 
 export default function Kanban() {
   const setSelected = useSetAtom(projectAtom)
   const [containers, setContainers] = useState<Board[]>([])
-
-  const { state, isMobile } = useSidebar()
 
   useEffect(() => {
     socket.emit('request_board')
@@ -97,8 +95,6 @@ export default function Kanban() {
     setSelected({ id: project.id, open: true })
     dragHandleProps.onClick(event)
   }
-
-  // const width = useScreenWidth()
 
   return (
     <ScrollArea className='pb-3'>
