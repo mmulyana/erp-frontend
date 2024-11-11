@@ -1,14 +1,18 @@
+import { cn } from '@/utils/cn'
 import { SidebarProvider } from '@/components/ui/sidebar'
 
 import Setting from './setting/setting'
 import Sidebar from './sidebar'
 import Header from './header'
 
-export function DashboardLayout({ children }: React.PropsWithChildren) {
+export function DashboardLayout({
+  children,
+  className,
+}: React.PropsWithChildren & { className?: string }) {
   return (
     <SidebarProvider>
       <Sidebar />
-      <main className='flex-grow'>
+      <main className={cn('flex-grow', className)}>
         <Header />
         {children}
       </main>

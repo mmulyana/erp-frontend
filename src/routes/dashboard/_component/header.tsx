@@ -42,7 +42,7 @@ export default function Header() {
   return (
     <div
       className={cn(
-        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12 bg-white sticky top-0 left-0 min-w-full z-20'
+        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12 bg-white sticky top-0 left-0 min-w-full z-10'
       )}
     >
       <div className='flex gap-2 items-center'>
