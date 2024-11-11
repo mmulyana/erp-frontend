@@ -1,3 +1,6 @@
+import { z } from "zod"
+import { createRecapSchema } from "../schema/recap"
+
 export type payloadCreateEmployee = {
   fullname: string
   joined_at?: string
@@ -188,3 +191,12 @@ export type createCashAdvance = {
   requestDate: Date | string
   description?: string | null
 }
+
+export type createOvertime = {
+  employeeId: number
+  date: string | Date
+  total_hour: number
+  description?: string
+}
+
+export type CreateRecap = z.infer<typeof createRecapSchema>
