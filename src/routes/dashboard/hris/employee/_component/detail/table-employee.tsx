@@ -196,7 +196,6 @@ export default function TableEmployee({
         columns={columns}
         data={data?.data || []}
         withPagination
-        withLoading
         isLoading={isLoading}
         totalPages={data?.total_pages || 0}
       />

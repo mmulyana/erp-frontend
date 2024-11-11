@@ -142,10 +142,9 @@ export default function Page() {
           </HeadTable>
           <FilterTable placeholder='Cari pegawai' />
           <DataTable
-            columns={columns}
             data={data?.data?.data || []}
-            withLoading
             isLoading={isLoading}
+            columns={columns}
             withPagination
           />
         </div>
