@@ -2,16 +2,16 @@ import Filter from '@/components/common/filter'
 import Search from '@/components/common/search'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import {
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
-import { useOvertime } from '@/hooks/api/use-overtime'
-import { Employee } from '@/utils/types/api'
+  useDeleteOvertime,
+  useOvertimePagination,
+} from '@/hooks/api/use-overtime'
+import { Overtime as TOvertime } from '@/utils/types/api'
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
 import { format, parse } from 'date-fns'
-import { CalendarDaysIcon, PencilIcon, TrashIcon } from 'lucide-react'
+import { CalendarDaysIcon, X } from 'lucide-react'
 import { AddOvertime } from './add-overtime'
 import {
   Popover,
@@ -22,79 +22,92 @@ import { cn } from '@/utils/cn'
 import { id } from 'date-fns/locale'
 import { Calendar } from '@/components/ui/calendar'
 import DropdownEdit from '@/components/common/dropdown-edit'
+import { useApiData } from '@/hooks/use-api-data'
+import { useState } from 'react'
 
 export function Overtime() {
-  const [url, setUrl] = useUrlState({ name: '', date: '' })
-  const { data, isLoading } = useOvertime({
-    name: url.name,
-    ...(url.date !== ''
-      ? {
-          date: format(parse(url.date, 'dd-MM-yyyy', new Date()), 'dd-MM-yyyy'),
-        }
-      : undefined),
-  })
+  const { mutate: remove } = useDeleteOvertime()
+
+  const [url, setUrl] = useUrlState({ name: '', date: '', page: '' })
+  const { data, isLoading } = useApiData(
+    useOvertimePagination({
+      ...(url.name !== '' ? { fullname: url.name } : undefined),
+      ...(url.page !== '' ? { page: url.page } : undefined),
+      ...(url.date !== ''
+        ? {
+            date: url.date,
+          }
+        : undefined),
+    })
+  )
 
   // COLUMNS
-  const columnOvertime: ColumnDef<
-    Employee & {
-      id: number
-      overtime?: { id: number; total_hour?: number; description?: string }[]
-    }
-  >[] = [
+  const columnOvertime: ColumnDef<TOvertime>[] = [
     {
       accessorKey: 'fullname',
       header: 'Nama',
+      cell: ({ cell }) => {
+        return <p>{cell.row.original.employee.fullname}</p>
+      },
     },
     {
       id: 'jabatan',
       header: 'Jabatan',
       cell: ({ cell }) => {
-        return <p>{cell.row.original?.position?.name}</p>
+        return <p>{cell.row.original.employee.position?.name}</p>
       },
     },
     {
       id: 'total_hour',
-      header: 'Jumlah jam',
+      header: () => <p className='text-center'>Jumlah jam</p>,
+      cell: ({ cell }) => (
+        <p className='text-center'>{cell.row.original.total_hour}</p>
+      ),
+    },
+    {
+      id: 'date',
+      header: 'Tanggal',
       cell: ({ cell }) => (
         <p>
-          {!!cell.row.original.overtime?.length &&
-            cell.row.original?.overtime[0]?.total_hour}
+          {format(cell.row.original.date, 'EEEE, dd MMM yyyy', { locale: id })}
         </p>
       ),
     },
     {
       id: 'description',
       header: 'Keterangan',
-      cell: ({ cell }) => (
-        <p>
-          {!!cell.row.original.overtime?.length &&
-            cell.row.original?.overtime[0]?.description}
-        </p>
-      ),
+      cell: ({ cell }) => <p>{cell.row.original.description}</p>,
     },
     {
       id: 'action',
-      cell: () => (
+      cell: ({ row }) => (
         <div className='flex justify-end w-full'>
           <DropdownEdit className='-translate-x-3'>
-            <DropdownMenuGroup>
-              <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
-                <PencilIcon className='w-3.5 h-3.5 text-dark/50' />
-                Ubah
-              </DropdownMenuItem>
-              <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
-                <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
-                Hapus
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuItem
+              className='flex items-center gap-2 cursor-pointer'
+              onClick={() => setDialog({ open: true, id: row.original.id })}
+            >
+              Ubah
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className='flex items-center gap-2 cursor-pointer'
+              onClick={() => remove({ id: row.original.id })}
+            >
+              Hapus
+            </DropdownMenuItem>
           </DropdownEdit>
         </div>
       ),
     },
   ]
 
+  const [dialog, setDialog] = useState<{
+    open: boolean
+    id: number | null
+  } | null>(null)
+  
   return (
-    <div>
+    <>
       <div className='flex justify-between items-center p-4 bg-[#F9FAFB]'>
         <div className='flex gap-4'>
           <Search />
@@ -102,7 +115,7 @@ export function Overtime() {
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                variant={'outline'}
+                variant='outline'
                 className={cn(
                   'w-fit pl-3 gap-2 text-left font-normal text-dark'
                 )}
@@ -110,7 +123,7 @@ export function Overtime() {
                 <CalendarDaysIcon className='h-4 w-4 text-[#2A9D90]' />
                 {url.date ? (
                   format(
-                    parse(url.date, 'dd-MM-yyyy', new Date()),
+                    parse(url.date, 'yyyy-MM-dd', new Date()),
                     'EEEE, dd MMM yyyy',
                     {
                       locale: id,
@@ -126,13 +139,14 @@ export function Overtime() {
                 mode='single'
                 selected={
                   url.date
-                    ? parse(url.date, 'dd-MM-yyyy', new Date())
+                    ? parse(url.date, 'yyyy-MM-dd', new Date())
                     : undefined
                 }
                 onSelect={(val) => {
-                  const originalDate = new Date(val as Date)
-                  const formattedDate = format(originalDate, 'dd-MM-yyyy')
-                  setUrl((prev) => ({ ...prev, date: formattedDate }))
+                  if (val) {
+                    const formattedDate = format(val, 'yyyy-MM-dd')
+                    setUrl((prev) => ({ ...prev, date: formattedDate }))
+                  }
                 }}
                 disabled={(date) =>
                   date > new Date() || date < new Date('2024-01-01')
@@ -140,15 +154,38 @@ export function Overtime() {
               />
             </PopoverContent>
           </Popover>
+          {(url.date !== '' || url.name !== '') && (
+            <Button
+              variant='ghost'
+              className='font-normal flex items-center gap-1 relative pl-3 pr-6'
+              onClick={() => {
+                setUrl({ date: undefined, name: undefined })
+              }}
+            >
+              Hapus filter
+              <X
+                size={14}
+                className='text-red-primary/80 absolute top-[55%] right-1.5 -translate-y-1/2'
+              />
+            </Button>
+          )}
         </div>
-        <AddOvertime />
+        <Button onClick={() => setDialog({ open: true, id: null })}>
+          Tambah Data
+        </Button>
       </div>
       <DataTable
         columns={columnOvertime}
-        data={data?.data?.data || []}
-        withLoading
+        data={data?.data || []}
         isLoading={isLoading}
+        totalPages={data?.total_pages}
+        withPagination
       />
-    </div>
+      <AddOvertime
+        open={dialog?.open || false}
+        setOpen={() => setDialog(null)}
+        id={dialog?.id}
+      />
+    </>
   )
 }
