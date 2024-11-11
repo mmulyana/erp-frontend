@@ -16,7 +16,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function AppSidebar() {
   return (
-    <Sidebar variant='sidebar'>
+    <Sidebar variant='sidebar' className='z-20'>
       <SidebarHeader>
         <p>BJS</p>
       </SidebarHeader>
@@ -106,12 +106,16 @@ const hrisMenus = [
     url: PATH.EMPLOYEE,
   },
   {
-    title: 'Absen',
+    title: 'Presensi',
     url: PATH.EMPLOYEE_ATTENDANCE,
   },
   {
     title: 'Kasbon',
     url: PATH.EMPLOYEE_CASH_ADVANCES,
+  },
+  {
+    title: 'Rekapan',
+    url: PATH.EMPLOYEE_RECAP,
   },
 ]
 const ProjectMenus = [
