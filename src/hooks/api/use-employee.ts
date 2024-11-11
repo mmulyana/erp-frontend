@@ -5,7 +5,6 @@ import http from '@/utils/http'
 import { toast } from 'sonner'
 import { AxiosError, AxiosResponse } from 'axios'
 import {
-  ApiError,
   Employee,
   ExpireCertif,
   ExpireSafety,
@@ -20,6 +19,7 @@ import {
 
 type ParamsEmployee = {
   search?: string
+  name?: string
   positionId?: string
   enabled?: boolean
 }
@@ -27,7 +27,7 @@ export const useEmployees = (params?: ParamsEmployee) => {
   return useQuery({
     queryKey: [KEYS.EMPLOYEE, params],
     queryFn: async (): Promise<AxiosResponse<IApiPagination<Employee[]>>> => {
-      return await http(URLS.EMPLOYEE + '/pagination', {
+      return await http(URLS.EMPLOYEE + '/list/pagination', {
         params,
       })
     },
@@ -36,7 +36,7 @@ export const useEmployees = (params?: ParamsEmployee) => {
 }
 export const useAllEmployees = (params?: ParamsEmployee) => {
   return useQuery({
-    queryKey: [KEYS.EMPLOYEE, params],
+    queryKey: [KEYS.EMPLOYEE, params?.name, params?.positionId],
     queryFn: async (): Promise<AxiosResponse<IApi<Employee[]>>> => {
       return await http(URLS.EMPLOYEE, {
         params,
@@ -72,7 +72,7 @@ export const useCreateEmployee = () => {
       })
       toast.success(data.data.message)
     },
-    onError: (error: AxiosError<ApiError>) => {
+    onError: (error: AxiosError<any>) => {
       if (error.response?.data.errors?.fullname.message) {
         toast.error(error.response?.data.errors?.fullname.message)
       }
