@@ -308,13 +308,13 @@ type Attendance = {
   type: 'presence' | 'absent'
 }
 
-type Overtime = {
+export type Overtime = {
   id: number
   employeeId: number
   employee: Employee
   date: string
   total_hour: number
-  description?: number
+  description?: string
 }
 
 export type Position = {
@@ -480,4 +480,38 @@ export type TopClientChart = {
       color: string
     }
   }
+}
+
+export type Recap = {
+  id: number
+  name: string
+  start_date: string
+  end_date: string
+}
+
+export type RecapReport = {
+  employeeId: number
+  basic_salary: number
+  overtime_salary: number
+  fullname: string
+  position: string
+  attendance:
+    | {
+        id: number
+        date: string
+        total_hour: number
+        type: 'presence' | 'absent'
+      }[]
+    | null
+    
+  overtime:
+    | { id: number; date: string; total_hour: number; description: string }[]
+    | null
+
+  attendanceFee: number
+  overtimeFee: number
+  totalCashAdvace: number
+  attendanceTotal: number
+  overtimeTotal: number
+  total: number
 }
