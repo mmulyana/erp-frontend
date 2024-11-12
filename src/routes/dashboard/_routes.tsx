@@ -21,6 +21,9 @@ const Inventory = lazy(() => import('./inventory/index.tsx'))
 const InventorySupplier = lazy(() => import('./inventory/supplier.tsx'))
 const InventoryStock = lazy(() => import('./inventory/stock.tsx'))
 
+// INVENTORY
+const User = lazy(() => import('./admin/index.tsx'))
+
 export const dashboardRoutes = [
   {
     path: PATH.DASHBOARD_OVERVIEW,
@@ -73,5 +76,9 @@ export const dashboardRoutes = [
   {
     path: PATH.EMPLOYEE_RECAP_REPORT,
     element: <ReportDetail />,
+  },
+  {
+    path: PATH.ADMIN_USER,
+    element: <User />,
   },
 ]
