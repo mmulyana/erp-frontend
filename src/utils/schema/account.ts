@@ -10,57 +10,40 @@ const ACCEPTED_IMAGE_TYPES = [
 
 const phoneNumberRegex =
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
-const passwordLength = 8
 
-const imageSchema = z.object({
-  photo: z
-    .any()
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      'Only .jpg, .jpeg, .png and .webp formats are supported.'
-    )
-    .nullable()
-    .optional(),
+export const createAccountSchema = z.object({
+  name: z.string().min(1, 'Nama harus lebih dari 1 huruf'),
+  email: z.string().refine((val) => {
+    if (val === '') return true
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)
+  }, 'Format email salah'),
+  phoneNumber: z.string().refine((val) => {
+    if (val === '') return true
+    return phoneNumberRegex.test(val)
+  }, 'Format nomor telepon salah'),
 })
-
-const baseSchema = {
-  name: z
-    .string()
-    .min(1, 'Nama harus lebih dari 1 huruf')
-    .nullable()
-    .optional(),
-  email: z.string().email('Format email salah').nullable().optional(),
-  phoneNumber: z
-    .string()
-    .regex(phoneNumberRegex, 'Format nomor telepon salah')
-    .nullable()
-    .optional(),
-  employeeId: z.number().int().positive().nullable().optional(),
-}
-
-export const createAccountSchema = z
-  .object({
-    ...baseSchema,
-    ...imageSchema.shape,
-    password: z
-      .string()
-      .min(passwordLength, `Password minimal ${passwordLength} karakter`),
-    permissions: string().array(),
-  })
-  .strict()
 
 export const updateAccountSchema = z
   .object({
-    ...baseSchema,
-    ...imageSchema.shape,
-    password: z
+    name: z.string().min(1, 'Nama harus lebih dari 1 huruf'),
+    email: z.string().email('Format email salah').optional(),
+    phoneNumber: z
       .string()
-      .min(passwordLength, `Password minimal ${passwordLength} karakter`)
+      .regex(phoneNumberRegex, 'Format nomor telepon salah')
+      .optional(),
+    employeeId: z.number().optional(),
+    permissions: string().array(),
+    photo: z
+      .any()
+      .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+      .refine(
+        (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+        'Only .jpg, .jpeg, .png and .webp formats are supported.'
+      )
+      .nullable()
       .optional(),
   })
   .partial()
-  .strict()
 
 export const updatePasswordSchema = z
   .object({
@@ -70,5 +53,4 @@ export const updatePasswordSchema = z
   .strict()
 
 export type UpdatePasswordDto = z.infer<typeof updatePasswordSchema>
-export type CreateAccountSchema = z.infer<typeof createAccountSchema>
 export type UpdateAccountSchema = z.infer<typeof updateAccountSchema>
