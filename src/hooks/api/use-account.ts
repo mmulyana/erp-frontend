@@ -107,3 +107,45 @@ export const useResetPassword = () => {
     },
   })
 }
+export const useActiveAccount = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      return await http.patch(`${URLS.ACCOUNT}/${id}/activate`)
+    },
+    onSuccess(data) {
+      toast.success(data.data.message)
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACCOUNTS],
+      })
+    },
+  })
+}
+export const useDeactiveAccount = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      return await http.patch(`${URLS.ACCOUNT}/${id}/deactivate`)
+    },
+    onSuccess(data) {
+      toast.success(data.data.message)
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACCOUNTS],
+      })
+    },
+  })
+}
+export const useDeleteAccount = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      return await http.delete(`${URLS.ACCOUNT}/${id}`)
+    },
+    onSuccess(data) {
+      toast.success(data.data.message)
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACCOUNTS],
+      })
+    },
+  })
+}

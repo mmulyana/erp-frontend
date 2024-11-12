@@ -29,6 +29,7 @@ export type User = {
   employeeId: number | null
   employee: Employee
   created_at: string
+  active: boolean
   role: {
     id: number
     name: string

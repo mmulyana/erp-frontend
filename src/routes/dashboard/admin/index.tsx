@@ -3,7 +3,13 @@ import { DashboardLayout } from '../_component/layout'
 import { User } from '@/utils/types/api'
 import { DataTable } from '@/components/data-table'
 import { useApiData } from '@/hooks/use-api-data'
-import { useAccountPagination, useResetPassword } from '@/hooks/api/use-account'
+import {
+  useAccountPagination,
+  useActiveAccount,
+  useDeactiveAccount,
+  useDeleteAccount,
+  useResetPassword,
+} from '@/hooks/api/use-account'
 import { Button } from '@/components/ui/button'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { UserCircle } from 'lucide-react'
@@ -16,6 +22,10 @@ import { useState } from 'react'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import AddUser from './_component.ts/add-user'
 import useUrlState from '@ahooksjs/use-url-state'
+import { formatPhone } from '@/utils/format-phone'
+import Chips from '@/components/common/chips'
+import { useAtomValue } from 'jotai'
+import { userAtom } from '@/atom/auth'
 
 const LINKS = [
   { name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
@@ -24,6 +34,12 @@ const LINKS = [
 
 export default function Index() {
   useTitle(LINKS)
+
+  const { mutate: activate } = useActiveAccount()
+  const { mutate: deactivate } = useDeactiveAccount()
+
+  // HANDLE DELETE
+  const { mutate: remove } = useDeleteAccount()
 
   // HANDLE RESET PASSWORD
   const { mutate: reset } = useResetPassword()
@@ -46,7 +62,7 @@ export default function Index() {
       accessorKey: 'name',
       header: 'Name',
       cell: ({ row }) => (
-        <div className='flex gap-2 items-center'>
+        <div className='flex gap-2 items-center w-[160px]'>
           {row.original.photo ? (
             <img
               src={BASE_URL + '/img/' + row.original.photo}
@@ -64,8 +80,31 @@ export default function Index() {
       ),
     },
     {
-      id: 'date_created',
-      header: 'Tanggal dibuat',
+      id: 'email',
+      header: 'Email',
+      accessorKey: 'email',
+      cell: ({ row }) => (
+        <div className='w-[140px]'>
+          <p>{row.original?.email}</p>
+        </div>
+      ),
+    },
+    {
+      id: 'phone',
+      header: 'No Telp',
+      accessorKey: 'phoneNumber',
+      cell: ({ row }) => (
+        <div className='w-[104px]'>
+          {row.original.phoneNumber && (
+            <p>{formatPhone(row.original.phoneNumber)}</p>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: 'status',
+      header: 'Status',
+      cell: ({ row }) => <Chips status={row.original.active} />,
     },
     {
       id: 'role',
@@ -76,30 +115,52 @@ export default function Index() {
       id: 'action',
       cell: ({ row }) => (
         <div className='flex justify-end items-center gap-4'>
-          <Button
-            variant='outline'
-            onClick={() =>
-              setResetPassword({
-                id: row.original.id,
-                name: row.original.name,
-                open: true,
-              })
-            }
-          >
-            Reset Password
-          </Button>
-          <DropdownEdit>
-            <DropdownMenuItem>Hak istimewa</DropdownMenuItem>
-            <DropdownMenuItem>Nonaktifkan</DropdownMenuItem>
-            <DropdownMenuItem>Hapus</DropdownMenuItem>
-          </DropdownEdit>
+          {row.original.role.name !== 'Superadmin' && (
+            <>
+              <Button
+                variant='outline'
+                className='py-1 h-fit'
+                size='sm'
+                onClick={() =>
+                  setResetPassword({
+                    id: row.original.id,
+                    name: row.original.name,
+                    open: true,
+                  })
+                }
+              >
+                Reset Password
+              </Button>
+              <DropdownEdit className='-translate-x-3'>
+                <DropdownMenuItem>Hak istimewa</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    if (row.original.active) {
+                      deactivate({ id: row.original.id })
+                    } else {
+                      activate({ id: row.original.id })
+                    }
+                  }}
+                >
+                  {row.original.active ? 'Nonaktifkan' : 'Aktifkan'}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => remove({ id: row.original.id })}
+                >
+                  Hapus
+                </DropdownMenuItem>
+              </DropdownEdit>
+            </>
+          )}
         </div>
       ),
     },
   ]
 
+  const user = useAtomValue(userAtom)
+
   return (
-    <DashboardLayout>
+    <DashboardLayout className='overflow-hidden'>
       <HeadTable>
         <div className='flex gap-4 items-center'>
           <UserCircle className='text-[#989CA8]' />
@@ -110,7 +171,7 @@ export default function Index() {
       <FilterTable />
       <DataTable
         columns={column}
-        data={users?.data || []}
+        data={users?.data.filter((item) => item.id !== user?.id) || []}
         isLoading={isLoading}
         withPagination
         totalPages={users?.total_pages}
