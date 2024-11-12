@@ -1,5 +1,6 @@
-import { z } from "zod"
-import { createRecapSchema } from "../schema/recap"
+import { z } from 'zod'
+import { createRecapSchema } from '../schema/recap'
+import { createRoleSchema } from '../schema/role'
 
 export type payloadCreateEmployee = {
   fullname: string
@@ -199,4 +200,11 @@ export type createOvertime = {
   description?: string
 }
 
+export type createUser = {
+  name: string
+  email?: string | null
+  phoneNumber?: string | null
+}
+
 export type CreateRecap = z.infer<typeof createRecapSchema>
+export type CreateRole = z.infer<typeof createRoleSchema>

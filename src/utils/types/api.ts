@@ -28,6 +28,7 @@ export type User = {
   roleId: number | null
   employeeId: number | null
   employee: Employee
+  created_at: string
   role: {
     id: number
     name: string
@@ -503,7 +504,7 @@ export type RecapReport = {
         type: 'presence' | 'absent'
       }[]
     | null
-    
+
   overtime:
     | { id: number; date: string; total_hour: number; description: string }[]
     | null
@@ -514,4 +515,30 @@ export type RecapReport = {
   attendanceTotal: number
   overtimeTotal: number
   total: number
+}
+
+export type Role = {
+  id: number
+  name: string
+  description?: string
+  updated_at: string
+  created_at: string
+  rolePermissions: RolePermission[]
+  _count: {
+    users: number
+  }
+}
+
+export type RolePermission = {
+  id: number
+  roleId: number
+  permissionId: number
+  createdAt: string
+  permission: Permission
+}
+
+export type Permission = {
+  id: number
+  name: string
+  groupId: number | null
 }
