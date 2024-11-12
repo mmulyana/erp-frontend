@@ -17,7 +17,7 @@ export default function Search({
   onSearch,
   debounceTime = 300,
 }: Props) {
-  const [url, setUrl] = useUrlState({ name: '' })
+  const [url, setUrl] = useUrlState({ name: undefined })
   const [search, setSearch] = useState(withoutUrl ? '' : url.name)
 
   const debouncedSearch = useDebounce(search, debounceTime)
@@ -30,7 +30,7 @@ export default function Search({
   useEffect(() => {
     if (!withoutUrl) {
       if (debouncedSearch === '') {
-        setUrl({ name: '' })
+        setUrl({ name: undefined })
       } else {
         setUrl({ name: debouncedSearch })
       }

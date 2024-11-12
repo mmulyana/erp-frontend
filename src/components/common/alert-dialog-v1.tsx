@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { buttonVariants } from '../ui/button'
+import { cn } from '@/utils/cn'
 
 type TProps = {
   open?: boolean
@@ -19,6 +19,7 @@ type TProps = {
   onConfirm?: () => void
   cancelText?: string
   confirmText?: string
+  className?: string
 }
 export default function AlertDialogV1({
   open = false,
@@ -28,6 +29,7 @@ export default function AlertDialogV1({
   onConfirm,
   cancelText,
   confirmText,
+  className,
 }: TProps) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -48,7 +50,7 @@ export default function AlertDialogV1({
             {cancelText ?? 'Batal'}
           </AlertDialogCancel>
           <AlertDialogAction
-            className={buttonVariants({ variant: 'destructive' })}
+            className={cn('bg-destructive', className)}
             onClick={() => {
               if (onConfirm) {
                 onConfirm()
