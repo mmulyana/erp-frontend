@@ -1,13 +1,20 @@
 import Modal, { ModalContainer } from '@/components/modal-v2'
+import { Button } from '@/components/ui/button'
 import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
 import {
   useCreateCashAdvance,
@@ -16,9 +23,10 @@ import {
 } from '@/hooks/api/use-cash-advance'
 import { useAllEmployees } from '@/hooks/api/use-employee'
 import { useApiData } from '@/hooks/use-api-data'
-import { Employee } from '@/utils/types/api'
+
 import { createCashAdvance } from '@/utils/types/form'
-import { useEffect } from 'react'
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 type Props = {
@@ -28,7 +36,12 @@ type Props = {
 }
 
 export function ModalAdd({ open, setOpen, id }: Props) {
-  const { data: employees } = useApiData(useAllEmployees({ enabled: open }))
+  const [openPopover, setOpenPopover] = useState(false)
+  
+  const [search, setSearch] = useState('')
+  const { data: employees } = useApiData(
+    useAllEmployees({ enabled: open, name: search })
+  )
   const { data, isLoading } = useDetailCashAdvance({
     id,
     enabled: open && !!id,
@@ -106,21 +119,61 @@ export function ModalAdd({ open, setOpen, id }: Props) {
               name='employeeId'
               label='Pegawai'
               render={({ field }) => (
-                <Select
-                  onValueChange={(value) => field.onChange(Number(value))}
-                  value={field.value?.toString()}
+                <Popover
+                  modal={false}
+                  open={openPopover}
+                  onOpenChange={setOpenPopover}
                 >
-                  <SelectTrigger className='w-full rounded-xl shadow-sm shadow-gray-950/10 border border-[#DEE0E3]'>
-                    <SelectValue placeholder='Pilih pegawai' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {employees?.map((emp: Employee & { id: number }) => (
-                      <SelectItem key={emp.id} value={emp.id.toString()}>
-                        {emp.fullname}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant='outline'
+                      className='pr-2 pl-2.5 gap-2 w-full justify-between h-10'
+                    >
+                      {field.value
+                        ? employees?.find((item) => item.id === field.value)
+                            ?.fullname
+                        : 'Tambah Pegawai'}
+                      <ChevronsUpDown size={16} />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className='p-0'
+                    style={{
+                      width: 'var(--radix-popover-trigger-width)',
+                    }}
+                  >
+                    <Command shouldFilter={false}>
+                      <CommandInput
+                        placeholder='Cari peran'
+                        onValueChange={setSearch}
+                        value={search}
+                      />
+                      <CommandList>
+                        <CommandEmpty>Peran tidak ditemukan</CommandEmpty>
+                        <CommandGroup>
+                          {employees?.map((item) => (
+                            <CommandItem
+                              key={item.id}
+                              value={item.fullname}
+                              onSelect={() => {
+                                form.setValue('employeeId', item.id)
+                                setOpenPopover(false)
+                              }}
+                              className='flex justify-between items-center'
+                            >
+                              <span>{item.fullname}</span>
+                              {item.id === field.value && (
+                                <div className='h-6 w-6 rounded-full flex justify-center items-center bg-green-primary text-white'>
+                                  <Check size={14} strokeWidth={2.9} />
+                                </div>
+                              )}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               )}
             />
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>

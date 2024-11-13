@@ -72,6 +72,7 @@ export const useUpdateAccount = () => {
     },
     onSuccess: (data) => {
       toast.success(data.data.message)
+      queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNT] })
       queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNTS] })
     },
     onError: (error: AxiosError<ApiError>) => {

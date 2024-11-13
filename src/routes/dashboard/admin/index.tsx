@@ -129,49 +129,43 @@ export default function Index() {
       id: 'action',
       cell: ({ row }) => (
         <div className='flex justify-end items-center gap-4'>
-          {row.original.role.name !== 'Superadmin' && (
-            <>
-              <Button
-                variant='outline'
-                className='py-1 h-fit'
-                size='sm'
-                onClick={() =>
-                  setResetPassword({
-                    id: row.original.id,
-                    name: row.original.name,
-                    open: true,
-                  })
+          <Button
+            variant='outline'
+            className='py-1 h-fit'
+            size='sm'
+            onClick={() =>
+              setResetPassword({
+                id: row.original.id,
+                name: row.original.name,
+                open: true,
+              })
+            }
+          >
+            Reset Password
+          </Button>
+          <DropdownEdit className='-translate-x-3'>
+            <DropdownMenuItem
+              onClick={() => {
+                if (row.original.active) {
+                  deactivate({ id: row.original.id })
+                } else {
+                  activate({ id: row.original.id })
                 }
-              >
-                Reset Password
-              </Button>
-              <DropdownEdit className='-translate-x-3'>
-                <DropdownMenuItem
-                  onClick={() => {
-                    if (row.original.active) {
-                      deactivate({ id: row.original.id })
-                    } else {
-                      activate({ id: row.original.id })
-                    }
-                  }}
-                >
-                  {row.original.active ? 'Nonaktifkan' : 'Aktifkan'}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => setDialog({ id: row.original.id, open: true })}
-                >
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() =>
-                    setOpenDelete({ id: row.original.id, open: true })
-                  }
-                >
-                  Hapus
-                </DropdownMenuItem>
-              </DropdownEdit>
-            </>
-          )}
+              }}
+            >
+              {row.original.active ? 'Nonaktifkan' : 'Aktifkan'}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setDialog({ id: row.original.id, open: true })}
+            >
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setOpenDelete({ id: row.original.id, open: true })}
+            >
+              Hapus
+            </DropdownMenuItem>
+          </DropdownEdit>
         </div>
       ),
     },

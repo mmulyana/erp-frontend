@@ -18,22 +18,25 @@ import {
 } from '@/components/ui/popover'
 
 import { Check, ChevronsUpDown } from 'lucide-react'
+import { useState } from 'react'
 
 type Props = {
   id?: number
   roleId?: number | null
 }
 export default function AddUserRole({ id, roleId }: Props) {
+  const [openPopover, setOpenPopover] = useState(false)
+
   const { mutate: assign } = useAssignRoleAccount()
 
   const { data: roles } = useApiData(useRoles())
 
   return (
-    <Popover modal={false}>
+    <Popover modal={false} open={openPopover} onOpenChange={setOpenPopover}>
       <PopoverTrigger asChild>
         <Button
           variant='outline'
-          className='pr-2 pl-2.5 gap-2 min-w-[120px] justify-between'
+          className='pr-2 pl-2.5 gap-2 min-w-[104px] justify-between'
         >
           {roleId
             ? roles?.find((item) => item.id === roleId)?.name
@@ -56,14 +59,16 @@ export default function AddUserRole({ id, roleId }: Props) {
                 <CommandItem
                   key={item.id}
                   value={String(item.name)}
-                  onSelect={() => id && assign({ id, roleId: item.id })}
-                  disabled={item.id === roleId}
-                  className='flex justify-between items-center'
+                  onSelect={() => {
+                    id && assign({ id, roleId: item.id })
+                    setOpenPopover(false)
+                  }}
+                  className='flex justify-between items-center gap-1'
                 >
                   <span>{item.name}</span>
                   {item.id === roleId && (
-                    <div className='h-8 w-8 rounded-full flex justify-center items-center bg-green-primary/5 text-green-primary'>
-                      <Check size={16} />
+                    <div className='flex-shrink-0 h-5 w-5 rounded-full flex justify-center items-center bg-green-primary text-white'>
+                      <Check size={14} strokeWidth={2.9} />
                     </div>
                   )}
                 </CommandItem>
