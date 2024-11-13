@@ -17,8 +17,24 @@ import { Eye } from 'lucide-react'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import { AddRecap } from './_component/add-recap'
 import { cn } from '@/utils/cn'
+import { useTitle } from '../../_component/header'
+import { PATH } from '@/utils/constant/_paths'
+import { createLinkDetail } from '@/utils/create-link-detail'
+
+const links = [
+  {
+    name: 'Dashboard',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Rekapan',
+    path: PATH.EMPLOYEE_RECAP,
+  },
+]
 
 export default function Report() {
+  useTitle(links)
+
   const { mutate: remove } = useDeleteRecap()
 
   const { data, isLoading } = useApiData(useRecapPagination())
@@ -33,7 +49,11 @@ export default function Report() {
           className='w-fit pr-14'
           overlay={
             <Link
-              to={`/dashboard/hris/recap/${row.original.id}`}
+              to={createLinkDetail(
+                PATH.EMPLOYEE_RECAP_REPORT,
+                row.original.name,
+                row.original.id
+              )}
               className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
             >
               Lihat
@@ -42,7 +62,11 @@ export default function Report() {
         >
           <div className='hover:text-dark'>
             <Link
-              to={`/dashboard/hris/recap/${row.original.id}`}
+              to={createLinkDetail(
+                PATH.EMPLOYEE_RECAP_REPORT,
+                row.original.name,
+                row.original.id
+              )}
               className='break-words max-w-[120px] text-left'
             >
               {row.original.name}
@@ -70,7 +94,11 @@ export default function Report() {
               buttonVariants({ variant: 'default' }),
               'gap-2 pl-3 pr-2.5'
             )}
-            to={`/dashboard/hris/recap/${row.original.id}`}
+            to={createLinkDetail(
+              PATH.EMPLOYEE_RECAP_REPORT,
+              row.original.name,
+              row.original.id
+            )}
           >
             Lihat Laporan <Eye size={16} />
           </Link>

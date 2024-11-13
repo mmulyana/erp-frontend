@@ -539,7 +539,16 @@ export type RolePermission = {
 }
 
 export type Permission = {
+  id: 1
+  key: string
+  name: string
+  description: string
+  groupId: number | null
+}
+
+export type GroupPermission = {
   id: number
   name: string
-  groupId: number | null
+  created_at: string
+  permissions: Permission[]
 }

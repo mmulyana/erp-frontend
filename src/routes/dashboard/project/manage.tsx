@@ -9,8 +9,27 @@ import Filter from '@/components/common/filter'
 import DetailProject from './_component/detail-project'
 import { useAtom } from 'jotai'
 import { projectAtom } from '@/atom/project'
+import { PATH } from '@/utils/constant/_paths'
+import { useTitle } from '../_component/header'
+
+const links = [
+  {
+    name: 'Dashboard',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Proyek',
+    path: PATH.PROJECT_INDEX,
+  },
+  {
+    name: 'Kelola',
+    path: PATH.PROJECT_MANAGE,
+  },
+]
 
 export default function Manage() {
+  useTitle(links)
+
   const [selected, setSelected] = useAtom(projectAtom)
 
   return (

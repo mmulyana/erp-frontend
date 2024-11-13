@@ -22,26 +22,38 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DashboardLayout } from '../../_component/layout'
+import LoadingState from '@/components/common/loading-state'
+import { PATH } from '@/utils/constant/_paths'
+import { Title, useTitle } from '../../_component/header'
+import { useDetailName } from '@/hooks/use-detail-name'
 
 const TableSkeleton = () => (
-  <div className='space-y-4'>
-    <div className='h-10 w-[180px] bg-gray-200 rounded animate-pulse' />
-    <div className='border rounded-lg'>
-      <div className='h-20 bg-gray-100 rounded-t-lg' />
-      <div className='space-y-2 p-4'>
-        {[1, 2, 3].map((i) => (
-          <div key={i} className='h-12 bg-gray-200 rounded animate-pulse' />
-        ))}
-      </div>
-    </div>
+  <div className='h-28 relative border'>
+    <LoadingState />
   </div>
 )
 
-export default function Detail() {
-  const { id } = useParams()
+const links = [
+  {
+    name: 'Dashboard',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Rekapan',
+    path: PATH.EMPLOYEE_RECAP,
+  },
+]
+
+export default function DetailPage() {
+  const { detail } = useParams()
+  const { link } = useDetailName(PATH.EMPLOYEE_RECAP_REPORT, detail)
+  useTitle([...links, link as Title])
+
+  const id = detail?.split('-').pop()
+
   const [url, _] = useUrlState({ page: '', limit: '' })
 
-  const { data: detail } = useApiData(
+  const { data: recap } = useApiData(
     useDetailRecap({ id: Number(id), enabled: true })
   )
 
@@ -67,7 +79,7 @@ export default function Detail() {
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `${detail?.name}.xlsx`
+      a.download = `${recap?.name}.xlsx`
       document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)

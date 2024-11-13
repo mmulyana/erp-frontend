@@ -16,8 +16,27 @@ import DialogAddCompany from './_component/client/dialog-add-company'
 import DialogAddClient from './_component/client/dialog-add-client'
 import TableCompany from './_component/client/table-company'
 import TableClient from './_component/client/table-client'
+import { PATH } from '@/utils/constant/_paths'
+import { useTitle } from '../_component/header'
+
+const links = [
+  {
+    name: 'Dashboard',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Proyek',
+    path: PATH.PROJECT_INDEX,
+  },
+  {
+    name: 'klien',
+    path: PATH.PROJECT_MANAGE,
+  },
+]
 
 export default function Client() {
+  useTitle(links)
+
   // HANDLE DIALOG
   type Dialog = {
     clientAdd: boolean

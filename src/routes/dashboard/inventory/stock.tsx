@@ -10,13 +10,28 @@ import { Package } from 'lucide-react'
 import { atom, useAtom } from 'jotai'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import { useDeleteTransaction } from '@/hooks/api/use-transaction'
+import { PATH } from '@/utils/constant/_paths'
+import { useTitle } from '../_component/header'
 
 export const dialogDeleteTransaction = atom<{
   id: number
   open: boolean
 } | null>(null)
 
+const links = [
+  {
+    name: 'Inventory',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Kelola',
+    path: PATH.PROJECT_INDEX,
+  },
+]
+
 export default function Stock() {
+  useTitle(links)
+  
   const { mutate } = useDeleteTransaction()
 
   const [selected, setSelected] = useAtom(dialogDeleteTransaction)

@@ -39,6 +39,8 @@ export default function Header() {
   const setSettingConfig = useSetAtom(settingConfig)
   const links = useAtomValue(titleAtom)
 
+  console.log(links)
+
   return (
     <div
       className={cn(

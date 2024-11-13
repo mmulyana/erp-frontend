@@ -6,11 +6,11 @@ import { CreateRole } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 
-export const useRoles = () => {
+export const useRoles = (params?: { name?: string }) => {
   return useQuery({
-    queryKey: [KEYS.ROLES],
+    queryKey: [KEYS.ROLES, params?.name],
     queryFn: async (): Promise<AxiosResponse<IApi<Role[]>>> => {
-      return await http(URLS.ROLES)
+      return await http(URLS.ROLE, { params })
     },
   })
 }
@@ -24,7 +24,7 @@ export const useDetailRole = ({
   return useQuery({
     queryKey: [KEYS.ROLES],
     queryFn: async (): Promise<AxiosResponse<IApi<Role>>> => {
-      return await http(`${URLS.ROLES}/${id}`)
+      return await http(`${URLS.ROLE}/${id}`)
     },
     enabled,
   })
@@ -33,7 +33,7 @@ export const useCreateRole = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (payload: CreateRole) => {
-      return await http.post(URLS.ROLES, payload)
+      return await http.post(URLS.ROLE, payload)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [KEYS.ROLES] })
@@ -50,7 +50,7 @@ export const useUpdateRole = () => {
       id: number
       payload: CreateRole
     }) => {
-      return await http.patch(`${URLS.ROLES}/${id}`, payload)
+      return await http.patch(`${URLS.ROLE}/${id}`, payload)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [KEYS.ROLES] })
@@ -61,7 +61,7 @@ export const useDeleteRole = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ id }: { id: number }) => {
-      return await http.delete(`${URLS.ROLES}/${id}`)
+      return await http.delete(`${URLS.ROLE}/${id}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [KEYS.ROLES] })

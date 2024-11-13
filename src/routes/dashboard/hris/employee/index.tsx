@@ -143,7 +143,6 @@ export default function Employee() {
             data={positionQuery.data?.data?.data || []}
             isLoading={positionQuery.isLoading}
             columns={columns}
-            withLoading
           />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>

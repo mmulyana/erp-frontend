@@ -11,7 +11,7 @@ export const PATH = {
   EMPLOYEE_ATTENDANCE: '/dashboard/hris/attendance',
   EMPLOYEE_CASH_ADVANCES: '/dashboard/hris/cash-advances',
   EMPLOYEE_RECAP: '/dashboard/hris/recap',
-  EMPLOYEE_RECAP_REPORT: '/dashboard/hris/recap/:id',
+  EMPLOYEE_RECAP_REPORT: '/dashboard/hris/recap/:detail',
 
   PROJECT_INDEX: '/dashboard/project',
   PROJECT_MANAGE: '/dashboard/project/manage',

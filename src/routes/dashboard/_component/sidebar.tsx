@@ -13,8 +13,11 @@ import {
 } from '@/components/ui/sidebar'
 import { BlocksIcon, HardHat, House, UserCircle, Users } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useAtomValue } from 'jotai'
+import { userAtom } from '@/atom/auth'
 
 export default function AppSidebar() {
+  const user = useAtomValue(userAtom)
   return (
     <Sidebar variant='sidebar' className='z-20'>
       <SidebarHeader>
@@ -78,21 +81,25 @@ export default function AppSidebar() {
               </SidebarMenuSubItem>
             </SidebarMenuSub>
 
-            <SidebarMenuButton>
-              <UserCircle size={20} />
-              Admin
-            </SidebarMenuButton>
-            <SidebarMenuSub>
-              <SidebarMenuSubItem>
-                {AdminMenus.map((item) => (
-                  <SidebarMenuSubButton key={`submenu-${item.url}`} asChild>
-                    <Link to={item.url}>
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuSubButton>
-                ))}
-              </SidebarMenuSubItem>
-            </SidebarMenuSub>
+            {user?.role.name === 'Superadmin' && (
+              <>
+                <SidebarMenuButton>
+                  <UserCircle size={20} />
+                  Admin
+                </SidebarMenuButton>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    {AdminMenus.map((item) => (
+                      <SidebarMenuSubButton key={`submenu-${item.url}`} asChild>
+                        <Link to={item.url}>
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    ))}
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </>
+            )}
           </SidebarGroup>
         </SidebarContent>
       </ScrollArea>
@@ -154,9 +161,5 @@ const AdminMenus = [
   {
     title: 'Role',
     url: PATH.ADMIN_ROLE,
-  },
-  {
-    title: 'Hak istimewa',
-    url: PATH.ADMIN_PERMISSION,
   },
 ]

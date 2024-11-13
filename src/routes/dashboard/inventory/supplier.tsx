@@ -174,8 +174,6 @@ export default function Supplier() {
         columns={columns}
         data={data || []}
         isLoading={isLoading}
-        withLoading
-        withPagination
       />
       <DialogAddSupplier
         open={dialog.add}
