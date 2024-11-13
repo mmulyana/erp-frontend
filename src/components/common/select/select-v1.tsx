@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { ChevronsUpDown } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Popover,
   PopoverContent,
@@ -15,6 +15,7 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { cn } from '@/utils/cn'
+import { useDebounce } from '@uidotdev/usehooks'
 
 type Props = {
   name: string
@@ -30,6 +31,8 @@ type Props = {
   value?: string
   onChange?: (value: string) => void
   useFormMode?: boolean
+  shouldFilter?: boolean
+  debounceMs?: number
 }
 
 const SelectContent = ({
@@ -42,17 +45,23 @@ const SelectContent = ({
   className,
   side,
   prefix,
+  shouldFilter = true,
+  debounceMs = 300,
 }: Omit<Props, 'name' | 'useFormMode'> & {
   value: string
   onChange: (value: string) => void
 }) => {
   const [searchValue, setSearchValue] = useState('')
+  const debounceSearch = useDebounce(searchValue, debounceMs)
+
+  useEffect(() => {
+    if (onSearch) {
+      onSearch(debounceSearch)
+    }
+  }, [debounceSearch, onSearch])
 
   const handleSearch = (value: string) => {
     setSearchValue(value)
-    if (onSearch) {
-      onSearch(value)
-    }
   }
 
   return (
@@ -72,7 +81,7 @@ const SelectContent = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className='p-0' side={side || 'bottom'} align='start'>
-        <Command>
+        <Command shouldFilter={shouldFilter}>
           <CommandInput placeholder='Search...' onValueChange={handleSearch} />
           <CommandList>
             <CommandEmpty>

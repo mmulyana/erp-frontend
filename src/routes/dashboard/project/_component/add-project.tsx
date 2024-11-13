@@ -25,6 +25,8 @@ import {
 } from '@/components/common/multi-select'
 
 import { BoxIcon, User, UserIcon } from 'lucide-react'
+import { useState } from 'react'
+import { BASE_URL } from '@/utils/constant/_urls'
 
 type Props = {
   open: boolean
@@ -35,7 +37,15 @@ export default function AddProject({ open, setOpen }: Props) {
 
   const { mutate } = useCreateProject()
 
-  const { data: employees } = useApiData(useAllEmployees({ enabled: open }))
+  const [leadName, setLeadName] = useState('')
+  const { data: leads } = useApiData(
+    useAllEmployees({ enabled: open, name: leadName })
+  )
+
+  const [employeeName, setEmployeeName] = useState('')
+  const { data: employees } = useApiData(
+    useAllEmployees({ enabled: open, name: employeeName })
+  )
   const employeeOptions = employees?.map((item) => ({
     label: item.fullname,
     value: String(item.id),
@@ -146,32 +156,40 @@ export default function AddProject({ open, setOpen }: Props) {
                 name='leadId'
                 placeholder='Pilih Penanggung Jawab'
                 className='rounded-full w-fit gap-2'
+                onSearch={setLeadName}
+                shouldFilter={false}
                 prefix={<User size={14} />}
                 customPlaceholder={
                   <div className='inline-flex gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
                     <UserIcon className='w-4 h-4' />
-                    <span className='text-sm text-dark/50'>Pilih user</span>
+                    <span className='text-sm text-dark/50'>Pilih PJ</span>
                   </div>
                 }
                 preview={(val) => (
                   <span className='text-sm text-dark'>
-                    {employees?.find((s: any) => s.id === val)?.fullname}
+                    {leads?.find((s: any) => s.id === val)?.fullname}
                   </span>
                 )}
               >
-                {employees?.map((item) => (
+                {leads?.map((item) => (
                   <CommandItem
                     key={item.id}
-                    className='hover:bg-red-400'
-                    value={item.id.toString()}
-                    onSelect={(value) => {
-                      form.setValue('leadId', Number(value))
+                    value={item.fullname}
+                    onSelect={() => {
+                      form.setValue('leadId', item.id)
                     }}
                   >
-                    <span className='px-2 py-0.5 flex gap-1 items-center'>
-                      <div className='w-5 h-5 rounded-full bg-blue-900 text-white text-sm flex items-center justify-center pb-0.5 uppercase'>
-                        {item.fullname.at(0)}
-                      </div>
+                    <span className='py-0.5 flex gap-2 items-center'>
+                      {item.photo ? (
+                        <img
+                          src={BASE_URL + '/img/' + item.photo}
+                          className='w-6 h-6 rounded-full'
+                        />
+                      ) : (
+                        <div className='w-6 h-6 rounded-full bg-blue-900 text-white text-sm flex items-center justify-center pb-0.5 uppercase'>
+                          {item.fullname.at(0)}
+                        </div>
+                      )}
                       {item.fullname}
                     </span>
                   </CommandItem>
@@ -219,9 +237,11 @@ export default function AddProject({ open, setOpen }: Props) {
                 name='employees'
                 render={({ field }) => (
                   <MultiSelector
+                    shouldFilter={false}
                     options={employeeOptions || []}
                     values={field.value}
                     onValuesChange={field.onChange}
+                    onSearch={setEmployeeName}
                     loop
                   >
                     <MultiSelectorTrigger>

@@ -8,6 +8,7 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { cn } from '@/utils/cn'
+import { useDebounce } from '@uidotdev/usehooks'
 import { Command as CommandPrimitive } from 'cmdk'
 import { X as RemoveIcon, Check } from 'lucide-react'
 import React, {
@@ -16,6 +17,7 @@ import React, {
   forwardRef,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from 'react'
 
@@ -28,6 +30,7 @@ interface MultiSelectorProps
     label: string
     value: string
   }[]
+  onSearch?: (val: string) => void
 }
 
 interface MultiSelectContextProps {
@@ -65,6 +68,7 @@ const MultiSelector = ({
   children,
   dir,
   options,
+  onSearch,
   ...props
 }: MultiSelectorProps) => {
   const [inputValue, setInputValue] = useState('')
@@ -73,6 +77,13 @@ const MultiSelector = ({
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [isValueSelected, setIsValueSelected] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState('')
+  const debounceSearch = useDebounce(inputValue, 300)
+
+  useEffect(() => {
+    if (onSearch) {
+      onSearch(debounceSearch)
+    }
+  }, [debounceSearch, onSearch])
 
   const onValueChangeHandler = useCallback(
     (val: string) => {
