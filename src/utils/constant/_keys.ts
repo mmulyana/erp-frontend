@@ -1,5 +1,6 @@
 export const KEYS = {
   ACCOUNT: 'account',
+  ACCOUNT_DETAIL: 'account-detail',
   ACCOUNTS: 'accounts',
   ROLES: 'roles',
   ROLES_DETAIL: 'roles-detail',

@@ -1,3 +1,8 @@
+import { useEffect, useState } from 'react'
+
+import { useApiData } from '@/hooks/use-api-data'
+import { cn } from '@/utils/cn'
+
 import {
   Sheet,
   SheetContent,
@@ -6,17 +11,21 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { usePermissionGroup } from '@/hooks/api/use-permission'
+
 import {
   useAddPermissionRole,
   useDetailRole,
   useRemovePermissionRole,
 } from '@/hooks/api/use-role'
-import { useApiData } from '@/hooks/use-api-data'
-import { Key } from 'lucide-react'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { cn } from '@/utils/cn'
+import { 
+  Tabs, 
+  TabsList, 
+  TabsTrigger, 
+  TabsContent
+} from '@/components/ui/tabs'
 import { Switch } from '@/components/ui/switch'
-import { useEffect, useState } from 'react'
+
+import { Key } from 'lucide-react'
 
 type Props = {
   open: boolean

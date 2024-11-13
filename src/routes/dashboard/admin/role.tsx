@@ -1,20 +1,24 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { DashboardLayout } from '../_component/layout'
-import { Role } from '@/utils/types/api'
-import { DataTable } from '@/components/data-table'
-import { useApiData } from '@/hooks/use-api-data'
-import { Button } from '@/components/ui/button'
-import { FilterTable, HeadTable } from '@/components/data-table/component'
-import { UserCircle } from 'lucide-react'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { PATH } from '@/utils/constant/_paths'
-import { useTitle } from '../_component/header'
 import { useState } from 'react'
+
 import { useDeleteRole, useRoles } from '@/hooks/api/use-role'
-import AddRole from './_component.ts/add-role'
-import AddPermission from './_component.ts/add-permission'
+import { useApiData } from '@/hooks/use-api-data'
+import { PATH } from '@/utils/constant/_paths'
+import { Role } from '@/utils/types/api'
+
+import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
+import DropdownEdit from '@/components/common/dropdown-edit'
+import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
+
+import AddPermission from './_component.ts/add-permission'
+import { DashboardLayout } from '../_component/layout'
+import { useTitle } from '../_component/header'
+import AddRole from './_component.ts/add-role'
+
+import { UserCircle } from 'lucide-react'
 
 const LINKS = [
   { name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
@@ -50,11 +54,10 @@ export default function Index() {
       header: 'Name',
     },
     {
-      id: 'email',
+      id: 'description',
       header: 'description',
       accessorKey: 'description',
     },
-
     {
       id: 'action',
       cell: ({ row }) => (
@@ -109,7 +112,7 @@ export default function Index() {
       <AlertDialogV1
         title='Hapus peran'
         body='Peran ini akan dihapus dari sistem'
-        cancelText='Batat'
+        cancelText='Batal'
         className='bg-destructive'
         confirmText='Hapus'
         onConfirm={() => openDelete?.id && remove({ id: openDelete?.id })}

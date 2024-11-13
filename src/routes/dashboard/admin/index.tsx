@@ -1,7 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { DashboardLayout } from '../_component/layout'
+import useUrlState from '@ahooksjs/use-url-state'
+import { useAtomValue } from 'jotai'
+import { useState } from 'react'
+
+import { userAtom } from '@/atom/auth'
+import { formatPhone } from '@/utils/format-phone'
+import { BASE_URL } from '@/utils/constant/_urls'
+import { PATH } from '@/utils/constant/_paths'
 import { User } from '@/utils/types/api'
-import { DataTable } from '@/components/data-table'
 import { useApiData } from '@/hooks/use-api-data'
 import {
   useAccountPagination,
@@ -10,22 +16,21 @@ import {
   useDeleteAccount,
   useResetPassword,
 } from '@/hooks/api/use-account'
-import { Button } from '@/components/ui/button'
+
 import { FilterTable, HeadTable } from '@/components/data-table/component'
-import { UserCircle } from 'lucide-react'
-import { BASE_URL } from '@/utils/constant/_urls'
-import DropdownEdit from '@/components/common/dropdown-edit'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { PATH } from '@/utils/constant/_paths'
-import { useTitle } from '../_component/header'
-import { useState } from 'react'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
-import AddUser from './_component.ts/add-user'
-import useUrlState from '@ahooksjs/use-url-state'
-import { formatPhone } from '@/utils/format-phone'
+import DropdownEdit from '@/components/common/dropdown-edit'
+import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
 import Chips from '@/components/common/chips'
-import { useAtomValue } from 'jotai'
-import { userAtom } from '@/atom/auth'
+
+import AddUserRole from './_component.ts/add-user-role'
+import { DashboardLayout } from '../_component/layout'
+import { useTitle } from '../_component/header'
+import AddUser from './_component.ts/add-user'
+
+import { UserCircle } from 'lucide-react'
 
 const LINKS = [
   { name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
@@ -39,6 +44,10 @@ export default function Index() {
   const { mutate: deactivate } = useDeactiveAccount()
 
   // HANDLE DELETE
+  const [openDelete, setOpenDelete] = useState<{
+    id: number | null
+    open: boolean
+  }>({ id: null, open: false })
   const { mutate: remove } = useDeleteAccount()
 
   // HANDLE RESET PASSWORD
@@ -50,7 +59,10 @@ export default function Index() {
   } | null>(null)
 
   // HANDLE DIALOG NEW USER
-  const [open, setOpen] = useState(false)
+  const [dialog, setDialog] = useState<{
+    id: number | null
+    open: boolean
+  } | null>(null)
 
   const [url] = useUrlState({ page: '' })
   const { data: users, isLoading } = useApiData(
@@ -94,7 +106,7 @@ export default function Index() {
       header: 'No Telp',
       accessorKey: 'phoneNumber',
       cell: ({ row }) => (
-        <div className='w-[104px]'>
+        <div className='w-[120px]'>
           {row.original.phoneNumber && (
             <p>{formatPhone(row.original.phoneNumber)}</p>
           )}
@@ -109,7 +121,9 @@ export default function Index() {
     {
       id: 'role',
       header: 'Akses',
-      cell: ({ row }) => <p>{row.original.role.name}</p>,
+      cell: ({ row }) => (
+        <AddUserRole id={row.original.id} roleId={row.original.role.id} />
+      ),
     },
     {
       id: 'action',
@@ -132,7 +146,6 @@ export default function Index() {
                 Reset Password
               </Button>
               <DropdownEdit className='-translate-x-3'>
-                <DropdownMenuItem>Hak istimewa</DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
                     if (row.original.active) {
@@ -145,7 +158,14 @@ export default function Index() {
                   {row.original.active ? 'Nonaktifkan' : 'Aktifkan'}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => remove({ id: row.original.id })}
+                  onClick={() => setDialog({ id: row.original.id, open: true })}
+                >
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    setOpenDelete({ id: row.original.id, open: true })
+                  }
                 >
                   Hapus
                 </DropdownMenuItem>
@@ -166,7 +186,9 @@ export default function Index() {
           <UserCircle className='text-[#989CA8]' />
           <p className='text-dark font-medium'>User</p>
         </div>
-        <Button onClick={() => setOpen(!open)}>User Baru</Button>
+        <Button onClick={() => setDialog({ open: true, id: null })}>
+          User Baru
+        </Button>
       </HeadTable>
       <FilterTable />
       <DataTable
@@ -184,7 +206,21 @@ export default function Index() {
         className='bg-blue-primary'
         onConfirm={() => resetPassword?.id && reset({ id: resetPassword?.id })}
       />
-      <AddUser open={open} setOpen={setOpen} />
+      <AddUser
+        open={dialog?.open || false}
+        setOpen={() => setDialog(null)}
+        id={dialog?.id}
+      />
+      <AlertDialogV1
+        title='Hapus akun'
+        body='Akun ini akan dihapus dari sistem'
+        cancelText='Batal'
+        className='bg-destructive'
+        confirmText='Hapus'
+        onConfirm={() => openDelete?.id && remove({ id: openDelete?.id })}
+        open={openDelete?.open}
+        setOpen={() => setOpenDelete({ id: null, open: false })}
+      />
     </DashboardLayout>
   )
 }

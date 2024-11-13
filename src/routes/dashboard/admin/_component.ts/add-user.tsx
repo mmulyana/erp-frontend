@@ -1,12 +1,20 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+
+import {
+  useCreateAccount,
+  useDetailAccount,
+  useUpdateAccount,
+} from '@/hooks/api/use-account'
+import { useApiData } from '@/hooks/use-api-data'
+
+import { createAccountSchema } from '@/utils/schema/account'
+import { createUser } from '@/utils/types/form'
+
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useCreateAccount } from '@/hooks/api/use-account'
-import { createAccountSchema } from '@/utils/schema/account'
-import { createUser } from '@/utils/types/form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
 
 type FormValues = Pick<createUser, 'name'> & {
   phoneNumber: string
@@ -16,9 +24,15 @@ type FormValues = Pick<createUser, 'name'> & {
 type Props = {
   open: boolean
   setOpen: (val: boolean) => void
+  id?: number | null
 }
-export default function AddUser({ open, setOpen }: Props) {
+export default function AddUser({ open, setOpen, id }: Props) {
   const { mutate: create } = useCreateAccount()
+  const { mutate: update } = useUpdateAccount()
+
+  const { data: detail, isLoading } = useApiData(
+    useDetailAccount({ enabled: open && !!id, id })
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(createAccountSchema),
@@ -30,6 +44,18 @@ export default function AddUser({ open, setOpen }: Props) {
   })
 
   const submit = (payload: FormValues) => {
+    if (id) {
+      update(
+        { id, payload },
+        {
+          onSuccess: () => {
+            form.reset()
+            setOpen(false)
+          },
+        }
+      )
+      return
+    }
     create(
       {
         ...payload,
@@ -46,7 +72,17 @@ export default function AddUser({ open, setOpen }: Props) {
   }
 
   useEffect(() => {
-    if (!open) form.reset()
+    if (open && detail && !!id && !isLoading) {
+      form.reset({
+        name: detail.name,
+        email: detail.email ?? '',
+        phoneNumber: detail.phoneNumber ?? '',
+      })
+    }
+  }, [open, detail, id, isLoading])
+
+  useEffect(() => {
+    if (!open) form.reset({ name: '', email: '', phoneNumber: '' })
   }, [open])
 
   return (

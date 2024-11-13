@@ -25,6 +25,21 @@ export const useAccount = ({
     enabled,
   })
 }
+export const useDetailAccount = ({
+  id,
+  enabled,
+}: {
+  id?: number | null
+  enabled: boolean
+}) => {
+  return useQuery({
+    queryKey: [KEYS.ACCOUNT_DETAIL, id],
+    queryFn: async (): Promise<AxiosResponse<IApi<User>>> => {
+      return await http(`${URLS.ACCOUNT}/${id}`)
+    },
+    enabled,
+  })
+}
 export const useAccountPagination = (
   params?: {
     name?: string
@@ -55,9 +70,12 @@ export const useUpdateAccount = () => {
         },
       })
     },
-    onSuccess(data) {
+    onSuccess: (data) => {
       toast.success(data.data.message)
       queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNTS] })
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      toast.error(error.response?.data.message)
     },
   })
 }
@@ -72,6 +90,9 @@ export const useCreateAccount = () => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.ACCOUNTS],
       })
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      toast.error(error.response?.data.message)
     },
   })
 }
@@ -140,6 +161,20 @@ export const useDeleteAccount = () => {
   return useMutation({
     mutationFn: async ({ id }: { id: number }) => {
       return await http.delete(`${URLS.ACCOUNT}/${id}`)
+    },
+    onSuccess(data) {
+      toast.success(data.data.message)
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACCOUNTS],
+      })
+    },
+  })
+}
+export const useAssignRoleAccount = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, roleId }: { id: number; roleId: number }) => {
+      return await http.patch(`${URLS.ACCOUNT}/${id}/role/add/${roleId}`)
     },
     onSuccess(data) {
       toast.success(data.data.message)

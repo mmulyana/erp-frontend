@@ -1,5 +1,15 @@
-import { Button } from '@/components/ui/button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { z } from 'zod'
+
+import { isValidEmail } from '@/utils/is-email-valid'
+import { PATH } from '@/utils/constant/_paths'
 import { useAuth } from '@/hooks/api/use-auth'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Form,
   FormControl,
@@ -8,21 +18,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Input } from '@/components/ui/input'
-import { z } from 'zod'
-import { useState } from 'react'
-import { Alert, AlertTitle } from '@/components/ui/alert'
-import { isValidEmail } from '@/utils/is-email-valid'
 
-import { AlertCircle, Eye, EyeOff, XIcon } from 'lucide-react'
-import Logo from '/public/erp-logo.svg'
-import { Link, useNavigate } from 'react-router-dom'
-import { PATH } from '@/utils/constant/_paths'
-import { delay } from '@/utils/delay'
-import { toast } from 'sonner'
 import { Layout, Protected } from './component'
+import { Eye, EyeOff } from 'lucide-react'
+import Logo from '/public/erp-logo.svg'
 
 type Payload = {
   name?: string
@@ -39,8 +38,6 @@ export const LoginSchema = z.object({
 
 export default function Login() {
   const { logIn } = useAuth()
-  const navigate = useNavigate()
-  const [errorBanner, setErrorBanner] = useState('')
   const [isPassword, setIsPassword] = useState(true)
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -62,19 +59,7 @@ export default function Login() {
       payload.name = data.name
     }
 
-    const response = await logIn(payload)
-
-    if (response?.message?.includes('Invalid')) {
-      setErrorBanner('Email atau password salah')
-      return
-    } else {
-      setErrorBanner('')
-    }
-
-    delay(500).then(() => {
-      toast(response.message)
-    })
-    navigate(PATH.DASHBOARD_OVERVIEW)
+    await logIn(payload)
   }
 
   return (
@@ -92,20 +77,6 @@ export default function Login() {
               Enter your credential to access application
             </p>
           </div>
-        </div>
-        <div className='h-14 flex flex-col justify-center'>
-          {errorBanner !== '' && (
-            <Alert variant='destructive' className='py-2 h-fit bg-red-100'>
-              <AlertCircle className='h-4 w-4 absolute !top-1/2 -translate-y-1/2' />
-              <AlertTitle className='m-0 text-base leading-none font-normal'>
-                {errorBanner}
-                <XIcon
-                  className='h-4 w-4 text-red-500 -translate-y-1/2 absolute top-1/2 right-2 cursor-pointer'
-                  onClick={() => setErrorBanner('')}
-                />
-              </AlertTitle>
-            </Alert>
-          )}
         </div>
         <Form {...form}>
           <form

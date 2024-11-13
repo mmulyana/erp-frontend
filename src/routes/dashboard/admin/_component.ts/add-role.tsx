@@ -1,18 +1,20 @@
-import Modal, { ModalContainer } from '@/components/modal-v2'
-import { Form, FormField } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+
 import {
   useCreateRole,
   useDetailRole,
   useUpdateRole,
 } from '@/hooks/api/use-role'
-import { useApiData } from '@/hooks/use-api-data'
 import { createRoleSchema } from '@/utils/schema/role'
+import { useApiData } from '@/hooks/use-api-data'
 import { CreateRole } from '@/utils/types/form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import { Form, FormField } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 type Props = {
   open: boolean
@@ -32,7 +34,6 @@ export default function AddRole({ open, setOpen, id }: Props) {
     defaultValues: {
       name: '',
       description: '',
-      // permissionIds: [],
     },
   })
 
@@ -84,7 +85,7 @@ export default function AddRole({ open, setOpen, id }: Props) {
             <FormField
               control={form.control}
               name='description'
-              label='Email'
+              label='Deskripsi'
               render={({ field }) => <Textarea {...field} />}
             />
           </ModalContainer>
