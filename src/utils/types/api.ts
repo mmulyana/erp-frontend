@@ -522,9 +522,10 @@ export type Role = {
   id: number
   name: string
   description?: string
-  updated_at: string
-  created_at: string
-  rolePermissions: RolePermission[]
+  updatedAt: string
+  createdAt: string
+  permissions: string[]
+  RolePermission: RolePermission[]
   _count: {
     users: number
   }

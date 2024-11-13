@@ -2,6 +2,7 @@ export const KEYS = {
   ACCOUNT: 'account',
   ACCOUNTS: 'accounts',
   ROLES: 'roles',
+  ROLES_DETAIL: 'roles-detail',
   PERMISSION_GROUP: 'permission-grup',
   HRIS_POSITION: 'hris_position',
   EMPLOYEE: 'employee',
