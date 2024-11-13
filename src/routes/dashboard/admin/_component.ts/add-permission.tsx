@@ -40,12 +40,10 @@ export default function AddPermission({ open, setOpen, id }: Props) {
 
   const [defaultTab, setDefaultTab] = useState(0)
   useEffect(() => {
-    if (!defaultTab && !isLoading && !!permissionGroups?.length) {
-      console.log('change')
-      console.log(permissionGroups[0])
+    if (!defaultTab && !isLoading && !!permissionGroups?.length && open) {
       setDefaultTab(permissionGroups[0].id)
     }
-  }, [permissionGroups, isLoading, defaultTab])
+  }, [permissionGroups, isLoading, defaultTab, open])
 
   useEffect(() => {
     if (!open) setDefaultTab(1)

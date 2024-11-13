@@ -140,7 +140,7 @@ export default function Index() {
 
   return (
     <>
-      <DashboardLayout>
+      <DashboardLayout className='overflow-hidden'>
         <div className='p-4 flex flex-col gap-4'>
           <CardHighlight />
           <div className='rounded-lg border border-line overflow-auto'>

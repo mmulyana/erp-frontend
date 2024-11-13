@@ -19,6 +19,7 @@ import { ChevronRight, Settings } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { userAtom } from '@/atom/auth'
 import { BASE_URL } from '@/utils/constant/_urls'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export type Title = {
   name: string
@@ -35,11 +36,12 @@ export const useTitle = (title: Title[]) => {
   }, [title])
 }
 export default function Header() {
-  const user = useAtomValue(userAtom)
   const setSettingConfig = useSetAtom(settingConfig)
+  
   const links = useAtomValue(titleAtom)
+  const user = useAtomValue(userAtom)
 
-  console.log(links)
+  const isMobile = useIsMobile()
 
   return (
     <div
@@ -49,34 +51,36 @@ export default function Header() {
     >
       <div className='flex gap-2 items-center'>
         <SidebarTrigger />
-        <BreadCrumbWrapper>
-          <BreadcrumbList className='flex items-center'>
-            {links.map((link, index) => {
-              const lastIndex = links.length - 1
+        {!isMobile && (
+          <BreadCrumbWrapper>
+            <BreadcrumbList className='flex items-center'>
+              {links.map((link, index) => {
+                const lastIndex = links.length - 1
 
-              return (
-                <React.Fragment key={index}>
-                  <BreadcrumbItem>
-                    {index === lastIndex ? (
-                      <BreadcrumbPage className='text-[#021328] text-sm font-medium'>
-                        {link.name}
-                      </BreadcrumbPage>
-                    ) : (
-                      <Link to={link.path} className='text-[#989CA8] text-sm'>
-                        {link.name}
-                      </Link>
+                return (
+                  <React.Fragment key={index}>
+                    <BreadcrumbItem>
+                      {index === lastIndex ? (
+                        <BreadcrumbPage className='text-[#021328] text-sm font-medium'>
+                          {link.name}
+                        </BreadcrumbPage>
+                      ) : (
+                        <Link to={link.path} className='text-[#989CA8] text-sm'>
+                          {link.name}
+                        </Link>
+                      )}
+                    </BreadcrumbItem>
+                    {index !== lastIndex && (
+                      <BreadcrumbSeparator>
+                        <ChevronRight className='w-2 h-2 text-[#989CA8]' />
+                      </BreadcrumbSeparator>
                     )}
-                  </BreadcrumbItem>
-                  {index !== lastIndex && (
-                    <BreadcrumbSeparator>
-                      <ChevronRight className='w-2 h-2 text-[#989CA8]' />
-                    </BreadcrumbSeparator>
-                  )}
-                </React.Fragment>
-              )
-            })}
-          </BreadcrumbList>
-        </BreadCrumbWrapper>
+                  </React.Fragment>
+                )
+              })}
+            </BreadcrumbList>
+          </BreadCrumbWrapper>
+        )}
       </div>
 
       <div className='flex gap-2 items-center'>
@@ -94,7 +98,10 @@ export default function Header() {
           className='w-8 h-8 rounded-full bg-[#FFF] border-[1.5px] border-[#2A9D90] p-0.5 relative'
         >
           {user?.photo ? (
-            <img src={BASE_URL + '/img/' + user?.photo} className='h-full w-full rounded-full object-cover'/>
+            <img
+              src={BASE_URL + '/img/' + user?.photo}
+              className='h-full w-full rounded-full object-cover'
+            />
           ) : (
             <div className='w-full h-full rounded-full bg-blue-primary/20 flex justify-center items-center pb-0.5'>
               <p className='text-sm uppercase text-blue-primary'>
