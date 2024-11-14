@@ -11,9 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useState } from 'react'
 import DialogDeleteCompany from './_component/client/dialog-delete-company'
-import DialogDeleteClient from './_component/client/dialog-delete-client'
 import DialogAddCompany from './_component/client/dialog-add-company'
-import DialogAddClient from './_component/client/dialog-add-client'
 import TableCompany from './_component/client/table-company'
 import TableClient from './_component/client/table-client'
 import { PATH } from '@/utils/constant/_paths'
@@ -106,10 +104,7 @@ export default function Client() {
         <div className='border border-line rounded-xl overflow-hidden pt-3.5'>
           <Tabs>
             <Tab label='Klien'>
-              <TableClient
-                setSelectedId={setSelectedId}
-                handleDialog={handleDialog}
-              />
+              <TableClient />
             </Tab>
             <Tab label='Perusahaan'>
               <TableCompany
@@ -120,14 +115,7 @@ export default function Client() {
           </Tabs>
         </div>
       </div>
-      <DialogAddClient
-        selectedId={selectedId}
-        open={dialog.clientAdd}
-        setOpen={(val) => {
-          handleDialog('clientAdd', val)
-          setSelectedId(null)
-        }}
-      />
+
       <DialogAddCompany
         selectedId={selectedId}
         open={dialog.companyAdd}
@@ -141,13 +129,6 @@ export default function Client() {
         open={dialog.companyDelete}
         setOpen={(val) => {
           handleDialog('companyDelete', val)
-        }}
-      />
-      <DialogDeleteClient
-        id={selectedId}
-        open={dialog.clientDelete}
-        setOpen={(val) => {
-          handleDialog('clientDelete', val)
         }}
       />
     </DashboardLayout>

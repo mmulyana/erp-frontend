@@ -201,7 +201,18 @@ export default function MessageItem2({
   return (
     <div>
       <div className={cn('grid grid-cols-[28px_1fr] gap-2 p-2.5')}>
-        <div className='w-7 h-7 rounded-full bg-gray-200'></div>
+        {props.user.photo ? (
+          <img
+            src={BASE_URL + '/img/' + props.user.photo}
+            className='w-7 h-7 rounded-full flex-shrink-0'
+          />
+        ) : (
+          <div className='w-7 h-7 rounded-full flex-shrink-0 bg-blue-primary/5 flex items-center justify-center'>
+            <p className='text-blue-primary leading-none uppercase font-medium'>
+              {props.user.name.at(0)}
+            </p>
+          </div>
+        )}
         <div className='flex flex-col gap-0.5'>
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-1'>

@@ -9,7 +9,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
-type Params = Pagination & {}
+type Params = Pagination & {
+  name?: string
+}
 export const useClient = (params?: Params) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<Client[]>>> => {
@@ -20,6 +22,19 @@ export const useClient = (params?: Params) => {
       })
     },
     queryKey: [KEYS.CLIENT],
+  })
+}
+export const useClientPagination = (params?: Params) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<Client[]>>> => {
+      return await http(URLS.PROJECT_CLIENT + '/list/pagination', { params })
+    },
+    queryKey: [
+      KEYS.CLIENT_PAGINATION,
+      params?.name,
+      params?.page,
+      params?.limit,
+    ],
   })
 }
 export const useDetailClient = ({
@@ -46,7 +61,7 @@ export const useCreateClient = () => {
       return await http.post(URLS.PROJECT_CLIENT, payload)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT_PAGINATION] })
       toast.success(data.data.message)
     },
   })
@@ -66,7 +81,7 @@ export const useUpdateClient = () => {
       return await http.patch(`${URLS.PROJECT_CLIENT}/${id}`, payload)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT_PAGINATION] })
       toast.success(data.data.message)
     },
   })
@@ -80,7 +95,7 @@ export const useDeleteClient = () => {
       return await http.delete(`${URLS.PROJECT_CLIENT}/${id}`)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT_PAGINATION] })
       toast.success(data.data.message)
     },
   })

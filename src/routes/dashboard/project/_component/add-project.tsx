@@ -146,7 +146,7 @@ export default function AddProject({ open, setOpen, withSocket }: Props) {
                 customPlaceholder={
                   <div className='inline-flex gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
                     <UserIcon className='w-4 h-4' />
-                    <span className='text-sm text-dark/50'>Pilih user</span>
+                    <span className='text-sm text-dark/50'>Pilih klien</span>
                   </div>
                 }
                 preview={(val) => (

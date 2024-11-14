@@ -1,24 +1,34 @@
+import { ColumnDef } from '@tanstack/react-table'
+import useUrlState from '@ahooksjs/use-url-state'
+
+import { useClientPagination } from '@/hooks/api/use-client'
+import { useApiData } from '@/hooks/use-api-data'
+
+import { Client as ClientType } from '@/utils/types/api'
+import { BASE_URL } from '@/utils/constant/_urls'
+
 import { FilterTable } from '@/components/data-table/component'
 import DropdownEdit from '@/components/common/dropdown-edit'
-import { Client as ClientType } from '@/utils/types/api'
 import { DataTable } from '@/components/data-table'
-import { useClient } from '@/hooks/api/use-client'
-import { ColumnDef } from '@tanstack/react-table'
-import { BASE_URL } from '@/utils/constant/_urls'
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
-} from '@radix-ui/react-dropdown-menu'
+} from '@/components/ui/dropdown-menu'
+import DialogAddClient from './dialog-add-client'
+import { useState } from 'react'
+import DialogDeleteClient from './dialog-delete-client'
 
-type Props = {
-  setSelectedId: (val: number) => void
-  handleDialog: (type: any, val: boolean) => void
-}
-export default function TableClient({ setSelectedId, handleDialog }: Props) {
-  const { data, isLoading } = useClient()
+export default function TableClient() {
+  const [url] = useUrlState({ name: '', page: '' })
+  const { data, isLoading } = useApiData(
+    useClientPagination({
+      ...(url.name !== '' ? { name: url.name } : undefined),
+      page: url.page,
+    })
+  )
 
   // COLUMNS CLIENT
-  const columnsClient: ColumnDef<ClientType>[] = [
+  const columns: ColumnDef<ClientType>[] = [
     {
       accessorKey: 'name',
       header: 'Nama',
@@ -61,8 +71,7 @@ export default function TableClient({ setSelectedId, handleDialog }: Props) {
               <DropdownMenuItem
                 className='flex items-center gap-2 cursor-pointer px-1'
                 onClick={() => {
-                  setSelectedId(row.original.id)
-                  handleDialog('clientAdd', true)
+                  setDialog({ id: row.original.id, open: true })
                 }}
               >
                 Edit
@@ -70,8 +79,7 @@ export default function TableClient({ setSelectedId, handleDialog }: Props) {
               <DropdownMenuItem
                 className='flex items-center gap-2 cursor-pointer px-1'
                 onClick={() => {
-                  setSelectedId(row.original.id)
-                  handleDialog('clientDelete', true)
+                  setDialogDelete({ id: row.original.id, open: true })
                 }}
               >
                 Hapus
@@ -83,14 +91,42 @@ export default function TableClient({ setSelectedId, handleDialog }: Props) {
     },
   ]
 
+  const [dialog, setDialog] = useState<{
+    id: number | null
+    open: boolean
+  } | null>(null)
+
+  const [dialogDelete, setDialogDelete] = useState<{
+    id: number | null
+    open: boolean
+  } | null>(null)
+
   return (
     <>
-      <FilterTable placeholder='Cari klien' />
+      <FilterTable
+        placeholder='Cari klien'
+        onAdd={() => setDialog({ id: null, open: true })}
+      />
       <DataTable
-        columns={columnsClient}
-        data={data?.data?.data || []}
+        columns={columns}
+        data={data?.data || []}
         isLoading={isLoading}
+        totalPages={data?.total_pages}
         withPagination
+      />
+      <DialogAddClient
+        selectedId={dialog?.id}
+        open={dialog?.open || false}
+        setOpen={() => {
+          setDialog(null)
+        }}
+      />
+      <DialogDeleteClient
+        id={dialogDelete?.id}
+        open={dialogDelete?.open || false}
+        setOpen={() => {
+          setDialogDelete(null)
+        }}
       />
     </>
   )

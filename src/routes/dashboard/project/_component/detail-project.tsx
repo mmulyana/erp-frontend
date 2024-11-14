@@ -248,7 +248,7 @@ export default function DetailProject({
                 />
               </DataSheet>
               <DataSheet>
-                <p className='text-dark/50'>User</p>
+                <p className='text-dark/50'>Klien</p>
                 <UserProject
                   id={id}
                   data={{ client: project?.client }}

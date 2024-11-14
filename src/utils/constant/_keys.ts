@@ -28,6 +28,7 @@ export const KEYS = {
   PROJECT_LABEL: 'project-label',
   PROJECT_CHART: 'project-chart',
   CLIENT: 'client',
+  CLIENT_PAGINATION: 'client-pagination',
   TOP_CLIENT: 'top-client',
   CLIENT_COMPANY: 'client-company',
   GOODS: 'goods',
