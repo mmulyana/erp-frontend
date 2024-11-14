@@ -27,7 +27,14 @@ export default function MenuAccount() {
 
   const submit = (data: Partial<User>) => {
     if (!user?.id) return
-    update({ id: user?.id, payload: data })
+    update({
+      id: user?.id,
+      payload: {
+        email: data.email,
+        name: data.name,
+        phoneNumber: data.phoneNumber,
+      },
+    })
   }
 
   useEffect(() => {

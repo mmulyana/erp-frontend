@@ -13,7 +13,6 @@ export default function CardInfo({
   title,
   value,
   percent,
-  tooltip,
   icon,
   status = 'up',
 }: Props) {

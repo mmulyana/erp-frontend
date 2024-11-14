@@ -9,7 +9,6 @@ import {
 } from '../ui/select'
 import { cn } from '@/utils/cn'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import SearchUrl from '../common/search-url'
 import { Button } from '../ui/button'
 import Search from '../common/search'
 
