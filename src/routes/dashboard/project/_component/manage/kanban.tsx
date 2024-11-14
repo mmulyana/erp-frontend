@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai'
 
@@ -18,6 +18,7 @@ export default function Kanban() {
     socket.emit('request_board')
 
     socket.on('initial_data', (data) => {
+      console.log('data baru', data)
       setContainers(data)
     })
 
@@ -116,7 +117,7 @@ export default function Kanban() {
                     )}
                   >
                     <KanbanHead color={container.color} name={container.name} />
-                    <ScrollArea className={cn('h-[calc(100vh-232px)] px-0.5')}>
+                    <ScrollArea className={cn('h-[calc(100vh-180px)] px-0.5')}>
                       {container.items.map((item, index) => (
                         <Draggable
                           key={item.id}
