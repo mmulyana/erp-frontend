@@ -185,7 +185,7 @@ export default function Setting() {
       >
         <div
           className={cn(
-            'bg-[#F6F6F6] border-r border-[#E8EBF0] p-6 flex flex-col gap-5 overflow-y-auto',
+            'bg-[#F6F6F6] border-r border-[#E8EBF0] p-2 flex flex-col gap-2 overflow-y-auto',
             isMobile &&
               'absolute inset-0 z-10 transition-transform duration-300',
             isMobile && !showMenu && 'translate-x-[-100%]',
@@ -194,7 +194,7 @@ export default function Setting() {
         >
           {SIDE_MENUS.map((menu, index) => (
             <div key={`${menu}-${index}`}>
-              <p className='text-sm text-dark/50 mb-2'>{menu.name}</p>
+              <p className='text-sm text-dark/50 mb-1.5'>{menu.name}</p>
               <div className='flex flex-col gap-2'>
                 {menu.menus.map((item) => (
                   <button
@@ -217,7 +217,7 @@ export default function Setting() {
           ))}
           <Button className='mt-2 gap-2' variant='destructive' onClick={logOut}>
             Keluar
-            <LogOut size={20} />
+            <LogOut size={14} />
           </Button>
         </div>
 
