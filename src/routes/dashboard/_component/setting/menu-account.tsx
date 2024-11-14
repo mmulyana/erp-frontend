@@ -40,8 +40,6 @@ export default function MenuAccount() {
     }
   }, [user])
 
-  console.log(user)
-  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(submit)}>

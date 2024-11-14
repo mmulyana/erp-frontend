@@ -29,7 +29,7 @@ export default function Client() {
   useTitle(links)
 
   return (
-    <DashboardLayout>
+    <DashboardLayout className='overflow-hidden'>
       <TitlePage className='mb-2'>
         <div className='flex gap-4 items-center'>
           <SquareUserRoundIcon className='text-[#989CA8]' />

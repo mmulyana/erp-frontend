@@ -140,10 +140,14 @@ export default function Setting() {
   const [showMenu, setShowMenu] = useState(true)
 
   useEffect(() => {
-    if (config.open) {
+    if (isMobile && config.open) {
       setShowMenu(true)
     }
   }, [config.open, isMobile])
+
+  useEffect(() => {
+    return () => setConfig({ open: false })
+  }, [])
 
   const onClose = () => {
     setConfig((prev) => ({ ...prev, open: false }))

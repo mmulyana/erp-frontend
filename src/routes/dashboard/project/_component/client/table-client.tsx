@@ -23,7 +23,7 @@ export default function TableClient() {
   const { data, isLoading } = useApiData(
     useClientPagination({
       ...(url.name !== '' ? { name: url.name } : undefined),
-      page: url.page,
+      ...(url.page !== '' ? { page: url.page } : undefined),
     })
   )
 

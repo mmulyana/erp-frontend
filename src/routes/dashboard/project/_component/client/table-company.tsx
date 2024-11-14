@@ -23,8 +23,8 @@ export default function TableCompany() {
   const [url] = useUrlState({ name: '', page: '' })
   const { data, isLoading } = useApiData(
     useClientCompanyPagination({
-      name: url.name,
-      page: url.page,
+      ...(url.name !== '' ? { name: url.name } : undefined),
+      ...(url.page !== '' ? { page: url.page } : undefined),
     })
   )
 
@@ -35,10 +35,12 @@ export default function TableCompany() {
       header: 'Nama',
       cell: ({ row }) => (
         <div className='flex gap-1 items-center'>
-          <img
-            className='w-6 h-6 rounded-full object-cover object-center shadow'
-            src={BASE_URL + '/img/' + row.original.logo}
-          />
+          {row.original.logo && (
+            <img
+              className='w-6 h-6 rounded-full object-cover object-center shadow'
+              src={BASE_URL + '/img/' + row.original.logo}
+            />
+          )}
           <p className='text-dark/70'>{row.original.name}</p>
         </div>
       ),

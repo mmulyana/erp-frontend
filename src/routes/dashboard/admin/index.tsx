@@ -19,10 +19,11 @@ import {
 
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import AlertDialogV1 from '@/components/common/alert-dialog-v1'
-import DropdownEdit from '@/components/common/dropdown-edit'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
+
+import AlertDialogV1 from '@/components/common/alert-dialog-v1'
+import DropdownEdit from '@/components/common/dropdown-edit'
 import Chips from '@/components/common/chips'
 
 import AddUserRole from './_component.ts/add-user-role'
@@ -64,9 +65,9 @@ export default function Index() {
     open: boolean
   } | null>(null)
 
-  const [url] = useUrlState({ page: '' })
+  const [url] = useUrlState({ page: '', name: '' })
   const { data: users, isLoading } = useApiData(
-    useAccountPagination({ page: url.page })
+    useAccountPagination({ page: url.page, name: url.name })
   )
   const column: ColumnDef<User>[] = [
     {

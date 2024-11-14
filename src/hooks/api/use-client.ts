@@ -112,7 +112,7 @@ export const useClientCompany = (params?: CompanyParams) => {
         params,
       })
     },
-    queryKey: [KEYS.CLIENT_COMPANY, params?.name, params?.page, params?.limit],
+    queryKey: [KEYS.CLIENT_COMPANY, params?.name],
   })
 }
 export const useClientCompanyPagination = (params?: CompanyParams) => {
@@ -122,7 +122,7 @@ export const useClientCompanyPagination = (params?: CompanyParams) => {
         params,
       })
     },
-    queryKey: [KEYS.CLIENT_COMPANY, params?.name, params?.page, params?.limit],
+    queryKey: [KEYS.CLIENT_COMPANY_PAGINATION, params?.name, params?.page, params?.limit],
   })
 }
 export const useDetailClientCompany = ({

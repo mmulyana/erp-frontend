@@ -45,8 +45,8 @@ export default function DialogAddCompany({
       const { logo, name, address, email, phone } = qCompany?.data.data?.data
 
       form.reset({
-        address,
-        email,
+        address: address ?? '',
+        email: email ?? '',
         name,
         phone: phone ? String(phone) : '',
       })
