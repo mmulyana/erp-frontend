@@ -144,13 +144,8 @@ export default function CardProject({
         )}
       >
         {!!props?.labels?.length &&
-          props.labels.map((item: any, index: number) => (
-            <div
-              className='py-1 px-2.5 rounded-md border border-dark/20'
-              key={index}
-            >
-              <p className='text-xs text-dark/70'>{item.label.name}</p>
-            </div>
+          props.labels.map((item, index) => (
+            <Label key={index} color={item.label.color} name={item.label.name} />
           ))}
       </div>
 
