@@ -11,19 +11,19 @@ import { toast } from 'sonner'
 type goodsParams = Pagination & {
   name?: string
 }
-export const useGoods = (params?: goodsParams) => {
+export const useGoodsByPagination = (params?: goodsParams) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApiPagination<Goods[]>>> => {
-      return await http(URLS.INVENTORY_GOODS, { params })
+      return await http(URLS.INVENTORY_GOODS + '/list/pagination', { params })
     },
     queryKey: [KEYS.GOODS, params],
   })
 }
 
-export const useGoodsAll = (params?: goodsParams) => {
+export const useGoods = (params?: goodsParams) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<Goods[]>>> => {
-      return await http(URLS.INVENTORY_GOODS + '/data/all', { params })
+      return await http(URLS.INVENTORY_GOODS, { params })
     },
     queryKey: [KEYS.GOODS_ALL, params?.name],
   })
