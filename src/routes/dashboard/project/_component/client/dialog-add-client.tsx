@@ -6,7 +6,7 @@ import { CommandItem } from '@/components/ui/command'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { delay } from '@/utils/delay'
 import { cn } from '@/utils/cn'
@@ -17,6 +17,7 @@ import {
   useDetailClient,
   useUpdateClient,
 } from '@/hooks/api/use-client'
+import { useApiData } from '@/hooks/use-api-data'
 
 const clientSchema = z.object({
   name: z.string(),
@@ -61,8 +62,7 @@ export default function DialogAddClient({
   }, [qClient.isLoading, qClient.data, open])
 
   // START OF HANDLE SELECT COMPANY
-  const qCompany = useClientCompany()
-  const [selectOpen, setSelectOpen] = useState(false)
+  const { data: companies } = useApiData(useClientCompany())
   // END OF HANDLE SELECT COMPANY
 
   // HANDLE FORM
@@ -143,8 +143,6 @@ export default function DialogAddClient({
               <div className='flex flex-col gap-2'>
                 <FormLabel>Perusahaan</FormLabel>
                 <SelectV1
-                  open={selectOpen}
-                  setOpen={setSelectOpen}
                   name='companyId'
                   placeholder='Pilih perusahaan'
                   side='bottom'
@@ -155,21 +153,16 @@ export default function DialogAddClient({
                       className={cn('w-full justify-start')}
                       type='button'
                     >
-                      {
-                        qCompany?.data?.data.data?.find(
-                          (s: any) => s.id === Number(val)
-                        )?.name
-                      }
+                      {companies?.find((s) => s.id === Number(val))?.name}
                     </Button>
                   )}
                 >
-                  {qCompany?.data?.data.data?.map((item: any) => (
+                  {companies?.map((item) => (
                     <CommandItem
                       key={item.id}
-                      value={item.id.toString()}
+                      value={item.name.toString()}
                       onSelect={(value) => {
                         form.setValue('companyId', value)
-                        setSelectOpen(false)
                       }}
                     >
                       <span>{item.name}</span>

@@ -1,21 +1,32 @@
-import { FilterTable } from '@/components/data-table/component'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import { useClientCompany } from '@/hooks/api/use-client'
-import { DataTable } from '@/components/data-table'
+import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
+import { useState } from 'react'
+
 import { BASE_URL } from '@/utils/constant/_urls'
 import { Company } from '@/utils/types/api'
+
+import { useApiData } from '@/hooks/use-api-data'
+
+import DropdownEdit from '@/components/common/dropdown-edit'
+import { FilterTable } from '@/components/data-table/component'
+import { useClientCompanyPagination } from '@/hooks/api/use-client'
+import { DataTable } from '@/components/data-table'
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
-} from '@radix-ui/react-dropdown-menu'
+} from '@/components/ui/dropdown-menu'
 
-type Props = {
-  setSelectedId: (val: number) => void
-  handleDialog: (type: any, val: boolean) => void
-}
-export default function TableCompany({ setSelectedId, handleDialog }: Props) {
-  const { data, isLoading } = useClientCompany()
+import DialogAddCompany from './dialog-add-company'
+import DialogDeleteCompany from './dialog-delete-company'
+
+export default function TableCompany() {
+  const [url] = useUrlState({ name: '', page: '' })
+  const { data, isLoading } = useApiData(
+    useClientCompanyPagination({
+      name: url.name,
+      page: url.page,
+    })
+  )
 
   // COLUMNS Company
   const columns: ColumnDef<Company>[] = [
@@ -53,8 +64,7 @@ export default function TableCompany({ setSelectedId, handleDialog }: Props) {
               <DropdownMenuItem
                 className='flex items-center gap-2 cursor-pointer px-1'
                 onClick={() => {
-                  setSelectedId(row.original.id)
-                  handleDialog('companyAdd', true)
+                  setDialog({ id: row.original.id, open: true })
                 }}
               >
                 Edit
@@ -62,8 +72,7 @@ export default function TableCompany({ setSelectedId, handleDialog }: Props) {
               <DropdownMenuItem
                 className='flex items-center gap-2 cursor-pointer px-1'
                 onClick={() => {
-                  setSelectedId(row.original.id)
-                  handleDialog('companyDelete', true)
+                  setDialogDelete({ id: row.original.id, open: true })
                 }}
               >
                 Hapus
@@ -75,15 +84,38 @@ export default function TableCompany({ setSelectedId, handleDialog }: Props) {
     },
   ]
 
+  const [dialog, setDialog] = useState<{
+    id: number | null
+    open: boolean
+  } | null>(null)
+
+  const [dialogDelete, setDialogDelete] = useState<{
+    id: number | null
+    open: boolean
+  } | null>(null)
+
   return (
     <>
-      <FilterTable placeholder='Cari' />
+      <FilterTable
+        placeholder='Cari'
+        onAdd={() => setDialog({ id: null, open: true })}
+      />
       <DataTable
         columns={columns}
-        data={data?.data?.data || []}
         isLoading={isLoading}
-        withLoading
+        data={data?.data || []}
+        totalPages={data?.total_pages}
         withPagination
+      />
+      <DialogAddCompany
+        selectedId={dialog?.id}
+        open={dialog?.open || false}
+        setOpen={() => setDialog(null)}
+      />
+      <DialogDeleteCompany
+        id={dialogDelete?.id}
+        open={dialogDelete?.open || false}
+        setOpen={() => setDialogDelete(null)}
       />
     </>
   )

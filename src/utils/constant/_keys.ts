@@ -31,6 +31,7 @@ export const KEYS = {
   CLIENT_PAGINATION: 'client-pagination',
   TOP_CLIENT: 'top-client',
   CLIENT_COMPANY: 'client-company',
+  CLIENT_COMPANY_PAGINATION: 'client-company-pagination',
   GOODS: 'goods',
   GOODS_ALL: 'goods-all',
   GOODS_DETAIL: 'goods-detail',

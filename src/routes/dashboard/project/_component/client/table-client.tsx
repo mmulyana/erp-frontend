@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table'
 import useUrlState from '@ahooksjs/use-url-state'
+import { useState } from 'react'
 
 import { useClientPagination } from '@/hooks/api/use-client'
 import { useApiData } from '@/hooks/use-api-data'
@@ -15,7 +16,6 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
 import DialogAddClient from './dialog-add-client'
-import { useState } from 'react'
 import DialogDeleteClient from './dialog-delete-client'
 
 export default function TableClient() {

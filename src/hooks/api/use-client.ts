@@ -102,17 +102,27 @@ export const useDeleteClient = () => {
 }
 
 // CLIENT COMPANY
-type CompanyParams = Pagination & {}
+type CompanyParams = Pagination & {
+  name?: string
+}
 export const useClientCompany = (params?: CompanyParams) => {
   return useQuery({
-    queryFn: async (): Promise<AxiosResponse<IApiPagination<Company[]>>> => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.PROJECT_CLIENT_COMPANY,
+    queryFn: async (): Promise<AxiosResponse<IApi<Company[]>>> => {
+      return await http(URLS.PROJECT_CLIENT_COMPANY, {
         params,
       })
     },
-    queryKey: [KEYS.CLIENT_COMPANY],
+    queryKey: [KEYS.CLIENT_COMPANY, params?.name, params?.page, params?.limit],
+  })
+}
+export const useClientCompanyPagination = (params?: CompanyParams) => {
+  return useQuery({
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<Company[]>>> => {
+      return await http(URLS.PROJECT_CLIENT_COMPANY + '/list/pagination', {
+        params,
+      })
+    },
+    queryKey: [KEYS.CLIENT_COMPANY, params?.name, params?.page, params?.limit],
   })
 }
 export const useDetailClientCompany = ({
@@ -145,7 +155,9 @@ export const useCreateClientCompany = () => {
       })
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT_COMPANY] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.CLIENT_COMPANY_PAGINATION],
+      })
       toast.success(data.data.message)
     },
   })
