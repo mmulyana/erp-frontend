@@ -1,6 +1,7 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
+import { socket } from '@/utils/socket'
 import { IApi, IApiPagination, Project, ProjectDetail } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { updateProject } from '@/utils/types/form'
@@ -88,7 +89,6 @@ export const useUpdateProject = () => {
         queryKey: [KEYS.PROJECT_DETAIL, data.data.data?.id],
       })
       if (data.data.data?.update) {
-        console.log('update cuy')
         queryClient.invalidateQueries({
           queryKey: [KEYS.PROJECT_PAGINATION],
           refetchType: 'all',
@@ -226,4 +226,38 @@ export const useUpdateStatusProject = () => {
       toast.success(data.data.message)
     },
   })
+}
+
+export const useCreateProjectSocket = () => {
+  const queryClient = useQueryClient()
+
+  const createBySocket = async (payload: any) => {
+    return new Promise((resolve, reject) => {
+      socket.once('success_create_project', (response) => {
+        if (response.message) {
+          queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT_PAGINATION] })
+          toast.success(response.message)
+          resolve(response.data)
+        } else {
+          toast.error(response.error)
+          reject(response)
+        }
+      })
+
+      socket.once('error_create_project', (error) => {
+        if (error?.errors?.name?.message) {
+          toast.error(error?.errors?.name?.message)
+        } else {
+          toast.error(error?.message)
+        }
+        reject(error)
+      })
+
+      socket.emit('create_project', payload)
+    })
+  }
+
+  return {
+    createBySocket,
+  }
 }
