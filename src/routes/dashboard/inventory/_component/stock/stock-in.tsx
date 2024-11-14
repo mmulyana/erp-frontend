@@ -18,6 +18,9 @@ import { Plus, X } from 'lucide-react'
 import { CreateTransaction } from '@/utils/types/form'
 import { useApiData } from '@/hooks/use-api-data'
 import useUrlState from '@ahooksjs/use-url-state'
+import { useGoods } from '@/hooks/api/use-goods'
+import SelectV1 from '@/components/common/select/select-v1'
+import { BASE_URL } from '@/utils/constant/_urls'
 
 const HIDE = ['project']
 
@@ -31,7 +34,15 @@ export default function StockIn() {
     })
   )
 
-  const { goods, suppliers } = useInventoryData()
+  const { suppliers } = useInventoryData()
+
+  const [search, setSearch] = useState('')
+  const { data: goods } = useApiData(
+    useGoods({
+      name: search,
+    })
+  )
+  console.log(search)
 
   const { mutate } = useCreateTransaction()
   const [open, setOpen] = useState(false)
@@ -97,36 +108,49 @@ export default function StockIn() {
                     )}
                   </div>
                   <div className='p-4 bg-[#F8FAFC] rounded-b-lg'>
-                    <div className='grid grid-cols-3 gap-4'>
-                      <div className='flex flex-col gap-3'>
+                    <div className='grid grid-cols-4 gap-4'>
+                      <div className='flex flex-col gap-3 col-span-2'>
                         <FormLabel>Barang</FormLabel>
-                        <Select
+                        <SelectV1
                           name={`items.${index}.goodsId`}
-                          placeholder='Pilih barang'
+                          placeholder='Pilih Barang'
+                          className='w-full col-span-2'
+                          onSearch={setSearch}
+                          shouldFilter={false}
+                          // prefix={<User size={14} />}
+                          // customPlaceholder={
+                          //   <div className='inline-flex gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
+                          //     <UserIcon className='w-4 h-4' />
+                          //     <span className='text-sm text-dark/50'>
+                          //       Pilih PJ
+                          //     </span>
+                          //   </div>
+                          // }
                           preview={(val) => (
-                            <span>
-                              {
-                                goods?.find((s: any) => s.id === Number(val))
-                                  ?.name
-                              }
+                            <span className='text-sm text-dark'>
+                              {goods?.find((s: any) => s.id === val)?.name}
                             </span>
                           )}
                         >
-                          {goods?.map((item: any) => (
+                          {goods?.map((item) => (
                             <CommandItem
                               key={item.id}
-                              value={item.id.toString()}
-                              onSelect={(value) => {
-                                form.setValue(
-                                  `items.${index}.goodsId`,
-                                  Number(value)
-                                )
+                              value={item.name}
+                              onSelect={() => {
+                                form.setValue(`items.${index}.goodsId`, item.id)
                               }}
+                              className='flex justify-between items-center'
                             >
-                              <span>{item.name}</span>
+                              <p className='text-dark'>{item.name}</p>
+                              {item.photoUrl && (
+                                <img
+                                  src={BASE_URL + '/img/' + item.photoUrl}
+                                  className='w-8 h-8 rounded-lg'
+                                />
+                              )}
                             </CommandItem>
                           ))}
-                        </Select>
+                        </SelectV1>
                       </div>
 
                       <FormField

@@ -90,7 +90,6 @@ export default function TableClient({ setSelectedId, handleDialog }: Props) {
         columns={columnsClient}
         data={data?.data?.data || []}
         isLoading={isLoading}
-        withLoading
         withPagination
       />
     </>

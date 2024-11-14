@@ -18,13 +18,19 @@ import { Link } from 'react-router-dom'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
+import { socket } from '@/utils/socket'
 
 type Props = {
   projectId?: number
   attachments?: Attachment[]
+  withSocket?: boolean
 }
 
-export default function AttachmentProject({ projectId, attachments }: Props) {
+export default function AttachmentProject({
+  projectId,
+  attachments,
+  withSocket,
+}: Props) {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<null | {
     id: number
@@ -52,7 +58,12 @@ export default function AttachmentProject({ projectId, attachments }: Props) {
     if (selected.type == 'delete') {
       removeAttachment(
         { id: selected.id },
-        { onSuccess: () => setSelected(null) }
+        {
+          onSuccess: () => {
+            setSelected(null)
+            if (withSocket) socket.emit('request_board')
+          },
+        }
       )
     }
     if (selected.type == 'hide') {
@@ -160,6 +171,7 @@ export default function AttachmentProject({ projectId, attachments }: Props) {
         setOpen={setOpen}
         projectId={projectId}
         id={selected?.id}
+        withSocket={withSocket}
       />
       <AlertDialogV1
         open={selected?.open}

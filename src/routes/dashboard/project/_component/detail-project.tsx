@@ -38,14 +38,21 @@ import UserProject from './detail/user-project'
 import LeadProject from './detail/lead-project'
 
 import { Ellipsis } from 'lucide-react'
+import { socket } from '@/utils/socket'
 
 type Props = {
   open: boolean
   setOpen: (val: boolean) => void
   id?: number | null
+  withSocket?: boolean
 }
 
-export default function DetailProject({ open, setOpen, id }: Props) {
+export default function DetailProject({
+  open,
+  setOpen,
+  id,
+  withSocket,
+}: Props) {
   const { mutate: update } = useUpdateProject()
   const { mutate: updateStatus } = useUpdateStatusProject()
 
@@ -82,7 +89,16 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                   defaultData={project?.name}
                   className='text-xl font-medium text-dark'
                   onUpdate={(val) => {
-                    update({ id, payload: { name: val as string } })
+                    update(
+                      { id, payload: { name: val as string } },
+                      {
+                        onSuccess: () => {
+                          if (withSocket) {
+                            socket.emit('request_board')
+                          }
+                        },
+                      }
+                    )
                   }}
                 />
                 <DropdownMenu>
@@ -98,17 +114,35 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                     <DropdownMenuGroup>
                       <DropdownMenuItem
                         onClick={() => {
-                          update({
-                            id,
-                            payload: { isArchive: !project?.isArchive },
-                          })
+                          update(
+                            {
+                              id,
+                              payload: { isArchive: !project?.isArchive },
+                            },
+                            {
+                              onSuccess: () => {
+                                if (withSocket) {
+                                  socket.emit('request_board')
+                                }
+                              },
+                            }
+                          )
                         }}
                       >
                         {project?.isArchive ? 'Batal' : 'Arsipkan'}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => {
-                          update({ id, payload: { isDeleted: true } })
+                          update(
+                            { id, payload: { isDeleted: true } },
+                            {
+                              onSuccess: () => {
+                                if (withSocket) {
+                                  socket.emit('request_board')
+                                }
+                              },
+                            }
+                          )
                         }}
                       >
                         Hapus
@@ -188,24 +222,38 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                     }
                   }}
                   onUpdate={(val) => {
-                    updateStatus({ id, containerId: val as string })
+                    updateStatus(
+                      { id, containerId: val as string },
+                      {
+                        onSuccess: () => {
+                          if (withSocket) {
+                            socket.emit('request_board')
+                          }
+                        },
+                      }
+                    )
                   }}
                 />
               </DataSheet>
               <DataSheet
                 className={cn(
-                  project?.labels && project?.labels.length > 2 && 'items-start'
+                  project?.labels && project?.labels.length > 1 && 'items-start'
                 )}
               >
                 <p className='text-dark/50'>Label</p>
                 <LabelProject
                   id={id}
                   data={{ labels: project?.labels || [] }}
+                  withSocket={withSocket}
                 />
               </DataSheet>
               <DataSheet>
                 <p className='text-dark/50'>User</p>
-                <UserProject id={id} data={{ client: project?.client }} />
+                <UserProject
+                  id={id}
+                  data={{ client: project?.client }}
+                  withSocket={withSocket}
+                />
               </DataSheet>
               <DataSheet>
                 <p className='text-dark/50'>Penanggung Jawab</p>
@@ -220,7 +268,16 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                   defaultData={project?.progress}
                   customData={(val) => <p>{val} %</p>}
                   onUpdate={(val) => {
-                    update({ id, payload: { progress: Number(val) } })
+                    update(
+                      { id, payload: { progress: Number(val) } },
+                      {
+                        onSuccess: () => {
+                          if (withSocket) {
+                            socket.emit('request_board')
+                          }
+                        },
+                      }
+                    )
                   }}
                 />
               </DataSheet>
@@ -309,7 +366,16 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                         </p>
                       )}
                       onUpdate={(val) => {
-                        update({ id, payload: { date_ended: new Date(val) } })
+                        update(
+                          { id, payload: { date_ended: new Date(val) } },
+                          {
+                            onSuccess: () => {
+                              if (withSocket) {
+                                socket.emit('request_board')
+                              }
+                            },
+                          }
+                        )
                       }}
                     />
                   </DataSheet>
@@ -319,10 +385,12 @@ export default function DetailProject({ open, setOpen, id }: Props) {
                       employees: project?.employees || [],
                       leadId: project?.leadId || null,
                     }}
+                    withSocket={withSocket}
                   />
                   <AttachmentProject
                     projectId={project?.id}
                     attachments={project?.attachments}
+                    withSocket={withSocket}
                   />
                   <BorrowedProject id={id} />
                 </div>

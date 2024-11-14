@@ -3,7 +3,10 @@ import { useForm } from 'react-hook-form'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 import { useProjectLabels } from '@/hooks/api/use-project-label'
 import { useAllEmployees } from '@/hooks/api/use-employee'
-import { useCreateProject } from '@/hooks/api/use-project'
+import {
+  useCreateProject,
+  useCreateProjectSocket,
+} from '@/hooks/api/use-project'
 import { useBoards } from '@/hooks/api/use-board'
 import { useClient } from '@/hooks/api/use-client'
 import { useApiData } from '@/hooks/use-api-data'
@@ -27,15 +30,18 @@ import {
 import { BoxIcon, User, UserIcon } from 'lucide-react'
 import { useState } from 'react'
 import { BASE_URL } from '@/utils/constant/_urls'
+import { socket } from '@/utils/socket'
 
 type Props = {
   open: boolean
   setOpen: (val: boolean) => void
+  withSocket?: boolean
 }
-export default function AddProject({ open, setOpen }: Props) {
+export default function AddProject({ open, setOpen, withSocket }: Props) {
   useFixPointerEvent(open)
 
   const { mutate } = useCreateProject()
+  const { createBySocket } = useCreateProjectSocket()
 
   const [leadName, setLeadName] = useState('')
   const { data: leads } = useApiData(
@@ -74,13 +80,29 @@ export default function AddProject({ open, setOpen }: Props) {
   let leadId = form.watch('leadId')
 
   const submit = async (data: any) => {
+    if (!!withSocket) {
+      return createBySocket({
+        ...data,
+        labels: data.labels.map((item: any) => Number(item)),
+        employees: data.employees.map((item: any) => Number(item)),
+        containerId: boards?.find((item) => item.name === 'penawaran')?.id,
+      })
+        .then(() => {
+          setOpen(false)
+          form.reset()
+        })
+        .finally(() => {
+          socket.off('success_create_project')
+          socket.off('error_create_project')
+        })
+    }
     mutate(
       {
         payload: {
           ...data,
           labels: data.labels.map((item: any) => Number(item)),
           employees: data.employees.map((item: any) => Number(item)),
-          containerId: boards?.find((item) => item.name === 'Penawaran')?.id,
+          containerId: boards?.find((item) => item.name === 'penawaran')?.id,
         },
       },
       {

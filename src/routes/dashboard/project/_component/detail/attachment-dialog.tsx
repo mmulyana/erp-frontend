@@ -9,6 +9,7 @@ import { userAtom } from '@/atom/auth'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { z } from 'zod'
+import { socket } from '@/utils/socket'
 
 // type Form = Omit<createAttachment, 'file' | 'name'> & { file: File | null }
 const ACCEPTED_FILE_TYPES = [
@@ -37,12 +38,14 @@ type Props = {
   setOpen: (val: boolean) => void
   id?: number | null
   projectId?: number
+  withSocket?: boolean
 }
 export default function AttachmentDialog({
   open,
   setOpen,
   id,
   projectId,
+  withSocket,
 }: Props) {
   const user = useAtomValue(userAtom)
 
@@ -72,6 +75,7 @@ export default function AttachmentDialog({
       {
         onSuccess: () => {
           setOpen(false)
+          if (withSocket) socket.emit('request_board')
         },
       }
     )

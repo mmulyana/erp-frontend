@@ -1,6 +1,24 @@
-import Modal, { ModalContainer } from '@/components/modal-v2'
-import { Button } from '@/components/ui/button'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+
+import { useApiData } from '@/hooks/use-api-data'
+import { useGoods } from '@/hooks/api/use-goods'
+import { KEYS } from '@/utils/constant/_keys'
 import {
+  useCreateTransaction,
+  useProjectTransaction,
+  useReturnedTransaction,
+} from '@/hooks/api/use-transaction'
+import { cn } from '@/utils/cn'
+
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Form, FormField } from '@/components/ui/form'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -14,28 +32,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Form, FormField } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { useGoodsAll } from '@/hooks/api/use-goods'
-import {
-  useCreateTransaction,
-  useProjectTransaction,
-  useReturnedTransaction,
-} from '@/hooks/api/use-transaction'
-import { useApiData } from '@/hooks/use-api-data'
-import { cn } from '@/utils/cn'
-import { KEYS } from '@/utils/constant/_keys'
-import { useQueryClient } from '@tanstack/react-query'
-import { Command } from 'cmdk'
+
 import { ChevronsUpDown, Ellipsis, Undo2 } from 'lucide-react'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 
 type Props = {
   id?: number | null
@@ -163,7 +166,7 @@ function DialogForm({
 
   const { mutate: create } = useCreateTransaction()
   const { data: goods } = useApiData(
-    useGoodsAll({ ...(name !== '' ? { name } : undefined) })
+    useGoods({ ...(name !== '' ? { name } : undefined) })
   )
 
   const form = useForm({

@@ -19,6 +19,7 @@ import {
 } from '@/hooks/api/use-project'
 import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 import { BASE_URL } from '@/utils/constant/_urls'
+import { socket } from '@/utils/socket'
 import { Project } from '@/utils/types/api'
 import { Command } from 'cmdk'
 import { Plus, UserCircle, X } from 'lucide-react'
@@ -31,10 +32,12 @@ type FormValues = {
 type Props = {
   id: number
   data: Pick<Project, 'employees' | 'leadId'>
+  withSocket?: boolean
 }
 export default function EmployeeProject({
   id: projectId,
   data: { employees, leadId },
+  withSocket,
 }: Props) {
   //   HANDLE SEARCH
   const [search, setSearch] = useState('')
@@ -68,6 +71,7 @@ export default function EmployeeProject({
         onSuccess: () => {
           form.reset()
           setOpen(false)
+          if (withSocket) socket.emit('request_board')
         },
       }
     )
@@ -118,7 +122,14 @@ export default function EmployeeProject({
               variant='ghost'
               className='ml-2 border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
               onClick={() => {
-                remove({ id })
+                remove(
+                  { id },
+                  {
+                    onSuccess: () => {
+                      if (withSocket) socket.emit('request_board')
+                    },
+                  }
+                )
               }}
             >
               <X size={14} strokeWidth={3} />

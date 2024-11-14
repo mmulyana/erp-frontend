@@ -3,7 +3,7 @@ import { useMeasurement } from '@/hooks/api/use-measurement'
 import { useLocation } from '@/hooks/api/use-location'
 import { useBrand } from '@/hooks/api/use-brand'
 import { useCategory } from '@/hooks/api/use-category'
-import { useGoodsAll } from '@/hooks/api/use-goods'
+import { useGoods } from '@/hooks/api/use-goods'
 import {
   Goods,
   GoodsBrand,
@@ -38,7 +38,7 @@ export const useInventoryData = (): Return => {
   const { data: locations } = useApiData(useLocation())
   const { data: brands } = useApiData(useBrand())
   const { data: categories } = useApiData(useCategory())
-  const { data: goods } = useApiData(useGoodsAll())
+  const { data: goods } = useApiData(useGoods())
   const { data: suppliers } = useApiData(useSupplier())
 
   const measurementOptions = measurements?.map((item) => ({

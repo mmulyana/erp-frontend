@@ -22,6 +22,7 @@ import { cn } from '@/utils/cn'
 import { useEffect, useMemo, useState } from 'react'
 import { Pencil, User2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { socket } from '@/utils/socket'
 
 type FormValues = {
   clientId?: number | null
@@ -29,6 +30,7 @@ type FormValues = {
 type Props = {
   id: number
   data: Pick<Project, 'client'>
+  withSocket?: boolean
 }
 export default function UserProject({ id, data: { client } }: Props) {
   //   HANDLE SEARCH
@@ -59,6 +61,7 @@ export default function UserProject({ id, data: { client } }: Props) {
       {
         onSuccess: () => {
           setOpen(false)
+          socket.emit('request_board')
         },
       }
     )

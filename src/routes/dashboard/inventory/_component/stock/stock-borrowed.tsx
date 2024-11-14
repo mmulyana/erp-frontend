@@ -2,7 +2,7 @@ import { useForm, useFieldArray } from 'react-hook-form'
 import useUrlState from '@ahooksjs/use-url-state'
 
 import { useProjects } from '@/hooks/api/use-project'
-import { useGoodsAll } from '@/hooks/api/use-goods'
+import { useGoods } from '@/hooks/api/use-goods'
 import { useApiData } from '@/hooks/use-api-data'
 import {
   useCreateTransaction,
@@ -44,9 +44,7 @@ export default function StockBorrowed() {
     })
   )
   const [goodName, setGoodName] = useState('')
-  const { data: goods } = useApiData(
-    useGoodsAll({ ...(goodName !== '' ? { name: goodName } : undefined) })
-  )
+  const { data: goods } = useApiData(useGoods({ name: goodName }))
 
   const [url] = useUrlState({ page: '' })
   const { data: transactions, isLoading } = useApiData(

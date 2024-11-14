@@ -26,6 +26,7 @@ import { useMemo, useState } from 'react'
 import { Plus, X } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { z } from 'zod'
+import { socket } from '@/utils/socket'
 
 const formSchema = z.object({
   labelId: z.number({
@@ -38,10 +39,12 @@ type FormValues = z.infer<typeof formSchema>
 type Props = {
   id: number
   data: Pick<Project, 'labels'>
+  withSocket?: boolean
 }
 export default function LabelProject({
   id: projectId,
   data: { labels },
+  withSocket,
 }: Props) {
   // HANDLE SEARCH
   const [search, setSearch] = useState('')
@@ -71,6 +74,7 @@ export default function LabelProject({
         onSuccess: () => {
           setOpen(false)
           form.reset()
+          socket.emit('request_board')
         },
       }
     )
@@ -104,7 +108,16 @@ export default function LabelProject({
               className='border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
               style={{ color: item.label.color }}
               onClick={() => {
-                remove({ id: item.id })
+                remove(
+                  { id: item.id },
+                  {
+                    onSuccess: () => {
+                      if (withSocket) {
+                        socket.emit('request_board')
+                      }
+                    },
+                  }
+                )
               }}
             >
               <X size={14} strokeWidth={3} />

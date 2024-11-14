@@ -3,7 +3,10 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useSetAtom } from 'jotai'
 import { useState } from 'react'
 
-import { useDeleteGoods, useGoods } from '@/hooks/api/use-goods'
+import {
+  useDeleteGoods,
+  useGoodsByPagination,
+} from '@/hooks/api/use-goods'
 import { useApiData } from '@/hooks/use-api-data'
 import { PATH } from '@/utils/constant/_paths'
 import { Goods } from '@/utils/types/api'
@@ -48,7 +51,7 @@ export default function Index() {
 
   const { mutate } = useDeleteGoods()
   const { data, isLoading } = useApiData(
-    useGoods({
+    useGoodsByPagination({
       ...(url.page !== '' ? { page: url.page } : undefined),
       ...(url.name !== '' ? { name: url.name } : undefined),
     })
