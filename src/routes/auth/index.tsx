@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { z } from 'zod'
 
 import { isValidEmail } from '@/utils/is-email-valid'
-import { PATH } from '@/utils/constant/_paths'
 import { useAuth } from '@/hooks/api/use-auth'
 
 import { Button } from '@/components/ui/button'
@@ -81,7 +79,7 @@ export default function Login() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className='w-full flex flex-col gap-4'
+            className='w-full flex flex-col gap-4 mt-6'
           >
             <FormField
               control={form.control}
@@ -128,17 +126,8 @@ export default function Login() {
                 </FormItem>
               )}
             />
-            <div className='flex justify-end -mt-2'>
-              <div className='flex items-center space-x-2'>
-                <Link
-                  to={PATH.FORGOT}
-                  className='text-brand-blue underline underline-offset-2'
-                >
-                  Lupa password?
-                </Link>
-              </div>
-            </div>
-            <Button type='submit' variant='default' className='mt-2'>
+            
+            <Button type='submit' variant='default' className='mt-4'>
               Sign In
             </Button>
           </form>

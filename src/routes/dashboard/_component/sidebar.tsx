@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
+
+import { userAtom } from '@/atom/auth'
 
 import { PATH } from '@/utils/constant/_paths'
+
+import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Sidebar,
   SidebarContent,
@@ -11,17 +16,21 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
+
 import { BlocksIcon, HardHat, House, UserCircle, Users } from 'lucide-react'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { useAtomValue } from 'jotai'
-import { userAtom } from '@/atom/auth'
+import Logo from '../../../../public/erp-logo.svg'
 
 export default function AppSidebar() {
   const user = useAtomValue(userAtom)
   return (
     <Sidebar variant='sidebar' className='z-20'>
       <SidebarHeader>
-        <p>BJS</p>
+        <div className='rounded-lg w-full border px-1 py-1.5 border-line bg-white flex gap-2 items-center'>
+          <div className='w-6 h-6 rounded-full bg-brand-blue flex items-center justify-center'>
+            <img src={Logo} className='h-4 w-4 rounded' />
+          </div>
+          <p className='text-dark font-medium text-sm'>ERP BJS</p>
+        </div>
       </SidebarHeader>
       <ScrollArea>
         <SidebarContent>
