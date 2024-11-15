@@ -1,3 +1,10 @@
+import { useEffect, useState } from 'react'
+import { socket } from '@/utils/socket'
+import {
+  JOIN_BY_PARENT,
+  LEAVE_ROOM,
+  MESSAGES_BY_PARENT,
+} from '@/utils/constant/_socket'
 import {
   useDeleteActivity,
   useToggleLikeActivity,
@@ -9,13 +16,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { X } from 'lucide-react'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import MessageItem2 from './message-item-2'
 import MessageForm from './message-form'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { useEffect, useState } from 'react'
-import { socket } from '@/utils/socket'
-import { JOIN_BY_PARENT, MESSAGES_BY_PARENT } from '@/utils/constant/_socket'
+
+import { X } from 'lucide-react'
 
 type Props = {
   open: boolean
@@ -46,6 +51,7 @@ export default function ActivityDetail({
 
     return () => {
       socket.off(MESSAGES_BY_PARENT)
+      socket.emit(LEAVE_ROOM, { room: `detail-${id}` })
     }
   }, [id, open])
 

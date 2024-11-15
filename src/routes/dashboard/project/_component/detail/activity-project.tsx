@@ -1,17 +1,20 @@
-import ActivityDetail from '../activity/activity-detail'
+import { useState, useEffect } from 'react'
+import { Activity } from '@/utils/types/api'
+import { socket } from '@/utils/socket'
 import {
   useDeleteActivity,
-  // useRemovePhotoActivity,
   useToggleLikeActivity,
   useUpdateActivity,
-  // useUploadPhotosActivity,
 } from '@/hooks/api/use-activity'
-import MessageForm from '../activity/message-form'
-import { Activity } from '@/utils/types/api'
-import { useState, useEffect } from 'react'
+import {
+  JOIN_BY_PROJECT,
+  LEAVE_ROOM,
+  MESSAGES_BY_PROJECT,
+} from '@/utils/constant/_socket'
+
+import ActivityDetail from '../activity/activity-detail'
 import MessageItem2 from '../activity/message-item-2'
-import { socket } from '@/utils/socket'
-import { JOIN_BY_PROJECT, MESSAGES_BY_PROJECT } from '@/utils/constant/_socket'
+import MessageForm from '../activity/message-form'
 
 type Props = {
   id?: number | null
@@ -39,6 +42,7 @@ export default function ActivityProject({ id: projectId }: Props) {
 
     return () => {
       socket.off(MESSAGES_BY_PROJECT)
+      socket.emit(LEAVE_ROOM, { room: `project-${projectId}` })
     }
   }, [projectId])
 
