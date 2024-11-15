@@ -1,22 +1,27 @@
-import Filter from '@/components/common/filter'
-import Search from '@/components/common/search'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import useUrlState from '@ahooksjs/use-url-state'
+import { format, parse } from 'date-fns'
+import { id } from 'date-fns/locale'
+import { useMemo } from 'react'
+
+import { BASE_URL } from '@/utils/constant/_urls'
+import { cn } from '@/utils/cn'
+
 import {
   useAttendances,
   useCreateAttendance,
   useUpdateAttendance,
 } from '@/hooks/api/use-attendance'
-import { cn } from '@/utils/cn'
-import { BASE_URL } from '@/utils/constant/_urls'
-import useUrlState from '@ahooksjs/use-url-state'
-import { format, parse } from 'date-fns'
-import { id } from 'date-fns/locale'
+
+import Search from '@/components/common/search'
+
+import { Calendar } from '@/components/ui/calendar'
+import { Button } from '@/components/ui/button'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+
 import {
   CalendarDaysIcon,
   CheckIcon,
@@ -24,7 +29,6 @@ import {
   PlusIcon,
   X,
 } from 'lucide-react'
-import { useMemo } from 'react'
 
 export function Regular() {
   const [url, setUrl] = useUrlState({ name: '', date: '' })
@@ -53,7 +57,6 @@ export function Regular() {
       <div className='flex justify-between items-center mb-6'>
         <div className='flex gap-4'>
           <Search />
-          <Filter />
           <Popover>
             <PopoverTrigger asChild>
               <Button

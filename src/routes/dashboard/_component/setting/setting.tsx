@@ -181,17 +181,27 @@ export default function Setting() {
       <DialogContent
         showClose={false}
         close={<CustomClose setOpen={onClose} />}
-        className='max-w-[800px] h-[80vh] md:h-fit grid grid-cols-1 md:grid-cols-[200px_1fr] p-0 gap-0 overflow-hidden rounded-2xl relative'
+        className='max-w-[800px] h-full md:h-fit grid grid-cols-1 md:grid-cols-[200px_1fr] p-0 gap-0 overflow-hidden rounded-none md:rounded-2xl relative'
       >
         <div
           className={cn(
-            'bg-[#F6F6F6] border-r border-[#E8EBF0] p-2 flex flex-col gap-2 overflow-y-auto',
+            'bg-[#F6F6F6] border-r border-[#E8EBF0] p-4 md:p-2 flex flex-col gap-2 overflow-y-auto pb-8 md:pb-0',
             isMobile &&
               'absolute inset-0 z-10 transition-transform duration-300',
             isMobile && !showMenu && 'translate-x-[-100%]',
             isMobile && showMenu && 'translate-x-0'
           )}
         >
+          {isMobile && (
+            <Button
+              className='h-8 p-0.5 pl-2 pr-3 mb-2 inline-flex w-fit gap-1.5 bg-gray-200'
+              variant='secondary'
+              onClick={onClose}
+            >
+              <ArrowLeft className='h-4 w-4 text-dark' />
+              Tutup Pengaturan
+            </Button>
+          )}
           {SIDE_MENUS.map((menu, index) => (
             <div key={`${menu}-${index}`}>
               <p className='text-sm text-dark/50 mb-1.5'>{menu.name}</p>
@@ -215,7 +225,11 @@ export default function Setting() {
               </div>
             </div>
           ))}
-          <Button className='mt-2 gap-2' variant='destructive' onClick={logOut}>
+          <Button
+            className='mt-auto gap-2'
+            variant='destructive'
+            onClick={logOut}
+          >
             Keluar
             <LogOut size={14} />
           </Button>

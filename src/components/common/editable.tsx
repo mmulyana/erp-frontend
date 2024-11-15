@@ -68,7 +68,7 @@ const RenderData = memo(
     return (
       <Button
         variant='ghost'
-        className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit pl-4 relative'
+        className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-9 pl-4 relative'
         onClick={() => onEdit?.(keyData)}
       >
         <Plus
@@ -148,7 +148,7 @@ export const Editable = memo(
                 value={data || ''}
                 onKeyDown={handleKeyDown}
                 className={cn(
-                  'shadow-none h-fit block p-0 pl-1 rounded-md border-blue-primary w-[112px]',
+                  'shadow-none h-9 block p-0 pl-1 rounded-md border-blue-primary w-[120px]',
                   classNameInput
                 )}
                 ref={ref}
@@ -156,7 +156,7 @@ export const Editable = memo(
               />
               <Button
                 variant='secondary'
-                className='h-6 font-normal text-sm rounded-md p-0 px-2 bg-gray-200'
+                className='h-9 font-normal text-sm rounded-md p-0 px-2 bg-gray-200'
                 onClick={() => {
                   onUpdate?.(data as string)
                   handleBlur()
@@ -178,7 +178,7 @@ export const Editable = memo(
                   containerRef.current?.focus()
                 }}
               >
-                <SelectTrigger className='h-fit p-0 border-none bg-gray-50 py-1 pr-3'>
+                <SelectTrigger className='h-9 p-0 border-none bg-gray-100 py-1 pr-3'>
                   <Button
                     variant='ghost'
                     className={cn('shadow-none h-6 p-0 pl-2', classNameInput)}
@@ -211,7 +211,7 @@ export const Editable = memo(
               value={data || ''}
               onKeyDown={handleKeyDown}
               className={cn(
-                'shadow-none h-fit py-1 px-2 border border-blue-primary rounded-md',
+                'shadow-none h-9 bg-gray-100 py-1 px-2 borderrounded-md',
                 classNameInput
               )}
               onBlur={handleBlur}

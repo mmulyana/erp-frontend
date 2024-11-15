@@ -1,25 +1,30 @@
-import { useApiData } from '@/hooks/use-api-data'
-import { DashboardLayout } from '../../_component/layout'
-import { useDeleteRecap, useRecapPagination } from '@/hooks/api/use-recap'
 import { ColumnDef } from '@tanstack/react-table'
-import { Recap } from '@/utils/types/api'
-import { format } from 'date-fns'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import Filter from '@/components/common/filter'
-import Search from '@/components/common/search'
-import { DataTable } from '@/components/data-table'
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Overlay from '@/components/common/overlay'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { Eye } from 'lucide-react'
-import AlertDialogV1 from '@/components/common/alert-dialog-v1'
-import { AddRecap } from './_component/add-recap'
-import { cn } from '@/utils/cn'
-import { useTitle } from '../../_component/header'
-import { PATH } from '@/utils/constant/_paths'
+import { format } from 'date-fns'
+import { useState } from 'react'
+
+import { useDeleteRecap, useRecapPagination } from '@/hooks/api/use-recap'
+import { useApiData } from '@/hooks/use-api-data'
+
 import { createLinkDetail } from '@/utils/create-link-detail'
+import { PATH } from '@/utils/constant/_paths'
+import { Recap } from '@/utils/types/api'
+import { cn } from '@/utils/cn'
+
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { DataTable } from '@/components/data-table'
+
+import AlertDialogV1 from '@/components/common/alert-dialog-v1'
+import DropdownEdit from '@/components/common/dropdown-edit'
+import Search from '@/components/common/search'
+import Overlay from '@/components/common/overlay'
+
+import { Eye } from 'lucide-react'
+
+import { DashboardLayout } from '../../_component/layout'
+import { useTitle } from '../../_component/header'
+import { AddRecap } from './_component/add-recap'
 
 const links = [
   {
@@ -132,11 +137,10 @@ export default function Report() {
   } | null>(null)
 
   return (
-    <DashboardLayout>
+    <DashboardLayout className='overflow-hidden'>
       <div className='flex gap-4 items-center justify-between p-4'>
         <div className='flex gap-4'>
           <Search />
-          <Filter />
         </div>
         <Button
           variant='secondary'

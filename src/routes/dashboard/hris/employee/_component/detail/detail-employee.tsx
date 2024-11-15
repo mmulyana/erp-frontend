@@ -93,7 +93,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className='p-0 min-w-[400px] max-w-full'>
+      <SheetContent className='p-0 w-full'>
         <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
           <p className='text-sm text-dark'>Detail Pegawai</p>
         </div>
@@ -338,7 +338,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               </div>
             </Tab>
             <Tab label='Gaji'>
-              <div className='flex flex-col gap-3 px-4 pb-10 pt-2 bg-[#FBFBFB] min-h-[calc(100vh-422px)]'>
+              <div className='flex flex-col gap-5 px-4 pb-10 pt-2 bg-[#FBFBFB] min-h-[calc(100vh-422px)]'>
                 <DataSheet>
                   <p className='text-dark/50'>Gaji Pokok</p>
                   <Editable

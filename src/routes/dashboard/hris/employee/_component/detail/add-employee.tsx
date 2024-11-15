@@ -166,33 +166,49 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
   // HANDLE ADDRESS
 
   const photo = form.watch('photo')
+  const certifications = form.watch('certifications')
 
   const onSubmit = async (data: createEmployee) => {
     if (newUser) {
-      const payload = data?.certifications?.map((item) => ({ ...item }))
-      createCertif(
-        {
-          data: payload as createCertifType[],
-          employeeId: newUser.id,
-        },
-        {
-          onSuccess: () => {
-            setOpen(false)
-            form.reset()
-            setCurrentStep(0)
+      if (!!data.certifications.length) {
+        const payload = data?.certifications?.map((item) => ({ ...item }))
+        createCertif(
+          {
+            data: payload as createCertifType[],
+            employeeId: newUser.id,
           },
-        }
-      )
+          {
+            onSuccess: () => {
+              setOpen(false)
+              form.reset()
+              setCurrentStep(0)
+            },
+          }
+        )
+        return
+      }
+      setOpen(false)
       return
     }
-    createEmployee(data as payloadCreateEmployee, {
-      onSuccess: (data) => {
-        setNewUser(data.data.data)
-        if (data.data.data?.id && photo) {
-          uploadPhoto({ id: data.data.data.id, photo })
-        }
-      },
-    })
+    createEmployee(
+      {
+        ...data,
+        addresses: data.addresses
+          ?.filter((item) => item.value.trim() !== '')
+          .map((item) => item),
+        phoneNumbers: data.phoneNumbers
+          ?.filter((item) => item.value.trim() !== '')
+          .map((item) => item),
+      } as payloadCreateEmployee,
+      {
+        onSuccess: (data) => {
+          setNewUser(data.data.data)
+          if (data.data.data?.id && photo) {
+            uploadPhoto({ id: data.data.data.id, photo })
+          }
+        },
+      }
+    )
   }
 
   const onSubmitCertif = async (data: CertifFormValues) => {
@@ -234,7 +250,14 @@ export default function AddEmployee({ open, setOpen, id }: Props) {
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <Stepper navigation={(params) => <MainNavigation {...params} />}>
+              <Stepper
+                navigation={(params) => (
+                  <MainNavigation
+                    {...params}
+                    certifications={certifications.length}
+                  />
+                )}
+              >
                 <StepperItem label='Umum'>
                   <div>
                     <StepHeader step={1} title='Umum' />
@@ -873,7 +896,10 @@ function MainNavigation({
   prevStep,
   step,
   totalSteps,
-}: navigationParams) {
+  certifications,
+}: navigationParams & {
+  certifications?: number
+}) {
   return (
     <div
       className={cn(
@@ -907,7 +933,11 @@ function MainNavigation({
             onClick={nextStep}
             className='py-2 px-3 h-fit border border-blue-darker text-white bg-blue-primary rounded-lg text-sm'
           >
-            {step !== totalSteps ? 'Selanjutnya' : 'Simpan'}
+            {step !== totalSteps
+              ? 'Selanjutnya'
+              : certifications
+              ? 'Simpan'
+              : 'Tutup'}
           </button>
         )}
       </div>

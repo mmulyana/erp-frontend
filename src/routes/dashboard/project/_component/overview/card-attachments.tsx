@@ -38,8 +38,8 @@ export default function CardAttachments() {
         {isLoading ? (
           <LoadingState />
         ) : (
-          <ScrollArea className='overflow-hidden w-full h-48 px-2.5 pb-2.5 rounded-md'>
-            <div className='flex flex-col gap-4 bg-dark/5 p-2'>
+          <ScrollArea className='overflow-hidden w-full h-full  px-2.5 pb-2.5 rounded-md'>
+            <div className='flex flex-col gap-4 bg-dark/5 h-full p-2'>
               {attachments?.map((item) => (
                 <div
                   className='flex justify-between items-center'

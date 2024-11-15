@@ -37,7 +37,7 @@ export const useTitle = (title: Title[]) => {
 }
 export default function Header() {
   const setSettingConfig = useSetAtom(settingConfig)
-  
+
   const links = useAtomValue(titleAtom)
   const user = useAtomValue(userAtom)
 
@@ -46,7 +46,7 @@ export default function Header() {
   return (
     <div
       className={cn(
-        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-12 bg-white sticky top-0 left-0 min-w-full z-10'
+        'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-16 md:h-12 bg-white sticky top-0 left-0 min-w-full z-10'
       )}
     >
       <div className='flex gap-2 items-center'>
@@ -86,7 +86,7 @@ export default function Header() {
       <div className='flex gap-2 items-center'>
         <Button
           variant='secondary'
-          className='w-8 h-8 p-0 rounded-full bg-[#EFF0F2]'
+          className='w-10 h-10 p-0 rounded-full bg-[#EFF0F2]'
           onClick={() => {
             setSettingConfig({ open: true })
           }}
@@ -95,7 +95,7 @@ export default function Header() {
         </Button>
         <Button
           variant='secondary'
-          className='w-8 h-8 rounded-full bg-[#FFF] border-[1.5px] border-[#2A9D90] p-0.5 relative'
+          className='w-10 h-10 rounded-full bg-[#FFF] border-[1.5px] border-[#2A9D90] p-0.5 relative'
         >
           {user?.photo ? (
             <img

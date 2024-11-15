@@ -1,29 +1,34 @@
-import Filter from '@/components/common/filter'
-import Search from '@/components/common/search'
-import { DataTable } from '@/components/data-table'
-import { Button } from '@/components/ui/button'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import useUrlState from '@ahooksjs/use-url-state'
+import { ColumnDef } from '@tanstack/react-table'
+import { format, parse } from 'date-fns'
+import { id } from 'date-fns/locale'
+import { useState } from 'react'
+
 import {
   useDeleteOvertime,
   useOvertimePagination,
 } from '@/hooks/api/use-overtime'
+import { useApiData } from '@/hooks/use-api-data'
+
 import { Overtime as TOvertime } from '@/utils/types/api'
-import useUrlState from '@ahooksjs/use-url-state'
-import { ColumnDef } from '@tanstack/react-table'
-import { format, parse } from 'date-fns'
-import { CalendarDaysIcon, X } from 'lucide-react'
-import { AddOvertime } from './add-overtime'
+import { cn } from '@/utils/cn'
+
+import DropdownEdit from '@/components/common/dropdown-edit'
+import Search from '@/components/common/search'
+
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { Calendar } from '@/components/ui/calendar'
+import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { cn } from '@/utils/cn'
-import { id } from 'date-fns/locale'
-import { Calendar } from '@/components/ui/calendar'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import { useApiData } from '@/hooks/use-api-data'
-import { useState } from 'react'
+
+import { AddOvertime } from './add-overtime'
+
+import { CalendarDaysIcon, X } from 'lucide-react'
 
 export function Overtime() {
   const { mutate: remove } = useDeleteOvertime()
@@ -111,7 +116,6 @@ export function Overtime() {
       <div className='flex justify-between items-center p-4 bg-[#F9FAFB]'>
         <div className='flex gap-4'>
           <Search />
-          <Filter />
           <Popover>
             <PopoverTrigger asChild>
               <Button
