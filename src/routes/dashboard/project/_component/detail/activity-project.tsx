@@ -1,6 +1,5 @@
 import ActivityDetail from '../activity/activity-detail'
 import {
-  useActivity,
   useDeleteActivity,
   useRemovePhotoActivity,
   useToggleLikeActivity,
@@ -9,18 +8,22 @@ import {
 } from '@/hooks/api/use-activity'
 import MessageForm from '../activity/message-form'
 import { Activity } from '@/utils/types/api'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import MessageItem2 from '../activity/message-item-2'
+import { socket } from '@/utils/socket'
+import { JOIN_BY_PROJECT, MESSAGES_BY_PROJECT } from '@/utils/constant/_socket'
 
 type Props = {
   id?: number | null
 }
 type SelectedActivity = Partial<Activity> & { open: boolean }
+
 export default function ActivityProject({ id }: Props) {
-  const { data } = useActivity({
-    enabled: !!id,
-    projectId: id,
-  })
+  const [data, setData] = useState([])
+  // const { data } = useActivity({
+  //   enabled: !!id,
+  //   projectId: id,
+  // })
   const [selectedActivity, setSelectedActivity] =
     useState<null | SelectedActivity>(null)
 
@@ -30,11 +33,25 @@ export default function ActivityProject({ id }: Props) {
   const { mutate: removeAttachment } = useRemovePhotoActivity()
   const { mutate: upload } = useUploadPhotosActivity()
 
+  useEffect(() => {
+    if (!id) return
+
+    socket.emit(JOIN_BY_PROJECT, { id })
+
+    socket.on(MESSAGES_BY_PROJECT, (data: any) => {
+      setData(data)
+    })
+
+    return () => {
+      socket.off(MESSAGES_BY_PROJECT)
+    }
+  }, [id])
+
   return (
     <>
       <div className='flex flex-col gap-6'>
         <MessageForm type='textarea' projectId={id} />
-        {data?.data.data?.map((item) => (
+        {data?.map((item: any) => (
           <MessageItem2
             key={`message-` + item.id}
             nameKey='activity'
@@ -63,6 +80,7 @@ export default function ActivityProject({ id }: Props) {
                 },
                 {
                   onSuccess: () => {
+                    console.log('newAttachments',newAttachments)
                     if (!!newAttachments.length) {
                       upload({ id, photos: newAttachments })
                     }

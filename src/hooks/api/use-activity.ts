@@ -1,10 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Activity, IApi } from '@/utils/types/api'
 import { createActivity } from '@/utils/types/form'
 import { URLS } from '@/utils/constant/_urls'
 import { KEYS } from '@/utils/constant/_keys'
 import { AxiosResponse } from 'axios'
 import http from '@/utils/http'
+import { objectToFormData } from '@/utils/ObjectToFormData'
 
 type Params = {
   projectId?: number | null
@@ -37,39 +38,26 @@ export const useDetailActivity = (params?: DetailParams) => {
 }
 
 export const useCreateActivity = () => {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (
-      payload: createActivity
+      payload: createActivity & { type?: string }
     ): Promise<
       AxiosResponse<IApi<{ id: number; projectId: number; replyId?: number }>>
     > => {
-      return await http.post(URLS.PROJECT_ACTIVITY, payload)
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.projectId,
-          data.data.data?.id,
-        ],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.projectId,
-          data.data.data?.replyId,
-        ],
+      const formData = objectToFormData(payload)
+      return await http.post(URLS.PROJECT_ACTIVITY, formData, {
+        params: {
+          type: payload.type,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       })
     },
   })
 }
 
 export const useDeleteActivity = () => {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
       id,
@@ -80,23 +68,10 @@ export const useDeleteActivity = () => {
     > => {
       return await http.delete(`${URLS.PROJECT_ACTIVITY}/${id}`)
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.projectId,
-          data.data.data?.replyId,
-        ],
-      })
-    },
   })
 }
 
 export const useToggleLikeActivity = () => {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (payload: {
       activityId: number
@@ -108,23 +83,10 @@ export const useToggleLikeActivity = () => {
     > => {
       return await http.post(URLS.PROJECT_ACTIVITY + '/toggle/like', payload)
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [KEYS.ACTIVITY, data.data.data?.activity.projectId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.activity.projectId,
-          data.data.data?.activityId,
-        ],
-      })
-    },
   })
 }
 
 export const useUploadPhotosActivity = () => {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (payload: {
       photos: File[] | null
@@ -145,23 +107,10 @@ export const useUploadPhotosActivity = () => {
         }
       )
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.projectId,
-          data.data.data?.id,
-        ],
-      })
-    },
   })
 }
 
 export const useUpdateActivity = () => {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
       id,
@@ -174,29 +123,9 @@ export const useUpdateActivity = () => {
     > => {
       return await http.patch(`${URLS.PROJECT_ACTIVITY}/${id}`, payload)
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.projectId,
-          data.data.data?.id,
-        ],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.projectId,
-          data.data.data?.replyId,
-        ],
-      })
-    },
   })
 }
 export const useRemovePhotoActivity = () => {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (
       payload: number[]
@@ -207,25 +136,6 @@ export const useRemovePhotoActivity = () => {
         data: {
           ids: payload,
         },
-      })
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [KEYS.ACTIVITY, data.data.data?.projectId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.projectId,
-          data.data.data?.id,
-        ],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [
-          KEYS.ACTIVITY,
-          data.data.data?.projectId,
-          data.data.data?.replyId,
-        ],
       })
     },
   })

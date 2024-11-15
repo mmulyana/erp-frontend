@@ -154,6 +154,7 @@ export type createActivity = {
   comment: string
   projectId: number
   replyId?: number | null
+  photos?: File[]
 }
 
 export type createAttachment = {

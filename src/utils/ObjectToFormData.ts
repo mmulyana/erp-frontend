@@ -1,5 +1,5 @@
 export function objectToFormData(
-  obj: Record<string, string | File | string[] | number | null>
+  obj: Record<string, string | File | File[] | string[] | number | null>
 ) {
   const formData = new FormData()
 
@@ -7,8 +7,10 @@ export function objectToFormData(
     if (value != null && value !== '') {
       if (Array.isArray(value)) {
         value.forEach((item) => {
-          if (item != null) {
+          if (item instanceof File) {
             formData.append(key, item)
+          } else if (item != null) {
+            formData.append(key, String(item))
           }
         })
       } else if (value instanceof File) {

@@ -1,17 +1,16 @@
-import {
-  useCreateActivity,
-  useUploadPhotosActivity,
-} from '@/hooks/api/use-activity'
-import { Form, FormField } from '@/components/ui/form'
-import { Camera, SendHorizonal } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { useAtomValue } from 'jotai'
 import { useRef } from 'react'
+
+import { useCreateActivity } from '@/hooks/api/use-activity'
+import { Form, FormField } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useForm } from 'react-hook-form'
 import { userAtom } from '@/atom/auth'
-import { useAtomValue } from 'jotai'
 import { PreviewPhoto } from './preview-photo'
+
+import { Camera, SendHorizonal } from 'lucide-react'
 
 type MessageProps = {
   type: 'textarea' | 'input'
@@ -30,7 +29,6 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
 
   // HANDLE FORM
   const { mutate } = useCreateActivity()
-  const { mutate: upload } = useUploadPhotosActivity()
 
   const form = useForm<FormInputs>({
     defaultValues: {
@@ -62,10 +60,11 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
         comment: data.comment,
         userId: user?.id,
         replyId: id ?? null,
+        type: id ? 'detail' : 'project',
+        photos: data.photos,
       },
       {
-        onSuccess: (res) => {
-          upload({ id: res.data.data?.id as number, photos: data.photos })
+        onSuccess: () => {
           form.reset({ comment: '', photos: [] })
         },
       }
