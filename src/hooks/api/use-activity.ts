@@ -82,6 +82,7 @@ export const useToggleLikeActivity = () => {
       projectId?: number
       userId: number
       type?: string
+      replyId?: number
     }) => {
       return await http.post(URLS.PROJECT_ACTIVITY + '/toggle/like', payload)
     },

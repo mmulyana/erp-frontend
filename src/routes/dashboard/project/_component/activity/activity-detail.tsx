@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
 import { socket } from '@/utils/socket'
-import {
-  JOIN_BY_PARENT,
-  LEAVE_ROOM,
-  MESSAGES_BY_PARENT,
-} from '@/utils/constant/_socket'
+import { JOIN_BY_PARENT, MESSAGES_BY_PARENT } from '@/utils/constant/_socket'
 import {
   useDeleteActivity,
   useToggleLikeActivity,
@@ -21,6 +17,7 @@ import MessageItem2 from './message-item-2'
 import MessageForm from './message-form'
 
 import { X } from 'lucide-react'
+import { Activity } from '@/utils/types/api'
 
 type Props = {
   open: boolean
@@ -34,7 +31,7 @@ export default function ActivityDetail({
   projectId,
   id,
 }: Props) {
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<Activity | null>(null)
 
   const { mutate: toggle } = useToggleLikeActivity()
   const { mutate: remove } = useDeleteActivity()
@@ -43,15 +40,14 @@ export default function ActivityDetail({
   useEffect(() => {
     if (!open) return
 
-    socket.emit(JOIN_BY_PARENT, { id: projectId })
+    socket.emit(JOIN_BY_PARENT, { id })
 
-    socket.on(MESSAGES_BY_PARENT, (data: any) => {
+    socket.on(MESSAGES_BY_PARENT, (data: Activity) => {
       setData(data)
     })
 
     return () => {
       socket.off(MESSAGES_BY_PARENT)
-      socket.emit(LEAVE_ROOM, { room: `detail-${id}` })
     }
   }, [id, open])
 
@@ -71,10 +67,17 @@ export default function ActivityDetail({
               nameKey='detail'
               {...data}
               onDelete={(id) => {
-                remove({ id })
+                remove({ id, type: 'detail' })
               }}
               onToggle={(userId, id) => {
-                projectId && toggle({ id, userId, projectId, type: 'detail' })
+                projectId &&
+                  toggle({
+                    id,
+                    userId,
+                    projectId,
+                    type: 'detail',
+                    replyId: data.id,
+                  })
               }}
               onUpdate={({
                 id,
@@ -91,6 +94,7 @@ export default function ActivityDetail({
                       comment: comment,
                       photos: photos,
                       deletedPhoto: deletedAttachments,
+                      type: 'detail',
                     },
                   },
                   {
@@ -117,11 +121,17 @@ export default function ActivityDetail({
                     key={'detail-reply-' + reply.id}
                     {...reply}
                     onDelete={(id) => {
-                      remove({ id })
+                      remove({ id, type: 'detail' })
                     }}
                     onToggle={(userId, id) => {
                       projectId &&
-                        toggle({ id, userId, projectId, type: 'detail' })
+                        toggle({
+                          id,
+                          userId,
+                          projectId,
+                          type: 'detail',
+                          replyId: data.id,
+                        })
                     }}
                     onUpdate={({
                       id,
@@ -138,6 +148,7 @@ export default function ActivityDetail({
                             comment: comment,
                             photos: photos,
                             deletedPhoto: deletedAttachments,
+                            type: 'detail',
                           },
                         },
                         {

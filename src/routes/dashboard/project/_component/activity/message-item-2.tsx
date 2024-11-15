@@ -135,12 +135,6 @@ export default function MessageItem2({
                 >
                   {props?.user?.name}
                 </p>
-                <p className='text-sm text-dark/50'>
-                  {format(
-                    new Date(props.updated_at ?? props.created_at),
-                    'dd MMM yyyy, HH:mm'
-                  )}
-                </p>
               </div>
             </div>
             <Form {...form}>
@@ -154,7 +148,7 @@ export default function MessageItem2({
                         <Textarea className='rounded-xl w-full' {...field} />
                       )}
                     />
-                    <div className='flex gap-2 mt-2 flex-wrap w-full bg-red-100 flex-row'>
+                    <div className='flex gap-2 mt-2 flex-wrap w-full flex-row'>
                       {/* Render existing photos */}
                       {existingPhotos.map((item, index) => (
                         <div
@@ -205,7 +199,7 @@ export default function MessageItem2({
                   </div>
                   <div className='flex justify-between items-center mt-2.5'>
                     <Button
-                      className='p-0 w-fit px-4 gap-1 h-8 rounded-full'
+                      className='p-0 w-fit px-4 gap-1 h-8 rounded-full bg-gray-200'
                       variant='secondary'
                       onClick={onReset}
                       type='button'
@@ -217,7 +211,7 @@ export default function MessageItem2({
                         <button
                           type='button'
                           onClick={handleCameraClick}
-                          className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
+                          className='hover:bg-gray-100 px-2 rounded-md text-gray-600 h-8'
                         >
                           <Camera size={20} />
                         </button>
@@ -265,12 +259,6 @@ export default function MessageItem2({
               >
                 {props?.user?.name}
               </p>
-              <p className='text-sm text-dark/50'>
-                {format(
-                  new Date(props.updated_at ?? props.created_at),
-                  'dd MMM yyyy, HH:mm'
-                )}
-              </p>
             </div>
             {isOwnMessage && (
               <DropdownEdit>
@@ -310,7 +298,7 @@ export default function MessageItem2({
                 />
               ))}
               {props.attachments.length > 2 && (
-                <div className='w-14 h-14 rounded-lg bg-gray-100 flex justify-center items-center'>
+                <div className='w-14 h-14 rounded-lg bg-gray-200 flex justify-center items-center'>
                   <p className='text-dark font-medium'>
                     {props.attachments.length - 2}+
                   </p>
@@ -330,8 +318,10 @@ export default function MessageItem2({
                 }}
               >
                 <ThumbsUp size={15} strokeWidth={2} />
-                {!!props.likes?.length && (
-                  <p className='text-dark leading-none'>{props.likes.length}</p>
+                {!!props._count?.likes && (
+                  <p className='text-dark leading-none'>
+                    {props._count?.likes}
+                  </p>
                 )}
               </Button>
               {!hideReply && (
@@ -343,13 +333,19 @@ export default function MessageItem2({
                   }}
                 >
                   <MessageCircle size={15} strokeWidth={2} />
-                  {!!props.replies?.length && (
+                  {!!props._count?.replies && (
                     <p className='text-dark leading-none'>
-                      {props.replies.length}
+                      {props._count?.replies}
                     </p>
                   )}
                 </Button>
               )}
+              <p className='text-sm text-dark/50'>
+                {format(
+                  new Date(props.updated_at ?? props.created_at),
+                  'dd MMM yyyy, HH:mm'
+                )}
+              </p>
             </div>
           </div>
         </div>

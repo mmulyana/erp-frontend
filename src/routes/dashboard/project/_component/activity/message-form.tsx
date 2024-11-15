@@ -121,7 +121,7 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
               <button
                 type='button'
                 onClick={handleCameraClick}
-                className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
+                className='hover:bg-gray-100 px-2 rounded-md text-gray-600 h-8'
               >
                 <Camera size={20} />
               </button>
@@ -186,7 +186,7 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
                     <button
                       type='button'
                       onClick={handleCameraClick}
-                      className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
+                      className='hover:bg-gray-100 px-2 rounded-md text-gray-600 h-8'
                     >
                       <Camera size={20} />
                     </button>

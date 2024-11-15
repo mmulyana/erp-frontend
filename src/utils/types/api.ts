@@ -419,6 +419,7 @@ export type Activity = {
   }[]
   comment: string
   id: number
+  name: string
   projectId: number
   replyId: number
   userId: number
@@ -426,7 +427,10 @@ export type Activity = {
   replies: Activity[]
   created_at: string
   updated_at: string
-  likes: any[]
+  _count: {
+    replies: number
+    likes: number
+  }
 }
 
 export type Attachment = {

@@ -8,7 +8,6 @@ import {
 } from '@/hooks/api/use-activity'
 import {
   JOIN_BY_PROJECT,
-  LEAVE_ROOM,
   MESSAGES_BY_PROJECT,
 } from '@/utils/constant/_socket'
 
@@ -22,7 +21,7 @@ type Props = {
 type SelectedActivity = Partial<Activity> & { open: boolean }
 
 export default function ActivityProject({ id: projectId }: Props) {
-  const [data, setData] = useState([])
+  const [data, setData] = useState<Activity[]>([])
 
   const [selectedActivity, setSelectedActivity] =
     useState<null | SelectedActivity>(null)
@@ -36,13 +35,12 @@ export default function ActivityProject({ id: projectId }: Props) {
 
     socket.emit(JOIN_BY_PROJECT, { id: projectId })
 
-    socket.on(MESSAGES_BY_PROJECT, (data: any) => {
+    socket.on(MESSAGES_BY_PROJECT, (data: Activity[]) => {
       setData(data)
     })
 
     return () => {
       socket.off(MESSAGES_BY_PROJECT)
-      socket.emit(LEAVE_ROOM, { room: `project-${projectId}` })
     }
   }, [projectId])
 
