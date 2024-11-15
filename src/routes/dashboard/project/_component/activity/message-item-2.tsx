@@ -22,8 +22,8 @@ type MessageItemProps = Activity & {
   onDelete?: (val: number) => void
   onUpdate?: (
     payload: Partial<Activity> & {
-      newAttachments: File[]
-      deletedAttachments: number[]
+      photos: File[]
+      deletedAttachments: string
       reset: () => void
     }
   ) => void
@@ -58,6 +58,8 @@ export default function MessageItem2({
       photos: [] as File[],
     },
   })
+
+  const photos = form.watch('photos')
 
   useEffect(() => {
     if (!edit) {
@@ -99,8 +101,8 @@ export default function MessageItem2({
     onUpdate?.({
       id: props.id,
       comment: data.comment,
-      newAttachments: data.photos as File[],
-      deletedAttachments: data.deletedPhotos as number[],
+      photos: data.photos as File[],
+      deletedAttachments: data.deletedPhotos.join(','),
       reset: onReset,
     })
   }
@@ -109,92 +111,132 @@ export default function MessageItem2({
 
   if (edit === editKey) {
     return (
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(submit)} className='p-2.5'>
-          <div className='w-full relative'>
-            <div className='w-full'>
-              <FormField
-                control={form.control}
-                name='comment'
-                render={({ field }) => (
-                  <Textarea className='rounded-xl w-full' {...field} />
-                )}
-              />
-              <div className='flex gap-2 mt-2 flex-wrap'>
-                {/* Render existing photos */}
-                {existingPhotos.map((item, index) => (
-                  <div className='relative' key={`exist-photo-${item.id}`}>
-                    <img
-                      src={BASE_URL + '/img/' + item.attachment}
-                      className='w-20 h-20 object-cover rounded-lg'
-                      alt={`Attachment ${index + 1}`}
+      <div>
+        <div className={cn('grid grid-cols-[28px_1fr] gap-2 p-2.5')}>
+          {props.user.photo ? (
+            <img
+              src={BASE_URL + '/img/' + props.user.photo}
+              className='w-7 h-7 rounded-full flex-shrink-0'
+            />
+          ) : (
+            <div className='w-7 h-7 rounded-full flex-shrink-0 bg-blue-primary/5 flex items-center justify-center'>
+              <p className='text-blue-primary leading-none uppercase font-medium'>
+                {props.user.name.at(0)}
+              </p>
+            </div>
+          )}
+          <div className='flex flex-col gap-0.5'>
+            <div className='flex justify-between items-center'>
+              <div className='flex items-center gap-1'>
+                <p
+                  className={
+                    isOwnMessage ? 'text-dark/80' : 'text-dark/50 text-sm'
+                  }
+                >
+                  {props?.user?.name}
+                </p>
+                <p className='text-sm text-dark/50'>
+                  {format(
+                    new Date(props.updated_at ?? props.created_at),
+                    'dd MMM yyyy, HH:mm'
+                  )}
+                </p>
+              </div>
+            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(submit)} className='mt-2'>
+                <div className='w-full relative'>
+                  <div className='w-full'>
+                    <FormField
+                      control={form.control}
+                      name='comment'
+                      render={({ field }) => (
+                        <Textarea className='rounded-xl w-full' {...field} />
+                      )}
                     />
-                    <button
-                      type='button'
-                      className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1'
-                      onClick={() => handleDeleteExistingPhoto(item.id)}
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                ))}
-                {/* Render new photos */}
-                <FormField
-                  control={form.control}
-                  name='photos'
-                  render={({ field }) => (
-                    <>
-                      {field.value?.length > 0 &&
-                        field.value.map((file, index) => (
+                    <div className='flex gap-2 mt-2 flex-wrap w-full bg-red-100 flex-row'>
+                      {/* Render existing photos */}
+                      {existingPhotos.map((item, index) => (
+                        <div
+                          className='relative'
+                          key={`exist-photo-${item.id}`}
+                        >
+                          <img
+                            src={BASE_URL + '/img/' + item.attachment}
+                            className='w-20 h-20 object-cover rounded-lg'
+                            alt={`Attachment ${index + 1}`}
+                          />
+                          <button
+                            type='button'
+                            className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1'
+                            onClick={() => handleDeleteExistingPhoto(item.id)}
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ))}
+                      {/* Render new photos */}
+                      {!!photos.length &&
+                        photos.map((photo, index) => (
                           <PreviewPhoto
                             key={`new-photo-${index}`}
-                            photo={file}
+                            photo={photo}
                             onRemove={() => removeFile(index)}
                           />
                         ))}
-                      <input
-                        type='file'
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        multiple
-                        accept='image/*'
-                        className='hidden'
-                        name={field.name}
-                      />
-                    </>
-                  )}
-                />
-              </div>
-            </div>
-            <div className='flex justify-between items-center mt-2.5'>
-              <Button
-                className='p-0 w-fit px-2 gap-1 h-8 rounded-full'
-                variant='secondary'
-                onClick={onReset}
-                type='button'
-              >
-                Batal
-              </Button>
-              <div className='flex items-center gap-2'>
-                <button
-                  type='button'
-                  onClick={handleCameraClick}
-                  className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
-                >
-                  <Camera size={20} />
-                </button>
-                <Button
-                  type='submit'
-                  className='p-0 w-fit px-2 pl-3 gap-1 h-8 rounded-full'
-                >
-                  Perbarui
-                  <SendHorizonal size={16} />
-                </Button>
-              </div>
-            </div>
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name='photos'
+                      render={({ field }) => (
+                        <>
+                          <input
+                            type='file'
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            multiple
+                            accept='image/*'
+                            className='hidden'
+                            name={field.name}
+                          />
+                        </>
+                      )}
+                    />
+                  </div>
+                  <div className='flex justify-between items-center mt-2.5'>
+                    <Button
+                      className='p-0 w-fit px-4 gap-1 h-8 rounded-full'
+                      variant='secondary'
+                      onClick={onReset}
+                      type='button'
+                    >
+                      Batal
+                    </Button>
+                    <div className='flex items-center gap-2'>
+                      {existingPhotos.length + photos.length < 5 && (
+                        <button
+                          type='button'
+                          onClick={handleCameraClick}
+                          className='hover:bg-gray-100 px-2 rounded-md text-gray-400 h-8'
+                        >
+                          <Camera size={20} />
+                        </button>
+                      )}
+                      <Button
+                        type='submit'
+                        className='p-0 w-fit px-2 pl-3 gap-1 h-8 rounded-full'
+                      >
+                        Perbarui
+                        <SendHorizonal size={16} />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </Form>
           </div>
-        </form>
-      </Form>
+        </div>
+      </div>
     )
   }
 

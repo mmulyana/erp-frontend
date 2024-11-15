@@ -1,10 +1,7 @@
 import {
   useDeleteActivity,
-  useDetailActivity,
-  useRemovePhotoActivity,
   useToggleLikeActivity,
   useUpdateActivity,
-  useUploadPhotosActivity,
 } from '@/hooks/api/use-activity'
 import {
   Dialog,
@@ -16,6 +13,9 @@ import { X } from 'lucide-react'
 import MessageItem2 from './message-item-2'
 import MessageForm from './message-form'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useEffect, useState } from 'react'
+import { socket } from '@/utils/socket'
+import { JOIN_BY_PARENT, MESSAGES_BY_PARENT } from '@/utils/constant/_socket'
 
 type Props = {
   open: boolean
@@ -29,16 +29,25 @@ export default function ActivityDetail({
   projectId,
   id,
 }: Props) {
-  const { data } = useDetailActivity({
-    enabled: !!id && !!projectId,
-    projectId,
-    id,
-  })
-  const { mutate: removeAttachment } = useRemovePhotoActivity()
-  const { mutate: upload } = useUploadPhotosActivity()
+  const [data, setData] = useState<any>(null)
+
   const { mutate: toggle } = useToggleLikeActivity()
   const { mutate: remove } = useDeleteActivity()
   const { mutate: update } = useUpdateActivity()
+
+  useEffect(() => {
+    if (!open) return
+
+    socket.emit(JOIN_BY_PARENT, { id: projectId })
+
+    socket.on(MESSAGES_BY_PARENT, (data: any) => {
+      setData(data)
+    })
+
+    return () => {
+      socket.off(MESSAGES_BY_PARENT)
+    }
+  }, [id, open])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -51,20 +60,20 @@ export default function ActivityDetail({
           <DialogTitle className='text-base font-normal'>Detail</DialogTitle>
         </DialogHeader>
         <div className='bg-white border-b border-dark/20'>
-          {data && data.data.data && (
+          {data && (
             <MessageItem2
               nameKey='detail'
-              {...data?.data.data}
+              {...data}
               onDelete={(id) => {
                 remove({ id })
               }}
-              onToggle={(userId, activityId) => {
-                toggle({ activityId, userId })
+              onToggle={(userId, id) => {
+                projectId && toggle({ id, userId, projectId, type: 'detail' })
               }}
               onUpdate={({
                 id,
                 comment,
-                newAttachments,
+                photos,
                 deletedAttachments,
                 reset,
               }) => {
@@ -74,16 +83,12 @@ export default function ActivityDetail({
                     id,
                     payload: {
                       comment: comment,
+                      photos: photos,
+                      deletedPhoto: deletedAttachments,
                     },
                   },
                   {
                     onSuccess: () => {
-                      if (!!newAttachments.length) {
-                        upload({ id, photos: newAttachments })
-                      }
-                      if (!!deletedAttachments.length) {
-                        removeAttachment(deletedAttachments)
-                      }
                       reset()
                     },
                   }
@@ -95,11 +100,11 @@ export default function ActivityDetail({
             <div className='w-full flex flex-col gap-4 pt-4 pb-10 px-2'>
               <MessageForm
                 type='input'
-                id={data?.data.data?.id}
-                projectId={data?.data.data?.projectId}
+                id={data?.id}
+                projectId={data?.projectId}
               />
               {data &&
-                data.data.data?.replies.map((reply) => (
+                data.replies?.map((reply: any) => (
                   <MessageItem2
                     hideReply
                     nameKey='detail-reply'
@@ -108,13 +113,14 @@ export default function ActivityDetail({
                     onDelete={(id) => {
                       remove({ id })
                     }}
-                    onToggle={(userId, activityId) => {
-                      toggle({ activityId, userId })
+                    onToggle={(userId, id) => {
+                      projectId &&
+                        toggle({ id, userId, projectId, type: 'detail' })
                     }}
                     onUpdate={({
                       id,
                       comment,
-                      newAttachments,
+                      photos,
                       deletedAttachments,
                       reset,
                     }) => {
@@ -124,16 +130,12 @@ export default function ActivityDetail({
                           id,
                           payload: {
                             comment: comment,
+                            photos: photos,
+                            deletedPhoto: deletedAttachments,
                           },
                         },
                         {
                           onSuccess: () => {
-                            if (!!newAttachments.length) {
-                              upload({ id, photos: newAttachments })
-                            }
-                            if (!!deletedAttachments.length) {
-                              removeAttachment(deletedAttachments)
-                            }
                             reset()
                           },
                         }

@@ -11,17 +11,17 @@ type Params = {
   projectId?: number | null
   enabled: boolean
 }
-export const useActivity = (params?: Params) => {
-  return useQuery({
-    queryKey: [KEYS.ACTIVITY, params?.projectId],
-    queryFn: async (): Promise<AxiosResponse<IApi<Activity[]>>> => {
-      return await http(URLS.PROJECT_ACTIVITY, {
-        params: { projectId: params?.projectId },
-      })
-    },
-    enabled: params?.enabled,
-  })
-}
+// export const useActivity = (params?: Params) => {
+//   return useQuery({
+//     queryKey: [KEYS.ACTIVITY, params?.projectId],
+//     queryFn: async (): Promise<AxiosResponse<IApi<Activity[]>>> => {
+//       return await http(URLS.PROJECT_ACTIVITY, {
+//         params: { projectId: params?.projectId },
+//       })
+//     },
+//     enabled: params?.enabled,
+//   })
+// }
 type DetailParams = Params & {
   id?: number | null
 }
@@ -61,12 +61,16 @@ export const useDeleteActivity = () => {
   return useMutation({
     mutationFn: async ({
       id,
+      type,
     }: {
       id: number
+      type?: string
     }): Promise<
       AxiosResponse<IApi<{ projectId: number; replyId?: number }>>
     > => {
-      return await http.delete(`${URLS.PROJECT_ACTIVITY}/${id}`)
+      return await http.delete(`${URLS.PROJECT_ACTIVITY}/${id}`, {
+        params: { type },
+      })
     },
   })
 }
@@ -74,38 +78,12 @@ export const useDeleteActivity = () => {
 export const useToggleLikeActivity = () => {
   return useMutation({
     mutationFn: async (payload: {
-      activityId: number
-      userId: number
-    }): Promise<
-      AxiosResponse<
-        IApi<{ activityId: number; activity: { projectId: number } }>
-      >
-    > => {
-      return await http.post(URLS.PROJECT_ACTIVITY + '/toggle/like', payload)
-    },
-  })
-}
-
-export const useUploadPhotosActivity = () => {
-  return useMutation({
-    mutationFn: async (payload: {
-      photos: File[] | null
       id: number
-    }): Promise<AxiosResponse<IApi<{ id: number; projectId: number }>>> => {
-      const formData = new FormData()
-      payload.photos?.forEach((item) => {
-        formData.append('photos', item)
-      })
-
-      return await http.post(
-        `${URLS.PROJECT_ACTIVITY}/${payload.id}/upload/photo`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      )
+      projectId?: number
+      userId: number
+      type?: string
+    }) => {
+      return await http.post(URLS.PROJECT_ACTIVITY + '/toggle/like', payload)
     },
   })
 }
@@ -117,24 +95,18 @@ export const useUpdateActivity = () => {
       payload,
     }: {
       id: number
-      payload: Partial<createActivity>
-    }): Promise<
-      AxiosResponse<IApi<{ id: number; projectId: number; replyId?: number }>>
-    > => {
-      return await http.patch(`${URLS.PROJECT_ACTIVITY}/${id}`, payload)
-    },
-  })
-}
-export const useRemovePhotoActivity = () => {
-  return useMutation({
-    mutationFn: async (
-      payload: number[]
-    ): Promise<
-      AxiosResponse<IApi<{ id: number; projectId: number; replyId?: number }>>
-    > => {
-      return await http.delete(`${URLS.PROJECT_ACTIVITY}/photo/remove`, {
-        data: {
-          ids: payload,
+      payload: Partial<createActivity> & {
+        deletedPhoto?: string
+        type?: string
+      }
+    }) => {
+      const formData = objectToFormData(payload)
+      return await http.patch(`${URLS.PROJECT_ACTIVITY}/${id}`, formData, {
+        params: {
+          type: payload.type,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
       })
     },

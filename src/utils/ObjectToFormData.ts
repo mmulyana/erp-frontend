@@ -1,5 +1,5 @@
 export function objectToFormData(
-  obj: Record<string, string | File | File[] | string[] | number | null>
+  obj: Record<string, string | File | File[] | string[] | number | number[] | null>
 ) {
   const formData = new FormData()
 
