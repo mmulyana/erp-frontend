@@ -30,9 +30,9 @@ export default function CardProject({
 
   if (type === 'long') {
     return (
-      <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white flex-col md:flex-row gap-4'>
+      <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white flex-row gap-4'>
         <div className='flex flex-col gap-2'>
-          <div className='flex gap-4 items-center flex-wrap'>
+          <div className='flex gap-2 md:gap-4 items-start md:items-center flex-wrap flex-col md:flex-row'>
             <Chips
               background={props?.boardItems?.container.color}
               text={props?.boardItems?.container.name}
@@ -102,6 +102,7 @@ export default function CardProject({
             <CircularProgress progress={props.progress || 0} />
           </div>
         </div>
+        
         <Button
           variant='outline'
           className='p-2 rounded-md text-dark/50 gap-1 pr-1.5 ml-auto md:ml-0'

@@ -94,8 +94,11 @@ export default function AttachmentProject({
           </Button>
         </div>
         <div className='flex flex-col gap-2 mt-2'>
-          {attachments?.map((item) => (
-            <div className='flex justify-between items-center'>
+          {attachments?.map((item, index) => (
+            <div
+              className='flex justify-between items-center'
+              key={`attachment-${index}`}
+            >
               <div className='flex gap-2.5 items-center'>
                 <div className='h-10 w-10 rounded-lg bg-dark/10 text-dark flex items-center justify-center'>
                   <FileSpreadsheet size={24} />
