@@ -1,8 +1,23 @@
-import { Form, FormField, FormLabel } from '@/components/ui/form'
-import { useInventoryData } from '../../_hook/use-inventory-data'
-import { FilterTable } from '@/components/data-table/component'
+import useUrlState from '@ahooksjs/use-url-state'
+import { useState } from 'react'
+
+import { PATH } from '@/utils/constant/_paths'
+
+import {
+  useCreateTransaction,
+  useTransactionPagination,
+} from '@/hooks/api/use-transaction'
+
+import { DashboardLayout } from '../../_component/layout'
+import { useTitle } from '../../_component/header'
+import DetailTransaction from './_component/detail-transaction'
+import DeleteTransaction from './_component/delete-transaction'
+import TitlePage from '../../_component/title-page'
+
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import Select from '@/components/common/select/select-v1'
+import { Form, FormField, FormLabel } from '@/components/ui/form'
+import { FilterTable } from '@/components/data-table/component'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { CreateTransaction } from '@/utils/types/form'
 import { CommandItem } from '@/components/ui/command'
@@ -10,18 +25,32 @@ import { DataTable } from '@/components/data-table'
 import { useApiData } from '@/hooks/use-api-data'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { column } from './column'
-import { useState } from 'react'
-import {
-  useCreateTransaction,
-  useTransactionPagination,
-} from '@/hooks/api/use-transaction'
-import { Plus, X } from 'lucide-react'
-import useUrlState from '@ahooksjs/use-url-state'
+
+import { useInventoryData } from '../_hook/use-inventory-data'
+import { column } from './_component/column'
+
+import { Plus, X, PackageMinus } from 'lucide-react'
 
 const HIDE = ['supplier', 'project']
 
-export default function StockOut() {
+const links = [
+  {
+    name: 'Inventory',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Kelola',
+    path: PATH.PROJECT_INDEX,
+  },
+  {
+    name: 'Barang Keluar',
+    path: PATH.INVENTORY_STOCK_OUT,
+  },
+]
+
+export default function StockOutPage() {
+  useTitle(links)
+
   const [url] = useUrlState({ page: '' })
 
   const { data: transactions, isLoading } = useApiData(
@@ -62,18 +91,26 @@ export default function StockOut() {
   }
 
   return (
-    <div className='p-4'>
-      <div className='rounded-lg border overflow-hidden'>
-        <FilterTable onAdd={() => setOpen(!open)} />
+    <>
+      <DashboardLayout>
+        <TitlePage className='mb-2'>
+          <div className='flex gap-2 items-center'>
+            <PackageMinus className='text-[#989CA8]' />
+            <p className='text-dark font-medium'>Barang Masuk</p>
+          </div>
+        </TitlePage>
+        <FilterTable
+          onAdd={() => setOpen(!open)}
+          className='border-t border-line'
+        />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}
+          totalPages={transactions?.total_pages}
           data={transactions?.data || []}
           isLoading={isLoading}
-          totalPages={transactions?.total_pages}
-          styleFooter='border-b-0 border-t'
+          withPagination
         />
-      </div>
-
+      </DashboardLayout>
       <Modal title='Barang keluar' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -97,8 +134,8 @@ export default function StockOut() {
                     )}
                   </div>
                   <div className='p-4 bg-[#F8FAFC] rounded-b-lg'>
-                    <div className='grid grid-cols-3 gap-4'>
-                      <div className='flex flex-col gap-3'>
+                    <div className='grid grid-cols-5 gap-4'>
+                      <div className='flex flex-col gap-3 col-span-2'>
                         <FormLabel>Barang</FormLabel>
                         <Select
                           name={`items.${index}.goodsId`}
@@ -158,23 +195,25 @@ export default function StockOut() {
                         )}
                       />
 
-                      <FormField
-                        label='Harga jual'
-                        control={form.control}
-                        name={`items.${index}.price`}
-                        render={({ field }) => (
-                          <Input
-                            {...field}
-                            value={field.value ?? ''}
-                            onChange={(e) => {
-                              const value = e.target.value
-                              field.onChange(
-                                value === '' ? null : Number(value)
-                              )
-                            }}
-                          />
-                        )}
-                      />
+                      <div className='col-span-2'>
+                        <FormField
+                          label='Harga jual'
+                          control={form.control}
+                          name={`items.${index}.price`}
+                          render={({ field }) => (
+                            <Input
+                              {...field}
+                              value={field.value ?? ''}
+                              onChange={(e) => {
+                                const value = e.target.value
+                                field.onChange(
+                                  value === '' ? null : Number(value)
+                                )
+                              }}
+                            />
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
                   {index === fields.length - 1 && (
@@ -221,6 +260,8 @@ export default function StockOut() {
           </form>
         </Form>
       </Modal>
-    </div>
+      <DeleteTransaction />
+      <DetailTransaction />
+    </>
   )
 }

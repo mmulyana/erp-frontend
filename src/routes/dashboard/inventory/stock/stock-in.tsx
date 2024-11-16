@@ -1,30 +1,57 @@
-import { Form, FormField, FormLabel } from '@/components/ui/form'
-import { useInventoryData } from '../../_hook/use-inventory-data'
-import { FilterTable } from '@/components/data-table/component'
-import Modal, { ModalContainer } from '@/components/modal-v2'
-import Select from '@/components/common/select/select-v1'
-import { useForm, useFieldArray } from 'react-hook-form'
-import { CommandItem } from '@/components/ui/command'
-import { DataTable } from '@/components/data-table'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { useFieldArray, useForm } from 'react-hook-form'
+import useUrlState from '@ahooksjs/use-url-state'
+import { PATH } from '@/utils/constant/_paths'
 import { useState } from 'react'
-import { column } from './column'
+
+import { useApiData } from '@/hooks/use-api-data'
+import { useGoods } from '@/hooks/api/use-goods'
 import {
   useCreateTransaction,
   useTransactionPagination,
 } from '@/hooks/api/use-transaction'
-import { Plus, X } from 'lucide-react'
 import { CreateTransaction } from '@/utils/types/form'
-import { useApiData } from '@/hooks/use-api-data'
-import useUrlState from '@ahooksjs/use-url-state'
-import { useGoods } from '@/hooks/api/use-goods'
-import SelectV1 from '@/components/common/select/select-v1'
 import { BASE_URL } from '@/utils/constant/_urls'
+
+import DetailTransaction from './_component/detail-transaction'
+import DeleteTransaction from './_component/delete-transaction'
+import TitlePage from '../../_component/title-page'
+import { useInventoryData } from '../_hook/use-inventory-data'
+import { DashboardLayout } from '../../_component/layout'
+import { useTitle } from '../../_component/header'
+
+import { Form, FormField, FormLabel } from '@/components/ui/form'
+import { FilterTable } from '@/components/data-table/component'
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import SelectV1 from '@/components/common/select/select-v1'
+import { CommandItem } from '@/components/ui/command'
+import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { column } from './_component/column'
+import { Plus, X } from 'lucide-react'
+
+import { PackagePlus } from 'lucide-react'
+
+const links = [
+  {
+    name: 'Inventory',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Kelola',
+    path: PATH.PROJECT_INDEX,
+  },
+  {
+    name: 'Barang Masuk',
+    path: PATH.INVENTORY_STOCK_IN,
+  },
+]
 
 const HIDE = ['project']
 
-export default function StockIn() {
+export default function StockInPage() {
+  useTitle(links)
+
   const [url] = useUrlState({ page: '' })
 
   const { data, isLoading } = useApiData(
@@ -42,7 +69,6 @@ export default function StockIn() {
       name: search,
     })
   )
-  console.log(search)
 
   const { mutate } = useCreateTransaction()
   const [open, setOpen] = useState(false)
@@ -73,18 +99,28 @@ export default function StockIn() {
   }
 
   return (
-    <div className='p-4'>
-      <div className='rounded-lg border overflow-hidden'>
-        <FilterTable onAdd={() => setOpen(!open)} />
+    <>
+      <DashboardLayout>
+        <TitlePage>
+          <div className='flex gap-2 items-center'>
+            <PackagePlus className='text-[#989CA8]' />
+            <p className='text-dark font-medium'>Barang Masuk</p>
+          </div>
+        </TitlePage>
+        <FilterTable
+          onAdd={() => setOpen(!open)}
+          className='border-t border-line'
+        />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}
+          totalPages={data?.total_pages}
           data={data?.data || []}
           isLoading={isLoading}
-          totalPages={data?.total_pages}
-          styleFooter='border-b-0 border-t'
+          withPagination
         />
-      </div>
-
+      </DashboardLayout>
+      <DeleteTransaction />
+      <DetailTransaction />
       <Modal title='Barang masuk' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -108,7 +144,7 @@ export default function StockIn() {
                     )}
                   </div>
                   <div className='p-4 bg-[#F8FAFC] rounded-b-lg'>
-                    <div className='grid grid-cols-4 gap-4'>
+                    <div className='grid grid-cols-5 gap-4'>
                       <div className='flex flex-col gap-3 col-span-2'>
                         <FormLabel>Barang</FormLabel>
                         <SelectV1
@@ -117,15 +153,6 @@ export default function StockIn() {
                           className='w-full col-span-2'
                           onSearch={setSearch}
                           shouldFilter={false}
-                          // prefix={<User size={14} />}
-                          // customPlaceholder={
-                          //   <div className='inline-flex gap-1 items-center border border-dashed border-dark/40 hover:bg-line/50 px-3 py-1.5 rounded-full'>
-                          //     <UserIcon className='w-4 h-4' />
-                          //     <span className='text-sm text-dark/50'>
-                          //       Pilih PJ
-                          //     </span>
-                          //   </div>
-                          // }
                           preview={(val) => (
                             <span className='text-sm text-dark'>
                               {goods?.find((s: any) => s.id === val)?.name}
@@ -182,26 +209,28 @@ export default function StockIn() {
                         )}
                       />
 
-                      <FormField
-                        label='Harga beli'
-                        control={form.control}
-                        name={`items.${index}.price`}
-                        render={({ field }) => (
-                          <div className='relative'>
-                            <Input
-                              type='number'
-                              {...field}
-                              value={field.value ?? ''}
-                              onChange={(e) => {
-                                const value = e.target.value
-                                field.onChange(
-                                  value === '' ? null : Number(value)
-                                )
-                              }}
-                            />
-                          </div>
-                        )}
-                      />
+                      <div className='col-span-2'>
+                        <FormField
+                          label='Harga beli'
+                          control={form.control}
+                          name={`items.${index}.price`}
+                          render={({ field }) => (
+                            <div className='relative'>
+                              <Input
+                                type='number'
+                                {...field}
+                                value={field.value ?? ''}
+                                onChange={(e) => {
+                                  const value = e.target.value
+                                  field.onChange(
+                                    value === '' ? null : Number(value)
+                                  )
+                                }}
+                              />
+                            </div>
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
                   {index === fields.length - 1 && (
@@ -235,7 +264,7 @@ export default function StockIn() {
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-center pt-4 mt-4 border-t border-line border-dashed'>
                 <div className='flex flex-col gap-3'>
                   <FormLabel>Supplier</FormLabel>
-                  <Select
+                  <SelectV1
                     name='supplierId'
                     placeholder='Pilih supplier'
                     preview={(val) => (
@@ -258,7 +287,7 @@ export default function StockIn() {
                         <span>{item.name}</span>
                       </CommandItem>
                     ))}
-                  </Select>
+                  </SelectV1>
                 </div>
 
                 <FormField
@@ -274,6 +303,6 @@ export default function StockIn() {
           </form>
         </Form>
       </Modal>
-    </div>
+    </>
   )
 }

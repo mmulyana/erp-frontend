@@ -86,7 +86,7 @@ export default function Header() {
       <div className='flex gap-2 items-center'>
         <Button
           variant='secondary'
-          className='w-10 h-10 p-0 rounded-full bg-[#EFF0F2]'
+          className='w-10 h-10 md:w-8 md:h-8 p-0 rounded-full bg-[#EFF0F2]'
           onClick={() => {
             setSettingConfig({ open: true })
           }}
@@ -95,7 +95,7 @@ export default function Header() {
         </Button>
         <Button
           variant='secondary'
-          className='w-10 h-10 rounded-full bg-[#FFF] border-[1.5px] border-[#2A9D90] p-0.5 relative'
+          className='w-10 h-10 md:w-8 md:h-8 rounded-full bg-[#FFF] border-[1.5px] border-[#2A9D90] p-0.5 relative'
         >
           {user?.photo ? (
             <img

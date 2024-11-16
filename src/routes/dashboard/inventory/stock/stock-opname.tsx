@@ -1,5 +1,22 @@
+import useUrlState from '@ahooksjs/use-url-state'
+import { useState } from 'react'
+
+import {
+  useCreateTransaction,
+  useTransactionPagination,
+} from '@/hooks/api/use-transaction'
+import { PATH } from '@/utils/constant/_paths'
+
+import DetailTransaction from './_component/detail-transaction'
+import DeleteTransaction from './_component/delete-transaction'
+import TitlePage from '../../_component/title-page'
+
+import { useInventoryData } from '../_hook/use-inventory-data'
+import { DashboardLayout } from '../../_component/layout'
+import { useTitle } from '../../_component/header'
+import { column } from './_component/column'
+
 import { Form, FormField, FormLabel } from '@/components/ui/form'
-import { useInventoryData } from '../../_hook/use-inventory-data'
 import { FilterTable } from '@/components/data-table/component'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import Select from '@/components/common/select/select-v1'
@@ -10,18 +27,29 @@ import { DataTable } from '@/components/data-table'
 import { useApiData } from '@/hooks/use-api-data'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, X } from 'lucide-react'
-import { column } from './column'
-import { useState } from 'react'
-import {
-  useCreateTransaction,
-  useTransactionPagination,
-} from '@/hooks/api/use-transaction'
-import useUrlState from '@ahooksjs/use-url-state'
+
+import { Plus, X, ClipboardList } from 'lucide-react'
 
 const HIDE = ['supplier', 'price', 'project']
 
-export default function StockOpname() {
+const links = [
+  {
+    name: 'Inventory',
+    path: PATH.DASHBOARD_OVERVIEW,
+  },
+  {
+    name: 'Kelola',
+    path: PATH.PROJECT_INDEX,
+  },
+  {
+    name: 'Opname',
+    path: PATH.INVENTORY_STOCK_OPNAME,
+  },
+]
+
+export default function StockOpnamePage() {
+  useTitle(links)
+
   const [url] = useUrlState({ page: '' })
 
   const { data: transactions, isLoading } = useApiData(
@@ -62,18 +90,26 @@ export default function StockOpname() {
   }
 
   return (
-    <div className='p-4'>
-      <div className='rounded-lg border overflow-hidden'>
-        <FilterTable onAdd={() => setOpen(!open)} />
+    <>
+      <DashboardLayout>
+        <TitlePage className='mb-2'>
+          <div className='flex gap-2 items-center'>
+            <ClipboardList className='text-[#989CA8]' />
+            <p className='text-dark font-medium'>Opname</p>
+          </div>
+        </TitlePage>
+        <FilterTable
+          onAdd={() => setOpen(!open)}
+          className='border-t border-line'
+        />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}
+          totalPages={transactions?.total_pages}
           data={transactions?.data || []}
           isLoading={isLoading}
-          totalPages={transactions?.total_pages}
-          styleFooter='border-b-0 border-t'
+          withPagination
         />
-      </div>
-
+      </DashboardLayout>
       <Modal title='Opname' open={open} setOpen={setOpen}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -203,6 +239,8 @@ export default function StockOpname() {
           </form>
         </Form>
       </Modal>
-    </div>
+      <DeleteTransaction />
+      <DetailTransaction />
+    </>
   )
 }

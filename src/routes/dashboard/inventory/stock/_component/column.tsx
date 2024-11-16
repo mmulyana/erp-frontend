@@ -15,10 +15,10 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import { dialogDetailTransaction } from './detail-transaction'
-import { dialogDeleteTransaction } from '../../stock'
 import { Button } from '@/components/ui/button'
 import { Undo2 } from 'lucide-react'
 import { useReturnedTransaction } from '@/hooks/api/use-transaction'
+import { dialogDeleteTransaction } from './delete-transaction'
 
 export const column: ColumnDef<Transaction>[] = [
   {

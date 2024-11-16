@@ -19,7 +19,10 @@ const ProjectClient = lazy(() => import('./project/client.tsx'))
 // INVENTORY
 const Inventory = lazy(() => import('./inventory/index.tsx'))
 const InventorySupplier = lazy(() => import('./inventory/supplier.tsx'))
-const InventoryStock = lazy(() => import('./inventory/stock.tsx'))
+const InventoryStockIn = lazy(() => import('./inventory/stock/stock-in.tsx'))
+const InventoryStockOut = lazy(() => import('./inventory/stock/stock-out.tsx'))
+const InventoryStockBorrow = lazy(() => import('./inventory/stock/stock-borrowed.tsx'))
+const InventoryStockOpname = lazy(() => import('./inventory/stock/stock-opname.tsx'))
 
 // ADMIN
 const User = lazy(() => import('./admin/index.tsx'))
@@ -67,10 +70,6 @@ export const dashboardRoutes = [
     element: <InventorySupplier />,
   },
   {
-    path: PATH.INVENTORY_STOCK,
-    element: <InventoryStock />,
-  },
-  {
     path: PATH.EMPLOYEE_RECAP,
     element: <Report />,
   },
@@ -85,5 +84,21 @@ export const dashboardRoutes = [
   {
     path: PATH.ADMIN_ROLE,
     element: <Role />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK_IN,
+    element: <InventoryStockIn />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK_OUT,
+    element: <InventoryStockOut />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK_OPNAME,
+    element: <InventoryStockOpname />,
+  },
+  {
+    path: PATH.INVENTORY_STOCK_BORROWED,
+    element: <InventoryStockBorrow />,
   },
 ]
