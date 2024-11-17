@@ -128,7 +128,7 @@ export default function Login() {
             />
             
             <Button type='submit' variant='default' className='mt-4'>
-              Sign In
+              Masuk
             </Button>
           </form>
         </Form>
