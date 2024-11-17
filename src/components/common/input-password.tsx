@@ -4,17 +4,20 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FormLabel } from '../ui/form'
+import { cn } from '@/utils/cn'
 
 interface PasswordInputProps {
   name: string
   label: string
   placeholder?: string
+  className?: string
 }
 
 export default function InputPassword({
   name,
   label,
   placeholder = 'Masukkan password',
+  className,
 }: PasswordInputProps) {
   const {
     register,
@@ -26,10 +29,7 @@ export default function InputPassword({
 
   return (
     <div className='space-y-2'>
-      <FormLabel
-        htmlFor={name}
-        className='block text-sm font-medium text-gray-700'
-      >
+      <FormLabel htmlFor={name} className='block text-sm text-dark/80'>
         {label}
       </FormLabel>
       <div className='relative'>
@@ -44,7 +44,7 @@ export default function InputPassword({
               message: 'Password minimal 8 karakter',
             },
           })}
-          className='pr-10'
+          className={cn('pr-10', className)}
         />
         <Button
           type='button'

@@ -7,7 +7,7 @@ export function Layout({ children }: React.PropsWithChildren) {
   return (
     <>
       <div className='absolute w-[480px] max-w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4'>
-        <div className='p-4 border border-gray-200 rounded-2xl bg-[#F7F7F8] shadow-xl shadow-gray-600/10'>
+        <div className='p-4 py-6 border border-gray-300/90 rounded-2xl bg-gray-100 backdrop-blur-md shadow-2xl shadow-gray-800/10'>
           {children}
         </div>
       </div>

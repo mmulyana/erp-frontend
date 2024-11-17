@@ -185,7 +185,7 @@ export default function Setting() {
       >
         <div
           className={cn(
-            'bg-[#F6F6F6] border-r border-[#E8EBF0] p-4 md:p-2 flex flex-col gap-2 overflow-y-auto pb-8 md:pb-0',
+            'bg-[#F6F6F6] border-r border-[#E8EBF0] p-4 md:p-2 flex flex-col gap-2 overflow-y-auto',
             isMobile &&
               'absolute inset-0 z-10 transition-transform duration-300',
             isMobile && !showMenu && 'translate-x-[-100%]',

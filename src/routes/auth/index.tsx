@@ -1,25 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
 import { z } from 'zod'
 
 import { isValidEmail } from '@/utils/is-email-valid'
 import { useAuth } from '@/hooks/api/use-auth'
 
+import InputPassword from '@/components/common/input-password'
+import { Form, FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 
 import { Layout, Protected } from './component'
-import { Eye, EyeOff } from 'lucide-react'
-import Logo from '/public/erp-logo.svg'
+
+import bg from '/public/images/dave-hoefler-vHgAy9pOs9I-unsplash.jpg'
+import Logo from '/public/logo2.svg'
+import { LogIn } from 'lucide-react'
 
 type Payload = {
   name?: string
@@ -36,7 +31,6 @@ export const LoginSchema = z.object({
 
 export default function Login() {
   const { logIn } = useAuth()
-  const [isPassword, setIsPassword] = useState(true)
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -63,16 +57,14 @@ export default function Login() {
   return (
     <Protected>
       <Layout>
-        <div className='flex flex-col md:flex-row gap-4'>
-          <div className='w-14 h-14 rounded-full bg-brand-blue flex items-center justify-center'>
-            <img src={Logo} alt='logo erp' />
-          </div>
+        <div className='flex flex-col gap-4'>
+          <img src={Logo} alt='logo erp' className='w-12 h-12' />
           <div className='w-full md:w-[calc(100%-72px)] flex flex-col justify-center'>
-            <p className='text-[#2E2C2C] font-medium'>
-              Masuk
+            <p className='text-dark text-xl font-medium'>
+              Selamat Datang Kembali
             </p>
-            <p className='text-[#2E2C2C]/60 text-sm'>
-              Enter your credential to access application
+            <p className='text-dark/50 text-sm'>
+              Login dengan akun Anda untuk melanjutkan
             </p>
           </div>
         </div>
@@ -84,55 +76,34 @@ export default function Login() {
             <FormField
               control={form.control}
               name='name'
+              label='Nama'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nama atau Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder='Name' {...field} autoComplete='none' />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <Input
+                  placeholder='Name'
+                  {...field}
+                  autoComplete='none'
+                  className='bg-white/50'
+                />
               )}
             />
-            <FormField
-              control={form.control}
+            <InputPassword
+              label='Password'
               name='password'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <div className='relative'>
-                    <FormControl>
-                      <Input
-                        placeholder='password'
-                        {...field}
-                        autoComplete='none'
-                        type={isPassword ? 'password' : 'text'}
-                      />
-                    </FormControl>
-                    <Button
-                      type='button'
-                      variant='ghost'
-                      className='h-7 w-7 p-0 rounded-xl absolute hover:bg-transparent -translate-y-1/2 top-1/2 right-2'
-                      onClick={() => setIsPassword(!isPassword)}
-                    >
-                      {!isPassword ? (
-                        <EyeOff className='w-5 h-5 text-gray-500' />
-                      ) : (
-                        <Eye className='w-5 h-5 text-gray-500' />
-                      )}
-                    </Button>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
+              className='bg-white/50'
             />
-            
-            <Button type='submit' variant='default' className='mt-4'>
+
+            <Button
+              type='submit'
+              variant='default'
+              className='mt-4 h-fit py-2.5 gap-2'
+            >
               Masuk
+              <LogIn size={20} />
             </Button>
           </form>
         </Form>
       </Layout>
+      <img src={bg} className='fixed -z-10 w-screen h-[100vh] object-cover' />
     </Protected>
   )
 }
