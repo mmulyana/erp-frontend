@@ -66,22 +66,32 @@ export function Overtime() {
       id: 'total_hour',
       header: () => <p className='text-center'>Jumlah jam</p>,
       cell: ({ cell }) => (
-        <p className='text-center'>{cell.row.original.total_hour}</p>
+        <div className='w-[72px]'>
+          <p className='text-center'>{cell.row.original.total_hour}</p>
+        </div>
       ),
     },
     {
       id: 'date',
       header: 'Tanggal',
       cell: ({ cell }) => (
-        <p>
-          {format(cell.row.original.date, 'EEEE, dd MMM yyyy', { locale: id })}
-        </p>
+        <div className='w-[88px]'>
+          <p>
+            {format(cell.row.original.date, 'dd MMM yyyy', {
+              locale: id,
+            })}
+          </p>
+        </div>
       ),
     },
     {
       id: 'description',
       header: 'Keterangan',
-      cell: ({ cell }) => <p>{cell.row.original.description}</p>,
+      cell: ({ cell }) => (
+        <div className='w-[200px]'>
+          <p>{cell.row.original.description}</p>
+        </div>
+      ),
     },
     {
       id: 'action',
@@ -110,11 +120,11 @@ export function Overtime() {
     open: boolean
     id: number | null
   } | null>(null)
-  
+
   return (
     <>
-      <div className='flex justify-between items-center p-4 bg-[#F9FAFB]'>
-        <div className='flex gap-4'>
+      <div className='flex justify-between items-start p-4 bg-[#F9FAFB] gap-2'>
+        <div className='flex gap-4 flex-wrap'>
           <Search />
           <Popover>
             <PopoverTrigger asChild>
@@ -160,7 +170,7 @@ export function Overtime() {
           </Popover>
           {(url.date !== '' || url.name !== '') && (
             <Button
-              variant='ghost'
+              variant='outline'
               className='font-normal flex items-center gap-1 relative pl-3 pr-6'
               onClick={() => {
                 setUrl({ date: undefined, name: undefined })
@@ -175,7 +185,7 @@ export function Overtime() {
           )}
         </div>
         <Button onClick={() => setDialog({ open: true, id: null })}>
-          Tambah Data
+          Tambah
         </Button>
       </div>
       <DataTable

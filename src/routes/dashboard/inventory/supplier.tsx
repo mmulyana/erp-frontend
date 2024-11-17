@@ -161,7 +161,7 @@ export default function Supplier() {
   }
 
   return (
-    <DashboardLayout>
+    <DashboardLayout className='overflow-hidden'>
       <HeadTable>
         <div className='flex gap-4 items-center'>
           <BoxIcon className='text-[#989CA8]' />
@@ -170,11 +170,7 @@ export default function Supplier() {
         <Button onClick={() => handleDialog('add', true)}>Tambah</Button>
       </HeadTable>
       <FilterTable />
-      <DataTable
-        columns={columns}
-        data={data || []}
-        isLoading={isLoading}
-      />
+      <DataTable columns={columns} data={data || []} isLoading={isLoading} />
       <DialogAddSupplier
         open={dialog.add}
         setOpen={(val) => handleDialog('add', val)}

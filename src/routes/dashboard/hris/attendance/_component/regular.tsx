@@ -55,7 +55,7 @@ export function Regular() {
   return (
     <div className='bg-[#F9FAFB] p-4 min-h-[calc(100vh-141px)] pb-14'>
       <div className='flex justify-between items-center mb-6'>
-        <div className='flex gap-4'>
+        <div className='flex gap-4 flex-wrap'>
           <Search />
           <Popover>
             <PopoverTrigger asChild>
@@ -101,7 +101,7 @@ export function Regular() {
           </Popover>
           {(url.date !== '' || url.name !== '') && (
             <Button
-              variant='ghost'
+              variant='outline'
               className='font-normal flex items-center gap-1 relative pl-3 pr-6'
               onClick={() => {
                 setUrl({ date: undefined, name: undefined })

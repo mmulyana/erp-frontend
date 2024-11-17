@@ -1,23 +1,25 @@
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { Form, FormField, FormLabel } from '@/components/ui/form'
-import Modal, { ModalContainer } from '@/components/modal-v2'
-import SelectV1 from '@/components/common/select/select-v1'
-import { CommandItem } from '@/components/ui/command'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { delay } from '@/utils/delay'
-import { cn } from '@/utils/cn'
+import { useEffect } from 'react'
 import { z } from 'zod'
+
+import { BASE_URL } from '@/utils/constant/_urls'
+import { delay } from '@/utils/delay'
+
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useApiData } from '@/hooks/use-api-data'
 import {
   useClientCompany,
   useCreateClient,
   useDetailClient,
   useUpdateClient,
 } from '@/hooks/api/use-client'
-import { useApiData } from '@/hooks/use-api-data'
+
+import { Form, FormField, FormLabel } from '@/components/ui/form'
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import SelectV1 from '@/components/common/select/select-v1'
+import { CommandItem } from '@/components/ui/command'
+import { Input } from '@/components/ui/input'
 
 const clientSchema = z.object({
   name: z.string(),
@@ -27,6 +29,14 @@ const clientSchema = z.object({
   companyId: z.string().optional().nullable(),
 })
 type Client = z.infer<typeof clientSchema>
+
+const defaultValues = {
+  name: '',
+  position: '',
+  phone: '',
+  email: '',
+  companyId: '',
+}
 
 type ModalProps = {
   open: boolean
@@ -41,25 +51,26 @@ export default function DialogAddClient({
   useFixPointerEvent(open)
 
   // HANDLE GET DETAIL FOR EDIT
-  const qClient = useDetailClient({
-    id,
-    enabled: open && !!id,
-  })
+  const { data, isLoading } = useApiData(
+    useDetailClient({
+      id,
+      enabled: open && !!id,
+    })
+  )
 
   useEffect(() => {
-    if (qClient?.data?.data.data && !qClient.isLoading && open) {
-      const { name, position, phone, email, companyId } =
-        qClient?.data.data?.data
+    if (data && !isLoading && open) {
+      const { name, position, phone, email, companyId } = data
 
       form.reset({
         companyId: companyId ? String(companyId) : null,
-        email,
-        name,
-        phone,
-        position,
+        email: email ?? '',
+        name: name ?? '',
+        phone: phone ?? '',
+        position: position ?? '',
       })
     }
-  }, [qClient.isLoading, qClient.data, open])
+  }, [isLoading, data, open])
 
   // START OF HANDLE SELECT COMPANY
   const { data: companies } = useApiData(useClientCompany())
@@ -71,13 +82,7 @@ export default function DialogAddClient({
 
   const form = useForm<Client>({
     resolver: zodResolver(clientSchema),
-    defaultValues: {
-      name: '',
-      position: '',
-      phone: '',
-      email: '',
-      companyId: '',
-    },
+    defaultValues,
   })
 
   const onSubmit = async (data: Client) => {
@@ -101,7 +106,8 @@ export default function DialogAddClient({
   }
 
   useEffect(() => {
-    if (!open) form.reset()
+    if (!open)
+      form.reset(defaultValues)
   }, [open])
   // HANDLE FORM
 
@@ -147,24 +153,24 @@ export default function DialogAddClient({
                   placeholder='Pilih perusahaan'
                   side='bottom'
                   preview={(val) => (
-                    <Button
-                      size='sm'
-                      variant='outline'
-                      className={cn('w-full justify-start')}
-                      type='button'
-                    >
-                      {companies?.find((s) => s.id === Number(val))?.name}
-                    </Button>
+                    <p>{companies?.find((s) => s.id === Number(val))?.name}</p>
                   )}
                 >
                   {companies?.map((item) => (
                     <CommandItem
                       key={item.id}
                       value={item.name.toString()}
-                      onSelect={(value) => {
-                        form.setValue('companyId', value)
+                      onSelect={() => {
+                        form.setValue('companyId', String(item.id))
                       }}
+                      className='flex gap-2 items-center'
                     >
+                      {item.logo && (
+                        <img
+                          className='h-8 w-8 rounded'
+                          src={BASE_URL + '/img/' + item.logo}
+                        />
+                      )}
                       <span>{item.name}</span>
                     </CommandItem>
                   ))}

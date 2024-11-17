@@ -30,7 +30,7 @@ export default function CardProject({
 
   if (type === 'long') {
     return (
-      <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white flex-row gap-4'>
+      <div className='flex justify-between items-center px-5 py-4 rounded-2xl bg-white flex-row gap-4 relative'>
         <div className='flex flex-col gap-2'>
           <div className='flex gap-2 md:gap-4 items-start md:items-center flex-wrap flex-col md:flex-row'>
             <Chips
@@ -102,10 +102,10 @@ export default function CardProject({
             <CircularProgress progress={props.progress || 0} />
           </div>
         </div>
-        
+
         <Button
           variant='outline'
-          className='p-2 rounded-md text-dark/50 gap-1 pr-1.5 ml-auto md:ml-0'
+          className='py-1 h-fit px-2 rounded-full md:rounded-md text-dark/50 gap-1 pr-1.5 ml-auto md:ml-0 absolute md:relative top-4 right-4 shadow-md shadow-gray-200'
           onClick={() =>
             props.id && setSelectedProject({ id: props.id, open: true })
           }
@@ -113,7 +113,7 @@ export default function CardProject({
           Lihat
           <ChevronRight
             size={16}
-            className='text-dark pt-0.5'
+            className='text-dark/60'
             strokeWidth={2.5}
           />
         </Button>
@@ -146,7 +146,11 @@ export default function CardProject({
       >
         {!!props?.labels?.length &&
           props.labels.map((item, index) => (
-            <Label key={index} color={item.label.color} name={item.label.name} />
+            <Label
+              key={index}
+              color={item.label.color}
+              name={item.label.name}
+            />
           ))}
       </div>
 

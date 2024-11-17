@@ -81,7 +81,7 @@ export default function AddProject({ open, setOpen, withSocket }: Props) {
 
   const submit = async (data: any) => {
     if (!!withSocket) {
-      return createBySocket({
+      createBySocket({
         ...data,
         labels: data.labels.map((item: any) => Number(item)),
         employees: data.employees.map((item: any) => Number(item)),
@@ -95,6 +95,7 @@ export default function AddProject({ open, setOpen, withSocket }: Props) {
           socket.off('success_create_project')
           socket.off('error_create_project')
         })
+      return
     }
     mutate(
       {
@@ -245,7 +246,10 @@ export default function AddProject({ open, setOpen, withSocket }: Props) {
                     <MultiSelectorContent>
                       <MultiSelectorList>
                         {labels?.map((item) => (
-                          <MultiSelectorItem value={String(item.id)}>
+                          <MultiSelectorItem
+                            value={String(item.id)}
+                            key={item.id}
+                          >
                             <Label color={item.color} name={item.name} />
                           </MultiSelectorItem>
                         ))}
@@ -274,7 +278,10 @@ export default function AddProject({ open, setOpen, withSocket }: Props) {
                         {employees
                           ?.filter((item) => item.id !== Number(leadId))
                           .map((item) => (
-                            <MultiSelectorItem value={String(item.id)}>
+                            <MultiSelectorItem
+                              value={String(item.id)}
+                              key={item.id}
+                            >
                               <span className='px-2 py-0.5 flex gap-1 items-center'>
                                 <div className='w-5 h-5 rounded-full bg-blue-900 text-white text-sm flex items-center justify-center pb-0.5 uppercase'>
                                   {item.fullname.at(0)}

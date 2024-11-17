@@ -6,6 +6,7 @@ import TitlePage from '../../_component/title-page'
 import { FilePenIcon } from 'lucide-react'
 import { Regular } from './_component/regular'
 import { Overtime } from './_component/overtime'
+import DateNavigation from './_component/date-navigation'
 
 const links = [
   {
@@ -22,12 +23,13 @@ export default function Page() {
   useTitle(links)
 
   return (
-    <DashboardLayout>
-      <TitlePage className='mb-2'>
+    <DashboardLayout className='overflow-hidden'>
+      <TitlePage className='mb-2 flex justify-between items-center'>
         <div className='flex gap-4 items-center'>
           <FilePenIcon className='text-[#989CA8]' />
           <p className='text-dark font-medium'>Absensi</p>
         </div>
+        <DateNavigation />
       </TitlePage>
       <Tabs>
         <Tab label='Reguler'>

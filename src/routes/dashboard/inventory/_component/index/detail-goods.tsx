@@ -83,7 +83,7 @@ export default function DetailGoods() {
 
   return (
     <Sheet open={selected?.open} onOpenChange={() => onClose()} modal>
-      <SheetContent className='max-w-[512px] p-0 bg-[#FBFBFB]'>
+      <SheetContent className='w-full p-0 bg-[#FBFBFB]'>
         <SheetTitle>
           <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4 bg-white'>
             <p className='text-sm text-dark font-normal'>Detail Barang</p>

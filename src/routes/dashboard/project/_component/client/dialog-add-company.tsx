@@ -14,6 +14,7 @@ import {
   useDetailClientCompany,
   useUpdateClientCompany,
 } from '@/hooks/api/use-client'
+import { useApiData } from '@/hooks/use-api-data'
 
 const companySchema = z.object({
   name: z.string(),
@@ -36,13 +37,16 @@ export default function DialogAddCompany({
   const [preview, setPreview] = useState<string | null>(null)
 
   // HANDLE DETAIL COMPANY FOR EDIT
-  const qCompany = useDetailClientCompany({
-    enabled: open && !!id,
-    id,
-  })
+  const { data, isLoading } = useApiData(
+    useDetailClientCompany({
+      enabled: open && !!id,
+      id,
+    })
+  )
+
   useEffect(() => {
-    if (qCompany?.data?.data.data && !qCompany.isLoading && open) {
-      const { logo, name, address, email, phone } = qCompany?.data.data?.data
+    if (data && !isLoading && open) {
+      const { logo, name, address, email, phone } = data
 
       form.reset({
         address: address ?? '',
@@ -55,7 +59,7 @@ export default function DialogAddCompany({
         setPreview(BASE_URL + '/img/' + logo)
       }
     }
-  }, [qCompany.isLoading, qCompany.data, open])
+  }, [isLoading, data, open])
 
   // HANDLE FORM
   const { mutate: add } = useCreateClientCompany()

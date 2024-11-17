@@ -83,12 +83,20 @@ export default function Report() {
     {
       id: 'start_date',
       header: 'tanggal mulai',
-      cell: ({ row }) => <p>{format(row.original.start_date, 'd MMM yyyy')}</p>,
+      cell: ({ row }) => (
+        <div className='w-[88px]'>
+          <p>{format(row.original.start_date, 'd MMM yyyy')}</p>
+        </div>
+      ),
     },
     {
       id: 'end_date',
       header: 'tanggal akhir',
-      cell: ({ row }) => <p>{format(row.original.end_date, 'd MMM yyyy')}</p>,
+      cell: ({ row }) => (
+        <div className='w-[88px]'>
+          <p>{format(row.original.end_date, 'd MMM yyyy')}</p>
+        </div>
+      ),
     },
     {
       id: 'action',

@@ -41,11 +41,11 @@ export default function TableClient() {
       id: 'company',
       header: 'Perusahaan',
       cell: ({ row }) => (
-        <div className='flex gap-1 items-center'>
+        <div className='flex gap-2 items-center min-w-[140px]'>
           {row.original.company && (
             <>
               <img
-                className='w-6 h-6 rounded-full object-cover object-center shadow'
+                className='w-8 h-8 rounded object-cover object-center shadow'
                 src={BASE_URL + '/img/' + row.original?.company.logo}
               />
               <p className='text-dark/70'>{row.original.company.name}</p>

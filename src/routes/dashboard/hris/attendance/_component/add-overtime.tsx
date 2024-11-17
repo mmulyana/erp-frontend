@@ -128,7 +128,6 @@ export function AddOvertime({ open, setOpen, id }: Props) {
     }
   }, [open, detail, isLoading, id])
 
-  console.log('tes data ada', form.getValues('employeeId'))
   // HANDLE SELECT
   const [name, setName] = useState('')
   const { data: employees } = useApiData(
@@ -215,6 +214,7 @@ export function AddOvertime({ open, setOpen, id }: Props) {
             <FormField
               control={form.control}
               name='date'
+              label='Tanggal'
               render={({ field }) => (
                 <Input {...field} className='block' type='date' />
               )}

@@ -34,20 +34,21 @@ export default function TableCompany() {
       accessorKey: 'name',
       header: 'Nama',
       cell: ({ row }) => (
-        <div className='flex gap-1 items-center'>
+        <div className='flex gap-2 items-center py-2 w-[180px]'>
           {row.original.logo && (
             <img
-              className='w-6 h-6 rounded-full object-cover object-center shadow'
+              className='w-10 h-10 rounded object-cover object-center shadow'
               src={BASE_URL + '/img/' + row.original.logo}
             />
           )}
-          <p className='text-dark/70'>{row.original.name}</p>
+          <p className='text-dark'>{row.original.name}</p>
         </div>
       ),
     },
     {
       accessorKey: 'address',
       header: 'Alamat',
+      cell: ({row}) => <div className='w-[200px]'><p>{row.original.address}</p></div>
     },
     {
       accessorKey: 'phone',
