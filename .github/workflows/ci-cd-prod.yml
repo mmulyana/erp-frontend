@@ -1,0 +1,33 @@
+name: CI-CD-STAGING
+on:
+  push:
+    branches:
+      - prod
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ./deploy.key
+          sudo chmod 600 ./deploy.key
+          ssh-keyscan -H bjs.web.id >> ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_KEY}}
+
+      - name: Deploy to Server
+        run: |
+          ssh -i ./deploy.key ${{ secrets.SSH_USER }}@bjs.web.id "cd /var/www/production/frontend/ && \
+          git config pull.rebase false && \
+          git fetch origin main && \
+          git reset --hard origin/main && \
+          source ~/.nvm/nvm.sh && \
+          export PATH=\"/home/${{ secrets.SSH_USER }}/.nvm/versions/node/v22.11.0/bin:\$PATH\" && \
+          pnpm install && \
+          pnpm build && \
+          pm2 reload frontend-prod"
