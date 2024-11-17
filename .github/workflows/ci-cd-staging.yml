@@ -2,7 +2,7 @@ name: CI-CD-STAGING
 on:
   push:
     branches:
-      - development
+      - main
 jobs:
   ci-cd:
     runs-on: ubuntu-latest
