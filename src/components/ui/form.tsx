@@ -44,7 +44,7 @@ const FormField = <
         {...props}
         render={(field) => (
           <FormItem className={props.className}>
-            {!!props.label && <FormLabel>{props.label}</FormLabel>}
+            {!!props.label && <FormLabel className='text-dark/80 font-normal'>{props.label}</FormLabel>}
             <FormControl>{props.render(field)}</FormControl>
             {!!props.description && (
               <FormDescription>{props.description}</FormDescription>
