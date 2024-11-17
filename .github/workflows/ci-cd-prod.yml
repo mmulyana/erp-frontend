@@ -1,4 +1,4 @@
-name: CI-CD-STAGING
+name: production
 on:
   push:
     branches:
