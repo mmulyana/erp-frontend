@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
-
-import { userAtom } from '@/atom/auth'
+import React from 'react'
 
 import { PATH } from '@/utils/constant/_paths'
+import { userAtom } from '@/atom/auth'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Button } from '@/components/ui/button'
 import {
   Sidebar,
   SidebarContent,
@@ -16,32 +17,45 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
-
-import {
-  BlocksIcon,
-  ChevronDown,
-  HardHat,
-  House,
-  UserCircle,
-  Users,
-} from 'lucide-react'
-import Logo from '../../../../public/erp-logo.svg'
-import React from 'react'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 
+import Logo from '../../../../public/logo2.svg'
+
+import {
+  BlocksIcon,
+  ChevronDown,
+  ChevronLeft,
+  HardHat,
+  House,
+  UserCircle,
+  Users,
+} from 'lucide-react'
+
 export default function AppSidebar() {
   const user = useAtomValue(userAtom)
+  const { isMobile, toggleSidebar } = useSidebar()
   return (
-    <Sidebar variant='sidebar'className='z-20'>
+    <Sidebar variant='sidebar' className='z-20'>
       <SidebarHeader>
-        <div className='rounded-lg w-full border px-1 py-1.5 border-line bg-white flex gap-2 items-center'>
-          <div className='w-6 h-6 rounded-full bg-brand-blue flex items-center justify-center'>
-            <img src={Logo} className='h-4 w-4 rounded' />
+        {isMobile && (
+          <Button
+            className='h-8 p-0.5 pl-2 pr-3 mb-2 inline-flex w-fit gap-1.5 bg-gray-200'
+            variant='secondary'
+            onClick={toggleSidebar}
+          >
+            <ChevronLeft className='h-4 w-4 text-dark' />
+            Tutup
+          </Button>
+        )}
+        <div className='rounded-lg w-full flex gap-2 items-center'>
+          <div className='border px-1 py-1 border-line bg-white rounded-lg'>
+          <img src={Logo} className='h-6 w-6 rounded' />
           </div>
           <p className='text-dark font-medium text-sm'>ERP BJS</p>
         </div>

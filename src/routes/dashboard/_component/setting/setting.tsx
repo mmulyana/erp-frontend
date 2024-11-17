@@ -14,6 +14,7 @@ import MenuPassword from './menu-password'
 import {
   ArrowLeft,
   Award,
+  ChevronLeft,
   ComponentIcon,
   Lock,
   LogOut,
@@ -198,7 +199,7 @@ export default function Setting() {
               variant='secondary'
               onClick={onClose}
             >
-              <ArrowLeft className='h-4 w-4 text-dark' />
+              <ChevronLeft className='h-4 w-4 text-dark' />
               Tutup Pengaturan
             </Button>
           )}

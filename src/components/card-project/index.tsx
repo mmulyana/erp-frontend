@@ -105,7 +105,7 @@ export default function CardProject({
 
         <Button
           variant='outline'
-          className='py-1 h-fit px-2 rounded-full md:rounded-md text-dark/50 gap-1 pr-1.5 ml-auto md:ml-0 absolute md:relative top-4 right-4 shadow-md shadow-gray-200'
+          className='py-1 h-fit px-2 rounded-full md:rounded-md text-dark/50 gap-1 pr-1.5 ml-auto md:ml-0 absolute md:relative top-4 md:top-0 right-4 md:right-0 shadow-md shadow-gray-200'
           onClick={() =>
             props.id && setSelectedProject({ id: props.id, open: true })
           }

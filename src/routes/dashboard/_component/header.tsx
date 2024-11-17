@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom'
 import { userAtom } from '@/atom/auth'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { Separator } from '@/components/ui/separator'
 
 export type Title = {
   name: string
@@ -49,11 +50,12 @@ export default function Header() {
         'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-16 md:h-12 bg-white sticky top-0 left-0 min-w-full z-10'
       )}
     >
-      <div className='flex gap-2 items-center'>
+      <div className='flex gap-3 items-center'>
         <SidebarTrigger />
+        {links.length && <Separator className='border border-line h-7' orientation='vertical'/>}
         {!isMobile && (
           <BreadCrumbWrapper>
-            <BreadcrumbList className='flex items-center'>
+            <BreadcrumbList className='ml-2 flex items-center'>
               {links.map((link, index) => {
                 const lastIndex = links.length - 1
 
