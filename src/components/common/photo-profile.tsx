@@ -2,7 +2,9 @@ import { useState, useRef, ChangeEvent, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ImageIcon, X } from 'lucide-react'
 import { cn } from '@/utils/cn'
-
+import { Lightbox } from 'yet-another-react-lightbox'
+import 'yet-another-react-lightbox/styles.css'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 type Props = {
   defaultPreview: string | null
   onUpdate?: (val: File) => void
@@ -10,6 +12,7 @@ type Props = {
   size?: number
   className?: string
 }
+
 export default function PhotoProfile({
   defaultPreview,
   onUpdate,
@@ -17,8 +20,9 @@ export default function PhotoProfile({
   size = 80,
   className,
 }: Props) {
-const [preview, setPreview] = useState<string | null>(defaultPreview)
+  const [preview, setPreview] = useState<string | null>(defaultPreview)
   const [error, setError] = useState<string | null>(null)
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -69,23 +73,34 @@ const [preview, setPreview] = useState<string | null>(defaultPreview)
     }
   }
 
+  const handleImageClick = () => {
+    if (preview) {
+      setIsLightboxOpen(true)
+    }
+  }
+
   return (
-    <div className='flex items-center space-x-4'>
-      <label htmlFor='photo-upload' className='cursor-pointer'>
+    <>
+      <div className='flex items-center space-x-4'>
         {preview ? (
           <img
             src={preview}
             alt='Preview'
-            className={cn('rounded-full object-cover', className)}
+            className={cn(
+              'rounded-full object-cover cursor-pointer',
+              className
+            )}
             style={{
               width: size + 'px',
               height: size + 'px',
             }}
+            onClick={handleImageClick}
           />
         ) : (
-          <div
+          <label
+            htmlFor='photo-upload'
             className={cn(
-              'rounded-full flex justify-center items-center bg-[#EBECEE]',
+              'rounded-full flex justify-center items-center bg-[#EBECEE] cursor-pointer',
               className
             )}
             style={{
@@ -94,36 +109,48 @@ const [preview, setPreview] = useState<string | null>(defaultPreview)
             }}
           >
             <ImageIcon className='w-6 h-6 text-dark/70' />
-          </div>
+          </label>
         )}
-      </label>
-      <input
-        id='photo-upload'
-        type='file'
-        accept='image/*'
-        className='hidden'
-        onChange={handlePhotoChange}
-        ref={fileInputRef}
-      />
-      <div className='space-y-1'>
-        <div className='flex gap-2 items-center'>
-          <Button type='button' variant='outline' onClick={handleUploadClick}>
-            {preview ? 'Ganti photo' : 'Upload Photo'}
-          </Button>
-          {preview && (
-            <Button
-              type='button'
-              variant='outline'
-              className='h-8 w-8 p-0'
-              onClick={handleRemovePhoto}
-            >
-              <X className='w-5 h-5 text-red-primary' />
+        <input
+          id='photo-upload'
+          type='file'
+          accept='image/*'
+          className='hidden'
+          onChange={handlePhotoChange}
+          ref={fileInputRef}
+        />
+        <div className='space-y-1'>
+          <div className='flex gap-2 items-center'>
+            <Button type='button' variant='outline' onClick={handleUploadClick}>
+              {preview ? 'Ganti photo' : 'Upload Photo'}
             </Button>
-          )}
+            {preview && (
+              <Button
+                type='button'
+                variant='outline'
+                className='h-8 w-8 p-0'
+                onClick={handleRemovePhoto}
+              >
+                <X className='w-5 h-5 text-red-primary' />
+              </Button>
+            )}
+          </div>
+          <p className='text-sm text-dark/50'>PNG, JPEG max size 5MB</p>
         </div>
-        <p className='text-sm text-dark/50'>PNG, JPEG max size 5MB</p>
+        {error && <p className='text-red-500 text-sm'>{error}</p>}
       </div>
-      {error && <p className='text-red-500 text-sm'>{error}</p>}
-    </div>
+
+      {/* Lightbox Component */}
+      <Lightbox
+        plugins={[Zoom]}
+        open={isLightboxOpen}
+        close={() => setIsLightboxOpen(false)}
+        slides={preview ? [{ src: preview }] : []}
+        render={{
+          buttonPrev: () => null,
+          buttonNext: () => null,
+        }}
+      />
+    </>
   )
 }

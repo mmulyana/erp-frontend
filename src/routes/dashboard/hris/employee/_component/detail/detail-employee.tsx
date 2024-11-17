@@ -92,7 +92,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
   if (!id) return null
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={open} onOpenChange={setOpen} modal={false}>
       <SheetContent className='p-0 w-full'>
         <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
           <p className='text-sm text-dark'>Detail Pegawai</p>

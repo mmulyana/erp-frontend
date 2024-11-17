@@ -13,6 +13,8 @@ import { useForm } from 'react-hook-form'
 import { Form, FormField } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { PreviewPhoto } from './preview-photo'
+import Lightbox from 'yet-another-react-lightbox'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 
 const editAtom = atom<string | null>(null)
 
@@ -50,6 +52,9 @@ export default function MessageItem2({
   }
 
   const [edit, setEdit] = useAtom(editAtom)
+
+  const [open, setOpen] = useState(false)
+  const [index, setIndex] = useState(0)
 
   const form = useForm({
     defaultValues: {
@@ -235,7 +240,7 @@ export default function MessageItem2({
   }
 
   return (
-    <div>
+    <>
       <div className={cn('grid grid-cols-[28px_1fr] gap-2 p-2.5')}>
         {props.user.photo ? (
           <img
@@ -289,18 +294,28 @@ export default function MessageItem2({
 
           {!!props.attachments?.length && (
             <div className='flex gap-1.5 items-center mt-1'>
-              {props?.attachments.slice(0, 2).map((item, index) => (
+              {props?.attachments.slice(0, 3).map((item, idx) => (
                 <img
-                  key={`attachment-${index}`}
-                  className='w-14 h-14 rounded-lg object-cover object-center'
+                  key={`attachment-${idx}`}
+                  className='w-14 h-14 rounded-lg object-cover object-center cursor-pointer'
                   src={BASE_URL + '/img/' + item.attachment}
-                  alt={`Attachment ${index + 1}`}
+                  alt={`Attachment ${idx + 1}`}
+                  onClick={() => {
+                    setIndex(idx)
+                    setOpen(true)
+                  }}
                 />
               ))}
               {props.attachments.length > 2 && (
-                <div className='w-14 h-14 rounded-lg bg-gray-200 flex justify-center items-center'>
+                <div
+                  className='w-14 h-14 rounded-lg bg-gray-200 flex justify-center items-center cursor-pointer hover:bg-gray-300'
+                  onClick={() => {
+                    setIndex(3)
+                    setOpen(true)
+                  }}
+                >
                   <p className='text-dark font-medium'>
-                    {props.attachments.length - 2}+
+                    {props.attachments.length - 3}+
                   </p>
                 </div>
               )}
@@ -350,6 +365,18 @@ export default function MessageItem2({
           </div>
         </div>
       </div>
-    </div>
+
+      <Lightbox
+        plugins={[Zoom]}
+        open={open}
+        close={() => setOpen(false)}
+        slides={
+          props?.attachments?.map((item) => ({
+            src: BASE_URL + '/img/' + item.attachment,
+          })) || []
+        }
+        index={index}
+      />
+    </>
   )
 }

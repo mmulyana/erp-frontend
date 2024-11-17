@@ -73,7 +73,7 @@ export default function DetailProject({
   if (!id) return null
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={open} onOpenChange={setOpen} modal={false}>
       <SheetContent className='w-full p-0'>
         <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
           <p className='text-sm text-dark'>Detail Proyek</p>

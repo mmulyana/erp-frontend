@@ -42,11 +42,13 @@
     "cmdk": "^1.0.4",
     "date-fns": "^3.6.0",
     "debounce": "^2.1.0",
+    "install": "^0.13.0",
     "jotai": "^2.8.3",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.396.0",
     "next-themes": "^0.3.0",
+    "npm": "^10.9.0",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.2.0",
@@ -61,7 +63,7 @@
     "universal-cookie": "^7.1.4",
     "use-sync-external-store": "^1.2.2",
     "vaul": "^0.9.1",
-    "yet-another-react-lightbox": "1.1.1",
+    "yet-another-react-lightbox": "^3.21.7",
     "zod": "^3.23.8"
   },
   "devDependencies": {
