@@ -109,7 +109,7 @@ export default function StockBorrowedPage() {
 
   return (
     <>
-      <DashboardLayout>
+      <DashboardLayout className='overflow-hidden'>
         <TitlePage className='mb-2'>
           <div className='flex gap-2 items-center'>
             <Blocks className='text-[#989CA8]' />

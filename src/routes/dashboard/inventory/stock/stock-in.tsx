@@ -100,7 +100,7 @@ export default function StockInPage() {
 
   return (
     <>
-      <DashboardLayout>
+      <DashboardLayout className='overflow-hidden'>
         <TitlePage>
           <div className='flex gap-2 items-center'>
             <PackagePlus className='text-[#989CA8]' />
