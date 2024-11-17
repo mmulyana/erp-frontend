@@ -4,25 +4,30 @@ on:
     branches:
       - main
 jobs:
-  ci-cd:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_KEY }}
-          known_hosts: "secret"
-          
-      - name: Adding Known Hosts
-        run: ssh-keyscan -H bjs.web.id >> ~/.ssh/known_hosts
-        
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ./deploy.key
+          sudo chmod 600 ./deploy.key
+          ssh-keyscan -H bjs.web.id >> ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_KEY}}
+
       - name: Deploy to Server
         run: |
-          ssh ${{ secrets.SSH_USER }}@bjs.web.id "cd /var/www/staging/frontend/ && \
-          git pull origin development && \
+          ssh -i ./deploy.key ${{ secrets.SSH_USER }}@bjs.web.id "cd /var/www/staging/frontend/ && \
+          git config pull.rebase false && \
+          git fetch origin main && \
+          git reset --hard origin/main && \
+          source ~/.nvm/nvm.sh && \
+          export PATH=\"/home/${{ secrets.SSH_USER }}/.nvm/versions/node/v22.11.0/bin:\$PATH\" && \
           pnpm install && \
           pnpm build && \
           pm2 reload frontend-staging"
