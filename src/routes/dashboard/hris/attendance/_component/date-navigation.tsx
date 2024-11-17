@@ -20,7 +20,7 @@ const DateNavigation = () => {
 
   const handlePrevious = () => {
     const newDate = addDays(currentDate, -1)
-    setUrl({ date: format(newDate, 'yyyy-MM-dd') }) 
+    setUrl({ date: format(newDate, 'yyyy-MM-dd') })
   }
 
   const handleNext = () => {

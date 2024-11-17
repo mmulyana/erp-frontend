@@ -69,7 +69,7 @@ export default function Login() {
           </div>
           <div className='w-full md:w-[calc(100%-72px)] flex flex-col justify-center'>
             <p className='text-[#2E2C2C] font-medium'>
-              Sign in to your account
+              Masuk
             </p>
             <p className='text-[#2E2C2C]/60 text-sm'>
               Enter your credential to access application
