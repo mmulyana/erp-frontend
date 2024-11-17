@@ -1,20 +1,23 @@
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import DropdownEdit from '@/components/common/dropdown-edit'
 import { Camera, MessageCircle, SendHorizonal, ThumbsUp, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Activity } from '@/utils/types/api'
-import { userAtom } from '@/atom/auth'
-import { atom, useAtom, useAtomValue } from 'jotai'
-import { format } from 'date-fns'
-import { cn } from '@/utils/cn'
-import { BASE_URL } from '@/utils/constant/_urls'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { format } from 'date-fns'
+
+import { BASE_URL } from '@/utils/constant/_urls'
+import { Activity } from '@/utils/types/api'
+import { cn } from '@/utils/cn'
+
+import { userAtom } from '@/atom/auth'
+
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import DropdownEdit from '@/components/common/dropdown-edit'
 import { Form, FormField } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+
 import { PreviewPhoto } from './preview-photo'
-import Lightbox from 'yet-another-react-lightbox'
-import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import { lightboxAtom } from '../detail-project'
 
 const editAtom = atom<string | null>(null)
 
@@ -46,15 +49,9 @@ export default function MessageItem2({
   const isOwnMessage = currentUser?.id === props.user?.id
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [existingPhotos, setExistingPhotos] = useState(props.attachments || [])
-
-  const handleCameraClick = () => {
-    fileInputRef.current?.click()
-  }
-
+  
+  const setLightboxState = useSetAtom(lightboxAtom)
   const [edit, setEdit] = useAtom(editAtom)
-
-  const [open, setOpen] = useState(false)
-  const [index, setIndex] = useState(0)
 
   const form = useForm({
     defaultValues: {
@@ -72,6 +69,10 @@ export default function MessageItem2({
       setExistingPhotos(props.attachments || [])
     }
   }, [edit, props.attachments])
+
+  const handleCameraClick = () => {
+    fileInputRef.current?.click()
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
@@ -94,6 +95,19 @@ export default function MessageItem2({
     setExistingPhotos((prevPhotos) =>
       prevPhotos.filter((photo) => photo.id !== photoId)
     )
+  }
+
+  const handleImageClick = (index: number) => {
+    const slides =
+      props.attachments?.map((item) => ({
+        src: BASE_URL + '/img/' + item.attachment,
+      })) || []
+    setLightboxState((prev) => ({
+      ...prev,
+      slides,
+      currentIndex: index,
+      isOpen: true,
+    }))
   }
 
   const onReset = () => {
@@ -300,19 +314,13 @@ export default function MessageItem2({
                   className='w-14 h-14 rounded-lg object-cover object-center cursor-pointer'
                   src={BASE_URL + '/img/' + item.attachment}
                   alt={`Attachment ${idx + 1}`}
-                  onClick={() => {
-                    setIndex(idx)
-                    setOpen(true)
-                  }}
+                  onClick={() => handleImageClick(idx)}
                 />
               ))}
               {props.attachments.length > 2 && (
                 <div
                   className='w-14 h-14 rounded-lg bg-gray-200 flex justify-center items-center cursor-pointer hover:bg-gray-300'
-                  onClick={() => {
-                    setIndex(3)
-                    setOpen(true)
-                  }}
+                  onClick={() => handleImageClick(3)}
                 >
                   <p className='text-dark font-medium'>
                     {props.attachments.length - 3}+
@@ -365,18 +373,6 @@ export default function MessageItem2({
           </div>
         </div>
       </div>
-
-      <Lightbox
-        plugins={[Zoom]}
-        open={open}
-        close={() => setOpen(false)}
-        slides={
-          props?.attachments?.map((item) => ({
-            src: BASE_URL + '/img/' + item.attachment,
-          })) || []
-        }
-        index={index}
-      />
     </>
   )
 }

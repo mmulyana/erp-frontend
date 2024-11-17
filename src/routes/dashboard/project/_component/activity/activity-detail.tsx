@@ -18,6 +18,9 @@ import MessageForm from './message-form'
 
 import { X } from 'lucide-react'
 import { Activity } from '@/utils/types/api'
+import { useAtomValue } from 'jotai'
+import { lightboxAtom } from '../detail-project'
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 
 type Props = {
   open: boolean
@@ -32,6 +35,7 @@ export default function ActivityDetail({
   id,
 }: Props) {
   const [data, setData] = useState<Activity | null>(null)
+  const lightBoxState = useAtomValue(lightboxAtom)
 
   const { mutate: toggle } = useToggleLikeActivity()
   const { mutate: remove } = useDeleteActivity()
@@ -51,8 +55,13 @@ export default function ActivityDetail({
     }
   }, [id, open])
 
+  useFixPointerEvent(open)
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(val) => !lightBoxState.isOpen && setOpen(val)}
+    >
       <DialogContent
         className='p-0 overflow-hidden'
         showClose={false}

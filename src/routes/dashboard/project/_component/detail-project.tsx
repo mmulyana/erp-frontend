@@ -1,6 +1,9 @@
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { useCallback, useMemo, useState } from 'react'
 import { id as indonesia } from 'date-fns/locale'
+import Lightbox from 'yet-another-react-lightbox'
+import { atom, useAtom } from 'jotai'
 import { format } from 'date-fns'
 import { cn } from '@/utils/cn'
 
@@ -40,13 +43,22 @@ import LeadProject from './detail/lead-project'
 import { Ellipsis } from 'lucide-react'
 import { socket } from '@/utils/socket'
 
+export const lightboxAtom = atom<{
+  isOpen: boolean
+  currentIndex: number
+  slides: Array<{ src: string }>
+}>({
+  isOpen: false,
+  currentIndex: 0,
+  slides: [],
+})
+
 type Props = {
   open: boolean
   setOpen: (val: boolean) => void
   id?: number | null
   withSocket?: boolean
 }
-
 export default function DetailProject({
   open,
   setOpen,
@@ -56,6 +68,7 @@ export default function DetailProject({
   const { mutate: update } = useUpdateProject()
   const { mutate: updateStatus } = useUpdateStatusProject()
 
+  const [lightboxState, setLightboxState] = useAtom(lightboxAtom)
   const [content, setContent] = useState('')
 
   const { data: project } = useApiData(useProject(id))
@@ -411,6 +424,13 @@ export default function DetailProject({
             </Tab>
           </Tabs>
         </ScrollArea>
+        <Lightbox
+          plugins={[Zoom]}
+          open={lightboxState.isOpen}
+          close={() => setLightboxState((prev) => ({ ...prev, isOpen: false }))}
+          slides={lightboxState.slides}
+          index={lightboxState.currentIndex}
+        />
       </SheetContent>
     </Sheet>
   )
