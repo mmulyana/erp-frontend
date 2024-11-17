@@ -55,24 +55,26 @@ export default function AddUserRole({ id, roleId }: Props) {
           <CommandList>
             <CommandEmpty>Peran tidak ditemukan</CommandEmpty>
             <CommandGroup>
-              {roles?.map((item) => (
-                <CommandItem
-                  key={item.id}
-                  value={String(item.name)}
-                  onSelect={() => {
-                    id && assign({ id, roleId: item.id })
-                    setOpenPopover(false)
-                  }}
-                  className='flex justify-between items-center gap-1'
-                >
-                  <span>{item.name}</span>
-                  {item.id === roleId && (
-                    <div className='flex-shrink-0 h-5 w-5 rounded-full flex justify-center items-center bg-green-primary text-white'>
-                      <Check size={14} strokeWidth={2.9} />
-                    </div>
-                  )}
-                </CommandItem>
-              ))}
+              {roles
+                ?.filter((item) => item.name !== 'Superadmin')
+                .map((item) => (
+                  <CommandItem
+                    key={item.id}
+                    value={String(item.name)}
+                    onSelect={() => {
+                      id && assign({ id, roleId: item.id })
+                      setOpenPopover(false)
+                    }}
+                    className='flex justify-between items-center gap-1'
+                  >
+                    <span>{item.name}</span>
+                    {item.id === roleId && (
+                      <div className='flex-shrink-0 h-5 w-5 rounded-full flex justify-center items-center bg-green-primary text-white'>
+                        <Check size={14} strokeWidth={2.9} />
+                      </div>
+                    )}
+                  </CommandItem>
+                ))}
             </CommandGroup>
           </CommandList>
         </Command>
