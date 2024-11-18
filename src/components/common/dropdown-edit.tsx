@@ -24,7 +24,9 @@ export default function DropdownEdit({
           <Ellipsis className='w-4 h-4 text-[#313951]' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className={cn('px-0', className)}>
+      <DropdownMenuContent
+        className={cn('!min-w-12 right-0 px-0', className)}
+      >
         {children}
       </DropdownMenuContent>
     </DropdownMenu>

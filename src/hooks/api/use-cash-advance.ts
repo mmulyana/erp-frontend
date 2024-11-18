@@ -1,7 +1,7 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { CashAdvance, IApi } from '@/utils/types/api'
+import { CashAdvance, IApi, IApiPagination } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { createCashAdvance } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -10,15 +10,21 @@ import { toast } from 'sonner'
 
 type ParamsLeaves = Pagination & {
   name?: string
-  date?: string
+  startDate?: string
+  endDate?: string
 }
-export const useCashAdvance = (params: ParamsLeaves) => {
+export const useCashAdvancePagination = (params: ParamsLeaves) => {
   return useQuery({
-    queryKey: [KEYS.CASH_ADVANCES, params],
-    queryFn: async (): Promise<AxiosResponse<IApi<CashAdvance[]>>> => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.CASH_ADVANCES,
+    queryKey: [
+      KEYS.CASH_ADVANCES,
+      params.name,
+      params.startDate,
+      params.endDate,
+      params.page,
+      params.limit,
+    ],
+    queryFn: async (): Promise<AxiosResponse<IApiPagination<CashAdvance[]>>> => {
+      return await http(URLS.CASH_ADVANCES + '/list/pagination', {
         params,
       })
     },

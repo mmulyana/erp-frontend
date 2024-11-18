@@ -1,15 +1,17 @@
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
 import { FileOutputIcon } from 'lucide-react'
+import { useAtomValue } from 'jotai'
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 import { useState } from 'react'
 
+import { permissionAtom } from '@/atom/permission'
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { CashAdvance } from '@/utils/types/api'
 import { PATH } from '@/utils/constant/_paths'
 import {
-  useCashAdvance,
+  useCashAdvancePagination,
   useTotalCashAdvance,
 } from '@/hooks/api/use-cash-advance'
 import { useApiData } from '@/hooks/use-api-data'
@@ -18,15 +20,17 @@ import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import DropdownEdit from '@/components/common/dropdown-edit'
-import { Button } from '@/components/ui/button'
-
 import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
 
 import { DashboardLayout } from '../../_component/layout'
 import ModalDelete from './_component/modal-delete'
 import CardMonthly from './_component/card-monthly'
 import { useTitle } from '../../_component/header'
 import { ModalAdd } from './_component/modal-add'
+import FilterDate from './_component/filter-date'
+import ProtectedComponent from '@/components/protected'
+import { cn } from '@/utils/cn'
 
 const links = [
   {
@@ -42,13 +46,24 @@ const links = [
 export default function Page() {
   useTitle(links)
 
-  const [url] = useUrlState({ name: '', page: 1, limit: 10 })
+  const permission = useAtomValue(permissionAtom)
 
-  const { data, isLoading } = useCashAdvance({
-    ...(url.name !== '' ? { name: url.name } : undefined),
-    limit: url.limit,
-    page: url.page,
+  const [url] = useUrlState({
+    name: '',
+    page: 1,
+    limit: 10,
+    startDate: '',
+    endDate: '',
   })
+
+  const { data, isLoading } = useApiData(
+    useCashAdvancePagination({
+      ...(url.name !== '' ? { name: url.name } : undefined),
+      ...(url.startDate !== '' ? { startDate: url.startDate } : undefined),
+      ...(url.endDate !== '' ? { endDate: url.endDate } : undefined),
+      page: url.page,
+    })
+  )
   const { data: totalData } = useApiData(useTotalCashAdvance())
 
   // COLUMNS CASH ADVANCE
@@ -88,26 +103,34 @@ export default function Page() {
       id: 'action',
       cell: ({ row }) => (
         <div className='flex justify-end w-full'>
-          <DropdownEdit>
-            <DropdownMenuItem
-              className='flex items-center gap-2 cursor-pointer'
-              onClick={() => {
-                handleDialog('add', true)
-                setSelectedId(row.original.id)
-              }}
-            >
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className='flex items-center gap-2 cursor-pointer'
-              onClick={() => {
-                handleDialog('delete', true)
-                setSelectedId(row.original.id)
-              }}
-            >
-              Hapus
-            </DropdownMenuItem>
-          </DropdownEdit>
+          <ProtectedComponent
+            required={['cash-advance:update', 'cash-advance:delete']}
+          >
+            <DropdownEdit>
+              <ProtectedComponent required={['cash-advance:update']}>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer rounded-none'
+                  onClick={() => {
+                    handleDialog('add', true)
+                    setSelectedId(row.original.id)
+                  }}
+                >
+                  Edit
+                </DropdownMenuItem>
+              </ProtectedComponent>
+              <ProtectedComponent required={['cash-advance:delete']}>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer rounded-none'
+                  onClick={() => {
+                    handleDialog('delete', true)
+                    setSelectedId(row.original.id)
+                  }}
+                >
+                  Hapus
+                </DropdownMenuItem>
+              </ProtectedComponent>
+            </DropdownEdit>
+          </ProtectedComponent>
         </div>
       ),
     },
@@ -128,39 +151,58 @@ export default function Page() {
     }
   }
 
+  const hasAnyPermission = ['cash-advance:total', 'cash-advance:chart'].some(
+    (item) => permission.includes(item)
+  )
+
   return (
     <DashboardLayout>
-      <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
+      <div
+        className={cn(
+          'grid grid-cols-1 md:grid-cols-[1fr_340px]',
+          !hasAnyPermission && 'md:grid-cols-1'
+        )}
+      >
         <div>
           <HeadTable>
             <div className='flex gap-4 items-center'>
               <FileOutputIcon className='text-[#989CA8]' />
               <p className='text-dark font-medium'>Kasbon</p>
             </div>
-            <Button onClick={() => handleDialog('add', true)}>
-              Kasbon Baru
-            </Button>
+            <ProtectedComponent required={['cash-advance:create']}>
+              <Button onClick={() => handleDialog('add', true)}>
+                Kasbon Baru
+              </Button>
+            </ProtectedComponent>
           </HeadTable>
-          <FilterTable placeholder='Cari pegawai' />
+          <FilterTable
+            placeholder='Cari pegawai'
+            customFilter={<CustomFilter />}
+          />
           <DataTable
-            data={data?.data?.data || []}
+            data={data?.data || []}
             isLoading={isLoading}
             columns={columns}
             withPagination
+            totalPages={data?.total_pages}
           />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>
-          <Card className='rounded-xl'>
-            <CardHead>
-              <p className='text-dark text-sm font-semibold'>
-                Total kasbon bln. {format(new Date(), 'MMMM', { locale: id })}
-              </p>
-            </CardHead>
-            <CardBody>
-              <p>{formatToRupiah(totalData?.total || 0)}</p>
-            </CardBody>
-          </Card>
-          <CardMonthly />
+          <ProtectedComponent required={['cash-advance:total']}>
+            <Card className='rounded-xl'>
+              <CardHead>
+                <p className='text-dark text-sm font-semibold'>
+                  Total kasbon bln. {format(new Date(), 'MMMM', { locale: id })}
+                </p>
+              </CardHead>
+              <CardBody>
+                <p>{formatToRupiah(totalData?.total || 0)}</p>
+              </CardBody>
+            </Card>
+          </ProtectedComponent>
+          <ProtectedComponent required={['cash-advance:chart']}>
+            <CardMonthly />
+          </ProtectedComponent>
         </div>
       </div>
       <ModalAdd
@@ -174,5 +216,30 @@ export default function Page() {
         id={selectedId}
       />
     </DashboardLayout>
+  )
+}
+
+function CustomFilter() {
+  const [url, setUrl] = useUrlState({ startDate: '', endDate: '' })
+
+  return (
+    <>
+      <FilterDate
+        data={url.startDate}
+        onSelect={(val) => {
+          const formattedDate = format(val, 'yyyy-MM-dd')
+          setUrl((prev) => ({ ...prev, startDate: formattedDate }))
+        }}
+        placeholder='Pilih Tanggal Mulai'
+      />
+      <FilterDate
+        data={url.endDate}
+        onSelect={(val) => {
+          const formattedDate = format(val, 'yyyy-MM-dd')
+          setUrl((prev) => ({ ...prev, endDate: formattedDate }))
+        }}
+        placeholder='Pilih Tanggal Akhir'
+      />
+    </>
   )
 }

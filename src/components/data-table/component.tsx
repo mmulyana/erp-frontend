@@ -1,4 +1,18 @@
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
+import { CalendarDaysIcon } from 'lucide-react'
+import { format, parse } from 'date-fns'
+import { id } from 'date-fns/locale'
+
+import { cn } from '@/utils/cn'
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Calendar } from '@/components/ui/calendar'
+
 import {
   Select,
   SelectContent,
@@ -7,11 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select'
-import { cn } from '@/utils/cn'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { Button } from '../ui/button'
 import Search from '../common/search'
-
+import { useLocation, useNavigate } from 'react-router-dom'
 interface PaginationProps {
   totalPages: number
 }
@@ -125,9 +137,20 @@ type FilterProps = {
   className?: string
   placeholder?: string
   onAdd?: () => void
+  filter?: {
+    date?: boolean
+  }
+  customFilter?: React.ReactNode
+  reset?: boolean
 }
-export function FilterTable({ className, placeholder, onAdd }: FilterProps) {
-  const [url, setUrl] = useUrlState({ name: '' })
+export function FilterTable({
+  className,
+  placeholder,
+  onAdd,
+  filter,
+  customFilter,
+  reset = true,
+}: FilterProps) {
   return (
     <div
       className={cn(
@@ -135,25 +158,11 @@ export function FilterTable({ className, placeholder, onAdd }: FilterProps) {
         className
       )}
     >
-      <div className='flex gap-2 items-center'>
+      <div className='flex gap-2 items-center flex-wrap'>
         <Search debounceTime={500} placeholder={placeholder} />
-        {url.name !== '' && (
-          <Button
-            variant='outline'
-            className='font-normal flex items-center gap-1 relative px-3 pr-5'
-            onClick={() => {
-              setUrl(() => ({
-                name: '',
-              }))
-            }}
-          >
-            Hapus filter
-            <X
-              size={14}
-              className='text-red-primary/80 absolute top-[55%] right-1 -translate-y-1/2'
-            />
-          </Button>
-        )}
+        {filter?.date && <FilterDate />}
+        {customFilter && customFilter}
+        {reset && <FilterReset />}
       </div>
       {onAdd && <Button onClick={onAdd}>Tambah</Button>}
     </div>
@@ -174,4 +183,80 @@ export function HeadTable({ children, className }: TopTableProps) {
       {children}
     </div>
   )
+}
+
+export function FilterDate() {
+  const [url, setUrl] = useUrlState({ date: '' })
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant='outline'
+          className={cn('w-fit pl-3 gap-2 text-left font-normal text-dark')}
+        >
+          <CalendarDaysIcon className='h-4 w-4 text-[#2A9D90]' />
+          {url.date ? (
+            format(
+              parse(url.date, 'yyyy-MM-dd', new Date()),
+              'EEEE, dd MMM yyyy',
+              {
+                locale: id,
+              }
+            )
+          ) : (
+            <span>Pilih tanggal</span>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className='w-auto p-0' align='start'>
+        <Calendar
+          mode='single'
+          selected={
+            url.date ? parse(url.date, 'yyyy-MM-dd', new Date()) : undefined
+          }
+          onSelect={(val) => {
+            if (val) {
+              const formattedDate = format(val, 'yyyy-MM-dd')
+              setUrl((prev) => ({ ...prev, date: formattedDate }))
+            }
+          }}
+          disabled={(date) =>
+            date > new Date() || date < new Date('2024-01-01')
+          }
+        />
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+export function FilterReset() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const hasSomeQuery = () => {
+    const searchParams = new URLSearchParams(location.search)
+    return Array.from(searchParams).length > 0
+  }
+
+  const reset = () => {
+    navigate(location.pathname, { replace: true })
+  }
+
+  if (hasSomeQuery()) {
+    return (
+      <Button
+        variant='outline'
+        className='font-normal flex items-center gap-1 relative pl-3 pr-6'
+        onClick={reset}
+      >
+        Hapus filter
+        <X
+          size={14}
+          className='text-red-primary/80 absolute top-[55%] right-1.5 -translate-y-1/2'
+        />
+      </Button>
+    )
+  }
+
+  return null
 }
