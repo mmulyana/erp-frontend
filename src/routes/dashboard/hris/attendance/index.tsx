@@ -1,12 +1,18 @@
-import { PATH } from '@/utils/constant/_paths'
-import { Tab, Tabs } from '@/components/tab'
-import { useTitle } from '../../_component/header'
-import { DashboardLayout } from '../../_component/layout'
-import TitlePage from '../../_component/title-page'
 import { FilePenIcon } from 'lucide-react'
-import { Regular } from './_component/regular'
-import { Overtime } from './_component/overtime'
+import { useAtomValue } from 'jotai'
+
+import { permissionAtom } from '@/atom/permission'
+import { PATH } from '@/utils/constant/_paths'
+
+import ProtectedComponent from '@/components/protected'
+import { Tab, Tabs } from '@/components/tab'
+
+import { DashboardLayout } from '../../_component/layout'
 import DateNavigation from './_component/date-navigation'
+import TitlePage from '../../_component/title-page'
+import { useTitle } from '../../_component/header'
+import { Overtime } from './_component/overtime'
+import { Regular } from './_component/regular'
 
 const links = [
   {
@@ -22,6 +28,8 @@ const links = [
 export default function Page() {
   useTitle(links)
 
+  const permission = useAtomValue(permissionAtom)
+
   return (
     <DashboardLayout className='overflow-hidden'>
       <TitlePage className='mb-2 flex justify-between items-center'>
@@ -31,14 +39,26 @@ export default function Page() {
         </div>
         <DateNavigation />
       </TitlePage>
-      <Tabs>
-        <Tab label='Reguler'>
-          <Regular />
-        </Tab>
-        <Tab label='Lembur'>
-          <Overtime />
-        </Tab>
-      </Tabs>
+      <ProtectedComponent
+        required={['attendance:read', 'overtime:read']}
+        fallback={
+          <p className='text-center text-dark/50'>
+            Anda tidak diizinkan mengakses fitur ini
+          </p>
+        }
+      >
+        <Tabs>
+          <Tab
+            label='Reguler'
+            hidden={!permission?.includes('attendance:read')}
+          >
+            <Regular />
+          </Tab>
+          <Tab label='Lembur' hidden={!permission?.includes('overtime:read')}>
+            <Overtime />
+          </Tab>
+        </Tabs>
+      </ProtectedComponent>
     </DashboardLayout>
   )
 }

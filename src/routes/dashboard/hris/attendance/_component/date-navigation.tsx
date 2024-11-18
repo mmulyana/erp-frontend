@@ -1,4 +1,4 @@
-import { format, addDays, isAfter, startOfToday } from 'date-fns'
+import { format, addDays, isAfter, startOfToday, isYesterday } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { id } from 'date-fns/locale'
@@ -25,7 +25,7 @@ const DateNavigation = () => {
 
   const handleNext = () => {
     const newDate = addDays(currentDate, 1)
-    if (isAfter(newDate, currentDate)) {
+    if (isYesterday(new Date(url.date))) {
       setUrl({ date: undefined })
       return
     }

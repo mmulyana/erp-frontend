@@ -1,29 +1,32 @@
-import { DataTable } from '@/components/data-table'
-import { PATH } from '@/utils/constant/_paths'
 import useUrlState from '@ahooksjs/use-url-state'
+import { ColumnDef } from '@tanstack/react-table'
+import { FileOutputIcon } from 'lucide-react'
+import { id } from 'date-fns/locale'
+import { format } from 'date-fns'
+import { useState } from 'react'
+
+import { formatToRupiah } from '@/utils/formatCurrency'
+import { CashAdvance } from '@/utils/types/api'
+import { PATH } from '@/utils/constant/_paths'
 import {
   useCashAdvance,
   useTotalCashAdvance,
 } from '@/hooks/api/use-cash-advance'
-import { useTitle } from '../../_component/header'
-import { DashboardLayout } from '../../_component/layout'
-import { FilterTable, HeadTable } from '@/components/data-table/component'
-import { FileOutputIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useState } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
-import { format } from 'date-fns'
-import { id } from 'date-fns/locale'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { CashAdvance } from '@/utils/types/api'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import { DropdownMenuGroup } from '@radix-ui/react-dropdown-menu'
-import { Card, CardBody, CardHead } from '@/components/common/card-v1'
-import CardMonthly from './_component/card-monthly'
-import { ModalAdd } from './_component/modal-add'
-import ModalDelete from './_component/modal-delete'
 import { useApiData } from '@/hooks/use-api-data'
-import { formatToRupiah } from '@/utils/formatCurrency'
+
+import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import DropdownEdit from '@/components/common/dropdown-edit'
+import { Button } from '@/components/ui/button'
+
+import { DataTable } from '@/components/data-table'
+
+import { DashboardLayout } from '../../_component/layout'
+import ModalDelete from './_component/modal-delete'
+import CardMonthly from './_component/card-monthly'
+import { useTitle } from '../../_component/header'
+import { ModalAdd } from './_component/modal-add'
 
 const links = [
   {
@@ -86,26 +89,24 @@ export default function Page() {
       cell: ({ row }) => (
         <div className='flex justify-end w-full'>
           <DropdownEdit>
-            <DropdownMenuGroup>
-              <DropdownMenuItem
-                className='flex items-center gap-2 cursor-pointer'
-                onClick={() => {
-                  handleDialog('add', true)
-                  setSelectedId(row.original.id)
-                }}
-              >
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className='flex items-center gap-2 cursor-pointer'
-                onClick={() => {
-                  handleDialog('delete', true)
-                  setSelectedId(row.original.id)
-                }}
-              >
-                Hapus
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuItem
+              className='flex items-center gap-2 cursor-pointer'
+              onClick={() => {
+                handleDialog('add', true)
+                setSelectedId(row.original.id)
+              }}
+            >
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className='flex items-center gap-2 cursor-pointer'
+              onClick={() => {
+                handleDialog('delete', true)
+                setSelectedId(row.original.id)
+              }}
+            >
+              Hapus
+            </DropdownMenuItem>
           </DropdownEdit>
         </div>
       ),

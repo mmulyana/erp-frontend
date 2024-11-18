@@ -63,6 +63,8 @@ export function AddOvertime({ open, setOpen, id }: Props) {
     },
   })
 
+  const selectedDate = form.watch('date')
+
   const submit = async (data: OvertimeSchema) => {
     if (id) {
       update(
@@ -102,8 +104,12 @@ export function AddOvertime({ open, setOpen, id }: Props) {
     if (url.date !== '') {
       const parsedDate = parse(url.date, 'yyyy-MM-dd', new Date())
       form.setValue('date', format(parsedDate, 'yyyy-MM-dd'))
+      return
     }
-  }, [url.date])
+    if (selectedDate === '') {
+      form.setValue('date', new Date().toISOString().split('T')[0])
+    }
+  }, [url.date, selectedDate])
 
   useEffect(() => {
     if (!open) {

@@ -1,7 +1,7 @@
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
-import { format, parse } from 'date-fns'
 import { id } from 'date-fns/locale'
+import { format } from 'date-fns'
 import { useState } from 'react'
 
 import {
@@ -11,29 +11,22 @@ import {
 import { useApiData } from '@/hooks/use-api-data'
 
 import { Overtime as TOvertime } from '@/utils/types/api'
-import { cn } from '@/utils/cn'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import Search from '@/components/common/search'
-
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { Calendar } from '@/components/ui/calendar'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
 
 import { AddOvertime } from './add-overtime'
-
-import { CalendarDaysIcon, X } from 'lucide-react'
+import ProtectedComponent from '@/components/protected'
+import FilterDate from './filter-date'
+import FilterReset from './filter-reset'
 
 export function Overtime() {
   const { mutate: remove } = useDeleteOvertime()
 
-  const [url, setUrl] = useUrlState({ name: '', date: '', page: '' })
+  const [url] = useUrlState({ name: '', date: '', page: '' })
   const { data, isLoading } = useApiData(
     useOvertimePagination({
       ...(url.name !== '' ? { fullname: url.name } : undefined),
@@ -98,18 +91,22 @@ export function Overtime() {
       cell: ({ row }) => (
         <div className='flex justify-end w-full'>
           <DropdownEdit className='-translate-x-3'>
-            <DropdownMenuItem
-              className='flex items-center gap-2 cursor-pointer'
-              onClick={() => setDialog({ open: true, id: row.original.id })}
-            >
-              Ubah
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className='flex items-center gap-2 cursor-pointer'
-              onClick={() => remove({ id: row.original.id })}
-            >
-              Hapus
-            </DropdownMenuItem>
+            <ProtectedComponent required={['overtime:update']}>
+              <DropdownMenuItem
+                className='flex items-center gap-2 cursor-pointer'
+                onClick={() => setDialog({ open: true, id: row.original.id })}
+              >
+                Ubah
+              </DropdownMenuItem>
+            </ProtectedComponent>
+            <ProtectedComponent required={['overtime:delete']}>
+              <DropdownMenuItem
+                className='flex items-center gap-2 cursor-pointer'
+                onClick={() => remove({ id: row.original.id })}
+              >
+                Hapus
+              </DropdownMenuItem>
+            </ProtectedComponent>
           </DropdownEdit>
         </div>
       ),
@@ -126,67 +123,14 @@ export function Overtime() {
       <div className='flex justify-between items-start p-4 bg-[#F9FAFB] gap-2'>
         <div className='flex gap-4 flex-wrap'>
           <Search />
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant='outline'
-                className={cn(
-                  'w-fit pl-3 gap-2 text-left font-normal text-dark'
-                )}
-              >
-                <CalendarDaysIcon className='h-4 w-4 text-[#2A9D90]' />
-                {url.date ? (
-                  format(
-                    parse(url.date, 'yyyy-MM-dd', new Date()),
-                    'EEEE, dd MMM yyyy',
-                    {
-                      locale: id,
-                    }
-                  )
-                ) : (
-                  <span>Pilih tanggal</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className='w-auto p-0' align='start'>
-              <Calendar
-                mode='single'
-                selected={
-                  url.date
-                    ? parse(url.date, 'yyyy-MM-dd', new Date())
-                    : undefined
-                }
-                onSelect={(val) => {
-                  if (val) {
-                    const formattedDate = format(val, 'yyyy-MM-dd')
-                    setUrl((prev) => ({ ...prev, date: formattedDate }))
-                  }
-                }}
-                disabled={(date) =>
-                  date > new Date() || date < new Date('2024-01-01')
-                }
-              />
-            </PopoverContent>
-          </Popover>
-          {(url.date !== '' || url.name !== '') && (
-            <Button
-              variant='outline'
-              className='font-normal flex items-center gap-1 relative pl-3 pr-6'
-              onClick={() => {
-                setUrl({ date: undefined, name: undefined })
-              }}
-            >
-              Hapus filter
-              <X
-                size={14}
-                className='text-red-primary/80 absolute top-[55%] right-1.5 -translate-y-1/2'
-              />
-            </Button>
-          )}
+          <FilterDate />
+          <FilterReset />
         </div>
-        <Button onClick={() => setDialog({ open: true, id: null })}>
-          Tambah
-        </Button>
+        <ProtectedComponent required={['overtime:create']}>
+          <Button onClick={() => setDialog({ open: true, id: null })}>
+            Tambah
+          </Button>
+        </ProtectedComponent>
       </div>
       <DataTable
         columns={columnOvertime}

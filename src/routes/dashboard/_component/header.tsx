@@ -52,7 +52,12 @@ export default function Header() {
     >
       <div className='flex gap-3 items-center'>
         <SidebarTrigger />
-        {links.length && !isMobile && <Separator className='border border-line h-7' orientation='vertical'/>}
+        {links.length && !isMobile && (
+          <Separator
+            className='border border-line h-7'
+            orientation='vertical'
+          />
+        )}
         {!isMobile && (
           <BreadCrumbWrapper>
             <BreadcrumbList className='ml-2 flex items-center'>
@@ -111,7 +116,7 @@ export default function Header() {
               </p>
             </div>
           )}
-          <div className='w-2.5 h-2.5 rounded-full border-2 border-white bg-[#2A9D90] absolute -right-[2px] -top-[1px]'></div>
+          <div className='w-3 h-3 rounded-full border-2 border-white bg-[#2A9D90] absolute -right-1 -bottom-0.5'></div>
         </Button>
       </div>
     </div>
