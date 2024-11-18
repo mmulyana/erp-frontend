@@ -1,50 +1,52 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { id as indonesia } from 'date-fns/locale'
+import { format, parseISO } from 'date-fns'
+import { Ellipsis } from 'lucide-react'
+import { useAtomValue } from 'jotai'
+
 import {
   useEmployee,
   useRemovePhoto,
   useUpdateEmployee,
   useUploadPhoto,
 } from '@/hooks/api/use-employee'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { id as indonesia } from 'date-fns/locale'
-import { format, parseISO } from 'date-fns'
+import { permissionAtom } from '@/atom/permission'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import Chips from '@/components/common/chips'
-import DataSheet from '@/components/common/data-sheet'
-import PhotoProfile from '@/components/common/photo-profile'
-import { Editable } from '@/components/common/editable'
-import { Button } from '@/components/ui/button'
-import { Tab, Tabs } from '@/components/tab'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
-
-import CompetenciesEmployee from './employee/competencies-employee'
-import StatusEmployee from './employee/status-employee'
-import AddressEmployee from './employee/address-employee'
-import CertifEmployee from './employee/certif-employee'
-import JoinedEmployee from './employee/joined-employee'
-import PhoneEmployee from './employee/phone-employee'
-
-import { BASE_URL } from '@/utils/constant/_urls'
+import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
 import { EDUCATIONS, EDUCATIONS_OBJ } from '@/utils/data/educations'
+import { PAY_TIPE, PAY_TIPE_OBJ } from '@/utils/data/pay-tipe'
+import { GENDER, GENDER_OBJ } from '@/utils/data/gender'
+import { formatToRupiah } from '@/utils/formatCurrency'
+import { BASE_URL } from '@/utils/constant/_urls'
+import { Employee } from '@/utils/types/api'
+import { cn } from '@/utils/cn'
 import {
   EMPLOYEMENT_TYPE,
   EMPLOYEMENT_TYPE_OBJ,
 } from '@/utils/data/employment-type'
-import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
-import { PAY_TIPE, PAY_TIPE_OBJ } from '@/utils/data/pay-tipe'
-import { GENDER, GENDER_OBJ } from '@/utils/data/gender'
-import { formatToRupiah } from '@/utils/formatCurrency'
-import { Employee } from '@/utils/types/api'
-import { cn } from '@/utils/cn'
 
-import { Ellipsis } from 'lucide-react'
+import PhotoProfile from '@/components/common/photo-profile'
+import DataSheet from '@/components/common/data-sheet'
+import Chips from '@/components/common/chips'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Editable } from '@/components/common/editable'
+import { Button } from '@/components/ui/button'
+import { Tab, Tabs } from '@/components/tab'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
+import CompetenciesEmployee from './employee/competencies-employee'
+import AddressEmployee from './employee/address-employee'
+import StatusEmployee from './employee/status-employee'
+import CertifEmployee from './employee/certif-employee'
+import JoinedEmployee from './employee/joined-employee'
+import ProtectedComponent from '@/components/protected'
+import PhoneEmployee from './employee/phone-employee'
 import DeleteEmployee from './delete-employee'
 
 type Props = {
@@ -54,9 +56,11 @@ type Props = {
 }
 
 export default function DetailEmployee({ open, setOpen, id }: Props) {
-  const { mutate: update } = useUpdateEmployee()
+  const permission = useAtomValue(permissionAtom)
+
   const { mutate: uploadPhoto } = useUploadPhoto()
   const { mutate: removePhoto } = useRemovePhoto()
+  const { mutate: update } = useUpdateEmployee()
 
   // HANDLE DATA DETAIL
   const { data, isLoading, isFetching } = useEmployee(id)
@@ -89,6 +93,8 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
   const [openDelete, setOpenDelete] = useState(false)
   // HANDLE ACTIVE/INACTIVE AND DELETE
 
+  const isAllowed = permission?.includes('employee:update')
+
   if (!id) return null
 
   return (
@@ -109,6 +115,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               onRemove={() => {
                 removePhoto({ id })
               }}
+              disabled={!isAllowed}
             />
             <div className='relative pr-7'>
               <Editable
@@ -121,6 +128,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                 onUpdate={(val) => {
                   update({ id, payload: { fullname: val as string } })
                 }}
+                disabled={!isAllowed}
               />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -132,14 +140,18 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='min-w-fit -translate-x-4'>
-                  <DropdownMenuGroup>
+                  <ProtectedComponent
+                    required={['employee:activate', 'employee:deactivate']}
+                  >
                     <DropdownMenuItem onClick={() => setOpenActive(true)}>
                       {employee?.status ? 'Nonaktifkan' : 'Aktifkan'}
                     </DropdownMenuItem>
+                  </ProtectedComponent>
+                  <ProtectedComponent required={['employee:delete']}>
                     <DropdownMenuItem onClick={() => setOpenDelete(true)}>
                       Hapus
                     </DropdownMenuItem>
-                  </DropdownMenuGroup>
+                  </ProtectedComponent>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -168,6 +180,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                       payload: { employment_type: val as string },
                     })
                   }}
+                  disabled={!isAllowed}
                 />
               </DataSheet>
               <DataSheet className={cn(isEdit == 'joined_at' && 'items-start')}>
@@ -178,6 +191,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   onEdit={onEdit}
                   joined_at={employee.joined_at}
                   joined_type={employee.joined_type}
+                  permission={permission}
                 />
               </DataSheet>
               <DataSheet>
@@ -197,6 +211,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                       payload: { safety_induction_date: new Date(val) as Date },
                     })
                   }}
+                  disabled={!isAllowed}
                 />
               </DataSheet>
               <DataSheet className='items-start'>
@@ -204,6 +219,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                 <CompetenciesEmployee
                   id={id}
                   competencies={employee?.competencies || []}
+                  permission={permission}
                 />
               </DataSheet>
             </div>
@@ -224,6 +240,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     onUpdate={(val) => {
                       update({ id, payload: { last_education: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -236,6 +253,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     onUpdate={(val) => {
                       update({ id, payload: { place_of_birth: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -262,6 +280,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                       if (!id) return
                       update({ id, payload: { birth_date: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -293,6 +312,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     onUpdate={(val) => {
                       update({ id, payload: { marital_status: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -306,6 +326,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     onUpdate={(val) => {
                       update({ id, payload: { religion: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -319,6 +340,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     onUpdate={(val) => {
                       update({ id, payload: { email: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet className='items-start mt-4'>
@@ -326,6 +348,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   <PhoneEmployee
                     id={id}
                     phones={employee?.phoneNumbers || []}
+                    permission={permission}
                   />
                 </DataSheet>
                 <DataSheet className='items-start mt-4'>
@@ -333,11 +356,15 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                   <AddressEmployee
                     id={id}
                     addresses={employee?.addresses || []}
+                    permission={permission}
                   />
                 </DataSheet>
               </div>
             </Tab>
-            <Tab label='Gaji'>
+            <Tab
+              label='Gaji'
+              hidden={!permission.includes('employee:read-salary')}
+            >
               <div className='flex flex-col gap-5 px-4 pb-10 pt-2 bg-[#FBFBFB] min-h-[calc(100vh-422px)]'>
                 <DataSheet>
                   <p className='text-dark/50'>Gaji Pokok</p>
@@ -350,6 +377,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                     onUpdate={(val) => {
                       update({ id, payload: { basic_salary: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -369,6 +397,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                         payload: { pay_type: val as string },
                       })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -385,6 +414,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
                         payload: { overtime_salary: val as string },
                       })
                     }}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
               </div>
@@ -393,6 +423,7 @@ export default function DetailEmployee({ open, setOpen, id }: Props) {
               <div className='flex flex-col gap-3 px-4 pb-10 pt-4 bg-[#FBFBFB] min-h-[calc(100vh-422px)]'>
                 <CertifEmployee
                   certifications={employee?.certifications || []}
+                  permission={permission}
                   id={id}
                 />
               </div>

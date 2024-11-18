@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react'
+import { Key } from 'lucide-react'
 
-import { useApiData } from '@/hooks/use-api-data'
 import { cn } from '@/utils/cn'
+
+import {
+  useAddPermissionRole,
+  useDetailRole,
+  useRemovePermissionRole,
+} from '@/hooks/api/use-role'
+import { usePermissionGroup } from '@/hooks/api/use-permission'
+import { useApiData } from '@/hooks/use-api-data'
 
 import {
   Sheet,
@@ -10,22 +18,9 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
-import { usePermissionGroup } from '@/hooks/api/use-permission'
-
-import {
-  useAddPermissionRole,
-  useDetailRole,
-  useRemovePermissionRole,
-} from '@/hooks/api/use-role'
-import { 
-  Tabs, 
-  TabsList, 
-  TabsTrigger, 
-  TabsContent
-} from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Switch } from '@/components/ui/switch'
-
-import { Key } from 'lucide-react'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
 type Props = {
   open: boolean
@@ -60,7 +55,7 @@ export default function AddPermission({ open, setOpen, id }: Props) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen} modal={false}>
-      <SheetContent className='px-4 overflow-y-auto'>
+      <SheetContent className='px-4 overflow-y-auto w-full'>
         <SheetHeader>
           <div className='flex gap-2 items-center pb-2.5 border-b border-line'>
             <div className='h-10 w-10 rounded-lg border-line border flex items-center justify-center'>
@@ -77,17 +72,20 @@ export default function AddPermission({ open, setOpen, id }: Props) {
           </div>
         </SheetHeader>
         <Tabs defaultValue={String(defaultTab)} className='mt-6'>
-          <TabsList className='w-full justify-start p-0.5 h-fit mb-0'>
-            {permissionGroups?.map((group) => (
-              <TabsTrigger
-                key={group.id}
-                value={group.id.toString()}
-                className='px-4 capitalize'
-              >
-                {group.name}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          <ScrollArea className='pb-3'>
+            <TabsList className='w-full justify-start p-0.5 h-fit mb-0'>
+              {permissionGroups?.map((group) => (
+                <TabsTrigger
+                  key={group.id}
+                  value={group.id.toString()}
+                  className='px-4 capitalize'
+                >
+                  {group.name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            <ScrollBar orientation='horizontal' />
+          </ScrollArea>
 
           {permissionGroups?.map((group) => (
             <TabsContent key={group.id} value={String(group.id)}>

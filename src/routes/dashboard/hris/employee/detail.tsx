@@ -41,7 +41,7 @@ export default function Detail() {
   return (
     <DashboardLayout>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
-        <div>
+        <div className='overflow-hidden'>
           <TableEmployee
             positionId={positionId}
             name={link?.name}

@@ -27,6 +27,7 @@ type Props = {
     name: string
     value: string | number
   }[]
+  disabled?: boolean
 }
 
 type renderProps = {
@@ -34,35 +35,54 @@ type renderProps = {
   customData?: (val: string | number) => React.ReactNode
   keyData: string
   onEdit?: (val: string | null) => void
+  disabled?: boolean
 }
 
 const RenderData = memo(
-  ({ customData, defaultData, keyData, onEdit }: renderProps) => {
+  ({ customData, defaultData, keyData, onEdit, disabled }: renderProps) => {
     if (
       (customData && defaultData) ||
       (typeof defaultData == 'number' && defaultData === 0)
     ) {
       return (
-        <span className='inline-flex gap-2 items-center group w-full'>
+        <span
+          className={cn(
+            'inline-flex gap-2 items-center group w-full',
+            disabled && 'cursor-default'
+          )}
+        >
           {customData?.(defaultData)}
-          <Pencil
-            size={14}
-            className='text-gray-400 hidden group-hover:block'
-          />
+          {!disabled && (
+            <Pencil
+              size={14}
+              className='text-gray-400 hidden group-hover:block'
+            />
+          )}
         </span>
       )
     }
 
     if (defaultData || (typeof defaultData == 'number' && defaultData === 0)) {
       return (
-        <span className='inline-flex gap-2 items-center group'>
+        <span
+          className={cn(
+            'inline-flex gap-2 items-center group',
+            disabled && 'cursor-default'
+          )}
+        >
           {defaultData}
-          <Pencil
-            size={14}
-            className='text-gray-400 hidden group-hover:block'
-          />
+          {!disabled && (
+            <Pencil
+              size={14}
+              className='text-gray-400 hidden group-hover:block'
+            />
+          )}
         </span>
       )
+    }
+
+    if (disabled) {
+      return null
     }
 
     return (
@@ -94,6 +114,7 @@ export const Editable = memo(
     customData,
     customEdit,
     options,
+    disabled,
     ...props
   }: Props) => {
     const [data, setData] = useState<null | string | number>(
@@ -228,12 +249,13 @@ export const Editable = memo(
         ) : (
           <div
             className={cn('text-dark cursor-pointer', className)}
-            onClick={() => onEdit && onEdit(keyData)}
+            onClick={() => !disabled && onEdit?.(keyData)}
             {...props}
           >
             <RenderData
-              customData={customData}
               defaultData={defaultData}
+              customData={customData}
+              disabled={disabled}
               keyData={keyData}
               onEdit={onEdit}
             />

@@ -54,7 +54,7 @@ export default function AppSidebar() {
           </Button>
         )}
         <div className='rounded-lg w-full flex gap-2 items-center'>
-          <div className='border px-1 py-1 border-line bg-white rounded-lg'>
+          <div className='border px-1 py-1 border-gray-200 bg-white rounded-lg shadow-md shadow-gray-400/30'>
           <img src={Logo} className='h-6 w-6 rounded' />
           </div>
           <p className='text-dark font-medium text-sm'>ERP BJS</p>

@@ -1,36 +1,39 @@
-import { DataTable } from '@/components/data-table'
-import { usePosition } from '@/hooks/api/use-position'
-import { useTitle } from '../../_component/header'
-import { DashboardLayout } from '../../_component/layout'
-import { FilterTable, HeadTable } from '@/components/data-table/component'
-import { NetworkIcon, PencilIcon, TrashIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import CardStatusEmployee from './_component/index/card-status-employee'
-import CardTotalEmployee from './_component/index/card-total-employee'
+import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
-import Overlay from '@/components/common/overlay'
-import { PATH } from '@/utils/constant/_paths'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import {
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
-import { links } from './_component/links'
-import { createLinkDetail } from '@/utils/create-link-detail'
+import { NetworkIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
-import ModalAdd from './_component/index/add-position'
+
+import { createLinkDetail } from '@/utils/create-link-detail'
+import { usePosition } from '@/hooks/api/use-position'
+import { useApiData } from '@/hooks/use-api-data'
+import { PATH } from '@/utils/constant/_paths'
+
+import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
+import Overlay from '@/components/common/overlay'
+import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
+
+import CardStatusEmployee from './_component/index/card-status-employee'
+import CardTotalEmployee from './_component/index/card-total-employee'
 import ModalDelete from './_component/index/delete-position'
-import useUrlState from '@ahooksjs/use-url-state'
+import ModalAdd from './_component/index/add-position'
+import { DashboardLayout } from '../../_component/layout'
+import { useTitle } from '../../_component/header'
+import { links } from './_component/links'
 
 export default function Employee() {
-  const [url] = useUrlState({ name: '' })
-
-  const positionQuery = usePosition({
-    ...(url.name !== '' ? { name: url.name } : undefined),
-  })
-
   useTitle(links)
+
+  const [url] = useUrlState({ name: '' })
+  const { data, isLoading } = useApiData(
+    usePosition({
+      ...(url.name !== '' ? { name: url.name } : undefined),
+    })
+  )
 
   // COLUMNS POSITION
   const columns: ColumnDef<{
@@ -81,30 +84,34 @@ export default function Employee() {
       cell: ({ row }) => {
         return (
           <div className='flex justify-end w-full'>
-            <DropdownEdit>
-              <DropdownMenuGroup>
-                <DropdownMenuItem
-                  className='flex items-center gap-2 cursor-pointer'
-                  onClick={() => {
-                    handleDialog('add', true)
-                    setSelectedId(row.original.id)
-                  }}
-                >
-                  <PencilIcon className='w-3.5 h-3.5 text-dark/50' />
-                  Ubah
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className='flex items-center gap-2 cursor-pointer'
-                  onClick={() => {
-                    handleDialog('delete', true)
-                    setSelectedId(row.original.id)
-                  }}
-                >
-                  <TrashIcon className='w-3.5 h-3.5 text-dark/50' />
-                  Hapus
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownEdit>
+            <ProtectedComponent
+              required={['position:update', 'position:delete']}
+            >
+              <DropdownEdit>
+                <ProtectedComponent required={['position:update']}>
+                  <DropdownMenuItem
+                    className='flex items-center gap-2 cursor-pointer rounded-none'
+                    onClick={() => {
+                      handleDialog('add', true)
+                      setSelectedId(row.original.id)
+                    }}
+                  >
+                    Ubah
+                  </DropdownMenuItem>
+                </ProtectedComponent>
+                <ProtectedComponent required={['position:delete']}>
+                  <DropdownMenuItem
+                    className='flex items-center gap-2 cursor-pointer rounded-none'
+                    onClick={() => {
+                      handleDialog('delete', true)
+                      setSelectedId(row.original.id)
+                    }}
+                  >
+                    Hapus
+                  </DropdownMenuItem>
+                </ProtectedComponent>
+              </DropdownEdit>
+            </ProtectedComponent>
           </div>
         )
       },
@@ -136,12 +143,14 @@ export default function Employee() {
               <NetworkIcon className='text-[#989CA8]' />
               <p className='text-dark font-medium'>Jabatan</p>
             </div>
-            <Button onClick={() => handleDialog('add', true)}>Tambah</Button>
+            <ProtectedComponent required={['position:create']}>
+              <Button onClick={() => handleDialog('add', true)}>Tambah</Button>
+            </ProtectedComponent>
           </HeadTable>
           <FilterTable placeholder='Cari jabatan' />
           <DataTable
-            data={positionQuery.data?.data?.data || []}
-            isLoading={positionQuery.isLoading}
+            data={data || []}
+            isLoading={isLoading}
             columns={columns}
           />
         </div>

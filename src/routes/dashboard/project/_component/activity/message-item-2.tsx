@@ -49,7 +49,7 @@ export default function MessageItem2({
   const isOwnMessage = currentUser?.id === props.user?.id
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [existingPhotos, setExistingPhotos] = useState(props.attachments || [])
-  
+
   const setLightboxState = useSetAtom(lightboxAtom)
   const [edit, setEdit] = useAtom(editAtom)
 
@@ -317,7 +317,7 @@ export default function MessageItem2({
                   onClick={() => handleImageClick(idx)}
                 />
               ))}
-              {props.attachments.length > 2 && (
+              {props.attachments.length > 3 && (
                 <div
                   className='w-14 h-14 rounded-lg bg-gray-200 flex justify-center items-center cursor-pointer hover:bg-gray-300'
                   onClick={() => handleImageClick(3)}

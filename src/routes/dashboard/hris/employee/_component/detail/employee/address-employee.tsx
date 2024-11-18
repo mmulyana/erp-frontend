@@ -16,9 +16,10 @@ import { Controller, useForm } from 'react-hook-form'
 type Props = {
   id?: number | null
   addresses: Address[]
+  permission?: string[]
 }
 
-export default function AddressEmployee({ id, addresses }: Props) {
+export default function AddressEmployee({ id, addresses, permission }: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -90,6 +91,8 @@ export default function AddressEmployee({ id, addresses }: Props) {
     }
   }
 
+  const isAllowed = permission?.includes('employee:update')
+
   if (!id) return null
 
   return (
@@ -110,22 +113,26 @@ export default function AddressEmployee({ id, addresses }: Props) {
                 >
                   <p className='text-dark'>{address.value}</p>
                   <div className='absolute right-0 top-0 flex gap-2 items-center'>
-                    <button
-                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                      onClick={() => {
-                        remove({ id: address.id })
-                      }}
-                    >
-                      <Trash size={12} />
-                    </button>
-                    <button
-                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                      onClick={() => {
-                        onEdit(address.id)
-                      }}
-                    >
-                      <Pencil size={12} />
-                    </button>
+                    {isAllowed && (
+                      <button
+                        className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                        onClick={() => {
+                          remove({ id: address.id })
+                        }}
+                      >
+                        <Trash size={12} />
+                      </button>
+                    )}
+                    {isAllowed && (
+                      <button
+                        className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                        onClick={() => {
+                          onEdit(address.id)
+                        }}
+                      >
+                        <Pencil size={12} />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -149,22 +156,26 @@ export default function AddressEmployee({ id, addresses }: Props) {
               <div className='relative group gap-2 flex items-center'>
                 <p className='text-dark'>{addresses[0].value}</p>
                 <div className='absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 flex gap-2 items-center'>
-                  <button
-                    className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                    onClick={() => {
-                      remove({ id: addresses[0].id })
-                    }}
-                  >
-                    <Trash size={12} />
-                  </button>
-                  <button
-                    className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                    onClick={() => {
-                      onEdit(addresses[0].id)
-                    }}
-                  >
-                    <Pencil size={12} />
-                  </button>
+                  {isAllowed && (
+                    <button
+                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                      onClick={() => {
+                        remove({ id: addresses[0].id })
+                      }}
+                    >
+                      <Trash size={12} />
+                    </button>
+                  )}
+                  {isAllowed && (
+                    <button
+                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                      onClick={() => {
+                        onEdit(addresses[0].id)
+                      }}
+                    >
+                      <Pencil size={12} />
+                    </button>
+                  )}
                 </div>
               </div>
               {addresses.length > 1 && (
@@ -269,11 +280,11 @@ export default function AddressEmployee({ id, addresses }: Props) {
                 )}
               />
             </div>
-            <div className='flex justify-end gap-2'>
+            <div className='flex justify-end gap-4'>
               <Button
                 type='submit'
                 variant='ghost'
-                className='h-7 font-normal text-sm rounded-md p-0 px-2 text-red-400 hover:text-red-600'
+                className='h-7 font-normal text-sm rounded-md text-red-400 hover:text-red-600'
                 onClick={() => {
                   setIsAddress(false)
                   setSelectedId(null)
@@ -285,8 +296,7 @@ export default function AddressEmployee({ id, addresses }: Props) {
               </Button>
               <Button
                 type='submit'
-                variant='secondary'
-                className='h-7 font-normal text-sm rounded-md p-0 px-2'
+                className='h-7 font-normal text-sm rounded-md'
                 onClick={() => {
                   if (!id) return
                   if (selectedId) {
@@ -324,16 +334,18 @@ export default function AddressEmployee({ id, addresses }: Props) {
           </div>
         </Form>
       ) : (
-        <Button
-          variant='ghost'
-          className='font-normal hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mt-1'
-          onClick={() => {
-            setIsAddress(true)
-          }}
-        >
-          <Plus size={14} />
-          Tambah alamat
-        </Button>
+        isAllowed && (
+          <Button
+            variant='ghost'
+            className='font-normal hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mt-1'
+            onClick={() => {
+              setIsAddress(true)
+            }}
+          >
+            <Plus size={14} />
+            Tambah alamat
+          </Button>
+        )
       )}
     </div>
   )

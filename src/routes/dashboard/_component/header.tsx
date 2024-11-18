@@ -52,7 +52,7 @@ export default function Header() {
     >
       <div className='flex gap-3 items-center'>
         <SidebarTrigger />
-        {links.length && <Separator className='border border-line h-7' orientation='vertical'/>}
+        {links.length && !isMobile && <Separator className='border border-line h-7' orientation='vertical'/>}
         {!isMobile && (
           <BreadCrumbWrapper>
             <BreadcrumbList className='ml-2 flex items-center'>

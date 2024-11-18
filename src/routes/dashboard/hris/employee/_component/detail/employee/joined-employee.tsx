@@ -16,6 +16,7 @@ type Props = {
   joined_at: string | undefined
   joined_type: string | undefined
   onEdit?: (val: string | null) => void
+  permission?: string[]
 }
 export default function JoinedEmployee({
   id,
@@ -23,6 +24,7 @@ export default function JoinedEmployee({
   onEdit,
   joined_at,
   joined_type,
+  permission,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -52,6 +54,8 @@ export default function JoinedEmployee({
     onEdit?.(null)
     containerRef.current?.focus()
   }
+
+  const isAllowed = permission?.includes('employee:update')
 
   return (
     <div className={cn(isEdit === 'joined_at' && 'pt-2')} ref={containerRef}>
@@ -144,6 +148,7 @@ export default function JoinedEmployee({
           </Form>
         }
         className='capitalize'
+        disabled={!isAllowed}
       />
     </div>
   )

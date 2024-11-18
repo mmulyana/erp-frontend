@@ -1,16 +1,5 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { atom, useAtom } from 'jotai'
 import React, { useState, useEffect } from 'react'
-import MenuAccount from './menu-account'
-import { cn } from '@/utils/cn'
-import MenuPassword from './menu-password'
+import { atom, useAtom } from 'jotai'
 import {
   ArrowLeft,
   Award,
@@ -25,16 +14,30 @@ import {
   UserCircle,
   X,
 } from 'lucide-react'
-import MenuCompetency from './menu-competency'
-import MenuProjectLabel from './menu-project-label'
-import MenuInventoryLabel from './menu-inventory-label'
-import MenuInventoryLocation from './menu-inventory-location'
-import MenuInventoryMeasurement from './menu-inventory-measurement'
-import MenuInventoryBrand from './menu-inventory-brand'
-import MenuInventoryCategory from './menu-inventory-category'
+
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/api/use-auth'
+import { cn } from '@/utils/cn'
+
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+
+import MenuInventoryMeasurement from './menu-inventory-measurement'
+import MenuInventoryLocation from './menu-inventory-location'
+import MenuInventoryCategory from './menu-inventory-category'
+import MenuInventoryLabel from './menu-inventory-label'
+import MenuInventoryBrand from './menu-inventory-brand'
+import MenuProjectLabel from './menu-project-label'
+import MenuCompetency from './menu-competency'
+import MenuPassword from './menu-password'
+import MenuAccount from './menu-account'
 
 const MENUS = {
   account_myaccount: 'Akun',

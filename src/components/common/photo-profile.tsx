@@ -11,6 +11,7 @@ type Props = {
   onRemove?: () => void
   size?: number
   className?: string
+  disabled?: boolean
 }
 
 export default function PhotoProfile({
@@ -19,6 +20,7 @@ export default function PhotoProfile({
   onRemove,
   size = 80,
   className,
+  disabled,
 }: Props) {
   const [preview, setPreview] = useState<string | null>(defaultPreview)
   const [error, setError] = useState<string | null>(null)
@@ -119,24 +121,30 @@ export default function PhotoProfile({
           onChange={handlePhotoChange}
           ref={fileInputRef}
         />
-        <div className='space-y-1'>
-          <div className='flex gap-2 items-center'>
-            <Button type='button' variant='outline' onClick={handleUploadClick}>
-              {preview ? 'Ganti photo' : 'Upload Photo'}
-            </Button>
-            {preview && (
+        {!disabled && (
+          <div className='space-y-1'>
+            <div className='flex gap-2 items-center'>
               <Button
                 type='button'
                 variant='outline'
-                className='h-8 w-8 p-0'
-                onClick={handleRemovePhoto}
+                onClick={handleUploadClick}
               >
-                <X className='w-5 h-5 text-red-primary' />
+                {preview ? 'Ganti photo' : 'Upload Photo'}
               </Button>
-            )}
+              {preview && (
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='h-8 w-8 p-0'
+                  onClick={handleRemovePhoto}
+                >
+                  <X className='w-5 h-5 text-red-primary' />
+                </Button>
+              )}
+            </div>
+            <p className='text-sm text-dark/50'>PNG, JPEG max size 5MB</p>
           </div>
-          <p className='text-sm text-dark/50'>PNG, JPEG max size 5MB</p>
-        </div>
+        )}
         {error && <p className='text-red-500 text-sm'>{error}</p>}
       </div>
 

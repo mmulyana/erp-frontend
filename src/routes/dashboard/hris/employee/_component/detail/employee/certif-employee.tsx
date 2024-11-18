@@ -48,11 +48,13 @@ import { CertifFormValues, certifSchema } from '@/utils/schema/certif'
 type Props = {
   id?: number | null
   certifications: Certification[]
+  permission?: string[]
 }
 
 export default function CertifEmployee({
   id,
   certifications: dataCertif,
+  permission,
 }: Props) {
   const setCurrentStep = useSetAtom(stepperAtom)
 
@@ -134,6 +136,8 @@ export default function CertifEmployee({
     }
   }, [open])
 
+  const isAllowed = permission?.includes('employee:update')
+
   return (
     <div className='flex flex-col gap-4 w-full overflow-hidden'>
       {certifications?.map((item, index: number) => (
@@ -180,20 +184,22 @@ export default function CertifEmployee({
               />
             </div>
           )}
-          <div className='absolute -top-1 right-0 flex gap-2 pr-1'>
-            <button
-              className='h-7 w-7 rounded-full hover:bg-line flex justify-center items-center'
-              onClick={() => onEdit(item.id)}
-            >
-              <Pencil className='text-dark' size={14} />
-            </button>
-            <button
-              className='h-7 w-7 rounded-full hover:bg-line flex justify-center items-center'
-              onClick={() => remove({ id: item.id })}
-            >
-              <Trash className='text-dark' size={14} />
-            </button>
-          </div>
+          {isAllowed && (
+            <div className='absolute -top-1 right-0 flex gap-2 pr-1'>
+              <button
+                className='h-7 w-7 rounded-full hover:bg-line flex justify-center items-center'
+                onClick={() => onEdit(item.id)}
+              >
+                <Pencil className='text-dark' size={14} />
+              </button>
+              <button
+                className='h-7 w-7 rounded-full hover:bg-line flex justify-center items-center'
+                onClick={() => remove({ id: item.id })}
+              >
+                <Trash className='text-dark' size={14} />
+              </button>
+            </div>
+          )}
         </div>
       ))}
 
@@ -201,7 +207,11 @@ export default function CertifEmployee({
         <DialogTrigger asChild>
           <Button
             variant='ghost'
-            className='font-normal hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mx-auto mt-2'
+            className={cn(
+              'font-normal hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mx-auto mt-2',
+              !isAllowed && 'hidden'
+            )}
+            disabled={!isAllowed}
           >
             <Plus size={14} />
             Tambah Sertifikat

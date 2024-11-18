@@ -1,5 +1,18 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { useMemo, useState } from 'react'
+import { Plus, X } from 'lucide-react'
+import * as z from 'zod'
+
+import { useAddCompetency, useRemoveCompetency } from '@/hooks/api/use-employee'
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useCompetency } from '@/hooks/api/use-competency'
+import { EmployeeCompetency } from '@/utils/types/api'
+import { cn } from '@/utils/cn'
+
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
+import Label from '@/components/common/label'
 import {
   Command,
   CommandEmpty,
@@ -13,17 +26,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useCompetency } from '@/hooks/api/use-competency'
-import { cn } from '@/utils/cn'
-import { EmployeeCompetency } from '@/utils/types/api'
-import { Plus, X } from 'lucide-react'
-import Label from '@/components/common/label'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { useAddCompetency, useRemoveCompetency } from '@/hooks/api/use-employee'
 
 const formSchema = z.object({
   competencyId: z.number({
@@ -36,12 +38,20 @@ type FormValues = z.infer<typeof formSchema>
 type Props = {
   id?: number | null
   competencies: EmployeeCompetency[]
+  permission?: string[]
+  className?: string
 }
 
-export default function CompetenciesEmployee({ id, competencies }: Props) {
-  const { data } = useCompetency()
+export default function CompetenciesEmployee({
+  id,
+  competencies,
+  permission,
+  className,
+}: Props) {
   const { mutate: add } = useAddCompetency()
   const { mutate: remove } = useRemoveCompetency()
+
+  const { data } = useCompetency()
 
   const [search, setSearch] = useState('')
   const [open, setOpen] = useState(false)
@@ -87,10 +97,10 @@ export default function CompetenciesEmployee({ id, competencies }: Props) {
     )
   }
 
+  const isAllowed = permission?.includes('employee:update')
+
   return (
-    <div
-      className={cn('flex flex-wrap gap-2', !!competencies.length && 'pt-2')}
-    >
+    <div className={cn('flex flex-wrap gap-2', className)}>
       <div className='flex gap-2 flex-wrap items-center'>
         {competencies?.map((item, index) => (
           <Label
@@ -98,16 +108,18 @@ export default function CompetenciesEmployee({ id, competencies }: Props) {
             name={item.competency.name}
             key={`label-${index}`}
             suffix={
-              <Button
-                variant='ghost'
-                className='border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
-                style={{ color: item.competency.color }}
-                onClick={() => {
-                  remove({ id: item.id })
-                }}
-              >
-                <X size={14} strokeWidth={3} />
-              </Button>
+              isAllowed && (
+                <Button
+                  variant='ghost'
+                  className='border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
+                  style={{ color: item.competency.color }}
+                  onClick={() => {
+                    remove({ id: item.id })
+                  }}
+                >
+                  <X size={14} strokeWidth={3} />
+                </Button>
+              )
             }
           />
         ))}
@@ -123,7 +135,11 @@ export default function CompetenciesEmployee({ id, competencies }: Props) {
                       <PopoverTrigger asChild>
                         <Button
                           variant='ghost'
-                          className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative'
+                          className={cn(
+                            'font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative',
+                            !isAllowed && 'hidden'
+                          )}
+                          disabled={!isAllowed}
                         >
                           <Plus size={14} />
                           Tambah

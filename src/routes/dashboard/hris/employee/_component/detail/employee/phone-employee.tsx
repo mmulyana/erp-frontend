@@ -18,9 +18,10 @@ type TForm = { value: string }
 type Props = {
   id?: number | null
   phones: PhoneNumber[]
+  permission?: string[]
 }
 
-export default function PhoneEmployee({ id, phones }: Props) {
+export default function PhoneEmployee({ id, phones, permission }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -71,7 +72,9 @@ export default function PhoneEmployee({ id, phones }: Props) {
   const onCopy = async (text: string) => {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text)
-      toast.success('Nomor berhasil disalin')
+      toast.success('Nomor berhasil disalin', {
+        duration: 1000,
+      })
     }
   }
 
@@ -98,6 +101,8 @@ export default function PhoneEmployee({ id, phones }: Props) {
     )
   }
 
+  const isAllowed = permission?.includes('employee:update')
+
   if (!id) return null
 
   return (
@@ -121,22 +126,26 @@ export default function PhoneEmployee({ id, phones }: Props) {
                     >
                       <Copy size={12} />
                     </button>
-                    <button
-                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                      onClick={() => {
-                        remove({ id: phone.id })
-                      }}
-                    >
-                      <Trash size={12} />
-                    </button>
-                    <button
-                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                      onClick={() => {
-                        onEdit(phone.id)
-                      }}
-                    >
-                      <Pencil size={12} />
-                    </button>
+                    {isAllowed && (
+                      <button
+                        className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                        onClick={() => {
+                          remove({ id: phone.id })
+                        }}
+                      >
+                        <Trash size={12} />
+                      </button>
+                    )}
+                    {isAllowed && (
+                      <button
+                        className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                        onClick={() => {
+                          onEdit(phone.id)
+                        }}
+                      >
+                        <Pencil size={12} />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -166,22 +175,26 @@ export default function PhoneEmployee({ id, phones }: Props) {
                   >
                     <Copy size={12} />
                   </button>
-                  <button
-                    className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                    onClick={() => {
-                      remove({ id: phones[0].id })
-                    }}
-                  >
-                    <Trash size={12} />
-                  </button>
-                  <button
-                    className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
-                    onClick={() => {
-                      onEdit(phones[0].id)
-                    }}
-                  >
-                    <Pencil size={12} />
-                  </button>
+                  {isAllowed && (
+                    <button
+                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                      onClick={() => {
+                        remove({ id: phones[0].id })
+                      }}
+                    >
+                      <Trash size={12} />
+                    </button>
+                  )}
+                  {isAllowed && (
+                    <button
+                      className='w-6 h-6 rounded-full text-dark bg-muted-foreground/10 flex items-center justify-center'
+                      onClick={() => {
+                        onEdit(phones[0].id)
+                      }}
+                    >
+                      <Pencil size={12} />
+                    </button>
+                  )}
                 </div>
               </div>
               {phones.length > 1 && (
@@ -277,16 +290,18 @@ export default function PhoneEmployee({ id, phones }: Props) {
           </form>
         </Form>
       ) : (
-        <Button
-          variant='ghost'
-          className='font-normal hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mt-1'
-          onClick={() => {
-            setIsPhone(true)
-          }}
-        >
-          <Plus size={14} />
-          Tambah No.telp
-        </Button>
+        isAllowed && (
+          <Button
+            variant='ghost'
+            className='font-normal hover:bg-transparent gap-1 flex items-center text-blue-primary/80 hover:text-blue-primary h-fit p-0 relative text-sm mt-1'
+            onClick={() => {
+              setIsPhone(true)
+            }}
+          >
+            <Plus size={14} />
+            Tambah No.telp
+          </Button>
+        )
       )}
     </div>
   )

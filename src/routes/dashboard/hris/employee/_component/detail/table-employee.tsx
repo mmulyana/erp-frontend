@@ -1,25 +1,29 @@
-import Chips from '@/components/common/chips'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import Label from '@/components/common/label'
-import Overlay from '@/components/common/overlay'
-import { DataTable } from '@/components/data-table'
+import useUrlState from '@ahooksjs/use-url-state'
+import { CircleUserRoundIcon, SettingsIcon } from 'lucide-react'
+import { differenceInYears, parse } from 'date-fns'
+import { ColumnDef } from '@tanstack/react-table'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { isString } from 'lodash'
+
+import { settingConfig } from '@/routes/dashboard/_component/setting/setting'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
+import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
+import Overlay from '@/components/common/overlay'
+import Chips from '@/components/common/chips'
+
+import { permissionAtom } from '@/atom/permission'
+
 import { useEmployees } from '@/hooks/api/use-employee'
 import { useApiData } from '@/hooks/use-api-data'
-import { settingConfig } from '@/routes/dashboard/_component/setting/setting'
+
 import { EDUCATIONS_OBJ } from '@/utils/data/educations'
 import { Employee } from '@/utils/types/api'
-import useUrlState from '@ahooksjs/use-url-state'
-import { ColumnDef } from '@tanstack/react-table'
-import { differenceInYears, parse } from 'date-fns'
-import { useSetAtom } from 'jotai'
-import { isString } from 'lodash'
-import { CircleUserRoundIcon, SettingsIcon } from 'lucide-react'
+
+import CompetenciesEmployee from './employee/competencies-employee'
 
 type TableEmployeeProps = {
   status?: boolean
@@ -39,6 +43,7 @@ export default function TableEmployee({
   onDeleteEmployee,
   onSelect,
 }: TableEmployeeProps) {
+  const permission = useAtomValue(permissionAtom)
   const setConfig = useSetAtom(settingConfig)
 
   const [url] = useUrlState({ name: '', page: '' })
@@ -60,28 +65,34 @@ export default function TableEmployee({
       header: 'Nama',
       cell: ({ row }) => {
         const { fullname, id } = row.original
+        const isAllowed = permission?.includes('employee:detail')
         return (
-          <div className='w-[200px]'>
+          <div className='max-w-[160px]'>
             <Overlay
               className='w-fit pr-14'
               overlay={
-                <button
-                  onClick={() => {
-                    onSelect(id)
-                    onDetailEmployee(true)
-                  }}
-                  className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-                >
-                  Lihat
-                </button>
+                isAllowed && (
+                  <button
+                    onClick={() => {
+                      onSelect(id)
+                      onDetailEmployee(true)
+                    }}
+                    className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                  >
+                    Lihat
+                  </button>
+                )
               }
             >
               <div className='hover:text-dark'>
                 <button
                   onClick={() => {
-                    onSelect(id)
-                    onDetailEmployee(true)
+                    if (isAllowed) {
+                      onSelect(id)
+                      onDetailEmployee(true)
+                    }
                   }}
+                  disabled={!isAllowed}
                   className='justify-start flex'
                 >
                   <span className='break-words max-w-[120px] text-left'>
@@ -121,16 +132,15 @@ export default function TableEmployee({
       accessorKey: 'employeeCompetency',
       header: 'Kompetensi',
       cell: ({ cell }) => {
-        const competencies = cell.row.original.competencies
+        const { competencies, id } = cell.row.original
         return (
-          <div className='flex gap-2 max-w-fit'>
-            {competencies?.map((item) => (
-              <Label
-                key={`competency-${cell.row.original.id}-${item.id}`}
-                name={item.competency.name}
-                color={item.competency.color}
-              />
-            ))}
+          <div className='w-[200px]'>
+            <CompetenciesEmployee
+              competencies={competencies}
+              permission={permission}
+              className='py-2'
+              id={id}
+            />
           </div>
         )
       },
@@ -148,22 +158,34 @@ export default function TableEmployee({
         const { id } = row.original
         return (
           <div className='flex justify-end w-full'>
-            <DropdownEdit className='-translate-x-3'>
-              <DropdownMenuGroup>
-                <DropdownMenuItem className='flex items-center gap-2 cursor-pointer'>
-                  Nonaktifkan
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className='flex items-center gap-2 cursor-pointer'
-                  onClick={() => {
-                    onSelect(id)
-                    onDeleteEmployee(true)
-                  }}
+            <ProtectedComponent
+              required={[
+                'employee:activate',
+                'employee:deactivate',
+                'employee:delete',
+              ]}
+            >
+              <DropdownEdit className='-translate-x-3'>
+                <ProtectedComponent
+                  required={['employee:activate', 'employee:deactivate']}
                 >
-                  Hapus
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownEdit>
+                  <DropdownMenuItem className='flex items-center gap-2 cursor-pointer rounded-none'>
+                    Nonaktifkan
+                  </DropdownMenuItem>
+                </ProtectedComponent>
+                <ProtectedComponent required={['employee:delete']}>
+                  <DropdownMenuItem
+                    className='flex items-center gap-2 cursor-pointer rounded-none'
+                    onClick={() => {
+                      onSelect(id)
+                      onDeleteEmployee(true)
+                    }}
+                  >
+                    Hapus
+                  </DropdownMenuItem>
+                </ProtectedComponent>
+              </DropdownEdit>
+            </ProtectedComponent>
           </div>
         )
       },
@@ -179,16 +201,20 @@ export default function TableEmployee({
           <p className='text-dark font-medium'>{name}</p>
         </div>
         <div className='flex gap-2 items-center'>
-          <Button
-            variant='secondary'
-            className='w-8 p-0'
-            onClick={() =>
-              setConfig({ open: true, default: 'hris_competency' })
-            }
-          >
-            <SettingsIcon className='w-4 h-4 text-dark/70' />
-          </Button>
-          <Button onClick={onAddEmployee}>Pegawai Baru</Button>
+          <ProtectedComponent required={['competency:read']}>
+            <Button
+              variant='secondary'
+              className='w-8 p-0'
+              onClick={() =>
+                setConfig({ open: true, default: 'hris_competency' })
+              }
+            >
+              <SettingsIcon className='w-4 h-4 text-dark/70' />
+            </Button>
+          </ProtectedComponent>
+          <ProtectedComponent required={['employee:create']}>
+            <Button onClick={onAddEmployee}>Pegawai Baru</Button>
+          </ProtectedComponent>
         </div>
       </HeadTable>
       <FilterTable placeholder='Cari pegawai' />
