@@ -11,6 +11,8 @@ import { useEffect } from 'react'
 import { z } from 'zod'
 import { socket } from '@/utils/socket'
 import ProtectedComponent from '@/components/protected'
+import { useQueryClient } from '@tanstack/react-query'
+import { KEYS } from '@/utils/constant/_keys'
 
 // type Form = Omit<createAttachment, 'file' | 'name'> & { file: File | null }
 const ACCEPTED_FILE_TYPES = [
@@ -49,6 +51,7 @@ export default function AttachmentDialog({
   withSocket,
 }: Props) {
   const user = useAtomValue(userAtom)
+  const queryClient = useQueryClient()
 
   const { mutate: upload } = useCreateAttachment()
 
@@ -76,6 +79,9 @@ export default function AttachmentDialog({
       {
         onSuccess: () => {
           setOpen(false)
+          queryClient.invalidateQueries({
+            queryKey: [KEYS.PROJECT_DETAIL, projectId],
+          })
           if (withSocket) socket.emit('request_board')
         },
       }

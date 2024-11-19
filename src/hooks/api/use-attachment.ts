@@ -55,20 +55,11 @@ export const useUpdateAttachment = () => {
       payload,
       id,
     }: {
-      payload: Partial<createAttachment>
+      payload: Partial<Omit<createAttachment, 'isSecret'>> & {
+        isSecret: string
+      }
       id: number
     }): Promise<AxiosResponse<IApi<Attachment>>> => {
-      // const formData = new FormData()
-      // Object.entries(payload).forEach(([key, value]) => {
-      //   if (key === 'file') {
-      //     formData.append(key, value as File)
-      //   } else if (typeof value == 'number') {
-      //     formData.append(key, String(value))
-      //   } else if (value !== null && typeof value == 'string') {
-      //     formData.append(key, value)
-      //   }
-      // })
-
       return await http.patch(`${URLS.PROJECT_ATTACHMENT}/${id}`, payload)
     },
     onSuccess: (data) => {

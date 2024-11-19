@@ -1,22 +1,23 @@
+import { Eye, Lock } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import { format } from 'date-fns'
+import { useState } from 'react'
 
 import { useAttachments } from '@/hooks/api/use-attachment'
 import { useApiData } from '@/hooks/use-api-data'
 
+import { permissionAtom } from '@/atom/permission'
+
 import { BASE_URL } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'
 
-import { Card, CardBody, CardHead } from '@/components/common/card-v1'
-import { buttonVariants } from '@/components/ui/button'
-
-import { Eye, FileSpreadsheet, Lock } from 'lucide-react'
-import Search from '@/components/common/search'
-import { useState } from 'react'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import LoadingState from '@/components/common/loading-state'
-import { useAtomValue } from 'jotai'
-import { permissionAtom } from '@/atom/permission'
+import FileIcon from '@/components/common/file-icon'
+import Search from '@/components/common/search'
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { buttonVariants } from '@/components/ui/button'
 
 export default function CardAttachments() {
   const permission = useAtomValue(permissionAtom)
@@ -45,20 +46,19 @@ export default function CardAttachments() {
           <ScrollArea className='overflow-hidden w-full h-full  px-2.5 pb-2.5 rounded-md'>
             <div className='flex flex-col gap-4 bg-dark/5 h-full p-2'>
               {attachments
-                ?.filter(
-                  (item) =>
-                    !permission.includes('project:read-secret-attachment') &&
-                    !item.isSecret
-                )
+                ?.filter((item) => {
+                  if (!permission.includes('project:read-secret-attachment')) {
+                    return !item.isSecret
+                  }
+                  return item
+                })
                 .map((item) => (
                   <div
                     className='flex justify-between items-center'
                     key={'attachments-' + item.id}
                   >
                     <div className='flex gap-2.5 items-start'>
-                      <div className='h-fit flex-shrink-0 pt-1'>
-                        <FileSpreadsheet size={20} className='text-gray-600' />
-                      </div>
+                      <FileIcon type={item.type || ''} />
                       <div>
                         <div className='flex gap-2 items-center'>
                           <p className='text-dark leading-5 text-sm font-medium'>

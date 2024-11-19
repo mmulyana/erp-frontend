@@ -1,4 +1,4 @@
-import { Ellipsis, Eye, FileSpreadsheet, Lock } from 'lucide-react'
+import { Ellipsis, Eye, Lock } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { useState } from 'react'
@@ -25,6 +25,9 @@ import {
 import AttachmentDialog from './attachment-dialog'
 
 import EmptyState from '@/components/common/empty-state'
+import FileIcon from '@/components/common/file-icon'
+import { useQueryClient } from '@tanstack/react-query'
+import { KEYS } from '@/utils/constant/_keys'
 
 type Props = {
   projectId?: number
@@ -39,6 +42,8 @@ export default function AttachmentProject({
   withSocket,
   permission,
 }: Props) {
+  const queryClient = useQueryClient()
+
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<null | {
     id: number
@@ -69,6 +74,9 @@ export default function AttachmentProject({
         {
           onSuccess: () => {
             setSelected(null)
+            queryClient.invalidateQueries({
+              queryKey: [KEYS.PROJECT_DETAIL, projectId],
+            })
             if (withSocket) socket.emit('request_board')
           },
         }
@@ -76,14 +84,28 @@ export default function AttachmentProject({
     }
     if (selected.type == 'hide') {
       updateAttachment(
-        { id: selected.id, payload: { isSecret: true } },
-        { onSuccess: () => setSelected(null) }
+        { id: selected.id, payload: { isSecret: 'true' } },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [KEYS.PROJECT_DETAIL, projectId],
+            })
+            setSelected(null)
+          },
+        }
       )
     }
     if (selected.type == 'publish') {
       updateAttachment(
-        { id: selected.id, payload: { isSecret: false } },
-        { onSuccess: () => setSelected(null) }
+        { id: selected.id, payload: { isSecret: 'false' } },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [KEYS.PROJECT_DETAIL, projectId],
+            })
+            setSelected(null)
+          },
+        }
       )
     }
   }
@@ -94,7 +116,7 @@ export default function AttachmentProject({
 
   return (
     <>
-      <div className='flex flex-col gap-2 mt-2'>
+      <div className='flex flex-col gap-4 mt-2'>
         {attachments?.length ? (
           attachments
             ?.filter((item) => {
@@ -109,9 +131,7 @@ export default function AttachmentProject({
                 key={`attachment-${index}`}
               >
                 <div className='flex gap-2.5 items-center'>
-                  <div className='h-10 w-10 rounded-lg bg-dark/10 text-dark flex items-center justify-center'>
-                    <FileSpreadsheet size={24} />
-                  </div>
+                  <FileIcon type={item.type ?? ''} />
                   <div>
                     <div className='flex gap-2 items-center'>
                       <p className='text-dark leading-5 text-sm'>
@@ -212,6 +232,7 @@ export default function AttachmentProject({
         title={!!selected ? title[selected?.type] : ''}
         body={!!selected ? body[selected?.type] : ''}
         onConfirm={handleConfirm}
+        className='border border-red-500'
       />
     </>
   )
