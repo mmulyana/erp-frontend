@@ -65,8 +65,9 @@ export const useCreateProject = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [KEYS.PROJECT],
-        refetchType: 'all',
-        exact: false,
+      })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.PROJECT_PAGINATION],
       })
       toast.success(data.data.message)
     },
@@ -97,11 +98,9 @@ export const useUpdateProject = () => {
       if (data.data.data?.update) {
         queryClient.invalidateQueries({
           queryKey: [KEYS.PROJECT_PAGINATION],
-          refetchType: 'all',
         })
         queryClient.invalidateQueries({
           queryKey: [KEYS.PROJECT],
-          refetchType: 'all',
         })
       }
       toast.success(data.data.message)
