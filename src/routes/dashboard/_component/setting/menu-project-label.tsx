@@ -6,6 +6,7 @@ import { cn } from '@/utils/cn'
 
 import { Form, FormField, FormLabel } from '@/components/ui/form'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import ProtectedComponent from '@/components/protected'
 import { RadioV2 } from '@/components/common/radio-v2'
 import Search from '@/components/common/search'
 import { Button } from '@/components/ui/button'
@@ -17,7 +18,6 @@ import {
   useProjectLabels,
   useUpdateProjectLabel,
 } from '@/hooks/api/use-project-label'
-import ProtectedComponent from '@/components/protected'
 
 type Label = {
   name: string

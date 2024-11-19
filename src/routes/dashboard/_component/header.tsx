@@ -116,7 +116,6 @@ export default function Header() {
               </p>
             </div>
           )}
-          <div className='w-3 h-3 rounded-full border-2 border-white bg-[#2A9D90] absolute -right-1 -bottom-0.5'></div>
         </Button>
       </div>
     </div>
