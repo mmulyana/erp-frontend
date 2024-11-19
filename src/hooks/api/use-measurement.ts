@@ -13,9 +13,7 @@ type Params = Pagination & {
 export const useMeasurement = (params?: Params) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsMeasurement[]>>> => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.INVENTORY_MEASUREMENT,
+      return await http(URLS.INVENTORY_MEASUREMENT, {
         params,
       })
     },
@@ -34,7 +32,7 @@ export const useDetailMeasurement = ({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsMeasurement>>> => {
       return await http(`${URLS.INVENTORY_MEASUREMENT}/${id}`)
     },
-    queryKey: [KEYS.MEASUREMENT, id],
+    queryKey: [KEYS.MEASUREMENT_DETAIL, id],
     enabled,
   })
 }
@@ -78,7 +76,7 @@ export const useUpdateMeasurement = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.MEASUREMENT] })
       queryClient.invalidateQueries({
-        queryKey: [KEYS.MEASUREMENT, data.data.data?.id],
+        queryKey: [KEYS.MEASUREMENT_DETAIL, data.data.data?.id],
       })
       toast.success(data.data.message)
     },

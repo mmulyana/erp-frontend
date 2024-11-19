@@ -179,8 +179,8 @@ export default function MenuCompetency() {
               <Button onClick={() => setOpen(!open)}>Tambah</Button>
             </ProtectedComponent>
           </div>
-          <ScrollArea className='h-full'>
-            <div className='mt-6 flex flex-col gap-2'>
+          <ScrollArea className='mt-6 h-64'>
+            <div className='flex flex-col gap-2'>
               {competencies?.map((item) => (
                 <div
                   key={`competency-${item.id}`}
@@ -226,7 +226,7 @@ export default function MenuCompetency() {
                       </Button>
                     </div>
                   )}
-                  {(!isDanger || selectedId !== item.id) && (
+                  {(!isDanger && selectedId !== item.id) && (
                     <div>
                       {item?._count && (
                         <p className='text-dark/50'>Digunakan sebanyak</p>

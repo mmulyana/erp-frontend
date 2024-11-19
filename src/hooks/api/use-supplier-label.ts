@@ -35,7 +35,7 @@ export const useDetailSupplierLabel = ({
     queryFn: async (): Promise<AxiosResponse<IApi<SupplierLabel>>> => {
       return await http(`${URLS.INVENTORY_SUPPLIER_LABEL}/${id}`)
     },
-    queryKey: [KEYS.SUPPLIER_LABEL, id],
+    queryKey: [KEYS.SUPPLIER_LABEL_DETAIL, id],
     enabled,
   })
 }
@@ -61,7 +61,7 @@ export const useUpdateSupplierLabel = () => {
       payload,
     }: {
       payload: createLabel & { id: number }
-    }) => {
+    }): Promise<AxiosResponse<IApi<{ id: number }>>> => {
       return await http.patch(
         `${URLS.INVENTORY_SUPPLIER_LABEL}/${payload.id}`,
         {
@@ -72,6 +72,9 @@ export const useUpdateSupplierLabel = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.SUPPLIER_LABEL] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.SUPPLIER_LABEL_DETAIL, data.data.data?.id],
+      })
       toast.success(data.data.message)
     },
   })

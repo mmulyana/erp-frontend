@@ -1,25 +1,27 @@
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
 import { BASE_URL } from '@/utils/constant/_urls'
 import { Company } from '@/utils/types/api'
 
+import { useClientCompanyPagination } from '@/hooks/api/use-client'
 import { useApiData } from '@/hooks/use-api-data'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { FilterTable } from '@/components/data-table/component'
-import { useClientCompanyPagination } from '@/hooks/api/use-client'
 import { DataTable } from '@/components/data-table'
-import {
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
+import { permissionAtom } from '@/atom/permission'
 
-import DialogAddCompany from './dialog-add-company'
 import DialogDeleteCompany from './dialog-delete-company'
+import DialogAddCompany from './dialog-add-company'
 
 export default function TableCompany() {
+  const permission = useAtomValue(permissionAtom)
+
   const [url] = useUrlState({ name: '', page: '' })
   const { data, isLoading } = useApiData(
     useClientCompanyPagination({
@@ -48,7 +50,11 @@ export default function TableCompany() {
     {
       accessorKey: 'address',
       header: 'Alamat',
-      cell: ({row}) => <div className='w-[200px]'><p>{row.original.address}</p></div>
+      cell: ({ row }) => (
+        <div className='w-[200px]'>
+          <p>{row.original.address}</p>
+        </div>
+      ),
     },
     {
       accessorKey: 'phone',
@@ -62,26 +68,30 @@ export default function TableCompany() {
       id: 'action',
       cell: ({ row }) => (
         <div className='flex justify-end'>
-          <DropdownEdit className='-translate-x-3'>
-            <DropdownMenuGroup className='px-1'>
-              <DropdownMenuItem
-                className='flex items-center gap-2 cursor-pointer px-1'
-                onClick={() => {
-                  setDialog({ id: row.original.id, open: true })
-                }}
-              >
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className='flex items-center gap-2 cursor-pointer px-1'
-                onClick={() => {
-                  setDialogDelete({ id: row.original.id, open: true })
-                }}
-              >
-                Hapus
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownEdit>
+          <ProtectedComponent required={['company:update', 'company:delete']}>
+            <DropdownEdit className='-translate-x-3'>
+              <ProtectedComponent required={['company:update']}>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer px-1'
+                  onClick={() => {
+                    setDialog({ id: row.original.id, open: true })
+                  }}
+                >
+                  Edit
+                </DropdownMenuItem>
+              </ProtectedComponent>
+              <ProtectedComponent required={['company:delete']}>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer px-1'
+                  onClick={() => {
+                    setDialogDelete({ id: row.original.id, open: true })
+                  }}
+                >
+                  Hapus
+                </DropdownMenuItem>
+              </ProtectedComponent>
+            </DropdownEdit>
+          </ProtectedComponent>
         </div>
       ),
     },
@@ -97,11 +107,14 @@ export default function TableCompany() {
     open: boolean
   } | null>(null)
 
+  const isAllowed = permission.includes('company:create')
+
   return (
     <>
       <FilterTable
         placeholder='Cari'
         onAdd={() => setDialog({ id: null, open: true })}
+        create={isAllowed}
       />
       <DataTable
         columns={columns}

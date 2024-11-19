@@ -33,6 +33,8 @@ type Props = {
   useFormMode?: boolean
   shouldFilter?: boolean
   debounceMs?: number
+  modal?: boolean
+  contentStyle?: string
 }
 
 const SelectContent = ({
@@ -47,6 +49,8 @@ const SelectContent = ({
   prefix,
   shouldFilter = true,
   debounceMs = 300,
+  modal = true,
+  contentStyle,
 }: Omit<Props, 'name' | 'useFormMode'> & {
   value: string
   onChange: (value: string) => void
@@ -65,7 +69,7 @@ const SelectContent = ({
   }
 
   return (
-    <Popover modal>
+    <Popover modal={modal}>
       <PopoverTrigger asChild>
         <Button
           variant='outline'
@@ -80,7 +84,11 @@ const SelectContent = ({
           <ChevronsUpDown size={14} className='text-gray-400' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='p-0' side={side || 'bottom'} align='start'>
+      <PopoverContent
+        className={cn('p-0', contentStyle)}
+        side={side || 'bottom'}
+        align='start'
+      >
         <Command shouldFilter={shouldFilter}>
           <CommandInput placeholder='Search...' onValueChange={handleSearch} />
           <CommandList>

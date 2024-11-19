@@ -21,6 +21,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 import { Pencil, Phone, Trash2 } from 'lucide-react'
+import ProtectedComponent from '@/components/protected'
+import EmptyState from '@/components/common/empty-state'
 
 const schema = z.object({
   name: z.string().min(1),
@@ -105,53 +107,63 @@ export default function EmployeeSupplier({ id }: Props) {
       <div className='p-4 pb-4'>
         <div className='flex justify-between items-center mb-4'>
           <Search withoutUrl onSearch={setSearch} debounceTime={500} />
-          <Button variant='secondary' onClick={() => setOpen(!open)}>
-            Tambah
-          </Button>
+          <ProtectedComponent required={['supplier-employee:create']}>
+            <Button variant='secondary' onClick={() => setOpen(!open)}>
+              Tambah
+            </Button>
+          </ProtectedComponent>
         </div>
         <div className='space-y-4'>
-          {employees?.map((item) => (
-            <div
-              key={`employee-` + item.id}
-              className='p-2.5 bg-white rounded-lg border border-line'
-            >
-              <div className='flex items-start justify-between'>
-                <div className='mb-2.5'>
-                  <p className='text-lg text-dark'>{item.name}</p>
-                  <p className='text-dark/50'>{item?.position}</p>
-                </div>
-                <div className='flex gap-2 items-center'>
-                  <Button
-                    variant='secondary'
-                    className='p-0 w-6 h-6'
-                    onClick={() => {
-                      setSelected(item.id)
-                      setOpen(!open)
-                    }}
-                  >
-                    <Pencil size={14} />
-                  </Button>
-                  <Button
-                    variant='secondary'
-                    className='p-0 w-6 h-6'
-                    onClick={() => {
-                      remove({ id: item.id })
-                    }}
-                  >
-                    <Trash2 size={14} />
-                  </Button>
-                </div>
-              </div>
-              {item.phone && (
-                <div className='pt-4 border-t border-line border-dashed'>
+          {employees && !!employees.length ? (
+            employees?.map((item) => (
+              <div
+                key={`employee-` + item.id}
+                className='p-2.5 bg-white rounded-lg border border-line'
+              >
+                <div className='flex items-start justify-between'>
+                  <div className='mb-2.5'>
+                    <p className='text-lg text-dark'>{item.name}</p>
+                    <p className='text-dark/50'>{item?.position}</p>
+                  </div>
                   <div className='flex gap-2 items-center'>
-                    <Phone size={16} className='text-gray-500' />
-                    {item.phone}
+                    <ProtectedComponent required={['supplier-employee:update']}>
+                      <Button
+                        variant='secondary'
+                        className='p-0 w-6 h-6'
+                        onClick={() => {
+                          setSelected(item.id)
+                          setOpen(!open)
+                        }}
+                      >
+                        <Pencil size={14} />
+                      </Button>
+                    </ProtectedComponent>
+                    <ProtectedComponent required={['supplier-employee:delete']}>
+                      <Button
+                        variant='secondary'
+                        className='p-0 w-6 h-6'
+                        onClick={() => {
+                          remove({ id: item.id })
+                        }}
+                      >
+                        <Trash2 size={14} />
+                      </Button>
+                    </ProtectedComponent>
                   </div>
                 </div>
-              )}
-            </div>
-          ))}
+                {item.phone && (
+                  <div className='pt-4 border-t border-line border-dashed'>
+                    <div className='flex gap-2 items-center'>
+                      <Phone size={16} className='text-gray-500' />
+                      {item.phone}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <EmptyState />
+          )}
         </div>
       </div>
       <Modal title='Buat Pegawai Baru' open={open} setOpen={setOpen}>

@@ -15,8 +15,12 @@ import Search from '@/components/common/search'
 import { useState } from 'react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import LoadingState from '@/components/common/loading-state'
+import { useAtomValue } from 'jotai'
+import { permissionAtom } from '@/atom/permission'
 
 export default function CardAttachments() {
+  const permission = useAtomValue(permissionAtom)
+
   const [search, setSearch] = useState('')
 
   const { data: attachments, isLoading } = useApiData(
@@ -40,40 +44,46 @@ export default function CardAttachments() {
         ) : (
           <ScrollArea className='overflow-hidden w-full h-full  px-2.5 pb-2.5 rounded-md'>
             <div className='flex flex-col gap-4 bg-dark/5 h-full p-2'>
-              {attachments?.map((item) => (
-                <div
-                  className='flex justify-between items-center'
-                  key={'attachments-' + item.id}
-                >
-                  <div className='flex gap-2.5 items-start'>
-                    <div className='h-fit flex-shrink-0 pt-1'>
-                      <FileSpreadsheet size={20} className='text-gray-600' />
-                    </div>
-                    <div>
-                      <div className='flex gap-2 items-center'>
-                        <p className='text-dark leading-5 text-sm font-medium'>
-                          {item.name}.{item.type}
-                        </p>
-                        {item.isSecret && <Lock size={14} />}
+              {attachments
+                ?.filter(
+                  (item) =>
+                    !permission.includes('project:read-secret-attachment') &&
+                    !item.isSecret
+                )
+                .map((item) => (
+                  <div
+                    className='flex justify-between items-center'
+                    key={'attachments-' + item.id}
+                  >
+                    <div className='flex gap-2.5 items-start'>
+                      <div className='h-fit flex-shrink-0 pt-1'>
+                        <FileSpreadsheet size={20} className='text-gray-600' />
                       </div>
-                      <p className='text-dark/40 text-sm leading-4'>
-                        {format(item.uploaded_at, 'dd/MM/yy')}
-                      </p>
+                      <div>
+                        <div className='flex gap-2 items-center'>
+                          <p className='text-dark leading-5 text-sm font-medium'>
+                            {item.name}.{item.type}
+                          </p>
+                          {item.isSecret && <Lock size={14} />}
+                        </div>
+                        <p className='text-dark/40 text-sm leading-4'>
+                          {format(item.uploaded_at, 'dd/MM/yy')}
+                        </p>
+                      </div>
+                    </div>
+                    <div className='flex gap-2'>
+                      <Link
+                        to={BASE_URL + '/files/' + item.file}
+                        className={cn(
+                          buttonVariants({ variant: 'outline' }),
+                          'w-8 h-8 rounded-full border border-dark/[0.12] p-0 text-dark'
+                        )}
+                      >
+                        <Eye size={16} />
+                      </Link>
                     </div>
                   </div>
-                  <div className='flex gap-2'>
-                    <Link
-                      to={BASE_URL + '/files/' + item.file}
-                      className={cn(
-                        buttonVariants({ variant: 'outline' }),
-                        'w-8 h-8 rounded-full border border-dark/[0.12] p-0 text-dark'
-                      )}
-                    >
-                      <Eye size={16} />
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </ScrollArea>
         )}

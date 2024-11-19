@@ -1,13 +1,10 @@
+import { BriefcaseBusiness, Settings2Icon } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
-import { BriefcaseBusiness } from 'lucide-react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 
-import {
-  useProjectsPagination,
-  useUpdateProject,
-} from '@/hooks/api/use-project'
+import { useProjectsPagination, useUpdateProject } from '@/hooks/api/use-project'
 import { useApiData } from '@/hooks/use-api-data'
 
 import { permissionAtom } from '@/atom/permission'
@@ -35,12 +32,15 @@ import TopClientChart from './_component/overview/top-client-chart'
 import TotalClient from './_component/overview/total-client'
 import DetailProject from './_component/detail-project'
 import AddProject from './_component/add-project'
+
+import { settingConfig } from '../_component/setting/setting'
 import { DashboardLayout } from '../_component/layout'
 import { useTitle } from '../_component/header'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
 
+  const setSetting = useSetAtom(settingConfig)
   const permission = useAtomValue(permissionAtom)
 
   const [url] = useUrlState({ page: '', limit: '', name: '' })
@@ -236,6 +236,15 @@ export default function Dashboard() {
                   </div>
 
                   <div className='flex gap-2 items-center'>
+                    <Button
+                      variant='secondary'
+                      className='w-8 p-0'
+                      onClick={() =>
+                        setSetting({ open: true, default: 'project_label' })
+                      }
+                    >
+                      <Settings2Icon className='w-4 h-4 text-dark/70' />
+                    </Button>
                     <ProtectedComponent required={['project:create']}>
                       <Button onClick={() => handleDialog('add', true)}>
                         Proyek Baru

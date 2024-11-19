@@ -84,7 +84,7 @@ const SIDE_MENUS: SideMenus = [
       {
         name: 'Kompetensi',
         value: 'hris_competency',
-        icon: <Award className='w-3.5 h-3.5' />,
+        icon: <Award className='w-4 h-4' />,
       },
     ],
   },
@@ -102,14 +102,9 @@ const SIDE_MENUS: SideMenus = [
     name: 'Inventory',
     menus: [
       {
-        name: 'Label',
-        value: 'inventory_label',
-        icon: <Tag className='w-3.5 h-3.5' />,
-      },
-      {
-        name: 'Lokasi',
-        value: 'inventory_location',
-        icon: <Map className='w-3.5 h-3.5' />,
+        name: 'Kategori',
+        value: 'inventory_category',
+        icon: <ComponentIcon className='w-3.5 h-3.5' />,
       },
       {
         name: 'Ukuran',
@@ -122,9 +117,14 @@ const SIDE_MENUS: SideMenus = [
         icon: <Puzzle className='w-3.5 h-3.5' />,
       },
       {
-        name: 'Kategori',
-        value: 'inventory_category',
-        icon: <ComponentIcon className='w-3.5 h-3.5' />,
+        name: 'Lokasi',
+        value: 'inventory_location',
+        icon: <Map className='w-3.5 h-3.5' />,
+      },
+      {
+        name: 'Label',
+        value: 'inventory_label',
+        icon: <Tag className='w-3.5 h-3.5' />,
       },
     ],
   },

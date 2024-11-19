@@ -142,6 +142,7 @@ type FilterProps = {
   }
   customFilter?: React.ReactNode
   reset?: boolean
+  create?: boolean
 }
 export function FilterTable({
   className,
@@ -150,6 +151,7 @@ export function FilterTable({
   filter,
   customFilter,
   reset = true,
+  create = true,
 }: FilterProps) {
   return (
     <div
@@ -164,7 +166,7 @@ export function FilterTable({
         {customFilter && customFilter}
         {reset && <FilterReset />}
       </div>
-      {onAdd && <Button onClick={onAdd}>Tambah</Button>}
+      {create && onAdd && <Button onClick={onAdd}>Tambah</Button>}
     </div>
   )
 }

@@ -1,6 +1,8 @@
+import { ChevronsUpDown, Ellipsis, Undo2 } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import { format } from 'date-fns'
 
 import { useApiData } from '@/hooks/use-api-data'
 import { useGoods } from '@/hooks/api/use-goods'
@@ -13,6 +15,7 @@ import {
 import { cn } from '@/utils/cn'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'
+import ProtectedComponent from '@/components/protected'
 import { Form, FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -36,10 +39,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-
-import { ChevronsUpDown, Ellipsis, Undo2 } from 'lucide-react'
-import ProtectedComponent from '@/components/protected'
-import { format } from 'date-fns'
+import EmptyState from '@/components/common/empty-state'
 
 type Props = {
   id?: number | null
@@ -56,17 +56,17 @@ export default function BorrowedProject({ id }: Props) {
       <div>
         <div className='w-full pb-4 flex justify-between items-center'>
           <p className='text-dark'>Peminjaman</p>
-          <ProtectedComponent required={['project:borrow-goods']}>
-            <Button
-              variant='secondary'
-              className='text-sm text-dark font-normal h-fit'
-              onClick={() => setOpen(!open)}
-            >
-              Tambah
-            </Button>
-          </ProtectedComponent>
+          {/* <ProtectedComponent required={['project:borrow-goods']}> */}
+          <Button
+            variant='secondary'
+            className='text-sm text-dark font-normal h-fit'
+            onClick={() => setOpen(!open)}
+          >
+            Tambah
+          </Button>
+          {/* </ProtectedComponent> */}
         </div>
-        {!!data?.length && (
+        {data?.length ? (
           <div className='border border-line rounded-lg bg-white'>
             {data?.map((item, index) => (
               <div
@@ -155,6 +155,8 @@ export default function BorrowedProject({ id }: Props) {
               </div>
             ))}
           </div>
+        ) : (
+          <EmptyState />
         )}
       </div>
 

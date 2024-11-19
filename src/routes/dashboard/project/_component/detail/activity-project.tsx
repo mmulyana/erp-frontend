@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react'
+
+import { JOIN_BY_PROJECT, MESSAGES_BY_PROJECT } from '@/utils/constant/_socket'
 import { Activity } from '@/utils/types/api'
 import { socket } from '@/utils/socket'
-import {
-  useDeleteActivity,
-  useToggleLikeActivity,
-  useUpdateActivity,
-} from '@/hooks/api/use-activity'
-import {
-  JOIN_BY_PROJECT,
-  MESSAGES_BY_PROJECT,
-} from '@/utils/constant/_socket'
+
+import { useDeleteActivity, useToggleLikeActivity, useUpdateActivity } from '@/hooks/api/use-activity'
+
+import EmptyState from '@/components/common/empty-state'
 
 import ActivityDetail from '../activity/activity-detail'
 import MessageItem2 from '../activity/message-item-2'
@@ -48,39 +45,49 @@ export default function ActivityProject({ id: projectId }: Props) {
     <>
       <div className='flex flex-col gap-6'>
         <MessageForm type='textarea' projectId={projectId} />
-        {data?.map((item: any) => (
-          <MessageItem2
-            key={`message-` + item.id}
-            nameKey='activity'
-            {...item}
-            onSelectActivity={setSelectedActivity}
-            onDelete={(id) => {
-              remove({ id })
-            }}
-            onToggle={(userId, id) => {
-              projectId && toggle({ id, userId, projectId, type: 'project' })
-            }}
-            onUpdate={({ id, comment, photos, deletedAttachments, reset }) => {
-              if (!id) return
-              update(
-                {
-                  id,
-                  payload: {
-                    comment: comment,
-                    photos: photos,
-                    deletedPhoto: deletedAttachments,
-                    type: 'project',
+        {data.length ? (
+          data?.map((item: any) => (
+            <MessageItem2
+              key={`message-` + item.id}
+              nameKey='activity'
+              {...item}
+              onSelectActivity={setSelectedActivity}
+              onDelete={(id) => {
+                remove({ id })
+              }}
+              onToggle={(userId, id) => {
+                projectId && toggle({ id, userId, projectId, type: 'project' })
+              }}
+              onUpdate={({
+                id,
+                comment,
+                photos,
+                deletedAttachments,
+                reset,
+              }) => {
+                if (!id) return
+                update(
+                  {
+                    id,
+                    payload: {
+                      comment: comment,
+                      photos: photos,
+                      deletedPhoto: deletedAttachments,
+                      type: 'project',
+                    },
                   },
-                },
-                {
-                  onSuccess: () => {
-                    reset()
-                  },
-                }
-              )
-            }}
-          />
-        ))}
+                  {
+                    onSuccess: () => {
+                      reset()
+                    },
+                  }
+                )
+              }}
+            />
+          ))
+        ) : (
+          <EmptyState />
+        )}
       </div>
       <ActivityDetail
         open={selectedActivity?.open ?? false}

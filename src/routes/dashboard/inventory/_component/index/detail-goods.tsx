@@ -1,25 +1,38 @@
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
-import {
-  useDetailGoods,
-  useGoodsTransaction,
-  useUpdateGoods,
-} from '@/hooks/api/use-goods'
-import PhotoProfile from '@/components/common/photo-profile'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Editable } from '@/components/common/editable'
-import { useCallback, useMemo, useState } from 'react'
-import { BASE_URL } from '@/utils/constant/_urls'
-import { createGoods } from '@/utils/types/form'
-import { Button } from '@/components/ui/button'
 import {
   Ellipsis,
   PackageCheck,
   PackageMinus,
   PackageOpen,
   PackagePlus,
-  UserCircle,
 } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { atom, useAtom } from 'jotai'
+import { format } from 'date-fns'
+
+import {
+  useDetailGoods,
+  useGoodsTransaction,
+  useUpdateGoods,
+} from '@/hooks/api/use-goods'
+import usePermission from '@/hooks/use-permission'
+import { useApiData } from '@/hooks/use-api-data'
+
+import { formatToRupiah } from '@/utils/formatCurrency'
+import { BASE_URL } from '@/utils/constant/_urls'
+import { createGoods } from '@/utils/types/form'
+import { Transaction } from '@/utils/types/api'
+
+import PhotoProfile from '@/components/common/photo-profile'
+import SelectV1 from '@/components/common/select/select-v1'
+import EmptyState from '@/components/common/empty-state'
+import DataSheet from '@/components/common/data-sheet'
+import { EditorDescription } from '@/components/tiptap/editor-description'
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Editable } from '@/components/common/editable'
+import { CommandItem } from '@/components/ui/command'
+import { Button } from '@/components/ui/button'
+import { Tab, Tabs } from '@/components/tab'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,16 +40,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import DataSheet from '@/components/common/data-sheet'
+
 import { useInventoryData } from '../../_hook/use-inventory-data'
-import SelectV1 from '@/components/common/select/select-v1'
-import { CommandItem } from '@/components/ui/command'
-import { Tab, Tabs } from '@/components/tab'
-import { useApiData } from '@/hooks/use-api-data'
-import { Transaction } from '@/utils/types/api'
-import { format } from 'date-fns'
-import { formatToRupiah } from '@/utils/formatCurrency'
-import { EditorDescription } from '@/components/tiptap/editor-description'
+import ProtectedComponent from '@/components/protected'
 
 export const selectedGoodAtom = atom<{
   open: boolean
@@ -44,7 +50,10 @@ export const selectedGoodAtom = atom<{
 } | null>(null)
 
 export default function DetailGoods() {
+  const permission = usePermission()
+
   const [selected, setSelected] = useAtom(selectedGoodAtom)
+
   const { mutate: update } = useUpdateGoods()
 
   const [content, setContent] = useState('')
@@ -81,8 +90,16 @@ export default function DetailGoods() {
     setEdit(null)
   }
 
+  useEffect(() => {
+    if (!selected?.open) {
+      onEdit(null)
+    }
+  }, [selected?.open])
+
+  const isAllowed = permission.includes('item:update')
+
   return (
-    <Sheet open={selected?.open} onOpenChange={() => onClose()} modal>
+    <Sheet open={selected?.open} onOpenChange={() => onClose()} modal={false}>
       <SheetContent className='w-full p-0 bg-[#FBFBFB]'>
         <SheetTitle>
           <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4 bg-white'>
@@ -101,6 +118,7 @@ export default function DetailGoods() {
               onRemove={() => {
                 handleUpdate({ photoUrl: null })
               }}
+              disabled={!isAllowed}
             />
             <div className='relative pr-7'>
               <Editable
@@ -111,22 +129,25 @@ export default function DetailGoods() {
                 className='text-lg font-medium text-dark mt-4 py-1 px-1'
                 classNameInput='text-lg font-medium text-dark mt-4 py-1 px-1'
                 onUpdate={(name) => handleUpdate({ name: String(name) })}
+                disabled={!isAllowed}
               />
-              <DropdownMenu modal>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant='outline'
-                    className='absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-0 w-6 h-6 p-0'
-                  >
-                    <Ellipsis size={14} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className='min-w-fit -translate-x-4'>
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>Hapus</DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <ProtectedComponent required={['supplier:delete']}>
+                <DropdownMenu modal={false}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant='outline'
+                      className='absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-0 w-6 h-6 p-0'
+                    >
+                      <Ellipsis size={14} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='min-w-fit -translate-x-4'>
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>Hapus</DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </ProtectedComponent>
             </div>
             <Editable
               isEdit={isEdit}
@@ -173,9 +194,10 @@ export default function DetailGoods() {
                 </div>
               )}
               className='text-dark/50'
+              disabled={!isAllowed}
             />
 
-            <div className='space-y-4'>
+            <div className='space-y-4 mt-4'>
               <DataSheet>
                 <p className='text-dark/50'>Kuantitas</p>
                 <p className='text-dark'>{good?.qty}</p>
@@ -199,6 +221,7 @@ export default function DetailGoods() {
                     defaultData={good?.minimum}
                     customData={(val) => <p>{val}</p>}
                     onUpdate={(val) => handleUpdate({ minimum: Number(val) })}
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -213,6 +236,7 @@ export default function DetailGoods() {
                     onUpdate={(val) =>
                       handleUpdate({ measurementId: Number(val) })
                     }
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -227,6 +251,7 @@ export default function DetailGoods() {
                     onUpdate={(val) =>
                       handleUpdate({ categoryId: Number(val) })
                     }
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -241,6 +266,7 @@ export default function DetailGoods() {
                     onUpdate={(val) =>
                       handleUpdate({ locationId: Number(val) })
                     }
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
                 <DataSheet>
@@ -254,15 +280,18 @@ export default function DetailGoods() {
                     customEdit={
                       <div className='flex gap-2 items-center'>
                         <SelectV1
+                          modal={false}
                           useFormMode={false}
                           name='brandId'
-                          className='gap-2'
+                          className='gap-2 w-full'
+                          side='bottom'
                           preview={(val) => {
                             const selectedBrands = brands?.find(
                               (item) => item.id === Number(val)
                             )
                             return <span>{selectedBrands?.name || ''}</span>
                           }}
+                          contentStyle='w-48'
                         >
                           {brands?.map((item) => (
                             <CommandItem
@@ -274,26 +303,18 @@ export default function DetailGoods() {
                               }}
                             >
                               <div className='px-2 py-0.5 flex gap-1 items-center'>
-                                {item.photoUrl ? (
+                                {item.photoUrl && (
                                   <img
                                     src={BASE_URL + '/img/' + item.photoUrl}
-                                    className='w-5 h-5 rounded-full object-center'
+                                    className='w-8 h-8 rounded-md object-center'
                                   />
-                                ) : (
-                                  <div className='w-5 h-5 rounded-full flex items-center justify-center'>
-                                    <UserCircle size={14} />
-                                  </div>
                                 )}
                                 {item.name}
                               </div>
                             </CommandItem>
                           ))}
                         </SelectV1>
-                        <Button
-                          variant='ghost'
-                          className='h-fit p-0 px-2'
-                          onClick={() => onEdit(null)}
-                        >
+                        <Button variant='ghost' onClick={() => onEdit(null)}>
                           Batal
                         </Button>
                       </div>
@@ -301,15 +322,23 @@ export default function DetailGoods() {
                     onUpdate={(val) =>
                       handleUpdate({ locationId: Number(val) })
                     }
+                    disabled={!isAllowed}
                   />
                 </DataSheet>
               </div>
             </Tab>
             <Tab label='Laporan'>
               <div className='flex flex-col gap-6 p-4 pb-8'>
-                {transactions?.map((item) => (
-                  <TransactionsData key={'transaction-' + item.id} {...item} />
-                ))}
+                {!!transactions && transactions?.length ? (
+                  transactions?.map((item) => (
+                    <TransactionsData
+                      key={'transaction-' + item.id}
+                      {...item}
+                    />
+                  ))
+                ) : (
+                  <EmptyState />
+                )}
               </div>
             </Tab>
           </Tabs>
@@ -333,14 +362,14 @@ export function TransactionsData({
       <div className='flex gap-2 items-start'>
         <div className='w-[40px] flex-shrink-0'>
           <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
-            <PackageOpen size={18} className='text-purple-600' />
+            <PackageOpen size={18} className='text-purple-400' />
           </div>
         </div>
         <div className='flex-grow flex flex-col justify-center'>
           <p className='text-dark/70'>
             <span className='text-dark font-medium'>
               {qty} {good.measurement?.name} {good.name}
-            </span>
+            </span>{' '}
             dipinjam {project && 'untuk proyek '}
             <span className='text-dark font-medium'>{project?.name}</span>
           </p>
@@ -355,7 +384,7 @@ export function TransactionsData({
       <div className='flex gap-2 items-start'>
         <div className='w-[40px] flex-shrink-0'>
           <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
-            <PackageCheck size={18} className='text-green-primary/70' />
+            <PackageCheck size={18} className='text-green-primary' />
           </div>
         </div>
         <div className='flex-grow flex flex-col justify-center'>
@@ -377,7 +406,7 @@ export function TransactionsData({
       <div className='flex gap-2 items-start'>
         <div className='w-[40px] flex-shrink-0'>
           <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
-            <PackageMinus size={18} className='text-red-primary/70' />
+            <PackageMinus size={18} className='text-red-primary' />
           </div>
         </div>
         <div className='flex-grow flex flex-col justify-center'>
@@ -406,7 +435,7 @@ export function TransactionsData({
     <div className='flex gap-2 items-start'>
       <div className='w-[40px] flex-shrink-0'>
         <div className='w-10 h-10 rounded-full border border-dark/30 flex items-center justify-center'>
-          <PackagePlus size={18} className='text-blue-primary/70' />
+          <PackagePlus size={18} className='text-blue-primary' />
         </div>
       </div>
       <div className='flex-grow flex flex-col justify-center'>
@@ -415,9 +444,12 @@ export function TransactionsData({
           <span className='text-dark font-medium'>
             {qty} {good.measurement?.name} {good.name}
           </span>{' '}
-          ke{' '}
-          <span className='text-dark font-medium'>{good.location?.name}</span>{' '}
-          dari <span className='text-dark font-medium'>{supplier.name}</span>{' '}
+          <span className='text-dark font-medium'>
+            {good.location?.name ? `ke ${good.location?.name}` : ''}
+          </span>{' '}
+          <span className='text-dark font-medium'>
+            {supplier?.name ? `dari ${supplier?.name}` : ''}
+          </span>{' '}
           dengan harga{' '}
           <span className='text-dark font-medium'>
             {formatToRupiah(Number(price))}

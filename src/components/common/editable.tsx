@@ -199,17 +199,21 @@ export const Editable = memo(
                   containerRef.current?.focus()
                 }}
               >
-                <SelectTrigger className='h-9 p-0 border-none bg-gray-100 py-1 pr-3'>
-                  <Button
-                    variant='ghost'
-                    className={cn('shadow-none h-6 p-0 pl-2', classNameInput)}
-                  >
-                    Pilih
-                  </Button>
+                <SelectTrigger
+                  className={cn('h-9 p-0 border-none bg-gray-100 px-2.5 gap-2')}
+                >
+                  Pilih
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  className='w-fit px-0'
+                  style={{ width: 'var(--radix-select-trigger-width)' }}
+                >
                   {options?.map((option) => (
-                    <SelectItem key={option.value} value={String(option.value)}>
+                    <SelectItem
+                      key={option.value}
+                      className='px-2'
+                      value={String(option.value)}
+                    >
                       {option.name}
                     </SelectItem>
                   ))}
@@ -217,7 +221,7 @@ export const Editable = memo(
               </Select>
               <Button
                 variant='ghost'
-                className='h-fit p-0 px-2'
+                className='h-full'
                 onClick={() => onEdit?.(null)}
               >
                 Batal

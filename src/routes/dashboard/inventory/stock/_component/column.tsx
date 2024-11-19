@@ -1,23 +1,21 @@
 import { generatePath, Link } from 'react-router-dom'
 import { ColumnDef } from '@tanstack/react-table'
+import { Undo2 } from 'lucide-react'
 import { useSetAtom } from 'jotai'
 import { format } from 'date-fns'
 
+import { useReturnedTransaction } from '@/hooks/api/use-transaction'
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { Transaction } from '@/utils/types/api'
 import { PATH } from '@/utils/constant/_paths'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
 import Overlay from '@/components/common/overlay'
-import {
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
 
 import { dialogDetailTransaction } from './detail-transaction'
-import { Button } from '@/components/ui/button'
-import { Undo2 } from 'lucide-react'
-import { useReturnedTransaction } from '@/hooks/api/use-transaction'
 import { dialogDeleteTransaction } from './delete-transaction'
 
 export const column: ColumnDef<Transaction>[] = [
@@ -97,49 +95,57 @@ export const column: ColumnDef<Transaction>[] = [
 
       return (
         <div className='flex justify-end items-center gap-2'>
-          {row.original.type == 'borrowed' && !row.original.is_returned && (
-            <Button
-              className='bg-yellow-100 hover:bg-yellow-500 text-sm h-fit py-1 pr-2 pl-2.5 font-normal gap-1 group'
-              variant='secondary'
-              onClick={() => returned({ id: row.original.id })}
-            >
-              Kembalikan{' '}
-              <Undo2
-                size={16}
-                className='text-yellow-600 group-hover:text-white'
-              />
-            </Button>
-          )}
-          <DropdownEdit>
-            <DropdownMenuGroup>
-              {!(
-                row.original.is_returned && row.original.type === 'borrowed'
-              ) && (
+          <ProtectedComponent required={['transaction:returned']}>
+            {row.original.type == 'borrowed' && !row.original.is_returned && (
+              <Button
+                className='bg-yellow-100 hover:bg-yellow-500 text-sm h-fit py-1 pr-2 pl-2.5 font-normal gap-1 group'
+                variant='secondary'
+                onClick={() => returned({ id: row.original.id })}
+              >
+                Kembalikan{' '}
+                <Undo2
+                  size={16}
+                  className='text-yellow-600 group-hover:text-white'
+                />
+              </Button>
+            )}
+          </ProtectedComponent>
+          <ProtectedComponent
+            required={['transaction:update', 'transaction:delete']}
+          >
+            <DropdownEdit>
+              <ProtectedComponent required={['transaction:update']}>
+                {!(
+                  row.original.is_returned && row.original.type === 'borrowed'
+                ) && (
+                  <DropdownMenuItem
+                    className='rounded-none text-sm text-dark/70 cursor-pointer'
+                    onClick={() => {
+                      setSelected({
+                        id: row.original.id,
+                        open: true,
+                      })
+                    }}
+                  >
+                    Edit
+                  </DropdownMenuItem>
+                )}
+              </ProtectedComponent>
+              <ProtectedComponent required={['transaction:delete']}>
                 <DropdownMenuItem
                   className='rounded-none text-sm text-dark/70 cursor-pointer'
                   onClick={() => {
-                    setSelected({
+                    setSelectedDelete({
                       id: row.original.id,
                       open: true,
                     })
                   }}
                 >
-                  Edit
+                  Hapus
                 </DropdownMenuItem>
-              )}
-              <DropdownMenuItem
-                className='rounded-none text-sm text-dark/70 cursor-pointer'
-                onClick={() => {
-                  setSelectedDelete({
-                    id: row.original.id,
-                    open: true,
-                  })
-                }}
-              >
-                Hapus
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownEdit>
+              </ProtectedComponent>
+            </DropdownEdit>
+          </ProtectedComponent>
         </div>
       )
     },

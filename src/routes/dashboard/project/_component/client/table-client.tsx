@@ -1,24 +1,28 @@
 import { ColumnDef } from '@tanstack/react-table'
 import useUrlState from '@ahooksjs/use-url-state'
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
+import { permissionAtom } from '@/atom/permission'
 import { useClientPagination } from '@/hooks/api/use-client'
 import { useApiData } from '@/hooks/use-api-data'
 
 import { Client as ClientType } from '@/utils/types/api'
 import { BASE_URL } from '@/utils/constant/_urls'
 
-import { FilterTable } from '@/components/data-table/component'
 import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
+
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { FilterTable } from '@/components/data-table/component'
 import { DataTable } from '@/components/data-table'
-import {
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
-import DialogAddClient from './dialog-add-client'
+
 import DialogDeleteClient from './dialog-delete-client'
+import DialogAddClient from './dialog-add-client'
 
 export default function TableClient() {
+  const permission = useAtomValue(permissionAtom)
+
   const [url] = useUrlState({ name: '', page: '' })
   const { data, isLoading } = useApiData(
     useClientPagination({
@@ -66,26 +70,30 @@ export default function TableClient() {
       id: 'action',
       cell: ({ row }) => (
         <div className='flex justify-end'>
-          <DropdownEdit className='-translate-x-3'>
-            <DropdownMenuGroup className='px-1'>
-              <DropdownMenuItem
-                className='flex items-center gap-2 cursor-pointer px-1'
-                onClick={() => {
-                  setDialog({ id: row.original.id, open: true })
-                }}
-              >
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className='flex items-center gap-2 cursor-pointer px-1'
-                onClick={() => {
-                  setDialogDelete({ id: row.original.id, open: true })
-                }}
-              >
-                Hapus
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownEdit>
+          <ProtectedComponent required={['client:update', 'client:delete']}>
+            <DropdownEdit className='-translate-x-3'>
+              <ProtectedComponent required={['client:update']}>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer px-1'
+                  onClick={() => {
+                    setDialog({ id: row.original.id, open: true })
+                  }}
+                >
+                  Edit
+                </DropdownMenuItem>
+              </ProtectedComponent>
+              <ProtectedComponent required={['client:delete']}>
+                <DropdownMenuItem
+                  className='flex items-center gap-2 cursor-pointer px-1'
+                  onClick={() => {
+                    setDialogDelete({ id: row.original.id, open: true })
+                  }}
+                >
+                  Hapus
+                </DropdownMenuItem>
+              </ProtectedComponent>
+            </DropdownEdit>
+          </ProtectedComponent>
         </div>
       ),
     },
@@ -101,11 +109,14 @@ export default function TableClient() {
     open: boolean
   } | null>(null)
 
+  const isAllowed = permission.includes('client:create')
+
   return (
     <>
       <FilterTable
         placeholder='Cari klien'
-        onAdd={() => setDialog({ id: null, open: true })}
+        onAdd={() => !isAllowed && setDialog({ id: null, open: true })}
+        create={isAllowed}
       />
       <DataTable
         columns={columns}

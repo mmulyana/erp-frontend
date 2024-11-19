@@ -23,8 +23,13 @@ import { useUpdateTagSupplier } from '@/hooks/api/use-supplier'
 type Props = {
   id?: number | null
   data: Pick<Supplier, 'tags'>
+  permission?: string[]
 }
-export default function LabelSupplier({ id, data: { tags } }: Props) {
+export default function LabelSupplier({
+  id,
+  data: { tags },
+  permission,
+}: Props) {
   const { mutate } = useUpdateTagSupplier()
   const onAdd = (selectedId: number) => {
     if (!id) return
@@ -78,24 +83,28 @@ export default function LabelSupplier({ id, data: { tags } }: Props) {
     )
   }, [dataLabels, search, tags])
 
+  const isAllowed = permission?.includes('supplier:update')
+
   return (
-    <div className={cn('flex flex-wrap items-center gap-2', )}>
+    <div className={cn('flex flex-wrap items-center gap-2')}>
       {tags?.map((item) => (
         <Label
           key={`label-${item.id}`}
           color={item.tag.color}
           name={item.tag.name}
           suffix={
-            <Button
-              variant='ghost'
-              className='border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
-              style={{ color: item.tag.color }}
-              onClick={() => {
-                onRemove(item.tag.id)
-              }}
-            >
-              <X size={14} strokeWidth={3} />
-            </Button>
+            isAllowed && (
+              <Button
+                variant='ghost'
+                className='border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
+                style={{ color: item.tag.color }}
+                onClick={() => {
+                  onRemove(item.tag.id)
+                }}
+              >
+                <X size={14} strokeWidth={3} />
+              </Button>
+            )
           }
         />
       ))}
@@ -103,7 +112,11 @@ export default function LabelSupplier({ id, data: { tags } }: Props) {
         <PopoverTrigger asChild>
           <Button
             variant='ghost'
-            className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative'
+            className={cn(
+              'font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative',
+              !isAllowed && 'hidden'
+            )}
+            disabled={!isAllowed}
           >
             <Plus size={14} />
             Tambah

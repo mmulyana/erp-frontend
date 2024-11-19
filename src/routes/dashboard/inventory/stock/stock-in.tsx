@@ -3,6 +3,7 @@ import useUrlState from '@ahooksjs/use-url-state'
 import { PATH } from '@/utils/constant/_paths'
 import { useState } from 'react'
 
+import usePermission from '@/hooks/use-permission'
 import { useApiData } from '@/hooks/use-api-data'
 import { useGoods } from '@/hooks/api/use-goods'
 import {
@@ -52,6 +53,8 @@ const HIDE = ['project']
 export default function StockInPage() {
   useTitle(links)
 
+  const permission = usePermission()
+
   const [url] = useUrlState({ page: '' })
 
   const { data, isLoading } = useApiData(
@@ -98,6 +101,8 @@ export default function StockInPage() {
     )
   }
 
+  const isAllowed = permission.includes('transaction:create')
+
   return (
     <>
       <DashboardLayout className='overflow-hidden'>
@@ -110,6 +115,7 @@ export default function StockInPage() {
         <FilterTable
           onAdd={() => setOpen(!open)}
           className='border-t border-line'
+          create={isAllowed}
         />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}

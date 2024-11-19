@@ -14,9 +14,7 @@ type brandParams = Pagination & {
 export const useBrand = (params?: brandParams) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsBrand[]>>> => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.INVENTORY_BRAND,
+      return await http(URLS.INVENTORY_BRAND, {
         params,
       })
     },
@@ -35,7 +33,7 @@ export const useDetailBrand = ({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsBrand>>> => {
       return await http(`${URLS.INVENTORY_BRAND}/${id}`)
     },
-    queryKey: [KEYS.BRAND, id],
+    queryKey: [KEYS.BRAND_DETAIL, id],
     enabled,
   })
 }
@@ -58,7 +56,9 @@ export const useCreateBrand = () => {
       })
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.BRAND] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.BRAND],
+      })
       toast.success(data.data.message)
     },
   })
@@ -94,7 +94,7 @@ export const useUpdateBrand = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.BRAND] })
       queryClient.invalidateQueries({
-        queryKey: [KEYS.BRAND, data.data.data?.id],
+        queryKey: [KEYS.BRAND_DETAIL, data.data.data?.id],
       })
       toast.success(data.data.message)
     },

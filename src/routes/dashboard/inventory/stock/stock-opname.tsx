@@ -29,6 +29,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 import { Plus, X, ClipboardList } from 'lucide-react'
+import usePermission from '@/hooks/use-permission'
 
 const HIDE = ['supplier', 'price', 'project']
 
@@ -49,6 +50,8 @@ const links = [
 
 export default function StockOpnamePage() {
   useTitle(links)
+
+  const permission = usePermission()
 
   const [url] = useUrlState({ page: '' })
 
@@ -89,6 +92,8 @@ export default function StockOpnamePage() {
     )
   }
 
+  const isAllowed = permission.includes('transaction:create')
+
   return (
     <>
       <DashboardLayout className='overflow-hidden'>
@@ -101,6 +106,7 @@ export default function StockOpnamePage() {
         <FilterTable
           onAdd={() => setOpen(!open)}
           className='border-t border-line'
+          create={isAllowed}
         />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}

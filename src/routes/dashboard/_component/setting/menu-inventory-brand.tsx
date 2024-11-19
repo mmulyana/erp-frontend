@@ -157,18 +157,19 @@ export default function MenuInventoryBrand() {
           <div className='mt-6 flex flex-col gap-2'>
             {brands?.map((item) => (
               <div
-                key={`competency-${item.id}`}
+                key={`brand-${item.id}`}
                 className={cn(
                   'relative bg-white border border-line rounded-lg flex items-center gap-2 group overflow-hidden p-1',
                   selectedId === item.id &&
                     isDanger &&
-                    'bg-red-400/10 border-red-200 justify-between'
+                    'bg-red-400/10 border-red-200 justify-between',
+                  !item.photoUrl && 'pl-2.5'
                 )}
               >
                 <div className='flex gap-2 items-center'>
-                  {(!isDanger || selectedId !== item.id) && (
+                  {(!isDanger || selectedId !== item.id) && item.photoUrl && (
                     <img
-                      className='w-12 h-12 rounded object-cover object-center shadow-md'
+                      className='w-12 h-12 rounded object-cover object-center shadow-md bg-white'
                       src={BASE_URL + '/img/' + item.photoUrl}
                     />
                   )}

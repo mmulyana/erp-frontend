@@ -1,6 +1,10 @@
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { useState } from 'react'
+
 import { useAssignRoleAccount } from '@/hooks/api/use-account'
 import { useApiData } from '@/hooks/use-api-data'
 import { useRoles } from '@/hooks/api/use-role'
+import { cn } from '@/utils/cn'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -17,31 +21,36 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
-import { Check, ChevronsUpDown } from 'lucide-react'
-import { useState } from 'react'
-
 type Props = {
   id?: number
   roleId?: number | null
+  permission?: string[]
 }
-export default function AddUserRole({ id, roleId }: Props) {
+export default function AddUserRole({ id, roleId, permission }: Props) {
   const [openPopover, setOpenPopover] = useState(false)
 
   const { mutate: assign } = useAssignRoleAccount()
 
   const { data: roles } = useApiData(useRoles())
 
+  const isAllowed = permission?.includes('user:change-role')
+
   return (
     <Popover modal={false} open={openPopover} onOpenChange={setOpenPopover}>
       <PopoverTrigger asChild>
         <Button
-          variant='outline'
-          className='pr-2 pl-2.5 gap-2 min-w-[104px] justify-between'
+          variant={isAllowed ? 'outline' : 'ghost'}
+          className={cn(
+            'pr-2 pl-2.5 gap-2 min-w-[104px] justify-between',
+            !roleId && !isAllowed && 'hidden',
+            roleId && !isAllowed && 'px-0'
+          )}
+          disabled={!isAllowed}
         >
           {roleId
             ? roles?.find((item) => item.id === roleId)?.name
             : 'Tambah role'}
-          <ChevronsUpDown size={16} />
+          {isAllowed && <ChevronsUpDown size={16} />}
         </Button>
       </PopoverTrigger>
       <PopoverContent

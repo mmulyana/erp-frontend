@@ -30,6 +30,7 @@ import { useInventoryData } from '../_hook/use-inventory-data'
 import { column } from './_component/column'
 
 import { Plus, X, PackageMinus } from 'lucide-react'
+import usePermission from '@/hooks/use-permission'
 
 const HIDE = ['supplier', 'project']
 
@@ -50,6 +51,8 @@ const links = [
 
 export default function StockOutPage() {
   useTitle(links)
+
+  const permission = usePermission()
 
   const [url] = useUrlState({ page: '' })
 
@@ -90,6 +93,8 @@ export default function StockOutPage() {
     )
   }
 
+  const isAllowed = permission.includes('transaction:create')
+
   return (
     <>
       <DashboardLayout className='overflow-hidden'>
@@ -102,6 +107,7 @@ export default function StockOutPage() {
         <FilterTable
           onAdd={() => setOpen(!open)}
           className='border-t border-line'
+          create={isAllowed}
         />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}

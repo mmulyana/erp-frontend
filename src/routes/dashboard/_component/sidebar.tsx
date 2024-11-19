@@ -1,9 +1,17 @@
 import { Link } from 'react-router-dom'
-import { useAtomValue } from 'jotai'
 import React from 'react'
+import {
+  BlocksIcon,
+  ChevronDown,
+  ChevronLeft,
+  HardHat,
+  House,
+  UserCircle,
+  Users,
+} from 'lucide-react'
 
+import usePermission from '@/hooks/use-permission'
 import { PATH } from '@/utils/constant/_paths'
-import { userAtom } from '@/atom/auth'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
@@ -27,19 +35,15 @@ import {
 
 import Logo from '../../../../public/logo2.svg'
 
-import {
-  BlocksIcon,
-  ChevronDown,
-  ChevronLeft,
-  HardHat,
-  House,
-  UserCircle,
-  Users,
-} from 'lucide-react'
-
 export default function AppSidebar() {
-  const user = useAtomValue(userAtom)
+  const permission = usePermission()
+
   const { isMobile, toggleSidebar } = useSidebar()
+
+  const isAllowedAccess = ['user:read', 'role:read'].some((item) =>
+    permission.includes(item)
+  )
+
   return (
     <Sidebar variant='sidebar' className='z-20'>
       <SidebarHeader>
@@ -55,7 +59,7 @@ export default function AppSidebar() {
         )}
         <div className='rounded-lg w-full flex gap-2 items-center'>
           <div className='border px-1 py-1 border-gray-200 bg-white rounded-lg shadow-md shadow-gray-400/30'>
-          <img src={Logo} className='h-6 w-6 rounded' />
+            <img src={Logo} className='h-6 w-6 rounded' />
           </div>
           <p className='text-dark font-medium text-sm'>ERP BJS</p>
         </div>
@@ -160,30 +164,38 @@ export default function AppSidebar() {
               </SidebarMenuSub>
             </SidebarMenu>
 
-            <SidebarMenu>
-              {user?.role.name === 'Superadmin' && (
-                <>
-                  <SidebarMenuButton className='hover:bg-transparent cursor-default'>
-                    <UserCircle size={20} />
-                    Admin
-                  </SidebarMenuButton>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      {AdminMenus.map((item) => (
-                        <SidebarMenuSubButton
-                          key={`submenu-${item.url}`}
-                          asChild
-                        >
-                          <Link to={item.url}>
-                            <span>{item.title}</span>
-                          </Link>
-                        </SidebarMenuSubButton>
-                      ))}
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                </>
-              )}
-            </SidebarMenu>
+            {isAllowedAccess && (
+              <SidebarMenu>
+                <SidebarMenuButton className='hover:bg-transparent cursor-default'>
+                  <UserCircle size={20} />
+                  Admin
+                </SidebarMenuButton>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    {permission.includes('user:read') && (
+                      <SidebarMenuSubButton
+                        key={`submenu-${AdminMenus[0].url}`}
+                        asChild
+                      >
+                        <Link to={AdminMenus[0].url}>
+                          <span>{AdminMenus[0].title}</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    )}
+                    {permission.includes('role:read') && (
+                      <SidebarMenuSubButton
+                        key={`submenu-${AdminMenus[1].url}`}
+                        asChild
+                      >
+                        <Link to={AdminMenus[1].url}>
+                          <span>{AdminMenus[1].title}</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    )}
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </SidebarMenu>
+            )}
           </SidebarGroup>
         </SidebarContent>
       </ScrollArea>

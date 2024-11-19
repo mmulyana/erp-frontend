@@ -1,14 +1,17 @@
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useSupplierLabels } from '@/hooks/api/use-supplier-label'
+import { useCreateSupplier } from '@/hooks/api/use-supplier'
+import { useApiData } from '@/hooks/use-api-data'
+
 import MultiSelect from '@/components/common/select/multi-select-v1'
 import UploadProfile from '@/components/common/upload-profile'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useCreateSupplier } from '@/hooks/api/use-supplier'
-import { useTag } from '@/hooks/api/use-tag'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Input } from '@/components/ui/input'
 
 type Props = {
   open: boolean
@@ -20,16 +23,7 @@ export default function DialogAddSupplier({ open, setOpen }: Props) {
   const [preview, setPreview] = useState<null | string>(null)
 
   //  GET DATA TAG
-  const queryTag = useTag()
-  const tags = useMemo(
-    () =>
-      queryTag?.data?.data?.data?.map((item: any) => ({
-        ...item,
-        label: item.name,
-        value: item.id,
-      })) || [],
-    [queryTag.isLoading]
-  )
+  const { data: labels } = useApiData(useSupplierLabels())
 
   // START OF HANDLE FORM
   const { mutate } = useCreateSupplier()
@@ -96,7 +90,13 @@ export default function DialogAddSupplier({ open, setOpen }: Props) {
                 name='address'
                 render={({ field }) => <Textarea {...field} />}
               />
-              <MultiSelect options={tags} onChange={handleTags} />
+              <MultiSelect
+                options={labels?.map((item) => ({
+                  label: item.name,
+                  value: String(item.id),
+                })) || []}
+                onChange={handleTags}
+              />
             </div>
           </ModalContainer>
         </form>

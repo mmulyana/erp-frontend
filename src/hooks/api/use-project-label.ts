@@ -15,9 +15,7 @@ type Params = Pagination & {
 export const useProjectLabels = (params?: Params) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<ProjectLabel[]>>> => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.PROJECT_LABEL,
+      return await http(URLS.PROJECT_LABEL, {
         params,
       })
     },
@@ -35,7 +33,7 @@ export const useDetailProjectLabel = ({
     queryFn: async (): Promise<AxiosResponse<IApi<ProjectLabel>>> => {
       return await http(`${URLS.PROJECT_LABEL}/${id}`)
     },
-    queryKey: [KEYS.PROJECT_LABEL, id],
+    queryKey: [KEYS.PROJECT_LABEL_DETAIL, id],
     enabled,
   })
 }

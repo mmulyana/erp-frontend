@@ -29,7 +29,7 @@ export const useDetailCategory = ({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsCategory>>> => {
       return await http(`${URLS.INVENTORY_CATEGORY}/${id}`)
     },
-    queryKey: [KEYS.CATEGORY, id],
+    queryKey: [KEYS.CATEGORY_DETAIL, id],
     enabled,
   })
 }

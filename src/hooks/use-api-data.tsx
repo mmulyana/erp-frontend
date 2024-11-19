@@ -24,6 +24,6 @@ export function useApiData<T>(query: ApiResponse<T>): ApiDataResult<T> {
       isFetching: query.isFetching,
       isError: query.isError,
     }),
-    [query.isLoading, query.isFetching, query.isError, query.data?.data.data]
+    [query.isLoading, query.isFetching, query.isError, query.data]
   )
 }

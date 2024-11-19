@@ -13,9 +13,7 @@ type Params = Pagination & {
 export const useLocation = (params?: Params) => {
   return useQuery({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsLocation[]>>> => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.INVENTORY_LOCATION,
+      return await http(URLS.INVENTORY_LOCATION, {
         params,
       })
     },
@@ -33,7 +31,7 @@ export const useDetailLocation = ({
     queryFn: async (): Promise<AxiosResponse<IApi<GoodsLocation>>> => {
       return await http(`${URLS.INVENTORY_LOCATION}/${id}`)
     },
-    queryKey: [KEYS.LOCATION, id],
+    queryKey: [KEYS.LOCATION_DETAIL, id],
     enabled,
   })
 }
@@ -52,7 +50,9 @@ export const useCreateLocation = () => {
       return await http.post(URLS.INVENTORY_LOCATION, payload)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.LOCATION] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.LOCATION],
+      })
       toast.success(data.data.message)
     },
   })
@@ -76,7 +76,7 @@ export const useUpdateLocation = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.LOCATION] })
       queryClient.invalidateQueries({
-        queryKey: [KEYS.LOCATION, data.data.data?.id],
+        queryKey: [KEYS.LOCATION_DETAIL, data.data.data?.id],
       })
       toast.success(data.data.message)
     },

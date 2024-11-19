@@ -1,6 +1,6 @@
-import useUrlState from '@ahooksjs/use-url-state'
-import { CircleUserRoundIcon, SettingsIcon } from 'lucide-react'
+import { CircleUserRoundIcon, Settings2Icon } from 'lucide-react'
 import { differenceInYears, parse } from 'date-fns'
+import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { isString } from 'lodash'
@@ -201,17 +201,15 @@ export default function TableEmployee({
           <p className='text-dark font-medium'>{name}</p>
         </div>
         <div className='flex gap-2 items-center'>
-          <ProtectedComponent required={['competency:read']}>
-            <Button
-              variant='secondary'
-              className='w-8 p-0'
-              onClick={() =>
-                setConfig({ open: true, default: 'hris_competency' })
-              }
-            >
-              <SettingsIcon className='w-4 h-4 text-dark/70' />
-            </Button>
-          </ProtectedComponent>
+          <Button
+            variant='secondary'
+            className='w-8 p-0'
+            onClick={() =>
+              setConfig({ open: true, default: 'hris_competency' })
+            }
+          >
+            <Settings2Icon className='w-4 h-4 text-dark/70' />
+          </Button>
           <ProtectedComponent required={['employee:create']}>
             <Button onClick={onAddEmployee}>Pegawai Baru</Button>
           </ProtectedComponent>

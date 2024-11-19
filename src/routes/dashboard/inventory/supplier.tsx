@@ -20,7 +20,10 @@ import { DataTable } from '@/components/data-table'
 import { useTitle } from '../_component/header'
 import { Button } from '@/components/ui/button'
 
-import { BoxIcon } from 'lucide-react'
+import { BoxIcon, Settings2Icon } from 'lucide-react'
+import { useSetAtom } from 'jotai'
+import { settingConfig } from '../_component/setting/setting'
+import ProtectedComponent from '@/components/protected'
 
 export const links = [
   {
@@ -35,6 +38,8 @@ export const links = [
 
 export default function Supplier() {
   useTitle(links)
+
+  const setSetting = useSetAtom(settingConfig)
 
   // const [url, setUrl] = useUrlState({ name: '', tag: '', status: '' })
 
@@ -125,20 +130,22 @@ export default function Supplier() {
       id: 'action',
       cell: ({ row }) => (
         <div className='flex justify-end'>
-          <DropdownEdit className='-translate-x-3'>
-            <DropdownMenuItem className='cursor-pointer p-0'>
-              <Button
-                className='gap-1 justify-start flex items-center w-full border-none rounded-none'
-                variant='outline'
-                onClick={() => {
-                  setSelectedId(row.original.id)
-                  handleDialog('delete', true)
-                }}
-              >
-                Hapus
-              </Button>
-            </DropdownMenuItem>
-          </DropdownEdit>
+          <ProtectedComponent required={['supplier:delete']}>
+            <DropdownEdit className='-translate-x-3'>
+              <DropdownMenuItem className='cursor-pointer p-0'>
+                <Button
+                  className='gap-1 justify-start flex items-center w-full border-none rounded-none'
+                  variant='outline'
+                  onClick={() => {
+                    setSelectedId(row.original.id)
+                    handleDialog('delete', true)
+                  }}
+                >
+                  Hapus
+                </Button>
+              </DropdownMenuItem>
+            </DropdownEdit>
+          </ProtectedComponent>
         </div>
       ),
     },
@@ -167,7 +174,20 @@ export default function Supplier() {
           <BoxIcon className='text-[#989CA8]' />
           <p className='text-dark font-medium'>Supplier</p>
         </div>
-        <Button onClick={() => handleDialog('add', true)}>Tambah</Button>
+        <div className='flex gap-2 items-center'>
+          <Button
+            variant='secondary'
+            className='w-8 p-0'
+            onClick={() =>
+              setSetting({ open: true, default: 'inventory_label' })
+            }
+          >
+            <Settings2Icon className='w-4 h-4 text-dark/70' />
+          </Button>
+          <ProtectedComponent required={['supplier:create']}>
+            <Button onClick={() => handleDialog('add', true)}>Tambah</Button>
+          </ProtectedComponent>
+        </div>
       </HeadTable>
       <FilterTable />
       <DataTable columns={columns} data={data || []} isLoading={isLoading} />

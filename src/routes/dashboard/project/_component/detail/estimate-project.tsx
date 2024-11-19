@@ -1,15 +1,22 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
 import { Trash, Triangle } from 'lucide-react'
-import { useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
+import { useSetAtom } from 'jotai'
 
 import { useDeleteEstimate, useSaveEstimate } from '@/hooks/api/use-estimate'
+import { useEmployeeByProject } from '@/hooks/api/use-project'
+import { useApiData } from '@/hooks/use-api-data'
+
+import { getDaysDifference } from '@/utils/get-days-difference'
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { KEYS } from '@/utils/constant/_keys'
 import { Estimate } from '@/utils/types/api'
 import { cn } from '@/utils/cn'
 
+import EmptyState from '@/components/common/empty-state'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   accordionAtom,
   AccordionContent,
@@ -17,13 +24,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/common/accordion'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-
-import EmptyImg from '/public/icons/empty-box.png'
-import { useApiData } from '@/hooks/use-api-data'
-import { useEmployeeByProject } from '@/hooks/api/use-project'
-import { getDaysDifference } from '@/utils/get-days-difference'
 
 interface EstimateItem {
   id: number | null
@@ -318,10 +318,7 @@ export default function EstimateProject({
               ))}
             </AccordionGroup>
           ) : (
-            <div className='w-full h-fit py-4 bg-gray-50/50 mt-4 flex justify-center items-center flex-col'>
-              <img src={EmptyImg} className='w-20 aspect-square' />
-              <p className='text-dark/80 font-medium mt-4'>Masih kosong</p>
-            </div>
+            <EmptyState className='mt-2 pt-4'/>
           )}
           {!!fields.length && (
             <div className='flex justify-end gap-2 pr-6 pt-2 items-center'>

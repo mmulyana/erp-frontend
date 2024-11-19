@@ -1,24 +1,30 @@
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
-import PhotoProfile from '@/components/common/photo-profile'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Editable } from '@/components/common/editable'
-import { Tab, Tabs } from '@/components/tab'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { PackagePlus } from 'lucide-react'
+import { format } from 'date-fns'
+
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import usePermission from '@/hooks/use-permission'
+import { useApiData } from '@/hooks/use-api-data'
 import {
   useSupplierTransaction,
   useDetailSupplier,
   useUpdateSupplier,
 } from '@/hooks/api/use-supplier'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+
 import { formatToRupiah } from '@/utils/formatCurrency'
-import { useCallback, useMemo, useState } from 'react'
 import { BASE_URL } from '@/utils/constant/_urls'
-import { useApiData } from '@/hooks/use-api-data'
 import { Transaction } from '@/utils/types/api'
-import { PackagePlus } from 'lucide-react'
-import { format } from 'date-fns'
+import { cn } from '@/utils/cn'
+
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
+import PhotoProfile from '@/components/common/photo-profile'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Editable } from '@/components/common/editable'
+import { Tab, Tabs } from '@/components/tab'
+
 import EmployeeSupplier from './employee-supplier'
 import LabelSupplier from './label-supplier'
-import { cn } from '@/utils/cn'
+import EmptyState from '@/components/common/empty-state'
 
 type Props = {
   open: boolean
@@ -26,6 +32,8 @@ type Props = {
   id?: number | null
 }
 export default function DetailSupplier({ open, setOpen, id }: Props) {
+  const permission = usePermission()
+
   const { mutate: update } = useUpdateSupplier()
 
   const { data: supplier } = useApiData(useDetailSupplier(id))
@@ -40,7 +48,15 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
     [edit]
   )
 
+  useEffect(() => {
+    if (!open) {
+      onEdit(null)
+    }
+  }, [open])
+
   useFixPointerEvent(open)
+
+  const isAllowed = permission.includes('supplier:update')
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -66,6 +82,7 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
                 if (!id) return
                 update({ id, payload: { photo: null } })
               }}
+              disabled={!isAllowed}
             />
             <Editable
               isEdit={isEdit}
@@ -95,6 +112,7 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
                       if (!id) return
                       update({ id: id, payload: { phone: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </div>
               </div>
@@ -113,6 +131,7 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
                       if (!id) return
                       update({ id: id, payload: { email: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </div>
               </div>
@@ -131,6 +150,7 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
                       if (!id) return
                       update({ id: id, payload: { address: val as string } })
                     }}
+                    disabled={!isAllowed}
                   />
                 </div>
               </div>
@@ -147,6 +167,7 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
                   <LabelSupplier
                     id={id}
                     data={{ tags: supplier?.tags || [] }}
+                    permission={permission}
                   />
                 </div>
               </div>
@@ -158,9 +179,16 @@ export default function DetailSupplier({ open, setOpen, id }: Props) {
             </Tab>
             <Tab label='Transaksi'>
               <div className='p-4 space-y-6'>
-                {transactions?.map((item) => (
-                  <TransactionsData key={'transaction-' + item.id} {...item} />
-                ))}
+                {transactions && !!transactions.length ? (
+                  transactions?.map((item) => (
+                    <TransactionsData
+                      key={'transaction-' + item.id}
+                      {...item}
+                    />
+                  ))
+                ) : (
+                  <EmptyState className='mt-4' />
+                )}
               </div>
             </Tab>
           </Tabs>

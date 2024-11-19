@@ -1,21 +1,22 @@
+import { BriefcaseBusinessIcon, Settings2Icon } from 'lucide-react'
+import { useAtom, useSetAtom } from 'jotai'
 import { useState } from 'react'
-import { useAtom } from 'jotai'
 
 import { PATH } from '@/utils/constant/_paths'
 import { projectAtom } from '@/atom/project'
 
+import ProtectedComponent from '@/components/protected'
 import { Button } from '@/components/ui/button'
 
 import DetailProject from './_component/detail-project'
 import AddProject from './_component/add-project'
 import TitlePage from '../_component/title-page'
-import Container from '../_component/container'
 import Kanban from './_component/manage/kanban'
 
+import { settingConfig } from '../_component/setting/setting'
 import { DashboardLayout } from '../_component/layout'
 import { useTitle } from '../_component/header'
 
-import { BriefcaseBusinessIcon, Settings2Icon } from 'lucide-react'
 
 const links = [
   {
@@ -36,6 +37,7 @@ export default function Manage() {
   useTitle(links)
 
   const [selected, setSelected] = useAtom(projectAtom)
+  const setSetting = useSetAtom(settingConfig)
 
   const [openAdd, setOpenAdd] = useState(false)
 
@@ -47,15 +49,21 @@ export default function Manage() {
           <p className='text-dark font-medium'>Kelola</p>
         </div>
         <div className='flex gap-2 items-center'>
-          <Button variant='secondary' className='w-8 p-0'>
+          <Button
+            variant='secondary'
+            className='w-8 p-0'
+            onClick={() => setSetting({ open: true, default: 'project_label' })}
+          >
             <Settings2Icon className='w-4 h-4 text-dark/70' />
           </Button>
-          <Button onClick={() => setOpenAdd(!openAdd)}>Proyek Baru</Button>
+          <ProtectedComponent required={['project:create']}>
+            <Button onClick={() => setOpenAdd(!openAdd)}>Proyek Baru</Button>
+          </ProtectedComponent>
         </div>
       </TitlePage>
-      <Container className='pb-0'>
+      <div className='pt-4 pl-4'>
         <Kanban />
-      </Container>
+      </div>
       <DetailProject
         id={selected?.id}
         open={selected?.open || false}

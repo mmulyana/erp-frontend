@@ -42,6 +42,7 @@ import {
 } from '@/components/ui/popover'
 
 import { Check, ChevronsUpDown, Plus, X, Blocks } from 'lucide-react'
+import usePermission from '@/hooks/use-permission'
 
 const HIDE = ['supplier', 'price']
 
@@ -62,6 +63,8 @@ const links = [
 
 export default function StockBorrowedPage() {
   useTitle(links)
+
+  const permission = usePermission()
 
   const [search, setSearch] = useState('')
   const { data: projects } = useApiData(
@@ -107,6 +110,8 @@ export default function StockBorrowedPage() {
     )
   }
 
+  const isAllowed = permission.includes('transaction:create')
+
   return (
     <>
       <DashboardLayout className='overflow-hidden'>
@@ -119,6 +124,7 @@ export default function StockBorrowedPage() {
         <FilterTable
           onAdd={() => setOpen(!open)}
           className='border-t border-line'
+          create={isAllowed}
         />
         <DataTable
           columns={column.filter((item) => !HIDE.includes(String(item.id)))}

@@ -53,7 +53,7 @@ export default function MenuInventoryLabel() {
   const form = useForm<Label>({
     defaultValues: {
       name: '',
-      color: '',
+      color: '#5463E8',
     },
   })
 
