@@ -15,7 +15,7 @@ export default function EmptyState({
   return (
     <div
       className={cn(
-        'w-full h-fit pb-4 bg-gray-50/50 flex justify-center items-center flex-col',
+        'w-full h-fit pb-4 flex justify-center items-center flex-col',
         className
       )}
     >

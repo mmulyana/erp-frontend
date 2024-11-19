@@ -1,3 +1,5 @@
+import { Megaphone } from 'lucide-react'
+
 import { useExpireCertification } from '@/hooks/api/use-employee'
 import { useApiData } from '@/hooks/use-api-data'
 
@@ -17,7 +19,12 @@ export default function ExpireCertif({ positionId }: Props) {
   return (
     <Card>
       <CardHead className='px-3'>
-        <p className='text-dark text-sm'>Tenggat Waktu Sertifikasi Pegawai</p>
+        <div className='flex gap-2 items-center'>
+          <Megaphone size={18} className='text-gray-700' />
+          <p className='text-dark/70 text-sm'>
+            Tenggat Waktu Sertifikasi Pegawai
+          </p>
+        </div>
       </CardHead>
       <CardBody className='p-0'>
         <ScrollArea className='h-48 flex flex-col gap-4'>

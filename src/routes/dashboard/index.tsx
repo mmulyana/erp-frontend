@@ -77,7 +77,11 @@ export default function Dashboard() {
                 <ScrollArea className='h-[calc(100vh-275px)]'>
                   <div className='flex flex-col gap-4 h-full'>
                     {data?.map((item) => (
-                      <CardProject {...item} type='long' key={`project-${item.id}`} />
+                      <CardProject
+                        {...item}
+                        type='long'
+                        key={`project-${item.id}`}
+                      />
                     ))}
                   </div>
                 </ScrollArea>
