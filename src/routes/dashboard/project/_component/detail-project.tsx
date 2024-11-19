@@ -1,11 +1,17 @@
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import Lightbox from 'yet-another-react-lightbox'
+
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { useCallback, useMemo, useState } from 'react'
+import { atom, useAtom, useAtomValue } from 'jotai'
 import { id as indonesia } from 'date-fns/locale'
-import Lightbox from 'yet-another-react-lightbox'
-import { atom, useAtom } from 'jotai'
+import { ChevronLeft, Ellipsis } from 'lucide-react'
 import { format } from 'date-fns'
+
+import { socket } from '@/utils/socket'
 import { cn } from '@/utils/cn'
+
+import { permissionAtom } from '@/atom/permission'
 
 import {
   useProject,
@@ -15,18 +21,18 @@ import {
 import { useApiData } from '@/hooks/use-api-data'
 import { useBoards } from '@/hooks/api/use-board'
 
+import ProtectedComponent from '@/components/protected'
+import DataSheet from '@/components/common/data-sheet'
+import Chips from '@/components/common/chips'
 import { EditorDescription } from '@/components/tiptap/editor-description'
-import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Editable } from '@/components/common/editable'
+import { Button } from '@/components/ui/button'
 import { Tab, Tabs } from '@/components/tab'
-import DataSheet from '@/components/common/data-sheet'
-import Chips from '@/components/common/chips'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
@@ -39,9 +45,8 @@ import EstimateProject from './detail/estimate-project'
 import LabelProject from './detail/label-project'
 import UserProject from './detail/user-project'
 import LeadProject from './detail/lead-project'
-
-import { Ellipsis } from 'lucide-react'
-import { socket } from '@/utils/socket'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { Separator } from '@/components/ui/separator'
 
 export const lightboxAtom = atom<{
   isOpen: boolean
@@ -65,6 +70,8 @@ export default function DetailProject({
   id,
   withSocket,
 }: Props) {
+  const permission = useAtomValue(permissionAtom)
+  const isMobile = useIsMobile()
   const { mutate: update } = useUpdateProject()
   const { mutate: updateStatus } = useUpdateStatusProject()
 
@@ -83,13 +90,31 @@ export default function DetailProject({
     [edit]
   )
 
+  const isAllowed = permission.includes('project:update')
+
   if (!id) return null
 
   return (
     <Sheet open={open} onOpenChange={setOpen} modal={false}>
-      <SheetContent className='w-full p-0'>
-        <div className='h-12 w-full flex gap-2 items-center border-b border-line px-4'>
-          <p className='text-sm text-dark'>Detail Proyek</p>
+      <SheetContent
+        className='w-full min-w-[initial] md:min-w-[520px] p-0'
+        showClose={!isMobile}
+      >
+        <div className='h-12 w-full flex gap-4 items-center border-b border-line px-4'>
+          {isMobile && (
+            <>
+              <Button
+                className='h-8 p-0.5 pl-2 pr-3 inline-flex w-fit gap-1.5'
+                variant='secondary'
+                onClick={() => setOpen(false)}
+              >
+                <ChevronLeft className='h-4 w-4 text-dark' />
+                Tutup
+              </Button>
+              <Separator orientation='vertical' className='h-7' />
+            </>
+          )}
+          <p className='text-dark'>Detail Proyek</p>
         </div>
         <ScrollArea className='h-[calc(100vh-48px)]'>
           <div className='px-4 pt-4 mb-8'>
@@ -113,56 +138,63 @@ export default function DetailProject({
                       }
                     )
                   }}
+                  disabled={!isAllowed}
                 />
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant='outline'
-                      className='absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-0 w-6 h-6 p-0'
-                    >
-                      <Ellipsis size={14} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className='min-w-fit -translate-x-4'>
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          update(
-                            {
-                              id,
-                              payload: { isArchive: !project?.isArchive },
-                            },
-                            {
-                              onSuccess: () => {
-                                if (withSocket) {
-                                  socket.emit('request_board')
-                                }
-                              },
-                            }
-                          )
-                        }}
+                <ProtectedComponent
+                  required={['project:archive', 'project:delete']}
+                >
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant='outline'
+                        className='absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-0 w-6 h-6 p-0'
                       >
-                        {project?.isArchive ? 'Batal' : 'Arsipkan'}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          update(
-                            { id, payload: { isDeleted: true } },
-                            {
-                              onSuccess: () => {
-                                if (withSocket) {
-                                  socket.emit('request_board')
-                                }
+                        <Ellipsis size={14} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className='min-w-fit -translate-x-4'>
+                      <ProtectedComponent required={['project:archive']}>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            update(
+                              {
+                                id,
+                                payload: { isArchive: !project?.isArchive },
                               },
-                            }
-                          )
-                        }}
-                      >
-                        Hapus
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                              {
+                                onSuccess: () => {
+                                  if (withSocket) {
+                                    socket.emit('request_board')
+                                  }
+                                },
+                              }
+                            )
+                          }}
+                        >
+                          {project?.isArchive ? 'Batal' : 'Arsipkan'}
+                        </DropdownMenuItem>
+                      </ProtectedComponent>
+                      <ProtectedComponent required={['project:delete']}>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            update(
+                              { id, payload: { isDeleted: true } },
+                              {
+                                onSuccess: () => {
+                                  if (withSocket) {
+                                    socket.emit('request_board')
+                                  }
+                                },
+                              }
+                            )
+                          }}
+                        >
+                          Hapus
+                        </DropdownMenuItem>
+                      </ProtectedComponent>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </ProtectedComponent>
               </div>
               <Editable
                 isEdit={isEdit}
@@ -207,6 +239,7 @@ export default function DetailProject({
                 onUpdate={(val) => {
                   update({ id, payload: { description: val as string } })
                 }}
+                disabled={!isAllowed}
               />
             </div>
             <div className='flex mt-4 flex-col gap-4'>
@@ -246,6 +279,7 @@ export default function DetailProject({
                       }
                     )
                   }}
+                  disabled={!isAllowed}
                 />
               </DataSheet>
               <DataSheet
@@ -258,6 +292,7 @@ export default function DetailProject({
                   id={id}
                   data={{ labels: project?.labels || [] }}
                   withSocket={withSocket}
+                  permission={permission}
                 />
               </DataSheet>
               <DataSheet>
@@ -266,11 +301,16 @@ export default function DetailProject({
                   id={id}
                   data={{ client: project?.client }}
                   withSocket={withSocket}
+                  permission={permission}
                 />
               </DataSheet>
               <DataSheet>
                 <p className='text-dark/50'>Penanggung Jawab</p>
-                <LeadProject id={id} data={{ lead: project?.lead }} />
+                <LeadProject
+                  id={id}
+                  data={{ lead: project?.lead }}
+                  permission={permission}
+                />
               </DataSheet>
               <DataSheet>
                 <p className='text-dark/50'>Progress</p>
@@ -292,6 +332,7 @@ export default function DetailProject({
                       }
                     )
                   }}
+                  disabled={!isAllowed}
                 />
               </DataSheet>
             </div>
@@ -300,34 +341,41 @@ export default function DetailProject({
             <Tab label='Info'>
               <div className='px-4 pb-10 pt-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
                 <div className='flex flex-col gap-4'>
-                  <DataSheet>
-                    <p className='text-dark/50'>Nilai Proyek</p>
-                    <Editable
-                      isEdit={isEdit}
-                      onEdit={onEdit}
-                      keyData='net_value'
-                      defaultData={project?.net_value}
-                      customData={(val) => (
-                        <p>{formatToRupiah(val as number)}</p>
-                      )}
-                      onUpdate={(val) => {
-                        update({ id, payload: { net_value: Number(val) } })
-                      }}
-                    />
-                  </DataSheet>
-                  <DataSheet>
-                    <p className='text-dark/50'>Status Pembayaran</p>
-                    <Editable
-                      isEdit={isEdit}
-                      onEdit={onEdit}
-                      keyData='payment_status'
-                      defaultData={project?.payment_status ?? 0}
-                      customData={(val) => <p>{val} %</p>}
-                      onUpdate={(val) => {
-                        update({ id, payload: { payment_status: Number(val) } })
-                      }}
-                    />
-                  </DataSheet>
+                  <ProtectedComponent required={['project:read-value']}>
+                    <DataSheet>
+                      <p className='text-dark/50'>Nilai Proyek</p>
+                      <Editable
+                        isEdit={isEdit}
+                        onEdit={onEdit}
+                        keyData='net_value'
+                        defaultData={project?.net_value}
+                        customData={(val) => (
+                          <p>{formatToRupiah(val as number)}</p>
+                        )}
+                        onUpdate={(val) => {
+                          update({ id, payload: { net_value: Number(val) } })
+                        }}
+                        disabled={!isAllowed}
+                      />
+                    </DataSheet>
+                    <DataSheet>
+                      <p className='text-dark/50'>Status Pembayaran</p>
+                      <Editable
+                        isEdit={isEdit}
+                        onEdit={onEdit}
+                        keyData='payment_status'
+                        defaultData={project?.payment_status ?? 0}
+                        customData={(val) => <p>{val} %</p>}
+                        onUpdate={(val) => {
+                          update({
+                            id,
+                            payload: { payment_status: Number(val) },
+                          })
+                        }}
+                        disabled={!isAllowed}
+                      />
+                    </DataSheet>
+                  </ProtectedComponent>
                   <DataSheet>
                     <p className='text-dark/50'>Tanggal dibuat</p>
                     {project?.date_created ? (
@@ -361,6 +409,7 @@ export default function DetailProject({
                           payload: { date_started: new Date(val) },
                         })
                       }}
+                      disabled={!isAllowed}
                     />
                   </DataSheet>
                   <DataSheet>
@@ -390,6 +439,7 @@ export default function DetailProject({
                           }
                         )
                       }}
+                      disabled={!isAllowed}
                     />
                   </DataSheet>
                   <EmployeeProject
@@ -399,13 +449,8 @@ export default function DetailProject({
                       leadId: project?.leadId || null,
                     }}
                     withSocket={withSocket}
+                    permission={permission}
                   />
-                  <AttachmentProject
-                    projectId={project?.id}
-                    attachments={project?.attachments}
-                    withSocket={withSocket}
-                  />
-                  <BorrowedProject id={id} />
                 </div>
               </div>
             </Tab>
@@ -414,11 +459,27 @@ export default function DetailProject({
                 <ActivityProject id={project?.id} />
               </div>
             </Tab>
+            <Tab label='Lampiran'>
+              <div className='px-4 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
+                <AttachmentProject
+                  projectId={project?.id}
+                  attachments={project?.attachments}
+                  withSocket={withSocket}
+                  permission={permission}
+                />
+              </div>
+            </Tab>
+            <Tab label='Peminjaman'>
+              <div className='px-4 py-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
+                <BorrowedProject id={id} />
+              </div>
+            </Tab>
             <Tab label='Estimasi'>
               <div className='p-4 bg-[#FBFBFB] min-h-[calc(100vh-400px)]'>
                 <EstimateProject
                   projectId={project?.id}
                   estimation={project?.ProjectEstimate}
+                  date_started={project?.date_started}
                 />
               </div>
             </Tab>

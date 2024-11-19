@@ -557,3 +557,10 @@ export type GroupPermission = {
   created_at: string
   permissions: Permission[]
 }
+
+export type EmployeeByProject = {
+  employee: {
+    fullname: string
+    basic_salary: string
+  }
+}

@@ -1,11 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Link } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import { format } from 'date-fns'
 import { useState } from 'react'
 
 import { useDeleteRecap, useRecapPagination } from '@/hooks/api/use-recap'
 import { useApiData } from '@/hooks/use-api-data'
 
+import { permissionAtom } from '@/atom/permission'
 import { createLinkDetail } from '@/utils/create-link-detail'
 import { PATH } from '@/utils/constant/_paths'
 import { Recap } from '@/utils/types/api'
@@ -17,8 +19,9 @@ import { DataTable } from '@/components/data-table'
 
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
-import Search from '@/components/common/search'
+import ProtectedComponent from '@/components/protected'
 import Overlay from '@/components/common/overlay'
+import Search from '@/components/common/search'
 
 import { Eye } from 'lucide-react'
 
@@ -40,6 +43,8 @@ const links = [
 export default function Report() {
   useTitle(links)
 
+  const permission = useAtomValue(permissionAtom)
+
   const { mutate: remove } = useDeleteRecap()
 
   const { data, isLoading } = useApiData(useRecapPagination())
@@ -49,36 +54,47 @@ export default function Report() {
       id: 'name',
       accessorKey: 'name',
       header: 'Periode',
-      cell: ({ row }) => (
-        <Overlay
-          className='w-fit pr-14'
-          overlay={
-            <Link
-              to={createLinkDetail(
-                PATH.EMPLOYEE_RECAP_REPORT,
-                row.original.name,
-                row.original.id
+      cell: ({ row }) => {
+        const isAllowed = permission.includes('recap:detail')
+        return (
+          <Overlay
+            className='w-fit pr-14'
+            overlay={
+              isAllowed && (
+                <Link
+                  to={createLinkDetail(
+                    PATH.EMPLOYEE_RECAP_REPORT,
+                    row.original.name,
+                    row.original.id
+                  )}
+                  className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                >
+                  Lihat
+                </Link>
+              )
+            }
+          >
+            <div className='hover:text-dark'>
+              {isAllowed ? (
+                <Link
+                  to={createLinkDetail(
+                    PATH.EMPLOYEE_RECAP_REPORT,
+                    row.original.name,
+                    row.original.id
+                  )}
+                  className='break-words max-w-[120px] text-left'
+                >
+                  {row.original.name}
+                </Link>
+              ) : (
+                <p className='break-words max-w-[120px] text-left'>
+                  {row.original.name}
+                </p>
               )}
-              className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-            >
-              Lihat
-            </Link>
-          }
-        >
-          <div className='hover:text-dark'>
-            <Link
-              to={createLinkDetail(
-                PATH.EMPLOYEE_RECAP_REPORT,
-                row.original.name,
-                row.original.id
-              )}
-              className='break-words max-w-[120px] text-left'
-            >
-              {row.original.name}
-            </Link>
-          </div>
-        </Overlay>
-      ),
+            </div>
+          </Overlay>
+        )
+      },
     },
     {
       id: 'start_date',
@@ -102,33 +118,41 @@ export default function Report() {
       id: 'action',
       cell: ({ row }) => (
         <div className='flex gap-4 items-center'>
-          <Link
-            className={cn(
-              buttonVariants({ variant: 'default' }),
-              'gap-2 pl-3 pr-2.5'
-            )}
-            to={createLinkDetail(
-              PATH.EMPLOYEE_RECAP_REPORT,
-              row.original.name,
-              row.original.id
-            )}
-          >
-            Lihat Laporan <Eye size={16} />
-          </Link>
-          <DropdownEdit>
-            <DropdownMenuItem
-              onClick={() => setDialog({ id: row.original.id, open: true })}
+          <ProtectedComponent required={['recap:detail']}>
+            <Link
+              className={cn(
+                buttonVariants({ variant: 'default' }),
+                'gap-2 pl-3 pr-2.5'
+              )}
+              to={createLinkDetail(
+                PATH.EMPLOYEE_RECAP_REPORT,
+                row.original.name,
+                row.original.id
+              )}
             >
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                setDeleteDialog({ id: row.original.id, open: true })
-              }
-            >
-              Hapus
-            </DropdownMenuItem>
-          </DropdownEdit>
+              Lihat Laporan <Eye size={16} />
+            </Link>
+          </ProtectedComponent>
+          <ProtectedComponent required={['recap:update', 'recap:delete']}>
+            <DropdownEdit>
+              <ProtectedComponent required={['recap:update']}>
+                <DropdownMenuItem
+                  onClick={() => setDialog({ id: row.original.id, open: true })}
+                >
+                  Edit
+                </DropdownMenuItem>
+              </ProtectedComponent>
+              <ProtectedComponent required={['recap:delete']}>
+                <DropdownMenuItem
+                  onClick={() =>
+                    setDeleteDialog({ id: row.original.id, open: true })
+                  }
+                >
+                  Hapus
+                </DropdownMenuItem>
+              </ProtectedComponent>
+            </DropdownEdit>
+          </ProtectedComponent>
         </div>
       ),
     },
@@ -150,12 +174,14 @@ export default function Report() {
         <div className='flex gap-4'>
           <Search />
         </div>
-        <Button
-          variant='secondary'
-          onClick={() => setDialog({ open: true, id: null })}
-        >
-          Buat Periode
-        </Button>
+        <ProtectedComponent required={['recap:create']}>
+          <Button
+            variant='secondary'
+            onClick={() => setDialog({ open: true, id: null })}
+          >
+            Buat Periode
+          </Button>
+        </ProtectedComponent>
       </div>
       <DataTable
         columns={columns}

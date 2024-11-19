@@ -19,17 +19,20 @@ import { BASE_URL } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import { socket } from '@/utils/socket'
+import ProtectedComponent from '@/components/protected'
 
 type Props = {
   projectId?: number
   attachments?: Attachment[]
   withSocket?: boolean
+  permission?: string[]
 }
 
 export default function AttachmentProject({
   projectId,
   attachments,
   withSocket,
+  permission,
 }: Props) {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<null | {
@@ -80,21 +83,21 @@ export default function AttachmentProject({
     }
   }
 
+  const allowedReadSecret = permission?.includes(
+    'project:read-secret-attachment'
+  )
+
   return (
     <>
-      <div className='mt-4'>
-        <div className='w-full pb-2 border-b border-line flex justify-between items-center'>
-          <p className='text-dark/50'>Lampiran</p>
-          <Button
-            variant='secondary'
-            className='text-sm text-dark font-normal'
-            onClick={() => setOpen(!open)}
-          >
-            Tambah
-          </Button>
-        </div>
-        <div className='flex flex-col gap-2 mt-2'>
-          {attachments?.map((item, index) => (
+      <div className='flex flex-col gap-2 mt-2'>
+        {attachments
+          ?.filter((item) => {
+            if (allowedReadSecret) {
+              return item
+            }
+            return !item.isSecret
+          })
+          .map((item, index) => (
             <div
               className='flex justify-between items-center'
               key={`attachment-${index}`}
@@ -140,34 +143,52 @@ export default function AttachmentProject({
                         Unduh
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSelected({
-                          id: item.id,
-                          type: item.isSecret ? 'publish' : 'hide',
-                          open: true,
-                        })
-                      }}
+                    <ProtectedComponent
+                      required={['project:read-secret-attachment']}
                     >
-                      Jadikan {item.isSecret ? 'publik' : 'privat'}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSelected({
-                          id: item.id,
-                          type: 'delete',
-                          open: true,
-                        })
-                      }}
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelected({
+                            id: item.id,
+                            type: item.isSecret ? 'publish' : 'hide',
+                            open: true,
+                          })
+                        }}
+                      >
+                        Jadikan {item.isSecret ? 'publik' : 'privat'}
+                      </DropdownMenuItem>
+                    </ProtectedComponent>
+                    <ProtectedComponent
+                      required={['project:delete-attachment']}
                     >
-                      Hapus
-                    </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelected({
+                            id: item.id,
+                            type: 'delete',
+                            open: true,
+                          })
+                        }}
+                      >
+                        Hapus
+                      </DropdownMenuItem>
+                    </ProtectedComponent>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
             </div>
           ))}
-        </div>
+      </div>
+      <div className='mt-4 flex justify-center'>
+        <ProtectedComponent required={['project:upload-attachment']}>
+          <Button
+            variant='secondary'
+            className='text-sm text-dark font-normal mx-auto'
+            onClick={() => setOpen(!open)}
+          >
+            Tambah
+          </Button>
+        </ProtectedComponent>
       </div>
       <AttachmentDialog
         open={open}

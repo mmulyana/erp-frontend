@@ -21,6 +21,8 @@ export const useCreateAttachment = () => {
           formData.append(key, value as File)
         } else if (typeof value == 'number') {
           formData.append(key, String(value))
+        } else if (typeof value == 'boolean') {
+          formData.append(key, String(value))
         } else if (value !== null && typeof value == 'string') {
           formData.append(key, value)
         }

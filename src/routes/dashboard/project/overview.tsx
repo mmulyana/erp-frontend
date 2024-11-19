@@ -1,47 +1,47 @@
 import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
+import { BriefcaseBusiness } from 'lucide-react'
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
 import {
   useProjectsPagination,
-  useTotalProject,
   useUpdateProject,
 } from '@/hooks/api/use-project'
-import { useClient } from '@/hooks/api/use-client'
 import { useApiData } from '@/hooks/use-api-data'
+
+import { permissionAtom } from '@/atom/permission'
 
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { PATH } from '@/utils/constant/_paths'
 import { Project } from '@/utils/types/api'
 
 import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
+import { Tab, Tabs } from '@/components/tab'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
 import Overlay from '@/components/common/overlay'
 import Chips from '@/components/common/chips'
 
+import TotalProjectActive from './_component/overview/total-project-active'
 import ProjectByStatusChart from './_component/overview/project-by-status'
+import TotalProjectDone from './_component/overview/total-project-done'
+import CardAttachments from './_component/overview/card-attachments'
 import TopClientChart from './_component/overview/top-client-chart'
+import TotalClient from './_component/overview/total-client'
 import DetailProject from './_component/detail-project'
 import AddProject from './_component/add-project'
-
-import CardAttachments from './_component/overview/card-attachments'
 import { DashboardLayout } from '../_component/layout'
 import { useTitle } from '../_component/header'
 
-import {
-  BriefcaseBusiness,
-  HardHat,
-  ListChecks,
-  SquareUserRound,
-} from 'lucide-react'
-import { Tab, Tabs } from '@/components/tab'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
+
+  const permission = useAtomValue(permissionAtom)
 
   const [url] = useUrlState({ page: '', limit: '', name: '' })
 
@@ -64,9 +64,6 @@ export default function Dashboard() {
     })
   )
 
-  const { data: totalproject } = useApiData(useTotalProject())
-  const { data: clients } = useApiData(useClient())
-
   const columns: ColumnDef<Project>[] = [
     {
       id: 'name',
@@ -74,25 +71,29 @@ export default function Dashboard() {
       header: 'Nama',
       cell: ({ cell }) => {
         const { name, id } = cell.row.original
+        const isAllowed = permission.includes('project:detail')
         return (
           <div className='w-[140px]'>
             <Overlay
               className='w-fit pr-14'
               overlay={
-                <Button
-                  className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-                  onClick={() => {
-                    handleDialog('detail', true)
-                    setSelectedId(id)
-                  }}
-                >
-                  Lihat
-                </Button>
+                isAllowed && (
+                  <Button
+                    className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                    onClick={() => {
+                      handleDialog('detail', true)
+                      setSelectedId(id)
+                    }}
+                  >
+                    Lihat
+                  </Button>
+                )
               }
             >
               <p
                 className='hover:text-dark'
                 onClick={() => {
+                  if (!isAllowed) return
                   handleDialog('detail', true)
                   setSelectedId(id)
                 }}
@@ -160,25 +161,34 @@ export default function Dashboard() {
       header: '',
       cell: ({ row }) => (
         <div className='flex justify-end'>
-          <DropdownEdit>
-            <DropdownMenuItem
-              onClick={() =>
-                mutate({
-                  id: row.original.id,
-                  payload: { isArchive: !row.original.isArchive },
-                })
-              }
-            >
-              {row.original.isArchive ? 'Kembalikan' : 'Arsipkan'}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                mutate({ id: row.original.id, payload: { isDeleted: true } })
-              }
-            >
-              Hapus
-            </DropdownMenuItem>
-          </DropdownEdit>
+          <ProtectedComponent required={['project:archive', 'project:delete']}>
+            <DropdownEdit>
+              <ProtectedComponent required={['project:archive']}>
+                <DropdownMenuItem
+                  onClick={() =>
+                    mutate({
+                      id: row.original.id,
+                      payload: { isArchive: !row.original.isArchive },
+                    })
+                  }
+                >
+                  {row.original.isArchive ? 'Kembalikan' : 'Arsipkan'}
+                </DropdownMenuItem>
+              </ProtectedComponent>
+              <ProtectedComponent required={['project:delete']}>
+                <DropdownMenuItem
+                  onClick={() =>
+                    mutate({
+                      id: row.original.id,
+                      payload: { isDeleted: true },
+                    })
+                  }
+                >
+                  Hapus
+                </DropdownMenuItem>
+              </ProtectedComponent>
+            </DropdownEdit>
+          </ProtectedComponent>
         </div>
       ),
     },
@@ -200,47 +210,21 @@ export default function Dashboard() {
     }
   }
 
+  const isAllowedReadValue = permission.includes('project:read-value')
+
   return (
     <DashboardLayout>
-      <div className='p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6'>
-        <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
-          <div className='h-14 w-14 rounded-[10px] bg-blue-primary/5 flex justify-center items-center'>
-            <HardHat className='text-blue-primary' size={24} />
-          </div>
-          <div className='flex flex-col gap-1'>
-            <p className='text-dark/50 leading-none text-sm'>Total Proyek</p>
-            <p className='text-dark font-medium text-xl leading-none'>
-              {totalproject?.active}
-            </p>
-          </div>
+      <div className='p-6 grid grid-cols-1 gap-6'>
+        <div className='grid gap-6 md:grid-cols-1 lg:grid-cols-3'>
+          <TotalProjectActive />
+          <TotalProjectDone />
+          <TotalClient />
         </div>
-        <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
-          <div className='h-14 w-14 rounded-[10px] bg-green-primary/5 flex justify-center items-center'>
-            <ListChecks className='text-green-primary' size={24} />
-          </div>
-          <div className='flex flex-col gap-1'>
-            <p className='text-dark/50 leading-none text-sm'>
-              Total Proyek Selesai
-            </p>
-            <p className='text-dark font-medium text-xl leading-none'>
-              {totalproject?.done}
-            </p>
-          </div>
+        <div className='grid gap-6 md:grid-cols-1 lg:grid-cols-3'>
+          <TopClientChart />
+          <ProjectByStatusChart />
+          <CardAttachments />
         </div>
-        <div className='border border-line rounded-2xl flex items-center gap-5 p-2'>
-          <div className='h-14 w-14 rounded-[10px] bg-amber-50 flex justify-center items-center'>
-            <SquareUserRound className='text-amber-600' size={24} />
-          </div>
-          <div className='flex flex-col gap-1'>
-            <p className='text-dark/50 leading-none text-sm'>Total Klien</p>
-            <p className='text-dark font-medium text-xl leading-none'>
-              {clients?.length}
-            </p>
-          </div>
-        </div>
-        <TopClientChart />
-        <ProjectByStatusChart />
-        <CardAttachments />
         <div className='col-span-full'>
           <Tabs className='px-0'>
             <Tab label='Semua'>
@@ -250,16 +234,20 @@ export default function Dashboard() {
                     <BriefcaseBusiness className='text-[#989CA8]' />
                     <p className='text-dark font-medium'>Proyek</p>
                   </div>
-                  <div
-                    className='flex gap-2 items-center'
-                    onClick={() => handleDialog('add', true)}
-                  >
-                    <Button>Proyek Baru</Button>
+
+                  <div className='flex gap-2 items-center'>
+                    <ProtectedComponent required={['project:create']}>
+                      <Button onClick={() => handleDialog('add', true)}>
+                        Proyek Baru
+                      </Button>
+                    </ProtectedComponent>
                   </div>
                 </HeadTable>
                 <FilterTable placeholder='Cari proyek' />
                 <DataTable
-                  columns={columns}
+                  columns={columns.filter(
+                    (item) => !isAllowedReadValue && item.id !== 'net_value'
+                  )}
                   data={projectActive.data?.data || []}
                   isLoading={projectActive.isLoading}
                   totalPages={projectActive.data?.total_pages}

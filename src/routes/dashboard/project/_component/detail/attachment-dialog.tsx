@@ -10,6 +10,7 @@ import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { z } from 'zod'
 import { socket } from '@/utils/socket'
+import ProtectedComponent from '@/components/protected'
 
 // type Form = Omit<createAttachment, 'file' | 'name'> & { file: File | null }
 const ACCEPTED_FILE_TYPES = [
@@ -107,22 +108,24 @@ export default function AttachmentDialog({
                 />
               )}
             />
-            <FormField
-              control={form.control}
-              name='isSecret'
-              render={({ field }) => (
-                <div className='flex items-center space-x-2 mt-2'>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    id='secret'
-                  />
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel htmlFor='secret'>File rahasia</FormLabel>
+            <ProtectedComponent required={['project:read-secret-attachment']}>
+              <FormField
+                control={form.control}
+                name='isSecret'
+                render={({ field }) => (
+                  <div className='flex items-center space-x-2 mt-2'>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      id='secret'
+                    />
+                    <div className='space-y-1 leading-none'>
+                      <FormLabel htmlFor='secret'>File rahasia</FormLabel>
+                    </div>
                   </div>
-                </div>
-              )}
-            />
+                )}
+              />
+            </ProtectedComponent>
           </ModalContainer>
         </form>
       </Form>

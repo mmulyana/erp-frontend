@@ -23,6 +23,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Pencil, User2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { socket } from '@/utils/socket'
+import { useQueryClient } from '@tanstack/react-query'
+import { KEYS } from '@/utils/constant/_keys'
 
 type FormValues = {
   clientId?: number | null
@@ -31,8 +33,15 @@ type Props = {
   id: number
   data: Pick<Project, 'client'>
   withSocket?: boolean
+  permission?: string[]
 }
-export default function UserProject({ id, data: { client } }: Props) {
+export default function UserProject({
+  id,
+  data: { client },
+  permission,
+}: Props) {
+  const queryClient = useQueryClient()
+  
   //   HANDLE SEARCH
   const [search, setSearch] = useState('')
   const handleSearch = (value: string) => {
@@ -60,8 +69,9 @@ export default function UserProject({ id, data: { client } }: Props) {
       { id, payload: { clientId: data.clientId } },
       {
         onSuccess: () => {
-          setOpen(false)
+          queryClient.invalidateQueries({ queryKey: [KEYS.TOP_CLIENT] })
           socket.emit('request_board')
+          setOpen(false)
         },
       }
     )
@@ -83,6 +93,8 @@ export default function UserProject({ id, data: { client } }: Props) {
     )
   }, [clients, search, client])
 
+  const isAllowed = permission?.includes('project:update')
+
   return (
     <div className='flex gap-2 items-center flex-wrap'>
       <Form {...form}>
@@ -101,6 +113,7 @@ export default function UserProject({ id, data: { client } }: Props) {
                           'font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 h-fit relative gap-2',
                           client && 'text-dark'
                         )}
+                        disabled={!isAllowed}
                       >
                         {client ? (
                           <>
@@ -114,8 +127,14 @@ export default function UserProject({ id, data: { client } }: Props) {
                           </>
                         ) : (
                           <>
-                            <User2 size={14} />
-                            Pilih klien
+                            {isAllowed ? (
+                              <>
+                                <User2 size={14} />
+                                Pilih klien
+                              </>
+                            ) : (
+                              '-'
+                            )}
                           </>
                         )}
                       </Button>

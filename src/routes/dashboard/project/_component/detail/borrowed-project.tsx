@@ -13,7 +13,6 @@ import {
 import { cn } from '@/utils/cn'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Form, FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -39,6 +38,8 @@ import {
 } from '@/components/ui/popover'
 
 import { ChevronsUpDown, Ellipsis, Undo2 } from 'lucide-react'
+import ProtectedComponent from '@/components/protected'
+import { format } from 'date-fns'
 
 type Props = {
   id?: number | null
@@ -52,23 +53,28 @@ export default function BorrowedProject({ id }: Props) {
 
   return (
     <>
-      <div className='mt-4'>
-        <div className='w-full pb-2 flex justify-between items-center'>
-          <p className='text-dark/50'>Peminjaman</p>
-          <Button
-            variant='secondary'
-            className='text-sm text-dark font-normal'
-            onClick={() => setOpen(!open)}
-          >
-            Tambah
-          </Button>
+      <div>
+        <div className='w-full pb-4 flex justify-between items-center'>
+          <p className='text-dark'>Peminjaman</p>
+          <ProtectedComponent required={['project:borrow-goods']}>
+            <Button
+              variant='secondary'
+              className='text-sm text-dark font-normal h-fit'
+              onClick={() => setOpen(!open)}
+            >
+              Tambah
+            </Button>
+          </ProtectedComponent>
         </div>
         {!!data?.length && (
-          <ScrollArea className='max-h-72 pb-0.5 border border-line rounded '>
-            {data?.map((item) => (
+          <div className='border border-line rounded-lg bg-white'>
+            {data?.map((item, index) => (
               <div
                 key={`transaction-${item.id}`}
-                className='flex justify-between items-center border-b border-line p-2.5'
+                className={cn(
+                  'flex justify-between items-center border-b border-line p-2.5',
+                  index === data.length - 1 && 'border-none'
+                )}
               >
                 <div className='flex flex-col gap-1'>
                   <p
@@ -79,70 +85,76 @@ export default function BorrowedProject({ id }: Props) {
                   >
                     {item.good.name}
                   </p>
-                  <p
-                    className={cn(
-                      'text-sm text-dark/80',
-                      item.is_returned && 'line-through text-dark/50'
-                    )}
-                  >
-                    Sebanyak{' '}
-                    <span
+                  <div className='flex gap-2 items-center'>
+                    <p
                       className={cn(
-                        'text-dark font-medium',
-                        item.is_returned && 'text-inherit'
+                        'text-sm text-dark/80',
+                        item.is_returned && 'line-through text-dark/50'
                       )}
                     >
-                      {item.qty}
-                    </span>{' '}
-                    {item.good.measurement?.name}
-                  </p>
-                </div>
-                <div className='flex gap-4 items-center'>
-                  {!item.is_returned && (
-                    <Button
-                      className='bg-yellow-100 hover:bg-yellow-500 h-8 rounded-full pl-3 pr-2'
-                      variant='secondary'
-                      onClick={() => returned({ id: item.id })}
-                    >
-                      Kembalikan
-                      <Undo2
-                        size={16}
-                        className='text-yellow-600 group-hover:text-white'
-                      />
-                    </Button>
-                  )}
-                  <DropdownMenu modal={false}>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        className='w-8 h-8 rounded-full border border-dark/[0.12] p-0'
-                        variant='outline'
+                      Sebanyak{' '}
+                      <span
+                        className={cn(
+                          'text-dark font-medium',
+                          item.is_returned && 'text-inherit'
+                        )}
                       >
-                        <Ellipsis size={16} />
+                        {item.qty}
+                      </span>{' '}
+                      {item.good.measurement?.name}
+                    </p>
+                    <div className='h-1 w-1 rounded-full bg-gray-500'></div>
+                    <p className='text-sm'>{format(item.date, 'dd/MM/yyyy')}</p>
+                  </div>
+                </div>
+                <ProtectedComponent required={['project:borrow-goods']}>
+                  <div className='flex gap-4 items-center'>
+                    {!item.is_returned && (
+                      <Button
+                        className='bg-yellow-100 hover:bg-yellow-500 h-8 rounded-full pl-3 pr-2'
+                        variant='secondary'
+                        onClick={() => returned({ id: item.id })}
+                      >
+                        Kembalikan
+                        <Undo2
+                          size={16}
+                          className='text-yellow-600 group-hover:text-white'
+                        />
                       </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuGroup>
-                        {!item.is_returned && (
+                    )}
+                    <DropdownMenu modal={false}>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          className='w-8 h-8 rounded-full border border-dark/[0.12] p-0'
+                          variant='outline'
+                        >
+                          <Ellipsis size={16} />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuGroup>
+                          {!item.is_returned && (
+                            <DropdownMenuItem
+                              className='rounded-none text-sm text-dark/70 cursor-pointer'
+                              onClick={() => {}}
+                            >
+                              Edit
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem
                             className='rounded-none text-sm text-dark/70 cursor-pointer'
                             onClick={() => {}}
                           >
-                            Edit
+                            Hapus
                           </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          className='rounded-none text-sm text-dark/70 cursor-pointer'
-                          onClick={() => {}}
-                        >
-                          Hapus
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </ProtectedComponent>
               </div>
             ))}
-          </ScrollArea>
+          </div>
         )}
       </div>
 

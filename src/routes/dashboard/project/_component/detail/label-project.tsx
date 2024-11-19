@@ -40,11 +40,13 @@ type Props = {
   id: number
   data: Pick<Project, 'labels'>
   withSocket?: boolean
+  permission?: string[]
 }
 export default function LabelProject({
   id: projectId,
   data: { labels },
   withSocket,
+  permission,
 }: Props) {
   // HANDLE SEARCH
   const [search, setSearch] = useState('')
@@ -95,6 +97,8 @@ export default function LabelProject({
     )
   }, [dataLabels, search, labels])
 
+  const isAllowed = permission?.includes('project:update')
+
   return (
     <div className={cn('flex flex-wrap gap-2', labels.length > 2 && 'pt-2')}>
       {labels?.map((item) => (
@@ -103,25 +107,27 @@ export default function LabelProject({
           color={item.label.color}
           name={item.label.name}
           suffix={
-            <Button
-              variant='ghost'
-              className='border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
-              style={{ color: item.label.color }}
-              onClick={() => {
-                remove(
-                  { id: item.id },
-                  {
-                    onSuccess: () => {
-                      if (withSocket) {
-                        socket.emit('request_board')
-                      }
-                    },
-                  }
-                )
-              }}
-            >
-              <X size={14} strokeWidth={3} />
-            </Button>
+            isAllowed && (
+              <Button
+                variant='ghost'
+                className='border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
+                style={{ color: item.label.color }}
+                onClick={() => {
+                  remove(
+                    { id: item.id },
+                    {
+                      onSuccess: () => {
+                        if (withSocket) {
+                          socket.emit('request_board')
+                        }
+                      },
+                    }
+                  )
+                }}
+              >
+                <X size={14} strokeWidth={3} />
+              </Button>
+            )
           }
         />
       ))}
@@ -137,7 +143,11 @@ export default function LabelProject({
                     <PopoverTrigger asChild>
                       <Button
                         variant='ghost'
-                        className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative'
+                        className={cn(
+                          'font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative',
+                          !isAllowed && 'hidden'
+                        )}
+                        disabled={!isAllowed}
                       >
                         <Plus size={14} />
                         Tambah

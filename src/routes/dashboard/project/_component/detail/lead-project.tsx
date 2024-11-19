@@ -29,8 +29,9 @@ type FormValues = {
 type Props = {
   id: number
   data: Pick<ProjectDetail, 'lead'>
+  permission?: string[]
 }
-export default function LeadProject({ id, data: { lead } }: Props) {
+export default function LeadProject({ id, data: { lead }, permission }: Props) {
   //   HANDLE SEARCH
   const [search, setSearch] = useState('')
   const handleSearch = (value: string) => {
@@ -52,8 +53,8 @@ export default function LeadProject({ id, data: { lead } }: Props) {
     },
   })
   const handleSubmit = (data: FormValues) => {
-    if(!id || !data.leadId) return
-    
+    if (!id || !data.leadId) return
+
     update(
       { id, payload: { leadId: data.leadId } },
       {
@@ -79,6 +80,8 @@ export default function LeadProject({ id, data: { lead } }: Props) {
     )
   }, [leads, search, lead])
 
+  const isAllowed = permission?.includes('project:update')
+
   return (
     <div className='flex gap-2 flex-wrap items-center'>
       <Form {...form}>
@@ -97,6 +100,7 @@ export default function LeadProject({ id, data: { lead } }: Props) {
                           'font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 h-fit relative gap-2',
                           lead && 'text-dark'
                         )}
+                        disabled={!isAllowed}
                       >
                         {lead ? (
                           <>
@@ -110,8 +114,14 @@ export default function LeadProject({ id, data: { lead } }: Props) {
                           </>
                         ) : (
                           <>
-                            <User2 size={14} />
-                            Pilih PJ
+                            {isAllowed ? (
+                              <>
+                                <User2 size={14} />
+                                Pilih PJ
+                              </>
+                            ) : (
+                              '-'
+                            )}
                           </>
                         )}
                       </Button>

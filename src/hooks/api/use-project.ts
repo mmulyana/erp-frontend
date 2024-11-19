@@ -2,7 +2,13 @@ import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { socket } from '@/utils/socket'
-import { IApi, IApiPagination, Project, ProjectDetail } from '@/utils/types/api'
+import {
+  EmployeeByProject,
+  IApi,
+  IApiPagination,
+  Project,
+  ProjectDetail,
+} from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { updateProject } from '@/utils/types/form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -149,6 +155,22 @@ export const useUnassigneEmployee = () => {
   })
 }
 
+export const useEmployeeByProject = ({
+  id,
+  enabled,
+}: {
+  id?: number | null
+  enabled: boolean
+}) => {
+  return useQuery({
+    queryKey: [KEYS.PROJECT_DETAIL_EMPLOYEE],
+    queryFn: async (): Promise<AxiosResponse<IApi<EmployeeByProject[]>>> => {
+      return http(`${URLS.PROJECT}/${id}/employee`)
+    },
+    enabled,
+  })
+}
+
 export const useAddLabelProject = () => {
   const queryClient = useQueryClient()
 
@@ -194,6 +216,7 @@ export const useRemoveLabelProject = () => {
     },
   })
 }
+
 export const useTotalProject = () => {
   return useQuery({
     queryKey: [KEYS.PROJECT_TOTAL],

@@ -1,30 +1,37 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect, useMemo, useState } from 'react'
+import { Plus, UserCircle, X } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+
+import {
+  useAssigneEmployee,
+  useUnassigneEmployee,
+} from '@/hooks/api/use-project'
+import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useAllEmployees } from '@/hooks/api/use-employee'
+
+import { BASE_URL } from '@/utils/constant/_urls'
+import { KEYS } from '@/utils/constant/_keys'
+import { Project } from '@/utils/types/api'
+import { socket } from '@/utils/socket'
+import { cn } from '@/utils/cn'
+
+import ProtectedComponent from '@/components/protected'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import {
+  Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useAllEmployees } from '@/hooks/api/use-employee'
-import {
-  useAssigneEmployee,
-  useUnassigneEmployee,
-} from '@/hooks/api/use-project'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { BASE_URL } from '@/utils/constant/_urls'
-import { socket } from '@/utils/socket'
-import { Project } from '@/utils/types/api'
-import { Command } from 'cmdk'
-import { Plus, UserCircle, X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
 
 type FormValues = {
   employeeId?: number | null
@@ -33,12 +40,16 @@ type Props = {
   id: number
   data: Pick<Project, 'employees' | 'leadId'>
   withSocket?: boolean
+  permission?: string[]
 }
 export default function EmployeeProject({
   id: projectId,
   data: { employees, leadId },
   withSocket,
+  permission,
 }: Props) {
+  const queryClient = useQueryClient()
+
   //   HANDLE SEARCH
   const [search, setSearch] = useState('')
   const handleSearch = (value: string) => {
@@ -71,6 +82,9 @@ export default function EmployeeProject({
         onSuccess: () => {
           form.reset()
           setOpen(false)
+          queryClient.invalidateQueries({
+            queryKey: [KEYS.PROJECT_DETAIL, projectId],
+          })
           if (withSocket) socket.emit('request_board')
         },
       }
@@ -96,15 +110,17 @@ export default function EmployeeProject({
     )
   }, [employees, search, dataEmployees])
 
+  const isAllowed = permission?.includes('project:update')
+
   return (
-    <div className='flex flex-col gap-2 mt-2'>
+    <div className='flex flex-col gap-2'>
       <div className='w-full pb-2 border-b border-line flex justify-between items-center'>
         <p className='text-dark/50'>Pegawai</p>
       </div>
       <div className='flex gap-2 items-center flex-wrap'>
         {employees.map(({ employee, id }) => (
           <div
-            className='p-1 rounded-full bg-gray-100 flex gap-1.5 items-center pr-2'
+            className='p-1 rounded-full bg-gray-100 flex gap-2.5 items-center pr-2'
             key={`employee-${employee.id}`}
           >
             {employee.photo ? (
@@ -118,22 +134,27 @@ export default function EmployeeProject({
               </div>
             )}
             <p className='text-sm text-dark'>{employee.fullname}</p>
-            <Button
-              variant='ghost'
-              className='ml-2 border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
-              onClick={() => {
-                remove(
-                  { id },
-                  {
-                    onSuccess: () => {
-                      if (withSocket) socket.emit('request_board')
-                    },
-                  }
-                )
-              }}
-            >
-              <X size={14} strokeWidth={3} />
-            </Button>
+            <ProtectedComponent required={['project:update']}>
+              <Button
+                variant='ghost'
+                className='ml-2 border p-0 w-4 h-4 cursor-pointer z-[1] hover:bg-transparent opacity-70 pt-0.5'
+                onClick={() => {
+                  remove(
+                    { id },
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries({
+                          queryKey: [KEYS.PROJECT_DETAIL, projectId],
+                        })
+                        if (withSocket) socket.emit('request_board')
+                      },
+                    }
+                  )
+                }}
+              >
+                <X size={14} strokeWidth={3} />
+              </Button>
+            </ProtectedComponent>
           </div>
         ))}
         <Form {...form}>
@@ -148,7 +169,11 @@ export default function EmployeeProject({
                       <PopoverTrigger asChild>
                         <Button
                           variant='ghost'
-                          className='font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative'
+                          className={cn(
+                            'font-normal p-0 hover:bg-transparent inline-flex items-center text-gray-400 text-sm h-fit relative',
+                            !isAllowed && 'hidden'
+                          )}
+                          disabled={!isAllowed}
                         >
                           <Plus size={14} />
                           Tambah

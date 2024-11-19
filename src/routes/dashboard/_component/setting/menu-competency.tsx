@@ -1,9 +1,7 @@
-import { RadioV2 } from '@/components/common/radio-v2'
-import Search from '@/components/common/search'
-import { Button } from '@/components/ui/button'
-import { Form, FormField, FormLabel } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { Check, ChevronLeft, Pencil, Trash } from 'lucide-react'
+import { Controller, useForm } from 'react-hook-form'
+import { useEffect, useState } from 'react'
+
 import {
   useCompetency,
   useCreateCompetency,
@@ -12,9 +10,14 @@ import {
   useUpdateCompetency,
 } from '@/hooks/api/use-competency'
 import { cn } from '@/utils/cn'
-import { Check, ChevronLeft, Pencil, Trash } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+
+import ProtectedComponent from '@/components/protected'
+import Search from '@/components/common/search'
+import { Form, FormField, FormLabel } from '@/components/ui/form'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { RadioV2 } from '@/components/common/radio-v2'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 type Competency = {
   name: string
@@ -172,7 +175,9 @@ export default function MenuCompetency() {
           </p>
           <div className='mt-8 flex justify-between items-center'>
             <Search withoutUrl debounceTime={500} onSearch={setSearch} />
-            <Button onClick={() => setOpen(!open)}>Tambah</Button>
+            <ProtectedComponent required={['competency:create']}>
+              <Button onClick={() => setOpen(!open)}>Tambah</Button>
+            </ProtectedComponent>
           </div>
           <ScrollArea className='h-full'>
             <div className='mt-6 flex flex-col gap-2'>
@@ -230,22 +235,26 @@ export default function MenuCompetency() {
                   )}
                   {(!isDanger || selectedId !== item.id) && (
                     <div className='absolute top-1/2 -right-[72px] -translate-y-1/2 group-hover:right-0 h-full w-fit px-3 flex justify-between items-center gap-4 duration-150 ease-in'>
-                      <button
-                        onClick={() => {
-                          setSelectedId(item.id)
-                          setDanger(true)
-                        }}
-                      >
-                        <Trash className='w-4 h-4 text-red-400' />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedId(item.id)
-                          setOpen(true)
-                        }}
-                      >
-                        <Pencil className='w-4 h-4 text-gray-400' />
-                      </button>
+                      <ProtectedComponent required={['competency:delete']}>
+                        <button
+                          onClick={() => {
+                            setSelectedId(item.id)
+                            setDanger(true)
+                          }}
+                        >
+                          <Trash className='w-4 h-4 text-red-400' />
+                        </button>
+                      </ProtectedComponent>
+                      <ProtectedComponent required={['competency:update']}>
+                        <button
+                          onClick={() => {
+                            setSelectedId(item.id)
+                            setOpen(true)
+                          }}
+                        >
+                          <Pencil className='w-4 h-4 text-gray-400' />
+                        </button>
+                      </ProtectedComponent>
                     </div>
                   )}
                 </div>
