@@ -1,4 +1,4 @@
-name: production
+name: Production Deployment
 on:
   push:
     branches:
@@ -23,9 +23,10 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -i ./deploy.key ${{ secrets.SSH_USER }}@bjs.web.id "cd /var/www/production/frontend/ && \
+          git checkout prod && \
           git config pull.rebase false && \
-          git fetch origin main && \
-          git reset --hard origin/main && \
+          git fetch origin prod && \
+          git reset --hard origin/prod && \
           source ~/.nvm/nvm.sh && \
           export PATH=\"/home/${{ secrets.SSH_USER }}/.nvm/versions/node/v22.11.0/bin:\$PATH\" && \
           pnpm install && \
