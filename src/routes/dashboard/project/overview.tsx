@@ -4,7 +4,10 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 
-import { useProjectsPagination, useUpdateProject } from '@/hooks/api/use-project'
+import {
+  useProjectsPagination,
+  useUpdateProject,
+} from '@/hooks/api/use-project'
 import { useApiData } from '@/hooks/use-api-data'
 
 import { permissionAtom } from '@/atom/permission'
@@ -113,6 +116,7 @@ export default function Dashboard() {
         if (row.original.net_value) {
           return <p>{formatToRupiah(row.original.net_value)}</p>
         }
+        return null
       },
     },
     {
@@ -254,9 +258,12 @@ export default function Dashboard() {
                 </HeadTable>
                 <FilterTable placeholder='Cari proyek' />
                 <DataTable
-                  columns={columns.filter(
-                    (item) => !isAllowedReadValue && item.id !== 'net_value'
-                  )}
+                  columns={columns.filter((item) => {
+                    if (!isAllowedReadValue) {
+                      return item.id !== 'net_value'
+                    }
+                    return item
+                  })}
                   data={projectActive.data?.data || []}
                   isLoading={projectActive.isLoading}
                   totalPages={projectActive.data?.total_pages}
