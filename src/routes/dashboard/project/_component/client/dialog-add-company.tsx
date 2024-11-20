@@ -44,23 +44,6 @@ export default function DialogAddCompany({
     })
   )
 
-  useEffect(() => {
-    if (data && !isLoading && open) {
-      const { logo, name, address, email, phone } = data
-
-      form.reset({
-        address: address ?? '',
-        email: email ?? '',
-        name,
-        phone: phone ? String(phone) : '',
-      })
-
-      if (logo) {
-        setPreview(BASE_URL + '/img/' + logo)
-      }
-    }
-  }, [isLoading, data, open])
-
   // HANDLE FORM
   const { mutate: add } = useCreateClientCompany()
   const { mutate: update } = useUpdateClientCompany()
@@ -99,6 +82,23 @@ export default function DialogAddCompany({
       },
     })
   }
+
+  useEffect(() => {
+    if (data && !isLoading && open) {
+      const { logo, name, address, email, phone } = data
+
+      form.reset({
+        address: address ?? '',
+        email: email ?? '',
+        name: name ?? '',
+        phone: phone ? String(phone) : '',
+      })
+
+      if (logo) {
+        setPreview(BASE_URL + '/img/' + logo)
+      }
+    }
+  }, [isLoading, data, open])
 
   useEffect(() => {
     if (!open) {

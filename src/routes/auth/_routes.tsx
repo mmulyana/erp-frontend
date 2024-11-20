@@ -1,7 +1,7 @@
 import { PATH } from '@/utils/constant/_paths.ts'
 import { lazy } from 'react'
 
-const Login = lazy(() => import('./index.tsx'))
+const Login = lazy(() => import('./login.tsx'))
 
 export const authRoutes = [
   {

@@ -18,7 +18,6 @@ export default function Kanban() {
     socket.emit('request_board')
 
     socket.on('initial_data', (data) => {
-      console.log('data baru', data)
       setContainers(data)
     })
 

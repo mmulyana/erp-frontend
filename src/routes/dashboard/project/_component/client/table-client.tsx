@@ -115,7 +115,7 @@ export default function TableClient() {
     <>
       <FilterTable
         placeholder='Cari klien'
-        onAdd={() => !isAllowed && setDialog({ id: null, open: true })}
+        onAdd={() => setDialog({ id: null, open: true })}
         create={isAllowed}
       />
       <DataTable

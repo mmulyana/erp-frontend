@@ -1,11 +1,11 @@
+import { useNavigate } from 'react-router-dom'
+import { AxiosError } from 'axios'
+import { toast } from 'sonner'
+
+import { CookieKeys, CookieStorage } from '@/utils/cookie'
 import { PATH } from '@/utils/constant/_paths'
 import { URLS } from '@/utils/constant/_urls'
-import { CookieKeys, CookieStorage } from '@/utils/cookie'
 import http from '@/utils/http'
-import { ApiError } from '@/utils/types/api'
-import { AxiosError } from 'axios'
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
 
 type LoginPayload = {
   name?: string
@@ -24,7 +24,18 @@ export const useAuth = () => {
       toast.success(`Selamat datang ${data.data.data.name}`)
       navigate(PATH.DASHBOARD_OVERVIEW)
     } catch (error: unknown) {
-      const err = error as AxiosError<ApiError>
+      const err = error as AxiosError<any>
+
+      if (err.response?.data?.errors?.phoneNumber) {
+        return toast.error(err.response?.data?.errors?.phoneNumber.message)
+      }
+      if (err.response?.data?.errors?.name) {
+        return toast.error(err.response?.data?.errors?.name.message)
+      }
+      if (err.response?.data?.errors?.email) {
+        return toast.error(err.response?.data?.errors?.email.message)
+      }
+
       toast.error(err.response?.data.message)
     }
   }

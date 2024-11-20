@@ -242,9 +242,10 @@ export const useUpdateStatusProject = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT_CHART] })
+      queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT_PAGINATION] })
       queryClient.invalidateQueries({ queryKey: [KEYS.PROJECT] })
       queryClient.invalidateQueries({
-        queryKey: [KEYS.PROJECT, data.data.data?.id],
+        queryKey: [KEYS.PROJECT_DETAIL, data.data.data?.id],
       })
       toast.success(data.data.message)
     },

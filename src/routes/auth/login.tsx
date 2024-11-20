@@ -1,5 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { LogIn } from 'lucide-react'
+import { useState } from 'react'
 import { z } from 'zod'
 
 import { isValidEmail } from '@/utils/is-email-valid'
@@ -14,16 +16,17 @@ import { Layout, Protected } from './component'
 
 import bg from '/public/images/dave-hoefler-vHgAy9pOs9I-unsplash.jpg'
 import Logo from '/public/logo2.svg'
-import { LogIn } from 'lucide-react'
 
 type Payload = {
   name?: string
   email?: string
   password: string
+  phoneNumber?: string
 }
 
 export const LoginSchema = z.object({
-  name: z.string().min(1, { message: 'Masukkan nama atau email Anda' }),
+  name: z.string().optional(),
+  phoneNumber: z.string().optional(),
   password: z.string().min(8, {
     message: 'Silakan masukkan kata sandi yang terdiri dari minimal 8 karakter',
   }),
@@ -32,10 +35,13 @@ export const LoginSchema = z.object({
 export default function Login() {
   const { logIn } = useAuth()
 
+  const [isPhone, setPhone] = useState(true)
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       name: '',
+      phoneNumber: '',
       password: '',
     },
   })
@@ -45,10 +51,14 @@ export default function Login() {
       password: data.password,
     }
 
-    if (isValidEmail(data.name)) {
-      payload.email = data.name
+    if (data.name) {
+      if (isValidEmail(data.name)) {
+        payload.email = data.name
+      } else {
+        payload.name = data.name
+      }
     } else {
-      payload.name = data.name
+      payload.phoneNumber = data.phoneNumber
     }
 
     await logIn(payload)
@@ -71,21 +81,52 @@ export default function Login() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className='w-full flex flex-col gap-4 mt-6'
+            className='w-full flex flex-col gap-2.5 mt-6'
           >
-            <FormField
-              control={form.control}
-              name='name'
-              label='Nama'
-              render={({ field }) => (
-                <Input
-                  placeholder='Name'
-                  {...field}
-                  autoComplete='none'
-                  className='bg-white/50'
+            <div>
+              {isPhone ? (
+                <FormField
+                  control={form.control}
+                  name='phoneNumber'
+                  label='Nomor telepon'
+                  render={({ field }) => (
+                    <Input
+                      placeholder='Masukkan nomor telepon'
+                      {...field}
+                      autoComplete='none'
+                      className='bg-white/50'
+                    />
+                  )}
+                />
+              ) : (
+                <FormField
+                  control={form.control}
+                  name='name'
+                  label='Nama/Email'
+                  render={({ field }) => (
+                    <Input
+                      placeholder='Name'
+                      {...field}
+                      autoComplete='none'
+                      className='bg-white/50'
+                    />
+                  )}
                 />
               )}
-            />
+              <div className='flex justify-end w-full pt-2'>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  className='text-right text-blue-primary px-0 py-0 h-fit'
+                  onClick={() => setPhone(!isPhone)}
+                >
+                  {isPhone
+                    ? 'Masuk menggunakan email/username'
+                    : 'Masuk menggunakan nomor telp'}
+                </Button>
+              </div>
+            </div>
+
             <InputPassword
               label='Password'
               name='password'

@@ -1,5 +1,24 @@
-import Label from '@/components/common/label'
+import { useQueryClient } from '@tanstack/react-query'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMemo, useState } from 'react'
+import { Plus, X } from 'lucide-react'
+import { z } from 'zod'
+
+import {
+  useAddLabelProject,
+  useRemoveLabelProject,
+} from '@/hooks/api/use-project'
+import { useProjectLabels } from '@/hooks/api/use-project-label'
+
+import { KEYS } from '@/utils/constant/_keys'
+import { Project } from '@/utils/types/api'
+import { socket } from '@/utils/socket'
+import { cn } from '@/utils/cn'
+
+import { Form, FormControl, FormItem } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
+import Label from '@/components/common/label'
 import {
   Command,
   CommandEmpty,
@@ -13,20 +32,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Form, FormControl, FormItem } from '@/components/ui/form'
-import { useProjectLabels } from '@/hooks/api/use-project-label'
-import {
-  useAddLabelProject,
-  useRemoveLabelProject,
-} from '@/hooks/api/use-project'
-import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Project } from '@/utils/types/api'
-import { useMemo, useState } from 'react'
-import { Plus, X } from 'lucide-react'
-import { cn } from '@/utils/cn'
-import { z } from 'zod'
-import { socket } from '@/utils/socket'
 
 const formSchema = z.object({
   labelId: z.number({
@@ -48,6 +53,8 @@ export default function LabelProject({
   withSocket,
   permission,
 }: Props) {
+  const queryClient = useQueryClient()
+
   // HANDLE SEARCH
   const [search, setSearch] = useState('')
   const handleSearch = (value: string) => {
@@ -76,7 +83,10 @@ export default function LabelProject({
         onSuccess: () => {
           setOpen(false)
           form.reset()
-          socket.emit('request_board')
+          queryClient.invalidateQueries({
+            queryKey: [KEYS.PROJECT_DETAIL, projectId],
+          })
+          withSocket && socket.emit('request_board')
         },
       }
     )
@@ -117,9 +127,11 @@ export default function LabelProject({
                     { id: item.id },
                     {
                       onSuccess: () => {
-                        if (withSocket) {
-                          socket.emit('request_board')
-                        }
+                        queryClient.invalidateQueries({
+                          queryKey: [KEYS.PROJECT_DETAIL, projectId],
+                        })
+
+                        withSocket && socket.emit('request_board')
                       },
                     }
                   )

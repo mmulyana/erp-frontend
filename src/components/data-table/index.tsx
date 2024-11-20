@@ -16,6 +16,7 @@ import {
 import { Pagination } from './component'
 import { cn } from '@/utils/cn'
 import LoadingState from '../common/loading-state'
+import EmptyState from '../common/empty-state'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -76,8 +77,8 @@ export function DataTable<TData, TValue>({
 
     return (
       <TableRow>
-        <TableCell colSpan={columns.length} className='h-28 text-center'>
-          No results.
+        <TableCell colSpan={columns.length} className='h-fit py-4 text-center'>
+          <EmptyState />
         </TableCell>
       </TableRow>
     )
@@ -98,11 +99,13 @@ export function DataTable<TData, TValue>({
                       index !== headerGroup.headers.length - 1 &&
                       'border-l border-line'
                   )}
-                  style={{
-                    // width: `${header.column.columnDef.size}px`,
-                    // maxWidth: `${header.column.columnDef.size}px`,
-                    // minWidth: `${header.column.columnDef.size}px`,
-                  }}
+                  style={
+                    {
+                      // width: `${header.column.columnDef.size}px`,
+                      // maxWidth: `${header.column.columnDef.size}px`,
+                      // minWidth: `${header.column.columnDef.size}px`,
+                    }
+                  }
                 >
                   {flexRender(
                     header.column.columnDef.header,

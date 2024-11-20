@@ -122,7 +122,12 @@ export const useClientCompanyPagination = (params?: CompanyParams) => {
         params,
       })
     },
-    queryKey: [KEYS.CLIENT_COMPANY_PAGINATION, params?.name, params?.page, params?.limit],
+    queryKey: [
+      KEYS.CLIENT_COMPANY_PAGINATION,
+      params?.name,
+      params?.page,
+      params?.limit,
+    ],
   })
 }
 export const useDetailClientCompany = ({
@@ -187,7 +192,9 @@ export const useUpdateClientCompany = () => {
       )
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT_COMPANY] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.CLIENT_COMPANY_PAGINATION],
+      })
       toast.success(data.data.message)
     },
   })
@@ -201,7 +208,9 @@ export const useDeleteClientCompany = () => {
       return await http.delete(`${URLS.PROJECT_CLIENT_COMPANY}/${id}`)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [KEYS.CLIENT_COMPANY] })
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.CLIENT_COMPANY_PAGINATION],
+      })
       toast.success(data.data.message)
     },
   })

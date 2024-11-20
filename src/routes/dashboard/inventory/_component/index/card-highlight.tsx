@@ -5,12 +5,12 @@ import { useGoodsLowStock, useGoodsOutOfStock } from '@/hooks/api/use-goods'
 import { useTransactionBorrowed } from '@/hooks/api/use-transaction'
 import { useApiData } from '@/hooks/use-api-data'
 
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Modal from '@/components/modal-v2'
 
 import ButtonLink from '../button-link'
+import EmptyState from '@/components/common/empty-state'
 
 export default function CardHighlight() {
   const { data: borroweds } = useApiData(useTransactionBorrowed())
@@ -92,71 +92,87 @@ export default function CardHighlight() {
           <TabsContent value='borrowed'>
             <ScrollArea className='h-80'>
               <div className='flex flex-col pb-3'>
-                {borroweds?.map((item) => (
-                  <div
-                    key={`borrowed-${item.id}`}
-                    className='flex justify-between items-center p-4 border-b border-line'
-                  >
-                    <div>
-                      <p className='text-dark font-medium'>{item.good.name}</p>
-                      <p className='text-dark/80 text-sm'>
-                        sebanyak{' '}
-                        <span className='text-dark font-medium'>
-                          {item.qty}
-                        </span>{' '}
-                        {item.good.measurement?.name}
-                      </p>
-                    </div>
-                    {item.project && (
-                      <div className='text-right'>
-                        <p className='text-sm text-dark/50'>proyek terkait</p>
-                        <p>{item.project.name}</p>
+                {borroweds && !!borroweds.length ? (
+                  borroweds?.map((item) => (
+                    <div
+                      key={`borrowed-${item.id}`}
+                      className='flex justify-between items-center p-4 border-b border-line'
+                    >
+                      <div>
+                        <p className='text-dark font-medium'>
+                          {item.good.name}
+                        </p>
+                        <p className='text-dark/80 text-sm'>
+                          sebanyak{' '}
+                          <span className='text-dark font-medium'>
+                            {item.qty}
+                          </span>{' '}
+                          {item.good.measurement?.name}
+                        </p>
                       </div>
-                    )}
-                  </div>
-                ))}
+                      {item.project && (
+                        <div className='text-right'>
+                          <p className='text-sm text-dark/50'>proyek terkait</p>
+                          <p>{item.project.name}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <EmptyState className='h-80' />
+                )}
               </div>
             </ScrollArea>
           </TabsContent>
           <TabsContent value='low'>
             <ScrollArea className='h-80'>
               <div className='flex flex-col pb-3'>
-                {lowStocks?.map((item) => (
-                  <div
-                    key={`low-${item.id}`}
-                    className='flex justify-between items-center p-4 border-b border-line'
-                  >
-                    <div>
-                      <p className='text-dark font-medium'>{item.name}</p>
-                      <p className='text-dark/80 text-sm'>
-                        Mininum stock:
-                        {item.minimum}
+                {lowStocks && !!lowStocks.length ? (
+                  lowStocks?.map((item) => (
+                    <div
+                      key={`low-${item.id}`}
+                      className='flex justify-between items-center p-4 border-b border-line'
+                    >
+                      <div>
+                        <p className='text-dark font-medium'>{item.name}</p>
+                        <p className='text-dark/80 text-sm'>
+                          Mininum stock:
+                          {item.minimum}
+                        </p>
+                      </div>
+                      <p className='text-dark/50'>
+                        tersisa{' '}
+                        <span className='text-dark font-medium'>
+                          {item.available < item.qty
+                            ? item.available
+                            : item.qty}
+                        </span>
                       </p>
                     </div>
-                    <p className='text-dark/50'>
-                      tersisa{' '}
-                      <span className='text-dark font-medium'>
-                        {item.available < item.qty ? item.available : item.qty}
-                      </span>
-                    </p>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <EmptyState className='h-80' />
+                )}
               </div>
             </ScrollArea>
           </TabsContent>
           <TabsContent value='out'>
             <ScrollArea className='h-80'>
               <div className='flex flex-col pb-3'>
-                {outOfStocks?.map((item) => (
-                  <div
-                    key={`out-${item.id}`}
-                    className='flex justify-between items-center p-4 border-b border-line'
-                  >
-                    <div>
-                      <p className='text-dark font-medium'>{item.name}</p>
+                {outOfStocks && !!outOfStocks.length ? (
+                  outOfStocks?.map((item) => (
+                    <div
+                      key={`out-${item.id}`}
+                      className='flex justify-between items-center p-4 border-b border-line'
+                    >
+                      <div>
+                        <p className='text-dark font-medium'>{item.name}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <EmptyState className='h-80' />
+                )}
               </div>
             </ScrollArea>
           </TabsContent>

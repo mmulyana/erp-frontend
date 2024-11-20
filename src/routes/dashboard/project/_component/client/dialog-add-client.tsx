@@ -167,7 +167,7 @@ export default function DialogAddClient({
                     >
                       {item.logo && (
                         <img
-                          className='h-8 w-8 rounded'
+                          className='h-8 w-8 rounded object-cover object-center'
                           src={BASE_URL + '/img/' + item.logo}
                         />
                       )}
