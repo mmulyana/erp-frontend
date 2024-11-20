@@ -154,34 +154,6 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
                     placeholder='tulis pesan disini'
                     {...field}
                   />
-                  <FormField
-                    control={form.control}
-                    name='photos'
-                    render={({ field }) => (
-                      <>
-                        {field.value?.length > 0 && (
-                          <div className='flex gap-2 mt-2 flex-wrap'>
-                            {field.value.map((file, index) => (
-                              <PreviewPhoto
-                                key={index}
-                                photo={file}
-                                onRemove={() => removeFile(index)}
-                              />
-                            ))}
-                          </div>
-                        )}
-                        <input
-                          type='file'
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                          multiple
-                          accept='image/*'
-                          className='hidden'
-                          name={field.name}
-                        />
-                      </>
-                    )}
-                  />
                   <div className='flex justify-between items-center gap-2 absolute top-1/2 -translate-y-1/2 right-1'>
                     <button
                       type='button'
@@ -201,6 +173,36 @@ export default function MessageForm({ type, id, projectId }: MessageProps) {
               )}
             />
           </div>
+        </div>
+        <div className='flex gap-2 flex-wrap'>
+          <FormField
+            control={form.control}
+            name='photos'
+            render={({ field }) => (
+              <>
+                {field.value?.length > 0 && (
+                  <div className='flex gap-2 mt-2 flex-wrap'>
+                    {field.value.map((file, index) => (
+                      <PreviewPhoto
+                        key={index}
+                        photo={file}
+                        onRemove={() => removeFile(index)}
+                      />
+                    ))}
+                  </div>
+                )}
+                <input
+                  type='file'
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  multiple
+                  accept='image/*'
+                  className='hidden'
+                  name={field.name}
+                />
+              </>
+            )}
+          />
         </div>
       </form>
     </Form>
