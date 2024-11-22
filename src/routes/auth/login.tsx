@@ -51,7 +51,7 @@ export default function Login() {
       password: data.password,
     }
 
-    if (!isPhone) {
+    if (!isPhone && data.name) {
       if (isValidEmail(data.name)) {
         payload.email = data.name
       } else {
