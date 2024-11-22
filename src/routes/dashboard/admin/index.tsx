@@ -213,7 +213,7 @@ export default function Index() {
         columns={column}
         data={
           users?.data.filter(
-            (item) => item.id !== user?.id && user?.id !== 1
+            (item) => item.id !== user?.id || user?.id !== 1
           ) || []
         }
         isLoading={isLoading}
