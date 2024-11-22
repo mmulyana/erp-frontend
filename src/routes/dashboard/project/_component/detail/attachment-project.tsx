@@ -1,7 +1,7 @@
 import { Ellipsis, Eye, Lock } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   useDeleteAttachment,
@@ -114,96 +114,97 @@ export default function AttachmentProject({
     'project:read-secret-attachment'
   )
 
+  const files = useMemo(
+    () =>
+      attachments?.filter((item) =>
+        allowedReadSecret ? item : !item.isSecret
+      ) || [],
+    [attachments]
+  )
+
   return (
     <>
       <div className='flex flex-col gap-4 mt-2'>
-        {attachments?.length ? (
-          attachments
-            ?.filter((item) => {
-              if (allowedReadSecret) {
-                return item
-              }
-              return !item.isSecret
-            })
-            .map((item, index) => (
-              <div
-                className='flex justify-between items-center'
-                key={`attachment-${index}`}
-              >
-                <div className='flex gap-2.5 items-center'>
-                  <FileIcon type={item.type ?? ''} />
-                  <div>
-                    <div className='flex gap-2 items-center'>
-                      <p className='text-dark leading-5 text-sm'>
-                        {item.name}.{item.type}
-                      </p>
-                      {item.isSecret && <Lock size={14} />}
-                    </div>
-                    <p className='text-dark/40 text-sm leading-4'>
-                      {format(item.uploaded_at, 'dd/MM/yy')}
+        {files && !!files.length ? (
+          files.map((item, index) => (
+            <div
+              className='flex justify-between items-center'
+              key={`attachment-${index}`}
+            >
+              <div className='flex gap-2.5 items-center'>
+                <FileIcon type={item.type ?? ''} />
+                <div>
+                  <div className='flex gap-2 items-center'>
+                    <p className='text-dark leading-5 text-sm'>
+                      {item.name}.{item.type}
                     </p>
+                    {item.isSecret && <Lock size={14} />}
                   </div>
-                </div>
-                <div className='flex gap-2'>
-                  <Link
-                    to={BASE_URL + '/files/' + item.file}
-                    className={cn(
-                      buttonVariants({ variant: 'outline' }),
-                      'w-8 h-8 rounded-full border border-dark/[0.12] p-0 text-dark'
-                    )}
-                  >
-                    <Eye size={16} />
-                  </Link>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        className='w-8 h-8 rounded-full border border-dark/[0.12] p-0'
-                        variant='outline'
-                      >
-                        <Ellipsis size={16} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className='min-w-fit -translate-x-4'>
-                      <DropdownMenuItem>
-                        <Link to={BASE_URL + '/files/' + item.file} download>
-                          Unduh
-                        </Link>
-                      </DropdownMenuItem>
-                      <ProtectedComponent
-                        required={['project:read-secret-attachment']}
-                      >
-                        <DropdownMenuItem
-                          onClick={() => {
-                            setSelected({
-                              id: item.id,
-                              type: item.isSecret ? 'publish' : 'hide',
-                              open: true,
-                            })
-                          }}
-                        >
-                          Jadikan {item.isSecret ? 'publik' : 'privat'}
-                        </DropdownMenuItem>
-                      </ProtectedComponent>
-                      <ProtectedComponent
-                        required={['project:delete-attachment']}
-                      >
-                        <DropdownMenuItem
-                          onClick={() => {
-                            setSelected({
-                              id: item.id,
-                              type: 'delete',
-                              open: true,
-                            })
-                          }}
-                        >
-                          Hapus
-                        </DropdownMenuItem>
-                      </ProtectedComponent>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <p className='text-dark/40 text-sm leading-4'>
+                    {format(item.uploaded_at, 'dd/MM/yy')}
+                  </p>
                 </div>
               </div>
-            ))
+              <div className='flex gap-2'>
+                <Link
+                  to={BASE_URL + '/files/' + item.file}
+                  className={cn(
+                    buttonVariants({ variant: 'outline' }),
+                    'w-8 h-8 rounded-full border border-dark/[0.12] p-0 text-dark'
+                  )}
+                >
+                  <Eye size={16} />
+                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className='w-8 h-8 rounded-full border border-dark/[0.12] p-0'
+                      variant='outline'
+                    >
+                      <Ellipsis size={16} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='min-w-fit -translate-x-4'>
+                    <DropdownMenuItem>
+                      <Link to={BASE_URL + '/files/' + item.file} download>
+                        Unduh
+                      </Link>
+                    </DropdownMenuItem>
+                    <ProtectedComponent
+                      required={['project:read-secret-attachment']}
+                    >
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelected({
+                            id: item.id,
+                            type: item.isSecret ? 'publish' : 'hide',
+                            open: true,
+                          })
+                        }}
+                      >
+                        Jadikan {item.isSecret ? 'publik' : 'privat'}
+                      </DropdownMenuItem>
+                    </ProtectedComponent>
+                    <ProtectedComponent
+                      required={['project:delete-attachment']}
+                    >
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelected({
+                            id: item.id,
+                            type: 'delete',
+                            open: true,
+                          })
+                        }}
+                      >
+                        Hapus
+                      </DropdownMenuItem>
+                    </ProtectedComponent>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          ))
         ) : (
           <EmptyState className='mt-4' />
         )}

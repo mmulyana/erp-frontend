@@ -4,8 +4,8 @@ import { UserCircle } from 'lucide-react'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
-import { userAtom } from '@/atom/auth'
 import usePermission from '@/hooks/use-permission'
+import { userAtom } from '@/atom/auth'
 import { formatPhone } from '@/utils/format-phone'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { PATH } from '@/utils/constant/_paths'
@@ -19,9 +19,9 @@ import {
   useResetPassword,
 } from '@/hooks/api/use-account'
 
+import ProtectedComponent from '@/components/protected'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import ProtectedComponent from '@/components/protected'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 
@@ -211,7 +211,11 @@ export default function Index() {
       <FilterTable />
       <DataTable
         columns={column}
-        data={users?.data.filter((item) => item.id !== user?.id) || []}
+        data={
+          users?.data.filter(
+            (item) => item.id !== user?.id && user?.id !== 1
+          ) || []
+        }
         isLoading={isLoading}
         withPagination
         totalPages={users?.total_pages}
