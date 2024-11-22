@@ -58,7 +58,7 @@ export default function Login() {
         payload.name = data.name
       }
     } else {
-      payload.phoneNumber = data.phoneNumber
+      payload.phoneNumber = data.phoneNumber as string
     }
 
     await logIn(payload)
