@@ -41,7 +41,7 @@ export default function ExpireSafety({ positionId }: Props) {
                       </span>{' '}
                       telah melewati masa berlaku safety induction-nya selama{' '}
                       <span className='text-dark font-medium'>
-                        {item.daysUntilExpiry * -1}
+                        {item.daysUntilExpiry}
                       </span>{' '}
                       hari.
                     </>
