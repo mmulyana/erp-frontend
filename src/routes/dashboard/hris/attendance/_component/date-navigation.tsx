@@ -1,12 +1,24 @@
-import { format, addDays, isAfter, startOfToday, isYesterday } from 'date-fns'
+import {
+  format,
+  addDays,
+  isAfter,
+  startOfToday,
+  isYesterday,
+  getWeek,
+} from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { id } from 'date-fns/locale'
 
 import { cn } from '@/utils/cn'
+import { useAtomValue } from 'jotai'
+import { viewAtom } from './view-toggle'
+import { useEffect } from 'react'
 
 const DateNavigation = () => {
-  const [url, setUrl] = useUrlState({ date: '' })
+  const view = useAtomValue(viewAtom)
+
+  const [url, setUrl] = useUrlState({ date: '', week: '' })
 
   const getCurrentDate = () => {
     if (!url.date) {
@@ -19,11 +31,22 @@ const DateNavigation = () => {
   const today = startOfToday()
 
   const handlePrevious = () => {
+    if (view === 'table') {
+      const nextWeek = Number(url.week) - 1
+      setUrl((prev) => ({ ...prev, week: nextWeek }))
+
+      return
+    }
     const newDate = addDays(currentDate, -1)
     setUrl({ date: format(newDate, 'yyyy-MM-dd') })
   }
 
   const handleNext = () => {
+    if (view === 'table') {
+      const nextWeek = Number(url.week) + 1
+      setUrl((prev) => ({ ...prev, week: nextWeek }))
+      return
+    }
     const newDate = addDays(currentDate, 1)
     if (isYesterday(new Date(url.date))) {
       setUrl({ date: undefined })
@@ -31,6 +54,13 @@ const DateNavigation = () => {
     }
     setUrl({ date: format(newDate, 'yyyy-MM-dd') })
   }
+
+  useEffect(() => {
+    if (view === 'table') {
+      const weekNumber = getWeek(url.date || new Date())
+      setUrl((prev) => ({ ...prev, week: weekNumber }))
+    }
+  }, [view])
 
   const isNextDisabled = !isAfter(today, currentDate)
 
@@ -44,15 +74,17 @@ const DateNavigation = () => {
       </button>
 
       <div className='text-sm text-center'>
-        {format(currentDate, 'dd/MM/yyyy', { locale: id })}
+        {view === 'grid'
+          ? format(currentDate, 'dd/MM/yyyy', { locale: id })
+          : url.week}
       </div>
 
       <button
         onClick={handleNext}
-        disabled={isNextDisabled}
+        disabled={view !== 'table' && isNextDisabled}
         className={cn(
           'p-2 rounded-full bg-white',
-          isNextDisabled ? 'opacity-50 cursor-not-allowed' : 'shadow-md'
+          view !== 'table' && isNextDisabled ? 'opacity-50 cursor-not-allowed' : 'shadow-md'
         )}
       >
         <ChevronRight size={18} />

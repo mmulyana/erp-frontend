@@ -301,7 +301,7 @@ type EmployeeAssigned = {
   employee: Employee
 }
 
-type Attendance = {
+export type Attendance = {
   id: number
   employee: Employee
   employeeId: number

@@ -1,19 +1,21 @@
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
+import { IApi } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosResponse } from 'axios'
 
 type AttendanceParams = Pagination & {
   name?: string
+  date?: string
+  endDate?: string
 }
-export const useAttendances = (params: AttendanceParams) => {
+export const useAttendances = (params?: AttendanceParams) => {
   return useQuery({
-    queryKey: [KEYS.ATTENDANCE, params],
-    queryFn: async () => {
-      return await http.request({
-        method: 'GET',
-        url: URLS.ATTENDANCE,
+    queryKey: [KEYS.ATTENDANCE, params?.date, params?.endDate, params?.name],
+    queryFn: async (): Promise<AxiosResponse<IApi<any[]>>> => {
+      return await http(URLS.ATTENDANCE, {
         params,
       })
     },
