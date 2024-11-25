@@ -34,9 +34,12 @@ import {
 } from '@/components/ui/collapsible'
 
 import Logo from '../../../../public/logo2.svg'
+import { useActiveMenu } from '../_hook/use-active-menu'
+import { cn } from '@/utils/cn'
 
 export default function AppSidebar() {
   const permission = usePermission()
+  const menus = useActiveMenu()
 
   const { isMobile, toggleSidebar } = useSidebar()
 
@@ -68,7 +71,7 @@ export default function AppSidebar() {
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton isActive={menus.path === '/dashboard'} asChild>
                 <Link to='/dashboard'>
                   <House size={20} />
                   <span>Dashboard</span>
@@ -82,10 +85,23 @@ export default function AppSidebar() {
                 HRIS
               </SidebarMenuButton>
               <SidebarMenuSub>
-                <SidebarMenuSubItem>
+                <SidebarMenuSubItem className='flex-col gap-1 flex'>
                   {hrisMenus.map((item) => (
-                    <SidebarMenuSubButton key={`submenu-${item.url}`} asChild>
-                      <Link to={item.url}>
+                    <SidebarMenuSubButton
+                      isActive={menus.path === item.url}
+                      key={`submenu-${item.url}`}
+                      className={cn(
+                        'py-4 px-0',
+                        menus.path === item.url
+                          ? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
+                          : 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
+                      )}
+                      asChild
+                    >
+                      <Link to={item.url} className='relative'>
+                        {menus.path === item.url && (
+                          <div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+                        )}
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuSubButton>
@@ -100,10 +116,23 @@ export default function AppSidebar() {
                 Proyek
               </SidebarMenuButton>
               <SidebarMenuSub>
-                <SidebarMenuSubItem>
+                <SidebarMenuSubItem className='flex flex-col gap-1'>
                   {ProjectMenus.map((item) => (
-                    <SidebarMenuSubButton key={`submenu-${item.url}`} asChild>
+                    <SidebarMenuSubButton
+                      key={`submenu-${item.url}`}
+                      isActive={menus.path === item.url}
+                      className={cn(
+                        'py-4 px-0',
+                        menus.path === item.url
+                          ? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
+                          : 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
+                      )}
+                      asChild
+                    >
                       <Link to={item.url}>
+                        {menus.path === item.url && (
+                          <div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+                        )}
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuSubButton>
@@ -118,27 +147,47 @@ export default function AppSidebar() {
                 Inventory
               </SidebarMenuButton>
               <SidebarMenuSub>
-                <SidebarMenuSubItem>
+                <SidebarMenuSubItem className='flex flex-col gap-1'>
                   {InventoryMenus.map((item) => {
                     if (item.children) {
                       return (
                         <Collapsible
                           key={`submenu-${item.url}`}
                           className='group/collapsible'
+                          defaultOpen={
+                            menus.activeSubMenu === 'Kelola' &&
+                            menus.activeMenu === 'inventory'
+                          }
                         >
                           <CollapsibleTrigger asChild>
-                            <SidebarMenuButton className='flex justify-between items-center'>
+                            <SidebarMenuSubButton
+                              className={cn(
+                                'flex justify-between items-center relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md pr-2'
+                              )}
+                            >
                               <span>{item.title}</span>
                               <ChevronDown className='ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180' />
-                            </SidebarMenuButton>
+                            </SidebarMenuSubButton>
                           </CollapsibleTrigger>
 
                           <CollapsibleContent>
                             <SidebarMenuSub>
                               {item.children?.map((sub) => (
                                 <SidebarMenuSubItem key={`submenu-${sub.url}`}>
-                                  <SidebarMenuSubButton asChild>
+                                  <SidebarMenuSubButton
+                                    isActive={menus.path === sub.url}
+                                    className={cn(
+                                      'py-4 px-0',
+                                      menus.path === sub.url
+                                        ? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
+                                        : 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
+                                    )}
+                                    asChild
+                                  >
                                     <Link to={sub.url}>
+                                      {menus.path === sub.url && (
+                                        <div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+                                      )}
                                       <span>{sub.title}</span>
                                     </Link>
                                   </SidebarMenuSubButton>
@@ -152,8 +201,20 @@ export default function AppSidebar() {
 
                     return (
                       <React.Fragment key={`submenu-${item.url}`}>
-                        <SidebarMenuSubButton asChild>
+                        <SidebarMenuSubButton
+                          isActive={menus.path === item.url}
+                          className={cn(
+                            'py-4 px-0',
+                            menus.path === item.url
+                              ? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
+                              : 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
+                          )}
+                          asChild
+                        >
                           <Link to={item.url}>
+                            {menus.path === item.url && (
+                              <div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+                            )}
                             <span>{item.title}</span>
                           </Link>
                         </SidebarMenuSubButton>
@@ -171,13 +232,23 @@ export default function AppSidebar() {
                   Admin
                 </SidebarMenuButton>
                 <SidebarMenuSub>
-                  <SidebarMenuSubItem>
+                  <SidebarMenuSubItem className='flex flex-col gap-1'>
                     {permission.includes('user:read') && (
                       <SidebarMenuSubButton
                         key={`submenu-${AdminMenus[0].url}`}
+                        isActive={menus.path === AdminMenus[0].url}
+                        className={cn(
+                          'py-4 px-0',
+                          menus.path === AdminMenus[0].url
+                            ? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
+                            : 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
+                        )}
                         asChild
                       >
                         <Link to={AdminMenus[0].url}>
+                          {menus.path === AdminMenus[0].url && (
+                            <div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+                          )}
                           <span>{AdminMenus[0].title}</span>
                         </Link>
                       </SidebarMenuSubButton>
@@ -185,9 +256,19 @@ export default function AppSidebar() {
                     {permission.includes('role:read') && (
                       <SidebarMenuSubButton
                         key={`submenu-${AdminMenus[1].url}`}
+                        isActive={menus.path === AdminMenus[1].url}
+                        className={cn(
+                          'py-4 px-0',
+                          menus.path === AdminMenus[0].url
+                            ? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
+                            : 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
+                        )}
                         asChild
                       >
                         <Link to={AdminMenus[1].url}>
+                          {menus.path === AdminMenus[1].url && (
+                            <div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+                          )}
                           <span>{AdminMenus[1].title}</span>
                         </Link>
                       </SidebarMenuSubButton>
