@@ -259,7 +259,7 @@ export default function AppSidebar() {
                         isActive={menus.path === AdminMenus[1].url}
                         className={cn(
                           'py-4 px-0',
-                          menus.path === AdminMenus[0].url
+                          menus.path === AdminMenus[1].url
                             ? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
                             : 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
                         )}

@@ -1,7 +1,6 @@
 import { CheckIcon, MinusIcon, PlusIcon, X } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { format } from 'date-fns'
-import { useMemo } from 'react'
 
 import { BASE_URL } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'
@@ -13,27 +12,23 @@ import {
 } from '@/hooks/api/use-attendance'
 
 import ProtectedComponent from '@/components/protected'
+import { useApiData } from '@/hooks/use-api-data'
 
 export default function RegularGrid() {
   const { mutate: create } = useCreateAttendance()
   const { mutate: update } = useUpdateAttendance()
 
   const [url] = useUrlState({ name: '', date: '' })
-  const {
-    data: employees,
-    isLoading,
-    isFetching,
-  } = useAttendances({
-    name: url.name,
-    ...(url.date !== ''
-      ? {
-          date: url.date,
-        }
-      : undefined),
-  })
-  const data = useMemo(
-    () => employees?.data.data || [],
-    [isLoading, isFetching]
+
+  const { data } = useApiData(
+    useAttendances({
+      name: url.name,
+      ...(url.date !== ''
+        ? {
+            date: url.date,
+          }
+        : undefined),
+    })
   )
 
   return (

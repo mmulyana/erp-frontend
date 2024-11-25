@@ -280,7 +280,7 @@ export default function RegularTable() {
           ) : (
             <TableRow>
               <TableCell colSpan={8}>
-                <div className='flex justify-center'>
+                <div className='flex justify-center py-10'>
                   <EmptyState />
                 </div>
               </TableCell>
