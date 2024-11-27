@@ -1,17 +1,24 @@
-import { userAtom } from '@/atom/auth'
-import PhotoProfile from '@/components/common/photo-profile'
-import { Button } from '@/components/ui/button'
-import { Form, FormField } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useUpdateAccount } from '@/hooks/api/use-account'
-import { BASE_URL } from '@/utils/constant/_urls'
-import { User } from '@/utils/types/api'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+
+import { userAtom } from '@/atom/auth'
+
+import PhotoProfile from '@/components/common/photo-profile'
+import { Form, FormField } from '@/components/ui/form'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
+import { useUpdateAccount } from '@/hooks/api/use-account'
+import { BASE_URL } from '@/utils/constant/_urls'
+import { KEYS } from '@/utils/constant/_keys'
+import { User } from '@/utils/types/api'
 
 export default function MenuAccount() {
+  const queryClient = useQueryClient()
+
   const user = useAtomValue(userAtom)
 
   const { mutate: update } = useUpdateAccount()
@@ -60,7 +67,16 @@ export default function MenuAccount() {
               }
               onUpdate={(photo) => {
                 if (!user?.id) return
-                update({ id: user?.id, payload: { photo } })
+                update(
+                  { id: user?.id, payload: { photo } },
+                  {
+                    onSuccess: () => {
+                      queryClient.invalidateQueries({
+                        queryKey: [KEYS.ACCOUNT],
+                      })
+                    },
+                  }
+                )
               }}
               onRemove={() => {
                 if (!user?.id) return

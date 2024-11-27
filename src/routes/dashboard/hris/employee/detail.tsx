@@ -8,9 +8,11 @@ import { useDetailName } from '@/hooks/use-detail-name'
 import { PATH } from '@/utils/constant/_paths'
 import { useParams } from 'react-router-dom'
 import { links } from './_component/links'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ExpireCertif from './_component/detail/expire-certif'
 import ExpireSafety from './_component/detail/expire-safety'
+import Tour from '@/components/common/tour'
+import { generateStep } from './_component/tour-detail'
 
 export type DialogEmployee = {
   add: boolean
@@ -37,6 +39,13 @@ export default function Detail() {
       setSelectedId(null)
     }
   }
+
+  // HANDLE TOUR
+  const [start, setStart] = useState(true)
+
+  useEffect(() => {
+    return () => setStart(false)
+  }, [start])
 
   return (
     <DashboardLayout>
@@ -71,6 +80,8 @@ export default function Detail() {
         setOpen={() => handleDialog('delete')}
         id={selectedId}
       />
+
+      <Tour start={start} steps={generateStep(link?.name || '')}  />
     </DashboardLayout>
   )
 }

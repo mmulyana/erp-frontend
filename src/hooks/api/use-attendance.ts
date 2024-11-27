@@ -26,7 +26,7 @@ type createAttendance = {
   employeeId: number
   date: string | any
   total_hour: number
-  type: 'presence' | 'absent' | 'leave' | 'not_yet'
+  type: 'presence' | 'absent'
   leaveId?: number
 }
 export const useCreateAttendance = () => {

@@ -3,6 +3,7 @@ import { Search as SearchIcon } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { Input } from '@/components/ui/input'
 import { useDebounce } from '@uidotdev/usehooks'
+import { TEST_ID } from '@/utils/constant/_testId'
 
 type Props = {
   placeholder?: string
@@ -50,7 +51,7 @@ export default function Search({
   }, [url.name, withoutUrl])
 
   return (
-    <div className='relative'>
+    <div className='relative' id={TEST_ID.SEARCH} data-testid={TEST_ID.SEARCH}>
       <label
         htmlFor='searchV1'
         className='absolute left-3 top-1/2 -translate-y-1/2'

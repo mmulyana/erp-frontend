@@ -8,13 +8,17 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { useChartEmployeeByStatus } from '@/hooks/api/use-chart'
+import { TEST_ID } from '@/utils/constant/_testId'
 import { Pie, PieChart } from 'recharts'
 
 export default function CardStatusEmployee() {
   const ByStatusQuery = useChartEmployeeByStatus()
 
   return (
-    <Card>
+    <Card
+      id={TEST_ID.TOTAL_STATUS_EMPLOYEE_POSITION}
+      data-testid={TEST_ID.TOTAL_STATUS_EMPLOYEE_POSITION}
+    >
       <CardHead>
         <p className='text-dark text-sm font-semibold'>Status pegawai</p>
       </CardHead>

@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom'
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+
+import { cn } from '@/utils/cn'
 
 import {
   Table,
@@ -13,8 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+
 import { Pagination } from './component'
-import { cn } from '@/utils/cn'
 import LoadingState from '../common/loading-state'
 import EmptyState from '../common/empty-state'
 
@@ -25,6 +28,10 @@ interface DataTableProps<TData, TValue> {
   withPagination?: boolean
   totalPages?: number
   styleFooter?: string
+  onCellClick?: (row: TData) => void
+  redirectField?: string
+  autoRedirect?: boolean
+  clickableColumns?: string[]
 }
 
 export function DataTable<TData, TValue>({
@@ -34,12 +41,31 @@ export function DataTable<TData, TValue>({
   withPagination,
   totalPages,
   styleFooter,
+  onCellClick,
+  redirectField,
+  autoRedirect = false,
+  clickableColumns = [],
 }: DataTableProps<TData, TValue>) {
+  const navigate = useNavigate()
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  const isColumnClickable = (columnId: string) => {
+    return clickableColumns.length === 0 || clickableColumns.includes(columnId)
+  }
+
+  const handleCellClick = (row: TData, columnId: string) => {
+    if (!isColumnClickable(columnId) || !autoRedirect) return
+
+    if (redirectField && row[redirectField as keyof TData]) {
+      navigate(row[redirectField as keyof TData] as string)
+    } else if (onCellClick) {
+      onCellClick(row)
+    }
+  }
 
   const renderTableBody = () => {
     if (isLoading) {
@@ -65,8 +91,12 @@ export function DataTable<TData, TValue>({
                 'text-dark/70 font-normal text-sm h-10 py-0',
                 index !== 0 &&
                   index !== row.getVisibleCells().length - 1 &&
-                  'border-l border-line'
+                  'border-l border-line',
+                isColumnClickable(cell.column.id) &&
+                  autoRedirect &&
+                  'cursor-pointer hover:bg-gray-50'
               )}
+              onClick={() => handleCellClick(row.original, cell.column.id)}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
@@ -99,13 +129,6 @@ export function DataTable<TData, TValue>({
                       index !== headerGroup.headers.length - 1 &&
                       'border-l border-line'
                   )}
-                  style={
-                    {
-                      // width: `${header.column.columnDef.size}px`,
-                      // maxWidth: `${header.column.columnDef.size}px`,
-                      // minWidth: `${header.column.columnDef.size}px`,
-                    }
-                  }
                 >
                   {flexRender(
                     header.column.columnDef.header,

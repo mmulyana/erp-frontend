@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { useChartEmployeeByPosition } from '@/hooks/api/use-chart'
+import { TEST_ID } from '@/utils/constant/_testId'
 import { useMemo } from 'react'
 import { Label, Pie, PieChart } from 'recharts'
 
@@ -22,7 +23,10 @@ export default function CardTotalEmployee() {
   }, [ByPositionQuery.data, ByPositionQuery.isLoading])
 
   return (
-    <Card>
+    <Card
+      id={TEST_ID.TOTAL_EMPLOYEE_POSITION}
+      data-testid={TEST_ID.TOTAL_EMPLOYEE_POSITION}
+    >
       <CardHead>
         <p className='text-dark text-sm font-semibold'>Jumlah pegawai</p>
       </CardHead>
@@ -75,7 +79,10 @@ export default function CardTotalEmployee() {
                 }}
               />
             </Pie>
-            <ChartLegend className='flex flex-wrap justify-center' content={<ChartLegendContent />} />
+            <ChartLegend
+              className='flex flex-wrap justify-center'
+              content={<ChartLegendContent />}
+            />
           </PieChart>
         </ChartContainer>
       </CardBody>

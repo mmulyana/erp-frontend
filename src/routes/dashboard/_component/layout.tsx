@@ -4,6 +4,7 @@ import { SidebarProvider } from '@/components/ui/sidebar'
 import Setting from './setting/setting'
 import Sidebar from './sidebar'
 import Header from './header'
+import Helpdesk from './helpdesk'
 
 export function DashboardLayout({
   children,
@@ -16,6 +17,7 @@ export function DashboardLayout({
         <Header />
         {children}
       </main>
+      <Helpdesk />
       <Setting />
     </SidebarProvider>
   )

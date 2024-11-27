@@ -7,7 +7,14 @@ type Props = Omit<TourProps, 'steps'>
 
 const steps: Step[] = [
   {
-    content: <p>Test</p>,
+    content: (
+      <div className='text-center'>
+        <p className='font-medium text-dark text-xl'>
+          Selamat Datang di Dashboard
+        </p>
+        <p className='text-dark/50'>Pantau semua informasi dalam satu tempat</p>
+      </div>
+    ),
     target: 'body',
     placement: 'center',
   },
@@ -43,7 +50,7 @@ const steps: Step[] = [
       <>
         <p className='font-medium'>Pantau Sertifikasi Pegawai</p>
         <p className='text-dark/60'>
-          Peringatan Dini Sebulan Sebelum Kadaluwarsa
+          Sistem akan memberitahu sebulan sebelum sertifikasi bakal kadaluwarsa
         </p>
       </>
     ),
@@ -55,7 +62,8 @@ const steps: Step[] = [
       <>
         <p className='font-medium'>Pantau Safety Induction Pegawai</p>
         <p className='text-dark/60'>
-          Peringatan Dini Sebulan Sebelum Kadaluwarsa
+          Sistem akan memberitahu sebulan sebelum 'safety induction' bakal
+          kadaluwarsa
         </p>
       </>
     ),

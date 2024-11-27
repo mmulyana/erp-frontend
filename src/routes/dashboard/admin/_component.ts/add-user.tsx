@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
@@ -27,6 +28,8 @@ type Props = {
   id?: number | null
 }
 export default function AddUser({ open, setOpen, id }: Props) {
+  const queryClient = useQueryClient()
+
   const { mutate: create } = useCreateAccount()
   const { mutate: update } = useUpdateAccount()
 
@@ -51,6 +54,7 @@ export default function AddUser({ open, setOpen, id }: Props) {
           onSuccess: () => {
             form.reset()
             setOpen(false)
+            queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNTS] })
           },
         }
       )

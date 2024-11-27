@@ -19,12 +19,9 @@ export default function Dashboard() {
   useTitle([{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW }])
 
   const [selected, setSelected] = useAtom(projectAtom)
-  const [start, setStart] = useState(false)
+  const [start, setStart] = useState(true)
 
   useEffect(() => {
-    if (!start) {
-      setStart(true)
-    }
     return () => setStart(false)
   }, [start])
 

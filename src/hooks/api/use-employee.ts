@@ -48,7 +48,7 @@ export const useAllEmployees = (params?: ParamsEmployee) => {
 
 export const useEmployee = (id?: number | null) => {
   return useQuery({
-    queryKey: [KEYS.EMPLOYEE, id],
+    queryKey: [KEYS.EMPLOYEE_DETAIL, id],
     queryFn: async () => {
       return await http(`${URLS.EMPLOYEE}/${id}`)
     },
@@ -96,7 +96,7 @@ export const useUpdateEmployee = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [KEYS.EMPLOYEE] })
       queryClient.invalidateQueries({
-        queryKey: [KEYS.EMPLOYEE, data.data.data?.id],
+        queryKey: [KEYS.EMPLOYEE_DETAIL, data.data.data?.id],
       })
       queryClient.invalidateQueries({
         queryKey: [KEYS.EXPIRE_CERTIFICATION],

@@ -54,7 +54,6 @@ export const useAccountPagination = (
   })
 }
 export const useUpdateAccount = () => {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
       id,
@@ -72,8 +71,6 @@ export const useUpdateAccount = () => {
     },
     onSuccess: (data) => {
       toast.success(data.data.message)
-      queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNT] })
-      queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNTS] })
     },
     onError: (error: AxiosError<ApiError>) => {
       toast.error(error.response?.data.message)

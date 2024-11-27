@@ -24,6 +24,7 @@ import { EDUCATIONS_OBJ } from '@/utils/data/educations'
 import { Employee } from '@/utils/types/api'
 
 import CompetenciesEmployee from './employee/competencies-employee'
+import { TEST_ID } from '@/utils/constant/_testId'
 
 type TableEmployeeProps = {
   status?: boolean
@@ -46,6 +47,8 @@ export default function TableEmployee({
   const permission = useAtomValue(permissionAtom)
   const setConfig = useSetAtom(settingConfig)
 
+  const isAllowed = permission?.includes('employee:detail')
+
   const [url] = useUrlState({ name: '', page: '' })
 
   const { isLoading, data } = useApiData(
@@ -61,13 +64,17 @@ export default function TableEmployee({
   // COLUMNS EMPLOYEE
   const columns: ColumnDef<Employee>[] = [
     {
+      id: 'fullname',
       accessorKey: 'fullname',
       header: 'Nama',
       cell: ({ row }) => {
         const { fullname, id } = row.original
-        const isAllowed = permission?.includes('employee:detail')
         return (
-          <div className='max-w-[160px]'>
+          <div
+            className='max-w-[160px]'
+            id={`${TEST_ID.DETAIL_EMPLOYEE}-${row.index + 1}`}
+            data-testid={`${TEST_ID.DETAIL_EMPLOYEE}-${row.index + 1}`}
+          >
             <Overlay
               className='w-fit pr-14'
               overlay={
@@ -122,6 +129,7 @@ export default function TableEmployee({
       },
     },
     {
+      id: 'last_education',
       accessorKey: 'last_education',
       header: () => <p className='text-center'>Pend. terakhir</p>,
       cell: ({ row }) => (
@@ -146,6 +154,7 @@ export default function TableEmployee({
       },
     },
     {
+      id: 'status',
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => (
@@ -157,7 +166,11 @@ export default function TableEmployee({
       cell: ({ row }) => {
         const { id } = row.original
         return (
-          <div className='flex justify-end w-full'>
+          <div
+            className='flex justify-end w-full'
+            id={`${TEST_ID.DROPDOWN_EDIT_EMPLOYEE}-${row.index + 1}`}
+            data-testid={`${TEST_ID.DROPDOWN_EDIT_EMPLOYEE}-${row.index + 1}`}
+          >
             <ProtectedComponent
               required={[
                 'employee:activate',
@@ -201,17 +214,27 @@ export default function TableEmployee({
           <p className='text-dark font-medium'>{name}</p>
         </div>
         <div className='flex gap-2 items-center'>
-          <Button
-            variant='secondary'
-            className='w-8 p-0'
-            onClick={() =>
-              setConfig({ open: true, default: 'hris_competency' })
-            }
+          <div
+            id={TEST_ID.BUTTON_OPEN_COMPETENCY}
+            data-testid={TEST_ID.BUTTON_OPEN_COMPETENCY}
           >
-            <Settings2Icon className='w-4 h-4 text-dark/70' />
-          </Button>
+            <Button
+              variant='secondary'
+              className='w-8 p-0'
+              onClick={() =>
+                setConfig({ open: true, default: 'hris_competency' })
+              }
+            >
+              <Settings2Icon className='w-4 h-4 text-dark/70' />
+            </Button>
+          </div>
           <ProtectedComponent required={['employee:create']}>
-            <Button onClick={onAddEmployee}>Pegawai Baru</Button>
+            <div
+              id={TEST_ID.BUTTON_ADD_EMPLOYEE}
+              data-testid={TEST_ID.BUTTON_ADD_EMPLOYEE}
+            >
+              <Button onClick={onAddEmployee}>Pegawai Baru</Button>
+            </div>
           </ProtectedComponent>
         </div>
       </HeadTable>
@@ -222,6 +245,12 @@ export default function TableEmployee({
         withPagination
         isLoading={isLoading}
         totalPages={data?.total_pages || 0}
+        clickableColumns={['fullname', 'age', 'last_education', 'status']}
+        autoRedirect={isAllowed}
+        onCellClick={({ id }) => {
+          onSelect(id)
+          onDetailEmployee(true)
+        }}
       />
     </>
   )

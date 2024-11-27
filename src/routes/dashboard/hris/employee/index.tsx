@@ -1,17 +1,19 @@
 import useUrlState from '@ahooksjs/use-url-state'
+import { Link, useNavigate } from 'react-router-dom'
 import { ColumnDef } from '@tanstack/react-table'
+import { useEffect, useState } from 'react'
 import { NetworkIcon } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
 
 import { createLinkDetail } from '@/utils/create-link-detail'
 import { usePosition } from '@/hooks/api/use-position'
+import { TEST_ID } from '@/utils/constant/_testId'
 import { useApiData } from '@/hooks/use-api-data'
 import { PATH } from '@/utils/constant/_paths'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'
 import Overlay from '@/components/common/overlay'
+import Tour from '@/components/common/tour'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
@@ -23,10 +25,12 @@ import ModalDelete from './_component/index/delete-position'
 import ModalAdd from './_component/index/add-position'
 import { DashboardLayout } from '../../_component/layout'
 import { useTitle } from '../../_component/header'
+import { steps } from './_component/tour-index'
 import { links } from './_component/links'
 
 export default function Employee() {
   useTitle(links)
+  const navigate = useNavigate()
 
   const [url] = useUrlState({ name: '' })
   const { data, isLoading } = useApiData(
@@ -42,37 +46,44 @@ export default function Employee() {
     description?: string
   }>[] = [
     {
+      id: 'name',
       accessorKey: 'name',
       header: 'Nama',
-      cell: ({ cell }) => {
+      cell: ({ cell, row }) => {
         const { name, id } = cell.row.original
         return (
-          <Overlay
-            className='w-fit pr-14'
-            overlay={
-              <Link
-                className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-                to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
-              >
-                Lihat
-              </Link>
-            }
+          <div
+            id={`${TEST_ID.DETAIL_POSITION}-${row.index + 1}`}
+            data-testid={`${TEST_ID.DETAIL_POSITION}-${row.index + 1}`}
           >
-            <div className='hover:text-dark'>
-              <Link
-                to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
-                className='justify-start flex'
-              >
-                <span className='break-words max-w-[120px] text-left'>
-                  {name}
-                </span>
-              </Link>
-            </div>
-          </Overlay>
+            <Overlay
+              className='w-fit pr-14'
+              overlay={
+                <Link
+                  className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
+                  to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
+                >
+                  Lihat
+                </Link>
+              }
+            >
+              <div className='hover:text-dark'>
+                <Link
+                  to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
+                  className='justify-start flex'
+                >
+                  <span className='break-words max-w-[120px] text-left'>
+                    {name}
+                  </span>
+                </Link>
+              </div>
+            </Overlay>
+          </div>
         )
       },
     },
     {
+      id: 'description',
       accessorKey: 'description',
       header: 'Deskripsi',
     },
@@ -83,7 +94,11 @@ export default function Employee() {
       size: 24,
       cell: ({ row }) => {
         return (
-          <div className='flex justify-end w-full'>
+          <div
+            className='flex justify-end w-full'
+            id={`${TEST_ID.DROPDOWN_EDIT_POSITION}-${row.index + 1}`}
+            data-testid={`${TEST_ID.DROPDOWN_EDIT_POSITION}-${row.index + 1}`}
+          >
             <ProtectedComponent
               required={['position:update', 'position:delete']}
             >
@@ -134,6 +149,13 @@ export default function Employee() {
     }
   }
 
+  // HANDLE TOUR
+  const [start, setStart] = useState(true)
+
+  useEffect(() => {
+    return () => setStart(false)
+  }, [start])
+
   return (
     <DashboardLayout>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_340px]'>
@@ -144,7 +166,13 @@ export default function Employee() {
               <p className='text-dark font-medium'>Jabatan</p>
             </div>
             <ProtectedComponent required={['position:create']}>
-              <Button onClick={() => handleDialog('add', true)}>Tambah</Button>
+              <Button
+                onClick={() => handleDialog('add', true)}
+                id={TEST_ID.BUTTON_ADD_POSITION}
+                data-testid={TEST_ID.BUTTON_ADD_POSITION}
+              >
+                Tambah
+              </Button>
             </ProtectedComponent>
           </HeadTable>
           <FilterTable placeholder='Cari jabatan' />
@@ -152,6 +180,11 @@ export default function Employee() {
             data={data || []}
             isLoading={isLoading}
             columns={columns}
+            clickableColumns={['name', 'description']}
+            autoRedirect
+            onCellClick={({ name, id }) => {
+              navigate(createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id))
+            }}
           />
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>
@@ -169,6 +202,8 @@ export default function Employee() {
         open={dialog.delete}
         setOpen={() => handleDialog('delete')}
       />
+
+      <Tour start={start} onTourEnd={() => {}} steps={steps} />
     </DashboardLayout>
   )
 }
