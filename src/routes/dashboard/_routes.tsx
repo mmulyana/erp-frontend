@@ -1,7 +1,7 @@
 import { PATH } from '@/utils/constant/_paths.ts'
 import { lazy } from 'react'
 
-const Overview = lazy(() => import('./index.tsx'))
+const Overview = lazy(() => import('./overview.tsx'))
 
 // HRIS
 const Employee = lazy(() => import('./hris/employee/index.tsx'))

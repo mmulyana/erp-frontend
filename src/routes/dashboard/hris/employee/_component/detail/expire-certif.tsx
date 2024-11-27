@@ -3,9 +3,10 @@ import { Megaphone } from 'lucide-react'
 import { useExpireCertification } from '@/hooks/api/use-employee'
 import { useApiData } from '@/hooks/use-api-data'
 
+import EmptyState from '@/components/common/empty-state'
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import EmptyState from '@/components/common/empty-state'
+import { TEST_ID } from '@/utils/constant/_testId'
 
 type Props = {
   positionId?: string
@@ -17,7 +18,7 @@ export default function ExpireCertif({ positionId }: Props) {
     })
   )
   return (
-    <Card>
+    <Card id={TEST_ID.CARD_CERTIF_LIST} data-testid={TEST_ID.CARD_CERTIF_LIST}>
       <CardHead className='px-3'>
         <div className='flex gap-2 items-center'>
           <Megaphone size={18} className='text-gray-700' />

@@ -67,7 +67,6 @@ export default function Login() {
   return (
     <Protected>
       <Layout>
-        {isPhone ? "true" : "false"}
         <div className='flex flex-col gap-4'>
           <img src={Logo} alt='logo erp' className='w-12 h-12' />
           <div className='w-full md:w-[calc(100%-72px)] flex flex-col justify-center'>
