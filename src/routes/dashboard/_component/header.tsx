@@ -1,9 +1,16 @@
+import { ChevronRight, Settings, Telescope } from 'lucide-react'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
+import { userAtom } from '@/atom/auth'
+import { startTourAtom } from '@/hooks/use-tour'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { BASE_URL } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'
 
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { Separator } from '@/components/ui/separator'
 import {
   Breadcrumb as BreadCrumbWrapper,
   BreadcrumbItem,
@@ -14,14 +21,6 @@ import {
 import { Button } from '@/components/ui/button'
 
 import { settingConfig } from './setting/setting'
-
-import { ChevronRight, CircleHelp, Navigation, Settings } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { userAtom } from '@/atom/auth'
-import { BASE_URL } from '@/utils/constant/_urls'
-import { useIsMobile } from '@/hooks/use-mobile'
-import { Separator } from '@/components/ui/separator'
-import { startTourAtom } from '@/hooks/use-tour'
 
 export type Title = {
   name: string
@@ -94,11 +93,11 @@ export default function Header() {
       <div className='flex gap-2 items-center'>
         <Button
           variant='secondary'
-          className='mr-4 rounded-full px-3 text-gray-400'
+          className='mr-2 rounded-full px-3 text-gray-400'
           onClick={() => setStart(true)}
         >
-          <Navigation size={16} />
-          <span className='px-1 text-gray-600'>Panduan Cepat</span>
+          <Telescope size={16} />
+          <span className='px-1 text-gray-600'>Lihat tutorial</span>
         </Button>
         <Button
           variant='secondary'
