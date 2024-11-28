@@ -5,17 +5,16 @@ import { permissionAtom } from '@/atom/permission'
 import { PATH } from '@/utils/constant/_paths'
 
 import ProtectedComponent from '@/components/protected'
+import Tour from '@/components/common/tour'
 import { Tab, Tabs } from '@/components/tab'
 
 import { DashboardLayout } from '../../_component/layout'
 import DateNavigation from './_component/date-navigation'
+import { steps } from './_component/tour-attendance'
 import TitlePage from '../../_component/title-page'
 import { useTitle } from '../../_component/header'
 import { Overtime } from './_component/overtime'
 import { Regular } from './_component/regular'
-import { useEffect, useState } from 'react'
-import Tour from '@/components/common/tour'
-import { steps } from './_component/tour-attendance'
 import useTour from '@/hooks/use-tour'
 
 const links = [
