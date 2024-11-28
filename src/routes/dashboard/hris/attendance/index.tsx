@@ -13,6 +13,10 @@ import TitlePage from '../../_component/title-page'
 import { useTitle } from '../../_component/header'
 import { Overtime } from './_component/overtime'
 import { Regular } from './_component/regular'
+import { useEffect, useState } from 'react'
+import Tour from '@/components/common/tour'
+import { steps } from './_component/tour-attendance'
+import useTour from '@/hooks/use-tour'
 
 const links = [
   {
@@ -27,6 +31,8 @@ const links = [
 
 export default function Page() {
   useTitle(links)
+
+  const { start, onTourEnd } = useTour('attendance')
 
   const permission = useAtomValue(permissionAtom)
 
@@ -59,6 +65,8 @@ export default function Page() {
           </Tab>
         </Tabs>
       </ProtectedComponent>
+
+      <Tour steps={steps} start={start} onTourEnd={onTourEnd} />
     </DashboardLayout>
   )
 }

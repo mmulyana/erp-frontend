@@ -95,7 +95,7 @@ export default function Tour({ start, onTourEnd, steps }: TourProps) {
         },
         tooltip: {
           borderRadius: '20px',
-          padding: 0,
+          padding: '12px 0 0',
         },
         tooltipContent: {
           textAlign: 'left',
@@ -105,6 +105,11 @@ export default function Tour({ start, onTourEnd, steps }: TourProps) {
         tooltipFooter: {
           padding: 8,
           marginTop: 8,
+        },
+        tooltipTitle: {
+          padding: '0 4px',
+          color: '#313951',
+          fontWeight: 600,
         },
       }}
       locale={{

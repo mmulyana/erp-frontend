@@ -8,11 +8,12 @@ import { useDetailName } from '@/hooks/use-detail-name'
 import { PATH } from '@/utils/constant/_paths'
 import { useParams } from 'react-router-dom'
 import { links } from './_component/links'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ExpireCertif from './_component/detail/expire-certif'
 import ExpireSafety from './_component/detail/expire-safety'
 import Tour from '@/components/common/tour'
 import { generateStep } from './_component/tour-detail'
+import useTour from '@/hooks/use-tour'
 
 export type DialogEmployee = {
   add: boolean
@@ -41,11 +42,7 @@ export default function Detail() {
   }
 
   // HANDLE TOUR
-  const [start, setStart] = useState(true)
-
-  useEffect(() => {
-    return () => setStart(false)
-  }, [start])
+  const { start, onTourEnd } = useTour('employee')
 
   return (
     <DashboardLayout>
@@ -81,7 +78,11 @@ export default function Detail() {
         id={selectedId}
       />
 
-      <Tour start={start} steps={generateStep(link?.name || '')}  />
+      <Tour
+        start={start}
+        steps={generateStep(link?.name || '')}
+        onTourEnd={onTourEnd}
+      />
     </DashboardLayout>
   )
 }

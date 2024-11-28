@@ -1,8 +1,8 @@
 import useUrlState from '@ahooksjs/use-url-state'
 import { Link, useNavigate } from 'react-router-dom'
 import { ColumnDef } from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
 import { NetworkIcon } from 'lucide-react'
+import { useState } from 'react'
 
 import { createLinkDetail } from '@/utils/create-link-detail'
 import { usePosition } from '@/hooks/api/use-position'
@@ -27,6 +27,7 @@ import { DashboardLayout } from '../../_component/layout'
 import { useTitle } from '../../_component/header'
 import { steps } from './_component/tour-index'
 import { links } from './_component/links'
+import useTour from '@/hooks/use-tour'
 
 export default function Employee() {
   useTitle(links)
@@ -150,11 +151,7 @@ export default function Employee() {
   }
 
   // HANDLE TOUR
-  const [start, setStart] = useState(true)
-
-  useEffect(() => {
-    return () => setStart(false)
-  }, [start])
+  const { start, onTourEnd } = useTour('position')
 
   return (
     <DashboardLayout>
@@ -203,7 +200,7 @@ export default function Employee() {
         setOpen={() => handleDialog('delete')}
       />
 
-      <Tour start={start} onTourEnd={() => {}} steps={steps} />
+      <Tour start={start} onTourEnd={onTourEnd} steps={steps} />
     </DashboardLayout>
   )
 }

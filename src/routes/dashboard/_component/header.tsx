@@ -15,12 +15,13 @@ import { Button } from '@/components/ui/button'
 
 import { settingConfig } from './setting/setting'
 
-import { ChevronRight, Settings } from 'lucide-react'
+import { ChevronRight, CircleHelp, Navigation, Settings } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { userAtom } from '@/atom/auth'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Separator } from '@/components/ui/separator'
+import { startTourAtom } from '@/hooks/use-tour'
 
 export type Title = {
   name: string
@@ -38,7 +39,7 @@ export const useTitle = (title: Title[]) => {
 }
 export default function Header() {
   const setSettingConfig = useSetAtom(settingConfig)
-
+  const setStart = useSetAtom(startTourAtom)
   const links = useAtomValue(titleAtom)
   const user = useAtomValue(userAtom)
 
@@ -91,6 +92,14 @@ export default function Header() {
       </div>
 
       <div className='flex gap-2 items-center'>
+        <Button
+          variant='secondary'
+          className='mr-4 rounded-full px-3 text-gray-400'
+          onClick={() => setStart(true)}
+        >
+          <Navigation size={16} />
+          <span className='px-1 text-gray-600'>Panduan Cepat</span>
+        </Button>
         <Button
           variant='secondary'
           className='w-10 h-10 md:w-8 md:h-8 p-0 rounded-full bg-[#EFF0F2]'

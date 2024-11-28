@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 
 import { PATH } from '@/utils/constant/_paths'
@@ -14,16 +13,14 @@ import Container from './_component/container'
 import ExpireCertif from './hris/employee/_component/detail/expire-certif'
 import ExpireSafety from './hris/employee/_component/detail/expire-safety'
 import DetailProject from './project/_component/detail-project'
+import useTour from '@/hooks/use-tour'
 
 export default function Dashboard() {
   useTitle([{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW }])
 
   const [selected, setSelected] = useAtom(projectAtom)
-  const [start, setStart] = useState(true)
 
-  useEffect(() => {
-    return () => setStart(false)
-  }, [start])
+  const { start, onTourEnd } = useTour('overview')
 
   return (
     <>
@@ -47,7 +44,7 @@ export default function Dashboard() {
         setOpen={() => setSelected(null)}
       />
 
-      <TourOverview start={start} />
+      <TourOverview start={start} onTourEnd={onTourEnd} />
     </>
   )
 }

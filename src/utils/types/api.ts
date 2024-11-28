@@ -36,6 +36,7 @@ export type User = {
     description?: string
   }
   permissions: string[]
+  tours: string[]
 }
 
 export type Board = {

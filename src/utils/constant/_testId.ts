@@ -21,6 +21,16 @@ export const TEST_ID = {
   DETAIL_EMPLOYEE: 'detail-employee',
   DROPDOWN_EDIT_EMPLOYEE: 'dropdown-edit-employee',
 
+  // ATTENDANCE
+  BUTTON_NAVIGATION_DATE: 'button-navigation-date',
+  BUTTON_PREV_DATE: 'button-prev-date',
+  BUTTON_NEXT_DATE: 'button-next-date',
+  FILTER_DATE_ATTENDANCE: 'filter-date-attendance',
+  TOGGLE_ATTENDANCE: 'toggle-attendance',
+  TOGGLE_GRID_ATTENDANCE: 'toggle-grid-attendance',
+  TOGGLE_TABLE_ATTENDANCE: 'toggle-table-attendance',
+  BUTTON_ADD_OVERTIME: 'button-add-overtime',
+
   // common
   SEARCH: 'search',
 }

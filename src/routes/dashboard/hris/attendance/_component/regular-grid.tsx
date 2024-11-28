@@ -34,8 +34,8 @@ export default function RegularGrid() {
   return (
     <div className='space-y-4'>
       {!!data?.length &&
-        data?.map((position: any) => (
-          <div key={`position-${position.id}`}>
+        data?.map((position: any, index) => (
+          <div key={`position-${index}`}>
             <p className='text-dark mb-4 font-medium'>{position.name}</p>
             <div className='grid grid-cols-1 md:grid-cols-4 gap-2'>
               {position?.employees?.map((item: any) => {

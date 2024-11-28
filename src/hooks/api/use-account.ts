@@ -182,3 +182,20 @@ export const useAssignRoleAccount = () => {
     },
   })
 }
+export const useCreateTourAccount = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, name }: { id: number; name: string }) => {
+      return await http.post(`${URLS.ACCOUNT}/${id}/tour`, { name })
+    },
+    onSuccess(data) {
+      toast.success(data.data.message)
+      queryClient.invalidateQueries({
+        queryKey: [KEYS.ACCOUNT],
+      })
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      toast.error(error.response?.data.message)
+    },
+  })
+}
