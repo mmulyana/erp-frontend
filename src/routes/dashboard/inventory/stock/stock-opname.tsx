@@ -1,3 +1,4 @@
+import { Plus, X, ClipboardList } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { useState } from 'react'
 
@@ -12,14 +13,19 @@ import DeleteTransaction from './_component/delete-transaction'
 import TitlePage from '../../_component/title-page'
 
 import { useInventoryData } from '../_hook/use-inventory-data'
+import usePermission from '@/hooks/use-permission'
+import useTour from '@/hooks/use-tour'
+
 import { DashboardLayout } from '../../_component/layout'
 import { useTitle } from '../../_component/header'
+import { steps } from '../_component/tour-stock'
 import { column } from './_component/column'
 
-import { Form, FormField, FormLabel } from '@/components/ui/form'
-import { FilterTable } from '@/components/data-table/component'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import Select from '@/components/common/select/select-v1'
+import Tour from '@/components/common/tour'
+import { Form, FormField, FormLabel } from '@/components/ui/form'
+import { FilterTable } from '@/components/data-table/component'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { CreateTransaction } from '@/utils/types/form'
 import { CommandItem } from '@/components/ui/command'
@@ -27,9 +33,6 @@ import { DataTable } from '@/components/data-table'
 import { useApiData } from '@/hooks/use-api-data'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-
-import { Plus, X, ClipboardList } from 'lucide-react'
-import usePermission from '@/hooks/use-permission'
 
 const HIDE = ['supplier', 'price', 'project']
 
@@ -63,6 +66,9 @@ export default function StockOpnamePage() {
   )
 
   const { goods } = useInventoryData()
+
+  // handle tour
+  const tours = useTour('manage-stock')
 
   const { mutate } = useCreateTransaction()
   const [open, setOpen] = useState(false)
@@ -247,6 +253,8 @@ export default function StockOpnamePage() {
       </Modal>
       <DeleteTransaction />
       <DetailTransaction />
+
+      <Tour steps={steps} {...tours} />
     </>
   )
 }

@@ -1,9 +1,11 @@
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import useUrlState from '@ahooksjs/use-url-state'
 import { CalendarDaysIcon } from 'lucide-react'
 import { format, parse } from 'date-fns'
 import { id } from 'date-fns/locale'
 
+import { TEST_ID } from '@/utils/constant/_testId'
 import { cn } from '@/utils/cn'
 
 import {
@@ -23,7 +25,7 @@ import {
 } from '../ui/select'
 import { Button } from '../ui/button'
 import Search from '../common/search'
-import { useLocation, useNavigate } from 'react-router-dom'
+
 interface PaginationProps {
   totalPages: number
 }
@@ -166,7 +168,15 @@ export function FilterTable({
         {customFilter && customFilter}
         {reset && <FilterReset />}
       </div>
-      {create && onAdd && <Button onClick={onAdd}>Tambah</Button>}
+      {create && onAdd && (
+        <Button
+          onClick={onAdd}
+          id={TEST_ID.BUTTON_ADD}
+          data-testid={TEST_ID.BUTTON_ADD}
+        >
+          Tambah
+        </Button>
+      )}
     </div>
   )
 }

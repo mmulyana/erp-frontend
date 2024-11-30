@@ -1,27 +1,33 @@
+import { Check, ChevronsUpDown, Plus, X, Blocks } from 'lucide-react'
+import { useForm, useFieldArray } from 'react-hook-form'
+import useUrlState from '@ahooksjs/use-url-state'
+import { useState } from 'react'
+
+import { CreateTransaction } from '@/utils/types/form'
 import { PATH } from '@/utils/constant/_paths'
 
 import { DashboardLayout } from '../../_component/layout'
 import { useTitle } from '../../_component/header'
-
+import { steps } from '../_component/tour-stock'
+import { column } from './_component/column'
 import DetailTransaction from './_component/detail-transaction'
 import DeleteTransaction from './_component/delete-transaction'
 import TitlePage from '../../_component/title-page'
 
-import { useForm, useFieldArray } from 'react-hook-form'
-import useUrlState from '@ahooksjs/use-url-state'
-
 import { useProjects } from '@/hooks/api/use-project'
 import { useGoods } from '@/hooks/api/use-goods'
 import { useApiData } from '@/hooks/use-api-data'
+import usePermission from '@/hooks/use-permission'
+import useTour from '@/hooks/use-tour'
 import {
   useCreateTransaction,
   useTransactionPagination,
 } from '@/hooks/api/use-transaction'
-import { CreateTransaction } from '@/utils/types/form'
 
+import Modal, { ModalContainer } from '@/components/modal-v2'
+import Tour from '@/components/common/tour'
 import { Form, FormField } from '@/components/ui/form'
 import { FilterTable } from '@/components/data-table/component'
-import Modal, { ModalContainer } from '@/components/modal-v2'
 import { DataTable } from '@/components/data-table'
 import {
   Command,
@@ -33,16 +39,11 @@ import {
 } from '@/components/ui/command'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { column } from './_component/column'
-import { useState } from 'react'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-
-import { Check, ChevronsUpDown, Plus, X, Blocks } from 'lucide-react'
-import usePermission from '@/hooks/use-permission'
 
 const HIDE = ['supplier', 'price']
 
@@ -65,6 +66,9 @@ export default function StockBorrowedPage() {
   useTitle(links)
 
   const permission = usePermission()
+
+  // handle tour
+  const tours = useTour('manage-stock')
 
   const [search, setSearch] = useState('')
   const { data: projects } = useApiData(
@@ -385,6 +389,8 @@ export default function StockBorrowedPage() {
       </Modal>
       <DeleteTransaction />
       <DetailTransaction />
+
+      <Tour steps={steps} {...tours} />
     </>
   )
 }

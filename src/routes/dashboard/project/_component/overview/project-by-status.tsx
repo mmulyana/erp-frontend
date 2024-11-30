@@ -12,12 +12,17 @@ import {
 } from '@/components/ui/chart'
 import LoadingState from '@/components/common/loading-state'
 
+import { TEST_ID } from '@/utils/constant/_testId'
+
 export default function ProjectByStatusChart() {
   const { data } = useApiData(useChartProject())
   const { data: totalData } = useApiData(useTotalProject())
 
   return (
-    <Card>
+    <Card
+      id={TEST_ID.PROJECT_BY_STATUS}
+      data-testid={TEST_ID.PROJECT_BY_STATUS}
+    >
       <CardHead className='border-b border-line h-fit py-2 px-2'>
         <p className='text-sm text-dark'>Proyek per status</p>
       </CardHead>

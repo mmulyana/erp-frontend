@@ -8,29 +8,33 @@ import { useState } from 'react'
 
 import { permissionAtom } from '@/atom/permission'
 import { formatToRupiah } from '@/utils/formatCurrency'
+import { TEST_ID } from '@/utils/constant/_testId'
 import { CashAdvance } from '@/utils/types/api'
 import { PATH } from '@/utils/constant/_paths'
+import { cn } from '@/utils/cn'
 import {
   useCashAdvancePagination,
   useTotalCashAdvance,
 } from '@/hooks/api/use-cash-advance'
 import { useApiData } from '@/hooks/use-api-data'
 
+import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import DropdownEdit from '@/components/common/dropdown-edit'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 
-import { DashboardLayout } from '../../_component/layout'
 import ModalDelete from './_component/modal-delete'
 import CardMonthly from './_component/card-monthly'
+import FilterDate from './_component/filter-date'
+import { DashboardLayout } from '../../_component/layout'
 import { useTitle } from '../../_component/header'
 import { ModalAdd } from './_component/modal-add'
-import FilterDate from './_component/filter-date'
-import ProtectedComponent from '@/components/protected'
-import { cn } from '@/utils/cn'
+import useTour from '@/hooks/use-tour'
+import Tour from '@/components/common/tour'
+import { steps } from './_component/tour-index'
 
 const links = [
   {
@@ -65,6 +69,9 @@ export default function Page() {
     })
   )
   const { data: totalData } = useApiData(useTotalCashAdvance())
+
+  // HANDLE TOUR
+  const { start, onTourEnd } = useTour('cash-advance')
 
   // COLUMNS CASH ADVANCE
   const columns: ColumnDef<CashAdvance>[] = [
@@ -170,7 +177,11 @@ export default function Page() {
               <p className='text-dark font-medium'>Kasbon</p>
             </div>
             <ProtectedComponent required={['cash-advance:create']}>
-              <Button onClick={() => handleDialog('add', true)}>
+              <Button
+                onClick={() => handleDialog('add', true)}
+                id={TEST_ID.BUTTON_ADD_CASH_ADVANCE}
+                data-testid={TEST_ID.BUTTON_ADD_CASH_ADVANCE}
+              >
                 Kasbon Baru
               </Button>
             </ProtectedComponent>
@@ -189,7 +200,11 @@ export default function Page() {
         </div>
         <div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>
           <ProtectedComponent required={['cash-advance:total']}>
-            <Card className='rounded-xl'>
+            <Card
+              className='rounded-xl'
+              id={TEST_ID.TOTAL_CASH_ADVANCE}
+              data-testid={TEST_ID.TOTAL_CASH_ADVANCE}
+            >
               <CardHead>
                 <p className='text-dark text-sm font-semibold'>
                   Total kasbon bln. {format(new Date(), 'MMMM', { locale: id })}
@@ -215,6 +230,7 @@ export default function Page() {
         setOpen={(val) => handleDialog('delete', val)}
         id={selectedId}
       />
+      <Tour steps={steps} start={start} onTourEnd={onTourEnd} />
     </DashboardLayout>
   )
 }
@@ -223,7 +239,10 @@ function CustomFilter() {
   const [url, setUrl] = useUrlState({ startDate: '', endDate: '' })
 
   return (
-    <>
+    <div
+      className='flex gap-2 items-center flex-wrap'
+      id={TEST_ID.FILTER_DATE_CASH_ADVANCE}
+    >
       <FilterDate
         data={url.startDate}
         onSelect={(val) => {
@@ -231,6 +250,7 @@ function CustomFilter() {
           setUrl((prev) => ({ ...prev, startDate: formattedDate }))
         }}
         placeholder='Pilih Tanggal Mulai'
+        id={TEST_ID.FILTER_DATE_START}
       />
       <FilterDate
         data={url.endDate}
@@ -239,7 +259,8 @@ function CustomFilter() {
           setUrl((prev) => ({ ...prev, endDate: formattedDate }))
         }}
         placeholder='Pilih Tanggal Akhir'
+        id={TEST_ID.FILTER_DATE_END}
       />
-    </>
+    </div>
   )
 }

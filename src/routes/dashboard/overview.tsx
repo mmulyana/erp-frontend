@@ -2,18 +2,20 @@ import { useAtom } from 'jotai'
 
 import { PATH } from '@/utils/constant/_paths'
 import { projectAtom } from '@/atom/project'
+import useTour from '@/hooks/use-tour'
 
-import { DashboardLayout } from './_component/layout'
-import { useTitle } from './_component/header'
-import TourOverview from './_component/tour-overview'
+import Tour from '@/components/common/tour'
+
 import ListProject from './_component/list-project'
 import CardTotal from './_component/card-total'
 import Container from './_component/container'
+import { DashboardLayout } from './_component/layout'
+import { steps } from './_component/tour-overview'
+import { useTitle } from './_component/header'
 
 import ExpireCertif from './hris/employee/_component/detail/expire-certif'
 import ExpireSafety from './hris/employee/_component/detail/expire-safety'
 import DetailProject from './project/_component/detail-project'
-import useTour from '@/hooks/use-tour'
 
 export default function Dashboard() {
   useTitle([{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW }])
@@ -44,7 +46,7 @@ export default function Dashboard() {
         setOpen={() => setSelected(null)}
       />
 
-      <TourOverview start={start} onTourEnd={onTourEnd} />
+      <Tour steps={steps} start={start} onTourEnd={onTourEnd} />
     </>
   )
 }

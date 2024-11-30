@@ -525,7 +525,7 @@ export const useStatusEmployee = () => {
         queryKey: [KEYS.EMPLOYEE],
       })
       queryClient.invalidateQueries({
-        queryKey: [KEYS.EMPLOYEE, data.data.data?.employeeId],
+        queryKey: [KEYS.EMPLOYEE_DETAIL, data.data.data?.employeeId],
       })
       toast.success(data.data.message)
     },

@@ -1,19 +1,23 @@
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+
 import { Title, useTitle } from '@/routes/dashboard/_component/header'
 import { DashboardLayout } from '@/routes/dashboard/_component/layout'
+
+import Tour from '@/components/common/tour'
+
+import useTour from '@/hooks/use-tour'
+import { useDetailName } from '@/hooks/use-detail-name'
+import { PATH } from '@/utils/constant/_paths'
+
 import DetailEmployee from './_component/detail/detail-employee'
 import DeleteEmployee from './_component/detail/delete-employee'
 import TableEmployee from './_component/detail/table-employee'
-import AddEmployee from './_component/detail/add-employee'
-import { useDetailName } from '@/hooks/use-detail-name'
-import { PATH } from '@/utils/constant/_paths'
-import { useParams } from 'react-router-dom'
-import { links } from './_component/links'
-import { useState } from 'react'
 import ExpireCertif from './_component/detail/expire-certif'
 import ExpireSafety from './_component/detail/expire-safety'
-import Tour from '@/components/common/tour'
+import AddEmployee from './_component/detail/add-employee'
 import { generateStep } from './_component/tour-detail'
-import useTour from '@/hooks/use-tour'
+import { links } from './_component/links'
 
 export type DialogEmployee = {
   add: boolean

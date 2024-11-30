@@ -12,6 +12,7 @@ export default function useTour(key: string) {
   const user = useAtomValue(userAtom)
 
   const [isFirst, setIsFirst] = useState(true)
+
   useEffect(() => {
     if (!isFirst || !user?.tours) return
 
@@ -29,12 +30,20 @@ export default function useTour(key: string) {
     }
   }, [user?.tours])
 
-  const onTourEnd = () => {
+  const onTourEnd = (type?: 'skip' | 'end') => {
     if (!user?.id) return
-    mutate({
-      id: user?.id,
-      name: key,
-    })
+    if (type === 'skip') {
+      setStart(false)
+      return
+    }
+
+    if (!user?.tours.includes(key)) {
+      mutate({
+        id: user?.id,
+        name: key,
+      })
+    }
+    setStart(false)
   }
 
   return { start, onTourEnd }

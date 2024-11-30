@@ -4,23 +4,29 @@ import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
 import { useDeleteRole, useRoles } from '@/hooks/api/use-role'
+
+import useTour from '@/hooks/use-tour'
+
 import { useApiData } from '@/hooks/use-api-data'
+import { TEST_ID } from '@/utils/constant/_testId'
 import { PATH } from '@/utils/constant/_paths'
 import { Role } from '@/utils/types/api'
 import { userAtom } from '@/atom/auth'
 
-import { FilterTable, HeadTable } from '@/components/data-table/component'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'
+import Tour from '@/components/common/tour'
+import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 
 import AddPermission from './_component.ts/add-permission'
-import { DashboardLayout } from '../_component/layout'
-import { useTitle } from '../_component/header'
 import AddRole from './_component.ts/add-role'
+import { DashboardLayout } from '../_component/layout'
+import { steps } from './_component.ts/tour-role'
+import { useTitle } from '../_component/header'
 
 const LINKS = [
   { name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
@@ -104,6 +110,9 @@ export default function Index() {
     },
   ]
 
+  // handle tour
+  const tours = useTour('role')
+
   return (
     <DashboardLayout className='overflow-hidden'>
       <HeadTable>
@@ -112,7 +121,11 @@ export default function Index() {
           <p className='text-dark font-medium'>Peran</p>
         </div>
         <ProtectedComponent required={['role:create']}>
-          <Button onClick={() => setOpenDialog({ id: null, open: true })}>
+          <Button
+            onClick={() => setOpenDialog({ id: null, open: true })}
+            id={TEST_ID.BUTTON_CREATE_ROLE}
+            data-testid={TEST_ID.BUTTON_CREATE_ROLE}
+          >
             Peran Baru
           </Button>
         </ProtectedComponent>
@@ -150,6 +163,8 @@ export default function Index() {
         open={openDelete?.open || false}
         setOpen={() => setOpenDelete(null)}
       />
+
+      <Tour steps={steps} {...tours} />
     </DashboardLayout>
   )
 }

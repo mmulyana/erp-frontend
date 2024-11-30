@@ -3,15 +3,13 @@ const V1 = BASE_URL + '/api/v1'
 
 export const URLS = {
   LOGIN: V1 + '/auth/login',
-  REGISTER: V1 + '/auth/register',
-  CHECK_EMAIL: V1 + '/auth/check/email',
-  CHECK_NAME: V1 + '/auth/check/name',
   ACCOUNT: V1 + '/account',
   ROLE: V1 + '/role',
   PERMISSION_GROUP: V1 + '/permission/group',
   PERMISSION_CHECK: V1 + '/permission/check',
   PERMISSION: V1 + '/permission',
   DASHBOARD: V1 + '/dashboard',
+  HELPDESK: V1 + '/helpdesk',
 
   // HRIS
   HRIS_POSITION: V1 + '/hris/position',

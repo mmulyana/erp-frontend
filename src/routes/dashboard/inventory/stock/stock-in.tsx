@@ -1,9 +1,11 @@
 import { useFieldArray, useForm } from 'react-hook-form'
+import { Plus, X, PackagePlus } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { PATH } from '@/utils/constant/_paths'
 import { useState } from 'react'
 
 import usePermission from '@/hooks/use-permission'
+import useTour from '@/hooks/use-tour'
 import { useApiData } from '@/hooks/use-api-data'
 import { useGoods } from '@/hooks/api/use-goods'
 import {
@@ -19,19 +21,18 @@ import TitlePage from '../../_component/title-page'
 import { useInventoryData } from '../_hook/use-inventory-data'
 import { DashboardLayout } from '../../_component/layout'
 import { useTitle } from '../../_component/header'
+import { steps } from '../_component/tour-stock'
+import { column } from './_component/column'
 
-import { Form, FormField, FormLabel } from '@/components/ui/form'
-import { FilterTable } from '@/components/data-table/component'
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import SelectV1 from '@/components/common/select/select-v1'
+import Tour from '@/components/common/tour'
+import { Form, FormField, FormLabel } from '@/components/ui/form'
+import { FilterTable } from '@/components/data-table/component'
 import { CommandItem } from '@/components/ui/command'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { column } from './_component/column'
-import { Plus, X } from 'lucide-react'
-
-import { PackagePlus } from 'lucide-react'
 
 const links = [
   {
@@ -54,6 +55,9 @@ export default function StockInPage() {
   useTitle(links)
 
   const permission = usePermission()
+
+  // handle tour
+  const tours = useTour('manage-stock')
 
   const [url] = useUrlState({ page: '' })
 
@@ -309,6 +313,8 @@ export default function StockInPage() {
           </form>
         </Form>
       </Modal>
+
+      <Tour steps={steps} {...tours} />
     </>
   )
 }

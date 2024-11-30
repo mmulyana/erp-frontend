@@ -1,7 +1,12 @@
-import { useMemo, useState } from 'react'
+import useUrlState from '@ahooksjs/use-url-state'
+import { BoxIcon, Settings2Icon } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
+import { useSetAtom } from 'jotai'
+import { useState } from 'react'
 
 import { useSupplier } from '@/hooks/api/use-supplier'
+import { useApiData } from '@/hooks/use-api-data'
+import useTour from '@/hooks/use-tour'
 
 import { Supplier as SupplierType } from '@/utils/types/api'
 import { PATH } from '@/utils/constant/_paths'
@@ -10,20 +15,20 @@ import DialogDeleteSupplier from './_component/supplier/dialog-delete-supplier'
 import DialogAddSupplier from './_component/supplier/dialog-add-supplier'
 import DetailSupplier from './_component/supplier/detail-supplier'
 import LabelSupplier from './_component/supplier/label-supplier'
-import DropdownEdit from '@/components/common/dropdown-edit'
-import Overlay from '@/components/common/overlay'
+import { settingConfig } from '../_component/setting/setting'
+import { DashboardLayout } from '../_component/layout'
+import { steps } from './_component/tour-supplier'
+import { useTitle } from '../_component/header'
 
+import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
+import Overlay from '@/components/common/overlay'
+import Tour from '@/components/common/tour'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { DashboardLayout } from '../_component/layout'
 import { DataTable } from '@/components/data-table'
-import { useTitle } from '../_component/header'
 import { Button } from '@/components/ui/button'
-
-import { BoxIcon, Settings2Icon } from 'lucide-react'
-import { useSetAtom } from 'jotai'
-import { settingConfig } from '../_component/setting/setting'
-import ProtectedComponent from '@/components/protected'
+import { TEST_ID } from '@/utils/constant/_testId'
 
 export const links = [
   {
@@ -41,18 +46,18 @@ export default function Supplier() {
 
   const setSetting = useSetAtom(settingConfig)
 
-  // const [url, setUrl] = useUrlState({ name: '', tag: '', status: '' })
+  // handle tour
+  const tours = useTour('supplier')
+
+  const [url, _] = useUrlState({ name: '', tag: '', status: '' })
 
   // GET DATA
-  const {
-    data: dataSupplier,
-    isLoading,
-    isFetching,
-  } = useSupplier({
-    // ...(url.name !== '' ? { name: url.name } : undefined),
-    // ...(url.tag !== '' ? { tag: url.tag } : undefined),
-  })
-  const data = useMemo(() => dataSupplier?.data?.data, [isLoading, isFetching])
+  const { data, isLoading } = useApiData(
+    useSupplier({
+      ...(url.name !== '' ? { name: url.name } : undefined),
+      ...(url.tag !== '' ? { tag: url.tag } : undefined),
+    })
+  )
 
   // COLUMNS
   const columns: ColumnDef<SupplierType>[] = [
@@ -181,16 +186,34 @@ export default function Supplier() {
             onClick={() =>
               setSetting({ open: true, default: 'inventory_label' })
             }
+            id={TEST_ID.BUTTON_OPEN_SUPPLIER_LABEL_SETTING}
+            data-testid={TEST_ID.BUTTON_OPEN_SUPPLIER_LABEL_SETTING}
           >
             <Settings2Icon className='w-4 h-4 text-dark/70' />
           </Button>
           <ProtectedComponent required={['supplier:create']}>
-            <Button onClick={() => handleDialog('add', true)}>Tambah</Button>
+            <Button
+              onClick={() => handleDialog('add', true)}
+              id={TEST_ID.BUTTON_ADD_SUPPLIER}
+              data-testid={TEST_ID.BUTTON_ADD_SUPPLIER}
+            >
+              Tambah
+            </Button>
           </ProtectedComponent>
         </div>
       </HeadTable>
       <FilterTable />
-      <DataTable columns={columns} data={data || []} isLoading={isLoading} />
+      <DataTable
+        columns={columns}
+        data={data || []}
+        isLoading={isLoading}
+        clickableColumns={['name', 'phone', 'email', 'address', 'tag']}
+        autoRedirect={true}
+        onCellClick={({ id }) => {
+          setSelectedId(id)
+          handleDialog('detail', true)
+        }}
+      />
       <DialogAddSupplier
         open={dialog.add}
         setOpen={(val) => handleDialog('add', val)}
@@ -206,6 +229,8 @@ export default function Supplier() {
         open={dialog.detail}
         setOpen={(val) => handleDialog('detail', val)}
       />
+
+      <Tour steps={steps} {...tours} />
     </DashboardLayout>
   )
 }

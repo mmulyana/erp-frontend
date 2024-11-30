@@ -4,8 +4,10 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { Package, Settings2Icon } from 'lucide-react'
 import { useState } from 'react'
 
+import useTour from '@/hooks/use-tour'
 import { useDeleteGoods, useGoodsByPagination } from '@/hooks/api/use-goods'
 import { useApiData } from '@/hooks/use-api-data'
+
 import { PATH } from '@/utils/constant/_paths'
 import { Goods } from '@/utils/types/api'
 
@@ -15,6 +17,7 @@ import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
+import Tour from '@/components/common/tour'
 
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
@@ -28,6 +31,8 @@ import ProtectedComponent from '@/components/protected'
 import { settingConfig } from '../_component/setting/setting'
 import { DashboardLayout } from '../_component/layout'
 import { useTitle } from '../_component/header'
+import { steps } from './_component/tour-index'
+import { TEST_ID } from '@/utils/constant/_testId'
 
 export const links = [
   {
@@ -61,6 +66,8 @@ export default function Index() {
     })
   )
 
+  const isAllowed = permission.includes('item:detail')
+
   // START OF COLUMNS
   const columns: ColumnDef<Goods>[] = [
     {
@@ -68,7 +75,6 @@ export default function Index() {
       header: 'Nama',
       cell: ({ row }) => {
         const { name, id } = row.original
-        const isAllowed = permission.includes('item:create')
         return (
           <div className='w-[120px]'>
             <Overlay
@@ -124,6 +130,7 @@ export default function Index() {
       header: 'Qty',
     },
     {
+      id: 'available',
       accessorKey: 'available',
       header: 'Ketersediaan',
     },
@@ -158,6 +165,9 @@ export default function Index() {
   ]
   // END OF COLUMNS
 
+  // handle tour
+  const tours = useTour('inventory')
+
   return (
     <>
       <DashboardLayout className='overflow-hidden'>
@@ -176,11 +186,19 @@ export default function Index() {
                   onClick={() =>
                     setSetting({ open: true, default: 'inventory_category' })
                   }
+                  id={TEST_ID.BUTTON_OPEN_INVENTORY_SETTING}
+                  data-testid={TEST_ID.BUTTON_OPEN_INVENTORY_SETTING}
                 >
                   <Settings2Icon className='w-4 h-4 text-dark/70' />
                 </Button>
                 <ProtectedComponent required={['item:create']}>
-                  <Button onClick={() => setOpen(true)}>Tambah</Button>
+                  <Button
+                    onClick={() => setOpen(true)}
+                    id={TEST_ID.BUTTON_ADD_GOODS}
+                    data-testid={TEST_ID.BUTTON_ADD_GOODS}
+                  >
+                    Tambah
+                  </Button>
                 </ProtectedComponent>
               </div>
             </HeadTable>
@@ -192,6 +210,19 @@ export default function Index() {
               totalPages={data?.total_pages}
               styleFooter='border-t border-b-0'
               withPagination
+              clickableColumns={[
+                'name',
+                'category',
+                'brand',
+                'measurement',
+                'qty',
+                'available',
+                'location',
+              ]}
+              autoRedirect={isAllowed}
+              onCellClick={({ id }) => {
+                setSelected({ id, open: true })
+              }}
             />
           </div>
         </div>
@@ -211,6 +242,8 @@ export default function Index() {
           )
         }}
       />
+
+      <Tour steps={steps} {...tours} />
     </>
   )
 }

@@ -1,16 +1,20 @@
-import { ColumnDef } from '@tanstack/react-table'
 import useUrlState from '@ahooksjs/use-url-state'
+import { ColumnDef } from '@tanstack/react-table'
 import { UserCircle } from 'lucide-react'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
 import usePermission from '@/hooks/use-permission'
+import useTour from '@/hooks/use-tour'
+import { useApiData } from '@/hooks/use-api-data'
+
 import { userAtom } from '@/atom/auth'
+
 import { formatPhone } from '@/utils/format-phone'
+import { TEST_ID } from '@/utils/constant/_testId'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { PATH } from '@/utils/constant/_paths'
 import { User } from '@/utils/types/api'
-import { useApiData } from '@/hooks/use-api-data'
 import {
   useAccountPagination,
   useActiveAccount,
@@ -28,11 +32,13 @@ import { Button } from '@/components/ui/button'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import Chips from '@/components/common/chips'
+import Tour from '@/components/common/tour'
 
 import AddUserRole from './_component.ts/add-user-role'
-import { DashboardLayout } from '../_component/layout'
-import { useTitle } from '../_component/header'
 import AddUser from './_component.ts/add-user'
+import { DashboardLayout } from '../_component/layout'
+import { steps } from './_component.ts/tour-index'
+import { useTitle } from '../_component/header'
 
 const LINKS = [
   { name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
@@ -43,6 +49,9 @@ export default function Index() {
   useTitle(LINKS)
 
   const permission = usePermission()
+
+  // handle tour
+  const tours = useTour('user')
 
   const { mutate: activate } = useActiveAccount()
   const { mutate: deactivate } = useDeactiveAccount()
@@ -126,11 +135,16 @@ export default function Index() {
       id: 'role',
       header: 'Akses',
       cell: ({ row }) => (
-        <AddUserRole
-          id={row.original.id}
-          roleId={row.original.role.id}
-          permission={permission}
-        />
+        <div
+          id={`${TEST_ID.BUTTON_ADD_ROLE}-${row.index + 1}`}
+          data-testid={`${TEST_ID.BUTTON_ADD_ROLE}-${row.index + 1}`}
+        >
+          <AddUserRole
+            id={row.original.id}
+            roleId={row.original.role.id}
+            permission={permission}
+          />
+        </div>
       ),
     },
     {
@@ -149,6 +163,8 @@ export default function Index() {
                   open: true,
                 })
               }
+              id={`${TEST_ID.BUTTON_RESET}-${row.index + 1}`}
+              data-testid={`${TEST_ID.BUTTON_RESET}-${row.index + 1}`}
             >
               Reset Password
             </Button>
@@ -203,7 +219,11 @@ export default function Index() {
           <p className='text-dark font-medium'>User</p>
         </div>
         <ProtectedComponent required={['user:create']}>
-          <Button onClick={() => setDialog({ open: true, id: null })}>
+          <Button
+            onClick={() => setDialog({ open: true, id: null })}
+            id={TEST_ID.BUTTON_ADD_USER}
+            data-testid={TEST_ID.BUTTON_ADD_USER}
+          >
             User Baru
           </Button>
         </ProtectedComponent>
@@ -243,6 +263,8 @@ export default function Index() {
         open={openDelete?.open}
         setOpen={() => setOpenDelete({ id: null, open: false })}
       />
+
+      <Tour steps={steps} {...tours} />
     </DashboardLayout>
   )
 }

@@ -171,21 +171,8 @@ export default function TableEmployee({
             id={`${TEST_ID.DROPDOWN_EDIT_EMPLOYEE}-${row.index + 1}`}
             data-testid={`${TEST_ID.DROPDOWN_EDIT_EMPLOYEE}-${row.index + 1}`}
           >
-            <ProtectedComponent
-              required={[
-                'employee:activate',
-                'employee:deactivate',
-                'employee:delete',
-              ]}
-            >
+            <ProtectedComponent required={['employee:delete']}>
               <DropdownEdit className='-translate-x-3'>
-                <ProtectedComponent
-                  required={['employee:activate', 'employee:deactivate']}
-                >
-                  <DropdownMenuItem className='flex items-center gap-2 cursor-pointer rounded-none'>
-                    Nonaktifkan
-                  </DropdownMenuItem>
-                </ProtectedComponent>
                 <ProtectedComponent required={['employee:delete']}>
                   <DropdownMenuItem
                     className='flex items-center gap-2 cursor-pointer rounded-none'

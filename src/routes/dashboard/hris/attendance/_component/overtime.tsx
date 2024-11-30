@@ -8,20 +8,24 @@ import {
   useDeleteOvertime,
   useOvertimePagination,
 } from '@/hooks/api/use-overtime'
+import useTour from '@/hooks/use-tour'
 import { useApiData } from '@/hooks/use-api-data'
 
 import { Overtime as TOvertime } from '@/utils/types/api'
+import { TEST_ID } from '@/utils/constant/_testId'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
+import ProtectedComponent from '@/components/protected'
 import Search from '@/components/common/search'
+import Tour from '@/components/common/tour'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 
-import { AddOvertime } from './add-overtime'
-import ProtectedComponent from '@/components/protected'
-import FilterDate from './filter-date'
 import FilterReset from './filter-reset'
+import FilterDate from './filter-date'
+import { AddOvertime } from './add-overtime'
+import { steps } from './tour-overtime'
 
 export function Overtime() {
   const { mutate: remove } = useDeleteOvertime()
@@ -118,6 +122,8 @@ export function Overtime() {
     id: number | null
   } | null>(null)
 
+  const { start, onTourEnd } = useTour('overtime')
+
   return (
     <>
       <div className='flex justify-between items-start p-4 bg-[#F9FAFB] gap-2'>
@@ -127,7 +133,11 @@ export function Overtime() {
           <FilterReset />
         </div>
         <ProtectedComponent required={['overtime:create']}>
-          <Button onClick={() => setDialog({ open: true, id: null })}>
+          <Button
+            onClick={() => setDialog({ open: true, id: null })}
+            id={TEST_ID.BUTTON_ADD_OVERTIME}
+            data-testid={TEST_ID.BUTTON_ADD_OVERTIME}
+          >
             Tambah
           </Button>
         </ProtectedComponent>
@@ -144,6 +154,8 @@ export function Overtime() {
         setOpen={() => setDialog(null)}
         id={dialog?.id}
       />
+
+      <Tour steps={steps} start={start} onTourEnd={onTourEnd} />
     </>
   )
 }

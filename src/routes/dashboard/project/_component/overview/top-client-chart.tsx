@@ -2,17 +2,23 @@ import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts'
 import { useChartTopClient } from '@/hooks/api/use-chart'
 import { useApiData } from '@/hooks/use-api-data'
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart'
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import LoadingState from '@/components/common/loading-state'
+
+import { TEST_ID } from '@/utils/constant/_testId'
 
 export default function TopClientChart() {
   const { data } = useApiData(useChartTopClient())
 
   return (
-    <Card>
+    <Card id={TEST_ID.TOP_CLIENT} data-testid={TEST_ID.TOP_CLIENT}>
       <CardHead className='border-b border-line h-fit py-2 px-2'>
-        <p className='text-sm text-dark'>User dengan proyek terbanyak</p>
+        <p className='text-sm text-dark'>Klien dengan proyek terbanyak</p>
       </CardHead>
       <CardBody className='p-2 h-48  relative'>
         {!data?.chartData || !data?.chartConfig ? (

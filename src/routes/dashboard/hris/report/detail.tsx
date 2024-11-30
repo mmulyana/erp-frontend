@@ -6,12 +6,16 @@ import { toast } from 'sonner'
 import React from 'react'
 
 import { useDetailRecap, useRecapReport } from '@/hooks/api/use-recap'
+import { useDetailName } from '@/hooks/use-detail-name'
 import { useApiData } from '@/hooks/use-api-data'
 
 import { formatToRupiah } from '@/utils/formatCurrency'
+import { TEST_ID } from '@/utils/constant/_testId'
+import { PATH } from '@/utils/constant/_paths'
 import { URLS } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'
 
+import LoadingState from '@/components/common/loading-state'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -22,10 +26,10 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DashboardLayout } from '../../_component/layout'
-import LoadingState from '@/components/common/loading-state'
-import { PATH } from '@/utils/constant/_paths'
 import { Title, useTitle } from '../../_component/header'
-import { useDetailName } from '@/hooks/use-detail-name'
+import Tour from '@/components/common/tour'
+import { steps } from './_component/tour-detail'
+import useTour from '@/hooks/use-tour'
 
 const TableSkeleton = () => (
   <div className='h-28 relative border'>
@@ -90,11 +94,19 @@ export default function DetailPage() {
     }
   }
 
+  const { start, onTourEnd } = useTour('recap-detail')
+
   return (
     <DashboardLayout className='overflow-hidden'>
       <div className='overflow-hidden w-full'>
         <div className='bg-[#F9FAFB] py-2 px-4 flex gap-4 items-center justify-end'>
-          <Button onClick={handleExport}>Export</Button>
+          <Button
+            onClick={handleExport}
+            id={TEST_ID.BUTTON_EXPORT_RECAP}
+            data-testid={TEST_ID.BUTTON_EXPORT_RECAP}
+          >
+            Export
+          </Button>
         </div>
 
         {isLoading ? (
@@ -252,6 +264,8 @@ export default function DetailPage() {
           </Table>
         )}
       </div>
+
+      <Tour steps={steps} start={start} onTourEnd={onTourEnd} />
     </DashboardLayout>
   )
 }

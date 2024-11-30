@@ -1,7 +1,10 @@
-import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+
+import { TEST_ID } from '@/utils/constant/_testId'
 import { useChartCashAdvance } from '@/hooks/api/use-chart'
 import { useApiData } from '@/hooks/use-api-data'
+
+import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import {
   ChartConfig,
   ChartContainer,
@@ -13,7 +16,11 @@ export default function CardMonthly() {
   const { data } = useApiData(useChartCashAdvance({ total: 3 }))
 
   return (
-    <Card className='rounded-xl'>
+    <Card
+      className='rounded-xl'
+      id={TEST_ID.REPORT_CASH_ADVANCE}
+      data-testid={TEST_ID.REPORT_CASH_ADVANCE}
+    >
       <CardHead>
         <p className='text-dark text-sm font-semibold'>
           Laporan kasbon bulanan

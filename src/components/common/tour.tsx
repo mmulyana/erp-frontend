@@ -7,7 +7,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 
 export type TourProps = {
   start: boolean
-  onTourEnd?: () => void
+  onTourEnd?: (type?: 'skip' | 'end') => void
   steps: Step[]
 }
 
@@ -35,7 +35,10 @@ export default function Tour({ start, onTourEnd, steps }: TourProps) {
 
     if (status === STATUS.FINISHED) {
       setState({ run: false, stepIndex: 0 })
-      onTourEnd?.()
+      onTourEnd?.('end')
+    } else if (status === STATUS.SKIPPED) {
+      setState({ run: false, stepIndex: 0 })
+      onTourEnd?.('skip')
     } else if (
       ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as Events[]).includes(type)
     ) {
@@ -98,7 +101,7 @@ export default function Tour({ start, onTourEnd, steps }: TourProps) {
           padding: '12px 0 0',
         },
         tooltipContent: {
-          textAlign: 'left',
+          textAlign: 'center',
           color: '#313951',
           padding: '16px 16px 0',
         },
@@ -107,9 +110,10 @@ export default function Tour({ start, onTourEnd, steps }: TourProps) {
           marginTop: 8,
         },
         tooltipTitle: {
-          padding: '0 4px',
+          padding: '0 28px',
           color: '#313951',
           fontWeight: 600,
+          fontSize: 16,
         },
       }}
       locale={{

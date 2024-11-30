@@ -19,6 +19,8 @@ import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { buttonVariants } from '@/components/ui/button'
 
+import { TEST_ID } from '@/utils/constant/_testId'
+
 export default function CardAttachments() {
   const permission = useAtomValue(permissionAtom)
 
@@ -29,7 +31,10 @@ export default function CardAttachments() {
   )
 
   return (
-    <Card>
+    <Card
+      id={TEST_ID.PROJECT_ATTACHMENTS}
+      data-testid={TEST_ID.PROJECT_ATTACHMENTS}
+    >
       <CardHead className='border-none h-fit py-2 px-2 flex justify-between items-center'>
         <p className='text-sm text-dark'>Lampiran</p>
         <Search

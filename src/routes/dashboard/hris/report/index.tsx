@@ -9,6 +9,7 @@ import { useApiData } from '@/hooks/use-api-data'
 
 import { permissionAtom } from '@/atom/permission'
 import { createLinkDetail } from '@/utils/create-link-detail'
+import { TEST_ID } from '@/utils/constant/_testId'
 import { PATH } from '@/utils/constant/_paths'
 import { Recap } from '@/utils/types/api'
 import { cn } from '@/utils/cn'
@@ -22,12 +23,15 @@ import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'
 import Overlay from '@/components/common/overlay'
 import Search from '@/components/common/search'
+import Tour from '@/components/common/tour'
 
 import { Eye } from 'lucide-react'
 
 import { DashboardLayout } from '../../_component/layout'
 import { useTitle } from '../../_component/header'
 import { AddRecap } from './_component/add-recap'
+import { steps } from './_component/tour-index'
+import useTour from '@/hooks/use-tour'
 
 const links = [
   {
@@ -168,6 +172,8 @@ export default function Report() {
     open: boolean
   } | null>(null)
 
+  const { start, onTourEnd } = useTour('recap')
+
   return (
     <DashboardLayout className='overflow-hidden'>
       <div className='flex gap-4 items-center justify-between p-4'>
@@ -178,6 +184,8 @@ export default function Report() {
           <Button
             variant='secondary'
             onClick={() => setDialog({ open: true, id: null })}
+            id={TEST_ID.BUTTON_ADD_RECAP}
+            data-testid={TEST_ID.BUTTON_ADD_RECAP}
           >
             Buat Periode
           </Button>
@@ -208,6 +216,8 @@ export default function Report() {
         open={!!dialog?.open}
         setOpen={() => setDialog(null)}
       />
+
+      <Tour steps={steps} start={start} onTourEnd={onTourEnd} />
     </DashboardLayout>
   )
 }

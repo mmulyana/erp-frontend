@@ -290,7 +290,7 @@ const hrisMenus = [
     url: PATH.EMPLOYEE,
   },
   {
-    title: 'Presensi',
+    title: 'Absensi',
     url: PATH.EMPLOYEE_ATTENDANCE,
   },
   {

@@ -1,9 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { Search as SearchIcon } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
-import { Input } from '@/components/ui/input'
 import { useDebounce } from '@uidotdev/usehooks'
+
 import { TEST_ID } from '@/utils/constant/_testId'
+
+import { Input } from '@/components/ui/input'
 
 type Props = {
   placeholder?: string

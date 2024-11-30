@@ -39,6 +39,10 @@ import AddProject from './_component/add-project'
 import { settingConfig } from '../_component/setting/setting'
 import { DashboardLayout } from '../_component/layout'
 import { useTitle } from '../_component/header'
+import { TEST_ID } from '@/utils/constant/_testId'
+import useTour from '@/hooks/use-tour'
+import Tour from '@/components/common/tour'
+import { steps } from './_component/tour-overview'
 
 export default function Dashboard() {
   useTitle([{ name: 'Proyek', path: PATH.PROJECT_INDEX }])
@@ -49,6 +53,9 @@ export default function Dashboard() {
   const [url] = useUrlState({ page: '', limit: '', name: '' })
 
   const { mutate } = useUpdateProject()
+
+  // handle tour
+  const tours = useTour('project-overview')
 
   const projectActive = useApiData(
     useProjectsPagination({
@@ -231,7 +238,7 @@ export default function Dashboard() {
         </div>
         <div className='col-span-full'>
           <Tabs className='px-0'>
-            <Tab label='Semua'>
+            <Tab label='Semua' id={TEST_ID.TAB_PROJECT_ACTIVE}>
               <div className='col-span-full border border-line rounded-xl overflow-hidden mt-4'>
                 <HeadTable>
                   <div className='flex gap-4 items-center'>
@@ -246,11 +253,17 @@ export default function Dashboard() {
                       onClick={() =>
                         setSetting({ open: true, default: 'project_label' })
                       }
+                      id={TEST_ID.BUTTON_OPEN_LABEL}
+                      data-testid={TEST_ID.BUTTON_OPEN_LABEL}
                     >
                       <Settings2Icon className='w-4 h-4 text-dark/70' />
                     </Button>
                     <ProtectedComponent required={['project:create']}>
-                      <Button onClick={() => handleDialog('add', true)}>
+                      <Button
+                        onClick={() => handleDialog('add', true)}
+                        id={TEST_ID.BUTTON_ADD_PROJECT_OVERVIEW}
+                        data-testid={TEST_ID.BUTTON_ADD_PROJECT_OVERVIEW}
+                      >
                         Proyek Baru
                       </Button>
                     </ProtectedComponent>
@@ -272,7 +285,7 @@ export default function Dashboard() {
                 />
               </div>
             </Tab>
-            <Tab label='Arsip'>
+            <Tab label='Arsip' id={TEST_ID.TAB_PROJECT_ARCHIVE}>
               <div className='col-span-full border border-line rounded-xl overflow-hidden mt-4'>
                 <HeadTable>
                   <div className='flex gap-4 items-center'>
@@ -303,6 +316,8 @@ export default function Dashboard() {
         open={dialog.detail}
         setOpen={(val) => handleDialog('detail', val)}
       />
+
+      <Tour steps={steps} {...tours} />
     </DashboardLayout>
   )
 }

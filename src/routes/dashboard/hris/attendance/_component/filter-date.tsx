@@ -3,6 +3,7 @@ import { CalendarDaysIcon } from 'lucide-react'
 import { format, parse } from 'date-fns'
 import { id } from 'date-fns/locale'
 
+import { TEST_ID } from '@/utils/constant/_testId'
 import { cn } from '@/utils/cn'
 
 import { Calendar } from '@/components/ui/calendar'
@@ -18,26 +19,34 @@ export default function FilterDate() {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger
+        asChild
+        id={TEST_ID.FILTER_DATE_ATTENDANCE}
+        data-testid={TEST_ID.FILTER_DATE_ATTENDANCE}
+      >
         <Button
           variant='outline'
-          className={cn('w-fit pl-3 gap-2 text-left font-normal text-dark')}
+          className={cn('w-fit px-2 gap-1 text-left font-normal text-dark')}
         >
           <CalendarDaysIcon className='h-4 w-4 text-[#2A9D90]' />
-          {url.date ? (
-            format(
-              parse(url.date, 'yyyy-MM-dd', new Date()),
-              'EEEE, dd MMM yyyy',
-              {
-                locale: id,
-              }
-            )
-          ) : (
-            <span>Pilih tanggal</span>
-          )}
+          <span className='px-1'>
+            {url.date
+              ? format(
+                  parse(url.date, 'yyyy-MM-dd', new Date()),
+                  'EEEE, dd MMM yyyy',
+                  {
+                    locale: id,
+                  }
+                )
+              : 'Pilih tanggal'}
+          </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-auto p-0' align='start'>
+      <PopoverContent
+        className='w-auto p-0'
+        align='start'
+        data-testid={TEST_ID.FILTER_DATE_ATTENDANCE_CONTENT}
+      >
         <Calendar
           mode='single'
           selected={

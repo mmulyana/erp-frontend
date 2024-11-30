@@ -1,7 +1,9 @@
-import { endOfWeek, format, getWeek, setWeek, startOfWeek } from 'date-fns'
+import useUrlState from '@ahooksjs/use-url-state'
 import { Check, MinusIcon, PlusIcon, X } from 'lucide-react'
+import { format } from 'date-fns'
 import { id } from 'date-fns/locale'
 
+import EmptyState from '@/components/common/empty-state'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -24,10 +26,14 @@ import {
 } from '@/hooks/api/use-attendance'
 import { useApiData } from '@/hooks/use-api-data'
 
+import { generateDateRange } from '@/utils/generate-date-range'
 import { Attendance } from '@/utils/types/api'
 import { cn } from '@/utils/cn'
-import useUrlState from '@ahooksjs/use-url-state'
-import EmptyState from '@/components/common/empty-state'
+
+import { useDateData } from '../_hook/use-date-data'
+import Tour from '@/components/common/tour'
+import { steps } from './tour-table'
+import useTour from '@/hooks/use-tour'
 
 export default function RegularTable() {
   const { mutate: create } = useCreateAttendance()
@@ -35,20 +41,23 @@ export default function RegularTable() {
 
   const [url] = useUrlState({ week: '', name: '' })
 
-  const weekNumber = getWeek(new Date())
-  const week = getWeekDates(url.week !== '' ? Number(url.week) : weekNumber)
-  const dateRange = generateDateRange(week.startDate, week.endDate)
+  const { startDate, endDate } = useDateData(
+    url.week !== '' ? Number(url.week) : undefined
+  )
+  const dateRange = generateDateRange(startDate, endDate)
 
   const { data } = useApiData(
     useAttendances({
-      date: format(week.startDate, 'yyyy-MM-dd'),
-      endDate: format(week.endDate, 'yyyy-MM-dd'),
+      date: format(startDate, 'yyyy-MM-dd'),
+      endDate: format(endDate, 'yyyy-MM-dd'),
       name: url.name,
     })
   )
 
+  const { start, onTourEnd } = useTour('atendance-regular-table')
+
   return (
-    <div>
+    <>
       <Table className='w-full border'>
         <TableHeader className='border-b'>
           <TableRow className='border-none'>
@@ -288,29 +297,8 @@ export default function RegularTable() {
           )}
         </TableBody>
       </Table>
-    </div>
+
+      <Tour steps={steps} start={start} onTourEnd={onTourEnd} />
+    </>
   )
-}
-
-const getWeekDates = (weekNumber: number) => {
-  const dateInWeek = setWeek(new Date(), weekNumber, { weekStartsOn: 1 })
-  const startDate = startOfWeek(dateInWeek, { weekStartsOn: 1 })
-  const endDate = endOfWeek(dateInWeek, { weekStartsOn: 1 })
-
-  return { startDate, endDate }
-}
-export const generateDateRange = (startDate: Date, endDate: Date): string[] => {
-  const dates: string[] = []
-  const currentDate = new Date(startDate)
-  const lastDate = new Date(endDate)
-
-  currentDate.setHours(17, 0, 0, 0)
-  lastDate.setHours(17, 0, 0, 0)
-
-  while (currentDate <= lastDate) {
-    dates.push(currentDate.toISOString())
-    currentDate.setDate(currentDate.getDate() + 1)
-  }
-
-  return dates
 }

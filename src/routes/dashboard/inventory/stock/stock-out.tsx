@@ -1,3 +1,4 @@
+import { Plus, X, PackageMinus } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { useState } from 'react'
 
@@ -7,15 +8,19 @@ import {
   useCreateTransaction,
   useTransactionPagination,
 } from '@/hooks/api/use-transaction'
+import useTour from '@/hooks/use-tour'
+import usePermission from '@/hooks/use-permission'
 
-import { DashboardLayout } from '../../_component/layout'
-import { useTitle } from '../../_component/header'
 import DetailTransaction from './_component/detail-transaction'
 import DeleteTransaction from './_component/delete-transaction'
 import TitlePage from '../../_component/title-page'
+import { DashboardLayout } from '../../_component/layout'
+import { useTitle } from '../../_component/header'
+import { steps } from '../_component/tour-stock'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import Select from '@/components/common/select/select-v1'
+import Tour from '@/components/common/tour'
 import { Form, FormField, FormLabel } from '@/components/ui/form'
 import { FilterTable } from '@/components/data-table/component'
 import { useForm, useFieldArray } from 'react-hook-form'
@@ -29,8 +34,6 @@ import { Input } from '@/components/ui/input'
 import { useInventoryData } from '../_hook/use-inventory-data'
 import { column } from './_component/column'
 
-import { Plus, X, PackageMinus } from 'lucide-react'
-import usePermission from '@/hooks/use-permission'
 
 const HIDE = ['supplier', 'project']
 
@@ -64,6 +67,9 @@ export default function StockOutPage() {
   )
 
   const { goods } = useInventoryData()
+
+  // handle tour
+  const tours = useTour('manage-stock')
 
   const { mutate } = useCreateTransaction()
   const [open, setOpen] = useState(false)
@@ -268,6 +274,8 @@ export default function StockOutPage() {
       </Modal>
       <DeleteTransaction />
       <DetailTransaction />
+
+      <Tour steps={steps} {...tours} />
     </>
   )
 }

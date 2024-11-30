@@ -18,6 +18,7 @@ type TabProps = {
   label: string
   index?: number
   badge?: string
+  id?: string
   children: React.ReactNode
   hidden?: boolean
 }
@@ -61,6 +62,8 @@ export function Tabs({ children, className }: TabsProps) {
                       : 'text-[#989CA8]'
                   )}
                   onClick={() => setActive(index)}
+                  id={child.props.id}
+                  data-testid={child.props.id}
                 >
                   {child.props.label}
                   {!!child.props.badge && (
