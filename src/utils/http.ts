@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { CookieKeys, CookieStorage } from './cookie'
+import { PATH } from './constant/_paths'
 
 const http = axios.create({
   timeout: 30000,
@@ -25,6 +26,10 @@ http.interceptors.request.use(
     return config
   },
   (error) => {
+    if (error.response?.message.includes('Token expired') || error.response?.message.includes('Token invalid')) {
+      CookieStorage.remove(CookieKeys.AuthToken)
+      window.location.href = PATH.LOGIN
+    }
     return Promise.reject(error)
   }
 )

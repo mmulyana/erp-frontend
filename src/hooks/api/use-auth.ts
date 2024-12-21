@@ -19,7 +19,10 @@ export const useAuth = () => {
     try {
       const data = await http.post(URLS.LOGIN, payload)
 
-      CookieStorage.set(CookieKeys.AuthToken, data.data.data.token)
+      const token = data.data.data.token
+      const decodedToken: any = JSON.parse(atob(token.split('.')[1]))
+      const expires = new Date(decodedToken.exp * 1000)
+      CookieStorage.set(CookieKeys.AuthToken, token, { expires })
 
       toast.success(`Selamat datang ${data.data.data.name}`)
       navigate(PATH.DASHBOARD_OVERVIEW)
