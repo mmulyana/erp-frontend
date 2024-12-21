@@ -13,43 +13,82 @@ type LoginPayload = {
   password: string
 }
 
+type LoginResponse = {
+  data: {
+    token: string
+    name: string
+  }
+}
+
 export const useAuth = () => {
   const navigate = useNavigate()
+
   const logIn = async (payload: LoginPayload) => {
     try {
-      const data = await http.post(URLS.LOGIN, payload)
+      const { data } = await http.post<LoginResponse>(URLS.LOGIN, payload)
+      const token = data.data.token
 
-      const token = data.data.data.token
       const decodedToken: any = JSON.parse(atob(token.split('.')[1]))
       const expires = new Date(decodedToken.exp * 1000)
       CookieStorage.set(CookieKeys.AuthToken, token, { expires })
 
-      toast.success(`Selamat datang ${data.data.data.name}`)
-      navigate(PATH.DASHBOARD_OVERVIEW)
+      toast.success(`Selamat datang ${data.data.name}`)
+
+      const redirectPath = sessionStorage.getItem('redirectAfterLogin')
+      if (redirectPath && redirectPath !== PATH.LOGIN) {
+        sessionStorage.removeItem('redirectAfterLogin')
+        navigate(redirectPath)
+      } else {
+        navigate(PATH.DASHBOARD_OVERVIEW)
+      }
     } catch (error: unknown) {
-      const err = error as AxiosError<any>
+      const err = error as AxiosError<{
+        message: string
+        errors?: {
+          phoneNumber?: { message: string }
+          name?: { message: string }
+          email?: { message: string }
+        }
+      }>
 
       if (err.response?.data?.errors?.phoneNumber) {
-        return toast.error(err.response?.data?.errors?.phoneNumber.message)
+        toast.error(err.response.data.errors.phoneNumber.message)
+        return
       }
       if (err.response?.data?.errors?.name) {
-        return toast.error(err.response?.data?.errors?.name.message)
+        toast.error(err.response.data.errors.name.message)
+        return
       }
       if (err.response?.data?.errors?.email) {
-        return toast.error(err.response?.data?.errors?.email.message)
+        toast.error(err.response.data.errors.email.message)
+        return
       }
 
-      toast.error(err.response?.data.message)
+      toast.error(err.response?.data?.message || 'Login failed')
     }
   }
 
   const logOut = () => {
     CookieStorage.remove(CookieKeys.AuthToken)
+    sessionStorage.removeItem('redirectAfterLogin')
     navigate(PATH.LOGIN)
+  }
+
+  const checkAuth = () => {
+    const token = CookieStorage.get(CookieKeys.AuthToken)
+    if (!token) {
+      const currentPath = window.location.pathname
+      if (currentPath !== PATH.LOGIN) {
+        sessionStorage.setItem('redirectAfterLogin', currentPath)
+      }
+      navigate(PATH.LOGIN)
+    }
+    return !!token
   }
 
   return {
     logIn,
     logOut,
+    checkAuth,
   }
 }
