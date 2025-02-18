@@ -1,12 +1,12 @@
 import { Toaster } from '@/components/ui/sonner'
 
 export default function NotificationWrapper({
-  children,
+	children,
 }: React.PropsWithChildren) {
-  return (
-    <>
-      {children}
-      <Toaster richColors theme='light' position='bottom-right' duration={1500}/>
-    </>
-  )
+	return (
+		<>
+			{children}
+			<Toaster richColors position='bottom-right' duration={1500} />
+		</>
+	)
 }
