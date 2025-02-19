@@ -8,7 +8,7 @@ import { BASE_URL } from '@/utils/constant/_urls'
 import { Activity } from '@/utils/types/api'
 import { cn } from '@/utils/cn'
 
-import { userAtom } from '@/atom/auth'
+import { userAtom } from '@/shared/store/auth'
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import DropdownEdit from '@/components/common/dropdown-edit'

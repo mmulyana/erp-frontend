@@ -7,10 +7,10 @@ export const checkAuth = () => {
 	const token = CookieStorage.get(CookieKeys.AuthToken)
 	if (!token) {
 		const currentPath = window.location.pathname
-		if (currentPath !== PATH.LOGIN) {
-			sessionStorage.setItem('redirectAfterLogin', currentPath)
+		if (currentPath !== PATH.BASE) {
+			sessionStorage.setItem(CookieKeys.RedirectAfterLogin, currentPath)
 		}
-		navigate(PATH.LOGIN)
+		navigate(PATH.BASE)
 	}
 	return !!token
 }

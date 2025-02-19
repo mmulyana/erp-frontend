@@ -1,4 +1,4 @@
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 import { Permission } from '@/utils/with-permission'
 import { useAtomValue } from 'jotai'
 import React from 'react'

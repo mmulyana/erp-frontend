@@ -10,7 +10,7 @@ const useProtected = () => {
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)
 		if (token) {
-			navigate(PATH.DASHBOARD_OVERVIEW, { replace: true })
+			navigate(PATH.ADMIN_USER, { replace: true })
 			navigate(0)
 		}
 		return () => {}

@@ -10,7 +10,7 @@ import {
   useUpdateEmployee,
   useUploadPhoto,
 } from '@/hooks/api/use-employee'
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 
 import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
 import { EDUCATIONS, EDUCATIONS_OBJ } from '@/utils/data/educations'

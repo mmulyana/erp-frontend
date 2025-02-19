@@ -1,25 +1,25 @@
-import { userAtom } from '@/atom/auth'
+import { userAtom } from '@/shared/store/auth'
 import InputPassword from '@/components/common/input-password'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import { useUpdatePassword } from '@/hooks/api/use-account'
-import { UpdatePasswordDto } from '@/utils/schema/account'
 import { useAtomValue } from 'jotai'
 import { useForm } from 'react-hook-form'
+import { UpdatePassword } from '@/features/user/types'
+import { useUpdatePassword } from '@/features/user/api/use-update-password'
 
 export default function MenuPassword() {
   const user = useAtomValue(userAtom)
 
   const { mutate } = useUpdatePassword()
 
-  const form = useForm<UpdatePasswordDto>({
+  const form = useForm<UpdatePassword>({
     defaultValues: {
       oldPassword: '',
       newPassword: '',
     },
   })
 
-  const submit = (payload: UpdatePasswordDto) => {
+  const submit = (payload: UpdatePassword) => {
     if (!user?.id) return
     mutate({ id: user.id, payload })
   }

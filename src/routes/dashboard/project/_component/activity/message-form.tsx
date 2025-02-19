@@ -7,7 +7,7 @@ import { Form, FormField } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { userAtom } from '@/atom/auth'
+import { userAtom } from '@/shared/store/auth'
 import { PreviewPhoto } from './preview-photo'
 
 import { Camera, SendHorizonal } from 'lucide-react'

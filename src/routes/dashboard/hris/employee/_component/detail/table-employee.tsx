@@ -15,7 +15,7 @@ import ProtectedComponent from '@/components/protected'
 import Overlay from '@/components/common/overlay'
 import Chips from '@/components/common/chips'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 
 import { useEmployees } from '@/hooks/api/use-employee'
 import { useApiData } from '@/hooks/use-api-data'

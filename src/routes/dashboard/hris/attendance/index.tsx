@@ -1,7 +1,7 @@
 import { FilePenIcon } from 'lucide-react'
 import { useAtomValue } from 'jotai'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 import { PATH } from '@/utils/constant/_paths'
 
 import ProtectedComponent from '@/components/protected'

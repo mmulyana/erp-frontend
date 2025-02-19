@@ -6,7 +6,7 @@ import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 import { useState } from 'react'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { TEST_ID } from '@/utils/constant/_testId'
 import { CashAdvance } from '@/utils/types/api'

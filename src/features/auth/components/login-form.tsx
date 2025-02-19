@@ -34,8 +34,7 @@ export default function LoginForm() {
 			password: '',
 		},
 	})
-	console.log('err', form.formState.errors)
-
+	
 	const onSubmit = async (data: FormData) => {
 		const payload: Payload = {
 			password: data.password,

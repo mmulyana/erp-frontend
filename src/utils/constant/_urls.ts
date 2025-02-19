@@ -3,7 +3,8 @@ const API = BASE_URL + '/api'
 
 export const URLS = {
 	LOGIN: API + '/auth/login',
-	ACCOUNT: API + '/account',
+	ME: API + '/auth/me',
+	ACCOUNT: API + '/user',
 	ROLE: API + '/role',
 	PERMISSION_GROUP: API + '/permission/group',
 	PERMISSION_CHECK: API + '/permission/check',

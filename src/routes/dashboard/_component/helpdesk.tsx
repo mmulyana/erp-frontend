@@ -11,7 +11,7 @@ import { useState } from 'react'
 
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import { userAtom } from '@/atom/auth'
+import { userAtom } from '@/shared/store/auth'
 import { useCreateHelpdesk } from '@/hooks/api/use-helpdesk'
 
 export default function Helpdesk() {

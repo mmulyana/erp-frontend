@@ -14,7 +14,7 @@ import {
   useGoodsTransaction,
   useUpdateGoods,
 } from '@/hooks/api/use-goods'
-import usePermission from '@/hooks/use-permission'
+import usePermission from '@/shared/hooks/use-permission'
 import { useApiData } from '@/hooks/use-api-data'
 
 import { formatToRupiah } from '@/utils/formatCurrency'

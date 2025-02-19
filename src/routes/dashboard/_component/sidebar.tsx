@@ -10,7 +10,7 @@ import {
   Users,
 } from 'lucide-react'
 
-import usePermission from '@/hooks/use-permission'
+import usePermission from '@/shared/hooks/use-permission'
 import { PATH } from '@/utils/constant/_paths'
 
 import { ScrollArea } from '@/components/ui/scroll-area'

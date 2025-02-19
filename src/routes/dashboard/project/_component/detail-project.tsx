@@ -11,7 +11,7 @@ import { format } from 'date-fns'
 import { socket } from '@/utils/socket'
 import { cn } from '@/utils/cn'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 
 import {
   useProject,

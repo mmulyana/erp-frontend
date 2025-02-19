@@ -11,7 +11,7 @@ import { useApiData } from '@/hooks/use-api-data'
 import { PATH } from '@/utils/constant/_paths'
 import { Goods } from '@/utils/types/api'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'

@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 
-import { permissionAtom } from '@/atom/permission'
-import { userAtom } from '@/atom/auth'
+import { permissionAtom } from '@/shared/store/permission'
+import { useGetme } from '@/shared/api/use-get-me'
+import { userAtom } from '@/shared/store/auth'
 
-import { useAccount } from '@/hooks/api/use-account'
 import { useApiData } from '@/hooks/use-api-data'
 
 import { CookieKeys, CookieStorage } from './cookie'
@@ -28,14 +28,13 @@ export default function ProtectedRoute({
 
 	const [id, setId] = useState<number | undefined>(undefined)
 
-	const { data: account, isLoading } = useApiData(
-		useAccount({ id, enabled: !!id })
-	)
+	const { data: account, isLoading } = useApiData(useGetme())
+	console.log('account', account)
 
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)
 		if (!token) {
-			navigate(PATH.LOGIN, { replace: true })
+			navigate(PATH.BASE, { replace: true })
 			navigate(0)
 		}
 		const user: { id: number } = jwtDecode(token)
@@ -45,7 +44,7 @@ export default function ProtectedRoute({
 
 	useEffect(() => {
 		if (account && !isLoading && !!id) {
-			setPermissionAtom(account?.permissions)
+			setPermissionAtom(account?.permissions as string[])
 			setUserAtom(account)
 		}
 	}, [account, isLoading, id])

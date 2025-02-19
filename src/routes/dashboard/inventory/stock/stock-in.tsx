@@ -4,7 +4,7 @@ import useUrlState from '@ahooksjs/use-url-state'
 import { PATH } from '@/utils/constant/_paths'
 import { useState } from 'react'
 
-import usePermission from '@/hooks/use-permission'
+import usePermission from '@/shared/hooks/use-permission'
 import useTour from '@/hooks/use-tour'
 import { useApiData } from '@/hooks/use-api-data'
 import { useGoods } from '@/hooks/api/use-goods'

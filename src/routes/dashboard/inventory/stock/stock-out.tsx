@@ -9,7 +9,7 @@ import {
   useTransactionPagination,
 } from '@/hooks/api/use-transaction'
 import useTour from '@/hooks/use-tour'
-import usePermission from '@/hooks/use-permission'
+import usePermission from '@/shared/hooks/use-permission'
 
 import DetailTransaction from './_component/detail-transaction'
 import DeleteTransaction from './_component/delete-transaction'

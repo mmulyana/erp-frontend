@@ -28,12 +28,12 @@ export const useLogin = () => {
 
 			toast.success(`Selamat datang kembali`)
 
-			const redirectPath = sessionStorage.getItem('redirectAfterLogin')
-			if (redirectPath && redirectPath !== PATH.LOGIN) {
-				sessionStorage.removeItem('redirectAfterLogin')
+			const redirectPath = sessionStorage.getItem(CookieKeys.RedirectAfterLogin)
+			if (redirectPath && redirectPath !== PATH.BASE) {
+				sessionStorage.removeItem(CookieKeys.RedirectAfterLogin)
 				navigate(redirectPath)
 			} else {
-				navigate(PATH.DASHBOARD_OVERVIEW)
+				navigate(PATH.ADMIN_USER)
 			}
 		},
 		onError: (error) => {

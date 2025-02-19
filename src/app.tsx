@@ -3,15 +3,26 @@ import { Suspense, lazy } from 'react'
 
 import LoadingScreen from '@/components/common/loading-screen'
 import ProtectedRoute from '@/utils/protected-route'
+import { PATH } from '@/utils/constant/_paths'
 import { RoutesConfig } from '@/shared/types'
 
 const Login = lazy(() => import('./pages/login'))
+const User = lazy(() => import('./pages/user'))
+const Role = lazy(() => import('./pages/role'))
 
 const routes: RoutesConfig[] = [
 	{
-		path: '/',
+		path: PATH.BASE,
 		component: <Login />,
 		withoutAuth: true,
+	},
+	{
+		path: PATH.ADMIN_USER,
+		component: <User />,
+	},
+	{
+		path: PATH.ADMIN_ROLE,
+		component: <Role />,
 	},
 ]
 

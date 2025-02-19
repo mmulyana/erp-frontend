@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useAttachments } from '@/hooks/api/use-attachment'
 import { useApiData } from '@/hooks/use-api-data'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 
 import { BASE_URL } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'

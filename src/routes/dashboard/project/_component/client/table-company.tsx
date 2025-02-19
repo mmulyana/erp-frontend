@@ -14,7 +14,7 @@ import ProtectedComponent from '@/components/protected'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { FilterTable } from '@/components/data-table/component'
 import { DataTable } from '@/components/data-table'
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 
 import DialogDeleteCompany from './dialog-delete-company'
 import DialogAddCompany from './dialog-add-company'

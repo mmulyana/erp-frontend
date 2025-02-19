@@ -13,7 +13,7 @@ import DeleteTransaction from './_component/delete-transaction'
 import TitlePage from '../../_component/title-page'
 
 import { useInventoryData } from '../_hook/use-inventory-data'
-import usePermission from '@/hooks/use-permission'
+import usePermission from '@/shared/hooks/use-permission'
 import useTour from '@/hooks/use-tour'
 
 import { DashboardLayout } from '../../_component/layout'

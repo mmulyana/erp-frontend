@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useDeleteRecap, useRecapPagination } from '@/hooks/api/use-recap'
 import { useApiData } from '@/hooks/use-api-data'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 import { createLinkDetail } from '@/utils/create-link-detail'
 import { TEST_ID } from '@/utils/constant/_testId'
 import { PATH } from '@/utils/constant/_paths'

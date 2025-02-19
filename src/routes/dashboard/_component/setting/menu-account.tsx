@@ -3,112 +3,110 @@ import { useForm } from 'react-hook-form'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 
-import { userAtom } from '@/atom/auth'
-
 import PhotoProfile from '@/components/common/photo-profile'
 import { Form, FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { useUpdateAccount } from '@/hooks/api/use-account'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { KEYS } from '@/utils/constant/_keys'
 import { User } from '@/utils/types/api'
+import { userAtom } from '@/shared/store/auth'
+import { useUpdateUser } from '@/features/user/api/use-update-user'
 
 export default function MenuAccount() {
-  const queryClient = useQueryClient()
+	const queryClient = useQueryClient()
 
-  const user = useAtomValue(userAtom)
+	const user = useAtomValue(userAtom)
 
-  const { mutate: update } = useUpdateAccount()
+	const { mutate: update } = useUpdateUser()
 
-  const form = useForm<User>({
-    defaultValues: {
-      email: '',
-      name: '',
-      phoneNumber: '',
-      photo: '',
-    },
-  })
+	const form = useForm<User>({
+		defaultValues: {
+			email: '',
+			username: '',
+			phone: '',
+		},
+	})
 
-  const submit = (data: Partial<User>) => {
-    if (!user?.id) return
-    update({
-      id: user?.id,
-      payload: {
-        email: data.email,
-        name: data.name,
-        phoneNumber: data.phoneNumber,
-      },
-    })
-  }
+	const submit = (data: Partial<User>) => {
+		if (!user?.id) return
+		update({
+			id: user?.id,
+			payload: {
+				email: data.email,
+				username: data.username,
+				phone: data.phone,
+			},
+		})
+	}
 
-  useEffect(() => {
-    if (!!user) {
-      form.reset({
-        name: user.name,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-      })
-    }
-  }, [user])
+	useEffect(() => {
+		if (!!user) {
+			form.reset({
+				username: user.username,
+				email: user.email,
+				phone: user.phone,
+			})
+		}
+	}, [user])
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(submit)}>
-        <div className='flex flex-col gap-6 max-w-sm p-6'>
-          <div>
-            <Label className='mb-3 block font-normal text-dark/80'>Photo</Label>
-            <PhotoProfile
-              size={64}
-              defaultPreview={
-                user?.photo ? BASE_URL + '/img/' + user?.photo : null
-              }
-              onUpdate={(photo) => {
-                if (!user?.id) return
-                update(
-                  { id: user?.id, payload: { photo } },
-                  {
-                    onSuccess: () => {
-                      queryClient.invalidateQueries({
-                        queryKey: [KEYS.ACCOUNT],
-                      })
-                    },
-                  }
-                )
-              }}
-              onRemove={() => {
-                if (!user?.id) return
-                update({ id: user.id, payload: { photo: null } })
-              }}
-            />
-          </div>
-          <div>
-            <FormField
-              label='Nama'
-              control={form.control}
-              name='name'
-              render={({ field }) => <Input className='w-full' {...field} />}
-            />
-          </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <FormField
-              label='Email'
-              control={form.control}
-              name='email'
-              render={({ field }) => <Input {...field} />}
-            />
-            <FormField
-              label='No. Telp'
-              control={form.control}
-              name='phoneNumber'
-              render={({ field }) => <Input {...field} />}
-            />
-          </div>
-          <Button className='w-fit'>Simpan</Button>
-        </div>
-      </form>
-    </Form>
-  )
+	return (
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(submit)}>
+				<div className='flex flex-col gap-6 max-w-sm p-6'>
+					<div>
+						<Label className='mb-3 block font-normal text-dark/80'>Photo</Label>
+						{/* <PhotoProfile
+							size={64}
+							defaultPreview={
+								user?.photoUrl ? BASE_URL + '/img/' + user?.photoUrl : null
+							}
+							onUpdate={(photo) => {
+								if (!user?.id) return
+								update(
+									{ id: user?.id, payload: { photo } },
+									{
+										onSuccess: () => {
+											queryClient.invalidateQueries({
+												queryKey: [KEYS.ACCOUNT],
+											})
+										},
+									}
+								)
+							}}
+							onRemove={() => {
+								if (!user?.id) return
+								update({ id: user.id, payload: { photoUrl: null } })
+							}}
+						/> */}
+					</div>
+					<div>
+						<FormField
+							label='Nama'
+							control={form.control}
+							name='username'
+							render={({ field }) => <Input className='w-full' {...field} />}
+						/>
+					</div>
+					<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+						<FormField
+							label='Email'
+							control={form.control}
+							name='email'
+							render={({ field }) => <Input {...field} />}
+						/>
+						<FormField
+							label='No. Telp'
+							control={form.control}
+							name='phone'
+							render={({ field }) => <Input {...field} />}
+						/>
+					</div>
+					<Button className='w-fit'>Simpan</Button>
+				</div>
+			</form>
+		</Form>
+	)
 }

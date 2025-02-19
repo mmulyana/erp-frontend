@@ -10,7 +10,7 @@ import {
 } from '@/hooks/api/use-project'
 import { useApiData } from '@/hooks/use-api-data'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { PATH } from '@/utils/constant/_paths'

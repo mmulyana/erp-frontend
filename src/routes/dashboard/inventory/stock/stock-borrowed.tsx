@@ -17,7 +17,7 @@ import TitlePage from '../../_component/title-page'
 import { useProjects } from '@/hooks/api/use-project'
 import { useGoods } from '@/hooks/api/use-goods'
 import { useApiData } from '@/hooks/use-api-data'
-import usePermission from '@/hooks/use-permission'
+import usePermission from '@/shared/hooks/use-permission'
 import useTour from '@/hooks/use-tour'
 import {
   useCreateTransaction,

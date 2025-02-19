@@ -3,7 +3,7 @@ import useUrlState from '@ahooksjs/use-url-state'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
-import { permissionAtom } from '@/atom/permission'
+import { permissionAtom } from '@/shared/store/permission'
 import { useClientPagination } from '@/hooks/api/use-client'
 import { useApiData } from '@/hooks/use-api-data'
 
