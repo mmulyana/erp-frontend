@@ -9,12 +9,12 @@ export const useDeactiveUser = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: async ({ id }: { id: string }) => {
-			return await http.patch(`${URLS.ACCOUNT}/${id}/deactivate`)
+			return await http.patch(`${URLS.USER}/${id}/deactivate`)
 		},
 		onSuccess(data) {
 			toast.success(data.data.message)
 			queryClient.invalidateQueries({
-				queryKey: [KEYS.ACCOUNT],
+				queryKey: [KEYS.USER],
 			})
 		},
 	})

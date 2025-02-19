@@ -9,12 +9,12 @@ export const useAssignRole = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: async ({ id, roleId }: { id: string; roleId: string }) => {
-			return await http.patch(`${URLS.ACCOUNT}/${id}/role/add/${roleId}`)
+			return await http.patch(`${URLS.USER}/${id}/role/add`, { roleId })
 		},
 		onSuccess(data) {
 			toast.success(data.data.message)
 			queryClient.invalidateQueries({
-				queryKey: [KEYS.ACCOUNT],
+				queryKey: [KEYS.USER],
 			})
 		},
 	})

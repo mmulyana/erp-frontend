@@ -15,6 +15,9 @@ import { useUpdateUser } from '../api/use-update-user'
 import { useUser } from '../api/use-user'
 import { CreateUserSchema } from '../schema'
 import { CreateUser } from '../types'
+import { AxiosError } from 'axios'
+import { ErrorResponse } from '@/shared/types'
+import { ApiError } from '@/utils/types/api'
 
 type Props = {
 	open: boolean
@@ -48,23 +51,38 @@ export default function AddUser({ open, setOpen, id }: Props) {
 						setOpen(false)
 						queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNT] })
 					},
+					onError: (err) => {
+						const errors = err as AxiosError<ApiError>
+
+						if (errors.response?.data?.errors) {
+							const validationErrors = errors.response.data.errors
+
+							validationErrors.forEach((err: any) => {
+								err.path.forEach((fieldName: string) => {
+									if (fieldName in payload) {
+										form.setError(
+											fieldName as keyof CreateUser,
+											{
+												type: err.code,
+												message: err.message,
+											},
+											{ shouldFocus: true }
+										)
+									}
+								})
+							})
+						}
+					},
 				}
 			)
 			return
 		}
-		create(
-			{
-				...payload,
-				email: payload.email,
-				phone: payload.phone,
+		create(payload, {
+			onSuccess: () => {
+				form.reset()
+				setOpen(false)
 			},
-			{
-				onSuccess: () => {
-					form.reset()
-					setOpen(false)
-				},
-			}
-		)
+		})
 	}
 
 	useEffect(() => {

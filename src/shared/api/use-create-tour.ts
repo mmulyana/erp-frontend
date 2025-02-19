@@ -11,12 +11,12 @@ export const useCreateTour = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: async ({ id, key }: { id: string; key: string }) => {
-			return await http.post(`${URLS.ACCOUNT}/${id}/tour`, { key })
+			return await http.post(`${URLS.USER}/${id}/tour`, { key })
 		},
 		onSuccess(data) {
 			toast.success(data.data.message)
 			queryClient.invalidateQueries({
-				queryKey: [KEYS.ACCOUNT],
+				queryKey: [KEYS.ME],
 			})
 		},
 		onError: (error: AxiosError<ApiError>) => {

@@ -17,7 +17,7 @@ export const useUpdatePassword = () => {
 			id: string
 			payload: UpdatePassword
 		}) => {
-			return await http.patch(`${URLS.ACCOUNT}/${id}/password/update`, payload)
+			return await http.patch(`${URLS.USER}/${id}/password/update`, payload)
 		},
 		onSuccess: (data) => {
 			toast.success(data.data.message)

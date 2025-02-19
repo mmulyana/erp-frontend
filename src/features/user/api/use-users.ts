@@ -15,7 +15,7 @@ export const useUsers = (
 	return useQuery({
 		queryKey: [KEYS.USER, params?.search, params?.page, params?.limit],
 		queryFn: async (): Promise<AxiosResponse<IApiPagination<User[]>>> => {
-			return await http(URLS.ACCOUNT, { params })
+			return await http(URLS.USER, { params })
 		},
 	})
 }

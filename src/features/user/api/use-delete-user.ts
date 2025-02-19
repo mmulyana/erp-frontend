@@ -9,12 +9,12 @@ export const useDeleteUser = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: async ({ id }: { id: string }) => {
-			return await http.delete(`${URLS.ACCOUNT}/${id}`)
+			return await http.delete(`${URLS.USER}/${id}`)
 		},
 		onSuccess(data) {
 			toast.success(data.data.message)
 			queryClient.invalidateQueries({
-				queryKey: [KEYS.ACCOUNT],
+				queryKey: [KEYS.USER],
 			})
 		},
 	})

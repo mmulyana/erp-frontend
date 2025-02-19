@@ -12,7 +12,7 @@ export const useCreateUser = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: async (payload: CreateUser) => {
-			return await http.post(URLS.ACCOUNT, payload)
+			return await http.post(URLS.USER, payload)
 		},
 		onSuccess(data) {
 			toast.success(data.data.message)

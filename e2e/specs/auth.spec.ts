@@ -3,10 +3,10 @@ import { test, expect } from '@playwright/test'
 import { loginFixtures } from 'e2e/fixtures/login'
 import { TEST_ID } from '@/utils/constant/_testId'
 
-import invalidLogin from '../mocks/login/invalid.json' assert { type: 'json' }
 import invalidCredential from '../mocks/login/invalidCredential.json' assert { type: 'json' }
 import accountNotExist from '../mocks/login/accountNotExist.json' assert { type: 'json' }
 import successLogin from '../mocks/login/successLogin.json' assert { type: 'json' }
+import invalidLogin from '../mocks/login/invalid.json' assert { type: 'json' }
 
 test.describe('authentication', () => {
 	let submitBtn: any

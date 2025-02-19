@@ -17,6 +17,7 @@ export interface IApiPagination<T = void> {
 export interface ApiError {
 	message: string
 	status: number
+	errors: any
 }
 
 export type User = {
