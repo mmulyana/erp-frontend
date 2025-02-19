@@ -54,6 +54,7 @@
     "cmdk": "^1.0.4",
     "date-fns": "^3.6.0",
     "debounce": "^2.1.0",
+    "dotenv": "^16.4.7",
     "install": "^0.13.0",
     "jotai": "^2.8.3",
     "jwt-decode": "^4.0.0",

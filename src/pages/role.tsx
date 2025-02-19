@@ -1,8 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table'
+import useUrlState from '@ahooksjs/use-url-state'
 import { UserCircle } from 'lucide-react'
 import { useState } from 'react'
 
+import { useDeleteRole } from '@/features/role/api/use-delete-role'
 import { useRoles } from '@/features/role/api/use-roles'
+import AddPermission from '@/features/role/component/add-permission'
+import tourRole from '@/features/role/component/tour-role'
+import AddRole from '@/features/role/component/add-role'
 
 import { useApiData } from '@/hooks/use-api-data'
 import { TEST_ID } from '@/utils/constant/_testId'
@@ -11,7 +16,6 @@ import { Role } from '@/utils/types/api'
 
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
-import ProtectedComponent from '@/components/protected'
 import Tour from '@/components/common/tour'
 
 import { FilterTable, HeadTable } from '@/components/data-table/component'
@@ -20,13 +24,7 @@ import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 
 import { DashboardLayout } from '@/shared/component/layout'
-import { useTitle } from '@/shared/component/header'
-
-import AddPermission from '@/features/role/component/add-permission'
-import tourRole from '@/features/role/component/tour-role'
-import AddRole from '@/features/role/component/add-role'
-import { useDeleteRole } from '@/features/role/api/use-delete-role'
-import useUrlState from '@ahooksjs/use-url-state'
+import { useTitle } from '@/shared/store/title'
 
 const LINKS = [
 	{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },

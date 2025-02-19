@@ -18,6 +18,7 @@ import { useLogin } from '../api/use-login'
 import { LoginSchema } from '../schema'
 import { Payload } from '../types'
 import { AxiosError } from 'axios'
+import { TEST_ID } from '@/utils/constant/_testId'
 
 type FormData = z.infer<typeof LoginSchema>
 
@@ -34,7 +35,7 @@ export default function LoginForm() {
 			password: '',
 		},
 	})
-	
+
 	const onSubmit = async (data: FormData) => {
 		const payload: Payload = {
 			password: data.password,
@@ -76,6 +77,15 @@ export default function LoginForm() {
 		})
 	}
 
+	const handleSwitchInput = () => {
+		form.reset({
+			...form.getValues(),
+			username: '',
+			phone: '',
+		})
+		setPhone(!isPhone)
+	}
+
 	return (
 		<>
 			<div className='flex flex-col gap-4'>
@@ -106,6 +116,7 @@ export default function LoginForm() {
 										{...field}
 										autoComplete='none'
 										className='bg-white/50'
+										data-testid={TEST_ID.LOGIN_INPUT_PHONE}
 									/>
 								)}
 							/>
@@ -120,6 +131,7 @@ export default function LoginForm() {
 										{...field}
 										autoComplete='none'
 										className='bg-white/50'
+										data-testid={TEST_ID.LOGIN_INPUT_NAME}
 									/>
 								)}
 							/>
@@ -129,7 +141,8 @@ export default function LoginForm() {
 								type='button'
 								variant='ghost'
 								className='text-right text-blue-primary px-0 py-0 h-fit'
-								onClick={() => setPhone(!isPhone)}
+								onClick={handleSwitchInput}
+								data-testid={TEST_ID.LOGIN_BUTTON_CHANGE}
 							>
 								{isPhone
 									? 'Masuk menggunakan email/username'
@@ -148,6 +161,7 @@ export default function LoginForm() {
 						type='submit'
 						variant='default'
 						className='mt-4 h-fit py-2.5 gap-2'
+						data-testid={TEST_ID.LOGIN_BUTTON_SUBMIT}
 					>
 						Masuk
 						<LogIn size={20} />
