@@ -108,7 +108,7 @@ export default function AddPermission({ open, setOpen, id }: Props) {
 										</div>
 										<Switch
 											value={permission.key}
-											checked={role?.permissions.includes(permission.key)}
+										checked={role?.permissions.includes(permission.key)}
 											onCheckedChange={(val) => {
 												if (!role?.id) return
 												if (val) {

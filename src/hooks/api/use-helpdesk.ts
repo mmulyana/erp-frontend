@@ -9,7 +9,7 @@ import http from '@/utils/http'
 type Payload = {
   type: 'feature' | 'bug'
   message: string
-  userId: number
+  userId: string
 }
 export const useCreateHelpdesk = () => {
   return useMutation({

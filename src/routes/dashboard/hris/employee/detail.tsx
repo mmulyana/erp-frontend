@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 
-import { Title, useTitle } from '@/routes/dashboard/_component/header'
-import { DashboardLayout } from '@/routes/dashboard/_component/layout'
+import { Title, useTitle } from '@/shared/component/header'
+import { DashboardLayout } from '@/shared/component/layout'
 
 import Tour from '@/components/common/tour'
 

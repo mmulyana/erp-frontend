@@ -8,9 +8,9 @@ import ProtectedComponent from '@/components/protected'
 import { Tab, Tabs } from '@/components/tab'
 
 import DateNavigation from './_component/date-navigation'
-import TitlePage from '../../_component/title-page'
-import { DashboardLayout } from '../../_component/layout'
-import { useTitle } from '../../_component/header'
+import TitlePage from '../../../../shared/component/title-page'
+import { DashboardLayout } from '../../../../shared/component/layout'
+import { useTitle } from '../../../../shared/component/header'
 import { Overtime } from './_component/overtime'
 import { Regular } from './_component/regular'
 

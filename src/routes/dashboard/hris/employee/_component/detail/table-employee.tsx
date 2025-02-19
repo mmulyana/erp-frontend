@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { isString } from 'lodash'
 
-import { settingConfig } from '@/routes/dashboard/_component/setting/setting'
+import { settingConfig } from '@/shared/component/setting/setting'
 import { FilterTable, HeadTable } from '@/components/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'

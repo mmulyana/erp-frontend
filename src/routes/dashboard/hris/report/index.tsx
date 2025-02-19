@@ -27,8 +27,8 @@ import Tour from '@/components/common/tour'
 
 import { Eye } from 'lucide-react'
 
-import { DashboardLayout } from '../../_component/layout'
-import { useTitle } from '../../_component/header'
+import { DashboardLayout } from '../../../../shared/component/layout'
+import { useTitle } from '../../../../shared/component/header'
 import { AddRecap } from './_component/add-recap'
 import { steps } from './_component/tour-index'
 import useTour from '@/hooks/use-tour'

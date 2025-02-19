@@ -28,9 +28,9 @@ import AddGood, { dialogGoodAtom } from './_component/index/add-good'
 import CardHighlight from './_component/index/card-highlight'
 import ProtectedComponent from '@/components/protected'
 
-import { settingConfig } from '../_component/setting/setting'
-import { DashboardLayout } from '../_component/layout'
-import { useTitle } from '../_component/header'
+import { settingConfig } from '../../../shared/component/setting/setting'
+import { DashboardLayout } from '../../../shared/component/layout'
+import { useTitle } from '../../../shared/component/header'
 import { steps } from './_component/tour-index'
 import { TEST_ID } from '@/utils/constant/_testId'
 

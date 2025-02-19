@@ -48,7 +48,7 @@ export default function AddUserRole({ id, roleId, permission }: Props) {
 					disabled={!isAllowed}
 				>
 					{roleId
-						? data?.roles?.find((item) => item.id === roleId)?.name
+						? data?.data?.find((item) => item.id === roleId)?.name
 						: 'Tambah role'}
 					{isAllowed && <ChevronsUpDown size={16} />}
 				</Button>
@@ -64,7 +64,7 @@ export default function AddUserRole({ id, roleId, permission }: Props) {
 					<CommandList>
 						<CommandEmpty>Peran tidak ditemukan</CommandEmpty>
 						<CommandGroup>
-							{data?.roles
+							{data?.data
 								?.filter((item) => item.name !== 'Superadmin')
 								.map((item) => (
 									<CommandItem

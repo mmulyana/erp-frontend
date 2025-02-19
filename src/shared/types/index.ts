@@ -11,3 +11,9 @@ export type ErrorResponse<T> = {
 	message: string
 	errors: T
 }
+
+export type Title = {
+	name: string
+	path: string
+	icon?: React.ReactNode | string
+}

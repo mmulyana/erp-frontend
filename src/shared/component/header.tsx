@@ -21,21 +21,8 @@ import { Button } from '@/components/ui/button'
 
 import { settingConfig } from './setting/setting'
 import { startTourAtom } from '@/shared/hooks/use-tour'
+import { titleAtom } from '@/shared/store/title'
 
-export type Title = {
-	name: string
-	path: string
-	icon?: React.ReactNode | string
-}
-
-const titleAtom = atom<Title[]>([])
-export const useTitle = (title: Title[]) => {
-	const setTitle = useSetAtom(titleAtom)
-
-	useEffect(() => {
-		setTitle(title)
-	}, [title])
-}
 export default function Header() {
 	const setSettingConfig = useSetAtom(settingConfig)
 	const setStart = useSetAtom(startTourAtom)

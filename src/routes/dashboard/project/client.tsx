@@ -9,11 +9,11 @@ import useTour from '@/hooks/use-tour'
 
 import TableCompany from './_component/client/table-company'
 import TableClient from './_component/client/table-client'
-import TitlePage from '../_component/title-page'
+import TitlePage from '../../../shared/component/title-page'
 
-import { DashboardLayout } from '../_component/layout'
+import { DashboardLayout } from '../../../shared/component/layout'
 import { steps } from './_component/tour-client'
-import { useTitle } from '../_component/header'
+import { useTitle } from '../../../shared/component/header'
 
 const links = [
   {

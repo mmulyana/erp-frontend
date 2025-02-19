@@ -13,9 +13,9 @@ import usePermission from '@/shared/hooks/use-permission'
 
 import DetailTransaction from './_component/detail-transaction'
 import DeleteTransaction from './_component/delete-transaction'
-import TitlePage from '../../_component/title-page'
-import { DashboardLayout } from '../../_component/layout'
-import { useTitle } from '../../_component/header'
+import TitlePage from '../../../../shared/component/title-page'
+import { DashboardLayout } from '../../../../shared/component/layout'
+import { useTitle } from '../../../../shared/component/header'
 import { steps } from '../_component/tour-stock'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'

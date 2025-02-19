@@ -19,13 +19,14 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 
-import { DashboardLayout } from '@/routes/dashboard/_component/layout'
-import { useTitle } from '@/routes/dashboard/_component/header'
+import { DashboardLayout } from '@/shared/component/layout'
+import { useTitle } from '@/shared/component/header'
 
 import AddPermission from '@/features/role/component/add-permission'
 import tourRole from '@/features/role/component/tour-role'
 import AddRole from '@/features/role/component/add-role'
 import { useDeleteRole } from '@/features/role/api/use-delete-role'
+import useUrlState from '@ahooksjs/use-url-state'
 
 const LINKS = [
 	{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
@@ -36,6 +37,8 @@ export default function Index() {
 	useTitle(LINKS)
 
 	const { mutate: remove } = useDeleteRole()
+
+	const [url] = useUrlState({ name: '' })
 
 	// HANDLE DIALOG NEW USER
 	const [openDialog, setOpenDialog] = useState<{
@@ -53,7 +56,7 @@ export default function Index() {
 		open: boolean
 	} | null>(null)
 
-	const { data, isLoading } = useApiData(useRoles())
+	const { data, isLoading } = useApiData(useRoles({ search: url.name }))
 	const column: ColumnDef<Role>[] = [
 		{
 			id: 'name',
@@ -69,39 +72,35 @@ export default function Index() {
 			id: 'action',
 			cell: ({ row }) => (
 				<div className='flex justify-end items-center gap-4'>
-					<ProtectedComponent
+					{/* <ProtectedComponent
 						required={['role:permission-update', 'role:update', 'role:delete']}
-					>
-						<DropdownEdit className='-translate-x-3'>
-							<ProtectedComponent required={['role:permission-update']}>
-								<DropdownMenuItem
-									onClick={() =>
-										setOpenPermission({ id: row.original.id, open: true })
-									}
-								>
-									Hak istimewa
-								</DropdownMenuItem>
-							</ProtectedComponent>
-							<ProtectedComponent required={['role:update']}>
-								<DropdownMenuItem
-									onClick={() =>
-										setOpenDialog({ id: row.original.id, open: true })
-									}
-								>
-									Edit
-								</DropdownMenuItem>
-							</ProtectedComponent>
-							<ProtectedComponent required={['role:delete']}>
-								<DropdownMenuItem
-									onClick={() =>
-										setOpenDelete({ id: row.original.id, open: true })
-									}
-								>
-									Hapus
-								</DropdownMenuItem>
-							</ProtectedComponent>
-						</DropdownEdit>
-					</ProtectedComponent>
+					> */}
+					<DropdownEdit className='-translate-x-3'>
+						{/* <ProtectedComponent required={['role:permission-update']}> */}
+						<DropdownMenuItem
+							onClick={() =>
+								setOpenPermission({ id: row.original.id, open: true })
+							}
+						>
+							Hak istimewa
+						</DropdownMenuItem>
+						{/* </ProtectedComponent> */}
+						{/* <ProtectedComponent required={['role:update']}> */}
+						<DropdownMenuItem
+							onClick={() => setOpenDialog({ id: row.original.id, open: true })}
+						>
+							Edit
+						</DropdownMenuItem>
+						{/* </ProtectedComponent> */}
+						{/* <ProtectedComponent required={['role:delete']}> */}
+						<DropdownMenuItem
+							onClick={() => setOpenDelete({ id: row.original.id, open: true })}
+						>
+							Hapus
+						</DropdownMenuItem>
+						{/* </ProtectedComponent> */}
+					</DropdownEdit>
+					{/* </ProtectedComponent> */}
 				</div>
 			),
 		},
@@ -114,20 +113,20 @@ export default function Index() {
 					<UserCircle className='text-[#989CA8]' />
 					<p className='text-dark font-medium'>Peran</p>
 				</div>
-				<ProtectedComponent required={['role:create']}>
-					<Button
-						onClick={() => setOpenDialog({ id: null, open: true })}
-						id={TEST_ID.BUTTON_CREATE_ROLE}
-						data-testid={TEST_ID.BUTTON_CREATE_ROLE}
-					>
-						Peran Baru
-					</Button>
-				</ProtectedComponent>
+				{/* <ProtectedComponent required={['role:create']}> */}
+				<Button
+					onClick={() => setOpenDialog({ id: null, open: true })}
+					id={TEST_ID.BUTTON_CREATE_ROLE}
+					data-testid={TEST_ID.BUTTON_CREATE_ROLE}
+				>
+					Peran Baru
+				</Button>
+				{/* </ProtectedComponent> */}
 			</HeadTable>
 			<FilterTable />
 			<DataTable
 				columns={column}
-				data={data?.roles || []}
+				data={data?.data || []}
 				isLoading={isLoading}
 			/>
 			<AddRole

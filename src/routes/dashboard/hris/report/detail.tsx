@@ -25,8 +25,8 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import { DashboardLayout } from '../../_component/layout'
-import { Title, useTitle } from '../../_component/header'
+import { DashboardLayout } from '../../../../shared/component/layout'
+import { Title, useTitle } from '../../../../shared/component/header'
 import Tour from '@/components/common/tour'
 import { steps } from './_component/tour-detail'
 import useTour from '@/hooks/use-tour'

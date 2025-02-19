@@ -29,14 +29,14 @@ import Tour from '@/components/common/tour'
 import AddUserRole from '@/features/user/components/add-user-role'
 import tourUser from '@/features/user/components/tour-user'
 import AddUser from '@/features/user/components/add-user'
-
-import { DashboardLayout } from '@/routes/dashboard/_component/layout'
-import { useTitle } from '@/routes/dashboard/_component/header'
-import { useUsers } from '@/features/user/api/use-users'
-import { useActiveUser } from '@/features/user/api/use-active-user'
-import { useDeactiveUser } from '@/features/user/api/use-deactive-user'
-import { useDeleteUser } from '@/features/user/api/use-delete-user'
 import { useResetPassword } from '@/features/user/api/use-reset-password'
+import { useDeactiveUser } from '@/features/user/api/use-deactive-user'
+import { useActiveUser } from '@/features/user/api/use-active-user'
+import { useDeleteUser } from '@/features/user/api/use-delete-user'
+import { useUsers } from '@/features/user/api/use-users'
+
+import { DashboardLayout } from '@/shared/layout/dashboard-layout'
+import { useTitle } from '@/shared/store/title'
 
 const LINKS = [
 	{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
@@ -75,9 +75,9 @@ export default function Index() {
 		open: boolean
 	} | null>(null)
 
-	const [url] = useUrlState({ page: '', name: '' })
-	const { data: users, isLoading } = useApiData(
-		useUsers({ page: url.page, search: url.name })
+	const [url] = useUrlState({ page: '', name: '', limit: '' })
+	const { data, isLoading } = useApiData(
+		useUsers({ page: url.page, search: url.name, limit: url.limit })
 	)
 	const column: ColumnDef<User>[] = [
 		{
@@ -88,7 +88,7 @@ export default function Index() {
 				<div className='flex gap-2 items-center w-[160px]'>
 					{row.original.photoUrl ? (
 						<img
-							src={BASE_URL + '/img/' + row.original.photoUrl}
+							src={BASE_URL + '/upload/' + row.original.photoUrl}
 							className='w-6 h-6 rounded-full flex-shrink-0'
 						/>
 					) : (
@@ -136,7 +136,7 @@ export default function Index() {
 				>
 					<AddUserRole
 						id={row.original.id}
-						roleId={row.original.role.id}
+						roleId={row.original.role && row.original.role.id}
 						permission={permission}
 					/>
 				</div>
@@ -204,8 +204,6 @@ export default function Index() {
 		},
 	]
 
-	const user = useAtomValue(userAtom)
-
 	return (
 		<DashboardLayout className='overflow-hidden'>
 			<HeadTable>
@@ -226,10 +224,10 @@ export default function Index() {
 			<FilterTable />
 			<DataTable
 				columns={column}
-				data={users?.data.filter((item) => item.id !== user?.id) || []}
+				data={data?.data || []}
 				isLoading={isLoading}
 				withPagination
-				totalPages={users?.total_pages}
+				totalPages={data?.total_pages}
 			/>
 			<AlertDialogV1
 				open={resetPassword?.open || false}

@@ -10,14 +10,14 @@ import { PATH } from '@/utils/constant/_paths'
 
 import DetailTransaction from './_component/detail-transaction'
 import DeleteTransaction from './_component/delete-transaction'
-import TitlePage from '../../_component/title-page'
+import TitlePage from '../../../../shared/component/title-page'
 
 import { useInventoryData } from '../_hook/use-inventory-data'
 import usePermission from '@/shared/hooks/use-permission'
 import useTour from '@/hooks/use-tour'
 
-import { DashboardLayout } from '../../_component/layout'
-import { useTitle } from '../../_component/header'
+import { DashboardLayout } from '../../../../shared/component/layout'
+import { useTitle } from '../../../../shared/component/header'
 import { steps } from '../_component/tour-stock'
 import { column } from './_component/column'
 

@@ -1,6 +1,6 @@
 import useProtected from '@/features/auth/hooks/use-protected'
-import LoginForm from '@/features/auth/components/login-form'
-import Layout from '@/features/auth/components/layout'
+import LoginForm from '@/features/auth/component/login-form'
+import Layout from '@/features/auth/component/layout'
 
 import bg from '/public/images/dave-hoefler-vHgAy9pOs9I-unsplash.jpg'
 

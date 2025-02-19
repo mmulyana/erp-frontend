@@ -3,7 +3,7 @@ import { HardHat, Users2 } from 'lucide-react'
 import { TEST_ID } from '@/utils/constant/_testId'
 import { useApiData } from '@/hooks/use-api-data'
 
-import { useDashboardTotal } from '../_hook/use-dashboard'
+import { useDashboardTotal } from '../../features/home/hooks/use-dashboard'
 
 export default function CardTotal() {
   const { data } = useApiData(useDashboardTotal())
