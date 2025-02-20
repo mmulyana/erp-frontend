@@ -23,7 +23,6 @@ type Props = {
 }
 
 export default function AddRole({ open, setOpen, id }: Props) {
-	console.log('id', id)
 	const { mutate: create } = useCreateRole()
 	const { mutate: update } = useUpdateRole()
 

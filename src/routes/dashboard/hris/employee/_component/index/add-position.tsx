@@ -83,7 +83,6 @@ export default function ModalAdd({ id, open, setOpen }: ModalProps) {
   useEffect(() => {
     if (!id) return
     if (!isLoading && !!data?.data) {
-      console.log(data?.data)
       form.setValue('name', data?.data?.data?.name as string)
       form.setValue('description', data?.data?.data?.description || '')
       form.setValue('color', data?.data?.data?.color || '')

@@ -29,7 +29,6 @@ export default function ProtectedRoute({
 	const [id, setId] = useState<number | undefined>(undefined)
 
 	const { data: account, isLoading } = useApiData(useGetme())
-	console.log('account', account)
 
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)

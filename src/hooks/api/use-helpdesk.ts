@@ -14,7 +14,6 @@ type Payload = {
 export const useCreateHelpdesk = () => {
   return useMutation({
     mutationFn: async (payload: Payload): Promise<AxiosResponse<IApi<any>>> => {
-      console.log(payload)
       return await http.post(URLS.HELPDESK, payload)
     },
     onSuccess: (data) => {
