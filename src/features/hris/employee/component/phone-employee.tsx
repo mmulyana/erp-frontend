@@ -5,7 +5,7 @@ import {
   useCreatePhone,
   useDeletePhone,
   useUpdatePhone,
-} from '@/hooks/api/use-employee'
+} from '@/features/hris/employee/api/use-employee'
 import { cn } from '@/utils/cn'
 import { formatPhone } from '@/utils/format-phone'
 import { PhoneNumber } from '@/utils/types/api'

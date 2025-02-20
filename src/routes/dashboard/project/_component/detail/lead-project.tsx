@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useAllEmployees } from '@/hooks/api/use-employee'
+import { useAllEmployees } from '@/features/hris/employee/api/use-employee'
 import { useUpdateProject } from '@/hooks/api/use-project'
 import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { cn } from '@/utils/cn'

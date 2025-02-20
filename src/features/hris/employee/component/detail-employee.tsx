@@ -9,7 +9,7 @@ import {
   useRemovePhoto,
   useUpdateEmployee,
   useUploadPhoto,
-} from '@/hooks/api/use-employee'
+} from '@/features/hris/employee/api/use-employee'
 import { permissionAtom } from '@/shared/store/permission'
 
 import { MARITAL_STATUS, MARITAL_STATUS_OBJ } from '@/utils/data/marital-status'
@@ -40,13 +40,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import CompetenciesEmployee from './employee/competencies-employee'
-import AddressEmployee from './employee/address-employee'
-import StatusEmployee from './employee/status-employee'
-import CertifEmployee from './employee/certif-employee'
-import JoinedEmployee from './employee/joined-employee'
+import CompetenciesEmployee from './competencies-employee'
+import AddressEmployee from './address-employee'
+import StatusEmployee from './status-employee'
+import CertifEmployee from './certif-employee'
+import JoinedEmployee from './joined-employee'
 import ProtectedComponent from '@/components/protected'
-import PhoneEmployee from './employee/phone-employee'
+import PhoneEmployee from './phone-employee'
 import DeleteEmployee from './delete-employee'
 
 type Props = {

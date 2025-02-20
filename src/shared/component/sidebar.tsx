@@ -226,58 +226,58 @@ export default function AppSidebar() {
 							</SidebarMenuSub>
 						</SidebarMenu>
 
-						<SidebarMenu>
-							<SidebarMenuButton className='hover:bg-transparent cursor-default'>
-								<UserCircle size={20} />
-								Admin
-							</SidebarMenuButton>
-							<SidebarMenuSub>
-								<SidebarMenuSubItem className='flex flex-col gap-1'>
-									{permission.includes('user:read') && (
-										<SidebarMenuSubButton
-											key={`submenu-${AdminMenus[0].url}`}
-											isActive={menus.path === AdminMenus[0].url}
-											className={cn(
-												'py-4 px-0',
-												menus.path === AdminMenus[0].url
-													? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
-													: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
-											)}
-											asChild
-										>
-											<Link to={AdminMenus[0].url}>
-												{menus.path === AdminMenus[0].url && (
-													<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+						{isAllowedAccess && (
+							<SidebarMenu>
+								<SidebarMenuButton className='hover:bg-transparent cursor-default'>
+									<UserCircle size={20} />
+									Admin
+								</SidebarMenuButton>
+								<SidebarMenuSub>
+									<SidebarMenuSubItem className='flex flex-col gap-1'>
+										{permission.includes('user:read') && (
+											<SidebarMenuSubButton
+												key={`submenu-${AdminMenus[0].url}`}
+												isActive={menus.path === AdminMenus[0].url}
+												className={cn(
+													'py-4 px-0',
+													menus.path === AdminMenus[0].url
+														? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
+														: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
 												)}
-												<span>{AdminMenus[0].title}</span>
-											</Link>
-										</SidebarMenuSubButton>
-									)}
-									{permission.includes('role:read') && (
-										<SidebarMenuSubButton
-											key={`submenu-${AdminMenus[1].url}`}
-											isActive={menus.path === AdminMenus[1].url}
-											className={cn(
-												'py-4 px-0',
-												menus.path === AdminMenus[1].url
-													? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
-													: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
-											)}
-											asChild
-										>
-											<Link to={AdminMenus[1].url}>
-												{menus.path === AdminMenus[1].url && (
-													<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+												asChild
+											>
+												<Link to={AdminMenus[0].url}>
+													{menus.path === AdminMenus[0].url && (
+														<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+													)}
+													<span>{AdminMenus[0].title}</span>
+												</Link>
+											</SidebarMenuSubButton>
+										)}
+										{permission.includes('role:read') && (
+											<SidebarMenuSubButton
+												key={`submenu-${AdminMenus[1].url}`}
+												isActive={menus.path === AdminMenus[1].url}
+												className={cn(
+													'py-4 px-0',
+													menus.path === AdminMenus[1].url
+														? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
+														: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
 												)}
-												<span>{AdminMenus[1].title}</span>
-											</Link>
-										</SidebarMenuSubButton>
-									)}
-								</SidebarMenuSubItem>
-							</SidebarMenuSub>
-						</SidebarMenu>
-						{/* {isAllowedAccess && ( */}
-						{/* )} */}
+												asChild
+											>
+												<Link to={AdminMenus[1].url}>
+													{menus.path === AdminMenus[1].url && (
+														<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+													)}
+													<span>{AdminMenus[1].title}</span>
+												</Link>
+											</SidebarMenuSubButton>
+										)}
+									</SidebarMenuSubItem>
+								</SidebarMenuSub>
+							</SidebarMenu>
+						)}
 					</SidebarGroup>
 				</SidebarContent>
 			</ScrollArea>

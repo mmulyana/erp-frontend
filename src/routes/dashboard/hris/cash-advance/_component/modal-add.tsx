@@ -21,7 +21,7 @@ import {
   useDetailCashAdvance,
   useUpdateCashAdvance,
 } from '@/hooks/api/use-cash-advance'
-import { useAllEmployees } from '@/hooks/api/use-employee'
+import { useAllEmployees } from '@/features/hris/employee/api/use-employee'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { createCashAdvance } from '@/utils/types/form'

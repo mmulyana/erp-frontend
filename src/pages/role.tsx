@@ -12,7 +12,6 @@ import AddRole from '@/features/role/component/add-role'
 import { useApiData } from '@/shared/hooks/use-api-data'
 import { TEST_ID } from '@/utils/constant/_testId'
 import { PATH } from '@/utils/constant/_paths'
-import { Role } from '@/utils/types/api'
 
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
@@ -25,6 +24,8 @@ import { Button } from '@/components/ui/button'
 
 import { DashboardLayout } from '@/shared/component/layout'
 import { useTitle } from '@/shared/store/title'
+import ProtectedComponent from '@/components/protected'
+import { Role } from '@/features/role/type'
 
 const LINKS = [
 	{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
@@ -70,35 +71,39 @@ export default function Index() {
 			id: 'action',
 			cell: ({ row }) => (
 				<div className='flex justify-end items-center gap-4'>
-					{/* <ProtectedComponent
+					<ProtectedComponent
 						required={['role:permission-update', 'role:update', 'role:delete']}
-					> */}
-					<DropdownEdit className='-translate-x-3'>
-						{/* <ProtectedComponent required={['role:permission-update']}> */}
-						<DropdownMenuItem
-							onClick={() =>
-								setOpenPermission({ id: row.original.id, open: true })
-							}
-						>
-							Hak istimewa
-						</DropdownMenuItem>
-						{/* </ProtectedComponent> */}
-						{/* <ProtectedComponent required={['role:update']}> */}
-						<DropdownMenuItem
-							onClick={() => setOpenDialog({ id: row.original.id, open: true })}
-						>
-							Edit
-						</DropdownMenuItem>
-						{/* </ProtectedComponent> */}
-						{/* <ProtectedComponent required={['role:delete']}> */}
-						<DropdownMenuItem
-							onClick={() => setOpenDelete({ id: row.original.id, open: true })}
-						>
-							Hapus
-						</DropdownMenuItem>
-						{/* </ProtectedComponent> */}
-					</DropdownEdit>
-					{/* </ProtectedComponent> */}
+					>
+						<DropdownEdit className='-translate-x-3'>
+							<ProtectedComponent required={['role:permission-update']}>
+								<DropdownMenuItem
+									onClick={() =>
+										setOpenPermission({ id: row.original.id, open: true })
+									}
+								>
+									Hak istimewa
+								</DropdownMenuItem>
+							</ProtectedComponent>
+							<ProtectedComponent required={['role:update']}>
+								<DropdownMenuItem
+									onClick={() =>
+										setOpenDialog({ id: row.original.id, open: true })
+									}
+								>
+									Edit
+								</DropdownMenuItem>
+							</ProtectedComponent>
+							<ProtectedComponent required={['role:delete']}>
+								<DropdownMenuItem
+									onClick={() =>
+										setOpenDelete({ id: row.original.id, open: true })
+									}
+								>
+									Hapus
+								</DropdownMenuItem>
+							</ProtectedComponent>
+						</DropdownEdit>
+					</ProtectedComponent>
 				</div>
 			),
 		},
@@ -111,15 +116,15 @@ export default function Index() {
 					<UserCircle className='text-[#989CA8]' />
 					<p className='text-dark font-medium'>Peran</p>
 				</div>
-				{/* <ProtectedComponent required={['role:create']}> */}
-				<Button
-					onClick={() => setOpenDialog({ id: null, open: true })}
-					id={TEST_ID.BUTTON_CREATE_ROLE}
-					data-testid={TEST_ID.BUTTON_CREATE_ROLE}
-				>
-					Peran Baru
-				</Button>
-				{/* </ProtectedComponent> */}
+				<ProtectedComponent required={['role:create']}>
+					<Button
+						onClick={() => setOpenDialog({ id: null, open: true })}
+						id={TEST_ID.BUTTON_CREATE_ROLE}
+						data-testid={TEST_ID.BUTTON_CREATE_ROLE}
+					>
+						Peran Baru
+					</Button>
+				</ProtectedComponent>
 			</HeadTable>
 			<FilterTable />
 			<DataTable

@@ -9,7 +9,7 @@ import {
   useCreateCertif,
   useDeleteCertif,
   useUpdateCertif,
-} from '@/hooks/api/use-employee'
+} from '@/features/hris/employee/api/use-employee'
 
 import { months, MONTHS_OBJ } from '@/utils/constant/months'
 import { Certification } from '@/utils/types/api'

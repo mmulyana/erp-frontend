@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 
 import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { useProjectLabels } from '@/hooks/api/use-project-label'
-import { useAllEmployees } from '@/hooks/api/use-employee'
+import { useAllEmployees } from '@/features/hris/employee/api/use-employee'
 import {
   useCreateProject,
   useCreateProjectSocket,

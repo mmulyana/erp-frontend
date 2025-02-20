@@ -2,7 +2,7 @@ import type { Step } from 'react-joyride'
 
 import { TEST_ID } from '@/utils/constant/_testId'
 
-export const generateStep = (name: string): Step[] => [
+export const tourDetail = (name: string): Step[] => [
   {
     title: 'Daftar pegawai',
     content: `Kelola semua pegawai dengan jabatan ${name}`,

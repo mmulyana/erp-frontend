@@ -46,7 +46,7 @@ import {
   useCreateEmployee,
   useCreateMultipleCertif,
   useUploadPhoto,
-} from '@/hooks/api/use-employee'
+} from '@/features/hris/employee/api/use-employee'
 import { useApiData } from '@/shared/hooks/use-api-data'
 import { cn } from '@/utils/cn'
 import { months } from '@/utils/constant/months'

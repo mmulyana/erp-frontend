@@ -6,7 +6,7 @@ import {
   useCreateAddress,
   useDeleteAddress,
   useUpdateAddress,
-} from '@/hooks/api/use-employee'
+} from '@/features/hris/employee/api/use-employee'
 import { cn } from '@/utils/cn'
 import { Address } from '@/utils/types/api'
 import { Eye, EyeOff, Pencil, Plus, Trash } from 'lucide-react'

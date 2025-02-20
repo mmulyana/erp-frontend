@@ -8,7 +8,7 @@ import {
   useUnassigneEmployee,
 } from '@/hooks/api/use-project'
 import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
-import { useAllEmployees } from '@/hooks/api/use-employee'
+import { useAllEmployees } from '@/features/hris/employee/api/use-employee'
 
 import { BASE_URL } from '@/utils/constant/_urls'
 import { KEYS } from '@/utils/constant/_keys'

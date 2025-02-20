@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { Plus, X } from 'lucide-react'
 import * as z from 'zod'
 
-import { useAddCompetency, useRemoveCompetency } from '@/hooks/api/use-employee'
+import { useAddCompetency, useRemoveCompetency } from '@/features/hris/employee/api/use-employee'
 import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { useCompetency } from '@/hooks/api/use-competency'
 import { EmployeeCompetency } from '@/utils/types/api'

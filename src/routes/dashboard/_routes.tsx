@@ -4,8 +4,8 @@ import { lazy } from 'react'
 const Overview = lazy(() => import('./overview.tsx'))
 
 // HRIS
-const Employee = lazy(() => import('./hris/employee/index.tsx'))
-const EmployeeByPosition = lazy(() => import('./hris/employee/detail.tsx'))
+const Employee = lazy(() => import('./hris/employee/position.tsx'))
+const EmployeeByPosition = lazy(() => import('../../pages/detail.tsx'))
 const Attendance = lazy(() => import('./hris/attendance/index.tsx'))
 const CashAdvance = lazy(() => import('./hris/cash-advance/index.tsx'))
 const Report = lazy(() => import('./hris/report/index.tsx'))

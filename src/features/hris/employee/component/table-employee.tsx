@@ -17,13 +17,13 @@ import Chips from '@/components/common/chips'
 
 import { permissionAtom } from '@/shared/store/permission'
 
-import { useEmployees } from '@/hooks/api/use-employee'
+import { useEmployees } from '@/features/hris/employee/api/use-employee'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { EDUCATIONS_OBJ } from '@/utils/data/educations'
 import { Employee } from '@/utils/types/api'
 
-import CompetenciesEmployee from './employee/competencies-employee'
+import CompetenciesEmployee from './competencies-employee'
 import { TEST_ID } from '@/utils/constant/_testId'
 
 type TableEmployeeProps = {

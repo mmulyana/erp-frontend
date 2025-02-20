@@ -1,4 +1,4 @@
-import { useSoftDeleteEmployee } from '@/hooks/api/use-employee'
+import { useSoftDeleteEmployee } from '@/features/hris/employee/api/use-employee'
 import { buttonVariants } from '@/components/ui/button'
 import {
   AlertDialog,

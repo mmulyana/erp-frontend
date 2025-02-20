@@ -11,8 +11,8 @@ import Container from '../../shared/component/container'
 import { DashboardLayout } from '../../shared/component/layout'
 import { steps } from '../../features/home/component/tour-overview'
 
-import ExpireCertif from './hris/employee/_component/detail/expire-certif'
-import ExpireSafety from './hris/employee/_component/detail/expire-safety'
+import ExpireCertif from '../../features/hris/employee/component/expire-certif'
+import ExpireSafety from '../../features/hris/employee/component/expire-safety'
 import DetailProject from './project/_component/detail-project'
 import { useTitle } from '@/shared/store/title'
 

@@ -1,6 +1,6 @@
 import { Megaphone } from 'lucide-react'
 
-import { useExpireSafety } from '@/hooks/api/use-employee'
+import { useExpireSafety } from '@/features/hris/employee/api/use-employee'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
 import EmptyState from '@/components/common/empty-state'
