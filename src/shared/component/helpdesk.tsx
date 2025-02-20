@@ -31,7 +31,6 @@ export default function Helpdesk() {
 
   const onSubmit = (data: any) => {
     if (!user?.id) return
-    console.log(data)
     mutate(
       { type, message: data.message, userId: user?.id },
       {
