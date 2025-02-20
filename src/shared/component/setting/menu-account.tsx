@@ -9,8 +9,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { BASE_URL } from '@/utils/constant/_urls'
-import { KEYS } from '@/utils/constant/_keys'
+import { baseUrl } from '@/utils/constant/_urls'
+import { keys } from '@/utils/constant/_keys'
 import { User } from '@/utils/types/api'
 import { userAtom } from '@/shared/store/auth'
 import { useUpdateUser } from '@/features/user/api/use-update-user'
@@ -61,7 +61,7 @@ export default function MenuAccount() {
 						{/* <PhotoProfile
 							size={64}
 							defaultPreview={
-								user?.photoUrl ? BASE_URL + '/img/' + user?.photoUrl : null
+								user?.photoUrl ? baseUrl + '/img/' + user?.photoUrl : null
 							}
 							onUpdate={(photo) => {
 								if (!user?.id) return
@@ -70,7 +70,7 @@ export default function MenuAccount() {
 									{
 										onSuccess: () => {
 											queryClient.invalidateQueries({
-												queryKey: [KEYS.ACCOUNT],
+												queryKey: [keys.ACCOUNT],
 											})
 										},
 									}

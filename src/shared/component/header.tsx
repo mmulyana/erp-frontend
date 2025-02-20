@@ -1,11 +1,11 @@
 import { ChevronRight, Settings, Telescope } from 'lucide-react'
-import { atom, useAtomValue, useSetAtom } from 'jotai'
-import React, { useEffect } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { userAtom } from '@/shared/store/auth'
 import { useIsMobile } from '@/shared/hooks/use-mobile'
-import { BASE_URL } from '@/utils/constant/_urls'
+import { baseUrl } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'
 
 import { SidebarTrigger } from '@/components/ui/sidebar'
@@ -101,7 +101,7 @@ export default function Header() {
 				>
 					{user?.photoUrl ? (
 						<img
-							src={BASE_URL + '/img/' + user?.photoUrl}
+							src={baseUrl + '/upload/' + user?.photoUrl}
 							className='h-full w-full rounded-full object-cover'
 						/>
 					) : (

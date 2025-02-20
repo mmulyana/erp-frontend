@@ -1,7 +1,7 @@
 import { useLocation, matchPath } from 'react-router-dom'
 import { useMemo } from 'react'
 
-import { PATH } from '@/utils/constant/_paths'
+import { paths } from '@/utils/constant/_paths'
 
 export const useActiveMenu = () => {
   const { pathname } = useLocation()
@@ -13,7 +13,7 @@ export const useActiveMenu = () => {
       path: '',
     }
 
-    Object.entries(PATH).forEach(([_, value]) => {
+    Object.entries(paths).forEach(([_, value]) => {
       const match = matchPath(value, pathname)
       if (match) {
         activeStates.path = value

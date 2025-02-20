@@ -37,7 +37,9 @@ import MenuProjectLabel from './menu-project-label'
 import MenuCompetency from './menu-competency'
 import MenuPassword from './menu-password'
 import MenuAccount from './menu-account'
-import logout from '@/shared/utils/logout'
+import { useNavigate } from 'react-router-dom'
+import { CookieKeys, CookieStorage } from '@/utils/cookie'
+import { paths } from '@/utils/constant/_paths'
 
 const MENUS = {
 	account_myaccount: 'Akun',
@@ -135,6 +137,8 @@ export const settingConfig = atom<{ open: boolean; default?: MenuKey }>({
 })
 
 export default function Setting() {
+	const navigate = useNavigate()
+
 	const [config, setConfig] = useAtom(settingConfig)
 	useFixPointerEvent(config.open)
 
@@ -154,6 +158,13 @@ export default function Setting() {
 	const onClose = () => {
 		setConfig((prev) => ({ ...prev, open: false }))
 		setShowMenu(true)
+	}
+
+	const logOut = () => {
+		CookieStorage.remove(CookieKeys.AuthToken)
+		sessionStorage.removeItem(CookieKeys.RedirectAfterLogin)
+
+		navigate(paths.base)
 	}
 
 	const content: Partial<Record<MenuKey, React.ReactNode>> = {
@@ -230,7 +241,7 @@ export default function Setting() {
 					<Button
 						className='mt-auto gap-2'
 						variant='destructive'
-						onClick={logout}
+						onClick={logOut}
 					>
 						Keluar
 						<LogOut size={14} />

@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 
 import usePermission from '@/shared/hooks/use-permission'
-import { PATH } from '@/utils/constant/_paths'
+import { paths } from '@/utils/constant/_paths'
 import { cn } from '@/utils/cn'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -288,74 +288,74 @@ export default function AppSidebar() {
 const hrisMenus = [
 	{
 		title: 'Pegawai',
-		url: PATH.EMPLOYEE,
+		url: paths.employee,
 	},
 	{
 		title: 'Absensi',
-		url: PATH.EMPLOYEE_ATTENDANCE,
+		url: paths.employeeAttendance,
 	},
 	{
 		title: 'Kasbon',
-		url: PATH.EMPLOYEE_CASH_ADVANCES,
+		url: paths.employeeCashAdvances,
 	},
 	{
 		title: 'Rekapan',
-		url: PATH.EMPLOYEE_RECAP,
+		url: paths.employeeRecap,
 	},
 ]
 const ProjectMenus = [
 	{
 		title: 'Dashboard',
-		url: PATH.PROJECT_INDEX,
+		url: paths.projectIndex,
 	},
 	{
 		title: 'Kelola',
-		url: PATH.PROJECT_MANAGE,
+		url: paths.projectManage,
 	},
 	{
 		title: 'Klien',
-		url: PATH.PROJECT_CLIENT,
+		url: paths.projectClient,
 	},
 ]
 const InventoryMenus = [
 	{
 		title: 'Dashboard',
-		url: PATH.INVENTORY_INDEX,
+		url: paths.inventoryIndex,
 	},
 	{
 		title: 'Kelola',
-		url: PATH.INVENTORY_STOCK,
+		url: paths.inventoryStock,
 		children: [
 			{
 				title: 'Barang Masuk',
-				url: PATH.INVENTORY_STOCK_IN,
+				url: paths.inventoryStockIn,
 			},
 			{
 				title: 'Barang Keluar',
-				url: PATH.INVENTORY_STOCK_OUT,
+				url: paths.inventoryStockOut,
 			},
 			{
 				title: 'Opname',
-				url: PATH.INVENTORY_STOCK_OPNAME,
+				url: paths.inventoryStockOpname,
 			},
 			{
 				title: 'Peminjaman',
-				url: PATH.INVENTORY_STOCK_BORROWED,
+				url: paths.inventoryStockBorrowed,
 			},
 		],
 	},
 	{
 		title: 'Supplier',
-		url: PATH.INVENTORY_SUPPLIER,
+		url: paths.inventorySupplier,
 	},
 ]
 const AdminMenus = [
 	{
 		title: 'User',
-		url: PATH.ADMIN_USER,
+		url: paths.adminUser,
 	},
 	{
 		title: 'Role',
-		url: PATH.ADMIN_ROLE,
+		url: paths.adminRole,
 	},
 ]

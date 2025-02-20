@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 import { loginFixtures } from 'e2e/fixtures/login'
-import { TEST_ID } from '@/utils/constant/_testId'
+import { testIds } from '@/utils/constant/_testId'
 
 import invalidCredential from '../mocks/login/invalidCredential.json' assert { type: 'json' }
 import accountNotExist from '../mocks/login/accountNotExist.json' assert { type: 'json' }
@@ -16,9 +16,9 @@ test.describe('authentication', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/')
 
-		submitBtn = page.getByTestId(TEST_ID.LOGIN_BUTTON_SUBMIT)
-		phoneInput = page.getByTestId(TEST_ID.LOGIN_INPUT_PHONE)
-		passwordInput = page.getByTestId(TEST_ID.LOGIN_INPUT_PASSWORD)
+		submitBtn = page.getByTestId(testIds.loginButtonSubmit)
+		phoneInput = page.getByTestId(testIds.loginInputPhone)
+		passwordInput = page.getByTestId(testIds.loginInputPassword)
 	})
 
 	test('should show error if required fields is empty', async ({ page }) => {

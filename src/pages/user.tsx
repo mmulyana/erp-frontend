@@ -11,9 +11,9 @@ import { useApiData } from '@/shared/hooks/use-api-data'
 import { userAtom } from '@/shared/store/auth'
 
 import { formatPhone } from '@/utils/format-phone'
-import { TEST_ID } from '@/utils/constant/_testId'
-import { BASE_URL } from '@/utils/constant/_urls'
-import { PATH } from '@/utils/constant/_paths'
+import { testIds } from '@/utils/constant/_testId'
+import { baseUrl } from '@/utils/constant/_urls'
+import { paths } from '@/utils/constant/_paths'
 import { User } from '@/utils/types/api'
 
 import { FilterTable, HeadTable } from '@/components/data-table/component'
@@ -39,8 +39,8 @@ import { DashboardLayout } from '@/shared/layout/dashboard-layout'
 import { useTitle } from '@/shared/store/title'
 
 const LINKS = [
-	{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
-	{ name: 'Admin', path: PATH.ADMIN_USER },
+	{ name: 'Dashboard', path: paths.dashboardOverview },
+	{ name: 'Admin', path: paths.adminUser },
 ]
 
 export default function Index() {
@@ -88,7 +88,7 @@ export default function Index() {
 				<div className='flex gap-2 items-center w-[160px]'>
 					{row.original.photoUrl ? (
 						<img
-							src={BASE_URL + '/upload/' + row.original.photoUrl}
+							src={baseUrl + '/upload/' + row.original.photoUrl}
 							className='w-6 h-6 rounded-full flex-shrink-0'
 						/>
 					) : (
@@ -131,8 +131,8 @@ export default function Index() {
 			header: 'Akses',
 			cell: ({ row }) => (
 				<div
-					id={`${TEST_ID.BUTTON_ADD_ROLE}-${row.index + 1}`}
-					data-testid={`${TEST_ID.BUTTON_ADD_ROLE}-${row.index + 1}`}
+					id={`${testIds.buttonAddRole}-${row.index + 1}`}
+					data-testid={`${testIds.buttonAddRole}-${row.index + 1}`}
 				>
 					<AddUserRole
 						id={row.original.id}
@@ -158,8 +158,8 @@ export default function Index() {
 									open: true,
 								})
 							}
-							id={`${TEST_ID.BUTTON_RESET}-${row.index + 1}`}
-							data-testid={`${TEST_ID.BUTTON_RESET}-${row.index + 1}`}
+							id={`${testIds.buttonReset}-${row.index + 1}`}
+							data-testid={`${testIds.buttonReset}-${row.index + 1}`}
 						>
 							Reset Password
 						</Button>
@@ -214,8 +214,8 @@ export default function Index() {
 				<ProtectedComponent required={['user:create']}>
 					<Button
 						onClick={() => setDialog({ open: true, id: null })}
-						id={TEST_ID.BUTTON_ADD_USER}
-						data-testid={TEST_ID.BUTTON_ADD_USER}
+						id={testIds.buttonAddUser}
+						data-testid={testIds.buttonAddUser}
 					>
 						User Baru
 					</Button>

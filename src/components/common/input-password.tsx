@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FormLabel } from '../ui/form'
 import { cn } from '@/utils/cn'
-import { TEST_ID } from '@/utils/constant/_testId'
+import { testIds } from '@/utils/constant/_testId'
 
 interface PasswordInputProps {
 	name: string
@@ -46,7 +46,7 @@ export default function InputPassword({
 						},
 					})}
 					className={cn('pr-10', className)}
-					data-testid={TEST_ID.LOGIN_INPUT_PASSWORD}
+					data-testid={testIds.loginInputPassword}
 				/>
 				<Button
 					type='button'
