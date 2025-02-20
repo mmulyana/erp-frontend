@@ -6,9 +6,9 @@ import { useState } from 'react'
 
 import { createLinkDetail } from '@/utils/create-link-detail'
 import { usePosition } from '@/hooks/api/use-position'
-import { TEST_ID } from '@/utils/constant/_testId'
+import { testIds } from '@/utils/constant/_testId'
 import { useApiData } from '@/shared/hooks/use-api-data'
-import { PATH } from '@/utils/constant/_paths'
+import { paths } from '@/utils/constant/_paths'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'
@@ -53,15 +53,15 @@ export default function Employee() {
 				const { name, id } = cell.row.original
 				return (
 					<div
-						id={`${TEST_ID.DETAIL_POSITION}-${row.index + 1}`}
-						data-testid={`${TEST_ID.DETAIL_POSITION}-${row.index + 1}`}
+						id={`${testIds.detailPosition}-${row.index + 1}`}
+						data-testid={`${testIds.detailPosition}-${row.index + 1}`}
 					>
 						<Overlay
 							className='w-fit pr-14'
 							overlay={
 								<Link
 									className='absolute right-0 top-1/2 -translate-y-1/2 text-sm text-[#313951] py-1 px-2 rounded-[6px] border border-[#EFF0F2] bg-white hover:shadow-sm hover:shadow-gray-200'
-									to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
+									to={createLinkDetail(paths.employeeDetail, name, id)}
 								>
 									Lihat
 								</Link>
@@ -69,7 +69,7 @@ export default function Employee() {
 						>
 							<div className='hover:text-dark'>
 								<Link
-									to={createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id)}
+									to={createLinkDetail(paths.employeeDetail, name, id)}
 									className='justify-start flex'
 								>
 									<span className='break-words max-w-[120px] text-left'>
@@ -96,8 +96,8 @@ export default function Employee() {
 				return (
 					<div
 						className='flex justify-end w-full'
-						id={`${TEST_ID.DROPDOWN_EDIT_POSITION}-${row.index + 1}`}
-						data-testid={`${TEST_ID.DROPDOWN_EDIT_POSITION}-${row.index + 1}`}
+						id={`${testIds.dropdownEditPosition}-${row.index + 1}`}
+						data-testid={`${testIds.dropdownEditPosition}-${row.index + 1}`}
 					>
 						<ProtectedComponent
 							required={['position:update', 'position:delete']}
@@ -161,8 +161,8 @@ export default function Employee() {
 						<ProtectedComponent required={['position:create']}>
 							<Button
 								onClick={() => handleDialog('add', true)}
-								id={TEST_ID.BUTTON_ADD_POSITION}
-								data-testid={TEST_ID.BUTTON_ADD_POSITION}
+								id={testIds.buttonAddPosition}
+								data-testid={testIds.buttonAddPosition}
 							>
 								Tambah
 							</Button>
@@ -176,7 +176,7 @@ export default function Employee() {
 						clickableColumns={['name', 'description']}
 						autoRedirect
 						onCellClick={({ name, id }) => {
-							navigate(createLinkDetail(PATH.EMPLOYEE_DETAIL, name, id))
+							navigate(createLinkDetail(paths.employeeDetail, name, id))
 						}}
 					/>
 				</div>

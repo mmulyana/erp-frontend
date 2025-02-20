@@ -13,13 +13,13 @@ export const urls = {
 	helpdesk: api + '/helpdesk',
 
 	// HRIS
-	hrisPosition: api + '/hris/position',
-	employee: api + '/hris/employee',
-	cashAdvances: api + '/hris/cash-advance',
-	attendance: api + '/hris/attendance',
-	overtime: api + '/hris/overtime',
-	competency: api + '/hris/competency',
-	recap: api + '/hris/recap',
+	hrisPosition: api + '/position',
+	employee: api + '/employee',
+	cashAdvances: api + '/cash-advance',
+	attendance: api + '/attendance',
+	overtime: api + '/overtime',
+	competency: api + '/competency',
+	recap: api + '/recap',
 
 	project: api + '/project/index',
 	projectLabel: api + '/project/label',
