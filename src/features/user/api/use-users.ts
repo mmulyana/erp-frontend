@@ -1,5 +1,5 @@
-import { KEYS } from '@/utils/constant/_keys'
-import { URLS } from '@/utils/constant/_urls'
+import { keys } from '@/utils/constant/_keys'
+import { urls } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 import { IApiPagination, User } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'
@@ -13,9 +13,9 @@ export const useUsers = (
 	} & Pagination
 ) => {
 	return useQuery({
-		queryKey: [KEYS.USER, params?.search, params?.page, params?.limit],
+		queryKey: [keys.user, params?.search, params?.page, params?.limit],
 		queryFn: async (): Promise<AxiosResponse<IApiPagination<User[]>>> => {
-			return await http(URLS.USER, { params })
+			return await http(urls.user, { params })
 		},
 	})
 }

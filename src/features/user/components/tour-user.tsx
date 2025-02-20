@@ -1,6 +1,6 @@
 import type { Step } from 'react-joyride'
 
-import { TEST_ID } from '@/utils/constant/_testId'
+import { testIds } from '@/utils/constant/_testId'
 
 import Img from '/public/images/user-edit.png'
 
@@ -14,25 +14,25 @@ const tourUser: Step[] = [
 	{
 		title: 'Tambah data',
 		content: 'Tekan tombol disini untuk menambahkan user baru',
-		target: '#' + TEST_ID.BUTTON_ADD_USER,
+		target: '#' + testIds.buttonAddUser,
 		placement: 'auto',
 	},
 	{
 		title: 'Pencarian',
 		content: 'Cari akun berdasarkan nama',
-		target: '#' + TEST_ID.SEARCH,
+		target: '#' + testIds.search,
 		placement: 'auto',
 	},
 	{
 		title: 'Tambah dan ganti Peran/Role',
 		content: 'Tekan tombol disini mereset password untuk akun',
-		target: '#' + TEST_ID.BUTTON_ADD_ROLE + '-1',
+		target: '#' + testIds.buttonAddRole + '-1',
 		placement: 'auto',
 	},
 	{
 		title: 'Reset password',
 		content: 'Tekan tombol disini mereset password untuk akun',
-		target: '#' + TEST_ID.BUTTON_RESET + '-1',
+		target: '#' + testIds.buttonReset + '-1',
 		placement: 'auto',
 	},
 	{

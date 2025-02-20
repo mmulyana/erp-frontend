@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
 import { CookieKeys, CookieStorage } from '@/utils/cookie'
-import { PATH } from '@/utils/constant/_paths'
+import { paths } from '@/utils/constant/_paths'
 
 const useProtected = () => {
 	const navigate = useNavigate()
@@ -10,7 +10,7 @@ const useProtected = () => {
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)
 		if (token) {
-			navigate(PATH.ADMIN_USER, { replace: true })
+			navigate(paths.adminUser, { replace: true })
 			navigate(0)
 		}
 		return () => {}

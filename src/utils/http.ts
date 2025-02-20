@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import { CookieKeys, CookieStorage } from './cookie'
-import { PATH } from './constant/_paths'
+import { paths } from './constant/_paths'
 
 const http = axios.create({
 	timeout: 30000,
@@ -45,11 +45,11 @@ http.interceptors.response.use(
 			CookieStorage.remove(CookieKeys.AuthToken)
 
 			const currentPath = window.location.pathname
-			if (currentPath !== PATH.BASE) {
+			if (currentPath !== paths.base) {
 				sessionStorage.setItem(CookieKeys.RedirectAfterLogin, currentPath)
 			}
 
-			window.location.href = PATH.BASE
+			window.location.href = paths.base
 		}
 
 		return Promise.reject(error)

@@ -18,7 +18,7 @@ import { useLogin } from '../api/use-login'
 import { LoginSchema } from '../schema'
 import { Payload } from '../types'
 import { AxiosError } from 'axios'
-import { TEST_ID } from '@/utils/constant/_testId'
+import { testIds } from '@/utils/constant/_testId'
 
 type FormData = z.infer<typeof LoginSchema>
 
@@ -116,7 +116,7 @@ export default function LoginForm() {
 										{...field}
 										autoComplete='none'
 										className='bg-white/50'
-										data-testid={TEST_ID.LOGIN_INPUT_PHONE}
+										data-testid={testIds.loginInputPhone}
 									/>
 								)}
 							/>
@@ -131,7 +131,7 @@ export default function LoginForm() {
 										{...field}
 										autoComplete='none'
 										className='bg-white/50'
-										data-testid={TEST_ID.LOGIN_INPUT_NAME}
+										data-testid={testIds.loginInputName}
 									/>
 								)}
 							/>
@@ -142,7 +142,7 @@ export default function LoginForm() {
 								variant='ghost'
 								className='text-right text-blue-primary px-0 py-0 h-fit'
 								onClick={handleSwitchInput}
-								data-testid={TEST_ID.LOGIN_BUTTON_CHANGE}
+								data-testid={testIds.loginButtonChange}
 							>
 								{isPhone
 									? 'Masuk menggunakan email/username'
@@ -161,7 +161,7 @@ export default function LoginForm() {
 						type='submit'
 						variant='default'
 						className='mt-4 h-fit py-2.5 gap-2'
-						data-testid={TEST_ID.LOGIN_BUTTON_SUBMIT}
+						data-testid={testIds.loginButtonSubmit}
 					>
 						Masuk
 						<LogIn size={20} />

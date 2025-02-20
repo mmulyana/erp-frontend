@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 
 import { IApi } from '@/utils/types/api'
-import { KEYS } from '@/utils/constant/_keys'
-import { URLS } from '@/utils/constant/_urls'
+import { keys } from '@/utils/constant/_keys'
+import { urls } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 
 import { Role } from '../type'
@@ -16,9 +16,9 @@ export const useDetailRole = ({
 	enabled: boolean
 }) => {
 	return useQuery({
-		queryKey: [KEYS.ROLES_DETAIL, id],
+		queryKey: [keys.rolesDetail, id],
 		queryFn: async (): Promise<AxiosResponse<IApi<Role>>> => {
-			return await http(`${URLS.ROLE}/${id}`)
+			return await http(`${urls.role}/${id}`)
 		},
 		enabled,
 	})

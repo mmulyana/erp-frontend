@@ -1,23 +1,24 @@
 import { useAtom } from 'jotai'
 
-import { PATH } from '@/utils/constant/_paths'
 import { projectAtom } from '@/atom/project'
 
 import Tour from '@/components/common/tour'
 
-import ListProject from '../../shared/component/list-project'
-import CardTotal from '../../shared/component/card-total'
-import Container from '../../shared/component/container'
-import { DashboardLayout } from '../../shared/component/layout'
-import { steps } from '../../features/home/component/tour-overview'
+import ListProject from '@/shared/component/list-project'
+import CardTotal from '@/shared/component/card-total'
+import Container from '@/shared/component/container'
+import { steps } from '@/features/home/component/tour-overview'
+import { DashboardLayout } from '@/shared/component/layout'
 
-import ExpireCertif from '../../features/hris/employee/component/expire-certif'
-import ExpireSafety from '../../features/hris/employee/component/expire-safety'
-import DetailProject from './project/_component/detail-project'
+import ExpireCertif from '@/features/hris/employee/component/expire-certif'
+import ExpireSafety from '@/features/hris/employee/component/expire-safety'
+import DetailProject from '@/routes/dashboard/project/_component/detail-project'
+
 import { useTitle } from '@/shared/store/title'
+import { paths } from '@/utils/constant/_paths'
 
 export default function Dashboard() {
-	useTitle([{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW }])
+	useTitle([{ name: 'Dashboard', path: paths.dashboardOverview }])
 
 	const [selected, setSelected] = useAtom(projectAtom)
 

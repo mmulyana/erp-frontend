@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { KEYS } from '@/utils/constant/_keys'
-import { URLS } from '@/utils/constant/_urls'
+import { keys } from '@/utils/constant/_keys'
+import { urls } from '@/utils/constant/_urls'
 import { ApiError } from '@/utils/types/api'
 import http from '@/utils/http'
 
@@ -11,10 +11,10 @@ export const useDeleteRole = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: async ({ id }: { id: string }) => {
-			return await http.delete(`${URLS.ROLE}/${id}`)
+			return await http.delete(`${urls.role}/${id}`)
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [KEYS.ROLES] })
+			queryClient.invalidateQueries({ queryKey: [keys.roles] })
 			toast.success(data.data.message)
 		},
 		onError: (err: AxiosError<ApiError>) => {

@@ -6,8 +6,8 @@ import { toast } from 'sonner'
 import { ErrorResponse } from '@/shared/types'
 
 import { CookieKeys, CookieStorage } from '@/utils/cookie'
-import { PATH } from '@/utils/constant/_paths'
-import { URLS } from '@/utils/constant/_urls'
+import { paths } from '@/utils/constant/_paths'
+import { urls } from '@/utils/constant/_urls'
 import http from '@/utils/http'
 
 import { Payload, Response } from '../types'
@@ -17,7 +17,7 @@ export const useLogin = () => {
 
 	return useMutation({
 		mutationFn: async (data: Payload) => {
-			return http.post<Response>(URLS.LOGIN, data)
+			return http.post<Response>(urls.login, data)
 		},
 		onSuccess: (data) => {
 			const token = data.data.data.token
@@ -29,11 +29,11 @@ export const useLogin = () => {
 			toast.success(`Selamat datang kembali`)
 
 			const redirectPath = sessionStorage.getItem(CookieKeys.RedirectAfterLogin)
-			if (redirectPath && redirectPath !== PATH.BASE) {
+			if (redirectPath && redirectPath !== paths.base) {
 				sessionStorage.removeItem(CookieKeys.RedirectAfterLogin)
 				navigate(redirectPath)
 			} else {
-				navigate(PATH.ADMIN_USER)
+				navigate(paths.adminUser)
 			}
 		},
 		onError: (error) => {

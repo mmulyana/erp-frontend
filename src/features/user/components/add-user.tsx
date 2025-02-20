@@ -5,19 +5,19 @@ import { useEffect } from 'react'
 
 import { useApiData } from '@/shared/hooks/use-api-data'
 
-import { KEYS } from '@/utils/constant/_keys'
+import { keys } from '@/utils/constant/_keys'
+import { ApiError } from '@/utils/types/api'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+
 import { useCreateUser } from '../api/use-create-user'
 import { useUpdateUser } from '../api/use-update-user'
-import { useUser } from '../api/use-user'
 import { CreateUserSchema } from '../schema'
+import { useUser } from '../api/use-user'
 import { CreateUser } from '../types'
 import { AxiosError } from 'axios'
-import { ErrorResponse } from '@/shared/types'
-import { ApiError } from '@/utils/types/api'
 
 type Props = {
 	open: boolean
@@ -49,7 +49,7 @@ export default function AddUser({ open, setOpen, id }: Props) {
 					onSuccess: () => {
 						form.reset()
 						setOpen(false)
-						queryClient.invalidateQueries({ queryKey: [KEYS.ACCOUNT] })
+						queryClient.invalidateQueries({ queryKey: [keys.user] })
 					},
 					onError: (err) => {
 						const errors = err as AxiosError<ApiError>

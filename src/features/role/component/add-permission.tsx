@@ -17,9 +17,12 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Switch } from '@/components/ui/switch'
 
-import { useRemovePermissionRole } from '@/features/role/api/use-remove-permissionRole'
-import { useAddPermissionRole } from '@/features/role/api/use-add-permissionRole'
 import { useDetailRole } from '@/features/role/api/use-detail-role'
+
+import {
+	useAddPermissionRole,
+	useRemovePermissionRole,
+} from '../api/use-permission-role'
 
 type Props = {
 	open: boolean

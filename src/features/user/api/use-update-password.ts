@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { URLS } from '@/utils/constant/_urls'
+import { urls } from '@/utils/constant/_urls'
 import { ApiError } from '@/utils/types/api'
 import http from '@/utils/http'
 
@@ -17,7 +17,7 @@ export const useUpdatePassword = () => {
 			id: string
 			payload: UpdatePassword
 		}) => {
-			return await http.patch(`${URLS.USER}/${id}/password/update`, payload)
+			return await http.patch(`${urls.user}/${id}/password/update`, payload)
 		},
 		onSuccess: (data) => {
 			toast.success(data.data.message)

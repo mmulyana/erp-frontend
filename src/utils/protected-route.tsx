@@ -4,13 +4,12 @@ import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 
 import { permissionAtom } from '@/shared/store/permission'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { useGetme } from '@/shared/api/use-get-me'
 import { userAtom } from '@/shared/store/auth'
 
-import { useApiData } from '@/shared/hooks/use-api-data'
-
 import { CookieKeys, CookieStorage } from './cookie'
-import { PATH } from './constant/_paths'
+import { paths } from './constant/_paths'
 
 type Props = {
 	children: React.ReactNode
@@ -33,7 +32,7 @@ export default function ProtectedRoute({
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)
 		if (!token) {
-			navigate(PATH.BASE, { replace: true })
+			navigate(paths.base, { replace: true })
 			navigate(0)
 		}
 		const user: { id: number } = jwtDecode(token)
