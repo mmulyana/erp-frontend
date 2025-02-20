@@ -28,7 +28,7 @@ import {
 import { DashboardLayout } from '../../../../shared/component/layout'
 import { Title, useTitle } from '../../../../shared/component/header'
 import Tour from '@/components/common/tour'
-import { steps } from './_component/tour-detail'
+import { steps } from '../../../../features/hris/recap/component/tour-detail'
 import useTour from '@/hooks/use-tour'
 import { CookieKeys, CookieStorage } from '@/utils/cookie'
 

@@ -1,3 +1,6 @@
+import { z } from 'zod'
+import { CreateRoleSchema } from '../schema'
+
 export type Role = {
 	id: string
 	name: string
@@ -36,3 +39,5 @@ export type Permission = {
 	createdAt: string
 	updatedAt: string
 }
+
+export type CreateRole = z.infer<typeof CreateRoleSchema>

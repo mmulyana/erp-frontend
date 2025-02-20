@@ -23,14 +23,14 @@ import {
   useAttendances,
   useCreateAttendance,
   useUpdateAttendance,
-} from '@/hooks/api/use-attendance'
+} from '@/features/hris/attendance/api/use-attendance'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { generateDateRange } from '@/utils/generate-date-range'
 import { Attendance } from '@/utils/types/api'
 import { cn } from '@/utils/cn'
 
-import { useDateData } from '../_hook/use-date-data'
+import { useDateData } from '../hook/use-date-data'
 import Tour from '@/components/common/tour'
 import { steps } from './tour-table'
 import useTour from '@/hooks/use-tour'

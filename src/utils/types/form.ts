@@ -1,67 +1,3 @@
-import { z } from 'zod'
-import { createRecapSchema } from '../schema/recap'
-import { createRoleSchema } from '../schema/role'
-
-export type payloadCreateEmployee = {
-	fullname: string
-	joined_at?: string
-	joined_type?: string
-	employment_type?: string
-	last_education?: string
-	gender?: string
-	place_of_birth?: string
-	birth_date?: string
-	marital_status?: string
-	religion?: string
-	basic_salary?: string | undefined
-	pay_type?: string
-	overtime_salary?: string | undefined
-	positionId?: string
-	competencies: string[]
-	safety_induction_date?: string | Date
-	email?: string
-	addresses?: createAddress[]
-	phoneNumbers?: createPhone[]
-}
-
-export type createEmployee = payloadCreateEmployee & {
-	photo: File | null
-	certif_file?: File | null
-	certif_name: string
-	issuing_organization?: string
-	issue_year?: string
-	issue_month?: string
-	expiry_year?: string
-	expiry_month?: string
-	competencyId?: string
-	certifications: createCertif[]
-}
-
-export type payloadUploadPhoto = {
-	id: number
-	photo: File
-}
-
-export type createCertif = {
-	certif_file?: File | null
-	certif_name: string
-	issuing_organization?: string
-	issue_year?: string
-	issue_month?: string
-	expiry_year?: string
-	expiry_month?: string
-	competencyId?: string | null
-}
-
-export type createAddress = {
-	type: 'domicile' | 'origin' | 'alternative'
-	value: string
-}
-
-export type createPhone = {
-	value: string
-}
-
 export type CreateSupplier = {
 	name: string
 	phone?: string
@@ -200,6 +136,3 @@ export type createOvertime = {
 	total_hour: number
 	description?: string
 }
-
-export type CreateRecap = z.infer<typeof createRecapSchema>
-export type CreateRole = z.infer<typeof createRoleSchema>

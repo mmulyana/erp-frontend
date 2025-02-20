@@ -20,7 +20,7 @@ import {
   useCreateCashAdvance,
   useDetailCashAdvance,
   useUpdateCashAdvance,
-} from '@/hooks/api/use-cash-advance'
+} from '@/features/hris/cash-advance/api/use-cash-advance'
 import { useAllEmployees } from '@/features/hris/employee/api/use-employee'
 import { useApiData } from '@/shared/hooks/use-api-data'
 

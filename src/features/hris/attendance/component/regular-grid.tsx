@@ -6,7 +6,7 @@ import {
   useAttendances,
   useCreateAttendance,
   useUpdateAttendance,
-} from '@/hooks/api/use-attendance'
+} from '@/features/hris/attendance/api/use-attendance'
 import useTour from '@/hooks/use-tour'
 import { useApiData } from '@/shared/hooks/use-api-data'
 

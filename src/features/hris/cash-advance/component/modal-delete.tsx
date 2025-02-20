@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { buttonVariants } from '@/components/ui/button'
-import { useDeleteCashAdvances } from '@/hooks/api/use-cash-advance'
+import { useDeleteCashAdvances } from '@/features/hris/cash-advance/api/use-cash-advance'
 import { cn } from '@/utils/cn'
 import { delay } from '@/utils/delay'
 

@@ -2,9 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 
-import { createRoleSchema } from '@/utils/schema/role'
-import { CreateRole } from '@/utils/types/form'
-
 import { useApiData } from '@/shared/hooks/use-api-data'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'
@@ -15,6 +12,8 @@ import { Input } from '@/components/ui/input'
 import { useCreateRole } from '../api/use-create-role'
 import { useUpdateRole } from '../api/use-update-role'
 import { useDetailRole } from '../api/use-detail-role'
+import { CreateRoleSchema } from '../schema'
+import { CreateRole } from '../type'
 
 type Props = {
 	open: boolean
@@ -31,7 +30,7 @@ export default function AddRole({ open, setOpen, id }: Props) {
 	)
 
 	const form = useForm<CreateRole>({
-		resolver: zodResolver(createRoleSchema),
+		resolver: zodResolver(CreateRoleSchema),
 		defaultValues: {
 			name: '',
 			description: '',

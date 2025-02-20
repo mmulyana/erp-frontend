@@ -7,12 +7,12 @@ import { PATH } from '@/utils/constant/_paths'
 import ProtectedComponent from '@/components/protected'
 import { Tab, Tabs } from '@/components/tab'
 
-import DateNavigation from './_component/date-navigation'
+import DateNavigation from '../../../../features/hris/attendance/component/date-navigation'
 import TitlePage from '../../../../shared/component/title-page'
 import { DashboardLayout } from '../../../../shared/component/layout'
 import { useTitle } from '../../../../shared/component/header'
-import { Overtime } from './_component/overtime'
-import { Regular } from './_component/regular'
+import { Overtime } from '../../../../features/hris/attendance/component/overtime'
+import { Regular } from '../../../../features/hris/attendance/component/regular'
 
 const links = [
   {

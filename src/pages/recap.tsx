@@ -29,8 +29,8 @@ import { Eye } from 'lucide-react'
 
 import { DashboardLayout } from '../../../../shared/component/layout'
 import { useTitle } from '../../../../shared/component/header'
-import { AddRecap } from './_component/add-recap'
-import { steps } from './_component/tour-index'
+import { AddRecap } from '../../../../features/hris/recap/component/add-recap'
+import { steps } from '../../../../features/hris/recap/component/tour-index'
 import useTour from '@/hooks/use-tour'
 
 const links = [

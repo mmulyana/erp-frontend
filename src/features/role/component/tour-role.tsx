@@ -1,6 +1,6 @@
 import type { Step } from 'react-joyride'
 
-import { TEST_ID } from '@/utils/constant/_testId'
+import { testIds } from '@/utils/constant/_testId'
 
 import Img from '/public/images/role.png'
 
@@ -14,12 +14,12 @@ const tourRole: Step[] = [
 	{
 		title: 'Tambah data',
 		content: 'Tekan tombol disini untuk menambahkan role/peran baru',
-		target: '#' + TEST_ID.BUTTON_CREATE_ROLE,
+		target: '#' + testIds.buttonCreateRole,
 		placement: 'auto',
 	},
 	{
 		content: 'Cari role/peran disini',
-		target: '#' + TEST_ID.SEARCH,
+		target: '#' + testIds.search,
 		placement: 'auto',
 	},
 	{

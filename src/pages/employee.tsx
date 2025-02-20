@@ -6,7 +6,6 @@ import { DashboardLayout } from '@/shared/component/layout'
 import Tour from '@/components/common/tour'
 
 import { useDetailName } from '@/shared/hooks/use-detail-name'
-import { PATH } from '@/utils/constant/_paths'
 
 import DetailEmployee from '@/features/hris/employee/component/detail-employee'
 import DeleteEmployee from '@/features/hris/employee/component/delete-employee'
@@ -18,6 +17,7 @@ import { tourDetail } from '@/features/hris/employee/component/tour-detail'
 import { links } from '@/features/hris/employee/component/links'
 import { useTitle } from '@/shared/store/title'
 import { Title } from '@/shared/types'
+import { paths } from '@/utils/constant/_paths'
 
 export type DialogEmployee = {
 	add: boolean
@@ -26,7 +26,7 @@ export type DialogEmployee = {
 }
 export default function Detail() {
 	const { detail } = useParams()
-	const { link } = useDetailName(PATH.EMPLOYEE_DETAIL, detail)
+	const { link } = useDetailName(paths.employeeDetail, detail)
 	useTitle([...links, link as Title])
 
 	const positionId = detail?.split('-').pop()
