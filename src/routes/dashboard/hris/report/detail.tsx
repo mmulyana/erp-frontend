@@ -6,8 +6,8 @@ import { toast } from 'sonner'
 import React from 'react'
 
 import { useDetailRecap, useRecapReport } from '@/hooks/api/use-recap'
-import { useDetailName } from '@/hooks/use-detail-name'
-import { useApiData } from '@/hooks/use-api-data'
+import { useDetailName } from '@/shared/hooks/use-detail-name'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { TEST_ID } from '@/utils/constant/_testId'

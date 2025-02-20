@@ -2,7 +2,7 @@ import { RadialBarChart, PolarRadiusAxis, Label, RadialBar } from 'recharts'
 
 import { useTotalProject } from '@/hooks/api/use-project'
 import { useChartProject } from '@/hooks/api/use-chart'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import {

@@ -27,7 +27,7 @@ import { useForm, useFieldArray } from 'react-hook-form'
 import { CreateTransaction } from '@/utils/types/form'
 import { CommandItem } from '@/components/ui/command'
 import { DataTable } from '@/components/data-table'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 

@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { useSupplierLabels } from '@/hooks/api/use-supplier-label'
 import { useCreateSupplier } from '@/hooks/api/use-supplier'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import MultiSelect from '@/components/common/select/multi-select-v1'
 import UploadProfile from '@/components/common/upload-profile'

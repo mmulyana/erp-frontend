@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { useState } from 'react'
 
 import { useAttachments } from '@/hooks/api/use-attachment'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { permissionAtom } from '@/shared/store/permission'
 

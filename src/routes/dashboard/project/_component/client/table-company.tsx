@@ -7,7 +7,7 @@ import { BASE_URL } from '@/utils/constant/_urls'
 import { Company } from '@/utils/types/api'
 
 import { useClientCompanyPagination } from '@/hooks/api/use-client'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'

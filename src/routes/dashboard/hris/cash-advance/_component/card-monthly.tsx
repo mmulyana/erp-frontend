@@ -2,7 +2,7 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
 import { TEST_ID } from '@/utils/constant/_testId'
 import { useChartCashAdvance } from '@/hooks/api/use-chart'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import {

@@ -520,41 +520,6 @@ export type RecapReport = {
 	total: number
 }
 
-export type Role = {
-	id: string
-	name: string
-	description?: string
-	updatedAt: string
-	createdAt: string
-	permissions: string[]
-	RolePermission: RolePermission[]
-	_count: {
-		users: number
-	}
-}
-
-export type RolePermission = {
-	id: number
-	roleId: number
-	permissionId: number
-	createdAt: string
-	permission: Permission
-}
-
-export type Permission = {
-	key: string
-	name: string
-	description: string
-	groupId: number | null
-}
-
-export type GroupPermission = {
-	id: number
-	name: string
-	created_at: string
-	permissions: Permission[]
-}
-
 export type EmployeeByProject = {
 	employee: {
 		fullname: string

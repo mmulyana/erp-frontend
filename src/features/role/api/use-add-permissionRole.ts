@@ -16,9 +16,9 @@ export const useAddPermissionRole = () => {
 			roleId: string
 			permissionId: string
 		}): Promise<AxiosResponse<IApi<{ roleId: string }>>> => {
-			return await http.post(
-				`${URLS.ROLE}/${roleId}/permission/add/${permissionId}`
-			)
+			return await http.post(`${URLS.ROLE}/${roleId}/permission`, {
+				permissionId,
+			})
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({

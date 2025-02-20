@@ -3,8 +3,8 @@ import { Key } from 'lucide-react'
 
 import { cn } from '@/utils/cn'
 
-import { usePermissionGroup } from '@/hooks/api/use-permission'
-import { useApiData } from '@/hooks/use-api-data'
+import { usePermissionGroup } from '@/features/role/api/use-permission'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import {
 	Sheet,
@@ -89,7 +89,7 @@ export default function AddPermission({ open, setOpen, id }: Props) {
 					{permissionGroups?.map((group) => (
 						<TabsContent key={group.id} value={String(group.id)}>
 							<div className='rounded-lg border border-line'>
-								{group.permissions.map((permission, index) => (
+								{group?.permissions.map((permission, index) => (
 									<div
 										key={permission.key}
 										className={cn(
@@ -108,7 +108,7 @@ export default function AddPermission({ open, setOpen, id }: Props) {
 										</div>
 										<Switch
 											value={permission.key}
-										checked={role?.permissions.includes(permission.key)}
+											checked={role?.permissions.includes(permission.key)}
 											onCheckedChange={(val) => {
 												if (!role?.id) return
 												if (val) {

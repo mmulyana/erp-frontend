@@ -15,7 +15,7 @@ import {
   useUpdateGoods,
 } from '@/hooks/api/use-goods'
 import usePermission from '@/shared/hooks/use-permission'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { BASE_URL } from '@/utils/constant/_urls'

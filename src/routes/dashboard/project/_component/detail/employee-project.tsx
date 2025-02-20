@@ -7,7 +7,7 @@ import {
   useAssigneEmployee,
   useUnassigneEmployee,
 } from '@/hooks/api/use-project'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { useAllEmployees } from '@/hooks/api/use-employee'
 
 import { BASE_URL } from '@/utils/constant/_urls'

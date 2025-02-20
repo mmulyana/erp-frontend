@@ -13,8 +13,9 @@ export const useDeleteRole = () => {
 		mutationFn: async ({ id }: { id: string }) => {
 			return await http.delete(`${URLS.ROLE}/${id}`)
 		},
-		onSuccess: () => {
+		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [KEYS.ROLES] })
+			toast.success(data.data.message)
 		},
 		onError: (err: AxiosError<ApiError>) => {
 			toast.error(err.response?.data.message)

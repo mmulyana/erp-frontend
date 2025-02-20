@@ -14,7 +14,7 @@ import {
   useDetailClientCompany,
   useUpdateClientCompany,
 } from '@/hooks/api/use-client'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 const companySchema = z.object({
   name: z.string(),

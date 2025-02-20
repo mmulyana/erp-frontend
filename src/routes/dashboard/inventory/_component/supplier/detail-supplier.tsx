@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PackagePlus } from 'lucide-react'
 import { format } from 'date-fns'
 
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import usePermission from '@/shared/hooks/use-permission'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import {
   useSupplierTransaction,
   useDetailSupplier,

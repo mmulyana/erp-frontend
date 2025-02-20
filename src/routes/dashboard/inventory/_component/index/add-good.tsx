@@ -12,8 +12,8 @@ import { useBrand } from '@/hooks/api/use-brand'
 import { Input } from '@/components/ui/input'
 import { useForm } from 'react-hook-form'
 import { atom, useAtom } from 'jotai'
-import { useApiData } from '@/hooks/use-api-data'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useApiData } from '@/shared/hooks/use-api-data'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { EditorDescription } from '@/components/tiptap/editor-description'
 
 export const dialogGoodAtom = atom<boolean>(false)

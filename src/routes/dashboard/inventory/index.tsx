@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 import useTour from '@/hooks/use-tour'
 import { useDeleteGoods, useGoodsByPagination } from '@/hooks/api/use-goods'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { PATH } from '@/utils/constant/_paths'
 import { Goods } from '@/utils/types/api'

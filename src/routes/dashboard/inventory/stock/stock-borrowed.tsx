@@ -16,7 +16,7 @@ import TitlePage from '../../../../shared/component/title-page'
 
 import { useProjects } from '@/hooks/api/use-project'
 import { useGoods } from '@/hooks/api/use-goods'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import usePermission from '@/shared/hooks/use-permission'
 import useTour from '@/hooks/use-tour'
 import {

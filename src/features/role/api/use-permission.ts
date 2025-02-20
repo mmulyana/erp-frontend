@@ -5,20 +5,13 @@ import { IApi } from '@/utils/types/api'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
+import { PermissionGroup } from '../type'
 
-import { Role } from '../type'
-
-export const useDetailRole = ({
-	id,
-	enabled,
-}: {
-	id?: string | null
-	enabled: boolean
-}) => {
+export const usePermissionGroup = ({ enabled }: { enabled?: boolean }) => {
 	return useQuery({
-		queryKey: [KEYS.ROLES_DETAIL, id],
-		queryFn: async (): Promise<AxiosResponse<IApi<Role>>> => {
-			return await http(`${URLS.ROLE}/${id}`)
+		queryKey: [KEYS.PERMISSION_GROUP],
+		queryFn: async (): Promise<AxiosResponse<IApi<PermissionGroup[]>>> => {
+			return await http(URLS.PERMISSION + '/group')
 		},
 		enabled,
 	})

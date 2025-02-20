@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { createRoleSchema } from '@/utils/schema/role'
 import { CreateRole } from '@/utils/types/form'
 
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'
@@ -21,7 +21,9 @@ type Props = {
 	setOpen: (val: boolean) => void
 	id?: string | null
 }
+
 export default function AddRole({ open, setOpen, id }: Props) {
+	console.log('id', id)
 	const { mutate: create } = useCreateRole()
 	const { mutate: update } = useUpdateRole()
 
@@ -68,7 +70,12 @@ export default function AddRole({ open, setOpen, id }: Props) {
 	}, [open, id, detail, isLoading])
 
 	useEffect(() => {
-		if (!open) form.reset()
+		if (!open) {
+			form.reset({
+				name: '',
+				description: '',
+			})
+		}
 	}, [open])
 
 	return (

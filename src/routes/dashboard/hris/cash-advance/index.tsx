@@ -16,7 +16,7 @@ import {
   useCashAdvancePagination,
   useTotalCashAdvance,
 } from '@/hooks/api/use-cash-advance'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'

@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { useProjectLabels } from '@/hooks/api/use-project-label'
 import { useAllEmployees } from '@/hooks/api/use-employee'
 import {
@@ -9,7 +9,7 @@ import {
 } from '@/hooks/api/use-project'
 import { useBoards } from '@/hooks/api/use-board'
 import { useClient } from '@/hooks/api/use-client'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { EditorDescription } from '@/components/tiptap/editor-description'
 import Modal, { ModalContainer } from '@/components/modal-v2'

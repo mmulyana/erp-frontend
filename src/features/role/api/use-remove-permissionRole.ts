@@ -17,7 +17,7 @@ export const useRemovePermissionRole = () => {
 			permissionId: string
 		}): Promise<AxiosResponse<IApi<{ roleId: string }>>> => {
 			return await http.delete(
-				`${URLS.ROLE}/${roleId}/permission/remove/${permissionId}`
+				`${URLS.ROLE}/${roleId}/permission/${permissionId}`
 			)
 		},
 		onSuccess: (data) => {

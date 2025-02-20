@@ -22,7 +22,7 @@ import {
   useOvertimeDetail,
   useUpdateOvertime,
 } from '@/hooks/api/use-overtime'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { BASE_URL } from '@/utils/constant/_urls'
 import useUrlState from '@ahooksjs/use-url-state'
 import { zodResolver } from '@hookform/resolvers/zod'

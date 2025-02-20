@@ -3,7 +3,7 @@ import type { CallBackProps, Events, Step } from 'react-joyride'
 import { useEffect, useState } from 'react'
 import { Triangle } from 'lucide-react'
 
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useIsMobile } from '@/shared/hooks/use-mobile'
 import useTour from '@/shared/hooks/use-tour'
 
 export type TourProps = {

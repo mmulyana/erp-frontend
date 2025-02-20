@@ -1,7 +1,7 @@
 import { HardHat, Users2 } from 'lucide-react'
 
 import { TEST_ID } from '@/utils/constant/_testId'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { useDashboardTotal } from '../../features/home/hooks/use-dashboard'
 

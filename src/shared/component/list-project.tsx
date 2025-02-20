@@ -6,7 +6,7 @@ import CardProject from '@/components/card-project'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { useProjects } from '@/hooks/api/use-project'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 export default function ListProject() {
   const { data } = useApiData(useProjects())

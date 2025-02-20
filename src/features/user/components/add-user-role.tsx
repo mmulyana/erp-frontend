@@ -1,7 +1,7 @@
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { useState } from 'react'
 
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { useRoles } from '@/features/role/api/use-roles'
 import { cn } from '@/utils/cn'
 

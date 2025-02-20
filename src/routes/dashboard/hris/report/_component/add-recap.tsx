@@ -6,7 +6,7 @@ import {
   useDetailRecap,
   useUpdateRecap,
 } from '@/hooks/api/use-recap'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { createRecapSchema } from '@/utils/schema/recap'
 import { CreateRecap } from '@/utils/types/form'
 import { zodResolver } from '@hookform/resolvers/zod'

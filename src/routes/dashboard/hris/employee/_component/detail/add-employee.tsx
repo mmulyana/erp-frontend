@@ -47,7 +47,7 @@ import {
   useCreateMultipleCertif,
   useUploadPhoto,
 } from '@/hooks/api/use-employee'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { cn } from '@/utils/cn'
 import { months } from '@/utils/constant/months'
 import { EDUCATIONS } from '@/utils/data/educations'

@@ -9,7 +9,7 @@ import AddPermission from '@/features/role/component/add-permission'
 import tourRole from '@/features/role/component/tour-role'
 import AddRole from '@/features/role/component/add-role'
 
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { TEST_ID } from '@/utils/constant/_testId'
 import { PATH } from '@/utils/constant/_paths'
 import { Role } from '@/utils/types/api'

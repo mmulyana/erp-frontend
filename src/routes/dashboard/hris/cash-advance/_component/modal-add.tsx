@@ -22,7 +22,7 @@ import {
   useUpdateCashAdvance,
 } from '@/hooks/api/use-cash-advance'
 import { useAllEmployees } from '@/hooks/api/use-employee'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { createCashAdvance } from '@/utils/types/form'
 import { Check, ChevronsUpDown } from 'lucide-react'

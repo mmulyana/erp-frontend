@@ -1,7 +1,7 @@
 import { Megaphone } from 'lucide-react'
 
 import { useExpireCertification } from '@/hooks/api/use-employee'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import EmptyState from '@/components/common/empty-state'
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'

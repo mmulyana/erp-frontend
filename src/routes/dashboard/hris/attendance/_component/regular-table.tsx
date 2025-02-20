@@ -24,7 +24,7 @@ import {
   useCreateAttendance,
   useUpdateAttendance,
 } from '@/hooks/api/use-attendance'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { generateDateRange } from '@/utils/generate-date-range'
 import { Attendance } from '@/utils/types/api'

@@ -12,7 +12,7 @@ import {
   useSupplierEmployee,
   useUpdateSupplierEmployee,
 } from '@/hooks/api/use-supplier-employee'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import { Form, FormField } from '@/components/ui/form'

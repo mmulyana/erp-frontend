@@ -1,7 +1,7 @@
 import { SquareUserRound } from 'lucide-react'
 
 import { useClient } from '@/hooks/api/use-client'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { TEST_ID } from '@/utils/constant/_testId'
 
 export default function TotalClient() {

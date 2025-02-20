@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import { useCompetency } from '@/hooks/api/use-competency'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import {
   useCreateCertif,
   useDeleteCertif,

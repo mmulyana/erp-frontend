@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { useState } from 'react'
 
 import { useDeleteRecap, useRecapPagination } from '@/hooks/api/use-recap'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { permissionAtom } from '@/shared/store/permission'
 import { createLinkDetail } from '@/utils/create-link-detail'

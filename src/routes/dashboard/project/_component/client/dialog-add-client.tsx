@@ -6,8 +6,8 @@ import { z } from 'zod'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { delay } from '@/utils/delay'
 
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { useApiData } from '@/hooks/use-api-data'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import {
   useClientCompany,
   useCreateClient,

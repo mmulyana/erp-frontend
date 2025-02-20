@@ -1,4 +1,4 @@
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { useMeasurement } from '@/hooks/api/use-measurement'
 import { useLocation } from '@/hooks/api/use-location'
 import { useBrand } from '@/hooks/api/use-brand'

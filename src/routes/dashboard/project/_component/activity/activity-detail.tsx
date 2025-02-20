@@ -20,7 +20,7 @@ import { X } from 'lucide-react'
 import { Activity } from '@/utils/types/api'
 import { useAtomValue } from 'jotai'
 import { lightboxAtom } from '../detail-project'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 
 type Props = {
   open: boolean

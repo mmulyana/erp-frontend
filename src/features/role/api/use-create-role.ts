@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { CreateRole } from '@/utils/types/form'
 import { KEYS } from '@/utils/constant/_keys'
 import { URLS } from '@/utils/constant/_urls'
 import http from '@/utils/http'
-import { toast } from 'sonner'
 
 export const useCreateRole = () => {
 	const queryClient = useQueryClient()

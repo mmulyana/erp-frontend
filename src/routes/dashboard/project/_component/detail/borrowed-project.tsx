@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { format } from 'date-fns'
 
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { useGoods } from '@/hooks/api/use-goods'
 import { KEYS } from '@/utils/constant/_keys'
 import {

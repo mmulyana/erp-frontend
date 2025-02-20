@@ -5,7 +5,7 @@ import { PATH } from '@/utils/constant/_paths'
 import { useState } from 'react'
 
 import usePermission from '@/shared/hooks/use-permission'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { useGoods } from '@/hooks/api/use-goods'
 import {
 	useCreateTransaction,

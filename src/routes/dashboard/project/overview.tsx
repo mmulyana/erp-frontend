@@ -8,7 +8,7 @@ import {
   useProjectsPagination,
   useUpdateProject,
 } from '@/hooks/api/use-project'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { permissionAtom } from '@/shared/store/permission'
 

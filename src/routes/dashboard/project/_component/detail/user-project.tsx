@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { useUpdateProject } from '@/hooks/api/use-project'
 import { useClient } from '@/hooks/api/use-client'
 import { Project } from '@/utils/types/api'

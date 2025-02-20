@@ -5,7 +5,7 @@ import { useSetAtom } from 'jotai'
 import { useState } from 'react'
 
 import { useSupplier } from '@/hooks/api/use-supplier'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import useTour from '@/hooks/use-tour'
 
 import { Supplier as SupplierType } from '@/utils/types/api'

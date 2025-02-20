@@ -18,7 +18,7 @@ import {
   useUpdateProject,
   useUpdateStatusProject,
 } from '@/hooks/api/use-project'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { useBoards } from '@/hooks/api/use-board'
 
 import ProtectedComponent from '@/components/protected'
@@ -45,7 +45,7 @@ import EstimateProject from './detail/estimate-project'
 import LabelProject from './detail/label-project'
 import UserProject from './detail/user-project'
 import LeadProject from './detail/lead-project'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useIsMobile } from '@/shared/hooks/use-mobile'
 import { Separator } from '@/components/ui/separator'
 
 export const lightboxAtom = atom<{

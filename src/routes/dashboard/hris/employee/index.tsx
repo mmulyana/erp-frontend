@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { createLinkDetail } from '@/utils/create-link-detail'
 import { usePosition } from '@/hooks/api/use-position'
 import { TEST_ID } from '@/utils/constant/_testId'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 import { PATH } from '@/utils/constant/_paths'
 
 import DropdownEdit from '@/components/common/dropdown-edit'

@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 import { permissionAtom } from '@/shared/store/permission'
 import { useClientPagination } from '@/hooks/api/use-client'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { Client as ClientType } from '@/utils/types/api'
 import { BASE_URL } from '@/utils/constant/_urls'

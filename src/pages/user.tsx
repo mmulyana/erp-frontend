@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 import usePermission from '@/shared/hooks/use-permission'
 import useTour from '@/shared/hooks/use-tour'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { userAtom } from '@/shared/store/auth'
 

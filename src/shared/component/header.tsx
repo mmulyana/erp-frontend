@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import { userAtom } from '@/shared/store/auth'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useIsMobile } from '@/shared/hooks/use-mobile'
 import { BASE_URL } from '@/utils/constant/_urls'
 import { cn } from '@/utils/cn'
 

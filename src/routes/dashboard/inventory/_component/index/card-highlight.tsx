@@ -3,7 +3,7 @@ import { Package } from 'lucide-react'
 
 import { useGoodsLowStock, useGoodsOutOfStock } from '@/hooks/api/use-goods'
 import { useTransactionBorrowed } from '@/hooks/api/use-transaction'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'

@@ -7,7 +7,7 @@ import { permissionAtom } from '@/shared/store/permission'
 import { useGetme } from '@/shared/api/use-get-me'
 import { userAtom } from '@/shared/store/auth'
 
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { CookieKeys, CookieStorage } from './cookie'
 import { PATH } from './constant/_paths'

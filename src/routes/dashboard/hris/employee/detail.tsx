@@ -7,7 +7,7 @@ import { DashboardLayout } from '@/shared/component/layout'
 import Tour from '@/components/common/tour'
 
 import useTour from '@/hooks/use-tour'
-import { useDetailName } from '@/hooks/use-detail-name'
+import { useDetailName } from '@/shared/hooks/use-detail-name'
 import { PATH } from '@/utils/constant/_paths'
 
 import DetailEmployee from './_component/detail/detail-employee'

@@ -18,7 +18,7 @@ import Chips from '@/components/common/chips'
 import { permissionAtom } from '@/shared/store/permission'
 
 import { useEmployees } from '@/hooks/api/use-employee'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { EDUCATIONS_OBJ } from '@/utils/data/educations'
 import { Employee } from '@/utils/types/api'

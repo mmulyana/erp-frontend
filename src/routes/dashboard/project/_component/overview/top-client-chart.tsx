@@ -1,6 +1,6 @@
 import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts'
 import { useChartTopClient } from '@/hooks/api/use-chart'
-import { useApiData } from '@/hooks/use-api-data'
+import { useApiData } from '@/shared/hooks/use-api-data'
 
 import {
   ChartContainer,

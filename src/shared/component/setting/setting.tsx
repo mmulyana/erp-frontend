@@ -15,8 +15,8 @@ import {
 	X,
 } from 'lucide-react'
 
-import { useFixPointerEvent } from '@/hooks/use-fix-pointer-events'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
+import { useIsMobile } from '@/shared/hooks/use-mobile'
 import { cn } from '@/utils/cn'
 
 import { Button } from '@/components/ui/button'
