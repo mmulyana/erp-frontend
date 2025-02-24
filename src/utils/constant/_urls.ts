@@ -7,8 +7,7 @@ export const urls = {
 	user: api + '/user',
 	role: api + '/role',
 	permissionGroup: api + '/permission/group',
-	permissionCheck: api + '/permission/check',
-	permission: api + '/permission',
+	permission: api + '/permission/item',
 	dashboard: api + '/dashboard',
 	helpdesk: api + '/helpdesk',
 
