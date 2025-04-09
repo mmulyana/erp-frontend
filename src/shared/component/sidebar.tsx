@@ -38,22 +38,29 @@ import Logo from '/public/logo2.svg'
 
 import { useActiveMenu } from '@/shared/hooks/use-active-menu'
 
-export default function AppSidebar() {
-	const permission = usePermission()
+export type SidebarLinkGroup = {
+	groupName?: string
+	links: {
+		href: string
+		name: string
+		icon: React.ReactNode
+	}[]
+}
+
+export type AppSidebarProps = {
+	items: SidebarLinkGroup[]
+}
+
+export default function AppSidebar({ items }: AppSidebarProps) {
+	const { isMobile, toggleSidebar } = useSidebar()
 	const menus = useActiveMenu()
 
-	const { isMobile, toggleSidebar } = useSidebar()
-
-	const isAllowedAccess = ['user:read', 'role:read'].some((item) =>
-		permission.includes(item)
-	)
-
 	return (
-		<Sidebar variant='sidebar' className='z-20'>
+		<Sidebar variant='sidebar' className='z-20 pt-[40px]'>
 			<SidebarHeader>
 				{isMobile && (
 					<Button
-						className='h-8 p-0.5 pl-2 pr-3 mb-2 inline-flex w-fit gap-1.5 bg-gray-200'
+						className='h-8 p-0.5 pl-2 pr-3 mb-2 inline-flex w-fit gap-1.5 bg-[#F7F7F7]'
 						variant='secondary'
 						onClick={toggleSidebar}
 					>
@@ -61,301 +68,59 @@ export default function AppSidebar() {
 						Tutup
 					</Button>
 				)}
-				<div className='rounded-lg w-full flex gap-2 items-center'>
-					<div className='border px-1 py-1 border-gray-200 bg-white rounded-lg shadow-md shadow-gray-400/30'>
-						<img src={Logo} className='h-6 w-6 rounded' />
-					</div>
-					<p className='text-dark font-medium text-sm'>ERP BJS</p>
-				</div>
 			</SidebarHeader>
-			<ScrollArea>
+
+			<ScrollArea className='px-6'>
 				<SidebarContent>
-					<SidebarGroup>
-						<SidebarMenu>
-							<SidebarMenuButton isActive={menus.path === '/dashboard'} asChild>
-								<Link to='/dashboard'>
-									<House size={20} />
-									<span>Dashboard</span>
-								</Link>
-							</SidebarMenuButton>
-						</SidebarMenu>
-
-						<SidebarMenu>
-							<SidebarMenuButton className='hover:bg-transparent cursor-default'>
-								<Users size={20} />
-								HRIS
-							</SidebarMenuButton>
-							<SidebarMenuSub>
-								<SidebarMenuSubItem className='flex-col gap-1 flex'>
-									{hrisMenus.map((item) => (
+					<SidebarGroup className='px-0 py-0'>
+						{items.map((group, groupIdx) => (
+							<SidebarMenu key={groupIdx} className='mb-6'>
+								{group.groupName && (
+									<p className='text-sm w-full text-[#1E1E1E]/50 mb-4'>
+										{group.groupName}
+									</p>
+								)}
+								<SidebarMenuSubItem className='flex flex-col gap-4 w-full px-0'>
+									{group.links.map((link) => (
 										<SidebarMenuSubButton
-											isActive={menus.path === item.url}
-											key={`submenu-${item.url}`}
+											key={link.href}
+											isActive={menus.path === link.href}
 											className={cn(
-												'py-4 px-0',
-												menus.path === item.url
-													? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
-													: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
+												'px-4 h-10 w-full !overflow-auto relative',
+												menus.path === link.href &&
+													'shadow-[0_4px_4px_-2px_rgba(72,74,87,0.08)]'
 											)}
 											asChild
 										>
-											<Link to={item.url} className='relative'>
-												{menus.path === item.url && (
-													<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+											<Link to={link.href}>
+												{menus.path === link.href && (
+													<div className='absolute top-1/2 -translate-y-1/2 w-1.5 h-[24px] rounded-r-md bg-blue-primary left-0'></div>
 												)}
-												<span>{item.title}</span>
-											</Link>
-										</SidebarMenuSubButton>
-									))}
-								</SidebarMenuSubItem>
-							</SidebarMenuSub>
-						</SidebarMenu>
-
-						<SidebarMenu>
-							<SidebarMenuButton className='hover:bg-transparent cursor-default'>
-								<HardHat size={20} />
-								Proyek
-							</SidebarMenuButton>
-							<SidebarMenuSub>
-								<SidebarMenuSubItem className='flex flex-col gap-1'>
-									{ProjectMenus.map((item) => (
-										<SidebarMenuSubButton
-											key={`submenu-${item.url}`}
-											isActive={menus.path === item.url}
-											className={cn(
-												'py-4 px-0',
-												menus.path === item.url
-													? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
-													: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
-											)}
-											asChild
-										>
-											<Link to={item.url}>
-												{menus.path === item.url && (
-													<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
-												)}
-												<span>{item.title}</span>
-											</Link>
-										</SidebarMenuSubButton>
-									))}
-								</SidebarMenuSubItem>
-							</SidebarMenuSub>
-						</SidebarMenu>
-
-						<SidebarMenu>
-							<SidebarMenuButton className='hover:bg-transparent cursor-default'>
-								<BlocksIcon size={20} />
-								Inventory
-							</SidebarMenuButton>
-							<SidebarMenuSub>
-								<SidebarMenuSubItem className='flex flex-col gap-1'>
-									{InventoryMenus.map((item) => {
-										if (item.children) {
-											return (
-												<Collapsible
-													key={`submenu-${item.url}`}
-													className='group/collapsible'
-													defaultOpen={
-														menus.activeSubMenu === 'Kelola' &&
-														menus.activeMenu === 'inventory'
-													}
-												>
-													<CollapsibleTrigger asChild>
-														<SidebarMenuSubButton
-															className={cn(
-																'flex justify-between items-center relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md pr-2'
-															)}
-														>
-															<span>{item.title}</span>
-															<ChevronDown className='ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180' />
-														</SidebarMenuSubButton>
-													</CollapsibleTrigger>
-
-													<CollapsibleContent>
-														<SidebarMenuSub>
-															{item.children?.map((sub) => (
-																<SidebarMenuSubItem key={`submenu-${sub.url}`}>
-																	<SidebarMenuSubButton
-																		isActive={menus.path === sub.url}
-																		className={cn(
-																			'py-4 px-0',
-																			menus.path === sub.url
-																				? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
-																				: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
-																		)}
-																		asChild
-																	>
-																		<Link to={sub.url}>
-																			{menus.path === sub.url && (
-																				<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
-																			)}
-																			<span>{sub.title}</span>
-																		</Link>
-																	</SidebarMenuSubButton>
-																</SidebarMenuSubItem>
-															))}
-														</SidebarMenuSub>
-													</CollapsibleContent>
-												</Collapsible>
-											)
-										}
-
-										return (
-											<React.Fragment key={`submenu-${item.url}`}>
-												<SidebarMenuSubButton
-													isActive={menus.path === item.url}
+												<div
 													className={cn(
-														'py-4 px-0',
-														menus.path === item.url
-															? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
-															: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
+														'flex items-center gap-2.5 text-[#BCBDC7]',
+														menus.path === link.href && 'text-blue-primary'
 													)}
-													asChild
 												>
-													<Link to={item.url}>
-														{menus.path === item.url && (
-															<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
+													{link.icon}
+													<span
+														className={cn(
+															'text-base text-[#828599]',
+															menus.path === link.href && 'text-blue-primary'
 														)}
-														<span>{item.title}</span>
-													</Link>
-												</SidebarMenuSubButton>
-											</React.Fragment>
-										)
-									})}
+													>
+														{link.name}
+													</span>
+												</div>
+											</Link>
+										</SidebarMenuSubButton>
+									))}
 								</SidebarMenuSubItem>
-							</SidebarMenuSub>
-						</SidebarMenu>
-
-						{isAllowedAccess && (
-							<SidebarMenu>
-								<SidebarMenuButton className='hover:bg-transparent cursor-default'>
-									<UserCircle size={20} />
-									Admin
-								</SidebarMenuButton>
-								<SidebarMenuSub>
-									<SidebarMenuSubItem className='flex flex-col gap-1'>
-										{permission.includes('user:read') && (
-											<SidebarMenuSubButton
-												key={`submenu-${AdminMenus[0].url}`}
-												isActive={menus.path === AdminMenus[0].url}
-												className={cn(
-													'py-4 px-0',
-													menus.path === AdminMenus[0].url
-														? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
-														: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
-												)}
-												asChild
-											>
-												<Link to={AdminMenus[0].url}>
-													{menus.path === AdminMenus[0].url && (
-														<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
-													)}
-													<span>{AdminMenus[0].title}</span>
-												</Link>
-											</SidebarMenuSubButton>
-										)}
-										{permission.includes('role:read') && (
-											<SidebarMenuSubButton
-												key={`submenu-${AdminMenus[1].url}`}
-												isActive={menus.path === AdminMenus[1].url}
-												className={cn(
-													'py-4 px-0',
-													menus.path === AdminMenus[1].url
-														? 'before:absolute before:w-[calc(100%+16px)] before:h-full before:bg-white before:-left-4 before:rounded-md before:-z-[1] before:shadow-md before:shadow-gray-200/80'
-														: 'relative px-0 hover:before:absolute hover:before:w-4 hover:before:h-full hover:before:bg-white hover:before:-left-4 hover:before:rounded-l-md'
-												)}
-												asChild
-											>
-												<Link to={AdminMenus[1].url}>
-													{menus.path === AdminMenus[1].url && (
-														<div className='absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-blue-primary -left-2.5'></div>
-													)}
-													<span>{AdminMenus[1].title}</span>
-												</Link>
-											</SidebarMenuSubButton>
-										)}
-									</SidebarMenuSubItem>
-								</SidebarMenuSub>
 							</SidebarMenu>
-						)}
+						))}
 					</SidebarGroup>
 				</SidebarContent>
 			</ScrollArea>
 		</Sidebar>
 	)
 }
-
-const hrisMenus = [
-	{
-		title: 'Pegawai',
-		url: paths.employee,
-	},
-	{
-		title: 'Absensi',
-		url: paths.employeeAttendance,
-	},
-	{
-		title: 'Kasbon',
-		url: paths.employeeCashAdvances,
-	},
-	{
-		title: 'Rekapan',
-		url: paths.employeeRecap,
-	},
-]
-const ProjectMenus = [
-	{
-		title: 'Dashboard',
-		url: paths.projectIndex,
-	},
-	{
-		title: 'Kelola',
-		url: paths.projectManage,
-	},
-	{
-		title: 'Klien',
-		url: paths.projectClient,
-	},
-]
-const InventoryMenus = [
-	{
-		title: 'Dashboard',
-		url: paths.inventoryIndex,
-	},
-	{
-		title: 'Kelola',
-		url: paths.inventoryStock,
-		children: [
-			{
-				title: 'Barang Masuk',
-				url: paths.inventoryStockIn,
-			},
-			{
-				title: 'Barang Keluar',
-				url: paths.inventoryStockOut,
-			},
-			{
-				title: 'Opname',
-				url: paths.inventoryStockOpname,
-			},
-			{
-				title: 'Peminjaman',
-				url: paths.inventoryStockBorrowed,
-			},
-		],
-	},
-	{
-		title: 'Supplier',
-		url: paths.inventorySupplier,
-	},
-]
-const AdminMenus = [
-	{
-		title: 'User',
-		url: paths.adminUser,
-	},
-	{
-		title: 'Role',
-		url: paths.adminRole,
-	},
-]

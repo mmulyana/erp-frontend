@@ -10,6 +10,7 @@ const Login = lazy(() => import('./pages/login'))
 const User = lazy(() => import('./pages/user'))
 const Role = lazy(() => import('./pages/role'))
 const Position = lazy(() => import('./pages/position'))
+const HrisDashboard = lazy(() => import('./pages/hris/dashboard'))
 
 const routes: RoutesConfig[] = [
 	{
@@ -26,8 +27,9 @@ const routes: RoutesConfig[] = [
 		component: <Role />,
 	},
 	{
-		path: paths.employee,
-		component: <Position />,
+		path: paths.hris,
+		component: <HrisDashboard />,
+		withoutAuth: true
 	},
 ]
 
