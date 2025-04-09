@@ -9,8 +9,8 @@ import { Form, FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-import Logo from '/public/images/logo.png'
 import LogoGoogle from '/public/images/logo-google.png'
+import Logo from '/public/images/logo.png'
 
 import { useLogin } from '../api/use-login'
 import { LoginSchema } from '../schema'

@@ -81,13 +81,13 @@ export function HrisLayout({
 }: React.PropsWithChildren & { className?: string }) {
 	return (
 		<SidebarProvider>
+			<Header />
 			<Sidebar items={navLinks} />
-			<main className={cn('flex-grow', className)}>
-				<Header />
+			<main className={cn('pt-[calc(3rem+24px)] px-6 flex-1', className)}>
 				{children}
 			</main>
-			<Helpdesk />
-			<Setting />
+			{/* <Helpdesk /> */}
+			{/* <Setting /> */}
 		</SidebarProvider>
 	)
 }

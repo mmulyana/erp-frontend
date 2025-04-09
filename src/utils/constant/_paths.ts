@@ -13,6 +13,9 @@ export const paths = {
 	hrisAttendanceRegular: '/hris/attendance/regular',
 	hrisAttendanceOvertime: '/hris/attendance/overtime',
 	hrisAttendanceReport: '/hris/attendance/report',
+
+	project: '/project',
+	inventory: '/inventory',
 	
 	// employee: '/dashboard/hris/employee',
 	// employeeDetail: '/dashboard/hris/employee/:detail',

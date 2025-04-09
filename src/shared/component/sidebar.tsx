@@ -56,8 +56,8 @@ export default function AppSidebar({ items }: AppSidebarProps) {
 	const menus = useActiveMenu()
 
 	return (
-		<Sidebar variant='sidebar' className='z-20 pt-[40px]'>
-			<SidebarHeader>
+		<Sidebar variant='sidebar' className='z-0 pt-12'>
+			<SidebarHeader className='block md:hidden'>
 				{isMobile && (
 					<Button
 						className='h-8 p-0.5 pl-2 pr-3 mb-2 inline-flex w-fit gap-1.5 bg-[#F7F7F7]'
@@ -70,7 +70,7 @@ export default function AppSidebar({ items }: AppSidebarProps) {
 				)}
 			</SidebarHeader>
 
-			<ScrollArea className='px-6'>
+			<ScrollArea className='px-6 pt-6'>
 				<SidebarContent>
 					<SidebarGroup className='px-0 py-0'>
 						{items.map((group, groupIdx) => (

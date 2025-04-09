@@ -1,100 +1,38 @@
-import { ChevronRight, Settings, Telescope } from 'lucide-react'
-import { useAtomValue, useSetAtom } from 'jotai'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { ChevronDown } from 'lucide-react'
+import { useAtomValue } from 'jotai'
 
-import { userAtom } from '@/shared/store/auth'
-import { useIsMobile } from '@/shared/hooks/use-mobile'
 import { baseUrl } from '@/utils/constant/_urls'
+import { Button } from '@/components/ui/button'
+import { userAtom } from '@/shared/store/auth'
 import { cn } from '@/utils/cn'
 
-import { SidebarTrigger } from '@/components/ui/sidebar'
-import { Separator } from '@/components/ui/separator'
-import {
-	Breadcrumb as BreadCrumbWrapper,
-	BreadcrumbItem,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import { Button } from '@/components/ui/button'
+import logo from '/public/images/logo.png'
 
-import { settingConfig } from './setting/setting'
-import { startTourAtom } from '@/shared/hooks/use-tour'
-import { titleAtom } from '@/shared/store/title'
+import TopNavigation from './top-navigation'
 
 export default function Header() {
-	const setSettingConfig = useSetAtom(settingConfig)
-	const setStart = useSetAtom(startTourAtom)
-	const links = useAtomValue(titleAtom)
 	const user = useAtomValue(userAtom)
-
-	const isMobile = useIsMobile()
-
 	return (
 		<div
 			className={cn(
-				'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-16 md:h-12 bg-white sticky top-0 left-0 min-w-full z-10'
+				'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-16 md:h-12 bg-white fixed top-0 left-0 w-full z-10'
 			)}
 		>
-			<div className='flex gap-3 items-center'>
-				<SidebarTrigger />
-				{!!links.length && !isMobile && (
-					<Separator
-						className='border border-line h-7'
-						orientation='vertical'
-					/>
-				)}
-				{!isMobile && (
-					<BreadCrumbWrapper>
-						<BreadcrumbList className='ml-2 flex items-center'>
-							{links.map((link, index) => {
-								const lastIndex = links.length - 1
+			<div className='flex gap-8 items-center'>
+				<div className='flex gap-2 items-center'>
+					<img src={logo} className='w-8 h-8' />
+					<div className='flex gap-1 items-center'>
+						<p className='font-medium text-[#2D2F36]'>Barokah</p>
+						<span className='rounded-md px-1 py-0.5 bg-[#475DEF] flex items-center justify-center text-xs text-white'>
+							ERP
+						</span>
+					</div>
+				</div>
 
-								return (
-									<React.Fragment key={index}>
-										<BreadcrumbItem>
-											{index === lastIndex ? (
-												<BreadcrumbPage className='text-[#021328] text-sm font-medium'>
-													{link.name}
-												</BreadcrumbPage>
-											) : (
-												<Link to={link.path} className='text-[#989CA8] text-sm'>
-													{link.name}
-												</Link>
-											)}
-										</BreadcrumbItem>
-										{index !== lastIndex && (
-											<BreadcrumbSeparator>
-												<ChevronRight className='w-2 h-2 text-[#989CA8]' />
-											</BreadcrumbSeparator>
-										)}
-									</React.Fragment>
-								)
-							})}
-						</BreadcrumbList>
-					</BreadCrumbWrapper>
-				)}
+				<TopNavigation />
 			</div>
 
 			<div className='flex gap-2 items-center'>
-				<Button
-					variant='secondary'
-					className='mr-2 rounded-full px-3 text-gray-400'
-					onClick={() => setStart(true)}
-				>
-					<Telescope size={16} />
-					<span className='px-1 text-gray-600'>Lihat tutorial</span>
-				</Button>
-				<Button
-					variant='secondary'
-					className='w-10 h-10 md:w-8 md:h-8 p-0 rounded-full bg-[#EFF0F2]'
-					onClick={() => {
-						setSettingConfig({ open: true })
-					}}
-				>
-					<Settings className='w-5 h-5 text-[#313951]/70' />
-				</Button>
 				<Button
 					variant='secondary'
 					className='w-10 h-10 md:w-8 md:h-8 rounded-full bg-[#FFF] border-[1.5px] border-[#2A9D90] p-0.5 relative'
@@ -112,6 +50,7 @@ export default function Header() {
 						</div>
 					)}
 				</Button>
+				<ChevronDown size={20} />
 			</div>
 		</div>
 	)
