@@ -10,8 +10,8 @@ import tourRole from '@/features/role/component/tour-role'
 import AddRole from '@/features/role/component/add-role'
 
 import { useApiData } from '@/shared/hooks/use-api-data'
-import { TEST_ID } from '@/utils/constant/_testId'
-import { PATH } from '@/utils/constant/_paths'
+import { testIds } from '@/utils/constant/_testId'
+import { paths } from '@/utils/constant/_paths'
 
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
@@ -28,8 +28,8 @@ import ProtectedComponent from '@/components/protected'
 import { Role } from '@/features/role/type'
 
 const LINKS = [
-	{ name: 'Dashboard', path: PATH.DASHBOARD_OVERVIEW },
-	{ name: 'Role', path: PATH.ADMIN_ROLE },
+	{ name: 'Dashboard', path: paths.dashboardOverview },
+	{ name: 'Role', path: paths.adminRole },
 ]
 
 export default function Index() {
@@ -119,8 +119,8 @@ export default function Index() {
 				<ProtectedComponent required={['role:create']}>
 					<Button
 						onClick={() => setOpenDialog({ id: null, open: true })}
-						id={TEST_ID.BUTTON_CREATE_ROLE}
-						data-testid={TEST_ID.BUTTON_CREATE_ROLE}
+						id={testIds.buttonCreateRole}
+						data-testid={testIds.buttonCreateRole}
 					>
 						Peran Baru
 					</Button>

@@ -9,7 +9,7 @@ import { testIds } from '@/utils/constant/_testId'
 
 interface PasswordInputProps {
 	name: string
-	label: string
+	label?: string
 	placeholder?: string
 	className?: string
 }
@@ -30,9 +30,11 @@ export default function InputPassword({
 
 	return (
 		<div className='space-y-2'>
-			<FormLabel htmlFor={name} className='block text-sm text-dark/80'>
-				{label}
-			</FormLabel>
+			{label && (
+				<FormLabel htmlFor={name} className='block text-sm text-dark/80'>
+					{label}
+				</FormLabel>
+			)}
 			<div className='relative'>
 				<Input
 					type={showPassword ? 'text' : 'password'}
