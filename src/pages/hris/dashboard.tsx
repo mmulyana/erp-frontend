@@ -2,19 +2,10 @@ import { HrisLayout } from '@/shared/layout/hris-dashboard'
 import CardHighlight from '@/shared/component/card-highlight'
 
 import TrenEmployee from '@/features/hris/dashboard/components/tren-employee'
+import PieEducation from '@/features/hris/dashboard/components/pie-education'
 import PiePosition from '@/features/hris/dashboard/components/pie-position'
 import Reminder from '@/features/hris/dashboard/components/reminder'
 import PieAge from '@/features/hris/dashboard/components/pie-age'
-import PieEducation from '@/features/hris/dashboard/components/pie-education'
-
-const pieData = [
-	{ name: 'Supir', value: 4 },
-	{ name: 'Tukang', value: 16 },
-	{ name: 'Helper', value: 40 },
-	{ name: 'Welder', value: 5 },
-]
-
-const pieColors = ['#f87171', '#fb923c', '#3b82f6', '#a855f7']
 
 export default function DashboardHris() {
 	return (

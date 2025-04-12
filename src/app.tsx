@@ -2,16 +2,24 @@ import { Routes, Route } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 
 import LoadingScreen from '@/components/common/loading-screen'
+
 import ProtectedRoute from '@/utils/protected-route'
 import { paths } from '@/utils/constant/_paths'
+
 import { RoutesConfig } from '@/shared/types'
 
 const Login = lazy(() => import('./pages/login'))
 const User = lazy(() => import('./pages/user'))
 const Role = lazy(() => import('./pages/role'))
-const Position = lazy(() => import('./pages/position'))
+
+// HRIS
 const HrisDashboard = lazy(() => import('./pages/hris/dashboard'))
+const Employee = lazy(() => import('./pages/hris/employee'))
+
+// PROJECT
 const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
+
+// INVENTORY
 const InventoryDashboard = lazy(() => import('./pages/inventory/dashboard'))
 
 const routes: RoutesConfig[] = [
@@ -41,6 +49,11 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.inventory,
 		component: <InventoryDashboard />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.hrisMasterDataEmployee,
+		component: <Employee />,
 		withoutAuth: true,
 	},
 ]
