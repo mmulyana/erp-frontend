@@ -1,10 +1,61 @@
-import { DashboardLayout } from '@/shared/layout/dashboard-layout'
 import { HrisLayout } from '@/shared/layout/hris-dashboard'
+import CardHighlight from '@/shared/component/card-highlight'
+
+import TrenEmployee from '@/features/hris/dashboard/components/tren-employee'
+import PiePosition from '@/features/hris/dashboard/components/pie-position'
+import Reminder from '@/features/hris/dashboard/components/reminder'
+import PieAge from '@/features/hris/dashboard/components/pie-age'
+import PieEducation from '@/features/hris/dashboard/components/pie-education'
+
+const pieData = [
+	{ name: 'Supir', value: 4 },
+	{ name: 'Tukang', value: 16 },
+	{ name: 'Helper', value: 40 },
+	{ name: 'Welder', value: 5 },
+]
+
+const pieColors = ['#f87171', '#fb923c', '#3b82f6', '#a855f7']
 
 export default function DashboardHris() {
 	return (
 		<HrisLayout>
-			<p>Dashboard layout</p>
+			<div className='grid gap-6 grid-cols-1 md:grid-cols-3'>
+				<CardHighlight
+					title='Total Pegawai'
+					value={120}
+					footer={{
+						percent: 12,
+						text: 'Lebih banyak dari bulan kemarin',
+					}}
+				/>
+				<CardHighlight
+					title='Pegawai Aktif'
+					value={80}
+					footer={{
+						percent: 15,
+						text: 'Lebih banyak dari bulan kemarin',
+					}}
+				/>
+				<CardHighlight
+					title='Pegawai Nonaktif'
+					value={120}
+					footer={{
+						percent: -8,
+						text: 'Lebih sedikit dari bulan kemarin',
+					}}
+				/>
+			</div>
+			<div className='grid gap-6 grid-cols-1 md:grid-cols-3 mt-6'>
+				<div className='grid gap-6 col-span-1 md:col-span-2 grid-cols-1 md:grid-cols-2 h-fit'>
+					<Reminder />
+					<TrenEmployee />
+				</div>
+				<div className='space-y-6'>
+					<PiePosition />
+					<PieAge />
+					<PieEducation />
+				</div>
+			</div>
 		</HrisLayout>
 	)
 }

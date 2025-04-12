@@ -9,9 +9,14 @@ import { cn } from '@/utils/cn'
 import logo from '/public/images/logo.png'
 
 import TopNavigation from './top-navigation'
+import { useIsMobile } from '../hooks/use-mobile'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)
+
+	const isMobile = useIsMobile()
+
 	return (
 		<div
 			className={cn(
@@ -23,13 +28,12 @@ export default function Header() {
 					<img src={logo} className='w-8 h-8' />
 					<div className='flex gap-1 items-center'>
 						<p className='font-medium text-[#2D2F36]'>Barokah</p>
-						<span className='rounded-md px-1 py-0.5 bg-[#475DEF] flex items-center justify-center text-xs text-white'>
+						<span className='rounded-md px-1 py-0.5 bg-brand flex items-center justify-center text-xs text-white'>
 							ERP
 						</span>
 					</div>
 				</div>
-
-				<TopNavigation />
+				{!isMobile ? <TopNavigation /> : <SidebarTrigger />}
 			</div>
 
 			<div className='flex gap-2 items-center'>
@@ -43,8 +47,8 @@ export default function Header() {
 							className='h-full w-full rounded-full object-cover'
 						/>
 					) : (
-						<div className='w-full h-full rounded-full bg-blue-primary/20 flex justify-center items-center pb-0.5'>
-							<p className='text-sm uppercase text-blue-primary'>
+						<div className='w-full h-full rounded-full bg-brand/20 flex justify-center items-center pb-0.5'>
+							<p className='text-sm uppercase text-brand'>
 								{user?.username.at(0)}
 							</p>
 						</div>

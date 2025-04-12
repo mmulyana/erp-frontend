@@ -83,7 +83,7 @@ export function HrisLayout({
 		<SidebarProvider>
 			<Header />
 			<Sidebar items={navLinks} />
-			<main className={cn('pt-[calc(3rem+24px)] px-6 flex-1', className)}>
+			<main className={cn('pt-[calc(3rem+24px)] px-6 flex-1 pb-6', className)}>
 				{children}
 			</main>
 			{/* <Helpdesk /> */}

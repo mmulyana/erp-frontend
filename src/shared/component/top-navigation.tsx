@@ -35,11 +35,11 @@ export default function TopNavigation() {
 						to={to}
 						className={cn(
 							'relative px-4 h-12 flex gap-1.5 items-center justify-center font-semibold text-sm text-[#828599]',
-							isActive && 'text-blue-primary'
+							isActive && 'text-brand'
 						)}
 					>
 						{isActive && (
-							<div className='absolute bottom-0 left-0 w-full h-1 bg-blue-primary rounded-t-lg' />
+							<div className='absolute bottom-0 left-0 w-full h-1 bg-brand rounded-t-lg' />
 						)}
 						{icon}
 						{label}

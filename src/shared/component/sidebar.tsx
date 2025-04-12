@@ -94,19 +94,19 @@ export default function AppSidebar({ items }: AppSidebarProps) {
 										>
 											<Link to={link.href}>
 												{menus.path === link.href && (
-													<div className='absolute top-1/2 -translate-y-1/2 w-1.5 h-[24px] rounded-r-md bg-blue-primary left-0'></div>
+													<div className='absolute top-1/2 -translate-y-1/2 w-1.5 h-[24px] rounded-r-md bg-brand left-0'></div>
 												)}
 												<div
 													className={cn(
 														'flex items-center gap-2.5 text-[#BCBDC7]',
-														menus.path === link.href && 'text-blue-primary'
+														menus.path === link.href && 'text-brand'
 													)}
 												>
 													{link.icon}
 													<span
 														className={cn(
 															'text-base text-[#828599]',
-															menus.path === link.href && 'text-blue-primary'
+															menus.path === link.href && 'text-brand'
 														)}
 													>
 														{link.name}
