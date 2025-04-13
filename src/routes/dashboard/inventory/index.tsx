@@ -13,9 +13,9 @@ import { Goods } from '@/utils/types/api'
 
 import { permissionAtom } from '@/shared/store/permission'
 
-import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { DataTable } from '@/components/data-table'
+import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
 import Tour from '@/components/common/tour'
 

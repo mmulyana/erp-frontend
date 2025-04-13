@@ -14,8 +14,8 @@ import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { FilterTable } from '@/components/data-table/component'
-import { DataTable } from '@/components/data-table'
+import { FilterTable } from '@/shared/component/data-table/component'
+import { DataTable } from '@/shared/component/data-table'
 
 import DialogDeleteClient from './dialog-delete-client'
 import DialogAddClient from './dialog-add-client'

@@ -15,6 +15,7 @@ const Role = lazy(() => import('./pages/role'))
 // HRIS
 const HrisDashboard = lazy(() => import('./pages/hris/dashboard'))
 const Employee = lazy(() => import('./pages/hris/employee'))
+const NewEmployee = lazy(() => import('./pages/hris/new-employee'))
 
 // PROJECT
 const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
@@ -54,6 +55,11 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.hrisMasterDataEmployee,
 		component: <Employee />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.hrisMasterDataEmployeeCreate,
+		component: <NewEmployee />,
 		withoutAuth: true,
 	},
 ]

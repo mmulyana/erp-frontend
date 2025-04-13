@@ -19,7 +19,7 @@ import ProtectedComponent from '@/components/protected'
 import Search from '@/components/common/search'
 import Tour from '@/components/common/tour'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { DataTable } from '@/components/data-table'
+import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
 
 import FilterReset from './filter-reset'

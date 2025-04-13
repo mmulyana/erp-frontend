@@ -17,9 +17,9 @@ import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import Tour from '@/components/common/tour'
 
-import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { DataTable } from '@/components/data-table'
+import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
 
 import { DashboardLayout } from '@/shared/component/layout'

@@ -1,6 +1,6 @@
 import { Toaster } from '@/components/ui/sonner'
 
-export default function NotificationWrapper({
+export default function ToasterWrapper({
 	children,
 }: React.PropsWithChildren) {
 	return (

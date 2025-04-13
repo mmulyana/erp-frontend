@@ -27,8 +27,8 @@ import {
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import Tour from '@/components/common/tour'
 import { Form, FormField } from '@/components/ui/form'
-import { FilterTable } from '@/components/data-table/component'
-import { DataTable } from '@/components/data-table'
+import { FilterTable } from '@/shared/component/data-table/component'
+import { DataTable } from '@/shared/component/data-table'
 import {
   Command,
   CommandEmpty,

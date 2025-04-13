@@ -16,9 +16,9 @@ import { formatToRupiah } from '@/utils/formatCurrency'
 import { PATH } from '@/utils/constant/_paths'
 import { Project } from '@/utils/types/api'
 
-import { FilterTable, HeadTable } from '@/components/data-table/component'
+import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { DataTable } from '@/components/data-table'
+import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
 import { Tab, Tabs } from '@/components/tab'
 
