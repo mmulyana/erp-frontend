@@ -1,4 +1,4 @@
-import { HrisLayout } from '@/shared/layout/hris-dashboard'
+import { HrisLayout } from '@/shared/layout/hris-layout'
 
 export default function DashboardInventory() {
 	return (

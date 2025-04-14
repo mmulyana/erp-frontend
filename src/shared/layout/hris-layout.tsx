@@ -1,7 +1,6 @@
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { cn } from '@/utils/cn'
 
-import Setting from '../component/setting/setting'
 import Sidebar, {
 	AppSidebarProps,
 	SidebarLinkGroup,

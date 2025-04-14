@@ -1,4 +1,4 @@
-import { HrisLayout } from '@/shared/layout/hris-dashboard'
+import { HrisLayout } from '@/shared/layout/hris-layout'
 import CardHighlight from '@/shared/component/card-highlight'
 
 import TrenEmployee from '@/features/hris/dashboard/components/tren-employee'

@@ -21,7 +21,10 @@ module.exports = {
 					secondary: '#484A57',
 					light: '#828599',
 				},
-				surface: '#F7F7F7',
+				surface: {
+					DEFAULT: '#F7F7F7',
+					secondary: '#FAFAFA',
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
