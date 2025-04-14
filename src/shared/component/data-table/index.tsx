@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
 							className={cn(
 								'text-dark/70 font-normal text-sm h-10 py-0',
 								index !== 0 &&
-									index !== row.getVisibleCells().length - 1 &&
+									index !== row.getVisibleCells().length &&
 									'border-l border-line',
 								isColumnClickable(cell.column.id) &&
 									autoRedirect &&

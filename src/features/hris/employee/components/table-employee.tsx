@@ -9,11 +9,11 @@ import { permissionAtom } from '@/shared/store/permission'
 
 import { useEmployees } from '@/features/hris/employee/api/use-employees'
 
-import { EDUCATIONS_OBJ } from '@/utils/data/educations'
 import { testIds } from '@/utils/constant/_testId'
-import { Employee } from '@/utils/types/api'
 
 import { parseAsString, useQueryStates } from 'nuqs'
+import { Employee } from '../types'
+import { format } from 'date-fns'
 
 export default function TableEmployee() {
 	const permission = useAtomValue(permissionAtom)
@@ -33,7 +33,7 @@ export default function TableEmployee() {
 			accessorKey: 'fullname',
 			header: 'Nama lengkap',
 			cell: ({ row }) => {
-				const { fullname, id } = row.original
+				const { fullname } = row.original
 				return (
 					<div
 						className='max-w-[160px]'
@@ -74,8 +74,12 @@ export default function TableEmployee() {
 		},
 		{
 			id: 'joined_at',
-			accessorKey: 'joined_at',
+			accessorKey: 'joinedAt',
 			header: 'Bergabung sejak',
+			cell: ({ row }) =>
+				row.original.joinedAt && (
+					<p>{format(row.original.joinedAt, 'dd MMMM yyyy')}</p>
+				),
 		},
 		{
 			id: 'position',
@@ -84,24 +88,21 @@ export default function TableEmployee() {
 		},
 		{
 			id: 'last_education',
-			accessorKey: 'last_education',
+			accessorKey: 'lastEducation',
 			header: 'Pend terakhir',
-			cell: ({ row }) => (
-				<p>{EDUCATIONS_OBJ[row.original.last_education as string]}</p>
-			),
 		},
 		{
-			id: 'phone_number',
-			accessorKey: 'phone_number',
+			id: 'phone',
+			accessorKey: 'phone',
 			header: 'Nomor telp',
 		},
 		{
 			id: 'status',
 			accessorKey: 'status',
 			header: 'Status',
-			cell: ({ row }) => (
-				<Chips status={row.original.status} className='rounded-full' />
-			),
+			// cell: ({ row }) => (
+			// 	<Chips status={row.original.} className='rounded-full' />
+			// ),
 		},
 	]
 	// COLUMNS
@@ -110,7 +111,7 @@ export default function TableEmployee() {
 		<>
 			<DataTable
 				columns={columns}
-				data={[]}
+				data={data?.data.data.data || []}
 				withPagination
 				isLoading={isLoading}
 				// totalPages={data?.total_pages || 0}

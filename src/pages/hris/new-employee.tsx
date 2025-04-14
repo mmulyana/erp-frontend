@@ -26,25 +26,40 @@ import { MultiStep } from '@/shared/component/multi-step'
 import DetailLayout from '@/shared/layout/detail-layout'
 
 import { paths } from '@/utils/constant/_paths'
+import { z } from 'zod'
+import { EmployeeSchema } from '@/features/hris/employee/schema'
+import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
+import { useNavigate } from 'react-router-dom'
 
 export default function NewEmployee() {
-	const form = useForm({
+	const navigate = useNavigate()
+
+	const [step, setStep] = useState(0)
+
+	const { mutate } = useCreateEmployee()
+	const form = useForm<z.infer<typeof EmployeeSchema>>({
 		defaultValues: {
 			fullname: '',
-			photo_url: null,
-			birth_date: '',
-			last_education: '',
-			sex: '',
-			marital_status: '',
-			join_date: '',
-			position: '',
-			basic_salary: 0,
-			overtime_salary: 0,
 			address: '',
-			phone_number: '',
+			birthDate: '',
+			joinedAt: '',
+			lastEducation: '',
+			overtimeSalary: 0,
+			phone: '',
+			position: '',
+			salary: 0,
 		},
 	})
-	const [step, setStep] = useState(0)
+
+	const onCreate = () => {
+		const payload = form.getValues()
+		mutate(payload, {
+			onSuccess: () => {
+				form.reset()
+				navigate(paths.hrisMasterDataEmployee)
+			},
+		})
+	}
 
 	const steps = [
 		{
@@ -85,12 +100,12 @@ export default function NewEmployee() {
 								Tambah foto agar mudah dikenali
 							</FormDescription>
 						</div>
-						<ImageUpload name='photo_url' />
+						<ImageUpload name='photoUrl' />
 					</div>
 					<div className='p-10 grid grid-cols-1 md:grid-cols-2 gap-6'>
 						<FormField
 							control={form.control}
-							name='birth_date'
+							name='birthDate'
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Tanggal Lahir</FormLabel>
@@ -106,7 +121,7 @@ export default function NewEmployee() {
 						/>
 						<FormField
 							control={form.control}
-							name='last_education'
+							name='lastEducation'
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Pendidikan terakhir</FormLabel>
@@ -130,48 +145,7 @@ export default function NewEmployee() {
 						/>
 						<FormField
 							control={form.control}
-							name='sex'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Jenis kelamin</FormLabel>
-									<FormControl>
-										<Select onValueChange={field.onChange}>
-											<SelectTrigger className='bg-surface-secondary'>
-												<SelectValue placeholder='Jenis kelamin' />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value='male'>Laki-laki</SelectItem>
-												<SelectItem value='female'>Perempuan</SelectItem>
-											</SelectContent>
-										</Select>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='marital_status'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Status Pernikahan</FormLabel>
-									<FormControl>
-										<Select onValueChange={field.onChange}>
-											<SelectTrigger className='bg-surface-secondary'>
-												<SelectValue placeholder='Status pernikahan' />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value='single'>Single</SelectItem>
-												<SelectItem value='merried'>Menikah</SelectItem>
-												<SelectItem value='divorce'>Cerai</SelectItem>
-											</SelectContent>
-										</Select>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='join_date'
+							name='joinedAt'
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Tanggal bergabung</FormLabel>
@@ -221,7 +195,7 @@ export default function NewEmployee() {
 					<div className='p-10 grid grid-cols-1 md:grid-cols-2 gap-6'>
 						<FormField
 							control={form.control}
-							name='basic_salary'
+							name='salary'
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Gaji pokok</FormLabel>
@@ -233,7 +207,7 @@ export default function NewEmployee() {
 						/>
 						<FormField
 							control={form.control}
-							name='overtime_salary'
+							name='overtimeSalary'
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Gaji lembur (per jam)</FormLabel>
@@ -286,7 +260,7 @@ export default function NewEmployee() {
 							</FormDescription>
 						</div>
 						<FormField
-							name='phone_number'
+							name='phone'
 							control={form.control}
 							render={({ field }) => (
 								<FormItem className='w-full md:w-72'>
@@ -308,7 +282,7 @@ export default function NewEmployee() {
 						currentStep={step}
 						onNext={() => setStep((prev) => prev + 1)}
 						onBack={() => setStep((prev) => prev - 1)}
-						onFinish={() => console.log(form.getValues())}
+						onFinish={() => onCreate()}
 					/>
 				</Form>
 			</div>

@@ -2,27 +2,30 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
-import { Employee, IApi } from '@/utils/types/api'
 import { urls } from '@/utils/constant/_urls'
 import { keys } from '@/utils/constant/_keys'
 import http from '@/utils/http'
 
-import { PayloadCreateEmployee } from '../types'
+import { IApi } from '@/shared/types'
+import { Employee } from '../types'
+import { toFormData } from '@/utils/helper/to-form-data'
 
 export const useCreateEmployee = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async (
-			payload: PayloadCreateEmployee
+			payload: Employee
 		): Promise<AxiosResponse<IApi<Employee>>> => {
-			return await http.post(urls.employee, payload)
+			const formData = toFormData(payload)
+			return await http.post(urls.employee, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.employee] })
-			queryClient.invalidateQueries({
-				queryKey: [keys.expireCertification],
-			})
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

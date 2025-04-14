@@ -1,5 +1,18 @@
 import { z } from 'zod'
 
+export const EmployeeSchema = z.object({
+	fullname: z.string(),
+	position: z.string(),
+	birthDate: z.string().optional(),
+	joinedAt: z.string().optional(),
+	lastEducation: z.string().optional(),
+	salary: z.number().int().optional(),
+	overtimeSalary: z.number().int().optional(),
+	address: z.string().optional(),
+	phone: z.string().optional(),
+	photoUrl: z.any(),
+})
+
 export const ACCEPTED_FILE_TYPES = [
 	'application/pdf',
 	'image/png',
