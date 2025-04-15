@@ -11,7 +11,7 @@ import {
 } from '@/hooks/api/use-project'
 import { useProjectLabels } from '@/hooks/api/use-project-label'
 
-import { KEYS } from '@/shared/utils/constant/_keys'
+import { KEYS } from '@/shared/constants/_keys'
 import { Project } from '@/utils/types/api'
 import { socket } from '@/shared/utils/socket'
 import { cn } from '@/shared/utils/cn'

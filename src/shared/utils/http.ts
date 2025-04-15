@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import { CookieKeys, CookieStorage } from './cookie'
-import { paths } from './constant/_paths'
+import { paths } from '../constants/_paths'
 
 const http = axios.create({
 	timeout: 30000,

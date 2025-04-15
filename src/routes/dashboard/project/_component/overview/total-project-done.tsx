@@ -3,7 +3,7 @@ import { ListChecks } from 'lucide-react'
 import { useTotalProject } from '@/hooks/api/use-project'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
-import { TEST_ID } from '@/shared/utils/constant/_testId'
+import { TEST_ID } from '@/shared/constants/_testId'
 
 export default function TotalProjectDone() {
   const { data } = useApiData(useTotalProject())

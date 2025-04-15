@@ -3,7 +3,7 @@ import { CalendarDaysIcon } from 'lucide-react'
 import { format, parse } from 'date-fns'
 import { id } from 'date-fns/locale'
 
-import { TEST_ID } from '@/shared/utils/constant/_testId'
+import { TEST_ID } from '@/shared/constants/_testId'
 import { cn } from '@/shared/utils/cn'
 
 import { Calendar } from '@/components/ui/calendar'

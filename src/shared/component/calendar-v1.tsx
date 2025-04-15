@@ -35,11 +35,11 @@ export function CalendarV1({
 
 	return (
 		<div className={cn('w-full max-w-xs', className)}>
-			<h2 className='mb-2 text-lg font-medium'>{month}</h2>
+			<h2 className='mb-2 text-ink-secondary font-medium'>{month}</h2>
 
 			<div className='grid grid-cols-7 gap-1 text-xs text-gray-500'>
 				{daysOfWeek[locale as keyof typeof daysOfWeek]?.map((day, index) => (
-					<div key={index} className='text-center font-medium'>
+					<div key={index} className='text-center text-ink-secondary'>
 						{day}
 					</div>
 				))}
@@ -52,7 +52,7 @@ export function CalendarV1({
 							<button
 								onClick={() => console.log(day)}
 								className={cn(
-									'flex h-full w-full items-center justify-center rounded-md text-sm transition-colors',
+									'flex h-full w-full items-center justify-center rounded-md text-sm transition-colors text-ink-light',
 									dates.includes(day)
 										? 'bg-success text-white hover:bg-teal-600'
 										: 'hover:bg-gray-100'

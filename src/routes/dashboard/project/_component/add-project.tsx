@@ -29,7 +29,7 @@ import {
 
 import { BoxIcon, User, UserIcon } from 'lucide-react'
 import { useState } from 'react'
-import { BASE_URL } from '@/shared/utils/constant/_urls'
+import { BASE_URL } from '@/shared/constants/_urls'
 import { socket } from '@/shared/utils/socket'
 
 type Props = {

@@ -7,7 +7,7 @@ import Sidebar, {
 } from '../component/sidebar'
 import Header from '../component/header'
 import Helpdesk from '../component/helpdesk'
-import { paths } from '@/shared/utils/constant/_paths'
+import { paths } from '@/shared/constants/_paths'
 import {
 	FileBarChart,
 	FileClock,

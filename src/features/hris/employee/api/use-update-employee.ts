@@ -3,8 +3,8 @@ import { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 import { Employee, IApi } from '@/utils/types/api'
-import { urls } from '@/shared/utils/constant/_urls'
-import { keys } from '@/shared/utils/constant/_keys'
+import { urls } from '@/shared/constants/_urls'
+import { keys } from '@/shared/constants/_keys'
 import http from '@/shared/utils/http'
 
 import { PayloadCreateEmployee } from '../types'

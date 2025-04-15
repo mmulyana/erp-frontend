@@ -1,5 +1,5 @@
-import { KEYS } from '@/shared/utils/constant/_keys'
-import { URLS } from '@/shared/utils/constant/_urls'
+import { KEYS } from '@/shared/constants/_keys'
+import { URLS } from '@/shared/constants/_urls'
 import http from '@/shared/utils/http'
 import { IApi } from '@/utils/types/api'
 import { Pagination } from '@/utils/types/common'

@@ -2,8 +2,8 @@ import { BriefcaseBusinessIcon, Settings2Icon } from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
 import { useState } from 'react'
 
-import { TEST_ID } from '@/shared/utils/constant/_testId'
-import { PATH } from '@/shared/utils/constant/_paths'
+import { TEST_ID } from '@/shared/constants/_testId'
+import { PATH } from '@/shared/constants/_paths'
 import { projectAtom } from '@/atom/project'
 
 import ProtectedComponent from '@/components/protected'

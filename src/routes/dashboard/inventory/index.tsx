@@ -8,7 +8,7 @@ import useTour from '@/hooks/use-tour'
 import { useDeleteGoods, useGoodsByPagination } from '@/hooks/api/use-goods'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
-import { PATH } from '@/shared/utils/constant/_paths'
+import { PATH } from '@/shared/constants/_paths'
 import { Goods } from '@/utils/types/api'
 
 import { permissionAtom } from '@/shared/store/permission'
@@ -32,7 +32,7 @@ import { settingConfig } from '../../../shared/component/setting/setting'
 import { DashboardLayout } from '../../../shared/component/layout'
 import { useTitle } from '../../../shared/component/header'
 import { steps } from './_component/tour-index'
-import { TEST_ID } from '@/shared/utils/constant/_testId'
+import { TEST_ID } from '@/shared/constants/_testId'
 
 export const links = [
   {

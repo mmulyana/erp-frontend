@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 import { loginFixtures } from 'e2e/fixtures/login'
-import { testIds } from '@/shared/utils/constant/_testId'
+import { testIds } from '@/shared/constants/_testId'
 
 import invalidCredential from '../mocks/login/invalidCredential.json' assert { type: 'json' }
 import accountNotExist from '../mocks/login/accountNotExist.json' assert { type: 'json' }

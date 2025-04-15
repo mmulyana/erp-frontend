@@ -1,4 +1,4 @@
-import { PATH } from '@/shared/utils/constant/_paths'
+import { PATH } from '@/shared/constants/_paths'
 import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
 import { useNavigate } from 'react-router-dom'
 

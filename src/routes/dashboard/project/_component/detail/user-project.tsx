@@ -24,7 +24,7 @@ import { Pencil, User2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { socket } from '@/shared/utils/socket'
 import { useQueryClient } from '@tanstack/react-query'
-import { KEYS } from '@/shared/utils/constant/_keys'
+import { KEYS } from '@/shared/constants/_keys'
 
 type FormValues = {
   clientId?: number | null

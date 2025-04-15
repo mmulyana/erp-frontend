@@ -4,7 +4,7 @@ import useUrlState from '@ahooksjs/use-url-state'
 import { useState } from 'react'
 
 import { CreateTransaction } from '@/utils/types/form'
-import { PATH } from '@/shared/utils/constant/_paths'
+import { PATH } from '@/shared/constants/_paths'
 
 import { DashboardLayout } from '../../../../shared/component/layout'
 import { useTitle } from '../../../../shared/component/header'

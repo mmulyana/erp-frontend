@@ -11,9 +11,9 @@ import { useApiData } from '@/shared/hooks/use-api-data'
 import { userAtom } from '@/shared/store/auth'
 
 import { formatPhone } from '@/shared/utils/format-phone'
-import { testIds } from '@/shared/utils/constant/_testId'
-import { baseUrl } from '@/shared/utils/constant/_urls'
-import { paths } from '@/shared/utils/constant/_paths'
+import { testIds } from '@/shared/constants/_testId'
+import { baseUrl } from '@/shared/constants/_urls'
+import { paths } from '@/shared/constants/_paths'
 
 import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'

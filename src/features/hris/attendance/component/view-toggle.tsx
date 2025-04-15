@@ -2,7 +2,7 @@ import { Grid, Table } from 'lucide-react'
 import { atom, useAtom } from 'jotai'
 import { cn } from '@/shared/utils/cn'
 
-import { TEST_ID } from '@/shared/utils/constant/_testId'
+import { TEST_ID } from '@/shared/constants/_testId'
 
 export const viewAtom = atom('grid')
 

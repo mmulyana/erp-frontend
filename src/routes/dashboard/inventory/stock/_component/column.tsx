@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 import { useReturnedTransaction } from '@/hooks/api/use-transaction'
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { Transaction } from '@/utils/types/api'
-import { PATH } from '@/shared/utils/constant/_paths'
+import { PATH } from '@/shared/constants/_paths'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'

@@ -12,7 +12,7 @@ import { z } from 'zod'
 import { socket } from '@/shared/utils/socket'
 import ProtectedComponent from '@/components/protected'
 import { useQueryClient } from '@tanstack/react-query'
-import { KEYS } from '@/shared/utils/constant/_keys'
+import { KEYS } from '@/shared/constants/_keys'
 
 // type Form = Omit<createAttachment, 'file' | 'name'> & { file: File | null }
 const ACCEPTED_FILE_TYPES = [

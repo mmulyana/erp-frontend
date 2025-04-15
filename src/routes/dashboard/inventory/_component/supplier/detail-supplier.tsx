@@ -12,7 +12,7 @@ import {
 } from '@/hooks/api/use-supplier'
 
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
-import { BASE_URL } from '@/shared/utils/constant/_urls'
+import { BASE_URL } from '@/shared/constants/_urls'
 import { Transaction } from '@/utils/types/api'
 import { cn } from '@/shared/utils/cn'
 

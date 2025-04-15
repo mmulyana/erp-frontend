@@ -1,4 +1,4 @@
-import { TEST_ID } from '@/shared/utils/constant/_testId'
+import { TEST_ID } from '@/shared/constants/_testId'
 
 import type { Step } from 'react-joyride'
 

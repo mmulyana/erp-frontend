@@ -9,7 +9,7 @@ import { useGetme } from '@/shared/api/use-get-me'
 import { userAtom } from '@/shared/store/auth'
 
 import { CookieKeys, CookieStorage } from './cookie'
-import { paths } from './constant/_paths'
+import { paths } from '../constants/_paths'
 
 type Props = {
 	children: React.ReactNode

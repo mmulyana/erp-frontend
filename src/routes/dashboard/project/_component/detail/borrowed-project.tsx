@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 
 import { useApiData } from '@/shared/hooks/use-api-data'
 import { useGoods } from '@/hooks/api/use-goods'
-import { KEYS } from '@/shared/utils/constant/_keys'
+import { KEYS } from '@/shared/constants/_keys'
 import {
   useCreateTransaction,
   useProjectTransaction,

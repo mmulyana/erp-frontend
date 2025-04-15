@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
-import { BASE_URL } from '@/shared/utils/constant/_urls'
+import { BASE_URL } from '@/shared/constants/_urls'
 import { Company } from '@/utils/types/api'
 
 import { useClientCompanyPagination } from '@/hooks/api/use-client'

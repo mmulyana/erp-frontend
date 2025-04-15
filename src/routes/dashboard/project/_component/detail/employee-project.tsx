@@ -10,8 +10,8 @@ import {
 import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { useAllEmployees } from '@/features/hris/employee/api/use-employee'
 
-import { BASE_URL } from '@/shared/utils/constant/_urls'
-import { KEYS } from '@/shared/utils/constant/_keys'
+import { BASE_URL } from '@/shared/constants/_urls'
+import { KEYS } from '@/shared/constants/_keys'
 import { Project } from '@/utils/types/api'
 import { socket } from '@/shared/utils/socket'
 import { cn } from '@/shared/utils/cn'

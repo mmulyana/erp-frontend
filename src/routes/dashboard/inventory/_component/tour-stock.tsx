@@ -1,6 +1,6 @@
 import type { Step } from 'react-joyride'
 
-import { TEST_ID } from '@/shared/utils/constant/_testId'
+import { TEST_ID } from '@/shared/constants/_testId'
 
 export const steps: Step[] = [
   {

@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 
 import usePermission from '@/shared/hooks/use-permission'
-import { paths } from '@/shared/utils/constant/_paths'
+import { paths } from '@/shared/constants/_paths'
 import { cn } from '@/shared/utils/cn'
 
 import { ScrollArea } from '@/components/ui/scroll-area'

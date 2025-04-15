@@ -12,7 +12,7 @@ import { id } from 'date-fns/locale'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 
-import { TEST_ID } from '@/shared/utils/constant/_testId'
+import { TEST_ID } from '@/shared/constants/_testId'
 import { cn } from '@/shared/utils/cn'
 
 import { viewAtom } from './view-toggle'

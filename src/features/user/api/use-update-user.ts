@@ -2,12 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { urls } from '@/shared/utils/constant/_urls'
+import { urls } from '@/shared/constants/_urls'
 import { ApiError } from '@/utils/types/api'
 import http from '@/shared/utils/http'
 
 import { UpdateUser } from '../types'
-import { keys } from '@/shared/utils/constant/_keys'
+import { keys } from '@/shared/constants/_keys'
 
 export const useUpdateUser = () => {
 	const queryClient = useQueryClient()

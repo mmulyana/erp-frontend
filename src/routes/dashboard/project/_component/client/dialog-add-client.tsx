@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { z } from 'zod'
 
-import { BASE_URL } from '@/shared/utils/constant/_urls'
+import { BASE_URL } from '@/shared/constants/_urls'
 import { delay } from '@/shared/utils/delay'
 
 import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'

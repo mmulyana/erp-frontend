@@ -25,7 +25,7 @@ import { ImageUpload } from '@/shared/component/image-upload'
 import { MultiStep } from '@/shared/component/multi-step'
 import DetailLayout from '@/shared/layout/detail-layout'
 
-import { paths } from '@/shared/utils/constant/_paths'
+import { paths } from '@/shared/constants/_paths'
 import { z } from 'zod'
 import { EmployeeSchema } from '@/features/hris/employee/schema'
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'

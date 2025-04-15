@@ -10,8 +10,8 @@ import tourRole from '@/features/role/component/tour-role'
 import AddRole from '@/features/role/component/add-role'
 
 import { useApiData } from '@/shared/hooks/use-api-data'
-import { testIds } from '@/shared/utils/constant/_testId'
-import { paths } from '@/shared/utils/constant/_paths'
+import { testIds } from '@/shared/constants/_testId'
+import { paths } from '@/shared/constants/_paths'
 
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'

@@ -6,8 +6,8 @@ import { toast } from 'sonner'
 import { ErrorResponse } from '@/shared/types'
 
 import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
-import { paths } from '@/shared/utils/constant/_paths'
-import { urls } from '@/shared/utils/constant/_urls'
+import { paths } from '@/shared/constants/_paths'
+import { urls } from '@/shared/constants/_urls'
 import http from '@/shared/utils/http'
 
 import { Payload, Response } from '../types'

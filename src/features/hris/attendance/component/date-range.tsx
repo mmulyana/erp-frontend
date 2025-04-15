@@ -13,7 +13,7 @@ import {
 
 import { useDateData } from '../hook/use-date-data'
 import { CalendarDaysIcon } from 'lucide-react'
-import { TEST_ID } from '@/shared/utils/constant/_testId'
+import { TEST_ID } from '@/shared/constants/_testId'
 
 const DateRange = () => {
   const [url, setUrl] = useUrlState({ week: '' })
