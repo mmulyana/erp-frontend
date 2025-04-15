@@ -13,7 +13,7 @@ import { useApiData } from '@/shared/hooks/use-api-data'
 import { BASE_URL } from '@/shared/constants/_urls'
 import { cn } from '@/shared/utils/cn'
 
-import ProtectedComponent from '@/components/protected'
+import ProtectedComponent from '@/shared/component/protected'
 import Tour from '@/components/common/tour'
 
 import { steps } from './tour-attendance'

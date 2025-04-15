@@ -21,7 +21,7 @@ import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
-import ProtectedComponent from '@/components/protected'
+import ProtectedComponent from '@/shared/component/protected'
 import Tour from '@/components/common/tour'
 
 import AddUserRole from '@/features/user/components/add-user-role'

@@ -3,7 +3,7 @@ import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 import { useState } from 'react'
 
-import ProtectedComponent from '@/components/protected'
+import ProtectedComponent from '@/shared/component/protected'
 import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
 

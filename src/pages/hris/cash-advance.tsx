@@ -14,7 +14,7 @@ import { testIds } from '@/shared/constants/_testId'
 import { cn } from '@/shared/utils/cn'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
-import ProtectedComponent from '@/components/protected'
+import ProtectedComponent from '@/shared/component/protected'
 import Tour from '@/components/common/tour'
 import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'

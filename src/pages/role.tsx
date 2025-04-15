@@ -23,7 +23,7 @@ import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
 
 import { useTitle } from '@/shared/store/title'
-import ProtectedComponent from '@/components/protected'
+import ProtectedComponent from '@/shared/component/protected'
 import { Role } from '@/features/role/type'
 
 export default function Index() {
