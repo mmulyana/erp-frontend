@@ -22,19 +22,11 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
 
-import { DashboardLayout } from '@/shared/component/layout'
 import { useTitle } from '@/shared/store/title'
 import ProtectedComponent from '@/components/protected'
 import { Role } from '@/features/role/type'
 
-const LINKS = [
-	{ name: 'Dashboard', path: paths.dashboardOverview },
-	{ name: 'Role', path: paths.adminRole },
-]
-
 export default function Index() {
-	useTitle(LINKS)
-
 	const { mutate: remove } = useDeleteRole()
 
 	const [url] = useUrlState({ name: '' })
@@ -110,7 +102,7 @@ export default function Index() {
 	]
 
 	return (
-		<DashboardLayout className='overflow-hidden'>
+		<>
 			<HeadTable>
 				<div className='flex gap-4 items-center'>
 					<UserCircle className='text-[#989CA8]' />
@@ -127,11 +119,7 @@ export default function Index() {
 				</ProtectedComponent>
 			</HeadTable>
 			<FilterTable />
-			<DataTable
-				columns={column}
-				data={data?.data || []}
-				isLoading={isLoading}
-			/>
+			<DataTable columns={column} data={[]} isLoading={isLoading} />
 			<AddRole
 				open={openDialog?.open || false}
 				setOpen={() => setOpenDialog(null)}
@@ -154,6 +142,6 @@ export default function Index() {
 			/>
 
 			<Tour steps={tourRole} name='role' />
-		</DashboardLayout>
+		</>
 	)
 }

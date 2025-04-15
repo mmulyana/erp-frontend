@@ -3,7 +3,6 @@ import { useAtomValue } from 'jotai'
 
 import { DataTable } from '@/shared/component/data-table'
 import Overlay from '@/components/common/overlay'
-import Chips from '@/components/common/chips'
 
 import { permissionAtom } from '@/shared/store/permission'
 

@@ -17,9 +17,9 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 
+import LoadingState from '../loading-state'
+import EmptyState from '../empty-state'
 import { Pagination } from './component'
-import LoadingState from '../../../components/common/loading-state'
-import EmptyState from '../../../components/common/empty-state'
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]

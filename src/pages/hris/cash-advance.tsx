@@ -11,14 +11,12 @@ import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { formatToRupiah } from '@/utils/formatCurrency'
 import { testIds } from '@/utils/constant/_testId'
-import { CashAdvance } from '@/utils/types/api'
 import { cn } from '@/utils/cn'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'
 import Tour from '@/components/common/tour'
 import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
-import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
@@ -28,7 +26,6 @@ import CardMonthly from '@/features/hris/cash-advance/component/card-monthly'
 import FilterDate from '@/features/hris/cash-advance/component/filter-date'
 import { ModalAdd } from '@/features/hris/cash-advance/component/modal-add'
 import { steps } from '@/features/hris/cash-advance/component/tour-index'
-import { DashboardLayout } from '@/shared/component/layout'
 import { useTitle } from '@/shared/store/title'
 import { paths } from '@/utils/constant/_paths'
 import {
@@ -36,20 +33,7 @@ import {
 	useTotalCashAdvance,
 } from '@/features/hris/cash-advance/api/use-cash-advance'
 
-const links = [
-	{
-		name: 'Dashboard',
-		path: paths.dashboardOverview,
-	},
-	{
-		name: 'Kasbon',
-		path: paths.employeeCashAdvances,
-	},
-]
-
 export default function Page() {
-	useTitle(links)
-
 	const permission = useAtomValue(permissionAtom)
 
 	const [url] = useUrlState({
@@ -71,7 +55,7 @@ export default function Page() {
 	const { data: totalData } = useApiData(useTotalCashAdvance())
 
 	// COLUMNS CASH ADVANCE
-	const columns: ColumnDef<CashAdvance>[] = [
+	const columns: ColumnDef<any>[] = [
 		{
 			id: 'nama',
 			header: 'Nama',
@@ -160,7 +144,7 @@ export default function Page() {
 	)
 
 	return (
-		<DashboardLayout>
+		<>
 			<div
 				className={cn(
 					'grid grid-cols-1 md:grid-cols-[1fr_340px]',
@@ -188,33 +172,11 @@ export default function Page() {
 						customFilter={<CustomFilter />}
 					/>
 					<DataTable
-						data={data?.data || []}
+						data={[]}
 						isLoading={isLoading}
 						columns={columns}
 						withPagination
-						totalPages={data?.total_pages}
 					/>
-				</div>
-				<div className='h-[calc(100vh-48px)] border-l border-line p-4 space-y-4'>
-					<ProtectedComponent required={['cash-advance:total']}>
-						<Card
-							className='rounded-xl'
-							id={testIds.totalCashAdvance}
-							data-testid={testIds.totalCashAdvance}
-						>
-							<CardHead>
-								<p className='text-dark text-sm font-semibold'>
-									Total kasbon bln. {format(new Date(), 'MMMM', { locale: id })}
-								</p>
-							</CardHead>
-							<CardBody>
-								<p>{formatToRupiah(totalData?.total || 0)}</p>
-							</CardBody>
-						</Card>
-					</ProtectedComponent>
-					<ProtectedComponent required={['cash-advance:chart']}>
-						<CardMonthly />
-					</ProtectedComponent>
 				</div>
 			</div>
 			<ModalAdd
@@ -228,7 +190,7 @@ export default function Page() {
 				id={selectedId}
 			/>
 			<Tour steps={steps} name='cash-advance' />
-		</DashboardLayout>
+		</>
 	)
 }
 

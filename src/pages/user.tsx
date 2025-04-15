@@ -14,7 +14,6 @@ import { formatPhone } from '@/utils/format-phone'
 import { testIds } from '@/utils/constant/_testId'
 import { baseUrl } from '@/utils/constant/_urls'
 import { paths } from '@/utils/constant/_paths'
-import { User } from '@/utils/types/api'
 
 import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
@@ -23,7 +22,6 @@ import { Button } from '@/components/ui/button'
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'
-import Chips from '@/components/common/chips'
 import Tour from '@/components/common/tour'
 
 import AddUserRole from '@/features/user/components/add-user-role'
@@ -35,17 +33,7 @@ import { useActiveUser } from '@/features/user/api/use-active-user'
 import { useDeleteUser } from '@/features/user/api/use-delete-user'
 import { useUsers } from '@/features/user/api/use-users'
 
-import { DashboardLayout } from '@/shared/layout/dashboard-layout'
-import { useTitle } from '@/shared/store/title'
-
-const LINKS = [
-	{ name: 'Dashboard', path: paths.dashboardOverview },
-	{ name: 'Admin', path: paths.adminUser },
-]
-
 export default function Index() {
-	useTitle(LINKS)
-
 	const permission = usePermission()
 
 	// handle tour
@@ -79,7 +67,7 @@ export default function Index() {
 	const { data, isLoading } = useApiData(
 		useUsers({ page: url.page, search: url.name, limit: url.limit })
 	)
-	const column: ColumnDef<User>[] = [
+	const column: ColumnDef<any>[] = [
 		{
 			id: 'name',
 			accessorKey: 'name',
@@ -124,7 +112,6 @@ export default function Index() {
 		{
 			id: 'status',
 			header: 'Status',
-			cell: ({ row }) => <Chips status={row.original.active} />,
 		},
 		{
 			id: 'role',
@@ -205,7 +192,7 @@ export default function Index() {
 	]
 
 	return (
-		<DashboardLayout className='overflow-hidden'>
+		<>
 			<HeadTable>
 				<div className='flex gap-4 items-center'>
 					<UserCircle className='text-[#989CA8]' />
@@ -224,10 +211,9 @@ export default function Index() {
 			<FilterTable />
 			<DataTable
 				columns={column}
-				data={data?.data || []}
+				data={[]}
 				isLoading={isLoading}
 				withPagination
-				totalPages={data?.total_pages}
 			/>
 			<AlertDialogV1
 				open={resetPassword?.open || false}
@@ -254,6 +240,6 @@ export default function Index() {
 			/>
 
 			<Tour steps={tourUser} name='user' />
-		</DashboardLayout>
+		</>
 	)
 }
