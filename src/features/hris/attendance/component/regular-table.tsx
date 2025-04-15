@@ -26,9 +26,9 @@ import {
 } from '@/features/hris/attendance/api/use-attendance'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
-import { generateDateRange } from '@/utils/generate-date-range'
+import { generateDateRange } from '@/shared/utils/generate-date-range'
 import { Attendance } from '@/utils/types/api'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import { useDateData } from '../hook/use-date-data'
 import Tour from '@/components/common/tour'

@@ -1,5 +1,5 @@
-import { cn } from '@/utils/cn'
-import { paths } from '@/utils/constant/_paths'
+import { cn } from '@/shared/utils/cn'
+import { paths } from '@/shared/utils/constant/_paths'
 import { HardHat, Package2, Users } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 

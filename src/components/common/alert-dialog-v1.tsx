@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 type TProps = {
   open?: boolean

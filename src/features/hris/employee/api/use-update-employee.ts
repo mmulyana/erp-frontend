@@ -3,9 +3,9 @@ import { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 import { Employee, IApi } from '@/utils/types/api'
-import { urls } from '@/utils/constant/_urls'
-import { keys } from '@/utils/constant/_keys'
-import http from '@/utils/http'
+import { urls } from '@/shared/utils/constant/_urls'
+import { keys } from '@/shared/utils/constant/_keys'
+import http from '@/shared/utils/http'
 
 import { PayloadCreateEmployee } from '../types'
 

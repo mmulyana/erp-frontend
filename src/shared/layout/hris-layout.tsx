@@ -1,5 +1,5 @@
 import { SidebarProvider } from '@/components/ui/sidebar'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import Sidebar, {
 	AppSidebarProps,
@@ -7,7 +7,7 @@ import Sidebar, {
 } from '../component/sidebar'
 import Header from '../component/header'
 import Helpdesk from '../component/helpdesk'
-import { paths } from '@/utils/constant/_paths'
+import { paths } from '@/shared/utils/constant/_paths'
 import {
 	FileBarChart,
 	FileClock,

@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 import { useApiData } from '@/shared/hooks/use-api-data'
 
-import { keys } from '@/utils/constant/_keys'
+import { keys } from '@/shared/utils/constant/_keys'
 import { ApiError } from '@/utils/types/api'
 
 import Modal, { ModalContainer } from '@/components/modal-v2'

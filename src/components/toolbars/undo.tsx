@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { useToolbar } from '@/components/toolbars/toolbar-provider'
 
 const UndoToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(

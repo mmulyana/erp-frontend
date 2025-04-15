@@ -2,7 +2,7 @@ import { Check } from 'lucide-react'
 import { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import { useIsMobile } from '../hooks/use-mobile'
 

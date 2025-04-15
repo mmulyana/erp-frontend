@@ -17,14 +17,14 @@ import { useFixPointerEvent } from '@/shared/hooks/use-fix-pointer-events'
 import { useUpdateProject } from '@/hooks/api/use-project'
 import { useClient } from '@/hooks/api/use-client'
 import { Project } from '@/utils/types/api'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import { useEffect, useMemo, useState } from 'react'
 import { Pencil, User2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { socket } from '@/utils/socket'
+import { socket } from '@/shared/utils/socket'
 import { useQueryClient } from '@tanstack/react-query'
-import { KEYS } from '@/utils/constant/_keys'
+import { KEYS } from '@/shared/utils/constant/_keys'
 
 type FormValues = {
   clientId?: number | null

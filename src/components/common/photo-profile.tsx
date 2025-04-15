@@ -1,7 +1,7 @@
 import { useState, useRef, ChangeEvent, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ImageIcon, X } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { Lightbox } from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'

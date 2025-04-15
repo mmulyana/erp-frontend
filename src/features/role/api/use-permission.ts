@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 
-import { keys } from '@/utils/constant/_keys'
-import { urls } from '@/utils/constant/_urls'
+import { keys } from '@/shared/utils/constant/_keys'
+import { urls } from '@/shared/utils/constant/_urls'
 import { IApi } from '@/utils/types/api'
-import http from '@/utils/http'
+import http from '@/shared/utils/http'
 
 import { PermissionGroup } from '../type'
 

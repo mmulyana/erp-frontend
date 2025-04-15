@@ -1,6 +1,6 @@
 import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 import { TrendingDown, TrendingUp } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 type Props = {
 	title: string

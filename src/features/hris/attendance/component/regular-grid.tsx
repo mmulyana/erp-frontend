@@ -10,8 +10,8 @@ import {
 import useTour from '@/hooks/use-tour'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
-import { BASE_URL } from '@/utils/constant/_urls'
-import { cn } from '@/utils/cn'
+import { BASE_URL } from '@/shared/utils/constant/_urls'
+import { cn } from '@/shared/utils/cn'
 
 import ProtectedComponent from '@/components/protected'
 import Tour from '@/components/common/tour'

@@ -4,8 +4,8 @@ import { useSetAtom } from 'jotai'
 
 import { projectAtom } from '@/atom/project'
 import { Board, Project } from '@/utils/types/api'
-import { socket } from '@/utils/socket'
-import { cn } from '@/utils/cn'
+import { socket } from '@/shared/utils/socket'
+import { cn } from '@/shared/utils/cn'
 
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import CardProject from '@/components/card-project'

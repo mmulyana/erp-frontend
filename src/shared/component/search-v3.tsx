@@ -1,7 +1,7 @@
 import { parseAsString, useQueryState } from 'nuqs'
 import { useMemo } from 'react'
 
-import { debounce } from '@/utils'
+import { debounce } from '@/shared/utils'
 import { Search } from 'lucide-react'
 
 type Props = {

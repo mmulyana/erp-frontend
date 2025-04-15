@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { useApiData } from '@/shared/hooks/use-api-data'
 import { useRoles } from '@/features/role/api/use-roles'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import { Button } from '@/components/ui/button'
 import {

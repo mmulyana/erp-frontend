@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Key } from 'lucide-react'
 
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import { usePermissionGroup } from '@/features/role/api/use-permission'
 import { useApiData } from '@/shared/hooks/use-api-data'

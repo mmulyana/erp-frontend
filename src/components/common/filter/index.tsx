@@ -13,7 +13,7 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer'
 import React, { useState } from 'react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 export default function Filter({
   children,

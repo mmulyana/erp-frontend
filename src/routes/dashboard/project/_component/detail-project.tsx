@@ -1,15 +1,15 @@
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import Lightbox from 'yet-another-react-lightbox'
 
-import { formatToRupiah } from '@/utils/formatCurrency'
+import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { useCallback, useMemo, useState } from 'react'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import { id as indonesia } from 'date-fns/locale'
 import { ChevronLeft, Ellipsis } from 'lucide-react'
 import { format } from 'date-fns'
 
-import { socket } from '@/utils/socket'
-import { cn } from '@/utils/cn'
+import { socket } from '@/shared/utils/socket'
+import { cn } from '@/shared/utils/cn'
 
 import { permissionAtom } from '@/shared/store/permission'
 

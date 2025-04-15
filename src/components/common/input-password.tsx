@@ -4,8 +4,8 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FormLabel } from '../ui/form'
-import { cn } from '@/utils/cn'
-import { testIds } from '@/utils/constant/_testId'
+import { cn } from '@/shared/utils/cn'
+import { testIds } from '@/shared/utils/constant/_testId'
 
 interface PasswordInputProps {
 	name: string

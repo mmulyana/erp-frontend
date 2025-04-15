@@ -16,7 +16,7 @@ import { useLogin } from '../api/use-login'
 import { LoginSchema } from '../schema'
 import { Payload } from '../types'
 import { AxiosError } from 'axios'
-import { testIds } from '@/utils/constant/_testId'
+import { testIds } from '@/shared/utils/constant/_testId'
 
 type FormData = z.infer<typeof LoginSchema>
 

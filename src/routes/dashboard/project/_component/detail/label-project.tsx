@@ -11,10 +11,10 @@ import {
 } from '@/hooks/api/use-project'
 import { useProjectLabels } from '@/hooks/api/use-project-label'
 
-import { KEYS } from '@/utils/constant/_keys'
+import { KEYS } from '@/shared/utils/constant/_keys'
 import { Project } from '@/utils/types/api'
-import { socket } from '@/utils/socket'
-import { cn } from '@/utils/cn'
+import { socket } from '@/shared/utils/socket'
+import { cn } from '@/shared/utils/cn'
 
 import { Form, FormControl, FormItem } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'

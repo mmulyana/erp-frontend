@@ -2,9 +2,9 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { urls } from '@/utils/constant/_urls'
+import { urls } from '@/shared/utils/constant/_urls'
 import { ApiError } from '@/utils/types/api'
-import http from '@/utils/http'
+import http from '@/shared/utils/http'
 
 export const useResetPassword = () => {
 	return useMutation({

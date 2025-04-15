@@ -5,9 +5,9 @@ import { useSetAtom } from 'jotai'
 import { format } from 'date-fns'
 
 import { useReturnedTransaction } from '@/hooks/api/use-transaction'
-import { formatToRupiah } from '@/utils/formatCurrency'
+import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { Transaction } from '@/utils/types/api'
-import { PATH } from '@/utils/constant/_paths'
+import { PATH } from '@/shared/utils/constant/_paths'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'

@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { format } from 'date-fns'
 
-import { BASE_URL } from '@/utils/constant/_urls'
+import { BASE_URL } from '@/shared/utils/constant/_urls'
 import { Activity } from '@/utils/types/api'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import { userAtom } from '@/shared/store/auth'
 

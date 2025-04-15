@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { Image, X } from 'lucide-react'
 import { useRef } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'

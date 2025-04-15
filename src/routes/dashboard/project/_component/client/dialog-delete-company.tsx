@@ -10,8 +10,8 @@ import {
 } from '@/components/ui/alert-dialog'
 import { buttonVariants } from '@/components/ui/button'
 import { useDeleteClientCompany } from '@/hooks/api/use-client'
-import { cn } from '@/utils/cn'
-import { delay } from '@/utils/delay'
+import { cn } from '@/shared/utils/cn'
+import { delay } from '@/shared/utils/delay'
 
 type ModalProps = {
   id?: number | null

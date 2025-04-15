@@ -1,6 +1,6 @@
 import type { Step } from 'react-joyride'
 
-import { testIds } from '@/utils/constant/_testId'
+import { testIds } from '@/shared/utils/constant/_testId'
 
 import Img from '/public/images/user-edit.png'
 

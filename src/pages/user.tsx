@@ -10,10 +10,10 @@ import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { userAtom } from '@/shared/store/auth'
 
-import { formatPhone } from '@/utils/format-phone'
-import { testIds } from '@/utils/constant/_testId'
-import { baseUrl } from '@/utils/constant/_urls'
-import { paths } from '@/utils/constant/_paths'
+import { formatPhone } from '@/shared/utils/format-phone'
+import { testIds } from '@/shared/utils/constant/_testId'
+import { baseUrl } from '@/shared/utils/constant/_urls'
+import { paths } from '@/shared/utils/constant/_paths'
 
 import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'

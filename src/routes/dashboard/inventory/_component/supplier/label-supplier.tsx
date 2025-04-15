@@ -16,7 +16,7 @@ import {
 import { Supplier } from '@/utils/types/api'
 import { useMemo, useState } from 'react'
 import { Plus, X } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { useSupplierLabels } from '@/hooks/api/use-supplier-label'
 import { useUpdateTagSupplier } from '@/hooks/api/use-supplier'
 

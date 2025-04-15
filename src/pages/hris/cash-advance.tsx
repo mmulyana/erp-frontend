@@ -9,9 +9,9 @@ import { useState } from 'react'
 import { permissionAtom } from '@/shared/store/permission'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
-import { formatToRupiah } from '@/utils/formatCurrency'
-import { testIds } from '@/utils/constant/_testId'
-import { cn } from '@/utils/cn'
+import { formatToRupiah } from '@/shared/utils/formatCurrency'
+import { testIds } from '@/shared/utils/constant/_testId'
+import { cn } from '@/shared/utils/cn'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'
@@ -27,7 +27,7 @@ import FilterDate from '@/features/hris/cash-advance/component/filter-date'
 import { ModalAdd } from '@/features/hris/cash-advance/component/modal-add'
 import { steps } from '@/features/hris/cash-advance/component/tour-index'
 import { useTitle } from '@/shared/store/title'
-import { paths } from '@/utils/constant/_paths'
+import { paths } from '@/shared/utils/constant/_paths'
 import {
 	useCashAdvancePagination,
 	useTotalCashAdvance,

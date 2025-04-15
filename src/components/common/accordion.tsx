@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { atom, useAtom } from 'jotai'
 import { createContext, useContext, ReactNode } from 'react'
 

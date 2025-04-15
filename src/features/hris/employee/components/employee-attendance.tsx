@@ -5,7 +5,7 @@ export default function EmployeeAttendance() {
 		<>
 			<div className='flex gap-2 items-center p-6'>
 				<Contact2Icon className='text-ink-secondary' />
-				<p className='text-ink-secondary font-medium'>Kehadiran</p>
+				<p className='text-ink-secondary font-medium'>Absensi</p>
 			</div>
 		</>
 	)

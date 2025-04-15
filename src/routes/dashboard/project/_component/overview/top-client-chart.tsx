@@ -10,7 +10,7 @@ import {
 import { Card, CardBody, CardHead } from '@/components/common/card-v1'
 import LoadingState from '@/components/common/loading-state'
 
-import { TEST_ID } from '@/utils/constant/_testId'
+import { TEST_ID } from '@/shared/utils/constant/_testId'
 
 export default function TopClientChart() {
   const { data } = useApiData(useChartTopClient())

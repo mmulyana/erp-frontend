@@ -9,10 +9,10 @@ import { userAtom } from '@/shared/store/auth'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { z } from 'zod'
-import { socket } from '@/utils/socket'
+import { socket } from '@/shared/utils/socket'
 import ProtectedComponent from '@/components/protected'
 import { useQueryClient } from '@tanstack/react-query'
-import { KEYS } from '@/utils/constant/_keys'
+import { KEYS } from '@/shared/utils/constant/_keys'
 
 // type Form = Omit<createAttachment, 'file' | 'name'> & { file: File | null }
 const ACCEPTED_FILE_TYPES = [

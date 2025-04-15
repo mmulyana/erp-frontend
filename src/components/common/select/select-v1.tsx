@@ -14,7 +14,7 @@ import {
   CommandInput,
   CommandList,
 } from '@/components/ui/command'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { useDebounce } from '@uidotdev/usehooks'
 
 type Props = {

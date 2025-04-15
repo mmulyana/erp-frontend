@@ -2,13 +2,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
-import { urls } from '@/utils/constant/_urls'
-import { keys } from '@/utils/constant/_keys'
-import http from '@/utils/http'
+import { urls } from '@/shared/utils/constant/_urls'
+import { keys } from '@/shared/utils/constant/_keys'
+import http from '@/shared/utils/http'
 
 import { IApi } from '@/shared/types'
 import { Employee } from '../types'
-import { toFormData } from '@/utils/helper/to-form-data'
+import { toFormData } from '@/shared/utils/helper/to-form-data'
 
 export const useCreateEmployee = () => {
 	const queryClient = useQueryClient()

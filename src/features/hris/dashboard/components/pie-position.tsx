@@ -5,7 +5,7 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 const chartData = [
 	{ name: 'Tukang', total: 275, fill: '#2B6FD5' },

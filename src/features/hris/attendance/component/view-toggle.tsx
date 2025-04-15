@@ -1,8 +1,8 @@
 import { Grid, Table } from 'lucide-react'
 import { atom, useAtom } from 'jotai'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
-import { TEST_ID } from '@/utils/constant/_testId'
+import { TEST_ID } from '@/shared/utils/constant/_testId'
 
 export const viewAtom = atom('grid')
 

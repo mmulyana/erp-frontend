@@ -6,7 +6,7 @@ import {
 	useReactTable,
 } from '@tanstack/react-table'
 
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import {
 	Table,

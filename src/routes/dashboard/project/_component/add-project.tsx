@@ -29,8 +29,8 @@ import {
 
 import { BoxIcon, User, UserIcon } from 'lucide-react'
 import { useState } from 'react'
-import { BASE_URL } from '@/utils/constant/_urls'
-import { socket } from '@/utils/socket'
+import { BASE_URL } from '@/shared/utils/constant/_urls'
+import { socket } from '@/shared/utils/socket'
 
 type Props = {
   open: boolean

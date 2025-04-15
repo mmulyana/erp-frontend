@@ -6,7 +6,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { parseAsInteger, useQueryStates } from 'nuqs'
 

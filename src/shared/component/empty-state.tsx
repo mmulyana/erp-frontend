@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import EmptyImg from '/public/icons/empty-box.png'
 

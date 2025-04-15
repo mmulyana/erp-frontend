@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PayloadUploadPhoto } from '../types'
-import http from '@/utils/http'
-import { urls } from '@/utils/constant/_urls'
+import http from '@/shared/utils/http'
+import { urls } from '@/shared/utils/constant/_urls'
 import { toast } from 'sonner'
 import { AxiosResponse } from 'axios'
 import { IApi } from '@/utils/types/api'
-import { keys } from '@/utils/constant/_keys'
+import { keys } from '@/shared/utils/constant/_keys'
 
 export const useUploadPhoto = () => {
 	const queryClient = useQueryClient()

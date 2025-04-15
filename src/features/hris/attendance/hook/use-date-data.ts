@@ -1,4 +1,4 @@
-import { getWeekDates } from '@/utils/get-week-dates'
+import { getWeekDates } from '@/shared/utils/get-week-dates'
 import { getWeek } from 'date-fns'
 
 export const useDateData = (number?: number) => {

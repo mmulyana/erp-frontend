@@ -1,7 +1,7 @@
 import CircularProgress from '../common/circular-progress'
 
 import { Project } from '@/utils/types/api'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import { Button } from '../ui/button'
 import Chips from '../common/chips'

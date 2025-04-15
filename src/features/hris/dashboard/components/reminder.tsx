@@ -3,7 +3,7 @@ import { CalendarClock } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Card, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { format } from 'date-fns'
 
 const certificationReminders = [

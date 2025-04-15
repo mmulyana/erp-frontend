@@ -1,10 +1,10 @@
 import { ChevronDown } from 'lucide-react'
 import { useAtomValue } from 'jotai'
 
-import { baseUrl } from '@/utils/constant/_urls'
+import { baseUrl } from '@/shared/utils/constant/_urls'
 import { Button } from '@/components/ui/button'
 import { userAtom } from '@/shared/store/auth'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 import logo from '/public/images/logo.png'
 

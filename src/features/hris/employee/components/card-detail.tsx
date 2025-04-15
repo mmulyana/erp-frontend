@@ -1,10 +1,6 @@
-import { File, Plus } from 'lucide-react'
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 
-import SearchV3 from '@/shared/component/search-v3'
 import EmployeeCertificate from './employee-certificate'
 import EmployeeAttendance from './employee-attendance'
 

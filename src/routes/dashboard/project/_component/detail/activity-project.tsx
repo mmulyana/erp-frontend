@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
-import { JOIN_BY_PROJECT, MESSAGES_BY_PROJECT } from '@/utils/constant/_socket'
+import { JOIN_BY_PROJECT, MESSAGES_BY_PROJECT } from '@/shared/utils/constant/_socket'
 import { Activity } from '@/utils/types/api'
-import { socket } from '@/utils/socket'
+import { socket } from '@/shared/utils/socket'
 
 import { useDeleteActivity, useToggleLikeActivity, useUpdateActivity } from '@/hooks/api/use-activity'
 

@@ -10,8 +10,8 @@ import {
 } from '@/components/ui/alert-dialog'
 import { buttonVariants } from '@/components/ui/button'
 import { useDeleteCashAdvances } from '@/features/hris/cash-advance/api/use-cash-advance'
-import { cn } from '@/utils/cn'
-import { delay } from '@/utils/delay'
+import { cn } from '@/shared/utils/cn'
+import { delay } from '@/shared/utils/delay'
 
 type ModalProps = {
   id?: number | null

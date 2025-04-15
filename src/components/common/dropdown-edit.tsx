@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 export default function DropdownEdit({
   children,

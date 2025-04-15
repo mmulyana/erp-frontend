@@ -1,7 +1,7 @@
 import { useFieldArray, useForm } from 'react-hook-form'
 import { Plus, X, PackagePlus } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
-import { PATH } from '@/utils/constant/_paths'
+import { PATH } from '@/shared/utils/constant/_paths'
 import { useState } from 'react'
 
 import usePermission from '@/shared/hooks/use-permission'
@@ -12,7 +12,7 @@ import {
 	useTransactionPagination,
 } from '@/hooks/api/use-transaction'
 import { CreateTransaction } from '@/utils/types/form'
-import { BASE_URL } from '@/utils/constant/_urls'
+import { BASE_URL } from '@/shared/utils/constant/_urls'
 
 import DetailTransaction from './_component/detail-transaction'
 import DeleteTransaction from './_component/delete-transaction'

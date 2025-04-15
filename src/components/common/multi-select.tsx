@@ -7,7 +7,7 @@ import {
   CommandEmpty,
   CommandList,
 } from '@/components/ui/command'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { useDebounce } from '@uidotdev/usehooks'
 import { Command as CommandPrimitive } from 'cmdk'
 import { X as RemoveIcon, Check } from 'lucide-react'

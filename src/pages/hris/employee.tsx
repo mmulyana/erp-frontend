@@ -8,7 +8,7 @@ import SearchV3 from '@/shared/component/search-v3'
 
 import TableEmployee from '@/features/hris/employee/components/table-employee'
 
-import { paths } from '@/utils/constant/_paths'
+import { paths } from '@/shared/utils/constant/_paths'
 
 export default function Employee() {
 	return (

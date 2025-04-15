@@ -5,10 +5,10 @@ import { toast } from 'sonner'
 
 import { ErrorResponse } from '@/shared/types'
 
-import { CookieKeys, CookieStorage } from '@/utils/cookie'
-import { paths } from '@/utils/constant/_paths'
-import { urls } from '@/utils/constant/_urls'
-import http from '@/utils/http'
+import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
+import { paths } from '@/shared/utils/constant/_paths'
+import { urls } from '@/shared/utils/constant/_urls'
+import http from '@/shared/utils/http'
 
 import { Payload, Response } from '../types'
 

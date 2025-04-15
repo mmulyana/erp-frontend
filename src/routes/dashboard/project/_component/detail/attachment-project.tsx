@@ -8,10 +8,10 @@ import {
   useUpdateAttachment,
 } from '@/hooks/api/use-attachment'
 
-import { BASE_URL } from '@/utils/constant/_urls'
+import { BASE_URL } from '@/shared/utils/constant/_urls'
 import { Attachment } from '@/utils/types/api'
-import { socket } from '@/utils/socket'
-import { cn } from '@/utils/cn'
+import { socket } from '@/shared/utils/socket'
+import { cn } from '@/shared/utils/cn'
 
 import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -27,7 +27,7 @@ import AttachmentDialog from './attachment-dialog'
 import EmptyState from '@/components/common/empty-state'
 import FileIcon from '@/components/common/file-icon'
 import { useQueryClient } from '@tanstack/react-query'
-import { KEYS } from '@/utils/constant/_keys'
+import { KEYS } from '@/shared/utils/constant/_keys'
 
 type Props = {
   projectId?: number

@@ -1,5 +1,5 @@
-import { PATH } from '@/utils/constant/_paths'
-import { CookieKeys, CookieStorage } from '@/utils/cookie'
+import { PATH } from '@/shared/utils/constant/_paths'
+import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
 import { useNavigate } from 'react-router-dom'
 
 export const checkAuth = () => {

@@ -1,6 +1,6 @@
 import React, { Children, Fragment, ReactElement } from 'react'
 import { Check } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 import { atom, useAtom, useAtomValue } from 'jotai'
 
 export const stepperAtom = atom<number>(0)

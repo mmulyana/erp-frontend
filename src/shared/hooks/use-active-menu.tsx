@@ -1,7 +1,7 @@
 import { useLocation, matchPath } from 'react-router-dom'
 import { useMemo } from 'react'
 
-import { paths } from '@/utils/constant/_paths'
+import { paths } from '@/shared/utils/constant/_paths'
 
 export const useActiveMenu = () => {
   const { pathname } = useLocation()

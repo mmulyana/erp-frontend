@@ -6,7 +6,7 @@ import React from 'react'
 import App from './app'
 import './globals.css'
 
-import ToasterWrapper from './utils/toaster-wrapper'
+import ToasterWrapper from './shared/utils/toaster-wrapper'
 
 const queryClient = new QueryClient({
 	defaultOptions: {
