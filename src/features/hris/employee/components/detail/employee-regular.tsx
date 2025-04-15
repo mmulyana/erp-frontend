@@ -1,9 +1,12 @@
-import { CalendarV1 } from '@/shared/component/calendar-v1'
 import { ChevronLeft, ChevronRight, Contact2Icon } from 'lucide-react'
 import { useState } from 'react'
-import { useCurrentCalendar } from '../hooks/use-current-calendar'
+
+import { CalendarV1 } from '@/shared/component/calendar-v1'
 import { MONTHS_OBJ } from '@/shared/constants/months'
+
 import { Button } from '@/components/ui/button'
+
+import { useCurrentCalendar } from '../../hooks/use-current-calendar'
 
 export default function EmployeeRegular() {
 	const [data] = useState([

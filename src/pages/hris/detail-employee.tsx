@@ -9,7 +9,7 @@ export default function DetailEmployee() {
 	return (
 		<DetailLayout title='Pegawai'>
 			<div className='mx-auto p-6 max-w-[1200px]'>
-				<div className='grid grid-cols-1 md:grid-cols-[400px_1fr] gap-6'>
+				<div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6'>
 					<div className='space-y-6'>
 						<CardInformation />
 						<CardAddress />

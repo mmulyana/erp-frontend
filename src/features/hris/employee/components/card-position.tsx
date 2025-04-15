@@ -4,7 +4,7 @@ export default function CardPosition() {
 	return (
 		<Card className='p-6'>
 			<CardTitle className='text-base text-ink-primary'>Jabatan</CardTitle>
-			<CardContent className='mt-4 p-0 grid grid-cols-1 md:grid-cols-[1fr_342px]'>
+			<CardContent className='mt-4 p-0 grid grid-cols-1 md:grid-cols-[1fr_342px] gap-6 md:gap-0'>
 				<div>
 					<p className='text-2xl text-ink-secondary'>Staff</p>
 					<p className='text-ink-light text-base'>

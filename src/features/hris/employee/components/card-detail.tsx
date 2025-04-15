@@ -1,10 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card, CardContent } from '@/components/ui/card'
-import EmployeeCertificate from './employee-certificate'
-import EmployeeRegular from './employee-regular'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { cn } from '@/shared/utils/cn'
-import EmployeeCashAdvance from './employee-cash-advance'
+import { Card, CardContent } from '@/components/ui/card'
+
+import EmployeeCashAdvance from './detail/employee-cash-advance'
+import EmployeeCertificate from './detail/employee-certificate'
+import EmployeeOvertime from './detail/employee-overtime'
+import EmployeeRegular from './detail/employee-regular'
+import EmployeeProject from './detail/employee-project'
 
 export default function CardDetail() {
 	return (
@@ -39,10 +41,13 @@ export default function CardDetail() {
 						<EmployeeRegular />
 					</TabsContent>
 					<TabsContent value='tab-3'>
-						<div className='p-6'></div>
+						<EmployeeOvertime />
 					</TabsContent>
 					<TabsContent value='tab-4'>
 						<EmployeeCashAdvance />
+					</TabsContent>
+					<TabsContent value='tab-5'>
+						<EmployeeProject />
 					</TabsContent>
 				</Tabs>
 			</CardContent>
