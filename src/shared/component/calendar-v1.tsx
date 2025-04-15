@@ -35,7 +35,7 @@ export function CalendarV1({
 
 	return (
 		<div className={cn('w-full max-w-xs', className)}>
-			<h2 className='mb-2 text-ink-secondary font-medium'>{month}</h2>
+			<h2 className='mb-2 text-ink-secondary font-medium select-none'>{month}</h2>
 
 			<div className='grid grid-cols-7 gap-1 text-xs text-gray-500'>
 				{daysOfWeek[locale as keyof typeof daysOfWeek]?.map((day, index) => (

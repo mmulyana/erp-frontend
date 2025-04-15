@@ -62,7 +62,7 @@ export default function EmployeeCertificate() {
 				<FileBadgeIcon className='text-ink-secondary' />
 				<p className='text-ink-secondary font-medium'>Sertifikasi</p>
 			</div>
-			<div className='px-6 py-3 bg-surface flex justify-between items-center border-t border-border'>
+			<div className='px-4 py-3 bg-surface flex justify-between items-center border-t border-border'>
 				<div className='flex gap-4 items-center'>
 					<SearchV3 />
 				</div>
