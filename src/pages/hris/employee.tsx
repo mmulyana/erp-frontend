@@ -14,7 +14,7 @@ export default function Employee() {
 	return (
 		<HrisLayout className='px-0 pt-12'>
 			<div className='flex justify-between items-center p-6'>
-				{/* <SearchV3 /> */}
+				<SearchV3 />
 				<Link
 					to={paths.hrisMasterDataEmployeeCreate}
 					className={buttonVariants({

@@ -27,11 +27,16 @@ interface DataTableProps<TData, TValue> {
 	isLoading?: boolean
 	withPagination?: boolean
 	totalPages?: number
-	styleFooter?: string
+	totalItems?: number
 	onCellClick?: (row: TData) => void
 	redirectField?: string
 	autoRedirect?: boolean
-	clickableColumns?: string[]
+	nonClickableColumns?: string[]
+	style?: {
+		header?: string
+		footer?: string
+		stripRowColor?: string
+	}
 }
 
 export function DataTable<TData, TValue>({
@@ -40,11 +45,12 @@ export function DataTable<TData, TValue>({
 	isLoading,
 	withPagination,
 	totalPages,
-	styleFooter,
+	totalItems,
 	onCellClick,
 	redirectField,
 	autoRedirect = false,
-	clickableColumns = [],
+	nonClickableColumns = [],
+	style,
 }: DataTableProps<TData, TValue>) {
 	const navigate = useNavigate()
 	const table = useReactTable({
@@ -54,7 +60,7 @@ export function DataTable<TData, TValue>({
 	})
 
 	const isColumnClickable = (columnId: string) => {
-		return clickableColumns.length === 0 || clickableColumns.includes(columnId)
+		return !nonClickableColumns.includes(columnId)
 	}
 
 	const handleCellClick = (row: TData, columnId: string) => {
@@ -78,11 +84,15 @@ export function DataTable<TData, TValue>({
 			)
 		}
 		if (table.getRowModel().rows?.length) {
-			return table.getRowModel().rows.map((row) => (
+			return table.getRowModel().rows.map((row, rowIndex) => (
 				<TableRow
 					key={row.id}
 					data-state={row.getIsSelected() && 'selected'}
-					className='h-10 py-0'
+					className={cn(
+						'h-10 py-0',
+						rowIndex % 2 === 1 &&
+							(style?.stripRowColor || 'bg-surface-secondary')
+					)}
 				>
 					{row.getVisibleCells().map((cell, index) => (
 						<TableCell
@@ -127,7 +137,8 @@ export function DataTable<TData, TValue>({
 										'text-ink-secondary bg-surface font-normal text-sm h-9',
 										index !== 0 &&
 											index !== headerGroup.headers.length &&
-											'border-l border-line'
+											'border-l border-line',
+										style?.header
 									)}
 								>
 									{flexRender(
@@ -143,12 +154,12 @@ export function DataTable<TData, TValue>({
 			</Table>
 			<div
 				className={cn(
-					'bg-[#F9FAFB] px-3 border-y border-line w-full h-12 flex justify-between items-center',
-					styleFooter
+					'bg-surface px-3 border-y border-line w-full py-1 flex justify-between items-center',
+					style?.footer
 				)}
 			>
-				{!!withPagination && !isLoading && (
-					<Pagination totalPages={totalPages ?? 1} />
+				{!!withPagination && !isLoading && totalItems && totalPages && (
+					<Pagination totalItems={totalItems} totalPages={totalPages} />
 				)}
 			</div>
 		</div>

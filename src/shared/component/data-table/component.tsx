@@ -1,20 +1,3 @@
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import useUrlState from '@ahooksjs/use-url-state'
-import { CalendarDaysIcon } from 'lucide-react'
-import { format, parse } from 'date-fns'
-import { id } from 'date-fns/locale'
-
-import { testIds } from '@/utils/constant/_testId'
-import { cn } from '@/utils/cn'
-
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/ui/popover'
-import { Calendar } from '@/components/ui/calendar'
-
 import {
 	Select,
 	SelectContent,
@@ -22,114 +5,125 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '../../../components/ui/select'
-import { Button } from '../../../components/ui/button'
+} from '@/components/ui/select'
+import { cn } from '@/utils/cn'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { parseAsInteger, useQueryStates } from 'nuqs'
 
-interface PaginationProps {
+type PaginationBarProps = {
+	totalItems: number
 	totalPages: number
 }
 
-export function Pagination({ totalPages }: PaginationProps) {
-	const [url, setUrl] = useUrlState({ page: '' })
-	const getPageNumbers = () => {
-		const pageNumbers = []
-		const delta = 1
+export function Pagination({ totalItems, totalPages }: PaginationBarProps) {
+	const [query, setQuery] = useQueryStates({
+		page: parseAsInteger.withDefault(1),
+		limit: parseAsInteger.withDefault(10),
+	})
 
+	const currentPage = query.page || 1
+	const perPage = query.limit || 10
+
+	const from = (currentPage - 1) * perPage + 1
+	const currentPageCount = Math.min(perPage, totalItems - from + 1)
+	const to = from + currentPageCount - 1
+
+	const getPageNumbers = () => {
+		const pages = []
+		const delta = 1
 		for (let i = 1; i <= totalPages; i++) {
 			if (
 				i === 1 ||
 				i === totalPages ||
-				(i >= (url.page !== '' ? Number(url.page) : 1) - delta &&
-					i <= (url.page !== '' ? Number(url.page) : 1) + delta)
+				(i >= currentPage - delta && i <= currentPage + delta)
 			) {
-				pageNumbers.push(i)
+				pages.push(i)
 			} else if (i === 2 || i === totalPages - 1) {
-				pageNumbers.push('...')
+				pages.push('...')
 			}
 		}
-
-		return pageNumbers
+		return pages
 	}
 
 	return (
-		<nav className='flex justify-between items-center w-full'>
-			<button
-				onClick={() => setUrl({ page: Number(url.page) - 1 })}
-				disabled={(url.page !== '' ? Number(url.page) : 1) === 1}
-				className={cn(
-					'w-6 h-6 flex justify-center items-center border rounded border-[#D4D7DF]',
-					(url.page !== '' ? Number(url.page) : 1) === 1
-						? 'bg-transparent border-transparent text-[#747C94]/50'
-						: 'bg-white text-[#747C94]'
-				)}
-			>
-				<ChevronLeft className='w-5 h-5' />
-			</button>
-			<ul className='flex gap-2'>
-				{getPageNumbers().map((number, index) => (
-					<li key={index}>
-						<button
-							className={cn(
-								'w-6 h-6 flex justify-center items-center border text-sm rounded',
-								(url.page !== '' ? Number(url.page) : 1) == number
-									? 'border-[#D4D7DF] bg-white'
-									: number === '...'
-									? 'border-transparent'
-									: 'border-transparent hover:bg-white hover:border-[#D4D7DF]'
-							)}
-							onClick={() => {
-								if (typeof number === 'number') {
-									setUrl({ page: number })
-								}
-							}}
-							disabled={number === '...'}
-						>
-							{number}
-						</button>
-					</li>
-				))}
-			</ul>
-			<button
-				onClick={() =>
-					setUrl({ page: (url.page !== '' ? Number(url.page) : 1) + 1 })
-				}
-				disabled={(url.page !== '' ? Number(url.page) : 1) === totalPages}
-				className={cn(
-					'w-6 h-6 flex justify-center items-center border rounded border-[#D4D7DF]',
-					(url.page !== '' ? Number(url.page) : 1) === totalPages
-						? 'bg-transparent border-transparent text-[#747C94]/50'
-						: 'bg-white text-[#747C94]'
-				)}
-			>
-				<ChevronRight className='w-5 h-5' />
-			</button>
-		</nav>
-	)
-}
+		<div className='w-full flex justify-between items-center px-2 py-2'>
+			<p className='text-ink-primary'>
+				{from}-{to} <span className='text-ink-light'>dari</span> {totalItems}
+			</p>
 
-type LimitProps = {
-	limit?: number
-}
-export function Limit({ limit }: LimitProps) {
-	const [_, setUrl] = useUrlState({ limit: limit })
-	return (
-		<Select
-			onValueChange={(val: string) => {
-				setUrl({ limit: val })
-			}}
-		>
-			<SelectTrigger className='w-fit h-8 border border-[#EFF0F2] rounded-[8px] shadow-md shadow-gray-100'>
-				<SelectValue placeholder={limit ?? '10'} />
-			</SelectTrigger>
-			<SelectContent>
-				<SelectGroup>
-					<SelectItem value='10'>10</SelectItem>
-					<SelectItem value='20'>20</SelectItem>
-					<SelectItem value='30'>30</SelectItem>
-					<SelectItem value='40'>40</SelectItem>
-					<SelectItem value='50'>50</SelectItem>
-				</SelectGroup>
-			</SelectContent>
-		</Select>
+			<nav className='flex items-center gap-2'>
+				<button
+					onClick={() => setQuery({ page: currentPage - 1 })}
+					disabled={currentPage === 1}
+					className={cn(
+						'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF]',
+						currentPage === 1
+							? 'bg-transparent border-transparent text-[#747C94]/50'
+							: 'bg-white text-[#747C94]'
+					)}
+				>
+					<ChevronLeft className='text-ink-secondary/80' size={18} strokeWidth={3.2} />
+				</button>
+				<ul className='flex'>
+					{getPageNumbers().map((number, index) => (
+						<li key={index}>
+							<button
+								className={cn(
+									'w-8 h-8 flex justify-center items-center border text-base rounded-md select-none',
+									currentPage === number
+										? 'border-brand text-brand rounded-none'
+										: number === '...'
+										? 'border-border rounded-none border-l-0 text-muted-foreground'
+										: 'border-border rounded-none border-l-0 hover:bg-white hover:border-[#D4D7DF]',
+									index === 0 && 'rounded-r-none rounded-l-md border-l',
+									index + 1 == getPageNumbers().length && 'rounded-r-md'
+								)}
+								onClick={() => {
+									if (typeof number === 'number') {
+										setQuery({ page: number })
+									}
+								}}
+								disabled={number === '...'}
+							>
+								{number}
+							</button>
+						</li>
+					))}
+				</ul>
+				<button
+					onClick={() => setQuery({ page: currentPage + 1 })}
+					disabled={currentPage === totalPages}
+					className={cn(
+						'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF]',
+						currentPage === totalPages
+							? 'bg-transparent border-transparent text-[#747C94]/50'
+							: 'bg-white text-[#747C94]'
+					)}
+				>
+					<ChevronRight className='text-ink-secondary/80' size={18} strokeWidth={3.2} />
+				</button>
+			</nav>
+
+			<div className='flex items-center gap-2 text-sm text-muted-foreground'>
+				<p className='text-ink-light text-base'>Baris per hal</p>
+				<Select
+					onValueChange={(val) => setQuery({ limit: Number(val), page: 1 })}
+					defaultValue={perPage.toString()}
+				>
+					<SelectTrigger className='w-[60px] h-8 border border-border'>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectGroup>
+							{['10', '20', '30'].map((val) => (
+								<SelectItem key={val} value={val} className='text-ink-primary'>
+									{val}
+								</SelectItem>
+							))}
+						</SelectGroup>
+					</SelectContent>
+				</Select>
+			</div>
+		</div>
 	)
 }
