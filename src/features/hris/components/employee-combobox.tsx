@@ -19,6 +19,7 @@ import { useDebounce } from '@uidotdev/usehooks'
 import { useInfiniteEmployees } from '../api/use-infinite-employees'
 import { Employee } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
+import { useEmployee } from '../employee/api/use-employee'
 
 type Props = {
 	onSelect?: (value: string) => void
@@ -26,9 +27,15 @@ type Props = {
 	style?: {
 		value?: string
 	}
+	defaultValue?: string
 }
 
-export default function EmployeeCombobox({ onSelect, disabled, style }: Props) {
+export default function EmployeeCombobox({
+	onSelect,
+	disabled,
+	style,
+	defaultValue,
+}: Props) {
 	const [open, setOpen] = useState(false)
 	const [search, setSearch] = useState('')
 	const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
@@ -37,6 +44,14 @@ export default function EmployeeCombobox({ onSelect, disabled, style }: Props) {
 	const debouncedSearchTerm = useDebounce(search, 500)
 	const loaderRef = useRef<HTMLDivElement>(null)
 	const commandListRef = useRef<HTMLDivElement>(null)
+
+	const { data: employee } = useEmployee(defaultValue)
+	
+	useEffect(() => {
+		if (employee && defaultValue) {
+			setSelectedEmployee(employee.data.data)
+		}
+	}, [employee, defaultValue])
 
 	const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading } =
 		useInfiniteEmployees({

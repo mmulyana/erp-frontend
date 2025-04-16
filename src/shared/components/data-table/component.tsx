@@ -6,6 +6,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/shared/components/ui/select'
+import { useIsMobile } from '@/shared/hooks/use-mobile'
 import { cn } from '@/shared/utils/cn'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { parseAsInteger, useQueryStates } from 'nuqs'
@@ -16,6 +17,8 @@ type PaginationBarProps = {
 }
 
 export function Pagination({ totalItems, totalPages }: PaginationBarProps) {
+	const isMobile = useIsMobile()
+
 	const [query, setQuery] = useQueryStates({
 		page: parseAsInteger.withDefault(1),
 		limit: parseAsInteger.withDefault(10),
@@ -46,10 +49,12 @@ export function Pagination({ totalItems, totalPages }: PaginationBarProps) {
 	}
 
 	return (
-		<div className='w-full flex justify-between items-center px-2 py-2'>
-			<p className='text-ink-primary'>
-				{from}-{to} <span className='text-ink-light'>dari</span> {totalItems}
-			</p>
+		<div className='w-full flex justify-center md:justify-between items-center px-2 py-2'>
+			{!isMobile && (
+				<p className='text-ink-primary'>
+					{from}-{to} <span className='text-ink-light'>dari</span> {totalItems}
+				</p>
+			)}
 
 			<nav className='flex items-center gap-2'>
 				<button
@@ -62,7 +67,11 @@ export function Pagination({ totalItems, totalPages }: PaginationBarProps) {
 							: 'bg-white text-[#747C94]'
 					)}
 				>
-					<ChevronLeft className='text-ink-secondary/80' size={18} strokeWidth={3.2} />
+					<ChevronLeft
+						className='text-ink-secondary/80'
+						size={18}
+						strokeWidth={3.2}
+					/>
 				</button>
 				<ul className='flex'>
 					{getPageNumbers().map((number, index) => (
@@ -97,33 +106,43 @@ export function Pagination({ totalItems, totalPages }: PaginationBarProps) {
 						'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF] disabled:bg-transparent disabled:border-none',
 						currentPage === totalPages
 							? 'bg-transparent border-transparent text-[#747C94]/50'
-							: 'bg-white text-[#747C94]',
+							: 'bg-white text-[#747C94]'
 					)}
 				>
-					<ChevronRight className='text-ink-secondary/80' size={18} strokeWidth={3.2} />
+					<ChevronRight
+						className='text-ink-secondary/80'
+						size={18}
+						strokeWidth={3.2}
+					/>
 				</button>
 			</nav>
 
-			<div className='flex items-center gap-2 text-sm text-muted-foreground'>
-				<p className='text-ink-light text-base'>Baris per hal</p>
-				<Select
-					onValueChange={(val) => setQuery({ limit: Number(val), page: 1 })}
-					defaultValue={perPage.toString()}
-				>
-					<SelectTrigger className='w-[60px] h-8 border border-border'>
-						<SelectValue />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectGroup>
-							{['10', '20', '30'].map((val) => (
-								<SelectItem key={val} value={val} className='text-ink-primary'>
-									{val}
-								</SelectItem>
-							))}
-						</SelectGroup>
-					</SelectContent>
-				</Select>
-			</div>
+			{!isMobile && (
+				<div className='flex items-center gap-2 text-sm text-muted-foreground'>
+					<p className='text-ink-light text-base'>Baris per hal</p>
+					<Select
+						onValueChange={(val) => setQuery({ limit: Number(val), page: 1 })}
+						defaultValue={perPage.toString()}
+					>
+						<SelectTrigger className='w-[60px] h-8 border border-border'>
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								{['10', '20', '30'].map((val) => (
+									<SelectItem
+										key={val}
+										value={val}
+										className='text-ink-primary'
+									>
+										{val}
+									</SelectItem>
+								))}
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+				</div>
+			)}
 		</div>
 	)
 }

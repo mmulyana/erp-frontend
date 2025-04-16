@@ -1,26 +1,33 @@
-import { DataTable } from '@/shared/components/data-table'
-import { formatToRupiah } from '@/shared/utils/formatCurrency'
+import { parseAsIsoDate, parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
+
+import { formatToRupiah } from '@/shared/utils/formatCurrency'
+import { DataTable } from '@/shared/components/data-table'
+
 import { useCashAdvances } from '../api/use-cash-advances'
-import { parseAsIsoDate, parseAsString, useQueryStates } from 'nuqs'
+import { CashAdvance } from '../types'
+import { useSetAtom } from 'jotai'
+import { ModalCashAdvance } from './modal-detail-cash-advance'
 
 export default function TableCashAdvance() {
+	const setModal = useSetAtom(ModalCashAdvance)
+
 	const [query] = useQueryStates({
 		q: parseAsString.withDefault(''),
 		page: parseAsString.withDefault('1'),
 		limit: parseAsString.withDefault('10'),
 		startDate: parseAsIsoDate.withDefault(new Date()),
-		endDate: parseAsString.withDefault(''),
+		endDate: parseAsIsoDate.withDefault(new Date()),
 	})
 
-	const { data } = useCashAdvances({
+	const { data, isLoading } = useCashAdvances({
 		limit: query.limit,
 		page: query.page,
 		search: query.q,
 	})
 
-	const columns: ColumnDef<any>[] = [
+	const columns: ColumnDef<CashAdvance>[] = [
 		{
 			id: 'fullname',
 			header: 'Nama lengkap',
@@ -50,6 +57,15 @@ export default function TableCashAdvance() {
 				withPagination
 				totalItems={data?.data.total}
 				totalPages={data?.data.total_pages}
+				onCellClick={(e) => {
+					setModal({
+						id: e.id,
+						open: true,
+					})
+				}}
+				nonClickableColumns={[]}
+				isLoading={isLoading}
+				autoRedirect
 			/>
 		</>
 	)

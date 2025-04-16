@@ -1,14 +1,4 @@
-import { CalendarIcon, Loader, Plus } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { id } from 'date-fns/locale'
-import { format } from 'date-fns'
-import { useState } from 'react'
-
-import { Calendar } from '@/shared/components/ui/calendar'
-import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { cn } from '@/shared/utils/cn'
 import {
 	Dialog,
 	DialogClose,
@@ -16,8 +6,12 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogTitle,
-	DialogTrigger,
 } from '@/shared/components/ui/dialog'
+import { atom, useAtom } from 'jotai'
+import { useCashAdvance } from '../api/use-cash-advance'
+import { useForm } from 'react-hook-form'
+import { CashAdvanceForm } from '../types'
+import { useEffect } from 'react'
 import {
 	Form,
 	FormControl,
@@ -26,21 +20,29 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
+import EmployeeCombobox from '../../components/employee-combobox'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
+import { cn } from '@/shared/utils/cn'
+import { format } from 'date-fns'
+import { id } from 'date-fns/locale'
+import { CalendarIcon, Loader } from 'lucide-react'
+import { Calendar } from '@/shared/components/ui/calendar'
+import { Input } from '@/shared/components/ui/input'
+import { Textarea } from '@/shared/components/ui/textarea'
+import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
+import ModalDeleteCashAdvance from './modal-delete-cash-advace'
 
-import EmployeeCombobox from '../../components/employee-combobox'
+export const ModalCashAdvance = atom<{ open: boolean; id: string } | null>(null)
+export default function ModalDetailCashAdvance() {
+	const [modal, setModal] = useAtom(ModalCashAdvance)
 
-import { useCreateCashAdvance } from '../api/use-create-cash-advance'
-import { CashAdvanceForm } from '../types'
+	const { data } = useCashAdvance({ id: modal?.id })
 
-export default function ModalAddCashAdvance() {
-	const [open, setOpen] = useState(false)
-
-	const { mutate, isPending } = useCreateCashAdvance()
+	const { mutate, isPending } = useUpdateCashAdvance()
 
 	const form = useForm<CashAdvanceForm>({
 		defaultValues: {
@@ -51,44 +53,35 @@ export default function ModalAddCashAdvance() {
 		},
 	})
 
-	const onSubmit = (data: CashAdvanceForm) => {
-		mutate(data, {
-			onSuccess: () => {
-				form.reset({
-					amount: 0,
-					date: new Date(),
-					employeeId: '',
-					note: '',
-				})
-				setOpen(false)
-			},
-			onError: (error: any) => {
-				if (error?.response?.data?.errors) {
-					error.response.data.errors.forEach((err: any) => {
-						const field = err.path?.[0]
-						const message = err.message
-						if (field) {
-							form.setError(field, { message })
-						}
-					})
-				}
-			},
-		})
+	useEffect(() => {
+		if (data) {
+			form.reset({
+				amount: data.data?.amount,
+				date: new Date(data.data?.date as string),
+				employeeId: data.data?.employeeId,
+				note: data.data?.note,
+			})
+		}
+	}, [data])
+
+	const onSubmit = async (data: CashAdvanceForm) => {
+		if (!modal?.id) return
+		mutate({ ...data, id: modal?.id })
 	}
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>
-				<Button>
-					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Kasbon</span>
-				</Button>
-			</DialogTrigger>
-
+		<Dialog
+			open={modal?.open}
+			onOpenChange={(open) => {
+				if (modal) {
+					setModal({ ...modal, open })
+				}
+			}}
+		>
 			<DialogContent className='p-6'>
-				<DialogTitle>Kasbon Baru</DialogTitle>
+				<DialogTitle>Detail Kasbon</DialogTitle>
 				<DialogDescription>
-					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
+					Pastikan semua data yang diperbarui sudah benar sebelum disimpan.
 				</DialogDescription>
 				<Form {...form}>
 					<form
@@ -105,6 +98,8 @@ export default function ModalAddCashAdvance() {
 										<EmployeeCombobox
 											onSelect={(e) => field.onChange(e)}
 											style={{ value: 'bg-surface' }}
+											defaultValue={field.value}
+											disabled
 										/>
 									</FormControl>
 									<FormMessage />
@@ -187,22 +182,25 @@ export default function ModalAddCashAdvance() {
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-end gap-4 items-center'>
-								<DialogClose asChild>
-									<Button variant='outline' type='button'>
-										Batal
+							<div className='flex justify-between w-full'>
+								<ModalDeleteCashAdvance />
+								<div className='flex justify-end gap-4 items-center'>
+									<DialogClose asChild>
+										<Button variant='outline' type='button'>
+											Batal
+										</Button>
+									</DialogClose>
+									<Button disabled={isPending}>
+										{isPending ? (
+											<>
+												<Loader className='mr-2 h-4 w-4 animate-spin' />
+												Menyimpan...
+											</>
+										) : (
+											'Simpan'
+										)}
 									</Button>
-								</DialogClose>
-								<Button disabled={isPending}>
-									{isPending ? (
-										<>
-											<Loader className='mr-2 h-4 w-4 animate-spin' />
-											Menyimpan...
-										</>
-									) : (
-										'Simpan'
-									)}
-								</Button>
+								</div>
 							</div>
 						</DialogFooter>
 					</form>

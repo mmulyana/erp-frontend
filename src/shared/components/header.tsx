@@ -23,7 +23,7 @@ export default function Header() {
 				'flex items-center justify-between border-b border-[#EFF0F2] px-4 h-16 md:h-12 bg-white fixed top-0 left-0 w-full z-10'
 			)}
 		>
-			<div className='flex gap-8 items-center'>
+			<div className='flex gap-2 md:gap-8 items-center'>
 				<div className='flex gap-2 items-center'>
 					<img src={logo} className='w-8 h-8' />
 					<div className='flex gap-1 items-center'>

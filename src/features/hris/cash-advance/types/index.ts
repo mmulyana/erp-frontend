@@ -1,3 +1,5 @@
+import { Employee } from '@/shared/types'
+
 export type CashAdvance = {
 	id: string
 	employeeId: string
@@ -9,4 +11,13 @@ export type CashAdvance = {
 	craetedAt: string
 	updatedAt: string
 	deleted?: string
+
+	employee: Employee
+}
+
+export type CashAdvanceForm = {
+	employeeId: string
+	amount: number
+	date: Date
+	note?: string
 }
