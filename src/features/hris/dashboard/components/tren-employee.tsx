@@ -1,11 +1,11 @@
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import {
 	ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
-} from '@/components/ui/chart'
+} from '@/shared/components/ui/chart'
 
 const chartData = [
 	{ month: 'January', employee: 186 },

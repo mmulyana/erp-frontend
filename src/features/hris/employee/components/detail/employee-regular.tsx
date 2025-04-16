@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { CalendarV1 } from '@/shared/components/calendar-v1'
 import { MONTHS_OBJ } from '@/shared/constants/months'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/shared/components/ui/button'
 
 import { useCurrentCalendar } from '../../hooks/use-current-calendar'
 

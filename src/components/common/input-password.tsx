@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { FormLabel } from '../ui/form'
+import { Input } from '@/shared/components/ui/input'
+import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 import { testIds } from '@/shared/constants/_testId'
+import { FormLabel } from '@/shared/components/ui/form'
 
 interface PasswordInputProps {
 	name: string

@@ -1,6 +1,6 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Card, CardContent } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs'
+import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area'
+import { Card, CardContent } from '@/shared/components/ui/card'
 
 import EmployeeCashAdvance from './detail/employee-cash-advance'
 import EmployeeCertificate from './detail/employee-certificate'

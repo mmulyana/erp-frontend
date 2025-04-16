@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 
 import { permissionAtom } from '@/shared/store/permission'
-import { useApiData } from '@/shared/hooks/use-api-data'
 import { useGetme } from '@/shared/api/use-get-me'
 import { userAtom } from '@/shared/store/auth'
 
@@ -27,7 +26,7 @@ export default function ProtectedRoute({
 
 	const [id, setId] = useState<number | undefined>(undefined)
 
-	const { data: account, isLoading } = useApiData(useGetme())
+	const { data: account, isLoading } = useGetme()
 
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)
@@ -42,7 +41,7 @@ export default function ProtectedRoute({
 
 	useEffect(() => {
 		if (account && !isLoading && !!id) {
-			setPermissionAtom(account?.permissions as string[])
+			// setPermissionAtom(account?.permissions as string[])
 			setUserAtom(account)
 		}
 	}, [account, isLoading, id])

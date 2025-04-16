@@ -1,4 +1,4 @@
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 
 export default function CardPosition() {
 	return (

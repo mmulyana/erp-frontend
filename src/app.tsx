@@ -9,8 +9,6 @@ import LoadingScreen from './shared/components/loading-screen'
 
 const NotFound = lazy(() => import('./pages/not-found'))
 const Login = lazy(() => import('./pages/login'))
-const User = lazy(() => import('./pages/user'))
-const Role = lazy(() => import('./pages/role'))
 
 // HRIS
 const HrisDashboard = lazy(() => import('./pages/hris/dashboard'))
@@ -35,14 +33,6 @@ const routes: RoutesConfig[] = [
 		path: paths.base,
 		component: <Login />,
 		withoutAuth: true,
-	},
-	{
-		path: paths.adminUser,
-		component: <User />,
-	},
-	{
-		path: paths.adminRole,
-		component: <Role />,
 	},
 	{
 		path: paths.hris,

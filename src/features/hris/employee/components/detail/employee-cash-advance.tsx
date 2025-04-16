@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Ellipsis, Wallet } from 'lucide-react'
 import { format } from 'date-fns'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/shared/components/ui/button'
 
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { DataTable } from '@/shared/components/data-table'
