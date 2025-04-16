@@ -27,6 +27,8 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/shared/components/ui/table'
+import { ColumnDef } from '@tanstack/react-table'
+import { DataTable } from '@/shared/components/data-table'
 
 const data = [
 	{
@@ -58,6 +60,22 @@ const data = [
 
 export default function TopEmployeeCashAdvance() {
 	const [month, setMonth] = useState(0)
+
+	const columns: ColumnDef<any>[] = [
+		{
+			accessorKey: 'fullname',
+			header: 'Nama lengkap',
+		},
+		{
+			accessorKey: 'position',
+			header: 'Jabatan',
+		},
+		{
+			accessorKey: 'total',
+			header: 'Total',
+			cell: ({ row }) => formatToRupiah(row.original.total),
+		},
+	]
 
 	return (
 		<Card className='p-6 col-span-1 lg:col-span-2'>
@@ -94,7 +112,9 @@ export default function TopEmployeeCashAdvance() {
 											<Check
 												className={cn(
 													'mr-2 h-4 w-4',
-													month === (i.value as number) + 1 ? 'opacity-100' : 'opacity-0'
+													month === (i.value as number) + 1
+														? 'opacity-100'
+														: 'opacity-0'
 												)}
 											/>
 											{i.name}
@@ -107,37 +127,12 @@ export default function TopEmployeeCashAdvance() {
 				</Popover>
 			</div>
 			<CardContent className='p-0 pt-4'>
-				<div className='rounded-xl border border-border overflow-hidden'>
-					<Table>
-						<TableHeader>
-							<TableRow className='bg-surface'>
-								<TableHead className='text-ink-secondary'>
-									Nama lengkap
-								</TableHead>
-								<TableHead className='text-ink-secondary'>Jabatan</TableHead>
-								<TableHead className='text-ink-secondary'>Total</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{data.map((i, index) => (
-								<TableRow
-									key={index}
-									className={index % 2 === 1 ? 'bg-surface' : ''}
-								>
-									<TableCell className='text-ink-secondary'>
-										{i.fullname}
-									</TableCell>
-									<TableCell className='text-ink-secondary'>
-										{i.position}
-									</TableCell>
-									<TableCell className='text-ink-secondary'>
-										{formatToRupiah(i.total)}
-									</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</div>
+				<DataTable
+					columns={columns}
+					data={data}
+					variant='rounded-bordered'
+					style={{ footer: 'hidden' }}
+				/>
 			</CardContent>
 		</Card>
 	)

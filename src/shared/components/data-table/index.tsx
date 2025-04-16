@@ -37,6 +37,7 @@ interface DataTableProps<TData, TValue> {
 		footer?: string
 		stripRowColor?: string
 	}
+	variant?: 'default' | 'rounded-bordered'
 }
 
 export function DataTable<TData, TValue>({
@@ -51,6 +52,7 @@ export function DataTable<TData, TValue>({
 	autoRedirect = false,
 	nonClickableColumns = [],
 	style,
+	variant = 'default',
 }: DataTableProps<TData, TValue>) {
 	const navigate = useNavigate()
 	const table = useReactTable({
@@ -125,9 +127,19 @@ export function DataTable<TData, TValue>({
 	}
 
 	return (
-		<div className='overflow-hidden'>
+		<div
+			className={cn(
+				'overflow-hidden',
+				variant === 'rounded-bordered' && 'rounded-xl border'
+			)}
+		>
 			<Table>
-				<TableHeader className='border-y border-line'>
+				<TableHeader
+					className={cn(
+						'border-y border-line',
+						variant === 'rounded-bordered' && 'border-none'
+					)}
+				>
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
 							{headerGroup.headers.map((header, index) => (
@@ -155,7 +167,8 @@ export function DataTable<TData, TValue>({
 			<div
 				className={cn(
 					'bg-surface px-3 border-y border-line w-full py-1 flex justify-between items-center min-h-8',
-					style?.footer
+					style?.footer,
+					variant === 'rounded-bordered' && 'border-b-0'
 				)}
 			>
 				{!!withPagination && !isLoading && (

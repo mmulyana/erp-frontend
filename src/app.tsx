@@ -17,6 +17,8 @@ const DetailEmployee = lazy(() => import('./pages/hris/detail-employee'))
 const CashAdvance = lazy(() => import('./pages/hris/cash-advance'))
 const ReportCashAdvance = lazy(() => import('./pages/hris/report-cash-advance'))
 const Regular = lazy(() => import('./pages/hris/regular'))
+const Overtime = lazy(() => import('./pages/hris/overtime'))
+const ReportAttendance = lazy(() => import('./pages/hris/report-attendance'))
 
 // PROJECT
 const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
@@ -78,6 +80,16 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.hrisAttendanceRegular,
 		component: <Regular />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.hrisAttendanceOvertime,
+		component: <Overtime />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.hrisAttendanceReport,
+		component: <ReportAttendance />,
 		withoutAuth: true,
 	},
 ]

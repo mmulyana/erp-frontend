@@ -15,12 +15,12 @@ export default function EmptyState({
 	return (
 		<div
 			className={cn(
-				'w-full h-fit pb-4 flex justify-center items-center flex-col',
+				'w-full h-fit pt-4 pb-5 flex justify-center items-center flex-col',
 				className
 			)}
 		>
 			<img src={EmptyImg} className='w-20 aspect-square' />
-			<p className={cn('text-dark/50 font-medium text-sm mt-4', textStyle)}>
+			<p className={cn('text-ink-secondary text-sm mt-2', textStyle)}>
 				{text}
 			</p>
 		</div>
