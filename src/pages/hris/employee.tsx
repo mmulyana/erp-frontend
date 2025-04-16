@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 
-import { buttonVariants } from '@/components/ui/button'
-
 import { HrisLayout } from '@/shared/layout/hris-layout'
-import SearchV3 from '@/shared/component/search-v3'
+import SearchV3 from '@/shared/components/search-v3'
 
 import TableEmployee from '@/features/hris/employee/components/table-employee'
 
 import { paths } from '@/shared/constants/_paths'
+import { buttonVariants } from '@/shared/components/ui/button'
 
 export default function Employee() {
 	return (

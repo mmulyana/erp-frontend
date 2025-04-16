@@ -1,4 +1,4 @@
-import { DataTable } from '@/shared/component/data-table'
+import { DataTable } from '@/shared/components/data-table'
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'

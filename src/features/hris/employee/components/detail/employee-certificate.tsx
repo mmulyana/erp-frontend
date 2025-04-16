@@ -1,9 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 
-import SearchV3 from '@/shared/component/search-v3'
+import SearchV3 from '@/shared/components/search-v3'
 import { Ellipsis, File, FileText, Plus, FileBadgeIcon} from 'lucide-react'
-import { DataTable } from '@/shared/component/data-table'
+import { DataTable } from '@/shared/components/data-table'
 
 const data = [
 	{

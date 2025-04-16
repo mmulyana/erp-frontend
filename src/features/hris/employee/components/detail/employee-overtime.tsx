@@ -5,8 +5,8 @@ import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
 
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
-import { DataTable } from '@/shared/component/data-table'
-import SearchV3 from '@/shared/component/search-v3'
+import { DataTable } from '@/shared/components/data-table'
+import SearchV3 from '@/shared/components/search-v3'
 
 const data = [
 	{

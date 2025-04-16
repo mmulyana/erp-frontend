@@ -13,9 +13,9 @@ import { Goods } from '@/utils/types/api'
 
 import { permissionAtom } from '@/shared/store/permission'
 
-import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
+import { FilterTable, HeadTable } from '@/shared/components/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { DataTable } from '@/shared/component/data-table'
+import { DataTable } from '@/shared/components/data-table'
 import { Button } from '@/components/ui/button'
 import Tour from '@/components/common/tour'
 
@@ -28,9 +28,9 @@ import AddGood, { dialogGoodAtom } from './_component/index/add-good'
 import CardHighlight from './_component/index/card-highlight'
 import ProtectedComponent from '@/components/protected'
 
-import { settingConfig } from '../../../shared/component/setting/setting'
-import { DashboardLayout } from '../../../shared/component/layout'
-import { useTitle } from '../../../shared/component/header'
+import { settingConfig } from '../../../shared/components/setting/setting'
+import { DashboardLayout } from '../../../shared/components/layout'
+import { useTitle } from '../../../shared/components/header'
 import { steps } from './_component/tour-index'
 import { TEST_ID } from '@/shared/constants/_testId'
 

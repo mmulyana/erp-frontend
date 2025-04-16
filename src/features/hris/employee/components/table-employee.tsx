@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { useAtomValue } from 'jotai'
 
-import { DataTable } from '@/shared/component/data-table'
+import { DataTable } from '@/shared/components/data-table'
 import Overlay from '@/components/common/overlay'
 
 import { permissionAtom } from '@/shared/store/permission'

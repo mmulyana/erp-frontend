@@ -1,8 +1,6 @@
-import { Toaster } from '@/components/ui/sonner'
+import { Toaster } from '../components/ui/sonner'
 
-export default function ToasterWrapper({
-	children,
-}: React.PropsWithChildren) {
+export default function ToasterWrapper({ children }: React.PropsWithChildren) {
 	return (
 		<>
 			{children}

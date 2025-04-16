@@ -10,19 +10,18 @@ import {
 	FormMessage,
 	FormDescription,
 	FormControl,
-} from '@/components/ui/form'
+} from '@/shared/components/ui/form'
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { Input } from '@/components/ui/input'
-
-import { ImageUpload } from '@/shared/component/image-upload'
-import { MultiStep } from '@/shared/component/multi-step'
+} from '@/shared/components/ui/select'
+import { ImageUpload } from '@/shared/components/image-upload'
+import { Textarea } from '@/shared/components/ui/textarea'
+import { MultiStep } from '@/shared/components/multi-step'
+import { Input } from '@/shared/components/ui/input'
 import DetailLayout from '@/shared/layout/detail-layout'
 
 import { paths } from '@/shared/constants/_paths'

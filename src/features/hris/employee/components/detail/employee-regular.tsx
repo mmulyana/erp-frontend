@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Contact2Icon } from 'lucide-react'
 import { useState } from 'react'
 
-import { CalendarV1 } from '@/shared/component/calendar-v1'
+import { CalendarV1 } from '@/shared/components/calendar-v1'
 import { MONTHS_OBJ } from '@/shared/constants/months'
 
 import { Button } from '@/components/ui/button'

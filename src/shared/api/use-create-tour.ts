@@ -4,8 +4,9 @@ import { toast } from 'sonner'
 
 import { keys } from '@/shared/constants/_keys'
 import { urls } from '@/shared/constants/_urls'
-import { ApiError } from '@/utils/types/api'
 import http from '@/shared/utils/http'
+
+import { ApiError } from '../types'
 
 export const useCreateTour = () => {
 	const queryClient = useQueryClient()

@@ -1,10 +1,11 @@
 import { Plus } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-
 import { HrisLayout } from '@/shared/layout/hris-layout'
-import SearchV3 from '@/shared/component/search-v3'
+import { Button } from '@/shared/components/ui/button'
+import SearchV3 from '@/shared/components/search-v3'
+
 import TableCashAdvance from '@/features/hris/cash-advance/components/table-cash-advance'
+import ModalAddCashAdvance from '@/features/hris/cash-advance/components/modal-add-cash-advance'
 
 export default function CashAdvancePage() {
 	return (
@@ -13,10 +14,7 @@ export default function CashAdvancePage() {
 				<div className='flex gap-4 items-center'>
 					<SearchV3 />
 				</div>
-				<Button className='gap-2'>
-					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Kasbon</span>
-				</Button>
+				<ModalAddCashAdvance />
 			</div>
 			<TableCashAdvance />
 		</HrisLayout>

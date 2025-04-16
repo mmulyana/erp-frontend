@@ -1,13 +1,3 @@
-import { SidebarProvider } from '@/components/ui/sidebar'
-import { cn } from '@/shared/utils/cn'
-
-import Sidebar, {
-	AppSidebarProps,
-	SidebarLinkGroup,
-} from '../component/sidebar'
-import Header from '../component/header'
-import Helpdesk from '../component/helpdesk'
-import { paths } from '@/shared/constants/_paths'
 import {
 	FileBarChart,
 	FileClock,
@@ -16,6 +6,13 @@ import {
 	PieChart,
 	Users,
 } from 'lucide-react'
+
+import { SidebarProvider } from '@/shared/components/ui/sidebar'
+import { paths } from '@/shared/constants/_paths'
+import { cn } from '@/shared/utils/cn'
+
+import Sidebar, { SidebarLinkGroup } from '../components/sidebar'
+import Header from '../components/header'
 
 const navLinks: SidebarLinkGroup[] = [
 	{

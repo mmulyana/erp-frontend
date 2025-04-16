@@ -1,4 +1,4 @@
-import HeaderV2 from '../component/header-v2'
+import HeaderV2 from '../components/header-v2'
 
 type Props = {
 	children: React.ReactNode

@@ -5,7 +5,7 @@ import ProtectedRoute from '@/shared/utils/protected-route'
 import { paths } from '@/shared/constants/_paths'
 
 import { RoutesConfig } from '@/shared/types'
-import LoadingScreen from './shared/component/loading-screen'
+import LoadingScreen from './shared/components/loading-screen'
 
 const NotFound = lazy(() => import('./pages/not-found'))
 const Login = lazy(() => import('./pages/login'))

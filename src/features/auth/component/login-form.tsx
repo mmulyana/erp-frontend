@@ -5,9 +5,9 @@ import { z } from 'zod'
 import { ErrorResponse } from '@/shared/types'
 
 import InputPassword from '@/components/common/input-password'
-import { Form, FormField } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Form, FormField } from '@/shared/components/ui/form'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
 
 import LogoGoogle from '/public/images/logo-google.png'
 import Logo from '/public/images/logo.png'
@@ -127,7 +127,7 @@ export default function LoginForm() {
 							type='button'
 							className='text-[#828599] font-medium bg-white gap-2 py-2.5 border-[#EFEFEF] h-fit'
 						>
-							<img src={LogoGoogle} className='w-5 h-5'/>
+							<img src={LogoGoogle} className='w-5 h-5' />
 							Masuk dengan google
 						</Button>
 					</form>

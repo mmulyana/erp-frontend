@@ -6,13 +6,13 @@ import { useState } from 'react'
 import { CreateTransaction } from '@/utils/types/form'
 import { PATH } from '@/shared/constants/_paths'
 
-import { DashboardLayout } from '../../../../shared/component/layout'
-import { useTitle } from '../../../../shared/component/header'
+import { DashboardLayout } from '../../../../shared/components/layout'
+import { useTitle } from '../../../../shared/components/header'
 import { steps } from '../_component/tour-stock'
 import { column } from './_component/column'
 import DetailTransaction from './_component/detail-transaction'
 import DeleteTransaction from './_component/delete-transaction'
-import TitlePage from '../../../../shared/component/title-page'
+import TitlePage from '../../../../shared/components/title-page'
 
 import { useProjects } from '@/hooks/api/use-project'
 import { useGoods } from '@/hooks/api/use-goods'
@@ -27,8 +27,8 @@ import {
 import Modal, { ModalContainer } from '@/components/modal-v2'
 import Tour from '@/components/common/tour'
 import { Form, FormField } from '@/components/ui/form'
-import { FilterTable } from '@/shared/component/data-table/component'
-import { DataTable } from '@/shared/component/data-table'
+import { FilterTable } from '@/shared/components/data-table/component'
+import { DataTable } from '@/shared/components/data-table'
 import {
   Command,
   CommandEmpty,
