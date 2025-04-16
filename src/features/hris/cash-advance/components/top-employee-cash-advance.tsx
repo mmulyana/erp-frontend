@@ -1,10 +1,10 @@
 import { Check, ChevronsUpDown } from 'lucide-react'
-import { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 
 import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
+import { months, MONTHS_OBJ } from '@/shared/constants/months'
+import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { Button } from '@/shared/components/ui/button'
-import { months } from '@/shared/constants/months'
 import { cn } from '@/shared/utils/cn'
 import {
 	Command,
@@ -19,7 +19,6 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
-import { DataTable } from '@/shared/components/data-table'
 import {
 	Table,
 	TableBody,
@@ -28,7 +27,6 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/shared/components/ui/table'
-import { formatToRupiah } from '@/shared/utils/formatCurrency'
 
 const data = [
 	{
@@ -61,23 +59,6 @@ const data = [
 export default function TopEmployeeCashAdvance() {
 	const [month, setMonth] = useState(0)
 
-	const columns: ColumnDef<any>[] = [
-		{
-			id: 'fullname',
-			header: 'Nama lengkap',
-			accessorKey: 'fullname',
-		},
-		{
-			id: 'position',
-			header: 'Jabatan',
-			accessorKey: 'position',
-		},
-		{
-			id: 'total',
-			header: 'Total',
-		},
-	]
-
 	return (
 		<Card className='p-6 col-span-1 lg:col-span-2'>
 			<div className='flex justify-between items-center'>
@@ -91,7 +72,7 @@ export default function TopEmployeeCashAdvance() {
 							role='combobox'
 							className='w-[200px] justify-between font-medium text-ink-secondary'
 						>
-							{month ? months.find((i) => i.value === month)?.name : ''}
+							{MONTHS_OBJ[month]}
 							<ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 						</Button>
 					</PopoverTrigger>
@@ -104,7 +85,7 @@ export default function TopEmployeeCashAdvance() {
 									{months.map((i) => (
 										<CommandItem
 											key={i.value}
-											value={String(i.value)}
+											value={String((i.value as number) + 1)}
 											onSelect={(e) => {
 												const value = Number(e)
 												setMonth(value)
@@ -113,7 +94,7 @@ export default function TopEmployeeCashAdvance() {
 											<Check
 												className={cn(
 													'mr-2 h-4 w-4',
-													month === i.value ? 'opacity-100' : 'opacity-0'
+													month === (i.value as number) + 1 ? 'opacity-100' : 'opacity-0'
 												)}
 											/>
 											{i.name}
@@ -130,9 +111,11 @@ export default function TopEmployeeCashAdvance() {
 					<Table>
 						<TableHeader>
 							<TableRow className='bg-surface'>
-								<TableHead>Nama lengkap</TableHead>
-								<TableHead>Jabatan</TableHead>
-								<TableHead>Total</TableHead>
+								<TableHead className='text-ink-secondary'>
+									Nama lengkap
+								</TableHead>
+								<TableHead className='text-ink-secondary'>Jabatan</TableHead>
+								<TableHead className='text-ink-secondary'>Total</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -141,9 +124,15 @@ export default function TopEmployeeCashAdvance() {
 									key={index}
 									className={index % 2 === 1 ? 'bg-surface' : ''}
 								>
-									<TableCell>{i.fullname}</TableCell>
-									<TableCell>{i.position}</TableCell>
-									<TableCell>{formatToRupiah(i.total)}</TableCell>
+									<TableCell className='text-ink-secondary'>
+										{i.fullname}
+									</TableCell>
+									<TableCell className='text-ink-secondary'>
+										{i.position}
+									</TableCell>
+									<TableCell className='text-ink-secondary'>
+										{formatToRupiah(i.total)}
+									</TableCell>
 								</TableRow>
 							))}
 						</TableBody>

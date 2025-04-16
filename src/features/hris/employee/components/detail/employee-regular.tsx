@@ -69,6 +69,7 @@ export default function EmployeeRegular() {
 				{data.map((i, index) => (
 					<CalendarV1
 						key={index}
+						monthIndex={group[index]}
 						selectedDates={i.selectedDates}
 						month={MONTHS_OBJ[group[index]]}
 					/>

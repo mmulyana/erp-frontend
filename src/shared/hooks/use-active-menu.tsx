@@ -4,34 +4,24 @@ import { useMemo } from 'react'
 import { paths } from '@/shared/constants/paths'
 
 export const useActiveMenu = () => {
-  const { pathname } = useLocation()
+	const { pathname } = useLocation()
 
-  return useMemo(() => {
-    const activeStates = {
-      activeMenu: '',
-      activeSubMenu: '',
-      path: '',
-    }
+	return useMemo(() => {
+		const activeStates = {
+			path: '',
+		}
 
-    Object.entries(paths).forEach(([_, value]) => {
-      const match = matchPath(value, pathname)
-      if (match) {
-        activeStates.path = value
-      }
-    })
+		Object.entries(paths).forEach(([_, value]) => {
+			const match = matchPath(value, pathname)
+			if (match) {
+				activeStates.path = value
+			}
+		})
 
-    if (!activeStates.path) {
-      activeStates.path = pathname
-    }
+		if (!activeStates.path) {
+			activeStates.path = pathname
+		}
 
-    // Inventory
-    else if (pathname.includes('/dashboard/inventory')) {
-      activeStates.activeMenu = 'inventory'
-      if (pathname.includes('/dashboard/inventory/manage')) {
-        activeStates.activeSubMenu = 'Kelola'
-      }
-    }
-
-    return activeStates
-  }, [pathname])
+		return activeStates
+	}, [pathname])
 }
