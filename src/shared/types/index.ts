@@ -53,3 +53,21 @@ export type StatusItem = {
 export type StatusObject = {
 	[key: string | number]: string
 }
+
+export type Employee = {
+	id: string
+	fullname: string
+	active: boolean
+	address: string
+	phone: string
+	photoUrl: string
+	createdAt: string
+	updatedAt: string
+	joinedAt: string
+	lastEducation: string
+	position: string
+	birthDate: string
+	salary: number
+	overtimeSalary: number
+	status: string
+}

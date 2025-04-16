@@ -71,7 +71,7 @@ export function Pagination({ totalItems, totalPages }: PaginationBarProps) {
 								className={cn(
 									'w-8 h-8 flex justify-center items-center border text-base rounded-md select-none',
 									currentPage === number
-										? 'border-brand text-brand rounded-none'
+										? 'border-brand text-brand rounded-none bg-white'
 										: number === '...'
 										? 'border-border rounded-none border-l-0 text-muted-foreground'
 										: 'border-border rounded-none border-l-0 hover:bg-white hover:border-[#D4D7DF]',
@@ -92,12 +92,12 @@ export function Pagination({ totalItems, totalPages }: PaginationBarProps) {
 				</ul>
 				<button
 					onClick={() => setQuery({ page: currentPage + 1 })}
-					disabled={currentPage === totalPages}
+					disabled={totalPages > 0 ? currentPage === totalPages : true}
 					className={cn(
-						'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF]',
+						'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF] disabled:bg-transparent disabled:border-none',
 						currentPage === totalPages
 							? 'bg-transparent border-transparent text-[#747C94]/50'
-							: 'bg-white text-[#747C94]'
+							: 'bg-white text-[#747C94]',
 					)}
 				>
 					<ChevronRight className='text-ink-secondary/80' size={18} strokeWidth={3.2} />

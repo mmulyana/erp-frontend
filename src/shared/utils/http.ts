@@ -49,7 +49,7 @@ http.interceptors.response.use(
 				sessionStorage.setItem(CookieKeys.RedirectAfterLogin, currentPath)
 			}
 
-			window.location.href = paths.base
+			// window.location.href = paths.base
 		}
 
 		return Promise.reject(error)

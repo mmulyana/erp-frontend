@@ -1,13 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 
-import { IApiPagination } from '@/shared/types'
+import { Employee, IApiPagination } from '@/shared/types'
 
 import { keys } from '@/shared/constants/_keys'
 import { urls } from '@/shared/constants/_urls'
 import http from '@/shared/utils/http'
-
-import { Employee } from '../types'
 
 type ParamsEmployee = {
 	search?: string

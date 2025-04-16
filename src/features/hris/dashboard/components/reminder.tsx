@@ -1,8 +1,8 @@
 import { CalendarClock } from 'lucide-react'
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Card, CardTitle } from '@/components/ui/card'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui/tabs'
+import { ScrollArea } from '@/shared/components/ui/scroll-area'
+import { Card, CardTitle } from '@/shared/components/ui/card'
 import { cn } from '@/shared/utils/cn'
 import { format } from 'date-fns'
 

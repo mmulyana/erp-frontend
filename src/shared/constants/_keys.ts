@@ -8,6 +8,7 @@ export const keys = {
 	permissionGroup: 'permission-grup',
 	hrisPosition: 'hris_position',
 	employee: 'employee',
+	employeeInfinite: 'employee-infinite',
 	employeeDetail: 'employee-detail',
 	expireCertification: 'expire-certification',
 	expireSafety: 'expire-safety',

@@ -27,7 +27,7 @@ export default function SearchV3({ placeholder }: Props) {
 				defaultValue={query}
 				onChange={(e) => debouncedSetQuery(e.target.value)}
 				placeholder={placeholder || 'Cari data'}
-				className='h-8 pr-2 pl-9 max-w-[200px] border border-border rounded-lg placeholder:text-ink-light valid:text-ink-primary'
+				className='h-8 pr-2 pb-0.5 pl-9 max-w-[200px] border border-border rounded-lg placeholder:text-ink-light valid:text-ink-primary'
 			/>
 		</div>
 	)

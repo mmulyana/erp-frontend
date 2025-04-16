@@ -15,12 +15,7 @@ const chartData = [
 	{ month: 'May', employee: 209 },
 	{ month: 'June', employee: 214 },
 ]
-const chartConfig = {
-	employee: {
-		label: 'Pegawai',
-		color: 'hsl(var(--chart-1))',
-	},
-} satisfies ChartConfig
+const chartConfig = {} satisfies ChartConfig
 
 export default function TrenEmployee() {
 	return (

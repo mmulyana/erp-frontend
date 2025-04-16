@@ -158,8 +158,11 @@ export function DataTable<TData, TValue>({
 					style?.footer
 				)}
 			>
-				{!!withPagination && !isLoading && totalItems && totalPages && (
-					<Pagination totalItems={totalItems} totalPages={totalPages} />
+				{!!withPagination && !isLoading && (
+					<Pagination
+						totalItems={totalItems || 0}
+						totalPages={totalPages || 0}
+					/>
 				)}
 			</div>
 		</div>

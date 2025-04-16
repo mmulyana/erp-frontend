@@ -2,35 +2,28 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
-import { toFormData } from '@/shared/utils/to-form-data'
 import { urls } from '@/shared/constants/_urls'
 import { keys } from '@/shared/constants/_keys'
 import { Employee, IApi } from '@/shared/types'
-
 import http from '@/shared/utils/http'
 
-export const useCreateEmployee = () => {
+import { CashAdvanceForm } from '../schemas'
+
+export const useCreateCashAdvance = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async (
-			payload: Partial<Employee>
-		): Promise<AxiosResponse<IApi<Employee>>> => {
-			const formData = toFormData(payload)
-			return await http.post(urls.employee, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			})
+			payload: Partial<CashAdvanceForm>
+		): Promise<AxiosResponse<IApi<CashAdvanceForm>>> => {
+			return await http.post(urls.cashAdvances, payload)
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [keys.employee] })
+			queryClient.invalidateQueries({ queryKey: [keys.cashAdvances] })
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {
-			if (error.response?.data.errors?.fullname.message) {
-				toast.error(error.response?.data.errors?.fullname.message)
-			}
+			toast.error(error.response?.data.message)
 		},
 	})
 }

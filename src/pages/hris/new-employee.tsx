@@ -1,6 +1,8 @@
 import { BriefcaseBusiness, MapPinned, User2 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import { z } from 'zod'
 
 import {
 	Form,
@@ -21,14 +23,12 @@ import {
 import { ImageUpload } from '@/shared/components/image-upload'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { MultiStep } from '@/shared/components/multi-step'
-import { Input } from '@/shared/components/ui/input'
 import DetailLayout from '@/shared/layout/detail-layout'
-
+import { Input } from '@/shared/components/ui/input'
 import { paths } from '@/shared/constants/_paths'
-import { z } from 'zod'
-import { EmployeeSchema } from '@/features/hris/employee/schema'
+
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
-import { useNavigate } from 'react-router-dom'
+import { EmployeeSchema } from '@/features/hris/employee/schema'
 
 export default function NewEmployee() {
 	const navigate = useNavigate()

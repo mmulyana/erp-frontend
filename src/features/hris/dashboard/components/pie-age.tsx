@@ -1,10 +1,10 @@
 import { Pie, PieChart } from 'recharts'
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import {
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
-} from '@/components/ui/chart'
+} from '@/shared/components/ui/chart'
 
 const chartData = [
 	{ age: '18-20', total: 275, fill: '#2B6FD5' },

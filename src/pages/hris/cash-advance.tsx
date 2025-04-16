@@ -1,11 +1,8 @@
-import { Plus } from 'lucide-react'
-
 import { HrisLayout } from '@/shared/layout/hris-layout'
-import { Button } from '@/shared/components/ui/button'
 import SearchV3 from '@/shared/components/search-v3'
 
-import TableCashAdvance from '@/features/hris/cash-advance/components/table-cash-advance'
 import ModalAddCashAdvance from '@/features/hris/cash-advance/components/modal-add-cash-advance'
+import TableCashAdvance from '@/features/hris/cash-advance/components/table-cash-advance'
 
 export default function CashAdvancePage() {
 	return (
