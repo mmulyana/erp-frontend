@@ -9,7 +9,7 @@ import { useApiData } from '@/shared/hooks/use-api-data'
 import useTour from '@/hooks/use-tour'
 
 import { Supplier as SupplierType } from '@/utils/types/api'
-import { PATH } from '@/shared/constants/_paths'
+import { PATH } from '@/shared/constants/paths'
 
 import DialogDeleteSupplier from './_component/supplier/dialog-delete-supplier'
 import DialogAddSupplier from './_component/supplier/dialog-add-supplier'
@@ -28,7 +28,7 @@ import { FilterTable, HeadTable } from '@/shared/components/data-table/component
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/shared/components/data-table'
 import { Button } from '@/components/ui/button'
-import { TEST_ID } from '@/shared/constants/_testId'
+import { TEST_ID } from '@/shared/constants/testId'
 
 export const links = [
   {

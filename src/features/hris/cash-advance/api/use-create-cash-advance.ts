@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
-import { urls } from '@/shared/constants/_urls'
-import { keys } from '@/shared/constants/_keys'
+import { urls } from '@/shared/constants/urls'
+import { keys } from '@/shared/constants/keys'
 import { IApi } from '@/shared/types'
 import http from '@/shared/utils/http'
 

@@ -1,8 +1,9 @@
-import { keys } from '@/shared/constants/_keys'
-import { urls } from '@/shared/constants/_urls'
-import { Employee } from '@/shared/types'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import axios from 'axios'
+
+import { keys } from '@/shared/constants/keys'
+import { urls } from '@/shared/constants/urls'
+import { Employee } from '@/shared/types'
 
 type ApiResponse = {
 	data: {

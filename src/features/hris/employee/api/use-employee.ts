@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { keys } from '@/shared/constants/_keys'
-import { urls } from '@/shared/constants/_urls'
+import { keys } from '@/shared/constants/keys'
+import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
 export const useEmployee = (id?: string | null) => {

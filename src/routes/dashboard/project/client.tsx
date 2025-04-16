@@ -3,8 +3,8 @@ import { SquareUserRoundIcon } from 'lucide-react'
 import Tour from '@/components/common/tour'
 import { Tab, Tabs } from '@/components/tab'
 
-import { TEST_ID } from '@/shared/constants/_testId'
-import { PATH } from '@/shared/constants/_paths'
+import { TEST_ID } from '@/shared/constants/testId'
+import { PATH } from '@/shared/constants/paths'
 import useTour from '@/hooks/use-tour'
 
 import TableCompany from './_component/client/table-company'

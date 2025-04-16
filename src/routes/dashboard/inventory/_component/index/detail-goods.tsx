@@ -18,7 +18,7 @@ import usePermission from '@/shared/hooks/use-permission'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
-import { BASE_URL } from '@/shared/constants/_urls'
+import { BASE_URL } from '@/shared/constants/urls'
 import { createGoods } from '@/utils/types/form'
 import { Transaction } from '@/utils/types/api'
 

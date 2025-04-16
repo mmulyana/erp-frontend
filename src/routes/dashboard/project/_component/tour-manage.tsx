@@ -1,6 +1,6 @@
 import type { Step } from 'react-joyride'
 
-import { TEST_ID } from '@/shared/constants/_testId'
+import { TEST_ID } from '@/shared/constants/testId'
 
 import Img from '/public/images/kanban.png'
 

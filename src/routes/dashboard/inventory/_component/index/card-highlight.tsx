@@ -11,7 +11,7 @@ import Modal from '@/components/modal-v2'
 
 import ButtonLink from '../button-link'
 import EmptyState from '@/components/common/empty-state'
-import { TEST_ID } from '@/shared/constants/_testId'
+import { TEST_ID } from '@/shared/constants/testId'
 
 export default function CardHighlight() {
   const { data: borroweds } = useApiData(useTransactionBorrowed())

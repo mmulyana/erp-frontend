@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { AxiosError } from 'axios'
 import { z } from 'zod'
 
 import { ErrorResponse } from '@/shared/types'
@@ -8,6 +9,7 @@ import InputPassword from '@/components/common/input-password'
 import { Form, FormField } from '@/shared/components/ui/form'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
+import { testIds } from '@/shared/constants/testId'
 
 import LogoGoogle from '/public/images/logo-google.png'
 import Logo from '/public/images/logo.png'
@@ -15,8 +17,6 @@ import Logo from '/public/images/logo.png'
 import { useLogin } from '../api/use-login'
 import { LoginSchema } from '../schema'
 import { Payload } from '../types'
-import { AxiosError } from 'axios'
-import { testIds } from '@/shared/constants/_testId'
 
 type FormData = z.infer<typeof LoginSchema>
 

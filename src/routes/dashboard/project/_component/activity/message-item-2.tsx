@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { format } from 'date-fns'
 
-import { BASE_URL } from '@/shared/constants/_urls'
+import { BASE_URL } from '@/shared/constants/urls'
 import { Activity } from '@/utils/types/api'
 import { cn } from '@/shared/utils/cn'
 

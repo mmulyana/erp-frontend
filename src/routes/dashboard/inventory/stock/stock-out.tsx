@@ -2,7 +2,7 @@ import { Plus, X, PackageMinus } from 'lucide-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { useState } from 'react'
 
-import { PATH } from '@/shared/constants/_paths'
+import { PATH } from '@/shared/constants/paths'
 
 import {
   useCreateTransaction,

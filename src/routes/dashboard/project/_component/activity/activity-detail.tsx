@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { socket } from '@/shared/utils/socket'
-import { JOIN_BY_PARENT, MESSAGES_BY_PARENT } from '@/shared/constants/_socket'
+import { JOIN_BY_PARENT, MESSAGES_BY_PARENT } from '@/shared/constants/socket'
 import {
   useDeleteActivity,
   useToggleLikeActivity,

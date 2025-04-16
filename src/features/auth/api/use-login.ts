@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { ErrorResponse } from '@/shared/types'
-
 import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
-import { paths } from '@/shared/constants/_paths'
-import { urls } from '@/shared/constants/_urls'
+import { paths } from '@/shared/constants/paths'
+import { urls } from '@/shared/constants/urls'
+import { ErrorResponse } from '@/shared/types'
 import http from '@/shared/utils/http'
 
 import { Payload, Response } from '../types'

@@ -3,8 +3,8 @@ import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 import { toFormData } from '@/shared/utils/to-form-data'
-import { urls } from '@/shared/constants/_urls'
-import { keys } from '@/shared/constants/_keys'
+import { urls } from '@/shared/constants/urls'
+import { keys } from '@/shared/constants/keys'
 import { Employee, IApi } from '@/shared/types'
 
 import http from '@/shared/utils/http'
@@ -14,10 +14,14 @@ export const useCreateEmployee = () => {
 
 	return useMutation({
 		mutationFn: async (
-			payload: Partial<Employee>
+			payload: Partial<
+				Employee & {
+					photoName?: string
+				}
+			>
 		): Promise<AxiosResponse<IApi<Employee>>> => {
 			const formData = toFormData(payload)
-			return await http.post(urls.employee, formData, {
+			return await http.post(urls.employee + '/pegawai', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},

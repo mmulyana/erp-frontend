@@ -6,7 +6,7 @@ import SearchV3 from '@/shared/components/search-v3'
 
 import TableEmployee from '@/features/hris/employee/components/table-employee'
 
-import { paths } from '@/shared/constants/_paths'
+import { paths } from '@/shared/constants/paths'
 import { buttonVariants } from '@/shared/components/ui/button'
 
 export default function Employee() {

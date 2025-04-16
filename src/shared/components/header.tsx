@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 
 import { SidebarTrigger } from '@/shared/components/ui/sidebar'
 import { Button } from '@/shared/components/ui/button'
-import { baseUrl } from '@/shared/constants/_urls'
+import { baseUrl } from '@/shared/constants/urls'
 import { userAtom } from '@/shared/store/auth'
 import { cn } from '@/shared/utils/cn'
 

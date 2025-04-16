@@ -5,20 +5,28 @@ import { cn } from '@/shared/utils/cn'
 
 type Props = {
 	title: string
-	value: number
+	value: number | string
 	footer?: {
 		percent: number
 		text: string
 	}
+	style?: {
+		value?: string
+		content?: string
+	}
 }
-export default function CardHighlight({ title, footer, value }: Props) {
+export default function CardHighlight({ title, footer, value, style }: Props) {
 	return (
 		<Card className='h-fit p-6'>
 			<CardTitle className='text-ink-secondary text-base font-normal'>
 				{title}
 			</CardTitle>
-			<CardContent className='h-fit p-0 pt-8'>
-				<p className='text-ink-primary text-4xl font-medium'>{value}</p>
+			<CardContent className={cn('h-fit p-0 pt-8', style?.content)}>
+				<p
+					className={cn('text-ink-primary text-4xl font-medium', style?.value)}
+				>
+					{value}
+				</p>
 				{footer && (
 					<div className='flex items-center gap-2 mt-4'>
 						{footer.percent > 0 ? (

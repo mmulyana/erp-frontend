@@ -2,8 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 
 import { IApi, Pagination } from '@/shared/types'
-import { keys } from '@/shared/constants/_keys'
-import { urls } from '@/shared/constants/_urls'
+import { keys } from '@/shared/constants/keys'
+import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
 type AttendanceParams = Pagination & {

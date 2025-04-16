@@ -8,7 +8,7 @@ import { useClientPagination } from '@/hooks/api/use-client'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
 import { Client as ClientType } from '@/utils/types/api'
-import { BASE_URL } from '@/shared/constants/_urls'
+import { BASE_URL } from '@/shared/constants/urls'
 
 import DropdownEdit from '@/components/common/dropdown-edit'
 import ProtectedComponent from '@/components/protected'

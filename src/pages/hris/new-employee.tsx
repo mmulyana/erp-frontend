@@ -25,7 +25,7 @@ import { Textarea } from '@/shared/components/ui/textarea'
 import { MultiStep } from '@/shared/components/multi-step'
 import DetailLayout from '@/shared/layout/detail-layout'
 import { Input } from '@/shared/components/ui/input'
-import { paths } from '@/shared/constants/_paths'
+import { paths } from '@/shared/constants/paths'
 
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
 import { EmployeeSchema } from '@/features/hris/employee/schema'
@@ -52,12 +52,15 @@ export default function NewEmployee() {
 
 	const onCreate = () => {
 		const payload = form.getValues()
-		mutate(payload, {
-			onSuccess: () => {
-				form.reset()
-				navigate(paths.hrisMasterDataEmployee)
-			},
-		})
+		mutate(
+			{ ...payload, photoName: 'testing' },
+			{
+				onSuccess: () => {
+					form.reset()
+					navigate(paths.hrisMasterDataEmployee)
+				},
+			}
+		)
 	}
 
 	const steps = [

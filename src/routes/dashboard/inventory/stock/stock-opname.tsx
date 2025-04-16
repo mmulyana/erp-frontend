@@ -6,7 +6,7 @@ import {
   useCreateTransaction,
   useTransactionPagination,
 } from '@/hooks/api/use-transaction'
-import { PATH } from '@/shared/constants/_paths'
+import { PATH } from '@/shared/constants/paths'
 
 import DetailTransaction from './_component/detail-transaction'
 import DeleteTransaction from './_component/delete-transaction'

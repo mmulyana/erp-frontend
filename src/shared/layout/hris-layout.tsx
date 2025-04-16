@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 
 import { SidebarProvider } from '@/shared/components/ui/sidebar'
-import { paths } from '@/shared/constants/_paths'
+import { paths } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
 
 import Sidebar, { SidebarLinkGroup } from '../components/sidebar'

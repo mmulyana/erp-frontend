@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/chart'
 import LoadingState from '@/components/common/loading-state'
 
-import { TEST_ID } from '@/shared/constants/_testId'
+import { TEST_ID } from '@/shared/constants/testId'
 
 export default function ProjectByStatusChart() {
   const { data } = useApiData(useChartProject())

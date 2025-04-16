@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
 import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
-import { paths } from '@/shared/constants/_paths'
+import { paths } from '@/shared/constants/paths'
 
 const useProtected = () => {
 	const navigate = useNavigate()

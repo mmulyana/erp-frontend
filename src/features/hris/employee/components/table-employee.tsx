@@ -8,7 +8,7 @@ import { permissionAtom } from '@/shared/store/permission'
 
 import { useEmployees } from '@/features/hris/employee/api/use-employees'
 
-import { testIds } from '@/shared/constants/_testId'
+import { testIds } from '@/shared/constants/testId'
 
 import { parseAsString, useQueryStates } from 'nuqs'
 import { Employee } from '../types'
