@@ -154,7 +154,7 @@ export function DataTable<TData, TValue>({
 			</Table>
 			<div
 				className={cn(
-					'bg-surface px-3 border-y border-line w-full py-1 flex justify-between items-center',
+					'bg-surface px-3 border-y border-line w-full py-1 flex justify-between items-center min-h-8',
 					style?.footer
 				)}
 			>

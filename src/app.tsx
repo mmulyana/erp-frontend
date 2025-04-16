@@ -17,6 +17,7 @@ const HrisDashboard = lazy(() => import('./pages/hris/dashboard'))
 const Employee = lazy(() => import('./pages/hris/employee'))
 const NewEmployee = lazy(() => import('./pages/hris/new-employee'))
 const DetailEmployee = lazy(() => import('./pages/hris/detail-employee'))
+const CashAdvance = lazy(() => import('./pages/hris/cash-advance'))
 
 // PROJECT
 const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
@@ -71,6 +72,11 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.hrisMasterDataEmployeeDetail,
 		component: <DetailEmployee />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.hrisCashAdvance,
+		component: <CashAdvance />,
 		withoutAuth: true,
 	},
 ]

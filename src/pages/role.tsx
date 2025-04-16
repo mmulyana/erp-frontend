@@ -1,5 +1,4 @@
 import { ColumnDef } from '@tanstack/react-table'
-import useUrlState from '@ahooksjs/use-url-state'
 import { UserCircle } from 'lucide-react'
 import { useState } from 'react'
 
@@ -17,7 +16,6 @@ import AlertDialogV1 from '@/components/common/alert-dialog-v1'
 import DropdownEdit from '@/components/common/dropdown-edit'
 import Tour from '@/components/common/tour'
 
-import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
@@ -28,8 +26,6 @@ import { Role } from '@/features/role/type'
 
 export default function Index() {
 	const { mutate: remove } = useDeleteRole()
-
-	const [url] = useUrlState({ name: '' })
 
 	// HANDLE DIALOG NEW USER
 	const [openDialog, setOpenDialog] = useState<{
@@ -47,7 +43,6 @@ export default function Index() {
 		open: boolean
 	} | null>(null)
 
-	const { data, isLoading } = useApiData(useRoles({ search: url.name }))
 	const column: ColumnDef<Role>[] = [
 		{
 			id: 'name',
@@ -103,23 +98,7 @@ export default function Index() {
 
 	return (
 		<>
-			<HeadTable>
-				<div className='flex gap-4 items-center'>
-					<UserCircle className='text-[#989CA8]' />
-					<p className='text-dark font-medium'>Peran</p>
-				</div>
-				<ProtectedComponent required={['role:create']}>
-					<Button
-						onClick={() => setOpenDialog({ id: null, open: true })}
-						id={testIds.buttonCreateRole}
-						data-testid={testIds.buttonCreateRole}
-					>
-						Peran Baru
-					</Button>
-				</ProtectedComponent>
-			</HeadTable>
-			<FilterTable />
-			<DataTable columns={column} data={[]} isLoading={isLoading} />
+			<DataTable columns={column} data={[]} />
 			<AddRole
 				open={openDialog?.open || false}
 				setOpen={() => setOpenDialog(null)}

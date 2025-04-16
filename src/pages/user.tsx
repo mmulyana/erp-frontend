@@ -1,21 +1,14 @@
-import useUrlState from '@ahooksjs/use-url-state'
 import { ColumnDef } from '@tanstack/react-table'
-import { UserCircle } from 'lucide-react'
-import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
 import usePermission from '@/shared/hooks/use-permission'
 import useTour from '@/shared/hooks/use-tour'
 import { useApiData } from '@/shared/hooks/use-api-data'
 
-import { userAtom } from '@/shared/store/auth'
-
 import { formatPhone } from '@/shared/utils/format-phone'
 import { testIds } from '@/shared/constants/_testId'
 import { baseUrl } from '@/shared/constants/_urls'
-import { paths } from '@/shared/constants/_paths'
 
-import { FilterTable, HeadTable } from '@/shared/component/data-table/component'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { DataTable } from '@/shared/component/data-table'
 import { Button } from '@/components/ui/button'
@@ -63,10 +56,6 @@ export default function Index() {
 		open: boolean
 	} | null>(null)
 
-	const [url] = useUrlState({ page: '', name: '', limit: '' })
-	const { data, isLoading } = useApiData(
-		useUsers({ page: url.page, search: url.name, limit: url.limit })
-	)
 	const column: ColumnDef<any>[] = [
 		{
 			id: 'name',
@@ -193,28 +182,7 @@ export default function Index() {
 
 	return (
 		<>
-			<HeadTable>
-				<div className='flex gap-4 items-center'>
-					<UserCircle className='text-[#989CA8]' />
-					<p className='text-dark font-medium'>User</p>
-				</div>
-				<ProtectedComponent required={['user:create']}>
-					<Button
-						onClick={() => setDialog({ open: true, id: null })}
-						id={testIds.buttonAddUser}
-						data-testid={testIds.buttonAddUser}
-					>
-						User Baru
-					</Button>
-				</ProtectedComponent>
-			</HeadTable>
-			<FilterTable />
-			<DataTable
-				columns={column}
-				data={[]}
-				isLoading={isLoading}
-				withPagination
-			/>
+			<DataTable columns={column} data={[]} withPagination />
 			<AlertDialogV1
 				open={resetPassword?.open || false}
 				setOpen={() => setResetPassword(null)}
