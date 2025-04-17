@@ -13,13 +13,13 @@ import {
 	AlertDialogTrigger,
 } from '@/shared/components/ui/alert-dialog'
 
-import { useDeleteCashAdvance } from '../api/use-delete-cash-advance'
-import { ModalCashAdvance } from './modal-detail-cash-advance'
+import { useDeleteOvertime } from '../api/use-delete-overtime'
+import { ModalOvertime } from './modal-detail-overtime'
 
-export default function ModalDeleteCashAdvance() {
-	const [modal, setModal] = useAtom(ModalCashAdvance)
+export default function ModalDeleteOvertime() {
+	const [modal, setModal] = useAtom(ModalOvertime)
 
-	const { mutate } = useDeleteCashAdvance()
+	const { mutate } = useDeleteOvertime()
 
 	return (
 		<AlertDialog>
@@ -29,12 +29,12 @@ export default function ModalDeleteCashAdvance() {
 					className='text-error hover:text-white hover:bg-error px-2.5'
 					type='button'
 				>
-					Hapus kasbon
+					Hapus Lembur
 				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Yakin ingin menghapus kasbon ini?</AlertDialogTitle>
+					<AlertDialogTitle>Yakin ingin menghapus lembur ini?</AlertDialogTitle>
 					<AlertDialogDescription>
 						Tindakan ini tidak dapat dibatalkan. Hubungi admin jika tidak
 						sengaja terhapus.

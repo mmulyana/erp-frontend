@@ -37,6 +37,7 @@ import EmployeeCombobox from '../../components/employee-combobox'
 import { useUpdateOvertime } from '../api/use-update-overtime'
 import { useOvertime } from '../api/use-overtime'
 import { OvertimeForm } from '../types'
+import ModalDeleteOvertime from './modal-delete-overtime'
 
 export const ModalOvertime = atom<{ open: boolean; id: string } | null>(null)
 export default function ModalDetailOvertime() {
@@ -195,11 +196,7 @@ export default function ModalDetailOvertime() {
 									<FormItem className='flex flex-col'>
 										<FormLabel>Jumlah jam</FormLabel>
 										<FormControl>
-											<Input
-												{...field}
-												type='number'
-												// onChange={(e) => field.onChange(Number(e.target.value))}
-											/>
+											<Input {...field} type='number' />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -220,22 +217,25 @@ export default function ModalDetailOvertime() {
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-end gap-4 items-center'>
-								<DialogClose asChild>
-									<Button variant='outline' type='button'>
-										Batal
+							<div className='flex justify-between w-full'>
+								<ModalDeleteOvertime />
+								<div className='flex justify-end gap-4 items-center'>
+									<DialogClose asChild>
+										<Button variant='outline' type='button'>
+											Batal
+										</Button>
+									</DialogClose>
+									<Button disabled={isPending}>
+										{isPending ? (
+											<>
+												<Loader className='mr-2 h-4 w-4 animate-spin' />
+												Menyimpan...
+											</>
+										) : (
+											'Perbarui'
+										)}
 									</Button>
-								</DialogClose>
-								<Button disabled={isPending}>
-									{isPending ? (
-										<>
-											<Loader className='mr-2 h-4 w-4 animate-spin' />
-											Menyimpan...
-										</>
-									) : (
-										'Perbarui'
-									)}
-								</Button>
+								</div>
 							</div>
 						</DialogFooter>
 					</form>

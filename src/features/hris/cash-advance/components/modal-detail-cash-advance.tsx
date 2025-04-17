@@ -199,7 +199,7 @@ export default function ModalDetailCashAdvance() {
 												Menyimpan...
 											</>
 										) : (
-											'Simpan'
+											'Perbarui'
 										)}
 									</Button>
 								</div>
