@@ -6,10 +6,10 @@ import { useDateIndex } from '@/shared/hooks/use-date-index'
 import { DataTable } from '@/shared/components/data-table'
 
 import { useCreateAttendance } from '../api/use-create-attendance'
-import { useUpdateAttendance } from '../api/use-update.attendance'
+import { useUpdateAttendance } from '../api/use-update-attendance'
 import { useAttendances } from '../api/use-attendances'
-import ButtonRegular from './button-regular'
 import { Attendance } from '../types'
+import ButtonRegular from './button-regular'
 
 export default function TableRegular() {
 	const { month } = useCurrentDate()
@@ -29,7 +29,7 @@ export default function TableRegular() {
 		indexMonth: query.month,
 	})
 
-	const { data: dataRegular } = useAttendances({
+	const { data } = useAttendances({
 		limit: query.limit,
 		page: query.page,
 		search: query.q,
@@ -101,9 +101,9 @@ export default function TableRegular() {
 	return (
 		<DataTable
 			columns={columns}
-			data={dataRegular?.data.data || []}
-			totalItems={dataRegular?.data.total}
-			totalPages={dataRegular?.data.total_pages}
+			data={data?.data.data || []}
+			totalItems={data?.data.total}
+			totalPages={data?.data.total_pages}
 			withPagination
 			variant='rounded-bordered'
 		/>

@@ -9,6 +9,7 @@ import SearchV3 from '@/shared/components/search-v3'
 
 import ModalAddOvertime from './modal-add-overtime'
 import TableOvertime from './table-overtime'
+import ModalDetailOvertime from './modal-detail-overtime'
 
 export default function AttendanceOvertime() {
 	const { month } = useCurrentDate()
@@ -45,6 +46,7 @@ export default function AttendanceOvertime() {
 				<ModalAddOvertime />
 			</div>
 			<TableOvertime />
+			<ModalDetailOvertime />
 		</div>
 	)
 }

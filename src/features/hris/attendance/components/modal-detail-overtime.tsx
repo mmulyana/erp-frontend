@@ -2,13 +2,14 @@ import { CalendarIcon, Loader } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { atom, useAtom } from 'jotai'
 import { id } from 'date-fns/locale'
-import { useEffect } from 'react'
 import { format } from 'date-fns'
+import { useEffect } from 'react'
+import { toast } from 'sonner'
 
 import { Calendar } from '@/shared/components/ui/calendar'
 import { Textarea } from '@/shared/components/ui/textarea'
-import { Input } from '@/shared/components/ui/input'
 import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
 import { cn } from '@/shared/utils/cn'
 import {
 	Dialog,
@@ -32,43 +33,74 @@ import {
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 
-import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
 import EmployeeCombobox from '../../components/employee-combobox'
-import ModalDeleteCashAdvance from './modal-delete-cash-advace'
-import { useCashAdvance } from '../api/use-cash-advance'
-import { CashAdvanceForm } from '../types'
+import { useUpdateOvertime } from '../api/use-update-overtime'
+import { useOvertime } from '../api/use-overtime'
+import { OvertimeForm } from '../types'
 
-export const ModalCashAdvance = atom<{ open: boolean; id: string } | null>(null)
-export default function ModalDetailCashAdvance() {
-	const [modal, setModal] = useAtom(ModalCashAdvance)
+export const ModalOvertime = atom<{ open: boolean; id: string } | null>(null)
+export default function ModalDetailOvertime() {
+	const [modal, setModal] = useAtom(ModalOvertime)
 
-	const { data } = useCashAdvance({ id: modal?.id })
+	const { data } = useOvertime({ id: modal?.id })
+	// console.log('modal', modal)
 
-	const { mutate, isPending } = useUpdateCashAdvance()
-
-	const form = useForm<CashAdvanceForm>({
+	const { mutate, isPending } = useUpdateOvertime()
+	const form = useForm<OvertimeForm>({
 		defaultValues: {
-			amount: 0,
 			date: new Date(),
 			employeeId: '',
 			note: '',
+			totalHour: 0,
 		},
 	})
 
 	useEffect(() => {
 		if (data) {
 			form.reset({
-				amount: data.data?.amount,
+				totalHour: data.data?.totalHour,
 				date: new Date(data.data?.date as string),
-				employeeId: data.data?.employeeId,
+				employeeId: data.data?.employee.id,
 				note: data.data?.note,
 			})
 		}
 	}, [data])
 
-	const onSubmit = async (data: CashAdvanceForm) => {
-		if (!modal?.id) return
-		mutate({ ...data, id: modal?.id })
+	useEffect(() => {
+		if (!modal?.open) {
+			form.reset({
+				date: new Date(),
+				employeeId: '',
+				note: '',
+				totalHour: 0,
+			})
+		}
+	}, [modal?.open])
+
+	const submit = (data: OvertimeForm) => {
+		if (!modal?.id) {
+			toast.error('Id tidak boleh kosong')
+			return
+		}
+		mutate(
+			{ ...data, totalHour: Number(data.totalHour), id: modal?.id },
+			{
+				onSuccess: () => {
+					setModal(null)
+				},
+				onError: (error: any) => {
+					if (error?.response?.data?.errors) {
+						error.response.data.errors.forEach((err: any) => {
+							const field = err.path?.[0]
+							const message = err.message
+							if (field) {
+								form.setError(field, { message })
+							}
+						})
+					}
+				},
+			}
+		)
 	}
 
 	return (
@@ -81,18 +113,18 @@ export default function ModalDetailCashAdvance() {
 			}}
 		>
 			<DialogContent className='p-6'>
-				<DialogTitle>Detail Kasbon</DialogTitle>
+				<DialogTitle>Lembur</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang diperbarui sudah benar sebelum disimpan.
 				</DialogDescription>
 				<Form {...form}>
 					<form
-						className='flex-1 flex flex-col gap-4 pt-4'
-						onSubmit={form.handleSubmit(onSubmit)}
+						onSubmit={form.handleSubmit(submit)}
+						className='flex gap-4 flex-col pt-4'
 					>
 						<FormField
-							name='employeeId'
 							control={form.control}
+							name='employeeId'
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
 									<FormLabel>Pegawai</FormLabel>
@@ -157,13 +189,17 @@ export default function ModalDetailCashAdvance() {
 								)}
 							/>
 							<FormField
-								name='amount'
+								name='totalHour'
 								control={form.control}
 								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Jumlah</FormLabel>
+									<FormItem className='flex flex-col'>
+										<FormLabel>Jumlah jam</FormLabel>
 										<FormControl>
-											<Input className='bg-surface' {...field} />
+											<Input
+												{...field}
+												type='number'
+												// onChange={(e) => field.onChange(Number(e.target.value))}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -174,35 +210,32 @@ export default function ModalDetailCashAdvance() {
 							name='note'
 							control={form.control}
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className='flex flex-col'>
 									<FormLabel>Keterangan</FormLabel>
 									<FormControl>
-										<Textarea className='bg-surface shadow-none' {...field} />
+										<Textarea {...field} className='bg-surface shadow-none' />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-between w-full'>
-								<ModalDeleteCashAdvance />
-								<div className='flex justify-end gap-4 items-center'>
-									<DialogClose asChild>
-										<Button variant='outline' type='button'>
-											Batal
-										</Button>
-									</DialogClose>
-									<Button disabled={isPending}>
-										{isPending ? (
-											<>
-												<Loader className='mr-2 h-4 w-4 animate-spin' />
-												Menyimpan...
-											</>
-										) : (
-											'Simpan'
-										)}
+							<div className='flex justify-end gap-4 items-center'>
+								<DialogClose asChild>
+									<Button variant='outline' type='button'>
+										Batal
 									</Button>
-								</div>
+								</DialogClose>
+								<Button disabled={isPending}>
+									{isPending ? (
+										<>
+											<Loader className='mr-2 h-4 w-4 animate-spin' />
+											Menyimpan...
+										</>
+									) : (
+										'Perbarui'
+									)}
+								</Button>
 							</div>
 						</DialogFooter>
 					</form>

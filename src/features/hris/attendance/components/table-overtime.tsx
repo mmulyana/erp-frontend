@@ -1,28 +1,41 @@
-import { DataTable } from '@/shared/components/data-table'
+import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
+import { useSetAtom } from 'jotai'
 
-const data = [
-	{
-		fullname: 'Ikmal',
-		position: 'staff',
-		hour: 4,
-		note: 'ot wwtp 2',
-	},
-	{
-		fullname: 'Kelvin',
-		position: 'staff',
-		hour: 4,
-		note: '',
-	},
-	{
-		fullname: 'Rania',
-		position: 'staff',
-		hour: 2,
-		note: 'ot spinning line 3',
-	},
-]
+import { useCurrentDate } from '@/shared/hooks/use-current-date'
+import { useDateIndex } from '@/shared/hooks/use-date-index'
+import { DataTable } from '@/shared/components/data-table'
+
+import { useOvertimes } from '../api/use-overtimes'
+import { ModalOvertime } from './modal-detail-overtime'
 
 export default function TableOvertime() {
+	const setModal = useSetAtom(ModalOvertime)
+
+	const { month } = useCurrentDate()
+
+	const [query] = useQueryStates({
+		date: parseAsInteger.withDefault(0),
+		month: parseAsInteger.withDefault(month),
+
+		// for pagination
+		q: parseAsString.withDefault(''),
+		page: parseAsString.withDefault('1'),
+		limit: parseAsString.withDefault('10'),
+	})
+
+	const { resultDate } = useDateIndex({
+		indexDate: query.date > 0 ? query.date : new Date().getDate(),
+		indexMonth: query.month,
+	})
+
+	const { data, isLoading } = useOvertimes({
+		limit: query.limit,
+		page: query.page,
+		search: query.q,
+		startDate: resultDate.toString(),
+	})
+
 	const columns: ColumnDef<any>[] = [
 		{
 			accessorKey: 'fullname',
@@ -33,7 +46,7 @@ export default function TableOvertime() {
 			header: 'Jabatan',
 		},
 		{
-			accessorKey: 'hour',
+			accessorKey: 'totalHour',
 			header: 'Jumlah jam',
 		},
 		{
@@ -44,11 +57,20 @@ export default function TableOvertime() {
 	return (
 		<DataTable
 			columns={columns}
-			data={data}
-			totalItems={10}
-			totalPages={2}
+			data={data?.data.data || []}
+			totalItems={data?.data.total}
+			totalPages={data?.data.total_pages}
 			withPagination
 			variant='rounded-bordered'
+			onCellClick={(e) => {
+				setModal({
+					id: e.id,
+					open: true,
+				})
+			}}
+			nonClickableColumns={[]}
+			isLoading={isLoading}
+			autoRedirect
 		/>
 	)
 }

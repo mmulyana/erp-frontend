@@ -33,16 +33,43 @@ import {
 } from '@/shared/components/ui/popover'
 
 import EmployeeCombobox from '../../components/employee-combobox'
+import { useCreateOvertime } from '../api/use-create-overtime'
+import { OvertimeForm } from '../types'
 
 export default function ModalAddOvertime() {
 	const [open, setOpen] = useState(false)
 
-	const form = useForm()
+	const { mutate, isPending } = useCreateOvertime()
+	const form = useForm<OvertimeForm>({
+		defaultValues: {
+			date: new Date(),
+			employeeId: '',
+			note: '',
+			totalHour: 0,
+		},
+	})
 
-	const submit = (data: any) => {}
+	const submit = (data: OvertimeForm) => {
+		mutate({...data, totalHour: Number(data.totalHour)}, {
+			onSuccess: () => {
+				setOpen(false)
+			},
+			onError: (error: any) => {
+				if (error?.response?.data?.errors) {
+					error.response.data.errors.forEach((err: any) => {
+						const field = err.path?.[0]
+						const message = err.message
+						if (field) {
+							form.setError(field, { message })
+						}
+					})
+				}
+			},
+		})
+	}
 
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button className='gap-2'>
 					<Plus strokeWidth={2} size={16} className='text-white' />
@@ -124,13 +151,17 @@ export default function ModalAddOvertime() {
 								)}
 							/>
 							<FormField
-								name='hour'
+								name='totalHour'
 								control={form.control}
 								render={({ field }) => (
 									<FormItem className='flex flex-col'>
 										<FormLabel>Jumlah jam</FormLabel>
 										<FormControl>
-											<Input {...field} type='number' />
+											<Input
+												{...field}
+												type='number'
+												// onChange={(e) => field.onChange(Number(e.target.value))}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -157,9 +188,15 @@ export default function ModalAddOvertime() {
 										Batal
 									</Button>
 								</DialogClose>
-								<Button>
-									<Loader className='mr-2 h-4 w-4 animate-spin' />
-									Menyimpan...
+								<Button disabled={isPending}>
+									{isPending ? (
+										<>
+											<Loader className='mr-2 h-4 w-4 animate-spin' />
+											Menyimpan...
+										</>
+									) : (
+										'Simpan'
+									)}
 								</Button>
 							</div>
 						</DialogFooter>
