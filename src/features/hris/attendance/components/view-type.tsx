@@ -8,11 +8,10 @@ export default function ViewType() {
 
 	return (
 		<div className='flex gap-2 items-center'>
-			<p className='text-ink-light'>Tampilan</p>
-			<div className='flex gap-2 px-1.5 py-[5px] bg-gray-100 rounded-xl'>
+			<div className='flex gap-1 px-1.5 py-[5px] bg-surface rounded-xl'>
 				<Button
 					className={cn(
-						'py-0.5 px-1.5 rounded-lg flex gap-1 items-center h-fit hover:bg-white/90 font-',
+						'py-0.5 px-1.5 rounded-lg flex gap-1 items-center h-fit hover:bg-white/90 hover:shadow-sm',
 						view === 'table' && 'bg-white shadow-md !text-ink-primary'
 					)}
 					variant='ghost'
@@ -21,7 +20,7 @@ export default function ViewType() {
 					<TableProperties
 						size={16}
 						className={cn(
-							'text-ink-light',
+							'text-ink-light rotate-180',
 							view === 'table' && 'stroke-amber-600'
 						)}
 					/>
@@ -36,7 +35,7 @@ export default function ViewType() {
 				</Button>
 				<Button
 					className={cn(
-						'py-0.5 px-1.5 rounded-lg flex gap-1 items-center h-fit hover:bg-white/90',
+						'py-0.5 px-1.5 rounded-lg flex gap-1 items-center h-fit hover:bg-white/90 hover:shadow-sm',
 						view === 'grid' && 'bg-white shadow-md !text-ink-primary'
 					)}
 					variant='ghost'

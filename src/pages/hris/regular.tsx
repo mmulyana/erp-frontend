@@ -1,14 +1,14 @@
 import { HrisLayout } from '@/shared/layout/hris-layout'
 
 import CalendarAttendance from '@/features/hris/attendance/components/calendar-attendance'
-import AttendanceRegular from '@/features/hris/attendance/components/attendance-regular'
+import SectionRegular from '@/features/hris/attendance/components/section-regular'
 
 export default function Regular() {
 	return (
 		<HrisLayout>
-			<div className='flex gap-10 flex-col md:flex-row'>
+			<div className='flex gap-4 flex-col md:flex-row'>
 				<CalendarAttendance />
-				<AttendanceRegular />
+				<SectionRegular />
 			</div>
 		</HrisLayout>
 	)

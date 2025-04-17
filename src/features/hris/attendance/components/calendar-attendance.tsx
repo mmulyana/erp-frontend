@@ -17,27 +17,29 @@ export default function CalendarAttendance() {
 	)
 
 	return (
-		<CalendarV1
-			monthIndex={selectedMonth}
-			month={MONTHS_OBJ[selectedMonth]}
-			selectedDates={[selectedDate || date]}
-			onDateSelect={(e) => {
-				setSelectedDate(e)
-			}}
-			style={{
-				title: 'text-xl',
-				titleWrapper: 'pb-4',
-			}}
-			showNavigation
-			onNext={() => {
-				setSelectedMonth((prev) => prev + 1)
-				if (selectedMonth + 1 === month) {
-					setSelectedDate(date)
-				}
-			}}
-			onPrev={() => {
-				setSelectedMonth((prev) => prev - 1)
-			}}
-		/>
+		<div className='w-[360px]'>
+			<CalendarV1
+				monthIndex={selectedMonth}
+				month={MONTHS_OBJ[selectedMonth]}
+				selectedDates={[selectedDate || date]}
+				onDateSelect={(e) => {
+					setSelectedDate(e)
+				}}
+				style={{
+					title: 'text-xl',
+					titleWrapper: 'pb-4',
+				}}
+				showNavigation
+				onNext={() => {
+					setSelectedMonth((prev) => prev + 1)
+					if (selectedMonth + 1 === month) {
+						setSelectedDate(date)
+					}
+				}}
+				onPrev={() => {
+					setSelectedMonth((prev) => prev - 1)
+				}}
+			/>
+		</div>
 	)
 }

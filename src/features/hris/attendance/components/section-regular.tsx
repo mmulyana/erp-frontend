@@ -4,15 +4,16 @@ import { format } from 'date-fns'
 
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
+import { Button } from '@/shared/components/ui/button'
 import CardData from '@/shared/components/card-data'
 import SearchV3 from '@/shared/components/search-v3'
-import { Button } from '@/shared/components/ui/button'
+
 import { UserSearch } from 'lucide-react'
 import TableRegular from './table-regular'
 import ViewType from './view-type'
 
 export default function AttendanceRegular() {
-	const { month, date } = useCurrentDate()
+	const { month } = useCurrentDate()
 
 	const [query] = useQueryStates({
 		date: parseAsInteger.withDefault(0),
@@ -29,7 +30,9 @@ export default function AttendanceRegular() {
 				<div className='flex flex-col'>
 					<p className='text-ink-light text-sm'>Tanggal</p>
 					<p className='text-ink-secondary text-xl font-medium'>
-						{format(resultDate || new Date(), 'PPP', { locale: id })}
+						{format(query.date > 0 ? resultDate : new Date(), 'PPP', {
+							locale: id,
+						})}
 					</p>
 				</div>
 				<div className='flex gap-6 items-center'>

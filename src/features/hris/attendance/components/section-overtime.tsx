@@ -10,6 +10,8 @@ import { Button } from '@/shared/components/ui/button'
 import { Plus, UserSearch } from 'lucide-react'
 import TableRegular from './table-regular'
 import ViewType from './view-type'
+import TableOvertime from './table-overtime'
+import ModalAddOvertime from './modal-add-overtime'
 
 export default function AttendanceOvertime() {
 	const { month, date } = useCurrentDate()
@@ -29,7 +31,9 @@ export default function AttendanceOvertime() {
 				<div className='flex flex-col'>
 					<p className='text-ink-light text-sm'>Tanggal</p>
 					<p className='text-ink-secondary text-xl font-medium'>
-						{format(resultDate || new Date(), 'PPP', { locale: id })}
+						{format(query.date > 0 ? resultDate : new Date(), 'PPP', {
+							locale: id,
+						})}
 					</p>
 				</div>
 				<div className='flex gap-6 items-center'>
@@ -40,14 +44,9 @@ export default function AttendanceOvertime() {
 				<div className='flex gap-4 items-center'>
 					<SearchV3 />
 				</div>
-				<div className='flex gap-4 items-center'>
-					<Button className='gap-2'>
-						<Plus strokeWidth={2} size={16} className='text-white' />
-						<span className='px-0.5'>Tambah Lembur</span>
-					</Button>
-				</div>
+				<ModalAddOvertime />
 			</div>
-			<TableRegular />
+			<TableOvertime />
 		</div>
 	)
 }

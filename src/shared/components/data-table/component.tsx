@@ -1,3 +1,8 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { parseAsInteger, useQueryStates } from 'nuqs'
+
+import { useIsMobile } from '@/shared/hooks/use-mobile'
+import { cn } from '@/shared/utils/cn'
 import {
 	Select,
 	SelectContent,
@@ -6,17 +11,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/shared/components/ui/select'
-import { useIsMobile } from '@/shared/hooks/use-mobile'
-import { cn } from '@/shared/utils/cn'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { parseAsInteger, useQueryStates } from 'nuqs'
 
-type PaginationBarProps = {
+type PaginationProps = {
 	totalItems: number
 	totalPages: number
 }
 
-export function Pagination({ totalItems, totalPages }: PaginationBarProps) {
+export function Pagination({ totalItems, totalPages }: PaginationProps) {
 	const isMobile = useIsMobile()
 
 	const [query, setQuery] = useQueryStates({

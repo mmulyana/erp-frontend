@@ -37,7 +37,7 @@ export default function AppSidebar({ items }: AppSidebarProps) {
 	const menus = useActiveMenu()
 
 	return (
-		<Sidebar variant='sidebar' className='z-0 pt-12'>
+		<Sidebar variant='sidebar' className='z-20 pt-12'>
 			<SidebarHeader className='block md:hidden'>
 				{isMobile && (
 					<Button
