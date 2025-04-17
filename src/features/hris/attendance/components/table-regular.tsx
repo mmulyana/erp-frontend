@@ -1,29 +1,45 @@
-import { DataTable } from '@/shared/components/data-table'
-import { Button } from '@/shared/components/ui/button'
-import { cn } from '@/shared/utils/cn'
+import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
-import { Check, X } from 'lucide-react'
 
-const data = [
-	{
-		fullname: 'Ikmal',
-		position: 'staff',
-		status: 'present',
-	},
-	{
-		fullname: 'Kelvin',
-		position: 'staff',
-		status: 'absent',
-	},
-	{
-		fullname: 'Rania',
-		position: 'staff',
-		status: null,
-	},
-]
+import { useCurrentDate } from '@/shared/hooks/use-current-date'
+import { useDateIndex } from '@/shared/hooks/use-date-index'
+import { DataTable } from '@/shared/components/data-table'
+
+import { useCreateAttendance } from '../api/use-create-attendance'
+import { useUpdateAttendance } from '../api/use-update.attendance'
+import { useAttendances } from '../api/use-attendances'
+import ButtonRegular from './button-regular'
+import { Attendance } from '../types'
 
 export default function TableRegular() {
-	const columns: ColumnDef<any>[] = [
+	const { month } = useCurrentDate()
+
+	const [query] = useQueryStates({
+		date: parseAsInteger.withDefault(0),
+		month: parseAsInteger.withDefault(month),
+
+		// for pagination
+		q: parseAsString.withDefault(''),
+		page: parseAsString.withDefault('1'),
+		limit: parseAsString.withDefault('10'),
+	})
+
+	const { resultDate } = useDateIndex({
+		indexDate: query.date > 0 ? query.date : new Date().getDate(),
+		indexMonth: query.month,
+	})
+
+	const { data: dataRegular } = useAttendances({
+		limit: query.limit,
+		page: query.page,
+		search: query.q,
+		startDate: resultDate.toString(),
+	})
+
+	const { mutate } = useCreateAttendance()
+	const { mutate: update } = useUpdateAttendance()
+
+	const columns: ColumnDef<Attendance>[] = [
 		{
 			accessorKey: 'fullname',
 			header: 'Nama lengkap',
@@ -36,64 +52,58 @@ export default function TableRegular() {
 			id: 'status',
 			header: 'Status',
 			cell: ({ row }) => {
-				const isPresent = row.original.status === 'present'
-				const isAbsent = row.original.status === 'absent'
-
 				return (
 					<div className='flex gap-2 items-center'>
-						<Button
-							variant='outline'
-							className={cn(
-								'group',
-								isPresent &&
-									'bg-success border-success hover:bg-teal-600 hover:border-teal-800'
-							)}
-						>
-							<Check
-								size={18}
-								strokeWidth={3}
-								className={cn('text-success ', isPresent && 'text-white')}
-							/>
-							<span
-								className={cn(
-									'px-0.5 text-sm text-ink-secondary',
-									isPresent && 'text-white'
-								)}
-							>
-								Hadir
-							</span>
-						</Button>
-						<Button
-							variant='outline'
-							className={cn(
-								isAbsent && 'bg-error border-error hover:bg-red-400'
-							)}
-						>
-							<X
-								size={18}
-								strokeWidth={3}
-								className={cn('text-error', isAbsent && 'text-white')}
-							/>
-							<span
-								className={cn(
-									'px-0.5 text-sm text-ink-secondary',
-									isAbsent && 'text-white'
-								)}
-							>
-								Absen
-							</span>
-						</Button>
+						<ButtonRegular
+							variant='presence'
+							status={row.original.status}
+							onClick={() => {
+								if (row.original.status !== null) {
+									update({
+										employeeId: row.original.employeeId,
+										date: resultDate.toString(),
+										type: 'presence',
+									})
+									return
+								}
+								mutate({
+									employeeId: row.original.employeeId,
+									date: resultDate.toString(),
+									type: 'presence',
+								})
+							}}
+						/>
+						<ButtonRegular
+							variant='absent'
+							status={row.original.status}
+							onClick={() => {
+								if (row.original.status !== null) {
+									update({
+										employeeId: row.original.employeeId,
+										date: resultDate.toString(),
+										type: 'absent',
+									})
+									return
+								}
+								mutate({
+									employeeId: row.original.employeeId,
+									date: resultDate.toString(),
+									type: 'absent',
+								})
+							}}
+						/>
 					</div>
 				)
 			},
 		},
 	]
+
 	return (
 		<DataTable
 			columns={columns}
-			data={data}
-			totalItems={10}
-			totalPages={2}
+			data={dataRegular?.data.data || []}
+			totalItems={dataRegular?.data.total}
+			totalPages={dataRegular?.data.total_pages}
 			withPagination
 			variant='rounded-bordered'
 		/>

@@ -1,7 +1,8 @@
-import { Button } from '@/shared/components/ui/button'
-import { useLocalStorage } from '@/shared/hooks/use-localstorage'
-import { cn } from '@/shared/utils/cn'
 import { LayoutGrid, TableProperties } from 'lucide-react'
+
+import { useLocalStorage } from '@/shared/hooks/use-localstorage'
+import { Button } from '@/shared/components/ui/button'
+import { cn } from '@/shared/utils/cn'
 
 export default function ViewType() {
 	const [view, setView] = useLocalStorage<string>('view-type', 'table')

@@ -22,6 +22,7 @@ export const keys = {
 	cashAdvancesTotal: 'cash_advances-total',
 	cashAdvancesChart: 'cash_advances-chart',
 	attendance: 'attendance',
+	attendanceTotalPerDay: 'attendance-total-per-day',
 	overtime: 'overtime',
 	overtimeDetail: 'overtime-detail',
 	project: 'project',

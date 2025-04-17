@@ -1,4 +1,4 @@
-import { parseAsInteger, useQueryStates } from 'nuqs'
+import { parseAsBoolean, parseAsInteger, useQueryStates } from 'nuqs'
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 
@@ -8,25 +8,33 @@ import { Button } from '@/shared/components/ui/button'
 import CardData from '@/shared/components/card-data'
 import SearchV3 from '@/shared/components/search-v3'
 
-import { UserSearch } from 'lucide-react'
+import { UserSearch, X } from 'lucide-react'
 import TableRegular from './table-regular'
 import ViewType from './view-type'
+import { useTotalAttendancePerDay } from '../api/use-total-attendance-per-day'
+import { cn } from '@/shared/utils/cn'
 
 export default function AttendanceRegular() {
 	const { month } = useCurrentDate()
 
-	const [query] = useQueryStates({
+	const [query, setQuery] = useQueryStates({
 		date: parseAsInteger.withDefault(0),
 		month: parseAsInteger.withDefault(month),
+		notYet: parseAsBoolean.withDefault(false),
 	})
 
 	const { resultDate } = useDateIndex({
-		indexDate: query.date,
+		indexDate: query.date > 0 ? query.date : new Date().getDate(),
 		indexMonth: query.month,
 	})
+
+	const { data } = useTotalAttendancePerDay({
+		startDate: resultDate.toString(),
+	})
+
 	return (
 		<div className='w-full'>
-			<div className='flex gap-8 lg:gap-20 items-center'>
+			<div className='flex gap-8 lg:gap-20 items-center flex-col md:flex-row w-fit'>
 				<div className='flex flex-col'>
 					<p className='text-ink-light text-sm'>Tanggal</p>
 					<p className='text-ink-secondary text-xl font-medium'>
@@ -36,20 +44,39 @@ export default function AttendanceRegular() {
 					</p>
 				</div>
 				<div className='flex gap-6 items-center'>
-					<CardData title='Hadir' value={30} />
-					<CardData title='Tidak Hadir' value={10} />
-					<CardData title='Belum diabsen' value={4} />
+					<CardData title='Hadir' value={data?.data?.total_presence || 0} />
+					<CardData title='Tidak Hadir' value={data?.data?.total_absent || 0} />
+					<CardData
+						title='Belum diabsen'
+						value={data?.data?.total_notYet || 0}
+					/>
 				</div>
 			</div>
-			<div className='flex justify-between items-center py-6'>
-				<div className='flex gap-4 items-center'>
-					<SearchV3 />
-					<Button variant='secondary' className='gap-1 px-2.5'>
-						<UserSearch size={18} className='text-ink-light' />
-						<span className='px-0.5 text-ink-secondary'>Belum diabsen</span>
-					</Button>
-				</div>
-				<div className='flex gap-4 items-center'>
+			<div className='flex gap-4 items-center flex-wrap md:flex-nowrap w-full py-6'>
+				<SearchV3 />
+				<Button
+					variant='secondary'
+					className={cn(
+						'gap-1 px-2.5',
+						query.notYet && 'bg-brand hover:bg-blue-800'
+					)}
+					onClick={() => setQuery({ notYet: !query.notYet })}
+				>
+					<UserSearch
+						size={18}
+						className={cn('text-ink-light', query.notYet && 'text-white')}
+					/>
+					<span
+						className={cn(
+							'px-0.5 text-ink-secondary',
+							query.notYet && 'text-white'
+						)}
+					>
+						Belum diabsen{' '}
+					</span>
+					{query.notYet && <X size={18} className='text-white ml-2' />}
+				</Button>
+				<div className='ml-auto'>
 					<ViewType />
 				</div>
 			</div>

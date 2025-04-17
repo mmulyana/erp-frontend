@@ -8,15 +8,20 @@ import { IApi } from '@/shared/types'
 
 import http from '@/shared/utils/http'
 
-export const useCreateRegular = () => {
+export const useUpdateAttendance = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (payload: any): Promise<AxiosResponse<IApi<any>>> => {
-			return await http.post(urls.attendance, payload)
+		mutationFn: async (payload: {
+			employeeId: string
+			date: string
+			type: 'presence' | 'absent'
+		}): Promise<AxiosResponse<IApi<any>>> => {
+			return await http.patch(urls.attendance, payload)
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.attendance] })
+			queryClient.invalidateQueries({ queryKey: [keys.attendanceTotalPerDay] })
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

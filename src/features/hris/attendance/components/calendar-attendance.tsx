@@ -17,7 +17,7 @@ export default function CalendarAttendance() {
 	)
 
 	return (
-		<div className='w-[360px]'>
+		<div className='w-[360px] max-w-full'>
 			<CalendarV1
 				monthIndex={selectedMonth}
 				month={MONTHS_OBJ[selectedMonth]}

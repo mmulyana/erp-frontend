@@ -6,15 +6,12 @@ import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
 import CardData from '@/shared/components/card-data'
 import SearchV3 from '@/shared/components/search-v3'
-import { Button } from '@/shared/components/ui/button'
-import { Plus, UserSearch } from 'lucide-react'
-import TableRegular from './table-regular'
-import ViewType from './view-type'
-import TableOvertime from './table-overtime'
+
 import ModalAddOvertime from './modal-add-overtime'
+import TableOvertime from './table-overtime'
 
 export default function AttendanceOvertime() {
-	const { month, date } = useCurrentDate()
+	const { month } = useCurrentDate()
 
 	const [query] = useQueryStates({
 		date: parseAsInteger.withDefault(0),
@@ -25,6 +22,7 @@ export default function AttendanceOvertime() {
 		indexDate: query.date,
 		indexMonth: query.month,
 	})
+
 	return (
 		<div className='w-full'>
 			<div className='flex gap-8 lg:gap-20 items-center'>

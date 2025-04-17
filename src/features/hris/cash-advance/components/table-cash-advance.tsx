@@ -1,14 +1,14 @@
 import { parseAsIsoDate, parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
+import { useSetAtom } from 'jotai'
 import { format } from 'date-fns'
 
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { DataTable } from '@/shared/components/data-table'
 
+import { ModalCashAdvance } from './modal-detail-cash-advance'
 import { useCashAdvances } from '../api/use-cash-advances'
 import { CashAdvance } from '../types'
-import { useSetAtom } from 'jotai'
-import { ModalCashAdvance } from './modal-detail-cash-advance'
 
 export default function TableCashAdvance() {
 	const setModal = useSetAtom(ModalCashAdvance)

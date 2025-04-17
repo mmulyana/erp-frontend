@@ -1,8 +1,5 @@
 import { DataTable } from '@/shared/components/data-table'
-import { Button } from '@/shared/components/ui/button'
-import { cn } from '@/shared/utils/cn'
 import { ColumnDef } from '@tanstack/react-table'
-import { Check, X } from 'lucide-react'
 
 const data = [
 	{

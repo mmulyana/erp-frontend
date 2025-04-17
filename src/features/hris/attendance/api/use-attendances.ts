@@ -5,20 +5,20 @@ import { IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
-
-import { CashAdvance } from '../types'
+import { Attendance } from '../types'
 
 type Params = {
 	search?: string
 	page?: string
 	limit?: string
+	startDate?: string
 }
 
-export const useCashAdvances = (params?: Params) => {
+export const useAttendances = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.cashAdvances, params],
-		queryFn: async (): Promise<IApiPagination<CashAdvance[]>> => {
-			const { data } = await http(urls.cashAdvances, {
+		queryKey: [keys.attendance, params],
+		queryFn: async (): Promise<IApiPagination<Attendance[]>> => {
+			const { data } = await http(urls.attendance, {
 				params,
 			})
 			return data
