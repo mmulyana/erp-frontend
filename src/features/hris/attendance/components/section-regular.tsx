@@ -1,4 +1,5 @@
 import { parseAsBoolean, parseAsInteger, useQueryStates } from 'nuqs'
+import { UserSearch, X } from 'lucide-react'
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 
@@ -7,14 +8,13 @@ import { useDateIndex } from '@/shared/hooks/use-date-index'
 import { Button } from '@/shared/components/ui/button'
 import CardData from '@/shared/components/card-data'
 import SearchV3 from '@/shared/components/search-v3'
-
-import { UserSearch, X } from 'lucide-react'
-import TableRegular from './table-regular'
-import ViewType from './view-type'
-import { useTotalAttendancePerDay } from '../api/use-total-attendance-per-day'
 import { cn } from '@/shared/utils/cn'
 
-export default function AttendanceRegular() {
+import { useTotalAttendancePerDay } from '../api/use-total-attendance-per-day'
+import TableRegular from './table-regular'
+import ViewType from './view-type'
+
+export default function SectionRegular() {
 	const { month } = useCurrentDate()
 
 	const [query, setQuery] = useQueryStates({

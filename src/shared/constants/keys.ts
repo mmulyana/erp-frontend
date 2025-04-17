@@ -25,6 +25,7 @@ export const keys = {
 	attendanceTotalPerDay: 'attendance-total-per-day',
 	overtime: 'overtime',
 	overtimeDetail: 'overtime-detail',
+	overtimeTotalPerDay: 'overtime-total-per-day',
 	project: 'project',
 	projectDetail: 'project-detail',
 	projectDetailEmployee: 'project-employee',

@@ -28,6 +28,8 @@ export const useUpdateOvertime = () => {
 			queryClient.invalidateQueries({
 				queryKey: [keys.overtimeDetail, data.id],
 			})
+			queryClient.invalidateQueries({ queryKey: [keys.overtimeTotalPerDay] })
+
 			toast.success(data.res.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

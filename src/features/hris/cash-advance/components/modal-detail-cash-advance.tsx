@@ -66,6 +66,17 @@ export default function ModalDetailCashAdvance() {
 		}
 	}, [data])
 
+	useEffect(() => {
+		if (!modal?.open) {
+			form.reset({
+				amount: 0,
+				date: new Date(),
+				employeeId: '',
+				note: '',
+			})
+		}
+	}, [modal?.open])
+
 	const onSubmit = async (data: CashAdvanceForm) => {
 		if (!modal?.id) return
 		mutate({ ...data, id: modal?.id })

@@ -1,8 +1,8 @@
 import { CalendarIcon, Loader, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
-import { useState } from 'react'
 
 import { Calendar } from '@/shared/components/ui/calendar'
 import { Textarea } from '@/shared/components/ui/textarea'
@@ -50,23 +50,37 @@ export default function ModalAddOvertime() {
 	})
 
 	const submit = (data: OvertimeForm) => {
-		mutate({...data, totalHour: Number(data.totalHour)}, {
-			onSuccess: () => {
-				setOpen(false)
-			},
-			onError: (error: any) => {
-				if (error?.response?.data?.errors) {
-					error.response.data.errors.forEach((err: any) => {
-						const field = err.path?.[0]
-						const message = err.message
-						if (field) {
-							form.setError(field, { message })
-						}
-					})
-				}
-			},
-		})
+		mutate(
+			{ ...data, totalHour: Number(data.totalHour) },
+			{
+				onSuccess: () => {
+					setOpen(false)
+				},
+				onError: (error: any) => {
+					if (error?.response?.data?.errors) {
+						error.response.data.errors.forEach((err: any) => {
+							const field = err.path?.[0]
+							const message = err.message
+							if (field) {
+								form.setError(field, { message })
+							}
+						})
+					}
+				},
+			}
+		)
 	}
+
+	useEffect(() => {
+		if (!open) {
+			form.reset({
+				date: new Date(),
+				employeeId: '',
+				note: '',
+				totalHour: 0,
+			})
+		}
+	}, [open])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>

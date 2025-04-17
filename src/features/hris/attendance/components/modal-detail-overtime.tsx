@@ -34,10 +34,10 @@ import {
 } from '@/shared/components/ui/popover'
 
 import EmployeeCombobox from '../../components/employee-combobox'
+import ModalDeleteOvertime from './modal-delete-overtime'
 import { useUpdateOvertime } from '../api/use-update-overtime'
 import { useOvertime } from '../api/use-overtime'
 import { OvertimeForm } from '../types'
-import ModalDeleteOvertime from './modal-delete-overtime'
 
 export const ModalOvertime = atom<{ open: boolean; id: string } | null>(null)
 export default function ModalDetailOvertime() {

@@ -14,6 +14,9 @@ export const useDeleteOvertime = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.overtime] })
+			queryClient.invalidateQueries({
+				queryKey: [keys.overtimeTotalPerDay],
+			})
 			toast.success(data.data.message)
 		},
 	})
