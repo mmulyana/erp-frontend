@@ -1,6 +1,6 @@
 import { HardHat, User } from 'lucide-react'
 
-import SearchV3 from '@/shared/components/search-v3'
+import SearchV3 from '@/shared/components/common/search-v3'
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import { format } from 'date-fns'
 

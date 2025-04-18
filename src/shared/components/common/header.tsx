@@ -10,7 +10,7 @@ import { cn } from '@/shared/utils/cn'
 import logo from '/public/images/logo.png'
 
 import TopNavigation from './top-navigation'
-import { useIsMobile } from '../hooks/use-mobile'
+import { useIsMobile } from '../../hooks/use-mobile'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)

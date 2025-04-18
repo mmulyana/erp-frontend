@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 
-import LoadingScreen from '@/shared/components/loading-screen'
+import LoadingScreen from '@/shared/components/common/loading-screen'
 import ProtectedRoute from '@/shared/utils/protected-route'
 import { paths } from '@/shared/constants/paths'
 import { RoutesConfig } from '@/shared/types'

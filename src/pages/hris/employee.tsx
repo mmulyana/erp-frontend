@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 
 import { HrisLayout } from '@/shared/layout/hris-layout'
-import SearchV3 from '@/shared/components/search-v3'
+import SearchV3 from '@/shared/components/common/search-v3'
 
 import TableEmployee from '@/features/hris/employee/components/table-employee'
 

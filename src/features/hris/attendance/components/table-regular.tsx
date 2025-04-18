@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table'
 
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
-import { DataTable } from '@/shared/components/data-table'
+import { DataTable } from '@/shared/components/common/data-table'
 
 import { useCreateAttendance } from '../api/use-create-attendance'
 import { useUpdateAttendance } from '../api/use-update-attendance'

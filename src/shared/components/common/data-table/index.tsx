@@ -15,7 +15,7 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '../ui/table'
+} from '../../ui/table'
 import LoadingState from '../loading-state'
 import EmptyState from '../empty-state'
 

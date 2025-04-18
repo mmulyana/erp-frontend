@@ -1,18 +1,15 @@
+import { parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useAtomValue } from 'jotai'
+import { format } from 'date-fns'
 
-import { DataTable } from '@/shared/components/data-table'
+import { DataTable } from '@/shared/components/common/data-table'
+import { permissionAtom } from '@/shared/store/permission'
+import { testIds } from '@/shared/constants/testId'
+import { Employee } from '@/shared/types'
 import Overlay from '@/components/common/overlay'
 
-import { permissionAtom } from '@/shared/store/permission'
-
 import { useEmployees } from '@/features/hris/employee/api/use-employees'
-
-import { testIds } from '@/shared/constants/testId'
-
-import { parseAsString, useQueryStates } from 'nuqs'
-import { Employee } from '../types'
-import { format } from 'date-fns'
 
 export default function TableEmployee() {
 	const permission = useAtomValue(permissionAtom)

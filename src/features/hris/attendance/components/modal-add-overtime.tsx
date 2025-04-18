@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 
+import { convertToWIB } from '@/shared/utils/convert-date'
 import { Calendar } from '@/shared/components/ui/calendar'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
@@ -32,7 +33,7 @@ import {
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 
-import EmployeeCombobox from '../../components/employee-combobox'
+import EmployeeCombobox from '../../_components/employee-combobox'
 import { useCreateOvertime } from '../api/use-create-overtime'
 import { OvertimeForm } from '../types'
 
@@ -51,7 +52,11 @@ export default function ModalAddOvertime() {
 
 	const submit = (data: OvertimeForm) => {
 		mutate(
-			{ ...data, totalHour: Number(data.totalHour) },
+			{
+				...data,
+				totalHour: Number(data.totalHour),
+				date: convertToWIB(data.date),
+			},
 			{
 				onSuccess: () => {
 					setOpen(false)

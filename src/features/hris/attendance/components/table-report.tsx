@@ -1,4 +1,6 @@
-import { Pagination } from '@/shared/components/data-table/component'
+import { Check, X } from 'lucide-react'
+
+import { Pagination } from '@/shared/components/common/data-table/component'
 import {
 	Table,
 	TableBody,
@@ -7,7 +9,6 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/shared/components/ui/table'
-import { Check, X } from 'lucide-react'
 
 export default function TableReport() {
 	const days = [

@@ -1,7 +1,7 @@
 import { parseAsInteger, useQueryState } from 'nuqs'
 
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
-import { CalendarV1 } from '@/shared/components/calendar-v1'
+import { CalendarV1 } from '@/shared/components/common/calendar-v1'
 import { MONTHS_OBJ } from '@/shared/constants/months'
 
 export default function CalendarAttendance() {

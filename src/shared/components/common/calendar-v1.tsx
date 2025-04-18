@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 
 import { cn } from '@/shared/utils/cn'
 
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 
 type Props = {
 	month?: string

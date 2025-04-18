@@ -11,8 +11,8 @@ import { SidebarProvider } from '@/shared/components/ui/sidebar'
 import { paths } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
 
-import Sidebar, { SidebarLinkGroup } from '../components/sidebar'
-import Header from '../components/header'
+import Sidebar, { SidebarLinkGroup } from '../components/common/sidebar'
+import Header from '../components/common/header'
 
 const navLinks: SidebarLinkGroup[] = [
 	{

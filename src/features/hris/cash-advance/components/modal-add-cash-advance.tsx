@@ -4,6 +4,7 @@ import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 import { useState } from 'react'
 
+import { convertToWIB } from '@/shared/utils/convert-date'
 import { Calendar } from '@/shared/components/ui/calendar'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
@@ -32,7 +33,7 @@ import {
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 
-import EmployeeCombobox from '../../components/employee-combobox'
+import EmployeeCombobox from '../../_components/employee-combobox'
 
 import { useCreateCashAdvance } from '../api/use-create-cash-advance'
 import { CashAdvanceForm } from '../types'
@@ -52,28 +53,34 @@ export default function ModalAddCashAdvance() {
 	})
 
 	const onSubmit = (data: CashAdvanceForm) => {
-		mutate(data, {
-			onSuccess: () => {
-				form.reset({
-					amount: 0,
-					date: new Date(),
-					employeeId: '',
-					note: '',
-				})
-				setOpen(false)
+		mutate(
+			{
+				...data,
+				date: convertToWIB(data.date),
 			},
-			onError: (error: any) => {
-				if (error?.response?.data?.errors) {
-					error.response.data.errors.forEach((err: any) => {
-						const field = err.path?.[0]
-						const message = err.message
-						if (field) {
-							form.setError(field, { message })
-						}
+			{
+				onSuccess: () => {
+					form.reset({
+						amount: 0,
+						date: new Date(),
+						employeeId: '',
+						note: '',
 					})
-				}
-			},
-		})
+					setOpen(false)
+				},
+				onError: (error: any) => {
+					if (error?.response?.data?.errors) {
+						error.response.data.errors.forEach((err: any) => {
+							const field = err.path?.[0]
+							const message = err.message
+							if (field) {
+								form.setError(field, { message })
+							}
+						})
+					}
+				},
+			}
+		)
 	}
 
 	return (

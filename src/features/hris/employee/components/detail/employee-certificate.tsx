@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/shared/components/ui/button'
 
-import SearchV3 from '@/shared/components/search-v3'
+import SearchV3 from '@/shared/components/common/search-v3'
 import { Ellipsis, File, FileText, Plus, FileBadgeIcon} from 'lucide-react'
 import { DataTable } from '@/shared/components/data-table'
 

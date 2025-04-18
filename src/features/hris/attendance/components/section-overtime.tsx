@@ -4,8 +4,8 @@ import { format } from 'date-fns'
 
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
-import CardData from '@/shared/components/card-data'
-import SearchV3 from '@/shared/components/search-v3'
+import CardData from '@/shared/components/common/card-data'
+import SearchV3 from '@/shared/components/common/search-v3'
 
 import { useTotalOvertimePerDay } from '../api/use-total-overtime-per-day'
 import ModalDetailOvertime from './modal-detail-overtime'

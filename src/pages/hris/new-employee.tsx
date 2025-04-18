@@ -20,9 +20,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/shared/components/ui/select'
-import { ImageUpload } from '@/shared/components/image-upload'
+import { ImageUpload } from '@/shared/components/common/image-upload'
 import { Textarea } from '@/shared/components/ui/textarea'
-import { MultiStep } from '@/shared/components/multi-step'
+import { MultiStep } from '@/shared/components/common/multi-step'
 import DetailLayout from '@/shared/layout/detail-layout'
 import { Input } from '@/shared/components/ui/input'
 import { paths } from '@/shared/constants/paths'
@@ -58,6 +58,17 @@ export default function NewEmployee() {
 				onSuccess: () => {
 					form.reset()
 					navigate(paths.hrisMasterDataEmployee)
+				},
+				onError: (error: any) => {
+					if (error?.response?.data?.errors) {
+						error.response.data.errors.forEach((err: any) => {
+							const field = err.path?.[0]
+							const message = err.message
+							if (field) {
+								form.setError(field, { message })
+							}
+						})
+					}
 				},
 			}
 		)

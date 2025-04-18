@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 
-import { useIsMobile } from '../hooks/use-mobile'
+import { useIsMobile } from '../../hooks/use-mobile'
 
 type Step = {
 	title: string
@@ -92,13 +92,22 @@ export function MultiStep({
 
 			<div key={currentStep}>{steps[currentStep].content}</div>
 
-			<div className='flex justify-end gap-4 p-4 bg-surface-secondary border-t border-border rounded-b-2xl'>
-				<Button onClick={onBack} disabled={currentStep === 0}>
-					Back
-				</Button>
-				<Button onClick={isLastStep ? onFinish : onNext}>
-					{isLastStep ? 'Finish' : 'Next'}
-				</Button>
+			<div className='flex gap-4 p-4 bg-surface-secondary border-t border-border rounded-b-2xl'>
+				{currentStep > 0 && (
+					<Button
+						onClick={onBack}
+						disabled={currentStep === 0}
+						variant='outline'
+					>
+						Kembali
+					</Button>
+				)}
+				<div className='ml-auto gap-4 flex'>
+					{!isLastStep && <Button onClick={onFinish} variant='secondary'>Selesai</Button>}
+					<Button onClick={isLastStep ? onFinish : onNext}>
+						{isLastStep ? 'Selesai' : 'Selanjutnya'}
+					</Button>
+				</div>
 			</div>
 		</div>
 	)

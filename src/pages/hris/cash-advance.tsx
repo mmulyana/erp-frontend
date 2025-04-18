@@ -1,5 +1,5 @@
 import { HrisLayout } from '@/shared/layout/hris-layout'
-import SearchV3 from '@/shared/components/search-v3'
+import SearchV3 from '@/shared/components/common/search-v3'
 
 import ModalAddCashAdvance from '@/features/hris/cash-advance/components/modal-add-cash-advance'
 import TableCashAdvance from '@/features/hris/cash-advance/components/table-cash-advance'

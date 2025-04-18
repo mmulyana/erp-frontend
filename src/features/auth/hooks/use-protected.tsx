@@ -10,7 +10,7 @@ const useProtected = () => {
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)
 		if (token) {
-			navigate(paths.adminUser, { replace: true })
+			navigate(paths.hris, { replace: true })
 			navigate(0)
 		}
 		return () => {}

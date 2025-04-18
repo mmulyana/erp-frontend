@@ -32,7 +32,7 @@ export const useLogin = () => {
 				sessionStorage.removeItem(CookieKeys.RedirectAfterLogin)
 				navigate(redirectPath)
 			} else {
-				navigate(paths.adminUser)
+				navigate(paths.hris)
 			}
 		},
 		onError: (error) => {

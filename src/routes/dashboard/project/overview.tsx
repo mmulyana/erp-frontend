@@ -38,7 +38,7 @@ import AddProject from './_component/add-project'
 
 import { settingConfig } from '../../../shared/components/setting/setting'
 import { DashboardLayout } from '../../../shared/components/layout'
-import { useTitle } from '../../../shared/components/header'
+import { useTitle } from '../../../shared/components/common/header'
 import { TEST_ID } from '@/shared/constants/testId'
 import useTour from '@/hooks/use-tour'
 import Tour from '@/components/common/tour'

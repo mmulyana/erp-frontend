@@ -3,12 +3,13 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useSetAtom } from 'jotai'
 import { format } from 'date-fns'
 
+import { DataTable } from '@/shared/components/common/data-table'
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
-import { DataTable } from '@/shared/components/data-table'
 
 import { ModalCashAdvance } from './modal-detail-cash-advance'
 import { useCashAdvances } from '../api/use-cash-advances'
 import { CashAdvance } from '../types'
+import { id } from 'date-fns/locale'
 
 export default function TableCashAdvance() {
 	const setModal = useSetAtom(ModalCashAdvance)
@@ -41,7 +42,8 @@ export default function TableCashAdvance() {
 		{
 			id: 'requestDate',
 			header: 'Tanggal',
-			cell: ({ row }) => format(new Date(row.original.date), 'dd MMMM yyyy'),
+			cell: ({ row }) =>
+				format(new Date(row.original.date), 'dd MMMM yyyy', { locale: id }),
 		},
 		{
 			id: 'note',

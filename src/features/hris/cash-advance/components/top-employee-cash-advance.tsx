@@ -28,7 +28,7 @@ import {
 	TableRow,
 } from '@/shared/components/ui/table'
 import { ColumnDef } from '@tanstack/react-table'
-import { DataTable } from '@/shared/components/data-table'
+import { DataTable } from '@/shared/components/common/data-table'
 
 const data = [
 	{

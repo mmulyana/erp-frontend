@@ -9,7 +9,6 @@ import http from '@/shared/utils/http'
 
 import { CashAdvanceForm } from '../types'
 
-
 export const useCreateCashAdvance = () => {
 	const queryClient = useQueryClient()
 
@@ -21,6 +20,7 @@ export const useCreateCashAdvance = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.cashAdvances] })
+			queryClient.invalidateQueries({ queryKey: [keys.cashAdvancesReport] })
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

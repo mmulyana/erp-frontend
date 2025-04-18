@@ -6,7 +6,7 @@ import { Button } from '@/shared/components/ui/button'
 
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { DataTable } from '@/shared/components/data-table'
-import SearchV3 from '@/shared/components/search-v3'
+import SearchV3 from '@/shared/components/common/search-v3'
 
 const data = [
 	{

@@ -21,3 +21,17 @@ export type CashAdvanceForm = {
 	date: Date
 	note?: string
 }
+
+export type Total = {
+	total: number
+}
+
+export type TotalInYear = Total & {
+	lastYear: number
+}
+export type TotalInMonth = Total & {
+	lastMonth: number
+}
+export type TotalInDay = Total & {
+	lastDay: number
+}

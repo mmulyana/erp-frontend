@@ -32,9 +32,11 @@ export const useCreateEmployee = () => {
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {
-			if (error.response?.data.errors?.fullname.message) {
-				toast.error(error.response?.data.errors?.fullname.message)
+			if (error.response?.data.errors[0].message) {
+				toast.error(error.response?.data.errors[0].message)
+				return
 			}
+			toast.error(error.response?.data.message)
 		},
 	})
 }

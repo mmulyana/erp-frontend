@@ -33,7 +33,7 @@ import {
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 
-import EmployeeCombobox from '../../components/employee-combobox'
+import EmployeeCombobox from '../../_components/employee-combobox'
 import ModalDeleteOvertime from './modal-delete-overtime'
 import { useUpdateOvertime } from '../api/use-update-overtime'
 import { useOvertime } from '../api/use-overtime'

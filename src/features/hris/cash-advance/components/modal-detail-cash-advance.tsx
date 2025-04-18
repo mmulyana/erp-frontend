@@ -32,9 +32,9 @@ import {
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 
-import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
-import EmployeeCombobox from '../../components/employee-combobox'
+import EmployeeCombobox from '../../_components/employee-combobox'
 import ModalDeleteCashAdvance from './modal-delete-cash-advace'
+import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
 import { useCashAdvance } from '../api/use-cash-advance'
 import { CashAdvanceForm } from '../types'
 

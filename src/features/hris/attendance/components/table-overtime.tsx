@@ -2,9 +2,9 @@ import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useSetAtom } from 'jotai'
 
+import { DataTable } from '@/shared/components/common/data-table'
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
-import { DataTable } from '@/shared/components/data-table'
 
 import { useOvertimes } from '../api/use-overtimes'
 import { ModalOvertime } from './modal-detail-overtime'

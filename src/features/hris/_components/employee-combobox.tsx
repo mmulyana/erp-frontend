@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
+import { useDebounce } from '@uidotdev/usehooks'
 
+import { Button } from '@/shared/components/ui/button'
+import { Employee } from '@/shared/types'
+import { cn } from '@/shared/utils/cn'
 import {
 	Command,
 	CommandEmpty,
@@ -14,11 +18,8 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
-import { Button } from '@/shared/components/ui/button'
-import { useDebounce } from '@uidotdev/usehooks'
-import { useInfiniteEmployees } from '../api/use-infinite-employees'
-import { Employee } from '@/shared/types'
-import { cn } from '@/shared/utils/cn'
+
+import { useInfiniteEmployees } from '../_api/use-infinite-employees'
 import { useEmployee } from '../employee/api/use-employee'
 
 type Props = {

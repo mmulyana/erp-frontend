@@ -14,6 +14,7 @@ export const useDeleteCashAdvance = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.cashAdvances] })
+			queryClient.invalidateQueries({ queryKey: [keys.cashAdvancesReport] })
 			toast.success(data.data.message)
 		},
 	})
