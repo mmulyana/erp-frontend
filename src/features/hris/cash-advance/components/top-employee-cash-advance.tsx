@@ -22,6 +22,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
+import { useReportTopByEmployee } from '../api/use-report-top-by-employee'
 
 const data = [
 	{
@@ -52,9 +53,13 @@ const data = [
 ]
 
 export default function TopEmployeeCashAdvance() {
-	const { month } = useCurrentDate()
+	const { month, year } = useCurrentDate()
 
-	const [CurrMonth, setCurrMonth] = useState(month)
+	const [currMonth, setCurrMonth] = useState(month)
+
+	const { data } = useReportTopByEmployee({
+		startDate: new Date(year, currMonth, 1).toString(),
+	})
 
 	const columns: ColumnDef<any>[] = [
 		{
@@ -85,7 +90,7 @@ export default function TopEmployeeCashAdvance() {
 							role='combobox'
 							className='w-[200px] justify-between font-medium text-ink-secondary'
 						>
-							{MONTHS_OBJ[CurrMonth - 1]}
+							{MONTHS_OBJ[currMonth]}
 							<ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 						</Button>
 					</PopoverTrigger>
@@ -93,12 +98,12 @@ export default function TopEmployeeCashAdvance() {
 						<Command>
 							<CommandInput placeholder='Cari bulan...' />
 							<CommandList>
-								<CommandEmpty>No framework found.</CommandEmpty>
+								<CommandEmpty>Bulan tidak ada</CommandEmpty>
 								<CommandGroup>
 									{months.map((i) => (
 										<CommandItem
 											key={i.value}
-											value={String((i.value as number) + 1)}
+											value={String(i.value as number)}
 											onSelect={(e) => {
 												const value = Number(e)
 												setCurrMonth(value)
@@ -107,7 +112,7 @@ export default function TopEmployeeCashAdvance() {
 											<Check
 												className={cn(
 													'mr-2 h-4 w-4',
-													CurrMonth === (i.value as number) + 1
+													currMonth === (i.value as number)
 														? 'opacity-100'
 														: 'opacity-0'
 												)}
@@ -124,7 +129,7 @@ export default function TopEmployeeCashAdvance() {
 			<CardContent className='p-0 pt-4'>
 				<DataTable
 					columns={columns}
-					data={data}
+					data={data?.data || []}
 					variant='rounded-bordered'
 					style={{ footer: 'hidden' }}
 				/>

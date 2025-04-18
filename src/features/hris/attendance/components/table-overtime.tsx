@@ -12,7 +12,7 @@ import { ModalOvertime } from './modal-detail-overtime'
 export default function TableOvertime() {
 	const setModal = useSetAtom(ModalOvertime)
 
-	const { month } = useCurrentDate()
+	const { month, date } = useCurrentDate()
 
 	const [query] = useQueryStates({
 		date: parseAsInteger.withDefault(0),
@@ -25,7 +25,7 @@ export default function TableOvertime() {
 	})
 
 	const { resultDate } = useDateIndex({
-		indexDate: query.date > 0 ? query.date : new Date().getDate(),
+		indexDate: query.date > 0 ? query.date : date,
 		indexMonth: query.month,
 	})
 

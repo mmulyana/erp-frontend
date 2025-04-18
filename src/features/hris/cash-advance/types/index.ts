@@ -40,3 +40,9 @@ export type ReportLastSixMonth = {
 	chartData: { month: number; total: number }[]
 	mean: number
 }
+
+export type ReportTop = {
+	fullname: string
+	position: string
+	total: number
+}

@@ -13,7 +13,7 @@ import ModalAddOvertime from './modal-add-overtime'
 import TableOvertime from './table-overtime'
 
 export default function AttendanceOvertime() {
-	const { month } = useCurrentDate()
+	const { month, date } = useCurrentDate()
 
 	const [query] = useQueryStates({
 		date: parseAsInteger.withDefault(0),
@@ -21,7 +21,7 @@ export default function AttendanceOvertime() {
 	})
 
 	const { resultDate } = useDateIndex({
-		indexDate: query.date,
+		indexDate: query.date > 0 ? query.date : date,
 		indexMonth: query.month,
 	})
 

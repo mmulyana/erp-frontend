@@ -176,11 +176,7 @@ export default function ModalAddOvertime() {
 									<FormItem className='flex flex-col'>
 										<FormLabel>Jumlah jam</FormLabel>
 										<FormControl>
-											<Input
-												{...field}
-												type='number'
-												// onChange={(e) => field.onChange(Number(e.target.value))}
-											/>
+											<Input {...field} type='number' />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

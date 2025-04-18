@@ -44,7 +44,6 @@ export default function ModalDetailOvertime() {
 	const [modal, setModal] = useAtom(ModalOvertime)
 
 	const { data } = useOvertime({ id: modal?.id })
-	// console.log('modal', modal)
 
 	const { mutate, isPending } = useUpdateOvertime()
 	const form = useForm<OvertimeForm>({
