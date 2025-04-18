@@ -1,4 +1,5 @@
 import { CalendarIcon, Loader, Plus } from 'lucide-react'
+import { NumericFormat } from 'react-number-format'
 import { useForm } from 'react-hook-form'
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
@@ -169,15 +170,34 @@ export default function ModalAddCashAdvance() {
 							<FormField
 								name='amount'
 								control={form.control}
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Jumlah</FormLabel>
-										<FormControl>
-											<Input className='bg-surface' {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
+								render={({ field }) => {
+									const usedField = { ...field }
+									delete (usedField as any).onChange
+
+									return (
+										<FormItem>
+											<FormLabel>Jumlah</FormLabel>
+											<FormControl>
+												<div className='relative'>
+													<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
+														Rp
+													</div>
+													<NumericFormat
+														type='text'
+														thousandSeparator='.'
+														decimalSeparator=','
+														customInput={Input}
+														className='h-10 w-full pl-12'
+														{...usedField}
+														onValueChange={(values) => {
+															field.onChange(Number(values.value))
+														}}
+													/>
+												</div>
+											</FormControl>
+										</FormItem>
+									)
+								}}
 							/>
 						</div>
 						<FormField

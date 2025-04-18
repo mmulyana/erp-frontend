@@ -14,11 +14,7 @@ export const useCreateEmployee = () => {
 
 	return useMutation({
 		mutationFn: async (
-			payload: Partial<
-				Employee & {
-					photoName?: string
-				}
-			>
+			payload: Partial<Employee>
 		): Promise<AxiosResponse<IApi<Employee>>> => {
 			const formData = toFormData(payload)
 			return await http.post(urls.employee + '/pegawai', formData, {

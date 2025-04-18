@@ -10,15 +10,17 @@ import http from '@/shared/utils/http'
 type ParamsEmployee = {
 	search?: string
 	name?: string
-	enabled?: boolean
+	page?: string
+	limit?: string
 }
 export const useEmployees = (params?: ParamsEmployee) => {
 	return useQuery({
 		queryKey: [keys.employee, params],
-		queryFn: async (): Promise<AxiosResponse<IApiPagination<Employee[]>>> => {
-			return await http(urls.employee, {
+		queryFn: async (): Promise<IApiPagination<Employee[]>> => {
+			const { data } = await http(urls.employee, {
 				params,
 			})
+			return data
 		},
 	})
 }

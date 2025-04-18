@@ -35,3 +35,8 @@ export type TotalInMonth = Total & {
 export type TotalInDay = Total & {
 	lastDay: number
 }
+
+export type ReportLastSixMonth = {
+	chartData: { month: number; total: number }[]
+	mean: number
+}

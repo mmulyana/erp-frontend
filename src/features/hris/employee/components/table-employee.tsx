@@ -18,9 +18,15 @@ export default function TableEmployee() {
 
 	const [query, setQuery] = useQueryStates({
 		q: parseAsString.withDefault(''),
+		page: parseAsString.withDefault('1'),
+		limit: parseAsString.withDefault('10'),
 	})
 
-	const { isLoading, data } = useEmployees()
+	const { isLoading, data } = useEmployees({
+		limit: query.limit,
+		page: query.page,
+		search: query.q,
+	})
 
 	// COLUMNS EMPLOYEE
 	const columns: ColumnDef<Employee>[] = [
@@ -107,11 +113,12 @@ export default function TableEmployee() {
 		<>
 			<DataTable
 				columns={columns}
-				data={data?.data.data.data || []}
-				withPagination
+				data={data?.data.data || []}
 				isLoading={isLoading}
-				// totalPages={data?.total_pages || 0}
 				autoRedirect={isAllowed}
+				totalItems={data?.data.total}
+				totalPages={data?.data.total_pages}
+				withPagination
 				// onCellClick={({ id }) => {}}
 			/>
 		</>

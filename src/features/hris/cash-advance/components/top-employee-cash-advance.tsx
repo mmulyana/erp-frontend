@@ -1,7 +1,10 @@
 import { Check, ChevronsUpDown } from 'lucide-react'
+import { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 
 import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
+import { DataTable } from '@/shared/components/common/data-table'
+import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { months, MONTHS_OBJ } from '@/shared/constants/months'
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { Button } from '@/shared/components/ui/button'
@@ -19,16 +22,6 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/shared/components/ui/table'
-import { ColumnDef } from '@tanstack/react-table'
-import { DataTable } from '@/shared/components/common/data-table'
 
 const data = [
 	{
@@ -59,7 +52,9 @@ const data = [
 ]
 
 export default function TopEmployeeCashAdvance() {
-	const [month, setMonth] = useState(0)
+	const { month } = useCurrentDate()
+
+	const [CurrMonth, setCurrMonth] = useState(month)
 
 	const columns: ColumnDef<any>[] = [
 		{
@@ -90,7 +85,7 @@ export default function TopEmployeeCashAdvance() {
 							role='combobox'
 							className='w-[200px] justify-between font-medium text-ink-secondary'
 						>
-							{MONTHS_OBJ[month]}
+							{MONTHS_OBJ[CurrMonth - 1]}
 							<ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 						</Button>
 					</PopoverTrigger>
@@ -106,13 +101,13 @@ export default function TopEmployeeCashAdvance() {
 											value={String((i.value as number) + 1)}
 											onSelect={(e) => {
 												const value = Number(e)
-												setMonth(value)
+												setCurrMonth(value)
 											}}
 										>
 											<Check
 												className={cn(
 													'mr-2 h-4 w-4',
-													month === (i.value as number) + 1
+													CurrMonth === (i.value as number) + 1
 														? 'opacity-100'
 														: 'opacity-0'
 												)}

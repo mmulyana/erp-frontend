@@ -29,13 +29,14 @@ import { paths } from '@/shared/constants/paths'
 
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
 import { EmployeeSchema } from '@/features/hris/employee/schema'
+import { NumericFormat } from 'react-number-format'
 
 export default function NewEmployee() {
 	const navigate = useNavigate()
 
 	const [step, setStep] = useState(0)
 
-	const { mutate } = useCreateEmployee()
+	const { mutate, isPending } = useCreateEmployee()
 	const form = useForm<z.infer<typeof EmployeeSchema>>({
 		defaultValues: {
 			fullname: '',
@@ -43,17 +44,16 @@ export default function NewEmployee() {
 			birthDate: '',
 			joinedAt: '',
 			lastEducation: '',
-			overtimeSalary: 0,
+			overtimeSalary: undefined,
 			phone: '',
 			position: '',
-			salary: 0,
+			salary: undefined,
 		},
 	})
 
-	const onCreate = () => {
-		const payload = form.getValues()
+	const onCreate = (payload: z.infer<typeof EmployeeSchema>) => {
 		mutate(
-			{ ...payload, photoName: 'testing' },
+			{ ...payload },
 			{
 				onSuccess: () => {
 					form.reset()
@@ -80,30 +80,36 @@ export default function NewEmployee() {
 			icon: <User2 size={16} />,
 			content: (
 				<>
-					<div className='border-b border-border p-10 flex justify-between items-start flex-col md:flex-row gap-2 md:gap-0'>
-						<div>
-							<FormLabel className='text-ink-primary text-base font-normal'>
-								Nama <span className='text-error'>*</span>
-							</FormLabel>
-							<FormDescription className='text-ink-light'>
-								Masukkan nama lengkap pegawai
-							</FormDescription>
-						</div>
-						<FormField
-							name='fullname'
-							control={form.control}
-							render={({ field }) => (
-								<FormItem className='w-full md:w-72'>
-									<Input
-										{...field}
-										className='bg-surface-secondary w-full'
-										placeholder='Nama lengkap'
-									/>
+					<FormField
+						name='fullname'
+						control={form.control}
+						render={({ field }) => (
+							<FormItem className='border-b border-border p-10 flex justify-between items-start flex-col md:flex-row gap-2 md:gap-0'>
+								<div>
+									<FormLabel className='text-ink-primary text-base font-normal'>
+										Nama <span className='text-error'>*</span>
+									</FormLabel>
+									<FormDescription className='text-ink-light'>
+										Masukkan nama lengkap pegawai
+									</FormDescription>
+								</div>
+								<div className='w-full md:w-72'>
+									<FormControl>
+										<Input
+											{...field}
+											onChange={(e) => {
+												field.onChange(e)
+												form.clearErrors('fullname')
+											}}
+											className='bg-surface-secondary w-full'
+											placeholder='Nama lengkap'
+										/>
+									</FormControl>
 									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
+								</div>
+							</FormItem>
+						)}
+					/>
 					<div className='border-b border-border p-10 flex justify-between items-start md:items-center flex-col md:flex-row gap-2 md:gap-0'>
 						<div>
 							<FormLabel className='text-ink-primary text-base font-normal'>
@@ -209,26 +215,72 @@ export default function NewEmployee() {
 						<FormField
 							control={form.control}
 							name='salary'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Gaji pokok</FormLabel>
-									<FormControl>
-										<Input {...field} className='bg-surface-secondary' />
-									</FormControl>
-								</FormItem>
-							)}
+							render={({ field }) => {
+								const usedField = { ...field }
+								delete (usedField as any).onChange
+
+								return (
+									<FormItem>
+										<FormLabel>
+											Gaji pokok{' '}
+											<span className='text-ink-light'>(per hari)</span>
+										</FormLabel>
+										<FormControl>
+											<div className='relative'>
+												<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
+													Rp
+												</div>
+												<NumericFormat
+													type='text'
+													thousandSeparator='.'
+													decimalSeparator=','
+													customInput={Input}
+													className='h-10 w-full pl-12'
+													{...usedField}
+													onValueChange={(values) => {
+														field.onChange(Number(values.value))
+													}}
+												/>
+											</div>
+										</FormControl>
+									</FormItem>
+								)
+							}}
 						/>
 						<FormField
 							control={form.control}
 							name='overtimeSalary'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Gaji lembur (per jam)</FormLabel>
-									<FormControl>
-										<Input {...field} className='bg-surface-secondary' />
-									</FormControl>
-								</FormItem>
-							)}
+							render={({ field }) => {
+								const usedField = { ...field }
+								delete (usedField as any).onChange
+
+								return (
+									<FormItem>
+										<FormLabel>
+											Gaji Lembur{' '}
+											<span className='text-ink-light'>(per jam)</span>
+										</FormLabel>
+										<FormControl>
+											<div className='relative'>
+												<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
+													Rp
+												</div>
+												<NumericFormat
+													type='text'
+													thousandSeparator='.'
+													decimalSeparator=','
+													customInput={Input}
+													className='h-10 w-full pl-12'
+													{...usedField}
+													onValueChange={(values) => {
+														field.onChange(Number(values.value))
+													}}
+												/>
+											</div>
+										</FormControl>
+									</FormItem>
+								)
+							}}
 						/>
 					</div>
 				</>
@@ -290,13 +342,15 @@ export default function NewEmployee() {
 		<DetailLayout title='Pegawai Baru' back={paths.hrisMasterDataEmployee}>
 			<div className='p-6'>
 				<Form {...form}>
-					<MultiStep
-						steps={steps}
-						currentStep={step}
-						onNext={() => setStep((prev) => prev + 1)}
-						onBack={() => setStep((prev) => prev - 1)}
-						onFinish={() => onCreate()}
-					/>
+					<form onSubmit={form.handleSubmit(onCreate)}>
+						<MultiStep
+							steps={steps}
+							currentStep={step}
+							onNext={() => setStep((prev) => prev + 1)}
+							onBack={() => setStep((prev) => prev - 1)}
+							onFinish={() => form.handleSubmit(onCreate)}
+						/>
+					</form>
 				</Form>
 			</div>
 		</DetailLayout>

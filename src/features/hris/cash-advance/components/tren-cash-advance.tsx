@@ -1,5 +1,11 @@
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+import { parseAsInteger, useQueryStates } from 'nuqs'
+import { useMemo } from 'react'
+
 import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
+import { useCurrentDate } from '@/shared/hooks/use-current-date'
+import { useDateIndex } from '@/shared/hooks/use-date-index'
+import { MONTHS_OBJ } from '@/shared/constants/months'
 import {
 	ChartConfig,
 	ChartContainer,
@@ -7,17 +13,33 @@ import {
 	ChartTooltipContent,
 } from '@/shared/components/ui/chart'
 
-const chartData = [
-	{ month: 'January', total: 1860000 },
-	{ month: 'February', total: 3050000 },
-	{ month: 'March', total: 2370000 },
-	{ month: 'April', total: 730000 },
-	{ month: 'May', total: 2090000 },
-	{ month: 'June', total: 2140000 },
-]
+import { useReportLastSixMonths } from '../api/use-report-last-six-months'
+
 const chartConfig = {} satisfies ChartConfig
 
 export default function TrenCashAdvances() {
+	const { month } = useCurrentDate()
+
+	const [query] = useQueryStates({
+		date: parseAsInteger.withDefault(0),
+		month: parseAsInteger.withDefault(month),
+	})
+
+	const { resultDate } = useDateIndex({
+		indexDate: query.date > 0 ? query.date : new Date().getDate(),
+		indexMonth: query.month,
+	})
+	const { data } = useReportLastSixMonths({
+		startDate: resultDate.toString(),
+	})
+	const chartData = useMemo(() => {
+		if (!data?.data) return []
+		return data.data.chartData.map((item) => ({
+			...item,
+			month: MONTHS_OBJ[item.month],
+		}))
+	}, [data])
+
 	return (
 		<Card className='col-span-1 lg:col-span-2 p-6 h-fit'>
 			<CardTitle className='text-ink-secondary text-base'>
@@ -29,8 +51,8 @@ export default function TrenCashAdvances() {
 						accessibilityLayer
 						data={chartData}
 						margin={{
-							left: 12,
-							right: 12,
+							left: 16,
+							right: 16,
 						}}
 					>
 						<CartesianGrid vertical={false} />

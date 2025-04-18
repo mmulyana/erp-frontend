@@ -47,7 +47,7 @@ export default function EmployeeCombobox({
 	const commandListRef = useRef<HTMLDivElement>(null)
 
 	const { data: employee } = useEmployee(defaultValue)
-	
+
 	useEffect(() => {
 		if (employee && defaultValue) {
 			setSelectedEmployee(employee.data.data)
@@ -98,17 +98,46 @@ export default function EmployeeCombobox({
 		[data]
 	)
 
-	const [, setRenderTick] = useState(0)
-
+	// Note: force re-render to attach ref at first open popover
 	useEffect(() => {
-		if (open) {
-			const timeout = setTimeout(() => {
-				setRenderTick((tick) => tick + 1)
-			}, 100)
+		if (!open) return
 
-			return () => clearTimeout(timeout)
-		}
-	}, [open])
+		const timeout = setTimeout(() => {
+			const handleScroll = () => {
+				if (
+					!commandListRef.current ||
+					!loaderRef.current ||
+					!hasNextPage ||
+					isFetchingNextPage
+				) {
+					return
+				}
+
+				const commandList = commandListRef.current
+				const loader = loaderRef.current
+
+				const rect = loader.getBoundingClientRect()
+				const listRect = commandList.getBoundingClientRect()
+
+				if (rect.top <= listRect.bottom) {
+					fetchNextPage()
+				}
+			}
+
+			const commandList = commandListRef.current
+			if (commandList) {
+				commandList.addEventListener('scroll', handleScroll)
+			}
+
+			return () => {
+				if (commandList) {
+					commandList.removeEventListener('scroll', handleScroll)
+				}
+			}
+		}, 100)
+
+		return () => clearTimeout(timeout)
+	}, [open, fetchNextPage, hasNextPage, isFetchingNextPage])
 
 	return (
 		<Popover open={open} onOpenChange={setOpen} modal>

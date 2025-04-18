@@ -11,6 +11,7 @@ import { HrisLayout } from '@/shared/layout/hris-layout'
 import { useTotalInYear } from '@/features/hris/cash-advance/api/use-total-in-year'
 import { useTotalInMonth } from '@/features/hris/cash-advance/api/use-total-in-month'
 import { useTotalInDay } from '@/features/hris/cash-advance/api/use-total-in-day'
+import { useReportLastSixMonths } from '@/features/hris/cash-advance/api/use-report-last-six-months'
 
 export default function ReportCashAdvance() {
 	const { month } = useCurrentDate()
@@ -34,6 +35,10 @@ export default function ReportCashAdvance() {
 	})
 
 	const { data: dataDay } = useTotalInDay({
+		startDate: resultDate.toString(),
+	})
+
+	const { data: dataReport } = useReportLastSixMonths({
 		startDate: resultDate.toString(),
 	})
 
@@ -85,7 +90,7 @@ export default function ReportCashAdvance() {
 				<TrenCashAdvances />
 				<CardHighlight
 					title='Rata-rata per bulan'
-					value={formatToRupiah(120000)}
+					value={formatToRupiah(dataReport?.data?.mean || 0)}
 					style={{
 						value: 'text-2xl pt-0',
 						content: 'pt-2',
