@@ -1,6 +1,13 @@
+import { parseAsString, useQueryStates } from 'nuqs'
 import { Check, X } from 'lucide-react'
+import { id } from 'date-fns/locale'
+import { format } from 'date-fns'
+import { useState } from 'react'
 
+import { DateRangePickerV1 } from '@/shared/components/common/date-range-picker-v1'
 import { Pagination } from '@/shared/components/common/data-table/component'
+import EmptyState from '@/shared/components/common/empty-state'
+import SearchV3 from '@/shared/components/common/search-v3'
 import {
 	Table,
 	TableBody,
@@ -10,239 +17,133 @@ import {
 	TableRow,
 } from '@/shared/components/ui/table'
 
-export default function TableReport() {
-	const days = [
-		{ number: 1, day: 'Sen' },
-		{ number: 2, day: 'Sel' },
-		{ number: 3, day: 'Rab' },
-		{ number: 4, day: 'Kam' },
-		{ number: 5, day: 'Jum' },
-		{ number: 6, day: 'Sab' },
-		{ number: 7, day: 'Min' },
-		{ number: 8, day: 'Sen' },
-		{ number: 9, day: 'Sel' },
-		{ number: 10, day: 'Rab' },
-		{ number: 11, day: 'Kam' },
-		{ number: 12, day: 'Jum' },
-		{ number: 13, day: 'Sab' },
-		{ number: 14, day: 'Min' },
-	]
+import { useReportAttendance } from '../api/use-report-attendance'
+import { useWeekRange } from '../../_hooks/use-week-range'
+import { getDatesInRange } from '@/shared/utils/date-range'
 
-	const students = [
-		{
-			name: 'Saepudin',
-			attendance: [
-				true,
-				false,
-				true,
-				true,
-				true,
-				true,
-				false,
-				true,
-				false,
-				true,
-				true,
-				true,
-				true,
-				false,
-			],
-			present: 10,
-			absent: 2,
-		},
-		{
-			name: 'Saepudin',
-			attendance: [
-				true,
-				true,
-				true,
-				false,
-				true,
-				true,
-				false,
-				true,
-				true,
-				true,
-				false,
-				true,
-				true,
-				false,
-			],
-			present: 10,
-			absent: 2,
-		},
-		{
-			name: 'Saepudin',
-			attendance: [
-				true,
-				true,
-				true,
-				false,
-				true,
-				true,
-				false,
-				true,
-				true,
-				true,
-				false,
-				true,
-				true,
-				false,
-			],
-			present: 10,
-			absent: 2,
-		},
-		{
-			name: 'Saepudin',
-			attendance: [
-				false,
-				true,
-				true,
-				true,
-				true,
-				true,
-				false,
-				false,
-				true,
-				true,
-				true,
-				true,
-				true,
-				false,
-			],
-			present: 10,
-			absent: 2,
-		},
-		{
-			name: 'Saepudin',
-			attendance: [
-				false,
-				true,
-				true,
-				true,
-				true,
-				false,
-				false,
-				false,
-				true,
-				true,
-				true,
-				true,
-				false,
-				false,
-			],
-			present: 8,
-			absent: 4,
-		},
-		{
-			name: 'Saepudin',
-			attendance: [
-				false,
-				true,
-				true,
-				true,
-				true,
-				true,
-				false,
-				false,
-				true,
-				true,
-				true,
-				true,
-				true,
-				false,
-			],
-			present: 10,
-			absent: 2,
-		},
-		{
-			name: 'Saepudin',
-			attendance: [
-				true,
-				true,
-				false,
-				false,
-				false,
-				true,
-				false,
-				true,
-				true,
-				false,
-				false,
-				false,
-				true,
-				false,
-			],
-			present: 6,
-			absent: 6,
-		},
-	]
+export default function TableReport() {
+	const weeks = useWeekRange()
+	const [dateRange, setDateRange] = useState<{
+		from: Date | undefined
+		to: Date | undefined
+	}>({
+		from: new Date(weeks[0]),
+		to: new Date(weeks[weeks.length - 1]),
+	})
+
+	const [query] = useQueryStates({
+		q: parseAsString.withDefault(''),
+		page: parseAsString.withDefault('1'),
+		limit: parseAsString.withDefault('10'),
+	})
+
+	const { data } = useReportAttendance({
+		endDate: dateRange.to?.toString(),
+		startDate: dateRange.from?.toString(),
+		limit: query.limit,
+		page: query.page,
+		search: query.q,
+	})
+
+	const heads = getDatesInRange(
+		dateRange.from?.toString() || weeks[0],
+		dateRange.to?.toString() || weeks[weeks.length - 1]
+	)
+
+	const isDataExists = data?.data && data?.data?.data.length > 0
 
 	return (
-		<div className='rounded-md border overflow-hidden'>
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead className='border-r bg-white' rowSpan={2}></TableHead>
-						{days.map((day, index) => (
-							<TableHead
-								key={index}
-								className='text-center border-r font-medium bg-gray-50'
-							>
-								<p>{day.day}</p>
-								<p>{day.number}</p>
-							</TableHead>
-						))}
-						<TableHead className='text-center border-r bg-white' rowSpan={2}>
-							<Check className='mx-auto h-5 w-5 text-success' />
-						</TableHead>
-						<TableHead className='text-center bg-white' rowSpan={2}>
-							<X className='mx-auto h-5 w-5 text-error' />
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{students.map((student, studentIndex) => (
-						<TableRow
-							key={studentIndex}
-							className={studentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
-						>
-							<TableCell className='font-medium border-r'>
-								{student.name}
-							</TableCell>
-							{student.attendance.map((isPresent, dayIndex) => (
-								<TableCell
-									key={dayIndex}
-									className='text-center p-0 border-r h-10'
-								>
-									{isPresent ? (
-										<div className='flex items-center justify-center h-full'>
-											<div className='bg-success rounded-full p-1 w-6 h-6 flex items-center justify-center'>
-												<Check className='h-5 w-5 text-white' />
-											</div>
-										</div>
-									) : (
-										<div className='flex items-center justify-center h-full'>
-											<div className='rounded-full p-1 w-6 h-6 flex items-center justify-center'>
-												<X className='h-5 w-5 text-error' />
-											</div>
-										</div>
-									)}
-								</TableCell>
-							))}
-							<TableCell className='text-center font-medium border-r text-ink-secondary'>
-								{student.present}
-							</TableCell>
-							<TableCell className='text-center font-medium text-ink-secondary'>
-								{student.absent}
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-			<div className='border-t border-border bg-surface'>
-				<Pagination totalItems={10} totalPages={10} />
+		<>
+			<div className='flex justify-between items-center py-4'>
+				<div className='flex gap-4 items-center'>
+					<SearchV3 />
+				</div>
+				<DateRangePickerV1
+					startDate={new Date(weeks[0])}
+					endDate={new Date(weeks[weeks.length - 1])}
+					onChange={setDateRange}
+				/>
 			</div>
-		</div>
+			<div className='rounded-md border overflow-hidden'>
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead className='border-r bg-white' rowSpan={2}></TableHead>
+							{heads.map((day, index) => (
+								<TableHead
+									key={index}
+									className='text-center border-r font-medium bg-gray-50'
+								>
+									<p>{format(new Date(day), 'EEE', { locale: id })}</p>
+									<p>{format(new Date(day), 'd')}</p>
+								</TableHead>
+							))}
+							<TableHead className='text-center border-r bg-white' rowSpan={2}>
+								<Check className='mx-auto h-5 w-5 text-success' />
+							</TableHead>
+							<TableHead className='text-center bg-white' rowSpan={2}>
+								<X className='mx-auto h-5 w-5 text-error' />
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{isDataExists &&
+							data?.data?.data?.map((student, studentIndex) => (
+								<TableRow
+									key={studentIndex}
+									className={studentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+								>
+									<TableCell className='font-medium border-r'>
+										{student.fullname}
+									</TableCell>
+									{student.attendance.map((isPresent, dayIndex) => (
+										<TableCell
+											key={dayIndex}
+											className='text-center p-0 border-r h-10'
+										>
+											{isPresent ? (
+												isPresent === 'presence' ? (
+													<div className='flex items-center justify-center h-full'>
+														<div className='bg-success rounded-full p-1 w-6 h-6 flex items-center justify-center'>
+															<Check className='h-5 w-5 text-white' />
+														</div>
+													</div>
+												) : (
+													<div className='flex items-center justify-center h-full'>
+														<div className='rounded-full p-1 w-6 h-6 flex items-center justify-center'>
+															<X className='h-5 w-5 text-error' />
+														</div>
+													</div>
+												)
+											) : (
+												<div className='flex items-center justify-center h-full'>
+													<div className='rounded-full p-1 w-6 h-6 flex items-center justify-center'></div>
+												</div>
+											)}
+										</TableCell>
+									))}
+									<TableCell className='text-center font-medium border-r text-ink-secondary'>
+										{student.present}
+									</TableCell>
+									<TableCell className='text-center font-medium text-ink-secondary'>
+										{student.absent}
+									</TableCell>
+								</TableRow>
+							))}
+					</TableBody>
+				</Table>
+				{!isDataExists && (
+					<div className='w-full'>
+						<EmptyState />
+					</div>
+				)}
+				<div className='border-t border-border bg-surface'>
+					<Pagination
+						totalItems={data?.data.total || 0}
+						totalPages={data?.data.total_pages || 0}
+					/>
+				</div>
+			</div>
+		</>
 	)
 }

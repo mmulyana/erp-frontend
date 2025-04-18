@@ -36,6 +36,9 @@ export default function ReportAttendance() {
 							</ScrollArea>
 						</div>
 					</TabsContent>
+					<TabsContent value='tab-2'>
+						<div className='p-6'></div>
+					</TabsContent>
 				</Tabs>
 			</Card>
 		</HrisLayout>

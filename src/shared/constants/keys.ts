@@ -21,6 +21,7 @@ export const keys = {
 	cashAdvancesReport: 'cash_advances-report',
 	attendance: 'attendance',
 	attendanceTotalPerDay: 'attendance-total-per-day',
+	attendanceReport: 'attendance-report',
 	overtime: 'overtime',
 	overtimeDetail: 'overtime-detail',
 	overtimeTotalPerDay: 'overtime-total-per-day',
@@ -55,4 +56,5 @@ export const keys = {
 	attachment: 'attachment',
 	estimate: 'estimate',
 	transactionByGoods: 'transaction-by-goods',
+	utils: 'utils',
 }
