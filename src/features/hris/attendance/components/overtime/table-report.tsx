@@ -7,6 +7,8 @@ import { DateRangePickerV1 } from '@/shared/components/common/date-range-picker-
 import { Pagination } from '@/shared/components/common/data-table/component'
 import EmptyState from '@/shared/components/common/empty-state'
 import SearchV3 from '@/shared/components/common/search-v3'
+import { getDatesInRange } from '@/shared/utils/date-range'
+import { convertUTCToWIB } from '@/shared/utils'
 import {
 	Table,
 	TableBody,
@@ -18,8 +20,6 @@ import {
 
 import { useReportOvertime } from '../../api/overtime/use-report-overtime'
 import { useWeekRange } from '../../../_hooks/use-week-range'
-import { getDatesInRange } from '@/shared/utils/date-range'
-import { convertUTCToWIB } from '@/shared/utils'
 
 export default function TableReportOvertime() {
 	const weeks = useWeekRange()
@@ -91,25 +91,25 @@ export default function TableReportOvertime() {
 					</TableHeader>
 					<TableBody>
 						{isDataExists &&
-							data?.data?.data?.map((student, studentIndex) => (
+							data?.data?.data?.map((item, itemIndex) => (
 								<TableRow
-									key={studentIndex}
-									className={studentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+									key={itemIndex}
+									className={itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
 								>
 									<TableCell className='font-medium border-r'>
-										{student.fullname}
+										{item.fullname}
 									</TableCell>
 
-									{student?.overtimes?.map((item, dayIndex) => (
+									{item?.overtimes?.map((overtime, overIndex) => (
 										<TableCell
-											key={dayIndex}
+											key={overIndex}
 											className='text-center p-0 border-r h-10'
 										>
-											{item?.totalHour}
+											{overtime?.totalHour}
 										</TableCell>
 									))}
 									<TableCell className='text-center font-medium border-r text-ink-secondary'>
-										{student.total}
+										{item.total}
 									</TableCell>
 								</TableRow>
 							))}

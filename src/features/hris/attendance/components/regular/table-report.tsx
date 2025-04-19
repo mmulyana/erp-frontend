@@ -17,9 +17,10 @@ import {
 	TableRow,
 } from '@/shared/components/ui/table'
 
-import { useReportAttendance } from '../api/regular/use-report-attendance'
-import { useWeekRange } from '../../_hooks/use-week-range'
+import { useWeekRange } from '@/features/hris/_hooks/use-week-range'
 import { getDatesInRange } from '@/shared/utils/date-range'
+
+import { useReportAttendance } from '../../api/regular/use-report-attendance'
 
 export default function TableReport() {
 	const weeks = useWeekRange()
@@ -88,21 +89,21 @@ export default function TableReport() {
 					</TableHeader>
 					<TableBody>
 						{isDataExists &&
-							data?.data?.data?.map((student, studentIndex) => (
+							data?.data?.data?.map((item, itemIndex) => (
 								<TableRow
-									key={studentIndex}
-									className={studentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+									key={itemIndex}
+									className={itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
 								>
 									<TableCell className='font-medium border-r'>
-										{student.fullname}
+										{item.fullname}
 									</TableCell>
-									{student.attendance.map((isPresent, dayIndex) => (
+									{item.attendance.map((status, attIndex) => (
 										<TableCell
-											key={dayIndex}
+											key={attIndex}
 											className='text-center p-0 border-r h-10'
 										>
-											{isPresent ? (
-												isPresent === 'presence' ? (
+											{status ? (
+												status === 'presence' ? (
 													<div className='flex items-center justify-center h-full'>
 														<div className='bg-success rounded-full p-1 w-6 h-6 flex items-center justify-center'>
 															<Check className='h-5 w-5 text-white' />
@@ -123,10 +124,10 @@ export default function TableReport() {
 										</TableCell>
 									))}
 									<TableCell className='text-center font-medium border-r text-ink-secondary'>
-										{student.present}
+										{item.present}
 									</TableCell>
 									<TableCell className='text-center font-medium text-ink-secondary'>
-										{student.absent}
+										{item.absent}
 									</TableCell>
 								</TableRow>
 							))}

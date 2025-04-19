@@ -7,7 +7,7 @@ import { DataTable } from '@/shared/components/common/data-table'
 
 import { useCreateAttendance } from '../../api/regular/use-create-attendance'
 import { useUpdateAttendance } from '../../api/regular/use-update-attendance'
-import { useAttendances } from '../api/use-attendances'
+import { useAttendances } from '../../api/regular/use-attendances'
 import { Attendance } from '../../types'
 import ButtonRegular from './button-regular'
 

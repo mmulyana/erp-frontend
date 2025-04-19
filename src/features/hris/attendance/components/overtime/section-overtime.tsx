@@ -9,8 +9,8 @@ import SearchV3 from '@/shared/components/common/search-v3'
 
 import { useTotalOvertimePerDay } from '../../api/regular/use-total-overtime-per-day'
 import ModalDetailOvertime from './modal-detail-overtime'
-import TableOvertime from '../regular/table-overtime'
 import ModalAddOvertime from './modal-add-overtime'
+import TableOvertime from './table-overtime'
 
 export default function SectionOvertime() {
 	const { month, date } = useCurrentDate()
