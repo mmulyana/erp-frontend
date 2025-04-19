@@ -1,11 +1,10 @@
-import { CalendarIcon, Loader } from 'lucide-react'
+import { CalendarIcon, Loader, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { atom, useAtom } from 'jotai'
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
-import { useEffect } from 'react'
-import { toast } from 'sonner'
 
+import { convertToWIB } from '@/shared/utils/convert-date'
 import { Calendar } from '@/shared/components/ui/calendar'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
@@ -18,6 +17,7 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogTitle,
+	DialogTrigger,
 } from '@/shared/components/ui/dialog'
 import {
 	Form,
@@ -33,60 +33,43 @@ import {
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 
-import EmployeeCombobox from '../../_components/employee-combobox'
-import ModalDeleteOvertime from './modal-delete-overtime'
-import { useUpdateOvertime } from '../api/use-update-overtime'
-import { useOvertime } from '../api/use-overtime'
-import { OvertimeForm } from '../types'
+import EmployeeCombobox from '../../../_components/employee-combobox'
+import { useCreateOvertime } from '../../api/overtime/use-create-overtime'
+import { OvertimeForm } from '../../types'
+import { useCurrentDate } from '@/shared/hooks/use-current-date'
+import { parseAsInteger, useQueryStates } from 'nuqs'
+import { convertUTCToWIB } from '@/shared/utils'
 
-export const ModalOvertime = atom<{ open: boolean; id: string } | null>(null)
-export default function ModalDetailOvertime() {
-	const [modal, setModal] = useAtom(ModalOvertime)
+export default function ModalAddOvertime() {
+	const [open, setOpen] = useState(false)
 
-	const { data } = useOvertime({ id: modal?.id })
+	const { month, date, year } = useCurrentDate()
 
-	const { mutate, isPending } = useUpdateOvertime()
+	const [query] = useQueryStates({
+		date: parseAsInteger.withDefault(date),
+		month: parseAsInteger.withDefault(month),
+	})
+
+	const { mutate, isPending } = useCreateOvertime()
 	const form = useForm<OvertimeForm>({
 		defaultValues: {
-			date: new Date(),
+			date: new Date(year, query.month, query.date),
 			employeeId: '',
 			note: '',
 			totalHour: 0,
 		},
 	})
 
-	useEffect(() => {
-		if (data) {
-			form.reset({
-				totalHour: data.data?.totalHour,
-				date: new Date(data.data?.date as string),
-				employeeId: data.data?.employee.id,
-				note: data.data?.note,
-			})
-		}
-	}, [data])
-
-	useEffect(() => {
-		if (!modal?.open) {
-			form.reset({
-				date: new Date(),
-				employeeId: '',
-				note: '',
-				totalHour: 0,
-			})
-		}
-	}, [modal?.open])
-
 	const submit = (data: OvertimeForm) => {
-		if (!modal?.id) {
-			toast.error('Id tidak boleh kosong')
-			return
-		}
 		mutate(
-			{ ...data, totalHour: Number(data.totalHour), id: modal?.id },
+			{
+				...data,
+				totalHour: Number(data.totalHour),
+				date: data.date,
+			},
 			{
 				onSuccess: () => {
-					setModal(null)
+					setOpen(false)
 				},
 				onError: (error: any) => {
 					if (error?.response?.data?.errors) {
@@ -103,19 +86,29 @@ export default function ModalDetailOvertime() {
 		)
 	}
 
+	useEffect(() => {
+		if (!open) {
+			form.reset({
+				date: new Date(year, query.month, query.date),
+				employeeId: '',
+				note: '',
+				totalHour: 0,
+			})
+		}
+	}, [open])
+
 	return (
-		<Dialog
-			open={modal?.open}
-			onOpenChange={(open) => {
-				if (modal) {
-					setModal({ ...modal, open })
-				}
-			}}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<Button className='gap-2'>
+					<Plus strokeWidth={2} size={16} className='text-white' />
+					<span className='px-0.5'>Tambah Lembur</span>
+				</Button>
+			</DialogTrigger>
 			<DialogContent className='p-6'>
 				<DialogTitle>Lembur</DialogTitle>
 				<DialogDescription>
-					Pastikan semua data yang diperbarui sudah benar sebelum disimpan.
+					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
 				<Form {...form}>
 					<form
@@ -132,8 +125,6 @@ export default function ModalDetailOvertime() {
 										<EmployeeCombobox
 											onSelect={(e) => field.onChange(e)}
 											style={{ value: 'bg-surface' }}
-											defaultValue={field.value}
-											disabled
 										/>
 									</FormControl>
 									<FormMessage />
@@ -174,6 +165,8 @@ export default function ModalDetailOvertime() {
 											</PopoverTrigger>
 											<PopoverContent className='w-auto p-0' align='start'>
 												<Calendar
+													weekStartsOn={1}
+													locale={id}
 													mode='single'
 													selected={field.value}
 													onSelect={field.onChange}
@@ -216,25 +209,22 @@ export default function ModalDetailOvertime() {
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-between w-full'>
-								<ModalDeleteOvertime />
-								<div className='flex justify-end gap-4 items-center'>
-									<DialogClose asChild>
-										<Button variant='outline' type='button'>
-											Batal
-										</Button>
-									</DialogClose>
-									<Button disabled={isPending}>
-										{isPending ? (
-											<>
-												<Loader className='mr-2 h-4 w-4 animate-spin' />
-												Menyimpan...
-											</>
-										) : (
-											'Perbarui'
-										)}
+							<div className='flex justify-end gap-4 items-center'>
+								<DialogClose asChild>
+									<Button variant='outline' type='button'>
+										Batal
 									</Button>
-								</div>
+								</DialogClose>
+								<Button disabled={isPending}>
+									{isPending ? (
+										<>
+											<Loader className='mr-2 h-4 w-4 animate-spin' />
+											Menyimpan...
+										</>
+									) : (
+										'Simpan'
+									)}
+								</Button>
 							</div>
 						</DialogFooter>
 					</form>

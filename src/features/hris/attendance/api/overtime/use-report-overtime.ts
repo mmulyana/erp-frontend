@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { IApi, IApiPagination } from '@/shared/types'
-
+import { IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
@@ -14,20 +13,20 @@ type Params = {
 	search?: string
 }
 
-export const useReportAttendance = (params?: Params) => {
+export const useReportOvertime = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.attendanceReport, params],
+		queryKey: [keys.overtimeReport, params],
 		queryFn: async (): Promise<
 			IApiPagination<
 				{
+					id: string
 					fullname: string
-					attendance: string[]
-					present: number
-					absent: number
+					overtimes: ({ id: string; totalHour: number } | null)[]
+					total: number
 				}[]
 			>
 		> => {
-			const { data } = await http(urls.attendance + '/report', {
+			const { data } = await http(urls.overtime + '/data/report', {
 				params,
 			})
 			return data

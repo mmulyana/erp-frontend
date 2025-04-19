@@ -1,13 +1,14 @@
-import TableReport from '@/features/hris/attendance/components/table-report'
+import TableReportOvertime from '@/features/hris/attendance/components/overtime/table-report'
+import TableReportRegular from '@/features/hris/attendance/components/regular/table-report'
+
+import { HrisLayout } from '@/shared/layout/hris-layout'
 import { Card } from '@/shared/components/ui/card'
-import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area'
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 } from '@/shared/components/ui/tabs'
-import { HrisLayout } from '@/shared/layout/hris-layout'
 
 export default function ReportAttendance() {
 	return (
@@ -30,14 +31,13 @@ export default function ReportAttendance() {
 					</TabsList>
 					<TabsContent value='tab-1'>
 						<div className='p-6'>
-							<ScrollArea className='min-w-full overflow-hidden'>
-								<TableReport />
-								<ScrollBar orientation='horizontal' />
-							</ScrollArea>
+							<TableReportRegular />
 						</div>
 					</TabsContent>
 					<TabsContent value='tab-2'>
-						<div className='p-6'></div>
+						<div className='p-6'>
+							<TableReportOvertime />
+						</div>
 					</TabsContent>
 				</Tabs>
 			</Card>

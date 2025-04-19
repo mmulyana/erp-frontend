@@ -6,7 +6,7 @@ import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
-import { TotalAttendancePerDay } from '../types'
+import { TotalAttendancePerDay } from '../../types'
 
 type Params = {
 	startDate?: string

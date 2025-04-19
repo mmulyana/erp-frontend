@@ -6,7 +6,7 @@ import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
-import { OvertimeDetail } from '../types'
+import { OvertimeDetail } from '../../types'
 
 export const useOvertime = ({ id }: { id?: string }) => {
 	return useQuery({

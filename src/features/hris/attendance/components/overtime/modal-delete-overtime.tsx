@@ -13,7 +13,7 @@ import {
 	AlertDialogTrigger,
 } from '@/shared/components/ui/alert-dialog'
 
-import { useDeleteOvertime } from '../api/use-delete-overtime'
+import { useDeleteOvertime } from '../../api/overtime/use-delete-overtime'
 import { ModalOvertime } from './modal-detail-overtime'
 
 export default function ModalDeleteOvertime() {

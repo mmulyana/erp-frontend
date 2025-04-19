@@ -25,6 +25,7 @@ export const keys = {
 	overtime: 'overtime',
 	overtimeDetail: 'overtime-detail',
 	overtimeTotalPerDay: 'overtime-total-per-day',
+	overtimeReport: 'overtime-report',
 	project: 'project',
 	projectDetail: 'project-detail',
 	projectDetailEmployee: 'project-employee',

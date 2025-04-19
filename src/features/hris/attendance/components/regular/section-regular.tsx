@@ -10,7 +10,7 @@ import CardData from '@/shared/components/common/card-data'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { cn } from '@/shared/utils/cn'
 
-import { useTotalAttendancePerDay } from '../api/use-total-attendance-per-day'
+import { useTotalAttendancePerDay } from '../../api/regular/use-total-attendance-per-day'
 import TableRegular from './table-regular'
 import ViewType from './view-type'
 

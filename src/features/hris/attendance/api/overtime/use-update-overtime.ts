@@ -6,7 +6,7 @@ import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
 import http from '@/shared/utils/http'
 
-import { OvertimeForm } from '../types'
+import { OvertimeForm } from '../../types'
 
 export const useUpdateOvertime = () => {
 	const queryClient = useQueryClient()

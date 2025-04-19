@@ -1,7 +1,7 @@
 import { HrisLayout } from '@/shared/layout/hris-layout'
 
+import SectionOvertime from '@/features/hris/attendance/components/overtime/section-overtime'
 import CalendarAttendance from '@/features/hris/attendance/components/calendar-attendance'
-import SectionOvertime from '@/features/hris/attendance/components/section-overtime'
 
 export default function Overtime() {
 	return (

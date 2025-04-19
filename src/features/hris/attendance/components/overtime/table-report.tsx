@@ -1,0 +1,132 @@
+import { parseAsString, useQueryStates } from 'nuqs'
+import { id } from 'date-fns/locale'
+import { format } from 'date-fns'
+import { useState } from 'react'
+
+import { DateRangePickerV1 } from '@/shared/components/common/date-range-picker-v1'
+import { Pagination } from '@/shared/components/common/data-table/component'
+import EmptyState from '@/shared/components/common/empty-state'
+import SearchV3 from '@/shared/components/common/search-v3'
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/shared/components/ui/table'
+
+import { useReportOvertime } from '../../api/overtime/use-report-overtime'
+import { useWeekRange } from '../../../_hooks/use-week-range'
+import { getDatesInRange } from '@/shared/utils/date-range'
+import { convertUTCToWIB } from '@/shared/utils'
+
+export default function TableReportOvertime() {
+	const weeks = useWeekRange()
+	const [dateRange, setDateRange] = useState<{
+		from: Date | undefined
+		to: Date | undefined
+	}>({
+		from: new Date(weeks[0]),
+		to: new Date(weeks[weeks.length - 1]),
+	})
+
+	const [query] = useQueryStates({
+		q: parseAsString.withDefault(''),
+		page: parseAsString.withDefault('1'),
+		limit: parseAsString.withDefault('10'),
+	})
+
+	const { data } = useReportOvertime({
+		endDate: dateRange.to?.toString(),
+		startDate: dateRange.from?.toString(),
+		limit: query.limit,
+		page: query.page,
+		search: query.q,
+	})
+
+	const heads = getDatesInRange(
+		dateRange.from?.toString() || weeks[0],
+		dateRange.to?.toString() || weeks[weeks.length - 1]
+	)
+
+	const isDataExists = data?.data && data?.data?.data.length > 0
+
+	return (
+		<>
+			<div className='flex justify-between items-center py-4'>
+				<div className='flex gap-4 items-center'>
+					<SearchV3 />
+				</div>
+				<DateRangePickerV1
+					startDate={new Date(weeks[0])}
+					endDate={new Date(weeks[weeks.length - 1])}
+					onChange={setDateRange}
+				/>
+			</div>
+			<div className='rounded-md border overflow-hidden'>
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead className='border-r bg-white' rowSpan={2}></TableHead>
+							{heads.map((day, index) => (
+								<TableHead
+									key={index}
+									className='text-center border-r font-medium bg-gray-50'
+								>
+									<p>
+										{format(
+											convertUTCToWIB(new Date(day)).toLocaleString(),
+											'EEE',
+											{ locale: id }
+										)}
+									</p>
+									<p>{convertUTCToWIB(new Date(day)).getDate()}</p>
+								</TableHead>
+							))}
+							<TableHead className='text-center border-r bg-white' rowSpan={2}>
+								<p>Total</p>
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{isDataExists &&
+							data?.data?.data?.map((student, studentIndex) => (
+								<TableRow
+									key={studentIndex}
+									className={studentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+								>
+									<TableCell className='font-medium border-r'>
+										{student.fullname}
+									</TableCell>
+
+									{student?.overtimes?.map((item, dayIndex) => (
+										<TableCell
+											key={dayIndex}
+											className='text-center p-0 border-r h-10'
+										>
+											{item?.totalHour}
+										</TableCell>
+									))}
+									<TableCell className='text-center font-medium border-r text-ink-secondary'>
+										{student.total}
+									</TableCell>
+								</TableRow>
+							))}
+					</TableBody>
+				</Table>
+				{!isDataExists && (
+					<div className='w-full'>
+						<EmptyState />
+					</div>
+				)}
+				<div className='border-t border-border bg-surface'>
+					<Pagination
+						totalItems={data?.data.total || 0}
+						totalPages={data?.data.total_pages || 0}
+					/>
+				</div>
+			</div>
+		</>
+	)
+}

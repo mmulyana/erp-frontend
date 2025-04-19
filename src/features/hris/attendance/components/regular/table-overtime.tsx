@@ -6,8 +6,8 @@ import { DataTable } from '@/shared/components/common/data-table'
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
 
-import { useOvertimes } from '../api/use-overtimes'
-import { ModalOvertime } from './modal-detail-overtime'
+import { useOvertimes } from '../../api/overtime/use-overtimes'
+import { ModalOvertime } from '../overtime/modal-detail-overtime'
 
 export default function TableOvertime() {
 	const setModal = useSetAtom(ModalOvertime)

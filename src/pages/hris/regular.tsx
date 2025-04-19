@@ -1,7 +1,7 @@
 import { HrisLayout } from '@/shared/layout/hris-layout'
 
 import CalendarAttendance from '@/features/hris/attendance/components/calendar-attendance'
-import SectionRegular from '@/features/hris/attendance/components/section-regular'
+import SectionRegular from '@/features/hris/attendance/components/regular/section-regular'
 
 export default function Regular() {
 	return (

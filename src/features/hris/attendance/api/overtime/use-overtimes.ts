@@ -5,7 +5,6 @@ import { IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
-import { Attendance } from '../types'
 
 type Params = {
 	search?: string

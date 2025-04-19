@@ -128,6 +128,8 @@ export function DateRangePickerV1({
 					<Calendar
 						initialFocus
 						mode='range'
+						weekStartsOn={1}
+						locale={id}
 						selected={date}
 						defaultMonth={date.from}
 						onSelect={handleRangeSelect}
@@ -147,13 +149,8 @@ export function DateRangePickerV1({
 					{error && <div className='p-3 text-sm text-red-500'>{error}</div>}
 					<div className='p-3 border-t border-border'>
 						<div className='text-sm text-muted-foreground'>
-							Maximum range: ±{MAX_RANGE_DAYS} days from start
+							Maksimal {MAX_RANGE_DAYS+1} hari sebelum atau sesudahnya
 						</div>
-						{date.from && date.to && (
-							<div className='text-sm font-medium mt-1'>
-								Selected: {differenceInDays(date.to, date.from) + 1} days
-							</div>
-						)}
 					</div>
 				</PopoverContent>
 			</Popover>

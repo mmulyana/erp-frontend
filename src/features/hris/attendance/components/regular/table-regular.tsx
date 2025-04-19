@@ -5,10 +5,10 @@ import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
 import { DataTable } from '@/shared/components/common/data-table'
 
-import { useCreateAttendance } from '../api/use-create-attendance'
-import { useUpdateAttendance } from '../api/use-update-attendance'
+import { useCreateAttendance } from '../../api/regular/use-create-attendance'
+import { useUpdateAttendance } from '../../api/regular/use-update-attendance'
 import { useAttendances } from '../api/use-attendances'
-import { Attendance } from '../types'
+import { Attendance } from '../../types'
 import ButtonRegular from './button-regular'
 
 export default function TableRegular() {

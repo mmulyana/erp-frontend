@@ -7,12 +7,12 @@ import { useDateIndex } from '@/shared/hooks/use-date-index'
 import CardData from '@/shared/components/common/card-data'
 import SearchV3 from '@/shared/components/common/search-v3'
 
-import { useTotalOvertimePerDay } from '../api/use-total-overtime-per-day'
+import { useTotalOvertimePerDay } from '../../api/regular/use-total-overtime-per-day'
 import ModalDetailOvertime from './modal-detail-overtime'
+import TableOvertime from '../regular/table-overtime'
 import ModalAddOvertime from './modal-add-overtime'
-import TableOvertime from './table-overtime'
 
-export default function AttendanceOvertime() {
+export default function SectionOvertime() {
 	const { month, date } = useCurrentDate()
 
 	const [query] = useQueryStates({

@@ -17,7 +17,7 @@ import {
 	TableRow,
 } from '@/shared/components/ui/table'
 
-import { useReportAttendance } from '../api/use-report-attendance'
+import { useReportAttendance } from '../api/regular/use-report-attendance'
 import { useWeekRange } from '../../_hooks/use-week-range'
 import { getDatesInRange } from '@/shared/utils/date-range'
 

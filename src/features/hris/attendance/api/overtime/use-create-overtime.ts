@@ -7,7 +7,7 @@ import { keys } from '@/shared/constants/keys'
 import { IApi } from '@/shared/types'
 import http from '@/shared/utils/http'
 
-import { OvertimeForm } from '../types'
+import { OvertimeForm } from '../../types'
 
 export const useCreateOvertime = () => {
 	const queryClient = useQueryClient()
