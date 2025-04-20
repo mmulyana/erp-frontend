@@ -5,64 +5,25 @@ import { format } from 'date-fns'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { DataTable } from '@/shared/components/common/data-table'
 import { Button } from '@/shared/components/ui/button'
-import { formatToRupiah } from '@/shared/utils'
+import { convertUTCToWIB, formatToRupiah } from '@/shared/utils'
 
 import ChartCashAdvance from './chart-cash-advance'
-
-const data = [
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-	{
-		amount: 40000,
-		requestDate: new Date(),
-		note: 'Sakit',
-	},
-]
+import { useParams } from 'react-router-dom'
+import { usePagination } from '@/shared/hooks/use-pagination'
+import { useDataCashAdvance } from '../../api/use-data-cash-advance'
+import { id } from 'date-fns/locale'
 
 export default function EmployeeCashAdvance() {
+	const { id: employeeId } = useParams()
+	const { limit, page, q } = usePagination()
+
+	const { data } = useDataCashAdvance({
+		id: employeeId,
+		limit,
+		page,
+		search: q,
+	})
+
 	const columns: ColumnDef<any>[] = [
 		{
 			id: 'amount',
@@ -72,19 +33,15 @@ export default function EmployeeCashAdvance() {
 		{
 			id: 'requestDate',
 			header: 'Tanggal',
-			cell: ({ row }) => format(row.original.requestDate, 'dd/MM/yyyy'),
+			cell: ({ row }) =>
+				format(convertUTCToWIB(new Date(row.original.date)), 'PPP', {
+					locale: id,
+				}),
 		},
 		{
 			id: 'note',
 			header: 'Keterangan',
-			cell: ({ row }) => (
-				<div className='flex justify-between items-center gap-4'>
-					<p>{row.original.note}</p>
-					<Button variant='outline'>
-						<Ellipsis size={16} />
-					</Button>
-				</div>
-			),
+			accessorKey: 'note',
 		},
 	]
 	return (
@@ -107,10 +64,10 @@ export default function EmployeeCashAdvance() {
 					header: 'bg-white',
 					stripRowColor: 'bg-white',
 				}}
-				data={data}
+				data={data?.data?.data || []}
 				columns={columns}
-				totalPages={5}
-				totalItems={20}
+				totalPages={data?.data.total_pages}
+				totalItems={data?.data.total}
 				withPagination
 			/>
 		</>
