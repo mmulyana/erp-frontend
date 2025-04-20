@@ -50,7 +50,7 @@ export default function EmployeeCombobox({
 
 	useEffect(() => {
 		if (employee && defaultValue) {
-			setSelectedEmployee(employee.data.data)
+			setSelectedEmployee(employee)
 		}
 	}, [employee, defaultValue])
 

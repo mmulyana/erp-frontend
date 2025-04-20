@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Contact2Icon } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Contact2Icon, FilePen } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 
 import { CalendarV1 } from '@/shared/components/common/calendar-v1'
@@ -25,7 +25,7 @@ export default function EmployeeRegular() {
 	return (
 		<>
 			<div className='flex gap-2 items-center p-6'>
-				<Contact2Icon className='text-ink-secondary' />
+				<FilePen className='text-ink-secondary' />
 				<p className='text-ink-secondary font-medium'>Absensi</p>
 			</div>
 			<div className='flex items-center justify-between px-6 pb-6 flex-col md:flex-row gap-5 w-full'>

@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { Ellipsis, Wallet } from 'lucide-react'
+import { Ellipsis, FilePen, Wallet } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { format } from 'date-fns'
 
@@ -51,8 +51,8 @@ export default function EmployeeOvertime() {
 	return (
 		<>
 			<div className='flex gap-2 items-center p-6'>
-				<Wallet className='text-ink-secondary' />
-				<p className='text-ink-secondary font-medium'>Kasbon</p>
+				<FilePen className='text-ink-secondary' />
+				<p className='text-ink-secondary font-medium'>Lembur</p>
 			</div>
 
 			<div className='px-4 py-3 bg-surface flex justify-between items-center border-t border-border'>
