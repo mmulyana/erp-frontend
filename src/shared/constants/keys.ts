@@ -8,6 +8,7 @@ export const keys = {
 	employee: 'employee',
 	employeeInfinite: 'employee-infinite',
 	employeeDetail: 'employee-detail',
+	employeeData: 'employee-data',
 	
 	employeeCertificates: 'employee-certificates',
 	certificate: 'certificate',

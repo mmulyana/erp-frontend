@@ -9,6 +9,7 @@ import { paths } from '@/shared/constants/paths'
 import { Employee } from '@/shared/types'
 
 import { useEmployees } from '@/features/hris/employee/api/use-employees'
+import { formatPhone } from '@/shared/utils'
 
 export default function TableEmployee() {
 	const navigate = useNavigate()
@@ -55,6 +56,7 @@ export default function TableEmployee() {
 			id: 'phone',
 			accessorKey: 'phone',
 			header: 'Nomor telp',
+			cell: ({ row }) => formatPhone(row.original.phone),
 		},
 		{
 			id: 'status',

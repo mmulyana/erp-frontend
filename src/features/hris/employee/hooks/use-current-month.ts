@@ -7,7 +7,7 @@ export const CALENDAR_ARR = [
 	[9, 10, 11],
 ]
 
-export function useCurrentCalendar() {
+export function useCurrentMonth() {
 	const currentMonth = new Date().getMonth()
 	const initialGroupIndex = CALENDAR_ARR.findIndex((group) =>
 		group.includes(currentMonth)

@@ -1,15 +1,14 @@
-import { Ellipsis, FileText, FileBadgeIcon } from 'lucide-react'
+import { FileText, FileBadgeIcon } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 import { useParams } from 'react-router-dom'
+import { useSetAtom } from 'jotai'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import SearchV3 from '@/shared/components/common/search-v3'
-import { Button } from '@/shared/components/ui/button'
 
 import { useCertificates } from '../../api/use-certificates'
 import ModalAddCertificate from './modal-add-certificate'
-import { useAtom, useSetAtom } from 'jotai'
 import ModalDetailCertificate, {
 	atomModalCertificate,
 } from './modal-detail-certificate'
@@ -18,9 +17,8 @@ export default function EmployeeCertificate() {
 	const { limit, page, q } = usePagination()
 	const { id } = useParams()
 
-	const [modal, setModal] = useAtom(atomModalCertificate)
-	console.log('modal', modal)
-	
+	const setModal = useSetAtom(atomModalCertificate)
+
 	const { data, isLoading } = useCertificates({
 		id,
 		limit,

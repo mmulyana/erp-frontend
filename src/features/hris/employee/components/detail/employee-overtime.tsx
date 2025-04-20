@@ -1,91 +1,53 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Ellipsis, Wallet } from 'lucide-react'
+import { useParams } from 'react-router-dom'
 import { format } from 'date-fns'
 
+import { DataTable } from '@/shared/components/common/data-table'
+import { usePagination } from '@/shared/hooks/use-pagination'
+import SearchV3 from '@/shared/components/common/search-v3'
 import { Button } from '@/shared/components/ui/button'
 
-import { DataTable } from '@/shared/components/common/data-table'
-import SearchV3 from '@/shared/components/common/search-v3'
-import { formatToRupiah } from '@/shared/utils'
-
-const data = [
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-	{
-		hour: 40000,
-		date: new Date(),
-		note: 'OT SPB line 3',
-	},
-]
+import { useDataOvertime } from '../../api/use-data-overtime'
+import { Overtime } from '@/features/hris/_types'
+import { id } from 'date-fns/locale'
+import { useSetAtom } from 'jotai'
+import ModalDetailOvertime, {
+	atomModalOvertime,
+} from '@/features/hris/attendance/components/overtime/modal-detail-overtime'
 
 export default function EmployeeOvertime() {
-	const columns: ColumnDef<any>[] = [
+	const { q, limit, page } = usePagination()
+	const { id: employeeId } = useParams()
+
+	// atom in component
+	const setModal = useSetAtom(atomModalOvertime)
+
+	const { data } = useDataOvertime({
+		search: q,
+		limit,
+		page,
+		id: employeeId,
+	})
+
+	const columns: ColumnDef<Overtime>[] = [
 		{
 			id: 'hour',
-			header: 'Jam',
-			cell: ({ row }) => row.original.hour,
+			header: 'Jumlah jam',
+			cell: ({ row }) => row.original?.totalHour,
 		},
 		{
 			id: 'date',
 			header: 'Tanggal',
-			cell: ({ row }) => format(row.original.date, 'dd/MM/yyyy'),
+			cell: ({ row }) => format(row.original.date, 'PPP', { locale: id }),
 		},
 		{
 			id: 'note',
 			header: 'Keterangan',
-			cell: ({ row }) => (
-				<div className='flex justify-between items-center gap-4'>
-					<p>{row.original.note}</p>
-					<Button variant='outline'>
-						<Ellipsis size={16} />
-					</Button>
-				</div>
-			),
+			accessorKey: 'note',
 		},
 	]
+
 	return (
 		<>
 			<div className='flex gap-2 items-center p-6'>
@@ -104,12 +66,21 @@ export default function EmployeeOvertime() {
 					header: 'bg-white',
 					stripRowColor: 'bg-white',
 				}}
-				data={data}
+				data={data?.data?.data || []}
 				columns={columns}
-				totalPages={5}
-				totalItems={20}
+				totalPages={data?.data.total_pages}
+				totalItems={data?.data.total}
 				withPagination
+				nonClickableColumns={[]}
+				onCellClick={({ id }) => {
+					setModal({
+						id,
+						open: true,
+					})
+				}}
+				autoRedirect
 			/>
+			<ModalDetailOvertime />
 		</>
 	)
 }
