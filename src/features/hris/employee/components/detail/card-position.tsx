@@ -1,18 +1,16 @@
 import { differenceInMonths, differenceInYears } from 'date-fns'
-import { useParams } from 'react-router-dom'
 import { useMemo } from 'react'
 
 import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
-import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import CardData from '@/shared/components/common/card-data'
+import { formatToRupiah } from '@/shared/utils'
 
-import { useEmployee } from '../../api/use-employee'
+import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditPosition from './modal-edit-position'
 
 export default function CardPosition() {
-	const { id } = useParams()
-	const { data, isPending } = useEmployee(id)
+	const { data, isPending } = useDetailEmployee()
 
 	const yoe = useMemo(() => {
 		if (!data?.joinedAt) return { years: 0, months: 1 }

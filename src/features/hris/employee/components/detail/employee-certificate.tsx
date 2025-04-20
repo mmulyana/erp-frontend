@@ -1,44 +1,33 @@
+import { Ellipsis, FileText, FileBadgeIcon } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
+import { useParams } from 'react-router-dom'
+
+import { DataTable } from '@/shared/components/common/data-table'
+import { usePagination } from '@/shared/hooks/use-pagination'
+import SearchV3 from '@/shared/components/common/search-v3'
 import { Button } from '@/shared/components/ui/button'
 
-import SearchV3 from '@/shared/components/common/search-v3'
-import { Ellipsis, File, FileText, Plus, FileBadgeIcon} from 'lucide-react'
-import { DataTable } from '@/shared/components/common/data-table'
-
-const data = [
-	{
-		name: 'K3 Umum',
-	},
-	{
-		name: 'Safety',
-	},
-	{
-		name: 'Safety',
-	},
-	{
-		name: 'Safety',
-	},
-	{
-		name: 'Safety',
-	},
-	{
-		name: 'Safety',
-	},
-	{
-		name: 'Safety',
-	},
-	{
-		name: 'Safety',
-	},
-	{
-		name: 'Safety',
-	},
-	{
-		name: 'Safety',
-	},
-]
+import { useCertificates } from '../../api/use-certificates'
+import ModalAddCertificate from './modal-add-certificate'
+import { useAtom, useSetAtom } from 'jotai'
+import ModalDetailCertificate, {
+	atomModalCertificate,
+} from './modal-detail-certificate'
 
 export default function EmployeeCertificate() {
+	const { limit, page, q } = usePagination()
+	const { id } = useParams()
+
+	const [modal, setModal] = useAtom(atomModalCertificate)
+	console.log('modal', modal)
+	
+	const { data, isLoading } = useCertificates({
+		id,
+		limit,
+		page,
+		search: q,
+	})
+
 	const columns: ColumnDef<any>[] = [
 		{
 			id: 'name',
@@ -49,9 +38,6 @@ export default function EmployeeCertificate() {
 						<FileText size={24} className='text-ink-light' />
 						<p className='text-ink-secondary'>{row.original.name}</p>
 					</div>
-					<Button variant='outline'>
-						<Ellipsis size={16} />
-					</Button>
 				</div>
 			),
 		},
@@ -62,14 +48,9 @@ export default function EmployeeCertificate() {
 				<FileBadgeIcon className='text-ink-secondary' />
 				<p className='text-ink-secondary font-medium'>Sertifikasi</p>
 			</div>
-			<div className='px-4 py-3 bg-surface flex justify-between items-center border-t border-border'>
-				<div className='flex gap-4 items-center'>
-					<SearchV3 />
-				</div>
-				<Button className='gap-2'>
-					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Sertifikasi</span>
-				</Button>
+			<div className='px-4 py-3 bg-surface flex justify-between items-center border-t border-border gap-4'>
+				<SearchV3 />
+				<ModalAddCertificate />
 			</div>
 			<DataTable
 				style={{
@@ -77,12 +58,22 @@ export default function EmployeeCertificate() {
 					header: 'bg-white',
 					stripRowColor: 'bg-white',
 				}}
-				data={data}
+				data={data?.data.data || []}
 				columns={columns}
-				totalPages={5}
-				totalItems={20}
+				totalPages={data?.data.total_pages}
+				totalItems={data?.data.total}
 				withPagination
+				nonClickableColumns={[]}
+				isLoading={isLoading}
+				autoRedirect
+				onCellClick={(e) => {
+					setModal({
+						id: e.id,
+						open: true,
+					})
+				}}
 			/>
+			<ModalDetailCertificate />
 		</>
 	)
 }

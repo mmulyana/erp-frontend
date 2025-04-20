@@ -131,7 +131,7 @@ export default function ModalEditInformation() {
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-end gap-4 items-center'>
+							<div className='flex justify-end gap-4 items-center pt-4'>
 								<DialogClose asChild>
 									<Button variant='outline' type='button'>
 										Batal

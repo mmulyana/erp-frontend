@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
-import { convertToWIB } from '@/shared/utils/convert-date'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
+import { convertUTCToWIB } from '@/shared/utils'
 import {
 	Dialog,
 	DialogClose,
@@ -48,7 +48,7 @@ export default function ModalAddCashAdvance() {
 		mutate(
 			{
 				...data,
-				date: convertToWIB(data.date),
+				date: convertUTCToWIB(data.date),
 			},
 			{
 				onSuccess: () => {
@@ -172,7 +172,7 @@ export default function ModalAddCashAdvance() {
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-end gap-4 items-center'>
+							<div className='flex justify-end gap-4 items-center pt-4'>
 								<DialogClose asChild>
 									<Button variant='outline' type='button'>
 										Batal

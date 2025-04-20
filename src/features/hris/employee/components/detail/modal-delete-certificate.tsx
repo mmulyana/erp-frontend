@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom'
+import { Trash } from 'lucide-react'
 import { useAtom } from 'jotai'
 
 import { Button } from '@/shared/components/ui/button'
@@ -13,28 +15,31 @@ import {
 	AlertDialogTrigger,
 } from '@/shared/components/ui/alert-dialog'
 
-import { useDeleteOvertime } from '../../api/overtime/use-delete-overtime'
-import { atomModalOvertime } from './modal-detail-overtime'
+import { useDeleteCertificate } from '../../api/use-delete-certificate'
+import { atomModalCertificate } from './modal-detail-certificate'
 
-export default function ModalDeleteOvertime() {
-	const [modal, setModal] = useAtom(atomModalOvertime)
-
-	const { mutate } = useDeleteOvertime()
+export default function ModalDeleteCertificate() {
+	const [modal, setModal] = useAtom(atomModalCertificate)
+	const { mutate } = useDeleteCertificate()
+	const { id: employeeId } = useParams()
 
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
 				<Button
 					variant='ghost'
-					className='text-error hover:text-white hover:bg-error px-2.5'
+					className='text-error hover:text-white hover:bg-error group gap-1'
 					type='button'
 				>
-					Hapus Lembur
+					<Trash size={18} className='text-error group-hover:text-white' />
+					<span className='px-0.5 '>Hapus</span>
 				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Yakin ingin menghapus lembur ini?</AlertDialogTitle>
+					<AlertDialogTitle>
+						Yakin ingin menghapus sertifikasi ini?
+					</AlertDialogTitle>
 					<AlertDialogDescription>
 						Tindakan ini tidak dapat dibatalkan. Hubungi admin jika tidak
 						sengaja terhapus.
@@ -45,9 +50,9 @@ export default function ModalDeleteOvertime() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (modal?.id) {
+							if (modal?.id && employeeId) {
 								mutate(
-									{ id: modal.id },
+									{ id: modal.id, employeeId },
 									{
 										onSuccess: () => {
 											setModal(null)

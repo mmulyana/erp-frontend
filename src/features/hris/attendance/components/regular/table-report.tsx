@@ -4,10 +4,11 @@ import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 import { useState } from 'react'
 
-import { DateRangePickerV1 } from '@/shared/components/common/date-range-picker-v1'
-import { Pagination } from '@/shared/components/common/data-table/component'
 import EmptyState from '@/shared/components/common/empty-state'
 import SearchV3 from '@/shared/components/common/search-v3'
+import { DateRangePickerV1 } from '@/shared/components/common/date-range-picker-v1'
+import { Pagination } from '@/shared/components/common/data-table/component'
+import { getDatesInRange } from '@/shared/utils'
 import {
 	Table,
 	TableBody,
@@ -18,7 +19,6 @@ import {
 } from '@/shared/components/ui/table'
 
 import { useWeekRange } from '@/features/hris/_hooks/use-week-range'
-import { getDatesInRange } from '@/shared/utils/date-range'
 
 import { useReportAttendance } from '../../api/regular/use-report-attendance'
 

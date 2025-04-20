@@ -58,22 +58,24 @@ export function Pagination({ totalItems, totalPages }: PaginationProps) {
 			)}
 
 			<nav className='flex items-center gap-2'>
-				<button
-					onClick={() => setQuery({ page: currentPage - 1 })}
-					disabled={currentPage === 1}
-					className={cn(
-						'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF]',
-						currentPage === 1
-							? 'bg-transparent border-transparent text-[#747C94]/50'
-							: 'bg-white text-[#747C94]'
-					)}
-				>
-					<ChevronLeft
-						className='text-ink-secondary/80'
-						size={18}
-						strokeWidth={3.2}
-					/>
-				</button>
+				{totalPages > 0 && (
+					<button
+						onClick={() => setQuery({ page: currentPage - 1 })}
+						disabled={currentPage === 1}
+						className={cn(
+							'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF]',
+							currentPage === 1
+								? 'bg-transparent border-transparent text-[#747C94]/50'
+								: 'bg-white text-[#747C94]'
+						)}
+					>
+						<ChevronLeft
+							className='text-ink-secondary/80'
+							size={18}
+							strokeWidth={3.2}
+						/>
+					</button>
+				)}
 				<ul className='flex'>
 					{getPageNumbers().map((number, index) => (
 						<li key={index}>
@@ -100,22 +102,24 @@ export function Pagination({ totalItems, totalPages }: PaginationProps) {
 						</li>
 					))}
 				</ul>
-				<button
-					onClick={() => setQuery({ page: currentPage + 1 })}
-					disabled={totalPages > 0 ? currentPage === totalPages : true}
-					className={cn(
-						'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF] disabled:bg-transparent disabled:border-none',
-						currentPage === totalPages
-							? 'bg-transparent border-transparent text-[#747C94]/50'
-							: 'bg-white text-[#747C94]'
-					)}
-				>
-					<ChevronRight
-						className='text-ink-secondary/80'
-						size={18}
-						strokeWidth={3.2}
-					/>
-				</button>
+				{totalPages > 0 && (
+					<button
+						onClick={() => setQuery({ page: currentPage + 1 })}
+						disabled={totalPages > 0 ? currentPage === totalPages : true}
+						className={cn(
+							'w-8 h-8 flex justify-center items-center border rounded-md border-[#D4D7DF] disabled:bg-transparent disabled:border-none',
+							currentPage === totalPages
+								? 'bg-transparent border-transparent text-[#747C94]/50'
+								: 'bg-white text-[#747C94]'
+						)}
+					>
+						<ChevronRight
+							className='text-ink-secondary/80'
+							size={18}
+							strokeWidth={3.2}
+						/>
+					</button>
+				)}
 			</nav>
 
 			{!isMobile && (

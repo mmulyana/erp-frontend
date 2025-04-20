@@ -1,15 +1,12 @@
-import { useParams } from 'react-router-dom'
-
 import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
-import { formatPhone } from '@/shared/utils/format-phone'
+import { formatPhone } from '@/shared/utils'
 
-import { useEmployee } from '../../api/use-employee'
+import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditAddress from './modal-edit-address'
 
 export default function CardAddress() {
-	const { id } = useParams()
-	const { data, isPending } = useEmployee(id)
+	const { data, isPending } = useDetailEmployee()
 
 	return (
 		<Card className='p-6'>

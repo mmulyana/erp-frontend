@@ -174,7 +174,7 @@ export default function ModalDetailCashAdvance() {
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-between w-full'>
+							<div className='flex justify-between w-full pt-4'>
 								<ModalDeleteCashAdvance />
 								<div className='flex justify-end gap-4 items-center'>
 									<DialogClose asChild>

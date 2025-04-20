@@ -14,9 +14,6 @@ export const useDeleteEmployee = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.employee] })
-			queryClient.invalidateQueries({
-				queryKey: [keys.employeeTotal],
-			})
 			toast.success(data.data.message)
 		},
 	})

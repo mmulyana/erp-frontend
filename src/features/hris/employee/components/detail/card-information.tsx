@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom'
 import { differenceInYears } from 'date-fns'
 import { useMemo } from 'react'
 
@@ -6,12 +5,11 @@ import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { baseUrl } from '@/shared/constants/urls'
 
+import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditInformation from './modal-edit-information'
-import { useEmployee } from '../../api/use-employee'
 
 export default function CardInformation() {
-	const { id } = useParams()
-	const { data, isPending } = useEmployee(id)
+	const { data, isPending } = useDetailEmployee()
 
 	const age = useMemo(() => {
 		if (!data) return new Date()

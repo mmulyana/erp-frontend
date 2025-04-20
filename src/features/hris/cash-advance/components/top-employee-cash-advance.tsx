@@ -6,8 +6,8 @@ import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import { DataTable } from '@/shared/components/common/data-table'
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { months, MONTHS_OBJ } from '@/shared/constants/months'
-import { formatToRupiah } from '@/shared/utils/formatCurrency'
 import { Button } from '@/shared/components/ui/button'
+import { formatToRupiah } from '@/shared/utils'
 import { cn } from '@/shared/utils/cn'
 import {
 	Command,

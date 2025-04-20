@@ -5,10 +5,9 @@ import { useState } from 'react'
 
 import { DateRangePickerV1 } from '@/shared/components/common/date-range-picker-v1'
 import { Pagination } from '@/shared/components/common/data-table/component'
+import { getDatesInRange, convertUTCToWIB } from '@/shared/utils'
 import EmptyState from '@/shared/components/common/empty-state'
 import SearchV3 from '@/shared/components/common/search-v3'
-import { getDatesInRange } from '@/shared/utils/date-range'
-import { convertUTCToWIB } from '@/shared/utils'
 import {
 	Table,
 	TableBody,
@@ -20,9 +19,12 @@ import {
 
 import { useReportOvertime } from '../../api/overtime/use-report-overtime'
 import { useWeekRange } from '../../../_hooks/use-week-range'
+import { usePagination } from '@/shared/hooks/use-pagination'
 
 export default function TableReportOvertime() {
+	const { limit, page, q } = usePagination()
 	const weeks = useWeekRange()
+
 	const [dateRange, setDateRange] = useState<{
 		from: Date | undefined
 		to: Date | undefined
@@ -31,18 +33,12 @@ export default function TableReportOvertime() {
 		to: new Date(weeks[weeks.length - 1]),
 	})
 
-	const [query] = useQueryStates({
-		q: parseAsString.withDefault(''),
-		page: parseAsString.withDefault('1'),
-		limit: parseAsString.withDefault('10'),
-	})
-
 	const { data } = useReportOvertime({
 		endDate: dateRange.to?.toString(),
 		startDate: dateRange.from?.toString(),
-		limit: query.limit,
-		page: query.page,
-		search: query.q,
+		limit,
+		page,
+		search: q,
 	})
 
 	const heads = getDatesInRange(

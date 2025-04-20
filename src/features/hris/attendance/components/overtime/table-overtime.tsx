@@ -7,21 +7,17 @@ import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
 
 import { useOvertimes } from '../../api/overtime/use-overtimes'
-import { ModalOvertime } from '../overtime/modal-detail-overtime'
+import { atomModalOvertime } from '../overtime/modal-detail-overtime'
+import { usePagination } from '@/shared/hooks/use-pagination'
 
 export default function TableOvertime() {
-	const setModal = useSetAtom(ModalOvertime)
-
+	const { limit, page, q } = usePagination()
 	const { month, date } = useCurrentDate()
 
+	const setModal = useSetAtom(atomModalOvertime)
 	const [query] = useQueryStates({
 		date: parseAsInteger.withDefault(0),
 		month: parseAsInteger.withDefault(month),
-
-		// for pagination
-		q: parseAsString.withDefault(''),
-		page: parseAsString.withDefault('1'),
-		limit: parseAsString.withDefault('10'),
 	})
 
 	const { resultDate } = useDateIndex({
@@ -30,9 +26,9 @@ export default function TableOvertime() {
 	})
 
 	const { data, isLoading } = useOvertimes({
-		limit: query.limit,
-		page: query.page,
-		search: query.q,
+		limit,
+		page,
+		search: q,
 		startDate: resultDate.toString(),
 	})
 

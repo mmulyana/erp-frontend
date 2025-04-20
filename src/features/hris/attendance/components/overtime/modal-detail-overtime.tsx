@@ -31,9 +31,9 @@ import { useOvertime } from '../../api/overtime/use-overtime'
 import ModalDeleteOvertime from './modal-delete-overtime'
 import { OvertimeForm } from '../../types'
 
-export const ModalOvertime = atom<{ open: boolean; id: string } | null>(null)
+export const atomModalOvertime = atom<{ open: boolean; id: string } | null>(null)
 export default function ModalDetailOvertime() {
-	const [modal, setModal] = useAtom(ModalOvertime)
+	const [modal, setModal] = useAtom(atomModalOvertime)
 
 	const { data } = useOvertime({ id: modal?.id })
 
@@ -175,7 +175,7 @@ export default function ModalDetailOvertime() {
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-between w-full'>
+							<div className='flex justify-between w-full pt-4'>
 								<ModalDeleteOvertime />
 								<div className='flex justify-end gap-4 items-center'>
 									<DialogClose asChild>

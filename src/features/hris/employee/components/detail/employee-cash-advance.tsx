@@ -2,10 +2,10 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Ellipsis, Wallet } from 'lucide-react'
 import { format } from 'date-fns'
 
-import { formatToRupiah } from '@/shared/utils/formatCurrency'
+import SearchV3 from '@/shared/components/common/search-v3'
 import { DataTable } from '@/shared/components/common/data-table'
 import { Button } from '@/shared/components/ui/button'
-import SearchV3 from '@/shared/components/common/search-v3'
+import { formatToRupiah } from '@/shared/utils'
 
 import ChartCashAdvance from './chart-cash-advance'
 

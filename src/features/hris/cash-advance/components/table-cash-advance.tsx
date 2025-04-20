@@ -4,7 +4,7 @@ import { useSetAtom } from 'jotai'
 import { format } from 'date-fns'
 
 import { DataTable } from '@/shared/components/common/data-table'
-import { formatToRupiah } from '@/shared/utils/formatCurrency'
+import { formatToRupiah } from '@/shared/utils'
 
 import { ModalCashAdvance } from './modal-detail-cash-advance'
 import { useCashAdvances } from '../api/use-cash-advances'
