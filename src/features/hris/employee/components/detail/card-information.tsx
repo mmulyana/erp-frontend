@@ -6,7 +6,8 @@ import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { baseUrl } from '@/shared/constants/urls'
 
-import { useEmployee } from '../api/use-employee'
+import ModalEditInformation from './modal-edit-information'
+import { useEmployee } from '../../api/use-employee'
 
 export default function CardInformation() {
 	const { id } = useParams()
@@ -19,9 +20,12 @@ export default function CardInformation() {
 
 	return (
 		<Card className='p-6'>
-			<CardTitle className='text-ink-secondary text-base'>
-				Informasi Pegawai
-			</CardTitle>
+			<div className='flex justify-between items-center'>
+				<CardTitle className='text-ink-secondary text-base'>
+					Informasi Pegawai
+				</CardTitle>
+				<ModalEditInformation />
+			</div>
 			<CardContent className='p-0 space-y-4 pt-4'>
 				{data?.photoUrl && data.photoUrl !== '' ? (
 					<img

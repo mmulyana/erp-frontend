@@ -1,11 +1,14 @@
-import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
+import { differenceInMonths, differenceInYears } from 'date-fns'
 import { useParams } from 'react-router-dom'
-import { useEmployee } from '../api/use-employee'
+import { useMemo } from 'react'
+
+import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { formatToRupiah } from '@/shared/utils/formatCurrency'
-import { useMemo } from 'react'
-import { differenceInMonths, differenceInYears } from 'date-fns'
 import CardData from '@/shared/components/common/card-data'
+
+import { useEmployee } from '../../api/use-employee'
+import ModalEditPosition from './modal-edit-position'
 
 export default function CardPosition() {
 	const { id } = useParams()
@@ -26,7 +29,10 @@ export default function CardPosition() {
 
 	return (
 		<Card className='p-6'>
-			<CardTitle className='text-base text-ink-primary'>Jabatan</CardTitle>
+			<div className='flex justify-between items-center'>
+				<CardTitle className='text-base text-ink-primary'>Jabatan</CardTitle>
+				<ModalEditPosition />
+			</div>
 			<CardContent className='mt-4 p-0 grid grid-cols-1 md:grid-cols-[1fr_342px] gap-6 md:gap-0'>
 				<div className='flex flex-col items-start justify-center'>
 					<LoaderWrapper isLoading={isPending}>

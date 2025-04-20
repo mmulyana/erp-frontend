@@ -2,11 +2,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui
 import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area'
 import { Card, CardContent } from '@/shared/components/ui/card'
 
-import EmployeeCashAdvance from './detail/employee-cash-advance'
-import EmployeeCertificate from './detail/employee-certificate'
-import EmployeeOvertime from './detail/employee-overtime'
-import EmployeeRegular from './detail/employee-regular'
-import EmployeeProject from './detail/employee-project'
+import EmployeeCashAdvance from './employee-cash-advance'
+import EmployeeCertificate from './employee-certificate'
+import EmployeeOvertime from './employee-overtime'
+import EmployeeRegular from './employee-regular'
+import EmployeeProject from './employee-project'
 
 export default function CardDetail() {
 	return (

@@ -1,7 +1,7 @@
-import CardInformation from '@/features/hris/employee/components/card-information'
-import CardPosition from '@/features/hris/employee/components/card-position'
-import CardAddress from '@/features/hris/employee/components/card-address'
-import CardDetail from '@/features/hris/employee/components/card-detail'
+import CardInformation from '@/features/hris/employee/components/detail/card-information'
+import CardPosition from '@/features/hris/employee/components/detail/card-position'
+import CardAddress from '@/features/hris/employee/components/detail/card-address'
+import CardDetail from '@/features/hris/employee/components/detail/card-detail'
 
 import DetailLayout from '@/shared/layout/detail-layout'
 

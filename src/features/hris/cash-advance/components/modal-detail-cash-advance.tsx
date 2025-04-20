@@ -1,16 +1,13 @@
-import { CalendarIcon, Loader } from 'lucide-react'
 import { NumericFormat } from 'react-number-format'
 import { useForm } from 'react-hook-form'
+import { Loader } from 'lucide-react'
 import { atom, useAtom } from 'jotai'
-import { id } from 'date-fns/locale'
 import { useEffect } from 'react'
-import { format } from 'date-fns'
 
-import { Calendar } from '@/shared/components/ui/calendar'
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Input } from '@/shared/components/ui/input'
 import { Button } from '@/shared/components/ui/button'
-import { cn } from '@/shared/utils/cn'
 import {
 	Dialog,
 	DialogClose,
@@ -27,15 +24,10 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/shared/components/ui/popover'
 
+import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
 import EmployeeCombobox from '../../_components/employee-combobox'
 import ModalDeleteCashAdvance from './modal-delete-cash-advace'
-import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
 import { useCashAdvance } from '../api/use-cash-advance'
 import { CashAdvanceForm } from '../types'
 
@@ -127,43 +119,10 @@ export default function ModalDetailCashAdvance() {
 								render={({ field }) => (
 									<FormItem className='flex flex-col'>
 										<FormLabel>Tanggal</FormLabel>
-										<Popover>
-											<PopoverTrigger asChild>
-												<FormControl>
-													<Button
-														variant={'outline'}
-														className={cn(
-															'h-10 bg-surface px-3 text-left font-normal',
-															!field.value && 'text-muted-foreground'
-														)}
-													>
-														{field.value ? (
-															format(field.value, 'PPP', {
-																locale: id,
-															})
-														) : (
-															<span>Pilih tanggal</span>
-														)}
-														<CalendarIcon
-															className='ml-auto'
-															size={18}
-															strokeWidth={2.5}
-														/>
-													</Button>
-												</FormControl>
-											</PopoverTrigger>
-											<PopoverContent className='w-auto p-0' align='start'>
-												<Calendar
-													mode='single'
-													selected={field.value}
-													onSelect={field.onChange}
-													disabled={(date) =>
-														date > new Date() || date < new Date('1900-01-01')
-													}
-													initialFocus
-												/>
-											</PopoverContent>
-										</Popover>
+										<DatePickerField
+											value={field.value}
+											onChange={field.onChange}
+										/>
 										<FormMessage />
 									</FormItem>
 								)}

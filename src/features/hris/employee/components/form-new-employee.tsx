@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, MapPinned, User2 } from 'lucide-react'
+import { BriefcaseBusiness, CalendarIcon, MapPinned, User2 } from 'lucide-react'
 import { NumericFormat } from 'react-number-format'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -28,7 +28,18 @@ import {
 } from '@/shared/components/ui/select'
 
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
-import { EmployeeSchema } from '@/features/hris/employee/schema'
+import { EmployeeForm } from '../types'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/shared/components/ui/popover'
+import { Button } from '@/shared/components/ui/button'
+import { format } from 'date-fns'
+import { cn } from '@/shared/utils/cn'
+import { Calendar } from '@/shared/components/ui/calendar'
+import { id } from 'date-fns/locale'
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 
 export default function FormNewEmployee() {
 	const navigate = useNavigate()
@@ -36,12 +47,12 @@ export default function FormNewEmployee() {
 	const [step, setStep] = useState(0)
 
 	const { mutate } = useCreateEmployee()
-	const form = useForm<z.infer<typeof EmployeeSchema>>({
+	const form = useForm<EmployeeForm>({
 		defaultValues: {
 			fullname: '',
 			address: '',
-			birthDate: '',
-			joinedAt: '',
+			birthDate: undefined,
+			joinedAt: undefined,
 			lastEducation: '',
 			overtimeSalary: undefined,
 			phone: '',
@@ -50,27 +61,24 @@ export default function FormNewEmployee() {
 		},
 	})
 
-	const onCreate = (payload: z.infer<typeof EmployeeSchema>) => {
-		mutate(
-			{ ...payload },
-			{
-				onSuccess: () => {
-					form.reset()
-					navigate(paths.hrisMasterDataEmployee)
-				},
-				onError: (error: any) => {
-					if (error?.response?.data?.errors) {
-						error.response.data.errors.forEach((err: any) => {
-							const field = err.path?.[0]
-							const message = err.message
-							if (field) {
-								form.setError(field, { message })
-							}
-						})
-					}
-				},
-			}
-		)
+	const onCreate = (payload: EmployeeForm) => {
+		mutate(payload, {
+			onSuccess: () => {
+				form.reset()
+				navigate(paths.hrisMasterDataEmployee)
+			},
+			onError: (error: any) => {
+				if (error?.response?.data?.errors) {
+					error.response.data.errors.forEach((err: any) => {
+						const field = err.path?.[0]
+						const message = err.message
+						if (field) {
+							form.setError(field, { message })
+						}
+					})
+				}
+			},
+		})
 	}
 
 	const steps = [
@@ -125,15 +133,12 @@ export default function FormNewEmployee() {
 							control={form.control}
 							name='birthDate'
 							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Tanggal Lahir</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											type='date'
-											className='block bg-surface-secondary'
-										/>
-									</FormControl>
+								<FormItem className='flex flex-col'>
+									<FormLabel>Tanggal lahir</FormLabel>
+									<DatePickerField
+										value={field.value}
+										onChange={field.onChange}
+									/>
 								</FormItem>
 							)}
 						/>
@@ -149,12 +154,13 @@ export default function FormNewEmployee() {
 												<SelectValue placeholder='Pend. Terakhir' />
 											</SelectTrigger>
 											<SelectContent>
-												<SelectItem value='sd'>SD</SelectItem>
-												<SelectItem value='smp'>SMP</SelectItem>
-												<SelectItem value='sma'>SMA</SelectItem>
-												<SelectItem value='s1'>S1</SelectItem>
-												<SelectItem value='s2'>S2</SelectItem>
-												<SelectItem value='s3'>S3</SelectItem>
+												{['sd', 'smp', 'sma', 's1', 's2', 's3'].map(
+													(i, index) => (
+														<SelectItem key={index} value={i}>
+															{i}
+														</SelectItem>
+													)
+												)}
 											</SelectContent>
 										</Select>
 									</FormControl>
@@ -168,10 +174,9 @@ export default function FormNewEmployee() {
 								<FormItem>
 									<FormLabel>Tanggal bergabung</FormLabel>
 									<FormControl>
-										<Input
-											{...field}
-											type='date'
-											className='block bg-surface-secondary'
+										<DatePickerField
+											value={field.value}
+											onChange={field.onChange}
 										/>
 									</FormControl>
 								</FormItem>

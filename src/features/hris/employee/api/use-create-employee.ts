@@ -3,18 +3,19 @@ import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 import { toFormData } from '@/shared/utils/to-form-data'
+import { Employee, IApi } from '@/shared/types'
 import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
-import { Employee, IApi } from '@/shared/types'
-
 import http from '@/shared/utils/http'
+
+import { EmployeeForm } from '../types'
 
 export const useCreateEmployee = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async (
-			payload: Partial<Employee>
+			payload: Partial<EmployeeForm>
 		): Promise<AxiosResponse<IApi<Employee>>> => {
 			const formData = toFormData(payload)
 			return await http.post(urls.employee + '/pegawai', formData, {

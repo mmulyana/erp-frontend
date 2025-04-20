@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom'
 
 import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
-
-import { useEmployee } from '../api/use-employee'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { formatPhone } from '@/shared/utils/format-phone'
+
+import { useEmployee } from '../../api/use-employee'
+import ModalEditAddress from './modal-edit-address'
 
 export default function CardAddress() {
 	const { id } = useParams()
@@ -12,9 +13,12 @@ export default function CardAddress() {
 
 	return (
 		<Card className='p-6'>
-			<CardTitle className='text-ink-secondary text-base'>
-				Alamat dan kontak
-			</CardTitle>
+			<div className='flex justify-between items-center'>
+				<CardTitle className='text-ink-secondary text-base'>
+					Alamat dan kontak
+				</CardTitle>
+				<ModalEditAddress />
+			</div>
 			<CardContent className='p-0 space-y-4 pt-4'>
 				<div>
 					<p className='text-ink-light'>Alamat</p>

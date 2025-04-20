@@ -1,16 +1,13 @@
-import { CalendarIcon, Loader } from 'lucide-react'
+import { Loader } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { atom, useAtom } from 'jotai'
-import { id } from 'date-fns/locale'
-import { format } from 'date-fns'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
-import { Calendar } from '@/shared/components/ui/calendar'
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { cn } from '@/shared/utils/cn'
 import {
 	Dialog,
 	DialogClose,
@@ -27,16 +24,11 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/shared/components/ui/popover'
 
-import EmployeeCombobox from '../../../_components/employee-combobox'
-import ModalDeleteOvertime from './modal-delete-overtime'
 import { useUpdateOvertime } from '../../api/overtime/use-update-overtime'
+import EmployeeCombobox from '../../../_components/employee-combobox'
 import { useOvertime } from '../../api/overtime/use-overtime'
+import ModalDeleteOvertime from './modal-delete-overtime'
 import { OvertimeForm } from '../../types'
 
 export const ModalOvertime = atom<{ open: boolean; id: string } | null>(null)
@@ -147,43 +139,10 @@ export default function ModalDetailOvertime() {
 								render={({ field }) => (
 									<FormItem className='flex flex-col'>
 										<FormLabel>Tanggal</FormLabel>
-										<Popover>
-											<PopoverTrigger asChild>
-												<FormControl>
-													<Button
-														variant={'outline'}
-														className={cn(
-															'h-10 bg-surface px-3 text-left font-normal',
-															!field.value && 'text-muted-foreground'
-														)}
-													>
-														{field.value ? (
-															format(field.value, 'PPP', {
-																locale: id,
-															})
-														) : (
-															<span>Pilih tanggal</span>
-														)}
-														<CalendarIcon
-															className='ml-auto'
-															size={18}
-															strokeWidth={2.5}
-														/>
-													</Button>
-												</FormControl>
-											</PopoverTrigger>
-											<PopoverContent className='w-auto p-0' align='start'>
-												<Calendar
-													mode='single'
-													selected={field.value}
-													onSelect={field.onChange}
-													disabled={(date) =>
-														date > new Date() || date < new Date('1900-01-01')
-													}
-													initialFocus
-												/>
-											</PopoverContent>
-										</Popover>
+										<DatePickerField
+											value={field.value}
+											onChange={field.onChange}
+										/>
 										<FormMessage />
 									</FormItem>
 								)}
