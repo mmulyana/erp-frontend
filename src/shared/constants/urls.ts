@@ -8,8 +8,6 @@ export const urls = {
 	role: api + '/role',
 	permissionGroup: api + '/permission/group',
 	permission: api + '/permission/item',
-	dashboard: api + '/dashboard',
-	helpdesk: api + '/helpdesk',
 
 	// HRIS
 	employee: api + '/employee',
@@ -17,6 +15,11 @@ export const urls = {
 	attendance: api + '/attendance',
 	overtime: api + '/overtime',
 	certificate: api + '/employee/data/certificate',
+
+	// DASHBOARD
+	dashboardHris: api + '/dashboard/hris',
+	dashboardProject: api + '/dashboard/project',
+	dashboardInventory: api + '/dashboard/inventory',
 
 	project: api + '/project/index',
 	projectLabel: api + '/project/label',

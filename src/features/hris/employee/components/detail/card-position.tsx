@@ -34,7 +34,7 @@ export default function CardPosition() {
 			<CardContent className='mt-4 p-0 grid grid-cols-1 md:grid-cols-[1fr_342px] gap-6 md:gap-0'>
 				<div className='flex flex-col items-start justify-center'>
 					<LoaderWrapper isLoading={isPending}>
-						<p className='text-2xl text-ink-secondary'>Staff</p>
+						<p className='text-2xl text-ink-secondary'>{data?.position}</p>
 					</LoaderWrapper>
 
 					<LoaderWrapper isLoading={isPending}>

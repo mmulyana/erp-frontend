@@ -3,8 +3,8 @@ import { NumericFormat } from 'react-number-format'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
-import { z } from 'zod'
 
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import { ImageUpload } from '@/shared/components/common/image-upload'
 import { MultiStep } from '@/shared/components/common/multi-step'
 import { Textarea } from '@/shared/components/ui/textarea'
@@ -28,18 +28,8 @@ import {
 } from '@/shared/components/ui/select'
 
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
+
 import { EmployeeForm } from '../types'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/shared/components/ui/popover'
-import { Button } from '@/shared/components/ui/button'
-import { format } from 'date-fns'
-import { cn } from '@/shared/utils/cn'
-import { Calendar } from '@/shared/components/ui/calendar'
-import { id } from 'date-fns/locale'
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 
 export default function FormNewEmployee() {
 	const navigate = useNavigate()
@@ -58,8 +48,11 @@ export default function FormNewEmployee() {
 			phone: '',
 			position: '',
 			salary: undefined,
+			photoUrl: undefined,
 		},
 	})
+
+	const photoWatch = form.watch('photoUrl')
 
 	const onCreate = (payload: EmployeeForm) => {
 		mutate(payload, {
@@ -126,7 +119,10 @@ export default function FormNewEmployee() {
 								Tambah foto agar mudah dikenali
 							</FormDescription>
 						</div>
-						<ImageUpload name='photoUrl' />
+						<ImageUpload
+							value={photoWatch}
+							onChange={(e) => form.setValue('photoUrl', e)}
+						/>
 					</div>
 					<div className='p-10 grid grid-cols-1 md:grid-cols-2 gap-6'>
 						<FormField
@@ -135,9 +131,10 @@ export default function FormNewEmployee() {
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
 									<FormLabel>Tanggal lahir</FormLabel>
-									<DatePickerField
-										value={field.value}
+									<Input
 										onChange={field.onChange}
+										className='block'
+										type='date'
 									/>
 								</FormItem>
 							)}
@@ -174,9 +171,10 @@ export default function FormNewEmployee() {
 								<FormItem>
 									<FormLabel>Tanggal bergabung</FormLabel>
 									<FormControl>
-										<DatePickerField
-											value={field.value}
+										<Input
 											onChange={field.onChange}
+											className='block'
+											type='date'
 										/>
 									</FormControl>
 								</FormItem>

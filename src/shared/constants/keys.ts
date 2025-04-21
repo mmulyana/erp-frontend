@@ -26,6 +26,12 @@ export const keys = {
 	overtimeTotalPerDay: 'overtime-total-per-day',
 	overtimeReport: 'overtime-report',
 
+	hrisDashboardTotal: 'hris-dashboard-total',
+	hrisDashboardExpireCertif: 'hris-dashboard-expire-certif',
+	hrisDashboardExpireSafetyInduction: 'hris-dashboard-expire-safety',
+	hrisDashboardEmployeePosition: 'hris-dashboard-employee-position',
+	hrisDashboardEmployeeEducation: 'hris-dashboard-employee-education',
+
 	project: 'project',
 	projectDetail: 'project-detail',
 	projectDetailEmployee: 'project-employee',

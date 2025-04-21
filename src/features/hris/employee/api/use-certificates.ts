@@ -4,7 +4,8 @@ import { Employee, IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
-import { Certificate } from '../types'
+
+import { Certificate } from '../../_types'
 
 type params = {
 	search?: string

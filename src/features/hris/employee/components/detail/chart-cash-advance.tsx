@@ -6,6 +6,8 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/shared/components/ui/chart'
+import { useParams } from 'react-router-dom'
+import { useDataChartCashAdvance } from '../../api/use-data-chart-cash-advance'
 
 const chartData = [
 	{ month: 'January', total: 1860 },
@@ -18,6 +20,9 @@ const chartData = [
 const chartConfig = {} satisfies ChartConfig
 
 export default function ChartCashAdvance() {
+	const { id } = useParams()
+	const { data } = useDataChartCashAdvance({ id })
+	
 	return (
 		<Card className='p-6 h-fit'>
 			<CardTitle className='text-ink-secondary text-base'>
@@ -27,10 +32,11 @@ export default function ChartCashAdvance() {
 				<ChartContainer config={chartConfig} className='h-40 w-full'>
 					<AreaChart
 						accessibilityLayer
-						data={chartData}
+						data={data?.data || []}
 						margin={{
 							left: 12,
 							right: 12,
+							top: 12,
 						}}
 					>
 						<CartesianGrid vertical={false} />

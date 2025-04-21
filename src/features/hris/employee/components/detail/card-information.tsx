@@ -7,6 +7,7 @@ import { baseUrl } from '@/shared/constants/urls'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditInformation from './modal-edit-information'
+import { Image } from 'lucide-react'
 
 export default function CardInformation() {
 	const { data, isPending } = useDetailEmployee()
@@ -28,10 +29,12 @@ export default function CardInformation() {
 				{data?.photoUrl && data.photoUrl !== '' ? (
 					<img
 						src={`${baseUrl}/${data.photoUrl}`}
-						className='w-[88px] h-[88px] rounded-full'
+						className='w-20 h-20 rounded-full'
 					/>
 				) : (
-					<div className='w-[88px] h-[88px] rounded-full bg-gray-300'></div>
+					<div className='w-20 h-20 rounded-full border border-dashed border-gray-300 flex items-center justify-center overflow-hidden bg-gray-50 relative'>
+						<Image className='text-ink-light' size={28} />
+					</div>
 				)}
 				<div className='flex justify-between items-center'>
 					<p className='text-ink-secondary'>Nama lengkap</p>

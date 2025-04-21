@@ -9,8 +9,8 @@ import { cn } from '@/shared/utils/cn'
 
 import logo from '/public/images/logo.png'
 
-import TopNavigation from './top-navigation'
 import { useIsMobile } from '../../hooks/use-mobile'
+import TopNavigation from './top-navigation'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)
@@ -24,6 +24,7 @@ export default function Header() {
 			)}
 		>
 			<div className='flex gap-2 md:gap-8 items-center'>
+				{!isMobile ? <TopNavigation /> : <SidebarTrigger />}
 				<div className='flex gap-2 items-center'>
 					<img src={logo} className='w-8 h-8' />
 					<div className='flex gap-1 items-center'>
@@ -33,7 +34,6 @@ export default function Header() {
 						</span>
 					</div>
 				</div>
-				{!isMobile ? <TopNavigation /> : <SidebarTrigger />}
 			</div>
 
 			<div className='flex gap-2 items-center'>

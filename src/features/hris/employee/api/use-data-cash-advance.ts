@@ -4,7 +4,6 @@ import { IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
-import { Overtime } from '../../_types'
 
 type params = {
 	id?: string

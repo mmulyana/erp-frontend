@@ -8,6 +8,8 @@ export type EmployeeForm = {
 	phone?: string
 	position?: string
 	salary?: number
+	photoUrl?: File | string | null
+	safetyInductionDate?: Date
 }
 
 export type CertificateForm = {
@@ -17,13 +19,4 @@ export type CertificateForm = {
 	publisher?: string
 	issueDate?: Date
 	expiryDate?: Date
-}
-
-export type Certificate = {
-	id: string
-	name: string
-	fileUrl: string
-	publisher: string
-	issueDate: string
-	expiryDate: string
 }

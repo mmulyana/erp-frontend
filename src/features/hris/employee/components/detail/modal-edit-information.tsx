@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import { ImageUpload } from '@/shared/components/common/image-upload'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import {
@@ -30,12 +31,17 @@ import {
 	SelectValue,
 } from '@/shared/components/ui/select'
 
+import { useDestroyPhotoEmployee } from '../../api/use-destroy-photo-employee'
+import { useUpdateEmployee } from '../../api/use-update-employee'
 import { useEmployee } from '../../api/use-employee'
 import { EmployeeForm } from '../../types'
 
 export default function ModalEditInformation() {
 	const { id } = useParams()
+
+	const { mutate: destroyPhoto } = useDestroyPhotoEmployee()
 	const { data, isPending } = useEmployee(id)
+	const { mutate } = useUpdateEmployee()
 
 	const [open, setOpen] = useState(false)
 	const form = useForm<Partial<EmployeeForm>>({
@@ -43,8 +49,11 @@ export default function ModalEditInformation() {
 			fullname: '',
 			birthDate: undefined,
 			lastEducation: '',
+			photoUrl: undefined,
 		},
 	})
+
+	const photoWatch = form.watch('photoUrl')
 
 	useEffect(() => {
 		if (data) {
@@ -52,16 +61,27 @@ export default function ModalEditInformation() {
 				fullname: data.fullname,
 				birthDate: new Date(data.birthDate),
 				lastEducation: data.lastEducation,
+				photoUrl: data.photoUrl,
 			})
 		}
 	}, [data])
 
-	const submit = (data: any) => {
-		console.log('data', data)
+	const submit = (payload: Partial<EmployeeForm>) => {
+		if (!id) return
+		if (payload.photoUrl === null) {
+			destroyPhoto({ id })
+		}
+		mutate(
+			{ ...payload, id },
+			{
+				onSuccess: handleFormSuccess(setOpen),
+				onError: handleFormError<Partial<EmployeeForm>>(form),
+			}
+		)
 	}
 
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button variant='outline' className='gap-2'>
 					<Pencil size={16} />
@@ -78,6 +98,13 @@ export default function ModalEditInformation() {
 						onSubmit={form.handleSubmit(submit)}
 						className='flex gap-4 flex-col pt-4'
 					>
+						<FormItem className='flex flex-col'>
+							<FormLabel>Photo</FormLabel>
+							<ImageUpload
+								value={photoWatch}
+								onChange={(e) => form.setValue('photoUrl', e)}
+							/>
+						</FormItem>
 						<FormField
 							control={form.control}
 							name='fullname'
@@ -97,9 +124,15 @@ export default function ModalEditInformation() {
 								<FormItem className='flex flex-col'>
 									<FormLabel>Tanggal lahir</FormLabel>
 									<FormControl>
-										<DatePickerField
-											value={field.value}
+										<Input
 											onChange={field.onChange}
+											className='block'
+											type='date'
+											value={
+												field.value
+													? new Date(field.value).toISOString().split('T')[0]
+													: ''
+											}
 										/>
 									</FormControl>
 								</FormItem>
@@ -113,13 +146,17 @@ export default function ModalEditInformation() {
 									<FormLabel>Pendidikan terakhir</FormLabel>
 									<FormControl>
 										<Select value={field.value} onValueChange={field.onChange}>
-											<SelectTrigger className='bg-surface-secondary'>
+											<SelectTrigger className='bg-surface-secondary uppercase'>
 												<SelectValue placeholder='Pend. Terakhir' />
 											</SelectTrigger>
 											<SelectContent>
 												{['sd', 'smp', 'sma', 's1', 's2', 's3'].map(
 													(i, index) => (
-														<SelectItem key={index} value={i}>
+														<SelectItem
+															key={index}
+															value={i}
+															className='uppercase'
+														>
 															{i}
 														</SelectItem>
 													)

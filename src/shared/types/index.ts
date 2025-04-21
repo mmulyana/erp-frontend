@@ -71,3 +71,10 @@ export type Employee = {
 	overtimeSalary: number
 	status: string
 }
+
+export type Base = {
+	id: string
+	createdAt: string
+	deletedAt?: string | null
+	updatedAt?: string
+}

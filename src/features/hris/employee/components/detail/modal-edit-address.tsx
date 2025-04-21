@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import {
@@ -22,21 +23,16 @@ import {
 	FormItem,
 	FormLabel,
 } from '@/shared/components/ui/form'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/shared/components/ui/select'
 
+import { useUpdateEmployee } from '../../api/use-update-employee'
 import { useEmployee } from '../../api/use-employee'
 import { EmployeeForm } from '../../types'
-import { Textarea } from '@/shared/components/ui/textarea'
 
 export default function ModalEditAddress() {
 	const { id } = useParams()
+	
 	const { data, isPending } = useEmployee(id)
+	const { mutate } = useUpdateEmployee()
 
 	const [open, setOpen] = useState(false)
 	const form = useForm<Partial<EmployeeForm>>({
@@ -55,12 +51,18 @@ export default function ModalEditAddress() {
 		}
 	}, [data])
 
-	const submit = (data: any) => {
-		console.log('data', data)
+	const submit = (payload: Partial<EmployeeForm>) => {
+		mutate(
+			{ ...payload, id },
+			{
+				onSuccess: handleFormSuccess(setOpen),
+				onError: handleFormError<EmployeeForm>(form),
+			}
+		)
 	}
 
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button variant='outline' className='gap-2'>
 					<Pencil size={16} />

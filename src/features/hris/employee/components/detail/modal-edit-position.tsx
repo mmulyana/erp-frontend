@@ -1,3 +1,4 @@
+import { NumericFormat } from 'react-number-format'
 import { Loader, Pencil } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -22,22 +23,17 @@ import {
 	FormItem,
 	FormLabel,
 } from '@/shared/components/ui/form'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/shared/components/ui/select'
 
 import { useEmployee } from '../../api/use-employee'
 import { EmployeeForm } from '../../types'
-import { Textarea } from '@/shared/components/ui/textarea'
-import { NumericFormat } from 'react-number-format'
+import { useUpdateEmployee } from '../../api/use-update-employee'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 
 export default function ModalEditPosition() {
 	const { id } = useParams()
+
 	const { data, isPending } = useEmployee(id)
+	const { mutate } = useUpdateEmployee()
 
 	const [open, setOpen] = useState(false)
 	const form = useForm<Partial<EmployeeForm>>({
@@ -60,12 +56,18 @@ export default function ModalEditPosition() {
 		}
 	}, [data])
 
-	const submit = (data: any) => {
-		console.log('data', data)
+	const submit = (payload: Partial<EmployeeForm>) => {
+		mutate(
+			{ ...payload, id },
+			{
+				onSuccess: handleFormSuccess(setOpen),
+				onError: handleFormError<Partial<EmployeeForm>>(form),
+			}
+		)
 	}
 
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button variant='outline' className='gap-2'>
 					<Pencil size={16} />
@@ -101,9 +103,15 @@ export default function ModalEditPosition() {
 								<FormItem className='flex flex-col'>
 									<FormLabel>Tanggal bergabung</FormLabel>
 									<FormControl>
-										<DatePickerField
-											value={field.value}
+										<Input
 											onChange={field.onChange}
+											className='block'
+											type='date'
+											value={
+												field.value
+													? new Date(field.value).toISOString().split('T')[0]
+													: ''
+											}
 										/>
 									</FormControl>
 								</FormItem>
