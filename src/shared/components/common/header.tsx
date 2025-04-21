@@ -24,7 +24,7 @@ export default function Header() {
 			)}
 		>
 			<div className='flex gap-2 md:gap-8 items-center'>
-				{!isMobile ? <TopNavigation /> : <SidebarTrigger />}
+				{isMobile && <SidebarTrigger />}
 				<div className='flex gap-2 items-center'>
 					<img src={logo} className='w-8 h-8' />
 					<div className='flex gap-1 items-center'>
@@ -34,6 +34,7 @@ export default function Header() {
 						</span>
 					</div>
 				</div>
+				{!isMobile && <TopNavigation />}
 			</div>
 
 			<div className='flex gap-2 items-center'>

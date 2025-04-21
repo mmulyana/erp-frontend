@@ -22,9 +22,15 @@ const ReportAttendance = lazy(() => import('./pages/hris/report-attendance'))
 
 // PROJECT
 const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
+const Projects = lazy(() => import('./pages/project/projects'))
+const Client = lazy(() => import('./pages/project/client'))
+const Company = lazy(() => import('./pages/project/company'))
 
 // INVENTORY
 const InventoryDashboard = lazy(() => import('./pages/inventory/dashboard'))
+const Item = lazy(() => import('./pages/inventory/item'))
+const Location = lazy(() => import('./pages/inventory/location'))
+const Brand = lazy(() => import('./pages/inventory/brand'))
 
 const routes: RoutesConfig[] = [
 	{
@@ -37,33 +43,46 @@ const routes: RoutesConfig[] = [
 		component: <Login />,
 		withoutAuth: true,
 	},
-	{
-		path: paths.hris,
-		component: <HrisDashboard />,
-		withoutAuth: true,
-	},
+	// project
 	{
 		path: paths.project,
 		component: <ProjectDashboard />,
 		withoutAuth: true,
 	},
 	{
-		path: paths.inventory,
-		component: <InventoryDashboard />,
+		path: paths.projectMasterdataProjects,
+		component: <Projects />,
 		withoutAuth: true,
 	},
 	{
-		path: paths.hrisMasterDataEmployee,
+		path: paths.projectMasterdataClient,
+		component: <Client />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.projectMasterdataClientCompany,
+		component: <Company />,
+		withoutAuth: true,
+	},
+
+	// hris
+	{
+		path: paths.hris,
+		component: <HrisDashboard />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.hrisMasterdataEmployee,
 		component: <Employee />,
 		withoutAuth: true,
 	},
 	{
-		path: paths.hrisMasterDataEmployeeCreate,
+		path: paths.hrisMasterdataEmployeeCreate,
 		component: <NewEmployee />,
 		withoutAuth: true,
 	},
 	{
-		path: paths.hrisMasterDataEmployeeDetail,
+		path: paths.hrisMasterdataEmployeeDetail,
 		component: <DetailEmployee />,
 		withoutAuth: true,
 	},
@@ -90,6 +109,28 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.hrisAttendanceReport,
 		component: <ReportAttendance />,
+		withoutAuth: true,
+	},
+
+	// inventory
+	{
+		path: paths.inventory,
+		component: <InventoryDashboard />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.inventoryMasterdataItem,
+		component: <Item />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.inventoryMasterdataBrand,
+		component: <Brand />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.inventoryMasterdataLocation,
+		component: <Location />,
 		withoutAuth: true,
 	},
 ]

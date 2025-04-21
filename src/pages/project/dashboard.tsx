@@ -1,9 +1,9 @@
-import { HrisLayout } from '@/shared/layout/hris-layout'
+import { DefaultLayout } from '@/shared/layout/default-layout'
 
 export default function DashboardProject() {
 	return (
-		<HrisLayout>
+		<DefaultLayout module='project'>
 			<p>Project Dashboard</p>
-		</HrisLayout>
+		</DefaultLayout>
 	)
 }

@@ -39,7 +39,7 @@ export default function CardPosition() {
 
 					<LoaderWrapper isLoading={isPending}>
 						{yoe.years || yoe.months ? (
-							<p className='text-ink-light text-base'>
+							<p className='text-ink-light text-sm'>
 								Bergabung sejak{' '}
 								{!!yoe.years && (
 									<span className='text-ink-secondary font-medium'>

@@ -1,9 +1,9 @@
-import { HrisLayout } from '@/shared/layout/hris-layout'
+import { DefaultLayout } from '@/shared/layout/default-layout'
 
 export default function DashboardInventory() {
 	return (
-		<HrisLayout>
+		<DefaultLayout module='inventory'>
 			<p>Inventory Dashboard</p>
-		</HrisLayout>
+		</DefaultLayout>
 	)
 }

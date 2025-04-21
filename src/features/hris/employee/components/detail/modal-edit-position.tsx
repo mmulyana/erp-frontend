@@ -49,7 +49,7 @@ export default function ModalEditPosition() {
 		if (data) {
 			form.reset({
 				position: data.position,
-				joinedAt: new Date(data.joinedAt),
+				joinedAt: data.joinedAt ? new Date(data.joinedAt) : undefined,
 				salary: data.salary,
 				overtimeSalary: data.overtimeSalary,
 			})
@@ -110,7 +110,7 @@ export default function ModalEditPosition() {
 											value={
 												field.value
 													? new Date(field.value).toISOString().split('T')[0]
-													: ''
+													: undefined
 											}
 										/>
 									</FormControl>

@@ -70,6 +70,7 @@ export type Employee = {
 	salary: number
 	overtimeSalary: number
 	status: string
+	safetyInductionDate?: string
 }
 
 export type Base = {

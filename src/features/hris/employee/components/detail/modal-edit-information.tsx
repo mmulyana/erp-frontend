@@ -59,7 +59,11 @@ export default function ModalEditInformation() {
 		if (data) {
 			form.reset({
 				fullname: data.fullname,
-				birthDate: new Date(data.birthDate),
+				birthDate: data.birthDate ? new Date(data.birthDate) : undefined,
+				joinedAt: data.birthDate ? new Date(data.joinedAt) : undefined,
+				safetyInductionDate: data.safetyInductionDate
+					? new Date(data.safetyInductionDate)
+					: undefined,
 				lastEducation: data.lastEducation,
 				photoUrl: data.photoUrl,
 			})
@@ -71,8 +75,13 @@ export default function ModalEditInformation() {
 		if (payload.photoUrl === null) {
 			destroyPhoto({ id })
 		}
+		const data = payload
+		if (typeof data.photoUrl === 'string') {
+			delete data.photoUrl
+		}
+
 		mutate(
-			{ ...payload, id },
+			{ ...data, id },
 			{
 				onSuccess: handleFormSuccess(setOpen),
 				onError: handleFormError<Partial<EmployeeForm>>(form),
@@ -119,27 +128,6 @@ export default function ModalEditInformation() {
 						/>
 						<FormField
 							control={form.control}
-							name='birthDate'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Tanggal lahir</FormLabel>
-									<FormControl>
-										<Input
-											onChange={field.onChange}
-											className='block'
-											type='date'
-											value={
-												field.value
-													? new Date(field.value).toISOString().split('T')[0]
-													: ''
-											}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
 							name='lastEducation'
 							render={({ field }) => (
 								<FormItem>
@@ -163,6 +151,69 @@ export default function ModalEditInformation() {
 												)}
 											</SelectContent>
 										</Select>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='birthDate'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Tanggal lahir</FormLabel>
+									<FormControl>
+										<Input
+											onChange={field.onChange}
+											className='block'
+											type='date'
+											value={
+												field.value
+													? new Date(field.value).toISOString().split('T')[0]
+													: ''
+											}
+										/>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='joinedAt'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Tanggal bergabung</FormLabel>
+									<FormControl>
+										<Input
+											onChange={field.onChange}
+											className='block'
+											type='date'
+											value={
+												field.value
+													? new Date(field.value).toISOString().split('T')[0]
+													: ''
+											}
+										/>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='safetyInductionDate'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Tanggal safety induction</FormLabel>
+									<FormControl>
+										<Input
+											onChange={field.onChange}
+											className='block'
+											type='date'
+											value={
+												field.value
+													? new Date(field.value).toISOString().split('T')[0]
+													: ''
+											}
+										/>
 									</FormControl>
 								</FormItem>
 							)}

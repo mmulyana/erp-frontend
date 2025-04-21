@@ -12,7 +12,13 @@ type Params = {
 export const useExpireCertificate = (params?: Params) => {
 	return useQuery({
 		queryKey: [keys.hrisDashboardExpireCertif, params],
-		queryFn: async (): Promise<IApi<Certificate[]>> => {
+		queryFn: async (): Promise<
+			IApi<
+				(Certificate & {
+					expireUntil: number
+				})[]
+			>
+		> => {
 			const { data } = await http(`${urls.dashboardHris}/expire/certificate`, {
 				params,
 			})

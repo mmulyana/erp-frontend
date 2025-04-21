@@ -1,7 +1,7 @@
 import TableReportOvertime from '@/features/hris/attendance/components/overtime/table-report'
 import TableReportRegular from '@/features/hris/attendance/components/regular/table-report'
 
-import { HrisLayout } from '@/shared/layout/hris-layout'
+import { DefaultLayout } from '@/shared/layout/default-layout'
 import { Card } from '@/shared/components/ui/card'
 import {
 	Tabs,
@@ -12,7 +12,7 @@ import {
 
 export default function ReportAttendance() {
 	return (
-		<HrisLayout>
+		<DefaultLayout module='hris'>
 			<Card className='p-0'>
 				<Tabs defaultValue='tab-1'>
 					<TabsList className='mt-6 before:bg-border relative h-auto w-full gap-2 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px'>
@@ -41,6 +41,6 @@ export default function ReportAttendance() {
 					</TabsContent>
 				</Tabs>
 			</Card>
-		</HrisLayout>
+		</DefaultLayout>
 	)
 }

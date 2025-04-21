@@ -9,8 +9,8 @@ import { useTotalInDay } from '@/features/hris/cash-advance/api/use-total-in-day
 
 import CardHighlight from '@/shared/components/common/card-highlight'
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
+import { DefaultLayout } from '@/shared/layout/default-layout'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
-import { HrisLayout } from '@/shared/layout/hris-layout'
 import { formatToRupiah } from '@/shared/utils'
 
 export default function ReportCashAdvance() {
@@ -43,7 +43,7 @@ export default function ReportCashAdvance() {
 	})
 
 	return (
-		<HrisLayout>
+		<DefaultLayout module='hris'>
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
 				<CardHighlight
 					title='Total Nominal Per tahun'
@@ -98,6 +98,6 @@ export default function ReportCashAdvance() {
 				/>
 				<TopEmployeeCashAdvance />
 			</div>
-		</HrisLayout>
+		</DefaultLayout>
 	)
 }
