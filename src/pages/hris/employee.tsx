@@ -15,7 +15,7 @@ export default function Employee() {
 			<div className='flex justify-between items-center p-6'>
 				<SearchV3 />
 				<Link
-					to={paths.hrisMasterDataEmployeeCreate}
+					to={paths.hrisMasterdataEmployeeCreate}
 					className={buttonVariants({
 						className: 'gap-2',
 						variant: 'default',

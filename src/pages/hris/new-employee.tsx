@@ -5,7 +5,7 @@ import FormNewEmployee from '@/features/hris/employee/components/form-new-employ
 
 export default function NewEmployee() {
 	return (
-		<DetailLayout title='Pegawai Baru' back={paths.hrisMasterDataEmployee}>
+		<DetailLayout title='Pegawai Baru' back={paths.hrisMasterdataEmployee}>
 			<FormNewEmployee />
 		</DetailLayout>
 	)

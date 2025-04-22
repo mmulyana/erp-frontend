@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -27,7 +28,6 @@ import {
 } from '@/shared/components/ui/form'
 
 import { useCreateCashAdvance } from '../api/use-create-cash-advance'
-import EmployeeCombobox from '../../_components/employee-combobox'
 import { CashAdvanceForm } from '../types'
 
 export default function ModalAddCashAdvance() {

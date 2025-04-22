@@ -9,7 +9,7 @@ export const keys = {
 	employeeInfinite: 'employee-infinite',
 	employeeDetail: 'employee-detail',
 	employeeData: 'employee-data',
-	
+
 	employeeCertificates: 'employee-certificates',
 	certificate: 'certificate',
 
@@ -39,37 +39,28 @@ export const keys = {
 	projectChart: 'project-chart',
 
 	client: 'client',
-	clientPagination: 'client-pagination',
+	clientDetail: 'client-detail',
+	clientInfinite: 'client-infinite',
 	topClient: 'top-client',
+
 	clientCompany: 'client-company',
-	clientCompanyPagination: 'client-company-pagination',
-
-	goods: 'goods',
-	goodsDetail: 'goods-detail',
-
-	transaction: 'transaction',
-	transactionDetail: 'transaction-detail',
-	transactionProject: 'transaction-project',
+	clientCompanyInfinite: 'client-company-infinite',
+	clientCompanyDetail: 'client-company-detail',
 
 	supplier: 'supplier',
 	supplierDetail: 'supplier-detail',
+	supplierInfinite: 'supplier-infinite',
+
 	supplierTransaction: 'supplier-transaction',
 
 	brand: 'brand',
 	brandDetail: 'brand-detail',
-
-	category: 'category',
-	categoryDetail: 'category-detail',
+	brandInfinite: 'brand-infinite',
 
 	location: 'location',
 	locationDetail: 'location-detail',
-
-	measurement: 'measurement',
-	measurementDetail: 'measurement-detail',
+	locationInfinite: 'location-infinite',
 
 	kanbanBoard: 'board',
 	activity: 'activity',
-	attachment: 'attachment',
-	estimate: 'estimate',
-	transactionByGoods: 'transaction-by-goods',
 }

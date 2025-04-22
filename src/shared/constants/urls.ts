@@ -31,14 +31,7 @@ export const urls = {
 	kanbanBoard: api + '/project/board',
 
 	// INVENTORY
-	inventoryGoods: api + '/inventory/goods',
-	inventoryCategory: api + '/inventory/category',
-	inventoryLocation: api + '/inventory/location',
-	inventorySupplierTag: api + '/inventory/tag',
-	inventoryMeasurement: api + '/inventory/measurement',
-	inventorySupplier: api + '/inventory/supplier',
-	inventorySupplierEmployee: api + '/inventory/supplier-employee',
-	inventorySupplierLabel: api + '/inventory/supplier-label',
-	inventoryBrand: api + '/inventory/brand',
-	inventoryTransaction: api + '/inventory/transaction',
+	inventoryLocation: api + '/location',
+	inventorySupplier: api + '/supplier',
+	inventoryBrand: api + '/brand',
 }

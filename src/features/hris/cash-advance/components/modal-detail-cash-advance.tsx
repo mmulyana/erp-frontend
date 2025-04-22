@@ -5,9 +5,10 @@ import { atom, useAtom } from 'jotai'
 import { useEffect } from 'react'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import { Textarea } from '@/shared/components/ui/textarea'
-import { Input } from '@/shared/components/ui/input'
 import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
 import {
 	Dialog,
 	DialogClose,
@@ -26,7 +27,6 @@ import {
 } from '@/shared/components/ui/form'
 
 import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
-import EmployeeCombobox from '../../_components/employee-combobox'
 import ModalDeleteCashAdvance from './modal-delete-cash-advace'
 import { useCashAdvance } from '../api/use-cash-advance'
 import { CashAdvanceForm } from '../types'

@@ -1,32 +1,36 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
+import { IApi } from '@/shared/types'
+
 import http from '@/shared/utils/http'
 
-export const useDestroyPhotoEmployee = () => {
+export const useUpdateLocation = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (payload: { id: string }) => {
-			const res = await http.patch(`${urls.employee}/${payload.id}/photo`)
+		mutationFn: async (payload: any) => {
+			const res = await http.patch(
+				`${urls.inventoryLocation}/${payload.id}`,
+				payload
+			)
 			return {
 				res,
 				id: payload.id,
 			}
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [keys.employee] })
-			queryClient.invalidateQueries({ queryKey: [keys.employee, data.id] })
+			queryClient.invalidateQueries({ queryKey: [keys.location] })
+			queryClient.invalidateQueries({ queryKey: [keys.locationInfinite] })
+			queryClient.invalidateQueries({
+				queryKey: [keys.locationDetail, data.id],
+			})
 			toast.success(data.res.data.message)
 		},
 		onError: (error: AxiosError<any>) => {
-			if (error.response?.data.errors[0].message) {
-				toast.error(error.response?.data.errors[0].message)
-				return
-			}
 			toast.error(error.response?.data.message)
 		},
 	})

@@ -18,7 +18,7 @@ import {
 } from '@/shared/components/ui/table'
 
 import { useReportOvertime } from '../../api/overtime/use-report-overtime'
-import { useWeekRange } from '../../../_hooks/use-week-range'
+import { useWeekRange } from '../../hooks/use-week-range'
 import { usePagination } from '@/shared/hooks/use-pagination'
 
 export default function TableReportOvertime() {

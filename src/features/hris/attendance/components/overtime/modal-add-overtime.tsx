@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
@@ -26,9 +27,7 @@ import {
 	FormMessage,
 } from '@/shared/components/ui/form'
 
-
 import { useCreateOvertime } from '../../api/overtime/use-create-overtime'
-import EmployeeCombobox from '../../../_components/employee-combobox'
 import { OvertimeForm } from '../../types'
 
 export default function ModalAddOvertime() {

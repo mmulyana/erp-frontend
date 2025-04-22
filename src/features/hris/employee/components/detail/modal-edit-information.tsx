@@ -1,10 +1,11 @@
-import { Loader, Pencil } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Pencil } from 'lucide-react'
 
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { ImageUpload } from '@/shared/components/common/image-upload'
+import ButtonSubmit from '@/shared/components/common/button-submit'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import {
@@ -108,7 +109,7 @@ export default function ModalEditInformation() {
 						className='flex gap-4 flex-col pt-4'
 					>
 						<FormItem className='flex flex-col'>
-							<FormLabel>Photo</FormLabel>
+							<FormLabel>Foto</FormLabel>
 							<ImageUpload
 								value={photoWatch}
 								onChange={(e) => form.setValue('photoUrl', e)}
@@ -225,16 +226,7 @@ export default function ModalEditInformation() {
 										Batal
 									</Button>
 								</DialogClose>
-								<Button disabled={isPending}>
-									{isPending ? (
-										<>
-											<Loader className='mr-2 h-4 w-4 animate-spin' />
-											Menyimpan...
-										</>
-									) : (
-										'Simpan'
-									)}
-								</Button>
+								<ButtonSubmit isPending={isPending} />
 							</div>
 						</DialogFooter>
 					</form>

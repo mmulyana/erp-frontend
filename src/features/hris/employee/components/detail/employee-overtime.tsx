@@ -9,12 +9,12 @@ import SearchV3 from '@/shared/components/common/search-v3'
 import { Button } from '@/shared/components/ui/button'
 
 import { useDataOvertime } from '../../api/use-data-overtime'
-import { Overtime } from '@/features/hris/_types'
 import { id } from 'date-fns/locale'
 import { useSetAtom } from 'jotai'
 import ModalDetailOvertime, {
 	atomModalOvertime,
 } from '@/features/hris/attendance/components/overtime/modal-detail-overtime'
+import { Overtime } from '@/features/hris/attendance/types'
 
 export default function EmployeeOvertime() {
 	const { q, limit, page } = usePagination()

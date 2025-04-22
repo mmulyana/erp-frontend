@@ -19,8 +19,8 @@ import {
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 
-import { useInfiniteEmployees } from '../_api/use-infinite-employees'
-import { useEmployee } from '../employee/api/use-employee'
+import { useInfiniteEmployees } from '@/features/hris/employee/api/use-infinite-employees'
+import { useEmployee } from '@/features/hris/employee/api/use-employee'
 
 type Props = {
 	onSelect?: (value: string) => void

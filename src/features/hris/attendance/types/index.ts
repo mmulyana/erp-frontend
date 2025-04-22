@@ -1,5 +1,3 @@
-import { Overtime } from "../../_types"
-
 export type Attendance = {
 	employeeId: string
 	fullname: string
@@ -19,7 +17,12 @@ export type OvertimeForm = {
 	totalHour: number
 	note?: string
 }
-
+export type Overtime = {
+	totalHour: number
+	note?: string
+	date: string
+	id: string
+}
 export type OvertimeDetail = Overtime & {
 	employee: {
 		fullname: string

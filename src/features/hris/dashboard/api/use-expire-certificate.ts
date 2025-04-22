@@ -3,7 +3,7 @@ import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 import { IApi } from '@/shared/types'
-import { Certificate } from '../../_types'
+import { Certificate } from '../../employee/types'
 
 type Params = {
 	day: number

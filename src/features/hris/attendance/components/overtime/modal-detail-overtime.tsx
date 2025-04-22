@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -26,12 +27,13 @@ import {
 } from '@/shared/components/ui/form'
 
 import { useUpdateOvertime } from '../../api/overtime/use-update-overtime'
-import EmployeeCombobox from '../../../_components/employee-combobox'
 import { useOvertime } from '../../api/overtime/use-overtime'
 import ModalDeleteOvertime from './modal-delete-overtime'
 import { OvertimeForm } from '../../types'
 
-export const atomModalOvertime = atom<{ open: boolean; id: string } | null>(null)
+export const atomModalOvertime = atom<{ open: boolean; id: string } | null>(
+	null
+)
 export default function ModalDetailOvertime() {
 	const [modal, setModal] = useAtom(atomModalOvertime)
 

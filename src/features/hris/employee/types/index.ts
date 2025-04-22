@@ -1,3 +1,5 @@
+import { Base, Employee } from '@/shared/types'
+
 export type EmployeeForm = {
 	fullname: string
 	address?: string
@@ -19,4 +21,14 @@ export type CertificateForm = {
 	publisher?: string
 	issueDate?: Date
 	expiryDate?: Date
+}
+
+export type Certificate = Base & {
+	employeeId: string
+	expiryDate: string
+	issueDate: string
+	fileUrl: string
+	name: string
+	publisher: string
+	employee: Employee
 }

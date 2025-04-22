@@ -18,7 +18,7 @@ import {
 	TableRow,
 } from '@/shared/components/ui/table'
 
-import { useWeekRange } from '@/features/hris/_hooks/use-week-range'
+import { useWeekRange } from '@/features/hris/attendance/hooks/use-week-range'
 
 import { useReportAttendance } from '../../api/regular/use-report-attendance'
 
