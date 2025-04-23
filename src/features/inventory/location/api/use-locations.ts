@@ -16,7 +16,7 @@ export const useLocations = (params?: Params) => {
 	return useQuery({
 		queryKey: [keys.location, params],
 		queryFn: async (): Promise<IApiPagination<any[]>> => {
-			const { data } = await http(urls.inventoryLocation, {
+			const { data } = await http(urls.location, {
 				params,
 			})
 			return data

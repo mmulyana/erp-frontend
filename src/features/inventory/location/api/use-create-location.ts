@@ -13,7 +13,7 @@ export const useCreateLocation = () => {
 
 	return useMutation({
 		mutationFn: async (payload: any): Promise<AxiosResponse<IApi<any>>> => {
-			return await http.post(urls.inventoryLocation, payload)
+			return await http.post(urls.location, payload)
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.location] })

@@ -1,26 +1,19 @@
-import { Link } from 'react-router-dom'
-import { Plus } from 'lucide-react'
-
 import { DefaultLayout } from '@/shared/layout/default-layout'
-import { buttonVariants } from '@/shared/components/ui/button'
 import SearchV3 from '@/shared/components/common/search-v3'
+
+import ModalDetailClient from '@/features/projects/client/components/modal-detail-client'
+import ModalAddClient from '@/features/projects/client/components/modal-add-client'
+import TableClient from '@/features/projects/client/components/table-client'
 
 export default function Client() {
 	return (
 		<DefaultLayout className='px-0 pt-12' module='project'>
 			<div className='flex justify-between items-center p-6'>
 				<SearchV3 />
-				<Link
-					to='/'
-					className={buttonVariants({
-						className: 'gap-2',
-						variant: 'default',
-					})}
-				>
-					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Klien</span>
-				</Link>
+				<ModalAddClient />
 			</div>
+			<TableClient />
+			<ModalDetailClient />
 		</DefaultLayout>
 	)
 }

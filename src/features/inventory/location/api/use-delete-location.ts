@@ -12,7 +12,7 @@ export const useDeleteLocation = () => {
 
 	return useMutation({
 		mutationFn: async (payload: { id?: string }) => {
-			return await http.delete(`${urls.inventoryLocation}/${payload.id}`)
+			return await http.delete(`${urls.location}/${payload.id}`)
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.location] })

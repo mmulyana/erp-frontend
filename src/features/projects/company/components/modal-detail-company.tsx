@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { ImageUpload } from '@/shared/components/common/image-upload'
 import ButtonSubmit from '@/shared/components/common/button-submit'
+import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import {
@@ -24,40 +25,41 @@ import {
 	FormMessage,
 } from '@/shared/components/ui/form'
 
-import { useDestroyPhotoBrand } from '../api/use-destroy-photo-brand'
-import { useUpdateBrand } from '../api/use-update-brand'
-import ModalDeleteBrand from './modal-delete-brand'
-import { useBrand } from '../api/use-brand'
+import { useDestroyPhotoCompany } from '../api/use-destroy-photo-company'
+import { useUpdateCompany } from '../api/use-update-company'
+import ModalDeleteCompany from './modal-delete-company'
+import { useCompany } from '../api/use-company'
+import { CompanyForm } from '../types'
 
-type Form = {
-	name: string
-	photoUrl?: File | string | null
-}
+export const atomModalCompany = atom<{ id: string; open: boolean } | null>(null)
+export default function ModalDetailCompany() {
+	const [modal, setModal] = useAtom(atomModalCompany)
 
-export const atomModalBrand = atom<{ open: boolean; id: string } | null>(null)
-export default function ModalDetailBrand() {
-	const [modal, setModal] = useAtom(atomModalBrand)
+	const defaultValues: CompanyForm = {
+		name: '',
+		email: '',
+		phone: '',
+		address: '',
+		photoUrl: null,
+	}
 
-	const { data } = useBrand({ id: modal?.id })
-	const { mutate, isPending } = useUpdateBrand()
-	const { mutate: destroyPhoto } = useDestroyPhotoBrand()
+	const { data } = useCompany({ id: modal?.id })
+	const { mutate, isPending } = useUpdateCompany()
+	const { mutate: destroyPhoto } = useDestroyPhotoCompany()
 
-	const form = useForm<Form>({
-		defaultValues: {
-			name: '',
-			photoUrl: undefined,
-		},
+	const form = useForm<CompanyForm>({
+		defaultValues,
 	})
 	const photoWatch = form.watch('photoUrl')
 
 	const onClose = () => setModal(null)
 
-	const submit = (payload: Form) => {
+	const submit = (payload: CompanyForm) => {
 		if (!modal?.id) return
-		if (payload.photoUrl === null) {
-			destroyPhoto({ id: modal.id })
-		}
 
+		if (payload.photoUrl === null) {
+			destroyPhoto({ id: modal?.id })
+		}
 		const data = payload
 		if (typeof data.photoUrl === 'string') {
 			delete data.photoUrl
@@ -67,7 +69,7 @@ export default function ModalDetailBrand() {
 			{ ...data, id: modal?.id },
 			{
 				onSuccess: handleFormSuccess(onClose),
-				onError: handleFormError<Form>(form),
+				onError: handleFormError<CompanyForm>(form),
 			}
 		)
 	}
@@ -75,18 +77,18 @@ export default function ModalDetailBrand() {
 	useEffect(() => {
 		if (data) {
 			form.reset({
-				name: data.data?.data.name,
-				photoUrl: data.data?.data.photoUrl,
+				address: data.data?.address,
+				email: data.data?.email,
+				name: data.data?.name,
+				phone: data.data?.phone,
+				photoUrl: data.data?.photoUrl,
 			})
 		}
 	}, [data])
 
 	useEffect(() => {
 		if (!open) {
-			form.reset({
-				name: '',
-				photoUrl: undefined,
-			})
+			form.reset(defaultValues)
 		}
 	}, [open])
 
@@ -100,7 +102,7 @@ export default function ModalDetailBrand() {
 			}}
 		>
 			<DialogContent className='p-6'>
-				<DialogTitle>Merek</DialogTitle>
+				<DialogTitle>Perusahaan</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
@@ -116,9 +118,10 @@ export default function ModalDetailBrand() {
 								onChange={(e) => form.setValue('photoUrl', e)}
 							/>
 						</FormItem>
+
 						<FormField
-							name='name'
 							control={form.control}
+							name='name'
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
 									<FormLabel>Nama</FormLabel>
@@ -129,10 +132,49 @@ export default function ModalDetailBrand() {
 								</FormItem>
 							)}
 						/>
+						<FormField
+							control={form.control}
+							name='email'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='phone'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Nomor telepon</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='address'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Alamat</FormLabel>
+									<FormControl>
+										<Textarea {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						<DialogFooter>
 							<div className='flex justify-between w-full pt-4'>
-								<ModalDeleteBrand />
+								<ModalDeleteCompany />
 								<div className='flex justify-end gap-4 items-center'>
 									<DialogClose asChild>
 										<Button variant='outline' type='button'>

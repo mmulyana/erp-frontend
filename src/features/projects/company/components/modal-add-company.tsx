@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 import { Plus } from 'lucide-react'
 
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
-import { ImageUpload } from '@/shared/components/common/image-upload'
 import ButtonSubmit from '@/shared/components/common/button-submit'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -24,39 +23,39 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
+import { useCreateCompany } from '../api/use-create-company'
+import { CompanyForm } from '../types'
+import { Textarea } from '@/shared/components/ui/textarea'
+import { ImageUpload } from '@/shared/components/common/image-upload'
 
-import { useCreateBrand } from '../api/use-create-brand'
-
-type Form = {
-	name: string
-	photoUrl?: File | string | null
-}
-
-export default function ModalAddBrand() {
+export default function ModalAddCompany() {
 	const [open, setOpen] = useState(false)
 
-	const { mutate, isPending } = useCreateBrand()
-	const form = useForm<Form>({
-		defaultValues: {
-			name: '',
-			photoUrl: undefined,
-		},
+	const defaultValues: CompanyForm = {
+		name: '',
+		email: '',
+		phone: '',
+		address: '',
+		photoUrl: null,
+	}
+
+	const { mutate, isPending } = useCreateCompany()
+
+	const form = useForm<CompanyForm>({
+		defaultValues,
 	})
 	const photoWatch = form.watch('photoUrl')
 
-	const submit = (payload: Form) => {
+	const submit = (payload: CompanyForm) => {
 		mutate(payload, {
 			onSuccess: handleFormSuccess(setOpen),
-			onError: handleFormError<Form>(form),
+			onError: handleFormError<CompanyForm>(form),
 		})
 	}
 
 	useEffect(() => {
 		if (!open) {
-			form.reset({
-				name: '',
-				photoUrl: undefined,
-			})
+			form.reset(defaultValues)
 		}
 	}, [open])
 
@@ -65,11 +64,11 @@ export default function ModalAddBrand() {
 			<DialogTrigger asChild>
 				<Button className='gap-2'>
 					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Merek</span>
+					<span className='px-0.5'>Tambah Perusahaan</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent className='p-6'>
-				<DialogTitle>Merek baru</DialogTitle>
+				<DialogTitle>Perusahaan Baru</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
@@ -85,14 +84,54 @@ export default function ModalAddBrand() {
 								onChange={(e) => form.setValue('photoUrl', e)}
 							/>
 						</FormItem>
+
 						<FormField
-							name='name'
 							control={form.control}
+							name='name'
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
-									<FormLabel>Nama lokasi</FormLabel>
+									<FormLabel>Nama</FormLabel>
 									<FormControl>
 										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='email'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='phone'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Nomor telepon</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='address'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Alamat</FormLabel>
+									<FormControl>
+										<Textarea {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

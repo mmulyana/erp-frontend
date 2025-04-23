@@ -120,7 +120,7 @@ export default function ModalDetailLocation() {
 											Batal
 										</Button>
 									</DialogClose>
-									<ButtonSubmit isPending={isPending} />
+									<ButtonSubmit isPending={isPending} title='Perbarui' />
 								</div>
 							</div>
 						</DialogFooter>

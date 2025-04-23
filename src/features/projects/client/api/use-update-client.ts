@@ -6,28 +6,26 @@ import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
 import http from '@/shared/utils/http'
 
-export const useDestroyPhotoBrand = () => {
+import { ClientForm } from '../types'
+
+export const useUpdateClient = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (payload: { id: string }) => {
-			const res = await http.patch(`${urls.brand}/${payload.id}/photo`)
+		mutationFn: async (payload: ClientForm & { id: string }) => {
+			const res = await http.patch(`${urls.client}/${payload.id}`, payload)
 			return {
 				res,
 				id: payload.id,
 			}
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [keys.brand] })
-			queryClient.invalidateQueries({ queryKey: [keys.brandInfinite] })
-			queryClient.invalidateQueries({ queryKey: [keys.brandDetail, data.id] })
+			queryClient.invalidateQueries({ queryKey: [keys.client] })
+			queryClient.invalidateQueries({ queryKey: [keys.clientInfinite] })
+			queryClient.invalidateQueries({ queryKey: [keys.clientDetail, data.id] })
 			toast.success(data.res.data.message)
 		},
 		onError: (error: AxiosError<any>) => {
-			if (error.response?.data.errors[0].message) {
-				toast.error(error.response?.data.errors[0].message)
-				return
-			}
 			toast.error(error.response?.data.message)
 		},
 	})

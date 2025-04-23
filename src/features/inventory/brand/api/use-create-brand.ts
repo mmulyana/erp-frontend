@@ -4,9 +4,8 @@ import { toast } from 'sonner'
 
 import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
-
-import http from '@/shared/utils/http'
 import { toFormData } from '@/shared/utils'
+import http from '@/shared/utils/http'
 
 export const useCreateBrand = () => {
 	const queryClient = useQueryClient()
@@ -14,7 +13,11 @@ export const useCreateBrand = () => {
 	return useMutation({
 		mutationFn: async (payload: any) => {
 			const formData = toFormData(payload)
-			return await http.post(urls.inventoryBrand, formData)
+			return await http.post(urls.brand, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.brand] })

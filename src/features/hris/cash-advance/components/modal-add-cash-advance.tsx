@@ -1,10 +1,12 @@
 import { NumericFormat } from 'react-number-format'
 import { Loader, Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import ButtonSubmit from '@/shared/components/common/button-submit'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -35,13 +37,15 @@ export default function ModalAddCashAdvance() {
 
 	const { mutate, isPending } = useCreateCashAdvance()
 
+	const defaultValues = {
+		amount: 0,
+		date: new Date(),
+		employeeId: '',
+		note: '',
+	}
+
 	const form = useForm<CashAdvanceForm>({
-		defaultValues: {
-			amount: 0,
-			date: new Date(),
-			employeeId: '',
-			note: '',
-		},
+		defaultValues,
 	})
 
 	const onSubmit = (data: CashAdvanceForm) => {
@@ -51,29 +55,17 @@ export default function ModalAddCashAdvance() {
 				date: convertUTCToWIB(data.date),
 			},
 			{
-				onSuccess: () => {
-					form.reset({
-						amount: 0,
-						date: new Date(),
-						employeeId: '',
-						note: '',
-					})
-					setOpen(false)
-				},
-				onError: (error: any) => {
-					if (error?.response?.data?.errors) {
-						error.response.data.errors.forEach((err: any) => {
-							const field = err.path?.[0]
-							const message = err.message
-							if (field) {
-								form.setError(field, { message })
-							}
-						})
-					}
-				},
+				onSuccess: handleFormSuccess(setOpen),
+				onError: handleFormError<CashAdvanceForm>(form),
 			}
 		)
 	}
+
+	useEffect(() => {
+		if (!open) {
+			form.reset(defaultValues)
+		}
+	}, [open])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -178,16 +170,7 @@ export default function ModalAddCashAdvance() {
 										Batal
 									</Button>
 								</DialogClose>
-								<Button disabled={isPending}>
-									{isPending ? (
-										<>
-											<Loader className='mr-2 h-4 w-4 animate-spin' />
-											Menyimpan...
-										</>
-									) : (
-										'Simpan'
-									)}
-								</Button>
+								<ButtonSubmit isPending={isPending} />
 							</div>
 						</DialogFooter>
 					</form>

@@ -43,9 +43,9 @@ export const keys = {
 	clientInfinite: 'client-infinite',
 	topClient: 'top-client',
 
-	clientCompany: 'client-company',
-	clientCompanyInfinite: 'client-company-infinite',
-	clientCompanyDetail: 'client-company-detail',
+	companyClient: 'client-company',
+	companyClientInfinite: 'client-company-infinite',
+	companyClientDetail: 'client-company-detail',
 
 	supplier: 'supplier',
 	supplierDetail: 'supplier-detail',

@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import ButtonSubmit from '@/shared/components/common/button-submit'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -36,17 +38,20 @@ export default function ModalDetailCashAdvance() {
 	const [modal, setModal] = useAtom(ModalCashAdvance)
 
 	const { data } = useCashAdvance({ id: modal?.id })
-
 	const { mutate, isPending } = useUpdateCashAdvance()
 
+	const defaultValues = {
+		amount: 0,
+		date: new Date(),
+		employeeId: '',
+		note: '',
+	}
+
 	const form = useForm<CashAdvanceForm>({
-		defaultValues: {
-			amount: 0,
-			date: new Date(),
-			employeeId: '',
-			note: '',
-		},
+		defaultValues,
 	})
+
+	const onClose = () => setModal(null)
 
 	useEffect(() => {
 		if (data) {
@@ -61,18 +66,19 @@ export default function ModalDetailCashAdvance() {
 
 	useEffect(() => {
 		if (!modal?.open) {
-			form.reset({
-				amount: 0,
-				date: new Date(),
-				employeeId: '',
-				note: '',
-			})
+			form.reset(defaultValues)
 		}
 	}, [modal?.open])
 
 	const onSubmit = async (data: CashAdvanceForm) => {
 		if (!modal?.id) return
-		mutate({ ...data, id: modal?.id })
+		mutate(
+			{ ...data, id: modal?.id },
+			{
+				onSuccess: handleFormSuccess(onClose),
+				onError: handleFormError<CashAdvanceForm>(form),
+			}
+		)
 	}
 
 	return (
@@ -182,16 +188,7 @@ export default function ModalDetailCashAdvance() {
 											Batal
 										</Button>
 									</DialogClose>
-									<Button disabled={isPending}>
-										{isPending ? (
-											<>
-												<Loader className='mr-2 h-4 w-4 animate-spin' />
-												Menyimpan...
-											</>
-										) : (
-											'Perbarui'
-										)}
-									</Button>
+									<ButtonSubmit isPending={isPending} title='Perbarui' />
 								</div>
 							</div>
 						</DialogFooter>

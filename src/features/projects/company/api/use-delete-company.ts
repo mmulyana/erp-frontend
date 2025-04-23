@@ -6,16 +6,16 @@ import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
 import http from '@/shared/utils/http'
 
-export const useDeleteBrand = () => {
+export const useDeleteCompany = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (payload: any) => {
-			return await http.delete(`${urls.brand}/${payload.id}`)
+		mutationFn: async (payload: { id: string }) => {
+			return await http.delete(`${urls.companyClient}/${payload.id}`)
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [keys.brand] })
-			queryClient.invalidateQueries({ queryKey: [keys.brandInfinite] })
+			queryClient.invalidateQueries({ queryKey: [keys.companyClient] })
+			queryClient.invalidateQueries({ queryKey: [keys.companyClientInfinite] })
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

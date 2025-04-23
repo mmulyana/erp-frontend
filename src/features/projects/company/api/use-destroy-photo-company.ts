@@ -6,21 +6,23 @@ import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
 import http from '@/shared/utils/http'
 
-export const useDestroyPhotoBrand = () => {
+export const useDestroyPhotoCompany = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async (payload: { id: string }) => {
-			const res = await http.patch(`${urls.brand}/${payload.id}/photo`)
+			const res = await http.patch(`${urls.companyClient}/${payload.id}/photo`)
 			return {
 				res,
 				id: payload.id,
 			}
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [keys.brand] })
-			queryClient.invalidateQueries({ queryKey: [keys.brandInfinite] })
-			queryClient.invalidateQueries({ queryKey: [keys.brandDetail, data.id] })
+			queryClient.invalidateQueries({ queryKey: [keys.companyClient] })
+			queryClient.invalidateQueries({ queryKey: [keys.companyClientInfinite] })
+			queryClient.invalidateQueries({
+				queryKey: [keys.companyClientDetail, data.id],
+			})
 			toast.success(data.res.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

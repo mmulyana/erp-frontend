@@ -34,6 +34,14 @@ export interface IApiPagination<T = void> {
 	message: string
 }
 
+export interface IApiInfinite<T = void> {
+	data: {
+		data: T
+		nextPage?: number
+	}
+	message: string
+}
+
 export interface ApiError {
 	message: string
 	status: number

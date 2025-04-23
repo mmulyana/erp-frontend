@@ -4,18 +4,22 @@ import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 import { IApi } from '@/shared/types'
+import { Client } from '../types'
 
 type Params = {
 	id?: string
 }
 
-export const useLocation = (params?: Params) => {
+export const useClient = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.locationDetail, params?.id],
-		queryFn: async (): Promise<IApi<any>> => {
-			const { data } = await http(`${urls.location}/${params?.id}`, {
-				params,
-			})
+		queryKey: [keys.clientDetail, params?.id],
+		queryFn: async (): Promise<IApi<Client>> => {
+			const { data } = await http.get<IApi<Client>>(
+				`${urls.client}/${params?.id}`,
+				{
+					params,
+				}
+			)
 			return data
 		},
 		enabled:

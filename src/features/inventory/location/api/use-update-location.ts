@@ -14,7 +14,7 @@ export const useUpdateLocation = () => {
 	return useMutation({
 		mutationFn: async (payload: any) => {
 			const res = await http.patch(
-				`${urls.inventoryLocation}/${payload.id}`,
+				`${urls.location}/${payload.id}`,
 				payload
 			)
 			return {

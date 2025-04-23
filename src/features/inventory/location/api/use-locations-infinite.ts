@@ -16,7 +16,7 @@ export const useLocationsInfinite = (params?: Params) => {
 	return useQuery({
 		queryKey: [keys.locationInfinite, params],
 		queryFn: async (): Promise<IApiPagination<any[]>> => {
-			const { data } = await http(urls.inventoryLocation + 'data/infinite', {
+			const { data } = await http(urls.location + 'data/infinite', {
 				params,
 			})
 			return data

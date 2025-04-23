@@ -13,10 +13,11 @@ export const useUpdateBrand = () => {
 	return useMutation({
 		mutationFn: async (payload: any) => {
 			const formData = toFormData(payload)
-			const res = await http.patch(
-				`${urls.inventoryBrand}/${payload.id}`,
-				formData
-			)
+			const res = await http.patch(`${urls.brand}/${payload.id}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
 			return {
 				res,
 				id: payload.id,

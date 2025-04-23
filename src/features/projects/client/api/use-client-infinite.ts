@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { IApiPagination } from '@/shared/types'
-
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
@@ -12,11 +11,11 @@ type Params = {
 	limit?: string
 }
 
-export const useBrandsInfinite = (params?: Params) => {
+export const useClientsInfinite = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.brandInfinite, params],
+		queryKey: [keys.clientInfinite, params],
 		queryFn: async (): Promise<IApiPagination<any[]>> => {
-			const { data } = await http(urls.brand + 'data/infinite', {
+			const { data } = await http(urls.client + 'data/infinite', {
 				params,
 			})
 			return data

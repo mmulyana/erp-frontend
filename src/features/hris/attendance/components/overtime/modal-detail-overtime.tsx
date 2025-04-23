@@ -6,6 +6,8 @@ import { toast } from 'sonner'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import ButtonSubmit from '@/shared/components/common/button-submit'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -37,16 +39,18 @@ export const atomModalOvertime = atom<{ open: boolean; id: string } | null>(
 export default function ModalDetailOvertime() {
 	const [modal, setModal] = useAtom(atomModalOvertime)
 
-	const { data } = useOvertime({ id: modal?.id })
+	const defaultValues = {
+		date: new Date(),
+		employeeId: '',
+		note: '',
+		totalHour: 0,
+	}
 
+	const { data } = useOvertime({ id: modal?.id })
 	const { mutate, isPending } = useUpdateOvertime()
+
 	const form = useForm<OvertimeForm>({
-		defaultValues: {
-			date: new Date(),
-			employeeId: '',
-			note: '',
-			totalHour: 0,
-		},
+		defaultValues,
 	})
 
 	useEffect(() => {
@@ -62,14 +66,11 @@ export default function ModalDetailOvertime() {
 
 	useEffect(() => {
 		if (!modal?.open) {
-			form.reset({
-				date: new Date(),
-				employeeId: '',
-				note: '',
-				totalHour: 0,
-			})
+			form.reset(defaultValues)
 		}
 	}, [modal?.open])
+
+	const onClose = () => setModal(null)
 
 	const submit = (data: OvertimeForm) => {
 		if (!modal?.id) {
@@ -79,20 +80,8 @@ export default function ModalDetailOvertime() {
 		mutate(
 			{ ...data, totalHour: Number(data.totalHour), id: modal?.id },
 			{
-				onSuccess: () => {
-					setModal(null)
-				},
-				onError: (error: any) => {
-					if (error?.response?.data?.errors) {
-						error.response.data.errors.forEach((err: any) => {
-							const field = err.path?.[0]
-							const message = err.message
-							if (field) {
-								form.setError(field, { message })
-							}
-						})
-					}
-				},
+				onSuccess: handleFormSuccess(onClose),
+				onError: handleFormError<OvertimeForm>(form),
 			}
 		)
 	}
@@ -185,16 +174,7 @@ export default function ModalDetailOvertime() {
 											Batal
 										</Button>
 									</DialogClose>
-									<Button disabled={isPending}>
-										{isPending ? (
-											<>
-												<Loader className='mr-2 h-4 w-4 animate-spin' />
-												Menyimpan...
-											</>
-										) : (
-											'Perbarui'
-										)}
-									</Button>
+									<ButtonSubmit isPending={isPending} title='Perbarui' />
 								</div>
 							</div>
 						</DialogFooter>

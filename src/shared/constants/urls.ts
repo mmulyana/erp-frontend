@@ -21,17 +21,15 @@ export const urls = {
 	dashboardProject: api + '/dashboard/project',
 	dashboardInventory: api + '/dashboard/inventory',
 
-	project: api + '/project/index',
-	projectLabel: api + '/project/label',
-	projectClient: api + '/project/client',
-	projectClientCompany: api + '/project/client-company',
-	projectActivity: api + '/project/activity',
-	projectEstimate: api + '/project/estimate',
-	projectAttachment: api + '/project/attachment',
-	kanbanBoard: api + '/project/board',
+	project: api + '/project',
+	client: api + '/client',
+	companyClient: api + '/company-client',
+	activity: api + '/activity',
+	attachment: api + '/attachment',
+	kanbanBoard: api + '/board',
 
 	// INVENTORY
-	inventoryLocation: api + '/location',
-	inventorySupplier: api + '/supplier',
-	inventoryBrand: api + '/brand',
+	location: api + '/location',
+	supplier: api + '/supplier',
+	brand: api + '/brand',
 }

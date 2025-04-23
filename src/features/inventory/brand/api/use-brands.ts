@@ -16,7 +16,7 @@ export const useBrands = (params?: Params) => {
 	return useQuery({
 		queryKey: [keys.brand, params],
 		queryFn: async (): Promise<IApiPagination<any[]>> => {
-			const { data } = await http(urls.inventoryBrand, {
+			const { data } = await http(urls.brand, {
 				params,
 			})
 			return data

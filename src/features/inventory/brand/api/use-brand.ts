@@ -13,7 +13,7 @@ export const useBrand = (params?: Params) => {
 	return useQuery({
 		queryKey: [keys.brandDetail, params?.id],
 		queryFn: async (): Promise<IApi<any>> => {
-			const { data } = await http(`${urls.inventoryBrand}/${params?.id}`, {
+			const { data } = await http(`${urls.brand}/${params?.id}`, {
 				params,
 			})
 			return data
