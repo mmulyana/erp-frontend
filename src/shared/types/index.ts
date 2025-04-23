@@ -37,9 +37,22 @@ export interface IApiPagination<T = void> {
 export interface IApiInfinite<T = void> {
 	data: {
 		data: T
-		nextPage?: number
+		nextPage?: number | null
 	}
 	message: string
+}
+
+export type InfiniteResult<T> = {
+	pages: {
+		data: T[]
+		nextPage?: number | null
+	}[]
+	pageParams: number[]
+}
+
+export type NormalizedResponse<T> = {
+	data: T[]
+	nextPage?: number
 }
 
 export interface ApiError {

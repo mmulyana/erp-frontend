@@ -23,6 +23,7 @@ import {
 	FormMessage,
 } from '@/shared/components/ui/form'
 
+import CompanyCombobox from '../../company/components/company-combobox'
 import { useUpdateClient } from '../api/use-update-client'
 import ModalDeleteClient from './modal-delete-client'
 import { useClient } from '../api/use-client'
@@ -145,6 +146,23 @@ export default function ModalDetailClient() {
 									<FormLabel>Jabatan</FormLabel>
 									<FormControl>
 										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='companyId'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Perusahaan</FormLabel>
+									<FormControl>
+										<CompanyCombobox
+											onSelect={(e) => field.onChange(e)}
+											style={{ value: 'bg-surface' }}
+											defaultValue={field.value ?? ''}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>

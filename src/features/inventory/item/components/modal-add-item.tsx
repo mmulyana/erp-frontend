@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { Plus } from 'lucide-react'
 
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import { ImageUpload } from '@/shared/components/common/image-upload'
 import ButtonSubmit from '@/shared/components/common/button-submit'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -23,31 +24,41 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
+import { useCreateItem } from '../api/use-create-item'
+import { ItemForm } from '../types'
+import { Textarea } from '@/shared/components/ui/textarea'
+import BrandCombobox from '../../brand/components/brand-combobox'
+import LocationCombobox from '../../location/components/location-combobox'
 
-import { useCreateClient } from '../api/use-create-client'
-import { ClientForm } from '../types'
-import CompanyCombobox from '../../company/components/company-combobox'
+type Form = {
+	name: string
+	photoUrl?: File | string | null
+}
 
-export default function ModalAddClient() {
+export default function ModalAddItem() {
 	const [open, setOpen] = useState(false)
 
 	const defaultValues = {
 		name: '',
-		email: '',
-		phone: '',
-		companyId: null,
-		position: '',
+		photoUrl: undefined,
+		brandId: null,
+		locationId: null,
+		description: '',
+		minimum: 1,
+		unitOfMeasurement: '',
 	}
 
-	const { mutate, isPending } = useCreateClient()
-	const form = useForm<ClientForm>({
+	const { mutate, isPending } = useCreateItem()
+
+	const form = useForm<ItemForm>({
 		defaultValues,
 	})
+	const photoWatch = form.watch('photoUrl')
 
-	const submit = (payload: ClientForm) => {
+	const submit = (payload: ItemForm) => {
 		mutate(payload, {
 			onSuccess: handleFormSuccess(setOpen),
-			onError: handleFormError<ClientForm>(form),
+			onError: handleFormError<Form>(form),
 		})
 	}
 
@@ -62,11 +73,11 @@ export default function ModalAddClient() {
 			<DialogTrigger asChild>
 				<Button className='gap-2'>
 					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Klien</span>
+					<span className='px-0.5'>Tambah Item</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent className='p-6'>
-				<DialogTitle>Klien Baru</DialogTitle>
+				<DialogTitle>Item baru</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
@@ -75,12 +86,19 @@ export default function ModalAddClient() {
 						onSubmit={form.handleSubmit(submit)}
 						className='flex gap-4 flex-col pt-4'
 					>
+						<FormItem className='flex flex-col'>
+							<FormLabel>Foto</FormLabel>
+							<ImageUpload
+								value={photoWatch}
+								onChange={(e) => form.setValue('photoUrl', e)}
+							/>
+						</FormItem>
 						<FormField
-							control={form.control}
 							name='name'
+							control={form.control}
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
-									<FormLabel>Nama</FormLabel>
+									<FormLabel>Nama lokasi</FormLabel>
 									<FormControl>
 										<Input {...field} />
 									</FormControl>
@@ -89,54 +107,72 @@ export default function ModalAddClient() {
 							)}
 						/>
 						<FormField
+							name='description'
 							control={form.control}
-							name='email'
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
-									<FormLabel>Email</FormLabel>
+									<FormLabel>Deskripsi</FormLabel>
 									<FormControl>
-										<Input {...field} />
+										<Textarea {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+							<FormField
+								name='minimum'
+								control={form.control}
+								render={({ field }) => (
+									<FormItem className='flex flex-col'>
+										<FormLabel>Minimum stok</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								name='unitOfMeasurement'
+								control={form.control}
+								render={({ field }) => (
+									<FormItem className='flex flex-col'>
+										<FormLabel>Satuan ukur</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</div>
+						<FormField
+							name='brandId'
+							control={form.control}
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Merek</FormLabel>
+									<FormControl>
+										<BrandCombobox
+											onSelect={field.onChange}
+											defaultValue={field.value || ''}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
 						<FormField
+							name='locationId'
 							control={form.control}
-							name='phone'
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
-									<FormLabel>Nomor telepon</FormLabel>
+									<FormLabel>Lokasi</FormLabel>
 									<FormControl>
-										<Input {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='position'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Jabatan</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='companyId'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Perusahaan</FormLabel>
-									<FormControl>
-										<CompanyCombobox
-											onSelect={(e) => field.onChange(e)}
-											style={{ value: 'bg-surface' }}
+										<LocationCombobox
+											onSelect={field.onChange}
+											defaultValue={field.value || ''}
 										/>
 									</FormControl>
 									<FormMessage />

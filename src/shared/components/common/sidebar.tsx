@@ -1,4 +1,5 @@
 import {
+	Blocks,
 	Box,
 	BriefcaseBusiness,
 	Building,
@@ -9,6 +10,8 @@ import {
 	FilePen,
 	House,
 	Map,
+	PackageMinus,
+	PackagePlus,
 	PieChart,
 	Tag,
 	Users,
@@ -38,7 +41,7 @@ import {
 	TabsList,
 	TabsTrigger,
 	TabsContent,
-} from '@/shared/components/ui/tabs' // assumed path
+} from '@/shared/components/ui/tabs'
 
 export type SidebarLinkGroup = {
 	groupName?: string
@@ -174,6 +177,26 @@ const inventoryLink: SidebarLinkGroup[] = [
 				href: paths.inventoryMasterdataBrand,
 				icon: <Tag size={20} strokeWidth={2} />,
 				name: 'Merek',
+			},
+		],
+	},
+	{
+		groupName: 'Transaksi',
+		links: [
+			{
+				href: paths.inventoryStockIn,
+				icon: <PackagePlus size={20} strokeWidth={2} />,
+				name: 'Stock masuk',
+			},
+			{
+				href: paths.inventoryStockOut,
+				icon: <PackageMinus size={20} strokeWidth={2} />,
+				name: 'Stok keluar',
+			},
+			{
+				href: paths.inventoryStockLoan,
+				icon: <Blocks size={20} strokeWidth={2} />,
+				name: 'Pinjam',
 			},
 		],
 	},

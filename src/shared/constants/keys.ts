@@ -53,6 +53,10 @@ export const keys = {
 
 	supplierTransaction: 'supplier-transaction',
 
+	item: 'item',
+	itemDetail: 'item-detail',
+	itemInfinite: 'item-infinite',
+
 	brand: 'brand',
 	brandDetail: 'brand-detail',
 	brandInfinite: 'brand-infinite',
