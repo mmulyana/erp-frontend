@@ -143,7 +143,7 @@ export default function InfiniteCombobox<T extends BaseItem>({
 					variant='outline'
 					role='combobox'
 					aria-expanded={open}
-					className={cn('w-full justify-between h-10', style?.value)}
+					className={cn('w-full justify-between h-10 bg-surface', style?.value)}
 				>
 					{selectedItem ? label(selectedItem) : placeholder}
 					<ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />

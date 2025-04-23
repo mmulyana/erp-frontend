@@ -30,6 +30,7 @@ import {
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
 
 import { EmployeeForm } from '../types'
+import { handleFormError } from '@/shared/utils/form'
 
 export default function FormNewEmployee() {
 	const navigate = useNavigate()
@@ -58,19 +59,9 @@ export default function FormNewEmployee() {
 		mutate(payload, {
 			onSuccess: () => {
 				form.reset()
-				navigate(paths.hrisMasterDataEmployee)
+				navigate(paths.hrisMasterdataEmployee)
 			},
-			onError: (error: any) => {
-				if (error?.response?.data?.errors) {
-					error.response.data.errors.forEach((err: any) => {
-						const field = err.path?.[0]
-						const message = err.message
-						if (field) {
-							form.setError(field, { message })
-						}
-					})
-				}
-			},
+			onError: handleFormError<EmployeeForm>(form),
 		})
 	}
 

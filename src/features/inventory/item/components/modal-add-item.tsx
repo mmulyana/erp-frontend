@@ -29,6 +29,7 @@ import { ItemForm } from '../types'
 import { Textarea } from '@/shared/components/ui/textarea'
 import BrandCombobox from '../../brand/components/brand-combobox'
 import LocationCombobox from '../../location/components/location-combobox'
+import { EditorDescription } from '@/shared/components/common/tiptap/editor-description'
 
 type Form = {
 	name: string
@@ -113,7 +114,10 @@ export default function ModalAddItem() {
 								<FormItem className='flex flex-col'>
 									<FormLabel>Deskripsi</FormLabel>
 									<FormControl>
-										<Textarea {...field} />
+										<EditorDescription
+											content={field.value}
+											onChange={field.onChange}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -146,39 +150,39 @@ export default function ModalAddItem() {
 									</FormItem>
 								)}
 							/>
+							<FormField
+								name='brandId'
+								control={form.control}
+								render={({ field }) => (
+									<FormItem className='flex flex-col'>
+										<FormLabel>Merek</FormLabel>
+										<FormControl>
+											<BrandCombobox
+												onSelect={field.onChange}
+												defaultValue={field.value || ''}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								name='locationId'
+								control={form.control}
+								render={({ field }) => (
+									<FormItem className='flex flex-col'>
+										<FormLabel>Lokasi</FormLabel>
+										<FormControl>
+											<LocationCombobox
+												onSelect={field.onChange}
+												defaultValue={field.value || ''}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 						</div>
-						<FormField
-							name='brandId'
-							control={form.control}
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Merek</FormLabel>
-									<FormControl>
-										<BrandCombobox
-											onSelect={field.onChange}
-											defaultValue={field.value || ''}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							name='locationId'
-							control={form.control}
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Lokasi</FormLabel>
-									<FormControl>
-										<LocationCombobox
-											onSelect={field.onChange}
-											defaultValue={field.value || ''}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
 
 						<DialogFooter>
 							<div className='flex justify-end gap-4 items-center pt-4'>

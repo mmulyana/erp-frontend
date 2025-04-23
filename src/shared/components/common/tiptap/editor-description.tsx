@@ -71,7 +71,7 @@ export const EditorDescription = ({ content = '', onChange }: Props) => {
 	}
 
 	return (
-		<div className='border w-full relative rounded-md overflow-hidden pb-3'>
+		<div className='border w-full relative rounded-md overflow-hidden'>
 			<div className='flex w-full items-center py-1 px-1 justify-between sticky top-0 left-0 bg-background'>
 				<TooltipProvider>
 					<ToolbarProvider editor={editor}>
@@ -98,7 +98,7 @@ export const EditorDescription = ({ content = '', onChange }: Props) => {
 				onClick={() => {
 					editor?.chain().focus().run()
 				}}
-				className='cursor-text min-h-[4rem] bg-background'
+				className='cursor-text min-h-[5rem] bg-surface pb-3'
 			>
 				<EditorContent className='outline-none' editor={editor} />
 			</div>

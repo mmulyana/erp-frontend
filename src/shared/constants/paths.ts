@@ -15,9 +15,10 @@ export const paths = {
 	hrisAttendanceReport: '/hris/attendance/report',
 
 	project: '/project',
-	projectMasterdataProjects: '/project/mastedata/project',
-	projectMasterdataClient: '/project/mastedata/client',
-	projectMasterdataClientCompany: '/project/mastedata/company',
+	projectNew: '/project/new',
+	projectMasterdataProjects: '/project/masterdata/project',
+	projectMasterdataClient: '/project/masterdata/client',
+	projectMasterdataClientCompany: '/project/masterdata/company',
 	projectKanban: '/project/kanban',
 
 	inventory: '/inventory',

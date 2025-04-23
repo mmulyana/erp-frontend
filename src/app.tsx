@@ -23,6 +23,7 @@ const ReportAttendance = lazy(() => import('./pages/hris/report-attendance'))
 // PROJECT
 const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
 const Projects = lazy(() => import('./pages/project/projects'))
+const ProjectNew = lazy(() => import('./pages/project/new-project'))
 const Client = lazy(() => import('./pages/project/client'))
 const Company = lazy(() => import('./pages/project/company'))
 
@@ -43,6 +44,7 @@ const routes: RoutesConfig[] = [
 		component: <Login />,
 		withoutAuth: true,
 	},
+	
 	// project
 	{
 		path: paths.project,
@@ -62,6 +64,11 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.projectMasterdataClientCompany,
 		component: <Company />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.projectNew,
+		component: <ProjectNew />,
 		withoutAuth: true,
 	},
 

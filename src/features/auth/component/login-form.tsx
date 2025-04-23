@@ -1,18 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { AxiosError } from 'axios'
 import { z } from 'zod'
 
-import { ErrorResponse } from '@/shared/types'
-
-import InputPassword from '@/components/common/input-password'
+import InputPassword from '@/shared/components/fields/password-field'
 import { Form, FormField } from '@/shared/components/ui/form'
+import { handleFormError } from '@/shared/utils/form'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { testIds } from '@/shared/constants/testId'
 
-import LogoGoogle from '/public/images/logo-google.png'
-import Logo from '/public/images/logo.png'
+import LogoGoogle from '/images/logo-google.png'
+import Logo from '/images/logo.png'
 
 import { useLogin } from '../api/use-login'
 import { LoginSchema } from '../schema'
@@ -40,28 +38,7 @@ export default function LoginForm() {
 		payload.phone = data.phone as string
 
 		mutate(payload, {
-			onError: (err) => {
-				const errors = err as AxiosError<ErrorResponse<any>>
-
-				if (errors.response?.data?.errors) {
-					const validationErrors = errors.response.data.errors
-
-					validationErrors.forEach((err: any) => {
-						err.path.forEach((fieldName: string) => {
-							if (fieldName in data) {
-								form.setError(
-									fieldName as keyof FormData,
-									{
-										type: err.code,
-										message: err.message,
-									},
-									{ shouldFocus: true }
-								)
-							}
-						})
-					})
-				}
-			},
+			onError: handleFormError<FormData>(form),
 		})
 	}
 
