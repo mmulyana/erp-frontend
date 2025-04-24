@@ -43,9 +43,20 @@ export function MultiStep({
 					</Button>
 				)}
 				<div className='ml-auto gap-4 flex'>
-					<Button type='button' onClick={isLastStep ? onFinish : onNext}>
-						{isLastStep ? 'Simpan' : 'Selanjutnya'}
-					</Button>
+					{isLastStep ? (
+						<Button
+							onClick={onFinish}
+							key='btn-submit'
+							type='submit'
+							id='btn-submit'
+						>
+							Simpan
+						</Button>
+					) : (
+						<Button onClick={onNext} key='btn-next' type='button' id='btn-next'>
+							Selanjutnya
+						</Button>
+					)}
 				</div>
 			</div>
 		</div>

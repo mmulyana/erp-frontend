@@ -34,9 +34,7 @@ export const keys = {
 
 	project: 'project',
 	projectDetail: 'project-detail',
-	projectDetailEmployee: 'project-employee',
-	projectLabelDetail: 'project-label-detail',
-	projectChart: 'project-chart',
+	projectInfinite: 'project-infinite',
 
 	client: 'client',
 	clientDetail: 'client-detail',

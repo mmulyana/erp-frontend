@@ -6,6 +6,8 @@ import { buttonVariants } from '@/shared/components/ui/button'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { paths } from '@/shared/constants/paths'
 
+import TableProject from '@/features/projects/project/components/table-project'
+
 export default function Projects() {
 	return (
 		<DefaultLayout className='px-0 pt-12' module='project'>
@@ -22,6 +24,7 @@ export default function Projects() {
 					<span className='px-0.5'>Tambah Proyek</span>
 				</Link>
 			</div>
+			<TableProject />
 		</DefaultLayout>
 	)
 }

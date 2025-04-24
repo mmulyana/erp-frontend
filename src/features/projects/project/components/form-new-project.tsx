@@ -1,9 +1,11 @@
-import { useForm } from 'react-hook-form'
+import { UseFormReturn } from 'react-hook-form'
 import { useEffect, useState } from 'react'
+import { useSetAtom } from 'jotai'
 
 import { EditorDescription } from '@/shared/components/common/tiptap/editor-description'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import { MultiStep } from '@/shared/components/common/multi-step'
+import { atomProgress } from '@/shared/store/progress'
 import { Input } from '@/shared/components/ui/input'
 import {
 	Form,
@@ -13,45 +15,22 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
-import { useSetAtom } from 'jotai'
-import { atomProgress } from '@/shared/store/progress'
+
 import ClientCombobox from '../../client/components/client-combobox'
+import { ProjectForm } from '../types'
 
-export default function FormNewProject() {
-	const [step, setStep] = useState(0)
+type props = {
+	form: UseFormReturn<ProjectForm>
+	onSubmit: (data: ProjectForm) => void
+}
 
+export default function FormNewProject({ form, onSubmit }: props) {
 	const setProgress = useSetAtom(atomProgress)
-	useEffect(() => {
-		const initialProgress = ((step + 1) / steps.length) * 100
-		setProgress(initialProgress)
-
-		return () => setProgress(0)
-	}, [])
-
-	const handleNext = () => {
-		setStep((prev) => {
-			const nextStep = prev + 1
-			const percent = ((nextStep + 1) / steps.length) * 100
-			setProgress(percent)
-			return nextStep
-		})
-	}
-
-	const handleBack = () => {
-		setStep((prev) => {
-			const prevStep = prev - 1
-			const percent = ((prevStep + 1) / steps.length) * 100
-			setProgress(percent)
-			return prevStep
-		})
-	}
-
-	const form = useForm()
+	const [step, setStep] = useState(0)
 
 	const steps = [
 		{
 			title: 'Info',
-			// icon: <User2 size={16} />,
 			content: (
 				<>
 					<FormField
@@ -144,16 +123,42 @@ export default function FormNewProject() {
 		},
 	]
 
+	useEffect(() => {
+		const initialProgress = ((step + 1) / steps.length) * 100
+		setProgress(initialProgress)
+
+		return () => setProgress(0)
+	}, [])
+
+	const handleNext = () => {
+		setStep((prev) => {
+			const nextStep = prev + 1
+			const percent = ((nextStep + 1) / steps.length) * 100
+			setProgress(percent)
+			return nextStep
+		})
+	}
+
+	const handleBack = () => {
+		setStep((prev) => {
+			const prevStep = prev - 1
+			const percent = ((prevStep + 1) / steps.length) * 100
+			setProgress(percent)
+			return prevStep
+		})
+	}
+
 	return (
 		<div className='p-6'>
 			<Form {...form}>
-				<MultiStep
-					steps={steps}
-					currentStep={step}
-					onNext={handleNext}
-					onBack={handleBack}
-					// onFinish={() => form.handleSubmit(onCreate)()}
-				/>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
+					<MultiStep
+						steps={steps}
+						currentStep={step}
+						onNext={handleNext}
+						onBack={handleBack}
+					/>
+				</form>
 			</Form>
 		</div>
 	)

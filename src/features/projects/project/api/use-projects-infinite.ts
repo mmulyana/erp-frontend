@@ -1,11 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { NormalizedResponse } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
-
-import { Client } from '../types'
+import { Project } from '../types'
+import { NormalizedResponse } from '@/shared/types'
 
 type Params = {
 	search?: string
@@ -13,11 +12,11 @@ type Params = {
 	page?: string
 }
 
-export function useClientInfinite(params: Params) {
-	return useInfiniteQuery<NormalizedResponse<Client>>({
-		queryKey: [keys.brandInfinite, params],
+export function useProjectInfinite(params: Params) {
+	return useInfiniteQuery<NormalizedResponse<Project>>({
+		queryKey: [keys.projectInfinite, params],
 		queryFn: async ({ pageParam = 1 }) => {
-			const { data } = await http(urls.client + '/data/infinite', {
+			const { data } = await http(urls.project + '/data/infinite', {
 				params: {
 					...params,
 					limit: String(params.limit),
