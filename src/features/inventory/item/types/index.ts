@@ -20,4 +20,10 @@ export type Item = ItemForm & {
 	}
 	quantity?: number
 	available?: string
+	category?: string
+	user?: {
+		id: string
+		username: string
+	}
+	createdAt: string
 }

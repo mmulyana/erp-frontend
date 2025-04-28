@@ -26,10 +26,12 @@ const Projects = lazy(() => import('./pages/project/projects'))
 const ProjectNew = lazy(() => import('./pages/project/new-project'))
 const Client = lazy(() => import('./pages/project/client'))
 const Company = lazy(() => import('./pages/project/company'))
+const DetailProject = lazy(() => import('./pages/project/detail-project'))
 
 // INVENTORY
 const InventoryDashboard = lazy(() => import('./pages/inventory/dashboard'))
 const Item = lazy(() => import('./pages/inventory/item'))
+const ItemDetail = lazy(() => import('./pages/inventory/detail-item'))
 const Location = lazy(() => import('./pages/inventory/location'))
 const Brand = lazy(() => import('./pages/inventory/brand'))
 
@@ -44,7 +46,7 @@ const routes: RoutesConfig[] = [
 		component: <Login />,
 		withoutAuth: true,
 	},
-	
+
 	// project
 	{
 		path: paths.project,
@@ -54,6 +56,11 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.projectMasterdataProjects,
 		component: <Projects />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.projectMasterdataProjectsDetail,
+		component: <DetailProject />,
 		withoutAuth: true,
 	},
 	{
@@ -128,6 +135,11 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.inventoryMasterdataItem,
 		component: <Item />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.inventoryMasterdataItemDetail,
+		component: <ItemDetail />,
 		withoutAuth: true,
 	},
 	{

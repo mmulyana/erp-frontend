@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 type Props = {
 	back?: string
-	title: string
+	title?: string
 }
 
 export default function HeaderV2({ back, title }: Props) {
