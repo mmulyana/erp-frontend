@@ -14,21 +14,21 @@ export default function ProjectTabs({ id }: { id?: string }) {
 			<TabsList className='border-b w-full'>
 				<TabsTrigger
 					value='tab-1'
-					className='bg-muted data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
+					className='pt-0 pb-3 data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
 				>
 					<p>Laporan</p>
 					<div className='hidden group-data-[state=active]:block w-full h-[3px] bg-brand absolute bottom-0'></div>
 				</TabsTrigger>
 				<TabsTrigger
 					value='tab-2'
-					className='bg-muted data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
+					className='pt-0 pb-3 data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
 				>
 					<p>Pemakaian</p>
 					<div className='hidden group-data-[state=active]:block w-full h-[3px] bg-brand absolute bottom-0'></div>
 				</TabsTrigger>
 				<TabsTrigger
 					value='tab-3'
-					className='bg-muted data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
+					className='pt-0 pb-3 data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
 				>
 					<p>Pemakaian</p>
 					<div className='hidden group-data-[state=active]:block w-full h-[3px] bg-brand absolute bottom-0'></div>

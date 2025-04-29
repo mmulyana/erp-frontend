@@ -34,7 +34,6 @@ export default function NewProject() {
 	const onSubmit = (payload: ProjectForm) => {
 		mutate(payload, {
 			onSuccess: (data) => {
-				console.log('data', data.data)
 				form.reset()
 				navigate(
 					`${paths.projectMasterdataProjects}/${data.data?.id}` as string

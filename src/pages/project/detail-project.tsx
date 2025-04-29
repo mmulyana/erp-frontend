@@ -35,8 +35,7 @@ export default function DetailProject() {
 	const { data } = useProject({ id })
 
 	const linkMemo: Link[] = useMemo(() => {
-		if (!id || data?.data) return links
-
+		if (!id || !data?.data) return links
 		return [
 			...links.filter((i) => i.name !== 'Detail'),
 			{

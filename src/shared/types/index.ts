@@ -64,6 +64,7 @@ export interface ApiError {
 export type Pagination = {
 	page?: string
 	limit?: string
+	search?: string
 }
 
 export type StatusItem = {

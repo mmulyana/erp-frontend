@@ -34,6 +34,8 @@ const Item = lazy(() => import('./pages/inventory/item'))
 const ItemDetail = lazy(() => import('./pages/inventory/detail-item'))
 const Location = lazy(() => import('./pages/inventory/location'))
 const Brand = lazy(() => import('./pages/inventory/brand'))
+const Supplier = lazy(() => import('./pages/inventory/supplier'))
+const SupplierDetail = lazy(() => import('./pages/inventory/detail-supplier'))
 
 const routes: RoutesConfig[] = [
 	{
@@ -150,6 +152,16 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.inventoryMasterdataLocation,
 		component: <Location />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.inventoryMasterdataSupplier,
+		component: <Supplier />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.inventoryMasterdataSupplierDetail,
+		component: <SupplierDetail />,
 		withoutAuth: true,
 	},
 ]

@@ -13,6 +13,7 @@ import {
 	PackageMinus,
 	PackagePlus,
 	PieChart,
+	Store,
 	Tag,
 	Users,
 } from 'lucide-react'
@@ -177,6 +178,11 @@ const inventoryLink: SidebarLinkGroup[] = [
 				href: paths.inventoryMasterdataBrand,
 				icon: <Tag size={20} strokeWidth={2} />,
 				name: 'Merek',
+			},
+			{
+				href: paths.inventoryMasterdataSupplier,
+				icon: <Store size={20} strokeWidth={2} />,
+				name: 'Supplier',
 			},
 		],
 	},

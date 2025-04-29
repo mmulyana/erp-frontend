@@ -19,6 +19,7 @@ type Props = {
 		action?: string
 		header?: string
 	}
+	buttonAction?: React.ReactNode
 }
 
 export type Link = {
@@ -34,6 +35,7 @@ export default function DetailLayout({
 	action,
 	style,
 	titleAction,
+	buttonAction,
 }: Props) {
 	return (
 		<>
@@ -85,15 +87,16 @@ export default function DetailLayout({
 							</div>
 						))}
 					</div>
-					{titleAction && (
-						<Button
-							variant='secondary'
-							onClick={action}
-							className={cn('text-brand hover:bg-gray-200', style?.action)}
-						>
-							{titleAction}
-						</Button>
-					)}
+					{buttonAction ||
+						(titleAction && (
+							<Button
+								variant='secondary'
+								onClick={action}
+								className={cn('text-brand hover:bg-gray-200', style?.action)}
+							>
+								{titleAction}
+							</Button>
+						))}
 				</div>
 			</div>
 			<main className='pt-16 flex-1 min-h-screen bg-surface'>{children}</main>

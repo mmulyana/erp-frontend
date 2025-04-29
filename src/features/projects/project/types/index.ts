@@ -22,6 +22,7 @@ export type Project = {
 	createdAt?: string
 	updatedAt?: string
 	deletedAt?: string
+	deadlineAt?: string
 }
 
 export type ProjectForm = {

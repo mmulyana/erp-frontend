@@ -1,20 +1,25 @@
-import { Pencil } from 'lucide-react'
+import { Pencil, Plus } from 'lucide-react'
 
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
+import EmptyState from '@/shared/components/common/empty-state'
 
 export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 	return (
 		<Card className='p-0 overflow-hidden'>
 			<div className='flex items-center justify-between px-6 pt-6'>
 				<p className='text-ink-primary'>Pegawai</p>
-				<Button variant='outline' className='gap-2'>
-					<Pencil size={16} />
-					<span className='px-0.5'>Edit</span>
+				<Button variant='outline' className='gap-1'>
+					<Plus size={16} />
+					<span className='px-0.5'>Tambah</span>
 				</Button>
 			</div>
 			<ScrollArea className='h-[280px] px-6 pt-2'>
+				<div className='h-full flex justify-center items-center'>
+					<EmptyState />
+				</div>
+				{/* 
 				<div className='flex flex-col gap-4'>
 					{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i, index) => (
 						<div key={index} className='flex justify-between items-center'>
@@ -27,8 +32,9 @@ export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 							</div>
 							<p className='text-ink-light'>12/10/2024</p>
 						</div>
-					))}
+					))} 
 				</div>
+					 */}
 			</ScrollArea>
 		</Card>
 	)

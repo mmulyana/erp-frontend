@@ -65,7 +65,7 @@ export default function ModalDetailLocation() {
 	useEffect(() => {
 		if (data) {
 			form.reset({
-				name: data.data?.data.name,
+				name: data.data?.name,
 			})
 		}
 	}, [data])
