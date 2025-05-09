@@ -1,3 +1,5 @@
+import { Base } from '@/shared/types'
+
 export type Project = {
 	id?: string
 	name: string
@@ -38,3 +40,25 @@ export type ProjectForm = {
 	endedAt?: string
 	archivedAt?: string
 }
+
+export type ProjectEmployee = {
+	id: string
+	employee: {
+		id: string
+		fullname: string
+		photoUrl: string
+		position: string
+	}
+	startDate: string
+	endDate: string
+}
+
+export type AttachmentForm = {
+	name: string
+	file: File | string | null
+	type: string
+	secret: boolean
+	projectId: string
+}
+
+export type Attachment = Base & AttachmentForm

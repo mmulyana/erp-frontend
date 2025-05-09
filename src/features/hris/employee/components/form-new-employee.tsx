@@ -1,15 +1,14 @@
-import { BriefcaseBusiness, CalendarIcon, MapPinned, User2 } from 'lucide-react'
+import { BriefcaseBusiness, MapPinned, User2 } from 'lucide-react'
 import { NumericFormat } from 'react-number-format'
-import { useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { UseFormReturn } from 'react-hook-form'
+import { useEffect, useState } from 'react'
+import { useSetAtom } from 'jotai'
 
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import { ImageUpload } from '@/shared/components/common/image-upload'
 import { MultiStep } from '@/shared/components/common/multi-step'
 import { Textarea } from '@/shared/components/ui/textarea'
+import { atomProgress } from '@/shared/store/progress'
 import { Input } from '@/shared/components/ui/input'
-import { paths } from '@/shared/constants/paths'
 import {
 	Form,
 	FormItem,
@@ -27,43 +26,18 @@ import {
 	SelectValue,
 } from '@/shared/components/ui/select'
 
-import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
-
 import { EmployeeForm } from '../types'
-import { handleFormError } from '@/shared/utils/form'
 
-export default function FormNewEmployee() {
-	const navigate = useNavigate()
-
+export default function FormNewEmployee({
+	form,
+	onSubmit,
+}: {
+	form: UseFormReturn<EmployeeForm>
+	onSubmit: (data: EmployeeForm) => void
+}) {
+	const setProgress = useSetAtom(atomProgress)
 	const [step, setStep] = useState(0)
-
-	const { mutate } = useCreateEmployee()
-	const form = useForm<EmployeeForm>({
-		defaultValues: {
-			fullname: '',
-			address: '',
-			birthDate: undefined,
-			joinedAt: undefined,
-			lastEducation: '',
-			overtimeSalary: undefined,
-			phone: '',
-			position: '',
-			salary: undefined,
-			photoUrl: undefined,
-		},
-	})
-
 	const photoWatch = form.watch('photoUrl')
-
-	const onCreate = (payload: EmployeeForm) => {
-		mutate(payload, {
-			onSuccess: () => {
-				form.reset()
-				navigate(paths.hrisMasterdataEmployee)
-			},
-			onError: handleFormError<EmployeeForm>(form),
-		})
-	}
 
 	const steps = [
 		{
@@ -332,16 +306,42 @@ export default function FormNewEmployee() {
 		},
 	]
 
+	useEffect(() => {
+		const initialProgress = ((step + 1) / steps.length) * 100
+		setProgress(initialProgress)
+
+		return () => setProgress(0)
+	}, [])
+
+	const handleNext = () => {
+		setStep((prev) => {
+			const nextStep = prev + 1
+			const percent = ((nextStep + 1) / steps.length) * 100
+			setProgress(percent)
+			return nextStep
+		})
+	}
+
+	const handleBack = () => {
+		setStep((prev) => {
+			const prevStep = prev - 1
+			const percent = ((prevStep + 1) / steps.length) * 100
+			setProgress(percent)
+			return prevStep
+		})
+	}
+
 	return (
 		<div className='p-6'>
 			<Form {...form}>
-				<MultiStep
-					steps={steps}
-					currentStep={step}
-					onNext={() => setStep((prev) => prev + 1)}
-					onBack={() => setStep((prev) => prev - 1)}
-					onFinish={() => form.handleSubmit(onCreate)()}
-				/>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
+					<MultiStep
+						steps={steps}
+						currentStep={step}
+						onNext={handleNext}
+						onBack={handleBack}
+					/>
+				</form>
 			</Form>
 		</div>
 	)

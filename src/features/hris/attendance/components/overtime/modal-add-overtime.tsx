@@ -99,10 +99,7 @@ export default function ModalAddOvertime() {
 								<FormItem className='flex flex-col'>
 									<FormLabel>Pegawai</FormLabel>
 									<FormControl>
-										<EmployeeCombobox
-											onSelect={(e) => field.onChange(e)}
-											style={{ value: 'bg-surface' }}
-										/>
+										<EmployeeCombobox onSelect={(e) => field.onChange(e)} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

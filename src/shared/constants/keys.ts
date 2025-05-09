@@ -34,6 +34,8 @@ export const keys = {
 
 	project: 'project',
 	projectDetail: 'project-detail',
+	projectEmployee: 'project-employee',
+	projectAttachment: 'project-attachment',
 	projectInfinite: 'project-infinite',
 
 	client: 'client',

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Plus } from 'lucide-react'
 
+import { EditorDescription } from '@/shared/components/common/tiptap/editor-description'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { ImageUpload } from '@/shared/components/common/image-upload'
 import ButtonSubmit from '@/shared/components/common/button-submit'
@@ -24,12 +25,11 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
+
+import LocationCombobox from '../../location/components/location-combobox'
+import BrandCombobox from '../../brand/components/brand-combobox'
 import { useCreateItem } from '../api/use-create-item'
 import { ItemForm } from '../types'
-import { Textarea } from '@/shared/components/ui/textarea'
-import BrandCombobox from '../../brand/components/brand-combobox'
-import LocationCombobox from '../../location/components/location-combobox'
-import { EditorDescription } from '@/shared/components/common/tiptap/editor-description'
 
 type Form = {
 	name: string

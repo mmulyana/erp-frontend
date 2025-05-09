@@ -14,11 +14,13 @@ export const useCreateEmployee = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (
-			payload: Partial<EmployeeForm>
-		): Promise<AxiosResponse<IApi<Employee>>> => {
+		mutationFn: async (payload: Partial<EmployeeForm>) => {
 			const formData = toFormData(payload)
-			return await http.post(urls.employee + '/pegawai', formData, {
+			return await http.post<
+				IApi<{
+					id: string
+				}>
+			>(urls.employee + '/pegawai', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},

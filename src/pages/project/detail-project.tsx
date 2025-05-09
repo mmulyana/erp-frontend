@@ -47,7 +47,7 @@ export default function DetailProject() {
 
 	return (
 		<DetailLayout links={linkMemo} style={{ header: 'w-[1020px]' }}>
-			<div className='grid grid-cols-1 md:grid-cols-[640px_1fr] gap-8 w-[1020px] max-w-full px-4 md:px-0 mx-auto pt-6'>
+			<div className='grid grid-cols-1 md:grid-cols-[640px_380px] gap-8 w-[1020px] max-w-full px-4 md:px-0 mx-auto pt-6'>
 				<div className='space-y-6'>
 					<ProjectInfo id={id} />
 					<ProjectDetail id={id} />

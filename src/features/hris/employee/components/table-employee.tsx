@@ -51,7 +51,8 @@ export default function TableEmployee() {
 			id: 'phone',
 			accessorKey: 'phone',
 			header: 'Nomor telp',
-			cell: ({ row }) => formatPhone(row.original.phone),
+			cell: ({ row }) =>
+				row.original.phone && formatPhone(row?.original?.phone),
 		},
 		{
 			id: 'status',
