@@ -17,7 +17,7 @@ module.exports = {
 				success: '#47AF97',
 				error: '#F45151',
 				ink: {
-					primary: '#2B2B2C',
+					primary: '#2C2C30',
 					secondary: '#484A57',
 					light: '#828599',
 				},

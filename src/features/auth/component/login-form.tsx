@@ -87,7 +87,7 @@ export default function LoginForm() {
 						<Button
 							type='submit'
 							variant='default'
-							className='h-fit py-2.5 gap-2 bg-[#475DEF] border-none'
+							className='h-fit py-2.5 gap-2 bg-brand border-none'
 							data-testid={testIds.loginButtonSubmit}
 						>
 							Login
@@ -96,13 +96,14 @@ export default function LoginForm() {
 						<div className='relative mt-2'>
 							<div className='h-[1px] w-full bg-[#EFEFEF] absolute top-1/2 left-0 -translate-y-1/2'></div>
 							<div className='bg-white px-4 absolute  top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
-								<p className='text-[#828599]'>Atau</p>
+								<p className='text-ink-light text-sm'>Atau</p>
 							</div>
 						</div>
 
 						<Button
 							type='button'
-							className='text-[#828599] font-medium bg-white gap-2 py-2.5 border-[#EFEFEF] h-fit'
+							variant='outline'
+							className='text-ink-light font-medium bg-white gap-2 py-2.5 border-[#EFEFEF] h-fit'
 						>
 							<img src={LogoGoogle} className='w-5 h-5' />
 							Masuk dengan google
