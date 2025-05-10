@@ -6,11 +6,9 @@ import { format } from 'date-fns'
 import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { useDateIndex } from '@/shared/hooks/use-date-index'
 import { Button } from '@/shared/components/ui/button'
-import CardData from '@/shared/components/common/card-data'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { cn } from '@/shared/utils/cn'
 
-import { useTotalAttendancePerDay } from '../../api/regular/use-total-attendance-per-day'
 import TableRegular from './table-regular'
 import ViewType from './view-type'
 
@@ -28,10 +26,6 @@ export default function SectionRegular() {
 		indexMonth: query.month,
 	})
 
-	const { data } = useTotalAttendancePerDay({
-		startDate: resultDate.toString(),
-	})
-
 	return (
 		<div className='w-full'>
 			<div className='flex gap-8 lg:gap-20 items-center flex-col md:flex-row w-fit'>
@@ -42,14 +36,6 @@ export default function SectionRegular() {
 							locale: id,
 						})}
 					</p>
-				</div>
-				<div className='flex gap-6 items-center'>
-					<CardData title='Hadir' value={data?.data?.total_presence || 0} />
-					<CardData title='Tidak Hadir' value={data?.data?.total_absent || 0} />
-					<CardData
-						title='Belum diabsen'
-						value={data?.data?.total_notYet || 0}
-					/>
 				</div>
 			</div>
 			<div className='flex gap-4 items-center flex-wrap md:flex-nowrap w-full py-6'>

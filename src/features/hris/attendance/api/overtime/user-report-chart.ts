@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { IApiPagination } from '@/shared/types'
+import { IApi, IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
@@ -8,25 +8,20 @@ import http from '@/shared/utils/http'
 type Params = {
 	startDate?: string
 	endDate?: string
-	page?: string
-	limit?: string
-	search?: string
 }
 
-export const useReportOvertime = (params?: Params) => {
+export const useReportChart = (params?: Params) => {
 	return useQuery({
 		queryKey: [keys.overtimeReport, params],
 		queryFn: async (): Promise<
-			IApiPagination<
+			IApi<
 				{
-					id: string
-					fullname: string
-					overtimes: ({ id: string; totalHour: number } | null)[]
+					date: string
 					total: number
 				}[]
 			>
 		> => {
-			const { data } = await http(urls.overtime + '/data/report', {
+			const { data } = await http(urls.overtime + '/report/chart', {
 				params,
 			})
 			return data

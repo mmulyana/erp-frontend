@@ -1,54 +1,33 @@
-'use client'
-
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from '@/shared/components/ui/card'
-import { Calendar } from '@/shared/components/ui/calendar'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/shared/components/ui/popover'
-import { Button } from '@/shared/components/ui/button'
+import { CalendarIcon, ChevronsUpDown, FilePen } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
-import {
-	CalendarIcon,
-	FileBarChart,
-	ChevronsUpDown,
-	FilePen,
-} from 'lucide-react'
+import { cn } from '@/shared/utils/cn'
+import { id } from 'date-fns/locale'
+import { useState } from 'react'
 import {
 	BarChart,
 	Bar,
 	XAxis,
 	YAxis,
-	Tooltip,
 	ResponsiveContainer,
 	CartesianGrid,
 } from 'recharts'
-import { useState } from 'react'
+
+import { Calendar } from '@/shared/components/ui/calendar'
+import CardV1 from '@/shared/components/common/card-v1'
+import { Button } from '@/shared/components/ui/button'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/shared/components/ui/popover'
 import {
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 	ChartConfig,
 } from '@/shared/components/ui/chart'
-import CardV1 from '@/shared/components/common/card-v1'
-import { cn } from '@/shared/utils/cn'
-import { id } from 'date-fns/locale'
-import { Badge } from '@/shared/components/ui/badge'
 
-const chartData = [
-	{ date: '2024-10-12', presence: 30, absent: 45 },
-	{ date: '2024-10-13', presence: 45, absent: 10 },
-	{ date: '2024-10-14', presence: 45, absent: 10 },
-	{ date: '2024-10-15', presence: 55, absent: 5 },
-	{ date: '2024-10-16', presence: 30, absent: 45 },
-	{ date: '2024-10-17', presence: 55, absent: 5 },
-]
+import { useReportChart } from '../../api/regular/use-report-chart'
 
 const chartConfig = {
 	presence: {
@@ -62,13 +41,14 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function BarRegular() {
+	const { data } = useReportChart()
 	const [value, setValue] = useState<Date | undefined>(new Date())
 
 	return (
 		<CardV1
 			title='Absensi Reguler'
 			icon={<FilePen size={20} className='stroke-ink-primary' />}
-			style={{ card: 'col-span-1 xl:col-span-2 !h-fit' }}
+			style={{ card: 'col-span-2 !h-fit' }}
 			action={
 				<>
 					<Popover>
@@ -108,7 +88,7 @@ export default function BarRegular() {
 				<div className='h-[220px]'>
 					<ResponsiveContainer width='100%' height='100%'>
 						<BarChart
-							data={chartData}
+							data={data?.data || []}
 							barGap={8}
 							barCategoryGap={20}
 							margin={{ top: 8, bottom: -8 }}

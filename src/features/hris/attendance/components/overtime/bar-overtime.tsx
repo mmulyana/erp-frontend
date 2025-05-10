@@ -1,46 +1,32 @@
-'use client'
-
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from '@/shared/components/ui/card'
+import { CalendarIcon, ChevronsUpDown, FileClock } from 'lucide-react'
 import { Calendar } from '@/shared/components/ui/calendar'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/shared/components/ui/popover'
-import { Button } from '@/shared/components/ui/button'
 import { format, parseISO } from 'date-fns'
-import {
-	CalendarIcon,
-	FileBarChart,
-	ChevronsUpDown,
-	FilePen,
-	FileClock,
-} from 'lucide-react'
+import { id } from 'date-fns/locale'
+import { useState } from 'react'
 import {
 	BarChart,
 	Bar,
 	XAxis,
 	YAxis,
-	Tooltip,
 	ResponsiveContainer,
 	CartesianGrid,
 } from 'recharts'
-import { useState } from 'react'
+
+import CardV1 from '@/shared/components/common/card-v1'
+import { Button } from '@/shared/components/ui/button'
+import { cn } from '@/shared/utils/cn'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/shared/components/ui/popover'
 import {
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 	ChartConfig,
 } from '@/shared/components/ui/chart'
-import CardV1 from '@/shared/components/common/card-v1'
-import { cn } from '@/shared/utils/cn'
-import { id } from 'date-fns/locale'
-import { Badge } from '@/shared/components/ui/badge'
+import { useReportChart } from '../../api/overtime/user-report-chart'
 
 const chartData = [
 	{ date: '2024-10-12', total: 30 },
@@ -59,13 +45,15 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function BarOvertime() {
+	const { data } = useReportChart()
+
 	const [value, setValue] = useState<Date | undefined>(new Date())
 
 	return (
 		<CardV1
 			title='Lembur'
 			icon={<FileClock size={20} className='stroke-ink-primary' />}
-			style={{ card: 'col-span-1 xl:col-span-2 !h-fit' }}
+			style={{ card: 'col-span-2 !h-fit' }}
 			action={
 				<>
 					<Popover>
@@ -109,7 +97,7 @@ export default function BarOvertime() {
 				<div className='h-[220px]'>
 					<ResponsiveContainer width='100%' height='100%'>
 						<BarChart
-							data={chartData}
+							data={data?.data || []}
 							barGap={8}
 							barCategoryGap={20}
 							margin={{ top: 8, bottom: -8 }}

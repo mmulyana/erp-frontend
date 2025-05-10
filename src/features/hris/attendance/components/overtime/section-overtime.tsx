@@ -7,7 +7,6 @@ import { useDateIndex } from '@/shared/hooks/use-date-index'
 import CardData from '@/shared/components/common/card-data'
 import SearchV3 from '@/shared/components/common/search-v3'
 
-import { useTotalOvertimePerDay } from '../../api/regular/use-total-overtime-per-day'
 import ModalDetailOvertime from './modal-detail-overtime'
 import ModalAddOvertime from './modal-add-overtime'
 import TableOvertime from './table-overtime'
@@ -25,10 +24,6 @@ export default function SectionOvertime() {
 		indexMonth: query.month,
 	})
 
-	const { data } = useTotalOvertimePerDay({
-		startDate: resultDate.toString(),
-	})
-
 	return (
 		<div className='w-full'>
 			<div className='flex gap-8 lg:gap-20 items-center'>
@@ -39,9 +34,6 @@ export default function SectionOvertime() {
 							locale: id,
 						})}
 					</p>
-				</div>
-				<div className='flex gap-6 items-center'>
-					<CardData title='Total entri lembur' value={data?.data?.total || 0} />
 				</div>
 			</div>
 			<div className='flex justify-between items-center py-6'>

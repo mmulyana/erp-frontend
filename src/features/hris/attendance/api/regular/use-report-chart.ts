@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { IApiPagination } from '@/shared/types'
+import { IApi, IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
@@ -8,25 +8,21 @@ import http from '@/shared/utils/http'
 type Params = {
 	startDate?: string
 	endDate?: string
-	page?: string
-	limit?: string
-	search?: string
 }
 
-export const useReportAttendance = (params?: Params) => {
+export const useReportChart = (params?: Params) => {
 	return useQuery({
 		queryKey: [keys.attendanceReport, params],
 		queryFn: async (): Promise<
-			IApiPagination<
+			IApi<
 				{
-					fullname: string
-					attendance: string[]
-					present: number
+					date: string
+					presence: number
 					absent: number
 				}[]
 			>
 		> => {
-			const { data } = await http(urls.attendance + '/report', {
+			const { data } = await http(urls.attendance + '/report/chart', {
 				params,
 			})
 			return data

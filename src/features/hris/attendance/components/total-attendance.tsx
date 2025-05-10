@@ -16,15 +16,17 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
+import { useReportAll } from '../api/regular/use-report-all'
 
-export function TotalAttendance() {
+export default function TotalAttendance() {
 	const [value, setValue] = useState<any>(new Date())
+	const { data } = useReportAll({ startDate: value })
 
 	return (
 		<CardV1
 			title='Absensi'
 			icon={<ClipboardList size={20} className='stroke-ink-primary' />}
-			style={{ card: 'h-fit' }}
+			style={{ card: 'h-fit col-span-2 xl:col-span-1 w-full' }}
 			action={
 				<>
 					<Popover>
@@ -66,7 +68,9 @@ export function TotalAttendance() {
 						<div className='h-4 w-1.5 rounded-lg bg-[#47AF97]'></div>
 						<p className='text-ink-primary/80 text-sm'>Hadir</p>
 					</div>
-					<p className='mt-1 text-xl text-ink-primary font-medium'>32</p>
+					<p className='mt-1 text-xl text-ink-primary font-medium'>
+						{data?.data?.presence}
+					</p>
 				</div>
 				<div className='h-fit border rounded-lg px-3.5 py-4'>
 					<div className='flex gap-1 items-center'>
@@ -75,7 +79,9 @@ export function TotalAttendance() {
 							Tidak Hadir
 						</p>
 					</div>
-					<p className='mt-1 text-xl text-ink-primary font-medium'>32</p>
+					<p className='mt-1 text-xl text-ink-primary font-medium'>
+						{data?.data?.absent}
+					</p>
 				</div>
 				<div className='h-fit border rounded-lg px-3.5 py-4'>
 					<div className='flex gap-1 items-center'>
@@ -84,7 +90,9 @@ export function TotalAttendance() {
 							Blm diabsen
 						</p>
 					</div>
-					<p className='mt-1 text-xl text-ink-primary font-medium'>32</p>
+					<p className='mt-1 text-xl text-ink-primary font-medium'>
+						{data?.data?.notYet}
+					</p>
 				</div>
 				<div className='h-fit border rounded-lg px-3.5 py-4'>
 					<div className='h-6 w-6 rounded border flex justify-center items-center'>
@@ -93,7 +101,7 @@ export function TotalAttendance() {
 					<div className='flex items-end justify-between'>
 						<p className='text-ink-primary/80 leading-none'>Total</p>
 						<p className='text-ink-primary font-medium leading-none text-2xl'>
-							96
+							{data?.data?.total}
 						</p>
 					</div>
 				</div>

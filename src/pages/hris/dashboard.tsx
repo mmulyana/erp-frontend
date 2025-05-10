@@ -1,8 +1,9 @@
+import TotalAttendance from '@/features/hris/attendance/components/total-attendance'
 import BarOvertime from '@/features/hris/attendance/components/overtime/bar-overtime'
 import BarRegular from '@/features/hris/attendance/components/regular/bar-regular'
-import { TotalAttendance } from '@/features/hris/attendance/components/total-attendance'
+import ReminderCertif from '@/features/hris/dashboard/components/reminder-certif'
 import ReminderSafety from '@/features/hris/dashboard/components/reminder-safety'
-import { TotalEmployee } from '@/features/hris/employee/components/total-employee'
+import TotalEmployee from '@/features/hris/employee/components/total-employee'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 
 export default function DashboardHris() {
@@ -17,7 +18,7 @@ export default function DashboardHris() {
 				</div>
 				<div className='space-y-4'>
 					<ReminderSafety />
-					<ReminderSafety />
+					<ReminderCertif />
 				</div>
 			</div>
 		</DefaultLayout>

@@ -9,6 +9,7 @@ export const keys = {
 	employeeInfinite: 'employee-infinite',
 	employeeDetail: 'employee-detail',
 	employeeData: 'employee-data',
+	employeeReportData: 'employee-report-data',
 
 	employeeCertificates: 'employee-certificates',
 	certificate: 'certificate',
@@ -20,6 +21,7 @@ export const keys = {
 	attendance: 'attendance',
 	attendanceTotalPerDay: 'attendance-total-per-day',
 	attendanceReport: 'attendance-report',
+	attendanceTotal: 'attendance-total',
 
 	overtime: 'overtime',
 	overtimeDetail: 'overtime-detail',

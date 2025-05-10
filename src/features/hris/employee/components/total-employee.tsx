@@ -1,29 +1,30 @@
-import * as React from 'react'
-import { Users } from 'lucide-react'
 import { Label, Pie, PieChart } from 'recharts'
+import { Users } from 'lucide-react'
+import { useMemo } from 'react'
+
+import CardV1 from '@/shared/components/common/card-v1'
+import { Badge } from '@/shared/components/ui/badge'
 import {
 	ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/shared/components/ui/chart'
-import CardV1 from '@/shared/components/common/card-v1'
-import { Badge } from '@/shared/components/ui/badge'
 
-const chartData = [
-	{ name: 'Aktif', total: 40, fill: '#475DEF' },
-	{ name: 'Nonaktif', total: 20, fill: '#D52B42' },
-]
-export function TotalEmployee() {
-	const totalEmployees = React.useMemo(() => {
-		return chartData.reduce((acc, curr) => acc + curr.total, 0)
-	}, [])
+import { useTotalEmployee } from '../api/use-total-employee'
+
+export default function TotalEmployee() {
+	const { data } = useTotalEmployee()
+
+	const totalEmployees = useMemo(() => {
+		return data?.data?.reduce((acc, curr) => acc + curr.total, 0)
+	}, [data])
 
 	return (
 		<CardV1
 			title='Pegawai'
 			icon={<Users size={20} className='stroke-ink-primary' />}
-			style={{ card: 'h-fit' }}
+			style={{ card: 'h-fit col-span-2 xl:col-span-1 w-full' }}
 		>
 			<ChartContainer
 				config={{} as ChartConfig}
@@ -35,7 +36,7 @@ export function TotalEmployee() {
 						content={<ChartTooltipContent hideLabel />}
 					/>
 					<Pie
-						data={chartData}
+						data={data?.data}
 						dataKey='total'
 						nameKey='name'
 						innerRadius={48}
@@ -65,7 +66,7 @@ export function TotalEmployee() {
 												y={(viewBox.cy || 0) + 16}
 												className='fill-ink-primary text-2xl font-bold'
 											>
-												{totalEmployees.toLocaleString()}
+												{totalEmployees?.toLocaleString()}
 											</tspan>
 										</text>
 									)
@@ -76,8 +77,8 @@ export function TotalEmployee() {
 				</PieChart>
 			</ChartContainer>
 			<div className='flex justify-center gap-2 flex-wrap'>
-				{chartData.map((i) => (
-					<Badge variant='outline'>
+				{data?.data?.map((i, idx) => (
+					<Badge variant='outline' key={idx}>
 						<div
 							className='w-1.5 h-1.5 rounded-full'
 							style={{ background: i.fill }}
