@@ -91,22 +91,15 @@ export function DataTable<TData, TValue>({
 					key={row.id}
 					data-state={row.getIsSelected() && 'selected'}
 					className={cn(
-						'h-10 py-0',
-						rowIndex % 2 === 1 &&
-							(style?.stripRowColor || 'bg-surface-secondary')
+						'h-10 py-0 border-none transition-colors hover:bg-ink-primary/10',
+						rowIndex % 2 === 1 && (style?.stripRowColor || 'bg-[#FAFAFA]')
 					)}
 				>
-					{row.getVisibleCells().map((cell, index) => (
+					{row.getVisibleCells().map((cell) => (
 						<TableCell
 							key={cell.id}
 							className={cn(
-								'text-dark/70 font-normal text-sm h-10 py-0',
-								index !== 0 &&
-									index !== row.getVisibleCells().length &&
-									'border-l border-line',
-								isColumnClickable(cell.column.id) &&
-									autoRedirect &&
-									'cursor-pointer hover:bg-gray-50'
+								'text-ink-primary/80 font-normal text-sm h-10 py-0 '
 							)}
 							onClick={() => handleCellClick(row.original, cell.column.id)}
 						>
@@ -135,21 +128,17 @@ export function DataTable<TData, TValue>({
 		>
 			<Table>
 				<TableHeader
-					className={cn(
-						'border-y border-line',
-						variant === 'rounded-bordered' && 'border-none'
-					)}
+					className={cn(variant === 'rounded-bordered' && 'border-none')}
 				>
 					{table.getHeaderGroups().map((headerGroup) => (
-						<TableRow key={headerGroup.id}>
+						<TableRow key={headerGroup.id} className='border-none'>
 							{headerGroup.headers.map((header, index) => (
 								<TableHead
 									key={header.id}
 									className={cn(
-										'text-ink-secondary bg-surface font-normal text-sm h-9',
-										index !== 0 &&
-											index !== headerGroup.headers.length &&
-											'border-l border-line',
+										'text-ink-primary bg-[#F7F7F7] font-normal text-sm h-9',
+										index === 0 && 'rounded-l-md',
+										index === headerGroup.headers.length - 1 && 'rounded-r-md',
 										style?.header
 									)}
 								>
@@ -166,7 +155,7 @@ export function DataTable<TData, TValue>({
 			</Table>
 			<div
 				className={cn(
-					'bg-surface px-3 border-y border-line w-full py-1 flex justify-between items-center min-h-8',
+					'w-full flex justify-between items-center h-fit',
 					style?.footer,
 					variant === 'rounded-bordered' && 'border-b-0'
 				)}

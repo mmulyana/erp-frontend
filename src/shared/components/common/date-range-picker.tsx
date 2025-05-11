@@ -7,10 +7,17 @@ import { format } from 'date-fns'
 import { cn } from '@/shared/utils/cn'
 import { id } from 'date-fns/locale'
 
-export default function DateRangePicker() {
+type props = {
+	startDate?: Date
+	endDate?: Date
+}
+export default function DateRangePicker({
+	startDate: startDateProps,
+	endDate: endDateProps,
+}: props) {
 	const [{ startDate, endDate }, setDates] = useQueryStates({
-		startDate: parseAsIsoDate.withDefault(new Date()),
-		endDate: parseAsIsoDate.withDefault(new Date()),
+		startDate: parseAsIsoDate.withDefault(startDateProps || new Date()),
+		endDate: parseAsIsoDate.withDefault(endDateProps || new Date()),
 	})
 
 	return (

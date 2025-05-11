@@ -1,19 +1,27 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 
+import ToggleSwitch from '@/shared/components/common/toggle-switch'
+import SearchV3 from '@/shared/components/common/search-v3'
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
-import BadgeV1 from '@/shared/components/common/badge-v1'
 import { paths } from '@/shared/constants/paths'
+import { keys } from '@/shared/constants/keys'
 import { formatPhone } from '@/shared/utils'
 import { Employee } from '@/shared/types'
 
 import { useEmployees } from '@/features/hris/employee/api/use-employees'
 
+import { useUpdateEmployee } from '../api/use-update-employee'
+
 export default function TableEmployee() {
 	const navigate = useNavigate()
 	const { page, limit, q } = usePagination()
+
+	const queryClient = useQueryClient()
+	const { mutate } = useUpdateEmployee()
 
 	const { isLoading, data } = useEmployees({
 		limit,
@@ -46,6 +54,7 @@ export default function TableEmployee() {
 			id: 'last_education',
 			accessorKey: 'lastEducation',
 			header: 'Pend terakhir',
+			cell: ({ row }) => row.original.lastEducation.toUpperCase(),
 		},
 		{
 			id: 'phone',
@@ -59,17 +68,34 @@ export default function TableEmployee() {
 			accessorKey: 'status',
 			header: 'Status',
 			cell: ({ row }) => (
-				<BadgeV1
-					text={row.original.status ? 'Aktif' : 'Nonaktif'}
-					variant={row.original.status ? 'default' : 'danger'}
-				/>
+				<div className='w-[120px]'>
+					<ToggleSwitch
+						value={row.original.status}
+						label={{ true: 'Aktif', false: 'Nonaktif' }}
+						onCheck={(val) => {
+							mutate(
+								{ id: row.original.id, status: val },
+								{
+									onSuccess: () => {
+										queryClient.invalidateQueries({
+											queryKey: [keys.employeeReportData],
+										})
+									},
+								}
+							)
+						}}
+					/>
+				</div>
 			),
 		},
 	]
 	// COLUMNS
 
 	return (
-		<>
+		<div className='p-6 rounded-2xl bg-white border border-border'>
+			<div className='flex justify-between items-center mb-4'>
+				<SearchV3 />
+			</div>
 			<DataTable
 				columns={columns}
 				data={data?.data.data || []}
@@ -78,11 +104,11 @@ export default function TableEmployee() {
 				totalItems={data?.data.total}
 				totalPages={data?.data.total_pages}
 				withPagination
-				nonClickableColumns={[]}
+				nonClickableColumns={['status']}
 				onCellClick={({ id }) =>
 					navigate(`${paths.hrisMasterdataEmployee}/${id}`)
 				}
 			/>
-		</>
+		</div>
 	)
 }

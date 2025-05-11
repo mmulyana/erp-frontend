@@ -16,7 +16,12 @@ export function DefaultLayout({
 		<SidebarProvider>
 			<Header />
 			<Sidebar module={module} />
-			<main className={cn('pt-[calc(68px+24px)] px-6 flex-1 pb-6', className)}>
+			<main
+				className={cn(
+					'pt-[calc(68px+24px)] px-6 flex-1 pb-6 bg-[#F7F7F7]',
+					className
+				)}
+			>
 				{children}
 			</main>
 			{/* <Helpdesk /> */}

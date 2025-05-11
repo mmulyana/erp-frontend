@@ -1,7 +1,6 @@
 import { format, parseISO } from 'date-fns'
 import { FilePen } from 'lucide-react'
 import { id } from 'date-fns/locale'
-import { useState } from 'react'
 import {
 	BarChart,
 	Bar,
@@ -32,9 +31,15 @@ const chartConfig = {
 	},
 } satisfies ChartConfig
 
-export default function BarRegular() {
-	const { data } = useReportChart()
-	const [value, setValue] = useState<Date | undefined>(new Date())
+type props = {
+	startDate?: Date
+	endDate?: Date
+}
+export default function BarRegular({ startDate, endDate }: props) {
+	const { data } = useReportChart({
+		startDate: startDate?.toString(),
+		endDate: endDate?.toString(),
+	})
 
 	return (
 		<CardV1

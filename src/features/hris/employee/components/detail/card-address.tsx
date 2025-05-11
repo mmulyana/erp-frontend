@@ -1,5 +1,7 @@
-import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
+import { MapPin } from 'lucide-react'
+
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import CardV1 from '@/shared/components/common/card-v1'
 import { formatPhone } from '@/shared/utils'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
@@ -9,29 +11,26 @@ export default function CardAddress() {
 	const { data, isPending } = useDetailEmployee()
 
 	return (
-		<Card className='p-6'>
-			<div className='flex justify-between items-center'>
-				<CardTitle className='text-ink-secondary text-base'>
-					Alamat dan kontak
-				</CardTitle>
-				<ModalEditAddress />
+		<CardV1
+			title='Alamat dan kontak'
+			icon={<MapPin size={20} className='text-ink-primary' />}
+			style={{ content: 'space-y-6 pt-4' }}
+			action={<ModalEditAddress />}
+		>
+			<div>
+				<p className='text-ink-light'>Alamat</p>
+				<LoaderWrapper isLoading={isPending}>
+					<p className='text-ink-primary'>{data?.address}</p>
+				</LoaderWrapper>
 			</div>
-			<CardContent className='p-0 space-y-4 pt-4'>
-				<div>
-					<p className='text-ink-light'>Alamat</p>
-					<LoaderWrapper isLoading={isPending}>
-						<p className='text-ink-primary'>{data?.address}</p>
-					</LoaderWrapper>
-				</div>
-				<div>
-					<p className='text-ink-light'>Kontak</p>
-					<LoaderWrapper isLoading={isPending}>
-						{data?.phone && data.phone !== '' && (
-							<p className='text-ink-primary'>{formatPhone(data?.phone)}</p>
-						)}
-					</LoaderWrapper>
-				</div>
-			</CardContent>
-		</Card>
+			<div>
+				<p className='text-ink-light'>Kontak</p>
+				<LoaderWrapper isLoading={isPending}>
+					{data?.phone && data.phone !== '' && (
+						<p className='text-ink-primary'>{formatPhone(data?.phone)}</p>
+					)}
+				</LoaderWrapper>
+			</div>
+		</CardV1>
 	)
 }

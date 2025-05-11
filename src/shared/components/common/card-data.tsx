@@ -17,7 +17,7 @@ export default function CardData({ title, value, style }: Props) {
 				style?.wrapper
 			)}
 		>
-			<p className={cn('text-ink-light text-sm', style?.title)}>{title}</p>
+			<p className={cn('text-ink-primary/50 text-sm', style?.title)}>{title}</p>
 			<p className={cn('text-ink-primary font-medium', style?.value)}>
 				{value}
 			</p>

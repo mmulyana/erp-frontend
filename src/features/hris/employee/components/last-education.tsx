@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 
 import CardV1 from '@/shared/components/common/card-v1'
 import { Badge } from '@/shared/components/ui/badge'
+import { cn } from '@/shared/utils/cn'
 import {
 	ChartConfig,
 	ChartContainer,
@@ -11,14 +12,13 @@ import {
 	ChartTooltipContent,
 } from '@/shared/components/ui/chart'
 
-import { useTotalEmployee } from '../api/use-total-employee'
-import { cn } from '@/shared/utils/cn'
+import { useLastEducation } from '../api/use-last-education'
 
 type props = {
 	variant?: 'default' | 'compact'
 }
-export default function TotalEmployee({ variant = 'default' }: props) {
-	const { data } = useTotalEmployee()
+export default function LastEducation({ variant }: props) {
+	const { data } = useLastEducation()
 
 	const totalEmployees = useMemo(() => {
 		return data?.data?.reduce((acc, curr) => acc + curr.total, 0)
@@ -34,7 +34,8 @@ export default function TotalEmployee({ variant = 'default' }: props) {
 					variant === 'compact' && 'h-fit w-fit'
 				),
 				content: cn(
-					variant === 'compact' && 'flex items-center justify-start p-4 py-0 gap-4 min-w-[352px] relative h-[120px]'
+					variant === 'compact' &&
+						'flex items-center justify-start p-4 py-0 gap-4 min-w-[352px] relative h-[120px]'
 				),
 			}}
 		>
@@ -78,8 +79,13 @@ export default function TotalEmployee({ variant = 'default' }: props) {
 											</tspan>
 											<tspan
 												x={viewBox.cx}
-												y={(viewBox.cy || 0) + (variant === 'default' ? 16 : 12)}
-												className={cn('fill-ink-primary text-2xl font-bold', variant === 'compact' && 'text-xl')}
+												y={
+													(viewBox.cy || 0) + (variant === 'default' ? 16 : 12)
+												}
+												className={cn(
+													'fill-ink-primary text-2xl font-bold',
+													variant === 'compact' && 'text-xl'
+												)}
 											>
 												{totalEmployees?.toLocaleString()}
 											</tspan>
@@ -94,7 +100,7 @@ export default function TotalEmployee({ variant = 'default' }: props) {
 			<div
 				className={cn(
 					'flex justify-center gap-2 flex-wrap',
-					variant === 'compact' && 'flex-col items-start ml-32'
+					variant === 'compact' && 'max-w-[180px] justify-start items-start ml-32 -mt-2'
 				)}
 			>
 				{data?.data?.map((i, idx) => (
@@ -103,7 +109,7 @@ export default function TotalEmployee({ variant = 'default' }: props) {
 							className='w-1.5 h-1.5 rounded-full'
 							style={{ background: i.fill }}
 						></div>
-						<span className='px-1 text-ink-primary/80 text-sm font-normal'>
+						<span className='px-1 text-ink-primary/80 text-sm font-normal uppercase'>
 							{i.name}
 						</span>
 						<span className='block ml-1 text-sm font-medium text-ink-primary'>

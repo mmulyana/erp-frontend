@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom'
 import { Bell } from 'lucide-react'
 
-import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import PhotoUrl from '@/shared/components/common/photo-url'
 import CardV1 from '@/shared/components/common/card-v1'
 import { Badge } from '@/shared/components/ui/badge'
 import { cn } from '@/shared/utils/cn'
 
 import { useExpireCertificate } from '../api/use-expire-certificate'
+import { ScrollArea } from '@/shared/components/ui/scroll-area'
 
 export default function ReminderCertif() {
 	const { data } = useExpireCertificate({
@@ -18,9 +18,9 @@ export default function ReminderCertif() {
 		<CardV1
 			title='Sertifikasi'
 			icon={<Bell size={20} className='text-ink-primary' />}
-			style={{ card: 'h-[340px]' }}
+			style={{ card: 'h-[360px]', content: 'pr-0' }}
 		>
-			<ScrollArea className='h-[280px]'>
+			<ScrollArea className='h-[300px] pr-6'>
 				{data?.data?.map((item, index) => {
 					const isOver = item.expireUntil < 0
 					const dayCount = Math.abs(item.expireUntil)

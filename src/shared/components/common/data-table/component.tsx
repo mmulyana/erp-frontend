@@ -50,7 +50,7 @@ export function Pagination({ totalItems, totalPages }: PaginationProps) {
 	}
 
 	return (
-		<div className='w-full flex justify-center md:justify-between items-center px-2 py-2'>
+		<div className='w-full flex justify-center md:justify-between items-center mt-4'>
 			{!isMobile && (
 				<p className='text-ink-primary'>
 					{from}-{to} <span className='text-ink-light'>dari</span> {totalItems}

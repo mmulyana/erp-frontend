@@ -10,6 +10,7 @@ export const keys = {
 	employeeDetail: 'employee-detail',
 	employeeData: 'employee-data',
 	employeeReportData: 'employee-report-data',
+	employeeReportLastEducation: 'employee-report-last-education',
 
 	employeeCertificates: 'employee-certificates',
 	certificate: 'certificate',

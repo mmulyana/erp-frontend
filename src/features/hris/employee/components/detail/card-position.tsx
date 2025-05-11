@@ -1,13 +1,14 @@
 import { differenceInMonths, differenceInYears } from 'date-fns'
 import { useMemo } from 'react'
 
-import { Card, CardContent, CardTitle } from '@/shared/components/ui/card'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import CardData from '@/shared/components/common/card-data'
+import CardV1 from '@/shared/components/common/card-v1'
 import { formatToRupiah } from '@/shared/utils'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditPosition from './modal-edit-position'
+import { BriefcaseBusiness } from 'lucide-react'
 
 export default function CardPosition() {
 	const { data, isPending } = useDetailEmployee()
@@ -26,28 +27,32 @@ export default function CardPosition() {
 	}, [data])
 
 	return (
-		<Card className='p-6'>
-			<div className='flex justify-between items-center'>
-				<CardTitle className='text-base text-ink-primary'>Jabatan</CardTitle>
-				<ModalEditPosition />
-			</div>
-			<CardContent className='mt-4 p-0 grid grid-cols-1 md:grid-cols-[1fr_342px] gap-6 md:gap-0'>
+		<>
+			<CardV1
+				title='Jabatan'
+				style={{
+					content:
+						'pt-4 grid grid-cols-1 md:grid-cols-[1fr_342px] gap-6 md:gap-0',
+				}}
+				icon={<BriefcaseBusiness size={20} className='text-ink-primary' />}
+				action={<ModalEditPosition />}
+			>
 				<div className='flex flex-col items-start justify-center'>
 					<LoaderWrapper isLoading={isPending}>
-						<p className='text-2xl text-ink-secondary'>{data?.position}</p>
+						<p className='text-2xl text-ink-primary'>{data?.position}</p>
 					</LoaderWrapper>
 
 					<LoaderWrapper isLoading={isPending}>
 						{yoe.years || yoe.months ? (
-							<p className='text-ink-light text-sm'>
+							<p className='text-ink-primary/50 text-sm'>
 								Bergabung sejak{' '}
 								{!!yoe.years && (
-									<span className='text-ink-secondary font-medium'>
+									<span className='text-ink-primary font-medium'>
 										{yoe.years} tahun
 									</span>
 								)}{' '}
 								{!!yoe.months && (
-									<span className='text-ink-secondary font-medium'>
+									<span className='text-ink-primary font-medium'>
 										{yoe.months} bulan
 									</span>
 								)}
@@ -82,7 +87,7 @@ export default function CardPosition() {
 						/>
 					</LoaderWrapper>
 				</div>
-			</CardContent>
-		</Card>
+			</CardV1>
+		</>
 	)
 }

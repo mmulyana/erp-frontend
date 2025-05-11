@@ -18,9 +18,9 @@ export default function ReminderSafety() {
 		<CardV1
 			title='Safety Induction'
 			icon={<Bell size={20} className='text-ink-primary' />}
-			style={{ card: 'h-[330px]' }}
+			style={{ card: 'h-[360px]', content: 'pr-0' }}
 		>
-			<ScrollArea className='h-[280px]'>
+			<ScrollArea className='h-[300px] pr-6'>
 				{data?.data?.map((item, index) => {
 					const isOver = item.expireUntil < 0
 					const dayCount = Math.abs(item.expireUntil)

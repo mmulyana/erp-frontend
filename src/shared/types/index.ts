@@ -91,7 +91,7 @@ export type Employee = {
 	birthDate: string
 	salary: number
 	overtimeSalary: number
-	status: string
+	status: boolean
 	safetyInductionDate?: string
 }
 

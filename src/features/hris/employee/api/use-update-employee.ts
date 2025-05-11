@@ -14,7 +14,7 @@ export const useUpdateEmployee = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (payload: Partial<EmployeeForm & { id: string }>) => {
+		mutationFn: async (payload: Partial<EmployeeForm & { id: string, status?: boolean }>) => {
 			const formData = toFormData(payload)
 			const res = await http.patch(`${urls.employee}/${payload.id}`, formData, {
 				headers: {

@@ -9,6 +9,7 @@ type props = {
 	action?: React.ReactNode
 	style?: {
 		card?: string
+		content?: string
 	}
 }
 
@@ -40,7 +41,7 @@ export default function CardV1({
 				</div>
 				<div className='flex-1 h-fit flex justify-end'>{action}</div>
 			</div>
-			<CardContent className={cn('px-6', footer && 'p-0 ')}>
+			<CardContent className={cn('px-6', style?.content, footer && 'p-0 ')}>
 				{children}
 			</CardContent>
 			{footer && <CardFooter className='px-4 pb-4'>{footer}</CardFooter>}

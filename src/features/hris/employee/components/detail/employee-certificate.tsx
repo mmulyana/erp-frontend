@@ -41,21 +41,16 @@ export default function EmployeeCertificate() {
 		},
 	]
 	return (
-		<>
-			<div className='flex gap-2 items-center p-6'>
+		<div className='px-6 space-y-6 pt-6'>
+			<div className='flex gap-2 items-center'>
 				<FileBadgeIcon className='text-ink-secondary' />
 				<p className='text-ink-secondary font-medium'>Sertifikasi</p>
 			</div>
-			<div className='px-4 py-3 bg-surface flex justify-between items-center border-t border-border gap-4'>
+			<div className='flex justify-between items-center gap-4'>
 				<SearchV3 />
 				<ModalAddCertificate />
 			</div>
 			<DataTable
-				style={{
-					footer: 'bg-white',
-					header: 'bg-white',
-					stripRowColor: 'bg-white',
-				}}
 				data={data?.data.data || []}
 				columns={columns}
 				totalPages={data?.data.total_pages}
@@ -72,6 +67,6 @@ export default function EmployeeCertificate() {
 				}}
 			/>
 			<ModalDetailCertificate />
-		</>
+		</div>
 	)
 }

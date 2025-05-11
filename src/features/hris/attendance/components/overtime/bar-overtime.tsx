@@ -26,8 +26,15 @@ const chartConfig = {
 	},
 } satisfies ChartConfig
 
-export default function BarOvertime() {
-	const { data } = useReportChart()
+type props = {
+	startDate?: Date
+	endDate?: Date
+}
+export default function BarOvertime({ startDate, endDate }: props) {
+	const { data } = useReportChart({
+		startDate: startDate?.toString(),
+		endDate: endDate?.toString(),
+	})
 
 	return (
 		<CardV1

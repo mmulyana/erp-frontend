@@ -43,7 +43,7 @@ export default function Header() {
 			<div className='flex gap-6 items-center'>
 				<SearchAction />
 				<Popover>
-					<PopoverTrigger>
+					<PopoverTrigger asChild>
 						<Button
 							variant='ghost'
 							className='flex gap-2 items-center px-0 hover:bg-transparent'
