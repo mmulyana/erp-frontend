@@ -112,7 +112,7 @@ const hrisLink: SidebarLinkGroup[] = [
 		groupName: 'Payroll',
 		links: [
 			{
-				href: paths.hrisReport,
+				href: paths.hrisPayroll,
 				icon: <FolderClosed size={20} />,
 				name: 'Periode',
 			},

@@ -56,14 +56,14 @@ export default function TableRegular() {
 								if (row.original.status !== null) {
 									update({
 										employeeId: row.original.employeeId,
-										date: query.date.toString(),
+										date: startDate.toString(),
 										type: 'presence',
 									})
 									return
 								}
 								mutate({
 									employeeId: row.original.employeeId,
-									date: query.date.toString(),
+									date: startDate.toString(),
 									type: 'presence',
 								})
 							}}
@@ -75,14 +75,14 @@ export default function TableRegular() {
 								if (row.original.status !== null) {
 									update({
 										employeeId: row.original.employeeId,
-										date: query.date.toString(),
+										date: startDate.toString(),
 										type: 'absent',
 									})
 									return
 								}
 								mutate({
 									employeeId: row.original.employeeId,
-									date: query.date.toString(),
+									date: startDate.toString(),
 									type: 'absent',
 								})
 							}}

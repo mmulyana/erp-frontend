@@ -52,23 +52,21 @@ export default function TableCashAdvance() {
 		},
 	]
 	return (
-		<>
-			<DataTable
-				columns={columns}
-				data={data?.data.data || []}
-				withPagination
-				totalItems={data?.data.total}
-				totalPages={data?.data.total_pages}
-				onCellClick={(e) => {
-					setModal({
-						id: e.id,
-						open: true,
-					})
-				}}
-				nonClickableColumns={[]}
-				isLoading={isLoading}
-				autoRedirect
-			/>
-		</>
+		<DataTable
+			columns={columns}
+			data={data?.data.data || []}
+			withPagination
+			totalItems={data?.data.total}
+			totalPages={data?.data.total_pages}
+			onCellClick={(e) => {
+				setModal({
+					id: e.id,
+					open: true,
+				})
+			}}
+			nonClickableColumns={[]}
+			isLoading={isLoading}
+			autoRedirect
+		/>
 	)
 }

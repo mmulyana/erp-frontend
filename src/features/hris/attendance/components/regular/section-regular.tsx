@@ -1,8 +1,10 @@
 import { parseAsBoolean, useQueryStates } from 'nuqs'
 import { UserSearch, X } from 'lucide-react'
 
-import { Button } from '@/shared/components/ui/button'
+import FilterButton from '@/shared/components/common/filter-button'
+import SortButton from '@/shared/components/common/sort-button'
 import SearchV3 from '@/shared/components/common/search-v3'
+import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 
 import TableRegular from './table-regular'
@@ -30,12 +32,12 @@ export default function SectionRegular() {
 					<SearchV3 />
 					<ViewType />
 
-					<div className='ml-auto'>
+					<div className='ml-auto flex gap-4 items-start'>
 						<Button
-							variant='secondary'
+							variant='outline'
 							className={cn(
 								'gap-1 px-2.5',
-								query.notYet && 'bg-brand hover:bg-blue-800'
+								query.notYet && 'bg-brand hover:bg-blue-800 border-brand'
 							)}
 							onClick={() => setQuery({ notYet: !query.notYet })}
 						>
@@ -53,6 +55,8 @@ export default function SectionRegular() {
 							</span>
 							{query.notYet && <X size={18} className='text-white ml-2' />}
 						</Button>
+						<FilterButton></FilterButton>
+						<SortButton></SortButton>
 					</div>
 				</div>
 				<TableRegular />

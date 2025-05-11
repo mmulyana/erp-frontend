@@ -1,5 +1,5 @@
 import { BarChart, Bar, Cell, ResponsiveContainer, XAxis } from 'recharts'
-import { ClipboardX, TrendingUp } from 'lucide-react'
+import { BarChartIcon, TrendingUp } from 'lucide-react'
 
 import { ChartContainer } from '@/shared/components/ui/chart'
 import CardV1 from '@/shared/components/common/card-v1'
@@ -11,18 +11,22 @@ const data = [
 	{ name: 'D', total: 20 },
 ]
 
-export default function AbsentTotal() {
-	const barColors = ['#EAEAEB', '#EAEAEB', '#EAEAEB', '#D52B42']
+export default function CashAdvanceTotal() {
+	const barColors = ['#EAEAEB', '#EAEAEB', '#EAEAEB', '#475DEF']
 
 	return (
 		<CardV1
-			title='Absen'
-			icon={<ClipboardX size={20} className='text-error' />}
+			title='Total kasbon'
+			icon={<BarChartIcon size={20} className='text-ink-primary' />}
+			style={{ card: 'w-[384px] max-w-full' }}
 		>
 			<div className='flex justify-between items-end mt-2'>
 				<div>
 					<div className='flex gap-1.5 items-center'>
-						<p className='text-3xl font-medium text-ink-primary'>32</p>
+						<div className='flex items-end gap-0.5'>
+							<p className='text-ink-primary/50 text-lg font-medium'>Rp</p>
+							<p className='text-2xl font-medium text-ink-primary'>320.000</p>
+						</div>
 						<div className='rounded-full flex text-xs px-1.5 py-0.5 bg-error/10 text-error'>
 							<TrendingUp size={16} />
 							<p>12%</p>

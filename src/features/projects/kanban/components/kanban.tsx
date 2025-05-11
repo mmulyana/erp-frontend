@@ -2,16 +2,12 @@
 // import { useEffect, useState } from 'react'
 // import { useSetAtom } from 'jotai'
 
-// import { projectAtom } from '@/atom/project'
-// import { Board, Project } from '@/utils/types/api'
 // import { socket } from '@/shared/utils/socket'
 // import { cn } from '@/shared/utils/cn'
 
-// import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-// import CardProject from '@/components/card-project'
+// import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area'
 
 // export default function Kanban() {
-// 	const setSelected = useSetAtom(projectAtom)
 // 	const [containers, setContainers] = useState<Board[]>([])
 
 // 	useEffect(() => {

@@ -1,20 +1,20 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { Ellipsis, FilePen, Wallet } from 'lucide-react'
 import { useParams } from 'react-router-dom'
+import { FilePen } from 'lucide-react'
+import { id } from 'date-fns/locale'
+import { useSetAtom } from 'jotai'
 import { format } from 'date-fns'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import SearchV3 from '@/shared/components/common/search-v3'
-import { Button } from '@/shared/components/ui/button'
 
-import { useDataOvertime } from '../../api/use-data-overtime'
-import { id } from 'date-fns/locale'
-import { useSetAtom } from 'jotai'
 import ModalDetailOvertime, {
 	atomModalOvertime,
 } from '@/features/hris/attendance/components/overtime/modal-detail-overtime'
 import { Overtime } from '@/features/hris/attendance/types'
+
+import { useDataOvertime } from '../../api/use-data-overtime'
 
 export default function EmployeeOvertime() {
 	const { q, limit, page } = usePagination()

@@ -17,6 +17,7 @@ const DetailEmployee = lazy(() => import('./pages/hris/detail-employee'))
 const CashAdvance = lazy(() => import('./pages/hris/cash-advance'))
 const Regular = lazy(() => import('./pages/hris/regular'))
 const Overtime = lazy(() => import('./pages/hris/overtime'))
+const Payroll = lazy(() => import('./pages/hris/payroll'))
 
 // PROJECT
 const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
@@ -101,6 +102,10 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.hrisAttendanceOvertime,
 		component: <Overtime />,
+	},
+	{
+		path: paths.hrisPayroll,
+		component: <Payroll />,
 	},
 
 	// inventory
