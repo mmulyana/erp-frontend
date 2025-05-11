@@ -1,72 +1,136 @@
-import { ChevronLeft, ChevronRight, Contact2Icon, FilePen } from 'lucide-react'
 import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import {
+	Calendar as CalendarIcon,
+	Check,
+	ChevronsUpDown,
+	FilePen,
+} from 'lucide-react'
 
-import { CalendarV1 } from '@/shared/components/common/calendar-v1'
-import CardData from '@/shared/components/common/card-data'
-import { MONTHS_OBJ } from '@/shared/constants/months'
+import { CalendarV2 } from '@/shared/components/common/calendar-v2'
 import { Button } from '@/shared/components/ui/button'
+import { cn } from '@/shared/utils/cn'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/shared/components/ui/popover'
 
-import { useCurrentMonth } from '../../hooks/use-current-month'
 import { useDataRegular } from '../../api/use-data-regular'
-import { useDateRange } from '../../hooks/use-date-range'
+
+const OPTIONS = [
+	{
+		label: 'Januari - Juni',
+		value: {
+			from: 0,
+			to: 5,
+		},
+	},
+	{
+		label: 'Juli - Agustus',
+		value: {
+			from: 6,
+			to: 11,
+		},
+	},
+]
+
+const currentYear = new Date().getFullYear()
+const YEARS = Array.from({ length: currentYear - 2020 + 1 }, (_, i) => 2020 + i)
 
 export default function EmployeeRegular() {
 	const { id } = useParams()
 
-	const { group, canNext, canPrev, next, prev, groupIndex } = useCurrentMonth()
-	const { startDate, endDate } = useDateRange(groupIndex)
+	const [selectedYear, setSelectedYear] = useState(currentYear)
+	const [selected, setSelected] = useState(OPTIONS[0])
 
 	const { data } = useDataRegular({
 		id,
-		startDate: startDate.toString(),
-		endDate: endDate.toString(),
+		endMonth: String(selected.value.to),
+		startMonth: String(selected.value.from),
+		year: String(selectedYear),
 	})
 
 	return (
 		<>
-			<div className='flex gap-2 items-center p-6'>
-				<FilePen className='text-ink-secondary' />
-				<p className='text-ink-secondary font-medium'>Absensi</p>
-			</div>
-			<div className='flex items-center justify-between px-6 pb-6 flex-col md:flex-row gap-5 w-full'>
-				<div className='gap-6 flex items-center justify-start w-full'>
-					<CardData title='Hadir' value={data?.data?.total.presence || 0} />
-					<CardData title='Tdk hadir' value={data?.data?.total.absent || 0} />
-					<CardData title='Blm diabsen' value={data?.data?.total.notYet || 0} />
+			<div className='flex items-center justify-between p-6 flex-col md:flex-row gap-5 w-full'>
+				<div className='flex gap-2 items-center'>
+					<FilePen className='text-ink-light' />
+					<p className='text-ink-primary font-medium'>Absensi</p>
 				</div>
-				<div className='gap-6 flex justify-end w-full items-end md:items-center flex-col md:flex-row'>
-					<div className='flex gap-2 items-center'>
-						<p className='text-ink-secondary'>{MONTHS_OBJ[group[0]]}</p>
-						<span className='text-ink-light'>-</span>
-						<p className='text-ink-secondary'>{MONTHS_OBJ[group[2]]}</p>
-					</div>
-					<div>
-						<Button
-							variant='outline'
-							className='rounded-l-md rounded-r-none border-r-0 py-0.5 px-1 h-fit'
-							disabled={!canPrev}
-							onClick={prev}
-						>
-							<ChevronLeft size={20} />
-						</Button>
-						<Button
-							variant='outline'
-							className='rounded-r-md rounded-l-none py-0.5 px-1 h-fit'
-							disabled={!canNext}
-							onClick={next}
-						>
-							<ChevronRight size={20} />
-						</Button>
-					</div>
+				<div className='flex gap-4 items-center'>
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button
+								variant='outline'
+								className='h-6 px-0.5 pl-1.5 rounded-md'
+							>
+								<CalendarIcon size={16} className='text-ink-light mr-1.5' />
+								{selected.label}
+								<ChevronsUpDown
+									size={16}
+									className='text-ink-primary/50 ml-1'
+								/>
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className='w-[--radix-popover-trigger-width] p-2'>
+							{OPTIONS.map((opt) => (
+								<button
+									key={opt.label}
+									onClick={() => setSelected(opt)}
+									className={cn(
+										'flex items-center px-2 py-1.5 text-sm hover:bg-muted rounded-md w-full',
+										opt.label === selected.label && 'bg-muted'
+									)}
+								>
+									{opt.label}
+									{opt.label === selected.label && (
+										<Check className='ml-auto h-4 w-4 text-primary' />
+									)}
+								</button>
+							))}
+						</PopoverContent>
+					</Popover>
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button
+								variant='outline'
+								className='w-fit justify-between !pl-2 h-6 px-0.5 rounded-md'
+							>
+								{selectedYear}
+								<ChevronsUpDown
+									size={16}
+									className='text-ink-primary/50 ml-1'
+								/>
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className='w-[--radix-popover-trigger-width] p-2'>
+							{YEARS.map((year) => (
+								<button
+									key={year}
+									onClick={() => setSelectedYear(year)}
+									className={cn(
+										'flex items-center w-full px-2 py-1.5 text-sm hover:bg-muted rounded-md',
+										year === selectedYear && 'bg-muted'
+									)}
+								>
+									{year}
+									{year === selectedYear && (
+										<Check className='ml-auto h-4 w-4 text-primary' />
+									)}
+								</button>
+							))}
+						</PopoverContent>
+					</Popover>
 				</div>
 			</div>
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-6 pb-6 gap-6'>
 				{data?.data?.data?.map((i, index) => (
-					<CalendarV1
+					<CalendarV2
 						key={index}
-						monthIndex={group[index]}
-						selectedDates={i.presence}
-						month={MONTHS_OBJ[group[index]]}
+						monthIndex={i.month}
+						presenceDates={i.presence}
+						absentDates={i.absent}
 					/>
 				))}
 			</div>

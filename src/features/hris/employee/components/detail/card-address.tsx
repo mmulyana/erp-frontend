@@ -18,13 +18,13 @@ export default function CardAddress() {
 			action={<ModalEditAddress />}
 		>
 			<div>
-				<p className='text-ink-light'>Alamat</p>
+				<p className='text-ink-primary/50'>Alamat</p>
 				<LoaderWrapper isLoading={isPending}>
 					<p className='text-ink-primary'>{data?.address}</p>
 				</LoaderWrapper>
 			</div>
 			<div>
-				<p className='text-ink-light'>Kontak</p>
+				<p className='text-ink-primary/50'>Kontak</p>
 				<LoaderWrapper isLoading={isPending}>
 					{data?.phone && data.phone !== '' && (
 						<p className='text-ink-primary'>{formatPhone(data?.phone)}</p>

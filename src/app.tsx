@@ -51,32 +51,26 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.project,
 		component: <ProjectDashboard />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.projectMasterdataProjects,
 		component: <Projects />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.projectMasterdataProjectsDetail,
 		component: <DetailProject />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.projectMasterdataClient,
 		component: <Client />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.projectMasterdataClientCompany,
 		component: <Company />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.projectNew,
 		component: <ProjectNew />,
-		withoutAuth: true,
 	},
 
 	// hris
@@ -87,69 +81,56 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.hrisMasterdataEmployee,
 		component: <Employee />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.hrisMasterdataEmployeeCreate,
 		component: <NewEmployee />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.hrisMasterdataEmployeeDetail,
 		component: <DetailEmployee />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.hrisCashAdvance,
 		component: <CashAdvance />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.hrisAttendanceRegular,
 		component: <Regular />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.hrisAttendanceOvertime,
 		component: <Overtime />,
-		withoutAuth: true,
 	},
 
 	// inventory
 	{
 		path: paths.inventory,
 		component: <InventoryDashboard />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.inventoryMasterdataItem,
 		component: <Item />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.inventoryMasterdataItemDetail,
 		component: <ItemDetail />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.inventoryMasterdataBrand,
 		component: <Brand />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.inventoryMasterdataLocation,
 		component: <Location />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.inventoryMasterdataSupplier,
 		component: <Supplier />,
-		withoutAuth: true,
 	},
 	{
 		path: paths.inventoryMasterdataSupplierDetail,
 		component: <SupplierDetail />,
-		withoutAuth: true,
 	},
 ]
 

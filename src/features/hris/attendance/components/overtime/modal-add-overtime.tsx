@@ -1,5 +1,4 @@
-import { parseAsInteger, useQueryStates } from 'nuqs'
-import { Loader, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -7,7 +6,6 @@ import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import ButtonSubmit from '@/shared/components/common/button-submit'
-import { useCurrentDate } from '@/shared/hooks/use-current-date'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -35,15 +33,8 @@ import { OvertimeForm } from '../../types'
 export default function ModalAddOvertime() {
 	const [open, setOpen] = useState(false)
 
-	const { month, date, year } = useCurrentDate()
-
-	const [query] = useQueryStates({
-		date: parseAsInteger.withDefault(date),
-		month: parseAsInteger.withDefault(month),
-	})
-
 	const defaultValues = {
-		date: new Date(year, query.month, query.date),
+		date: new Date(),
 		employeeId: '',
 		note: '',
 		totalHour: 0,

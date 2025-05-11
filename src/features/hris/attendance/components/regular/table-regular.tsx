@@ -1,22 +1,18 @@
-import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
+import { parseAsIsoDate, parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 
-import { useCurrentDate } from '@/shared/hooks/use-current-date'
-import { useDateIndex } from '@/shared/hooks/use-date-index'
 import { DataTable } from '@/shared/components/common/data-table'
 
 import { useCreateAttendance } from '../../api/regular/use-create-attendance'
 import { useUpdateAttendance } from '../../api/regular/use-update-attendance'
 import { useAttendances } from '../../api/regular/use-attendances'
 import { Attendance } from '../../types'
+
 import ButtonRegular from './button-regular'
 
 export default function TableRegular() {
-	const { month } = useCurrentDate()
-
 	const [query] = useQueryStates({
-		date: parseAsInteger.withDefault(0),
-		month: parseAsInteger.withDefault(month),
+		date: parseAsIsoDate.withDefault(new Date()),
 
 		// for pagination
 		q: parseAsString.withDefault(''),
@@ -24,16 +20,15 @@ export default function TableRegular() {
 		limit: parseAsString.withDefault('10'),
 	})
 
-	const { resultDate } = useDateIndex({
-		indexDate: query.date > 0 ? query.date : new Date().getDate(),
-		indexMonth: query.month,
-	})
+	const date = new Date(query.date || Date.now())
+	date.setHours(0, 0, 0, 0)
+	const startDate = date.toString()
 
 	const { data } = useAttendances({
 		limit: query.limit,
 		page: query.page,
 		search: query.q,
-		startDate: resultDate.toString(),
+		startDate,
 	})
 
 	const { mutate } = useCreateAttendance()
@@ -61,14 +56,14 @@ export default function TableRegular() {
 								if (row.original.status !== null) {
 									update({
 										employeeId: row.original.employeeId,
-										date: resultDate.toString(),
+										date: query.date.toString(),
 										type: 'presence',
 									})
 									return
 								}
 								mutate({
 									employeeId: row.original.employeeId,
-									date: resultDate.toString(),
+									date: query.date.toString(),
 									type: 'presence',
 								})
 							}}
@@ -80,14 +75,14 @@ export default function TableRegular() {
 								if (row.original.status !== null) {
 									update({
 										employeeId: row.original.employeeId,
-										date: resultDate.toString(),
+										date: query.date.toString(),
 										type: 'absent',
 									})
 									return
 								}
 								mutate({
 									employeeId: row.original.employeeId,
-									date: resultDate.toString(),
+									date: query.date.toString(),
 									type: 'absent',
 								})
 							}}
@@ -105,7 +100,6 @@ export default function TableRegular() {
 			totalItems={data?.data.total}
 			totalPages={data?.data.total_pages}
 			withPagination
-			variant='rounded-bordered'
 		/>
 	)
 }

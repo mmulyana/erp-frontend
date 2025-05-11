@@ -6,8 +6,9 @@ import http from '@/shared/utils/http'
 import { IApi } from '@/shared/types'
 
 type params = {
-	startDate?: string
-	endDate?: string
+	startMonth?: string
+	endMonth?: string
+	year?: string
 	id?: string
 }
 export const useDataRegular = (params?: params) => {
@@ -16,31 +17,39 @@ export const useDataRegular = (params?: params) => {
 			keys.employeeData,
 			'attendance',
 			params?.id,
-			params?.startDate,
-			params?.endDate,
+			params?.startMonth,
+			params?.endMonth,
+			params?.year,
 		],
 		queryFn: async (): Promise<
 			IApi<{
-				data: { presence: number[] }[]
-				total: {
-					presence: number
-					absent: number
-					notYet: number
-				}
+				data: { presence: number[]; absent: number[]; month: number }[]
 			}>
 		> => {
 			const { data } = await http(
 				`${urls.employee}/${params?.id}/data/attendance`,
 				{
 					params: {
-						startDate: params?.startDate,
-						endDate: params?.endDate,
+						startMonth: params?.startMonth,
+						endMonth: params?.endMonth,
+						year: params?.year,
 					},
 				}
 			)
 			return data
 		},
 		enabled:
-			params?.id !== null && params?.id !== undefined && params?.id !== '',
+			params?.id !== null &&
+			params?.id !== undefined &&
+			params?.id !== '' &&
+			params?.startMonth !== null &&
+			params?.startMonth !== undefined &&
+			params?.startMonth !== '' &&
+			params?.endMonth !== null &&
+			params?.endMonth !== undefined &&
+			params?.endMonth !== '' &&
+			params?.year !== null &&
+			params?.year !== undefined &&
+			params?.year !== '',
 	})
 }

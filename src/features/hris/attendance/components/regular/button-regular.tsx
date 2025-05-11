@@ -31,7 +31,7 @@ export default function ButtonRegular({ variant, status, onClick }: Props) {
 	return (
 		<Button
 			variant='outline'
-			className={cn('group', isActive && bg)}
+			className={cn('group rounded-full', isActive && bg)}
 			onClick={onClick}
 		>
 			<Icon

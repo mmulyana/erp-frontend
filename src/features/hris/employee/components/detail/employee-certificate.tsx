@@ -34,7 +34,7 @@ export default function EmployeeCertificate() {
 				<div className='flex justify-between items-center'>
 					<div className='flex gap-4 items-center'>
 						<FileText size={24} className='text-ink-light' />
-						<p className='text-ink-secondary'>{row.original.name}</p>
+						<p className='text-ink-primary'>{row.original.name}</p>
 					</div>
 				</div>
 			),
@@ -56,9 +56,9 @@ export default function EmployeeCertificate() {
 				totalPages={data?.data.total_pages}
 				totalItems={data?.data.total}
 				withPagination
+				autoRedirect
 				nonClickableColumns={[]}
 				isLoading={isLoading}
-				autoRedirect
 				onCellClick={(e) => {
 					setModal({
 						id: e.id,
