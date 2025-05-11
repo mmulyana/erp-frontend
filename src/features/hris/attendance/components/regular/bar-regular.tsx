@@ -1,6 +1,5 @@
-import { CalendarIcon, ChevronsUpDown, FilePen } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
-import { cn } from '@/shared/utils/cn'
+import { FilePen } from 'lucide-react'
 import { id } from 'date-fns/locale'
 import { useState } from 'react'
 import {
@@ -12,14 +11,7 @@ import {
 	CartesianGrid,
 } from 'recharts'
 
-import { Calendar } from '@/shared/components/ui/calendar'
 import CardV1 from '@/shared/components/common/card-v1'
-import { Button } from '@/shared/components/ui/button'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/shared/components/ui/popover'
 import {
 	ChartContainer,
 	ChartTooltip,
@@ -49,40 +41,6 @@ export default function BarRegular() {
 			title='Absensi Reguler'
 			icon={<FilePen size={20} className='stroke-ink-primary' />}
 			style={{ card: 'col-span-2 !h-fit' }}
-			action={
-				<>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button
-								variant={'outline'}
-								className={cn(
-									'w-fit h-8 text-left font-normal',
-									!value && 'text-muted-foreground'
-								)}
-							>
-								<CalendarIcon
-									size={16}
-									strokeWidth={2}
-									className='stroke-ink-primary mr-1'
-								/>
-								{value ? format(value, 'dd/MM/yyyy') : <span>Pilih Tggl</span>}
-								<ChevronsUpDown
-									size={18}
-									className='stroke-ink-primary/40 ml-2'
-								/>
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent className='w-auto p-0' align='start'>
-							<Calendar
-								mode='single'
-								selected={value}
-								onSelect={setValue}
-								disabled={(date) => date > new Date()}
-							/>
-						</PopoverContent>
-					</Popover>
-				</>
-			}
 		>
 			<ChartContainer config={chartConfig} className='h-[220px] w-full'>
 				<div className='h-[220px]'>

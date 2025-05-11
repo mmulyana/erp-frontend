@@ -1,5 +1,5 @@
 export const keys = {
-	// me: 'me',
+	me: 'me',
 	// user: 'user',
 	// userDetail: 'user-detail',
 	// roles: 'roles',

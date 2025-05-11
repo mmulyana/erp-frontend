@@ -101,3 +101,19 @@ export type Base = {
 	deletedAt?: string | null
 	updatedAt?: string
 }
+
+export type Role = {
+	id: string
+	name: string
+	permissions: string[]
+}
+
+export type User = {
+	id: string
+	email: string
+	permissions: string[]
+	phone: string
+	photoUrl: string | null
+	role: Role
+	username: string
+}

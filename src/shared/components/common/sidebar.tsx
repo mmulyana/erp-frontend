@@ -8,6 +8,7 @@ import {
 	FileBarChart,
 	FileClock,
 	FilePen,
+	FolderClosed,
 	House,
 	Map,
 	PackageMinus,
@@ -73,7 +74,7 @@ const hrisLink: SidebarLinkGroup[] = [
 		],
 	},
 	{
-		groupName: 'Masterdata',
+		groupName: 'Master Data',
 		links: [
 			{
 				href: paths.hrisMasterdataEmployee,
@@ -95,11 +96,6 @@ const hrisLink: SidebarLinkGroup[] = [
 				icon: <FileClock size={20} />,
 				name: 'Lembur',
 			},
-			{
-				href: paths.hrisAttendanceReport,
-				icon: <PieChart size={20} />,
-				name: 'Laporan',
-			},
 		],
 	},
 	{
@@ -110,8 +106,27 @@ const hrisLink: SidebarLinkGroup[] = [
 				icon: <FileBarChart size={20} />,
 				name: 'Kasbon',
 			},
+		],
+	},
+	{
+		groupName: 'Payroll',
+		links: [
 			{
-				href: paths.hrisCashAdvanceReport,
+				href: paths.hrisReport,
+				icon: <FolderClosed size={20} />,
+				name: 'Periode',
+			},
+			{
+				href: paths.hrisSalarySlip,
+				icon: <FileBarChart size={20} />,
+				name: 'Slip gaji',
+			},
+		],
+	},
+	{
+		links: [
+			{
+				href: paths.hrisReport,
 				icon: <PieChart size={20} />,
 				name: 'Laporan',
 			},
@@ -260,14 +275,14 @@ export default function AppSidebar({ module }: AppSidebarProps) {
 									)}
 									<div
 										className={cn(
-											'flex items-center gap-2.5 text-[#BCBDC7]',
+											'flex items-center gap-2.5 text-ink-primary/50',
 											menus.path === link.href && 'text-brand'
 										)}
 									>
 										{link.icon}
 										<span
 											className={cn(
-												'text-base text-[#828599]',
+												'text-base text-ink-primary/80',
 												menus.path === link.href && 'text-brand'
 											)}
 										>
@@ -284,7 +299,7 @@ export default function AppSidebar({ module }: AppSidebarProps) {
 	)
 
 	return (
-		<Sidebar variant='sidebar' className='z-20 pt-12'>
+		<Sidebar variant='sidebar' className='z-20 pt-[68px]'>
 			<SidebarHeader className='block md:hidden'>
 				{isMobile && (
 					<Button

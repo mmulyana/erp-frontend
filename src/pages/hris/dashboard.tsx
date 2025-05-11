@@ -5,6 +5,7 @@ import ReminderCertif from '@/features/hris/dashboard/components/reminder-certif
 import ReminderSafety from '@/features/hris/dashboard/components/reminder-safety'
 import TotalEmployee from '@/features/hris/employee/components/total-employee'
 import { DefaultLayout } from '@/shared/layout/default-layout'
+import DateRangePicker from '@/shared/components/common/date-range-picker'
 
 export default function DashboardHris() {
 	return (
@@ -13,6 +14,9 @@ export default function DashboardHris() {
 				<div className='col-span-1 xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit'>
 					<TotalEmployee />
 					<TotalAttendance />
+					<div className='col-span-2 flex justify-end pb-2'>
+						<DateRangePicker />
+					</div>
 					<BarRegular />
 					<BarOvertime />
 				</div>

@@ -34,13 +34,10 @@ export default function TopNavigation() {
 						key={label}
 						to={to}
 						className={cn(
-							'relative px-4 h-12 flex gap-1.5 items-center justify-center font-semibold text-sm text-[#828599]',
-							isActive && 'text-brand'
+							'relative px-3 h-fit py-1.5 flex gap-2 items-center justify-center font-semibold text-sm text-ink-primary/80 rounded-md',
+							isActive && 'text-brand bg-brand/5'
 						)}
 					>
-						{isActive && (
-							<div className='absolute bottom-0 left-0 w-full h-1 bg-brand rounded-t-lg' />
-						)}
 						{icon}
 						{label}
 					</Link>

@@ -11,6 +11,7 @@ type Props = {
 	url: string
 	style?: {
 		img?: string
+		icon?: string
 	}
 }
 
@@ -25,7 +26,7 @@ export default function PhotoUrl({ url, style }: Props) {
 					style?.img
 				)}
 			>
-				<Image className='text-ink-secondary' />
+				<Image className={cn('text-ink-secondary', style?.icon)} />
 			</div>
 		)
 	}
