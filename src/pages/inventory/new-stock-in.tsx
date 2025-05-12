@@ -30,6 +30,8 @@ import {
 } from '@/shared/components/ui/table'
 
 import SupplierCombobox from '@/features/inventory/supplier/components/supplier-combobox'
+import { useCreateStockIn } from '@/features/inventory/stock-in/api/use-create-stock-in'
+import { StockInForm } from '@/features/inventory/stock-in/type'
 
 const links: Link[] = [
 	{
@@ -42,29 +44,18 @@ const links: Link[] = [
 		name: 'Stock masuk',
 		path: paths.inventoryStockIn,
 	},
-	{
+{
 		name: 'Baru',
 		path: paths.inventoryStockInNew,
 	},
 ]
 
-type StockInForm = {
-	date: Date
-	referenceNumber: string
-	supplierId: string
-	note: string
-	photoUrl: string | File | null
-	items: {
-		productId: string
-		quantity: number
-		price: number
-	}[]
-}
-
 export default function NewStockIn() {
+	const { mutate } = useCreateStockIn()
+
 	const form = useForm<StockInForm>({
 		defaultValues: {
-			items: [{ productId: '', quantity: 0, price: 0 }],
+			items: [{ itemId: '', quantity: 0, unitPrice: 0 }],
 		},
 	})
 
@@ -77,6 +68,14 @@ export default function NewStockIn() {
 
 	const submit = (payload: StockInForm) => {
 		console.log(payload)
+		mutate({
+			date: payload.date,
+			items: payload.items,
+			note: payload.note,
+			photoUrl: payload.photoUrl,
+			referenceNumber: payload.referenceNumber,
+			supplierId: payload.supplierId,
+		})
 	}
 
 	return (
@@ -200,7 +199,7 @@ export default function NewStockIn() {
 							<TableBody>
 								{fields.map((item, index) => {
 									const quantity = form.watch(`items.${index}.quantity`)
-									const price = form.watch(`items.${index}.price`)
+									const price = form.watch(`items.${index}.unitPrice`)
 									const total = quantity * price
 
 									return (
@@ -208,7 +207,7 @@ export default function NewStockIn() {
 											<TableCell>
 												<FormField
 													control={form.control}
-													name={`items.${index}.productId`}
+													name={`items.${index}.itemId`}
 													render={({ field }) => (
 														<ItemCombobox
 															onSelect={field.onChange}
@@ -229,7 +228,7 @@ export default function NewStockIn() {
 											<TableCell>
 												<FormField
 													control={form.control}
-													name={`items.${index}.price`}
+													name={`items.${index}.unitPrice`}
 													render={({ field }) => (
 														<Input type='number' {...field} />
 													)}
@@ -243,7 +242,7 @@ export default function NewStockIn() {
 													variant='ghost'
 													className='text-error hover:text-red-600'
 													onClick={() => remove(index)}
-                                                    type='button'
+													type='button'
 												>
 													Hapus
 												</Button>
@@ -256,7 +255,7 @@ export default function NewStockIn() {
 						<Button
 							type='button'
 							variant='outline'
-							onClick={() => append({ productId: '', quantity: 0, price: 0 })}
+							onClick={() => append({ itemId: '', quantity: 0, unitPrice: 0 })}
 						>
 							Tambah Barang
 						</Button>

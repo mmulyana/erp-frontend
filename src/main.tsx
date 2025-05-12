@@ -11,7 +11,6 @@ import ToasterWrapper from './shared/utils/toaster-wrapper'
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			// refetchOnWindowFocus: true,
 			retry: false,
 		},
 	},

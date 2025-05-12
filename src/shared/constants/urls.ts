@@ -33,4 +33,5 @@ export const urls = {
 	supplier: api + '/supplier',
 	brand: api + '/brand',
 	item: api + '/item',
+	stockIn: api + '/stock-in',
 }

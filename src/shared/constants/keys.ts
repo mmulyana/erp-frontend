@@ -70,6 +70,12 @@ export const keys = {
 	locationDetail: 'location-detail',
 	locationInfinite: 'location-infinite',
 
-	kanbanBoard: 'board',
-	activity: 'activity',
+	stockIn: 'stock-in',
+	stockInDetail: 'stock-in-detail',
+	stockOut: 'stock-out',
+	stockOutDetail: 'stock-out-detail',
+	stockLoan: 'stock-loan',
+	stockLoanDetail: 'stock-loan-detail',
+
+	stockInReportByMonth: 'stock-in-report-by-month'
 }
