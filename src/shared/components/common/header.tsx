@@ -30,7 +30,7 @@ export default function Header() {
 				{isMobile && <SidebarTrigger />}
 				<div className='flex gap-2 items-center'>
 					<img src={logo} className='w-8 h-8' />
-					<div className='flex gap-1 items-center'>
+					<div className='gap-1 items-center hidden md:flex'>
 						<p className='font-medium text-[#2D2F36]'>Barokah</p>
 						<span className='rounded-md px-1 py-0.5 bg-brand flex items-center justify-center text-xs text-white'>
 							ERP

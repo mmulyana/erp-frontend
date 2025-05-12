@@ -1,11 +1,12 @@
-import { parseAsIsoDate, useQueryState } from 'nuqs'
+import { useQueryState, parseAsTimestamp } from 'nuqs'
+
 import { Calendar } from '@/shared/components/ui/calendar'
 import { id } from 'date-fns/locale'
 
 export default function CalendarAttendance() {
 	const [selectedDate, setSelectedDate] = useQueryState(
 		'date',
-		parseAsIsoDate.withDefault(new Date())
+		parseAsTimestamp.withDefault(new Date())
 	)
 
 	return (
@@ -13,7 +14,12 @@ export default function CalendarAttendance() {
 			<Calendar
 				mode='single'
 				selected={new Date(selectedDate)}
-				onSelect={(d) => d && setSelectedDate(d)}
+				onSelect={(d) => {
+					if (d) {
+						// console.log('date', d)
+						setSelectedDate(d)
+					}
+				}}
 				locale={id}
 				weekStartsOn={1}
 				classNames={{

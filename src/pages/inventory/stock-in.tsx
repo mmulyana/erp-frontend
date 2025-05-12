@@ -1,0 +1,42 @@
+import StockInTotal from '@/features/inventory/stock-in/components/stock-in-total'
+import TableStockIn from '@/features/inventory/stock-in/components/table-stock-in'
+import FilterButton from '@/shared/components/common/filter-button'
+import SearchV3 from '@/shared/components/common/search-v3'
+import SortButton from '@/shared/components/common/sort-button'
+import { buttonVariants } from '@/shared/components/ui/button'
+import { paths } from '@/shared/constants/paths'
+import { DefaultLayout } from '@/shared/layout/default-layout'
+import { Plus } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
+export default function StockIn() {
+	return (
+		<DefaultLayout module='inventory' className='space-y-6'>
+			<StockInTotal />
+			<div className='flex justify-between items-center'>
+				<div>
+					<p className='text-ink-primary font-medium leading-none mb-2'>
+						Stok Masuk
+					</p>
+					<p className='text-ink-primary/50 leading-none'>
+						Kelola data stok masuk
+					</p>
+				</div>
+				<Link to={paths.inventoryStockInNew} className={buttonVariants()}>
+					<Plus size={16} className='stroke-white' />
+					<span className='px-0.5'>Tambah</span>
+				</Link>
+			</div>
+			<div className='p-6 bg-white rounded-xl border border-border space-y-6'>
+				<div className='flex justify-between items-center'>
+					<SearchV3 />
+					<div className='flex gap-4 items-center'>
+						<FilterButton></FilterButton>
+						<SortButton></SortButton>
+					</div>
+				</div>
+				<TableStockIn />
+			</div>
+		</DefaultLayout>
+	)
+}

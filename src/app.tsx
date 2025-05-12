@@ -35,6 +35,12 @@ const Location = lazy(() => import('./pages/inventory/location'))
 const Brand = lazy(() => import('./pages/inventory/brand'))
 const Supplier = lazy(() => import('./pages/inventory/supplier'))
 const SupplierDetail = lazy(() => import('./pages/inventory/detail-supplier'))
+const StockIn = lazy(() => import('./pages/inventory/stock-in'))
+const StockInDetail = lazy(() => import('./pages/inventory/stock-in-detail'))
+const NewStockIn = lazy(() => import('./pages/inventory/new-stock-in'))
+const StockOut = lazy(() => import('./pages/inventory/stock-out'))
+const StockOutDetail = lazy(() => import('./pages/inventory/stock-out-detail'))
+const NewStockOut = lazy(() => import('./pages/inventory/new-stock-out'))
 
 const routes: RoutesConfig[] = [
 	{
@@ -136,6 +142,30 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.inventoryMasterdataSupplierDetail,
 		component: <SupplierDetail />,
+	},
+	{
+		path: paths.inventoryStockIn,
+		component: <StockIn />,
+	},
+	{
+		path: paths.inventoryStockInDetail,
+		component: <StockInDetail />,
+	},
+	{
+		path: paths.inventoryStockInNew,
+		component: <NewStockIn />,
+	},
+	{
+		path: paths.inventoryStockOut,
+		component: <StockOut />,
+	},
+	{
+		path: paths.inventoryStockOutNew,
+		component: <NewStockOut />,
+	},
+	{
+		path: paths.inventoryStockOutDetail,
+		component: <StockOutDetail />,
 	},
 ]
 

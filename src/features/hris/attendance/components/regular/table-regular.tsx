@@ -1,4 +1,4 @@
-import { parseAsIsoDate, parseAsString, useQueryStates } from 'nuqs'
+import { parseAsString, parseAsTimestamp, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { DataTable } from '@/shared/components/common/data-table'
@@ -12,7 +12,7 @@ import ButtonRegular from './button-regular'
 
 export default function TableRegular() {
 	const [query] = useQueryStates({
-		date: parseAsIsoDate.withDefault(new Date()),
+		date: parseAsTimestamp,
 
 		// for pagination
 		q: parseAsString.withDefault(''),

@@ -23,11 +23,13 @@ export const keys = {
 	attendanceTotalPerDay: 'attendance-total-per-day',
 	attendanceReport: 'attendance-report',
 	attendanceTotal: 'attendance-total',
+	attendanceByDate: 'attendance-by-date',
 
 	overtime: 'overtime',
 	overtimeDetail: 'overtime-detail',
 	overtimeTotalPerDay: 'overtime-total-per-day',
 	overtimeReport: 'overtime-report',
+	overtimeByDate: 'overtime-by-date',
 
 	hrisDashboardTotal: 'hris-dashboard-total',
 	hrisDashboardExpireCertif: 'hris-dashboard-expire-certif',

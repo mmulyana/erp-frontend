@@ -1,11 +1,11 @@
-import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
+import { parseAsTimestamp, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useSetAtom } from 'jotai'
 
 import { DataTable } from '@/shared/components/common/data-table'
 
-import { useOvertimes } from '../../api/overtime/use-overtimes'
 import { atomModalOvertime } from '../overtime/modal-detail-overtime'
+import { useOvertimes } from '../../api/overtime/use-overtimes'
 import { usePagination } from '@/shared/hooks/use-pagination'
 
 export default function TableOvertime() {
@@ -13,7 +13,7 @@ export default function TableOvertime() {
 
 	const setModal = useSetAtom(atomModalOvertime)
 	const [query] = useQueryStates({
-		date: parseAsInteger.withDefault(0),
+		date: parseAsTimestamp,
 	})
 
 	const date = new Date(query.date || Date.now())

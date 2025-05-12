@@ -9,7 +9,9 @@ import {
 	FileClock,
 	FilePen,
 	FolderClosed,
+	Hammer,
 	House,
+	Kanban,
 	Map,
 	PackageMinus,
 	PackagePlus,
@@ -17,6 +19,7 @@ import {
 	Store,
 	Tag,
 	Users,
+	Warehouse,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import React, { useState } from 'react'
@@ -123,15 +126,6 @@ const hrisLink: SidebarLinkGroup[] = [
 			},
 		],
 	},
-	{
-		links: [
-			{
-				href: paths.hrisReport,
-				icon: <PieChart size={20} />,
-				name: 'Laporan',
-			},
-		],
-	},
 ]
 
 const projectLink: SidebarLinkGroup[] = [
@@ -181,12 +175,12 @@ const inventoryLink: SidebarLinkGroup[] = [
 		links: [
 			{
 				href: paths.inventoryMasterdataItem,
-				icon: <Box size={20} strokeWidth={2} />,
-				name: 'Inventaris',
+				icon: <Hammer size={20} strokeWidth={2} />,
+				name: 'Barang',
 			},
 			{
 				href: paths.inventoryMasterdataLocation,
-				icon: <Map size={20} strokeWidth={2} />,
+				icon: <Warehouse size={20} strokeWidth={2} />,
 				name: 'Lokasi',
 			},
 			{
@@ -275,7 +269,7 @@ export default function AppSidebar({ module }: AppSidebarProps) {
 									)}
 									<div
 										className={cn(
-											'flex items-center gap-2.5 text-ink-primary/50',
+											'flex items-center gap-2.5 text-[#919193]',
 											menus.path === link.href && 'text-brand'
 										)}
 									>
@@ -299,7 +293,7 @@ export default function AppSidebar({ module }: AppSidebarProps) {
 	)
 
 	return (
-		<Sidebar variant='sidebar' className='z-20 pt-[68px]'>
+		<Sidebar variant='sidebar' className='z-20 pt-[68px] bg-red-400'>
 			<SidebarHeader className='block md:hidden'>
 				{isMobile && (
 					<Button

@@ -7,7 +7,7 @@ import http from '@/shared/utils/http'
 import { Supplier } from '../types'
 
 export function useSupplierInfinite(params: Pagination) {
-	return useInfiniteQuery<NormalizedResponse<Supplier[]>>({
+	return useInfiniteQuery<NormalizedResponse<Supplier>>({
 		queryKey: [keys.supplierInfinite, params],
 		queryFn: async ({ pageParam = 1 }) => {
 			const { data } = await http(urls.supplier + '/data/infinite', {

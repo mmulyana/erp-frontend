@@ -9,12 +9,14 @@ interface ImageUploadProps {
 	value?: File | string | null
 	onChange: (file: File | null) => void
 	maxSizeMb?: number
+	className?: string
 }
 
 export const ImageUpload = ({
 	value,
 	onChange,
 	maxSizeMb = 5,
+	className,
 }: ImageUploadProps) => {
 	const inputRef = useRef<HTMLInputElement | null>(null)
 
@@ -41,7 +43,8 @@ export const ImageUpload = ({
 			<div
 				className={cn(
 					'w-20 h-20 rounded-full border border-dashed border-gray-300 flex items-center justify-center overflow-hidden bg-gray-50 relative',
-					value && 'border-none'
+					value && 'border-none',
+					className
 				)}
 			>
 				{preview ? (

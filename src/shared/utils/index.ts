@@ -83,3 +83,11 @@ export function toFormData(payload: Record<string, any>): FormData {
 
 	return formData
 }
+
+export function formatThousands(value: any): string {
+	if (typeof value === 'number') {
+		return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+	} else {
+		return '-'
+	}
+}

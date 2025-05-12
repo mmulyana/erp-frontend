@@ -1,6 +1,6 @@
-import { Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Plus } from 'lucide-react'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
@@ -34,7 +34,7 @@ export default function ModalAddOvertime() {
 	const [open, setOpen] = useState(false)
 
 	const defaultValues = {
-		date: new Date(),
+		date: undefined,
 		employeeId: '',
 		note: '',
 		totalHour: 0,

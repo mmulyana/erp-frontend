@@ -7,9 +7,9 @@ import OvertimeTotal from '@/features/hris/attendance/components/overtime/overti
 export default function Overtime() {
 	return (
 		<DefaultLayout module='hris'>
-			<div className='flex gap-4 flex-col md:flex-row'>
+			<div className='flex gap-4 flex-col-reverse md:flex-row'>
 				<SectionOvertime />
-				<div className='space-y-6'>
+				<div className='space-y-6 mb-4'>
 					<CalendarAttendance />
 					<OvertimeTotal />
 				</div>

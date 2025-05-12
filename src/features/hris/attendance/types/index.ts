@@ -13,7 +13,7 @@ export type TotalAttendancePerDay = {
 
 export type OvertimeForm = {
 	employeeId: string
-	date: Date
+	date?: Date
 	totalHour: number
 	note?: string
 }
