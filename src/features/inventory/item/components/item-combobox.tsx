@@ -5,6 +5,7 @@ import { baseUrl, urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
 import { useItemInfinite } from '../api/use-items-infinite'
+import { useItem } from '../api/use-item'
 
 export default function ItemCombobox(props: {
 	onSelect?: (val: string) => void
@@ -14,10 +15,7 @@ export default function ItemCombobox(props: {
 		<InfiniteCombobox
 			{...props}
 			useInfiniteQuery={({ search }) => useItemInfinite({ search, limit: 10 })}
-			fetchItemById={async (id) => {
-				const { data } = await http(`${urls.item}/${id}`)
-				return data?.data ?? null
-			}}
+			fetchItemById={fetchItemById}
 			label={(item) => item.name}
 			placeholder='Pilih barang'
 			renderItem={(item, isSelected) => (
@@ -36,4 +34,9 @@ export default function ItemCombobox(props: {
 			)}
 		/>
 	)
+}
+
+const fetchItemById = async (id: string) => {
+	const { data } = await http(`${urls.item}/${id}`)
+	return data?.data ?? null
 }

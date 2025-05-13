@@ -30,6 +30,10 @@ import {
 } from '@/shared/components/ui/table'
 
 import SupplierCombobox from '@/features/inventory/supplier/components/supplier-combobox'
+import { useCreateStockOut } from '@/features/inventory/stock-out/api/use-create-stock-out'
+import { useNavigate } from 'react-router-dom'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import { NumericFormat } from 'react-number-format'
 
 const links: Link[] = [
 	{
@@ -48,7 +52,7 @@ const links: Link[] = [
 	},
 ]
 
-type StockInForm = {
+type StockOutForm = {
 	date: Date
 	note: string
 	photoUrl: string | File | null
@@ -60,7 +64,11 @@ type StockInForm = {
 }
 
 export default function NewStockOut() {
-	const form = useForm<StockInForm>({
+	const navigate = useNavigate()
+
+	const { mutate } = useCreateStockOut()
+
+	const form = useForm<StockOutForm>({
 		defaultValues: {
 			items: [{ productId: '', quantity: 0, price: 0 }],
 		},
@@ -73,8 +81,28 @@ export default function NewStockOut() {
 
 	const photoWatch = form.watch('photoUrl')
 
-	const submit = (payload: StockInForm) => {
-		console.log(payload)
+	const handleSuccess = () => {
+		navigate(paths.inventoryStockOut)
+		form.reset()
+	}
+
+	const submit = (payload: StockOutForm) => {
+		mutate(
+			{
+				date: payload.date,
+				items: payload.items.map((i) => ({
+					itemId: i.productId,
+					quantity: i.quantity,
+					unitPrice: i.price,
+				})),
+				photoUrl: payload.photoUrl,
+				note: payload.note,
+			},
+			{
+				onSuccess: handleFormSuccess(handleSuccess),
+				onError: handleFormError<StockOutForm>(form),
+			}
+		)
 	}
 
 	return (
@@ -195,9 +223,33 @@ export default function NewStockOut() {
 												<FormField
 													control={form.control}
 													name={`items.${index}.price`}
-													render={({ field }) => (
-														<Input type='number' {...field} />
-													)}
+													render={({ field }) => {
+														const usedField = { ...field }
+														delete (usedField as any).onChange
+
+														return (
+															<FormItem>
+																<FormControl>
+																	<div className='relative'>
+																		<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
+																			Rp
+																		</div>
+																		<NumericFormat
+																			type='text'
+																			thousandSeparator='.'
+																			decimalSeparator=','
+																			customInput={Input}
+																			className='h-10 w-full pl-12'
+																			{...usedField}
+																			onValueChange={(values) => {
+																				field.onChange(Number(values.value))
+																			}}
+																		/>
+																	</div>
+																</FormControl>
+															</FormItem>
+														)
+													}}
 												/>
 											</TableCell>
 											<TableCell className='text-right'>

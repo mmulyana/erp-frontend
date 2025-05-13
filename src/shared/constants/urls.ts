@@ -34,4 +34,5 @@ export const urls = {
 	brand: api + '/brand',
 	item: api + '/item',
 	stockIn: api + '/stock-in',
+	stockOut: api + '/stock-out',
 }

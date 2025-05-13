@@ -32,6 +32,7 @@ import {
 import SupplierCombobox from '@/features/inventory/supplier/components/supplier-combobox'
 import { useCreateStockIn } from '@/features/inventory/stock-in/api/use-create-stock-in'
 import { StockInForm } from '@/features/inventory/stock-in/type'
+import { NumericFormat } from 'react-number-format'
 
 const links: Link[] = [
 	{
@@ -44,7 +45,7 @@ const links: Link[] = [
 		name: 'Stock masuk',
 		path: paths.inventoryStockIn,
 	},
-{
+	{
 		name: 'Baru',
 		path: paths.inventoryStockInNew,
 	},
@@ -229,9 +230,33 @@ export default function NewStockIn() {
 												<FormField
 													control={form.control}
 													name={`items.${index}.unitPrice`}
-													render={({ field }) => (
-														<Input type='number' {...field} />
-													)}
+													render={({ field }) => {
+														const usedField = { ...field }
+														delete (usedField as any).onChange
+
+														return (
+															<FormItem>
+																<FormControl>
+																	<div className='relative'>
+																		<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
+																			Rp
+																		</div>
+																		<NumericFormat
+																			type='text'
+																			thousandSeparator='.'
+																			decimalSeparator=','
+																			customInput={Input}
+																			className='h-10 w-full pl-12'
+																			{...usedField}
+																			onValueChange={(values) => {
+																				field.onChange(Number(values.value))
+																			}}
+																		/>
+																	</div>
+																</FormControl>
+															</FormItem>
+														)
+													}}
 												/>
 											</TableCell>
 											<TableCell className='text-right'>
