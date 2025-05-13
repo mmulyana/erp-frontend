@@ -41,6 +41,7 @@ export const paths = {
 	inventoryStockOutNew: '/inventory/new-stock-out',
 	inventoryStockOutDetail: '/inventory/stock-out/:id',
 	inventoryStockLoan: '/inventory/stock-loan',
+	inventoryStockLoanNew: '/inventory/new-stock-loan',
 	inventoryStockLoanDetail: '/inventory/stock-loan/:id',
 
 	adminUser: '/dashboard/admin/users',

@@ -41,6 +41,9 @@ const NewStockIn = lazy(() => import('./pages/inventory/new-stock-in'))
 const StockOut = lazy(() => import('./pages/inventory/stock-out'))
 const StockOutDetail = lazy(() => import('./pages/inventory/stock-out-detail'))
 const NewStockOut = lazy(() => import('./pages/inventory/new-stock-out'))
+const Loan = lazy(() => import('./pages/inventory/loan'))
+const LoanDetail = lazy(() => import('./pages/inventory/loan-detail'))
+const NewLoan = lazy(() => import('./pages/inventory/new-loan'))
 
 const routes: RoutesConfig[] = [
 	{
@@ -166,6 +169,18 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.inventoryStockOutDetail,
 		component: <StockOutDetail />,
+	},
+	{
+		path: paths.inventoryStockLoan,
+		component: <Loan />,
+	},
+	{
+		path: paths.inventoryStockLoanDetail,
+		component: <LoanDetail />,
+	},
+	{
+		path: paths.inventoryStockLoanNew,
+		component: <NewLoan />,
 	},
 ]
 

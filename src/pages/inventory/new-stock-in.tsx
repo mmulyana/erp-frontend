@@ -1,13 +1,19 @@
 import { House, Image, List, Package } from 'lucide-react'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { NumericFormat } from 'react-number-format'
+import { useNavigate } from 'react-router-dom'
 
+import SupplierCombobox from '@/features/inventory/supplier/components/supplier-combobox'
 import ItemCombobox from '@/features/inventory/item/components/item-combobox'
+import { useCreateStockIn } from '@/features/inventory/stock-in/api/use-create-stock-in'
+import { StockInForm } from '@/features/inventory/stock-in/type'
 
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
-import { ImageUpload } from '@/shared/components/common/image-upload'
 import DetailLayout, { Link } from '@/shared/layout/detail-layout'
-import { Textarea } from '@/shared/components/ui/textarea'
 import CardV1 from '@/shared/components/common/card-v1'
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import { ImageUpload } from '@/shared/components/common/image-upload'
+import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { formatThousands } from '@/shared/utils'
@@ -29,11 +35,6 @@ import {
 	TableRow,
 } from '@/shared/components/ui/table'
 
-import SupplierCombobox from '@/features/inventory/supplier/components/supplier-combobox'
-import { useCreateStockIn } from '@/features/inventory/stock-in/api/use-create-stock-in'
-import { StockInForm } from '@/features/inventory/stock-in/type'
-import { NumericFormat } from 'react-number-format'
-
 const links: Link[] = [
 	{
 		icon: <House size={20} />,
@@ -52,6 +53,8 @@ const links: Link[] = [
 ]
 
 export default function NewStockIn() {
+	const navigate = useNavigate()
+
 	const { mutate } = useCreateStockIn()
 
 	const form = useForm<StockInForm>({
@@ -67,16 +70,23 @@ export default function NewStockIn() {
 
 	const photoWatch = form.watch('photoUrl')
 
+	const onSuccess = () => navigate(paths.inventoryStockIn)
+
 	const submit = (payload: StockInForm) => {
-		console.log(payload)
-		mutate({
-			date: payload.date,
-			items: payload.items,
-			note: payload.note,
-			photoUrl: payload.photoUrl,
-			referenceNumber: payload.referenceNumber,
-			supplierId: payload.supplierId,
-		})
+		mutate(
+			{
+				date: payload.date,
+				items: payload.items,
+				note: payload.note,
+				photoUrl: payload.photoUrl,
+				referenceNumber: payload.referenceNumber,
+				supplierId: payload.supplierId,
+			},
+			{
+				onSuccess: handleFormSuccess(onSuccess),
+				onError: handleFormError(form),
+			}
+		)
 	}
 
 	return (

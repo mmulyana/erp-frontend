@@ -58,11 +58,11 @@ export default function ModalAddLocation() {
 			<DialogTrigger asChild>
 				<Button className='gap-2'>
 					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Lokasi</span>
+					<span className='px-0.5'>Tambah Gudang</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent className='p-6'>
-				<DialogTitle>Lokasi baru</DialogTitle>
+				<DialogTitle>Gudang baru</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
@@ -76,7 +76,7 @@ export default function ModalAddLocation() {
 							control={form.control}
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
-									<FormLabel>Nama lokasi</FormLabel>
+									<FormLabel>Nama</FormLabel>
 									<FormControl>
 										<Input {...field} />
 									</FormControl>

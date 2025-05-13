@@ -3,6 +3,7 @@ import StockInTotal from '@/features/inventory/stock-in/components/stock-in-tota
 import TableStockIn from '@/features/inventory/stock-in/components/table-stock-in'
 import { Pagination } from '@/shared/components/common/data-table/component'
 import FilterButton from '@/shared/components/common/filter-button'
+import HeadPage from '@/shared/components/common/head-page'
 import SearchV3 from '@/shared/components/common/search-v3'
 import SortButton from '@/shared/components/common/sort-button'
 import { buttonVariants } from '@/shared/components/ui/button'
@@ -24,20 +25,11 @@ export default function StockIn() {
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
 			<StockInTotal />
-			<div className='flex justify-between items-center'>
-				<div>
-					<p className='text-ink-primary font-medium leading-none mb-2'>
-						Stok Masuk
-					</p>
-					<p className='text-ink-primary/50 leading-none'>
-						Kelola data stok masuk
-					</p>
-				</div>
-				<Link to={paths.inventoryStockInNew} className={buttonVariants()}>
-					<Plus size={16} className='stroke-white' />
-					<span className='px-0.5'>Tambah</span>
-				</Link>
-			</div>
+			<HeadPage
+				title='Stok Masuk'
+				subtitle='Kelola data stok masuk'
+				url={paths.inventoryStockInNew}
+			/>
 			<div className='p-6 bg-white rounded-xl border border-border space-y-6'>
 				<div className='flex justify-between items-center'>
 					<SearchV3 />
