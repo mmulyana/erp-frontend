@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns'
-import { FileClock } from 'lucide-react'
+import { FileClock, Megaphone } from 'lucide-react'
 import { id } from 'date-fns/locale'
 import {
 	BarChart,
@@ -17,36 +17,35 @@ import {
 	ChartTooltipContent,
 	ChartConfig,
 } from '@/shared/components/ui/chart'
-import { useReportChart } from '../../api/overtime/use-report-chart'
+import DateRangePicker from '@/shared/components/common/date-range-picker'
 
 const chartConfig = {
 	total: {
 		label: 'Total',
-		color: '#47AF97',
+		color: '#5167F4',
 	},
 } satisfies ChartConfig
 
-type props = {
-	startDate?: Date
-	endDate?: Date
-}
-export default function BarOvertime({ startDate, endDate }: props) {
-	const { data } = useReportChart({
-		startDate: startDate?.toString(),
-		endDate: endDate?.toString(),
-	})
+const chartData = [
+	{ date: '2025-05-13', total: 40 },
+	{ date: '2025-05-12', total: 10 },
+	{ date: '2025-05-14', total: 20 },
+	{ date: '2025-05-15', total: 20 },
+]
 
+export default function BarReport() {
 	return (
 		<CardV1
-			title='Lembur'
-			icon={<FileClock size={20} className='stroke-ink-primary' />}
+			title='Laporan'
+			icon={<Megaphone size={20} className='stroke-ink-primary' />}
 			style={{ card: 'col-span-2 !h-fit' }}
+			action={<DateRangePicker />}
 		>
 			<ChartContainer config={chartConfig} className='h-[220px] w-full'>
 				<div className='h-[220px]'>
 					<ResponsiveContainer width='100%' height='100%'>
 						<BarChart
-							data={data?.data || []}
+							data={chartData}
 							barGap={8}
 							barCategoryGap={20}
 							margin={{ top: 8, bottom: -8 }}

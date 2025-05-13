@@ -1,30 +1,30 @@
-import { Link } from 'react-router-dom'
-import { Plus } from 'lucide-react'
-
 import { DefaultLayout } from '@/shared/layout/default-layout'
-import { buttonVariants } from '@/shared/components/ui/button'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { paths } from '@/shared/constants/paths'
 
 import TableProject from '@/features/projects/project/components/table-project'
+import FilterButton from '@/shared/components/common/filter-button'
+import SortButton from '@/shared/components/common/sort-button'
+import HeadPage from '@/shared/components/common/head-page'
 
 export default function Projects() {
 	return (
-		<DefaultLayout className='px-0 pt-12' module='project'>
-			<div className='flex justify-between items-center p-6'>
-				<SearchV3 />
-				<Link
-					to={paths.projectNew}
-					className={buttonVariants({
-						className: 'gap-2',
-						variant: 'default',
-					})}
-				>
-					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Proyek</span>
-				</Link>
+		<DefaultLayout className='space-y-6' module='project'>
+			<HeadPage
+				title='Proyek'
+				subtitle='Kelola data proyek dalam perusahaan'
+				url={paths.projectNew}
+			/>
+			<div className='p-6 rounded-xl bg-white border border-border space-y-6'>
+				<div className='flex justify-between items-center'>
+					<SearchV3 />
+					<div className='flex gap-4 items-center'>
+						<FilterButton></FilterButton>
+						<SortButton></SortButton>
+					</div>
+				</div>
+				<TableProject />
 			</div>
-			<TableProject />
 		</DefaultLayout>
 	)
 }
