@@ -12,6 +12,7 @@ import { DefaultLayout } from '@/shared/layout/default-layout'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { paths } from '@/shared/constants/paths'
+import StockOutTotal from '@/features/inventory/stock-out/components/stock-out-total'
 
 export default function StockOut() {
 	const { page, limit, q } = usePagination()
@@ -21,10 +22,10 @@ export default function StockOut() {
 		page,
 		search: q,
 	})
-	console.log('data', data)
 
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
+			<StockOutTotal />
 			<div className='flex justify-between items-center'>
 				<div>
 					<p className='text-ink-primary font-medium leading-none mb-2'>

@@ -1,5 +1,4 @@
 import { User } from '@/shared/types'
-import { Item } from '../../item/types'
 
 export type StockOutItemForm = {
 	itemId: string
@@ -14,8 +13,20 @@ export type CreateStockOutPayload = {
 	items: StockOutItemForm[]
 	photoUrl: File | string | null
 }
-
-export interface StockOut {
+export type Item = {
+	id: string
+	stockOutId: string
+	itemId: string
+	quantity: number
+	unitPrice: number
+	totalPrice: number
+	item: {
+		id: string
+		name: string
+		photoUrl: string
+	}
+}
+export type StockOut = {
 	id: string
 	date: string
 	createdBy: string
@@ -24,15 +35,7 @@ export interface StockOut {
 	project: any | null
 	user: User
 	photoUrl: string | null
-	items: {
-		id: string
-		stockOutId: string
-		itemId: string
-		quantity: number
-		unitPrice: number
-		totalPrice: number
-		item: Item
-	}[]
+	items: Item[]
 	_count: {
 		items: number
 	}
