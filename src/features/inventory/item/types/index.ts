@@ -19,7 +19,8 @@ export type Item = ItemForm & {
 		name: string
 	}
 	quantity?: number
-	available?: string
+	availableStock?: number
+	totalStock?: number
 	category?: string
 	user?: {
 		id: string

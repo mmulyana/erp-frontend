@@ -1,7 +1,6 @@
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import SearchV3 from '@/shared/components/common/search-v3'
 
-import ModalDetailLocation from '@/features/inventory/location/components/modal-detail-location'
 import ModalAddLocation from '@/features/inventory/location/components/modal-add-location'
 import TableLocation from '@/features/inventory/location/components/table-location'
 import FilterButton from '@/shared/components/common/filter-button'
@@ -27,7 +26,6 @@ export default function Location() {
 				</div>
 				<TableLocation />
 			</div>
-			<ModalDetailLocation />
 		</DefaultLayout>
 	)
 }

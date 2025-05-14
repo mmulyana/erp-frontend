@@ -27,7 +27,6 @@ export default function Brand() {
 				</div>
 				<TableBrand />
 			</div>
-			<ModalDetailBrand />
 		</DefaultLayout>
 	)
 }

@@ -18,7 +18,7 @@ export const useBrand = (params?: Params) => {
 			const { data } = await http(`${urls.brand}/${params?.id}`, {
 				params,
 			})
-			return data
+			return data.data
 		},
 		enabled:
 			params?.id !== null && params?.id !== undefined && params?.id !== '',

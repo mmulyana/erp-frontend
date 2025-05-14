@@ -14,11 +14,12 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteBrand } from '../api/use-delete-brand'
-import { atomModalBrand } from './modal-detail-brand'
 
-export default function ModalDeleteBrand() {
-	const [modal, setModal] = useAtom(atomModalBrand)
-
+type props = {
+	setOpen: (val: boolean) => void
+	id?: string
+}
+export default function ModalDeleteBrand({ id, setOpen }: props) {
 	const { mutate } = useDeleteBrand()
 
 	return (
@@ -45,12 +46,12 @@ export default function ModalDeleteBrand() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (modal?.id) {
+							if (id) {
 								mutate(
-									{ id: modal.id },
+									{ id },
 									{
 										onSuccess: () => {
-											setModal(null)
+											setOpen(false)
 										},
 									}
 								)

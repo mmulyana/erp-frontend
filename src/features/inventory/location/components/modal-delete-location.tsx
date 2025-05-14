@@ -14,11 +14,12 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteLocation } from '../api/use-delete-location'
-import { atomModalLocation } from './modal-detail-location'
 
-export default function ModalDeleteLocation() {
-	const [modal, setModal] = useAtom(atomModalLocation)
-
+type props = {
+	setOpen: (val: boolean) => void
+	id?: string
+}
+export default function ModalDeleteLocation({ setOpen, id }: props) {
 	const { mutate } = useDeleteLocation()
 
 	return (
@@ -45,12 +46,12 @@ export default function ModalDeleteLocation() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (modal?.id) {
+							if (id) {
 								mutate(
-									{ id: modal.id },
+									{ id },
 									{
 										onSuccess: () => {
-											setModal(null)
+											setOpen(false)
 										},
 									}
 								)

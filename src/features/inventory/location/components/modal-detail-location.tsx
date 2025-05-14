@@ -33,13 +33,13 @@ type Form = {
 	name: string
 }
 
-export const atomModalLocation = atom<{ open: boolean; id: string } | null>(
-	null
-)
-export default function ModalDetailLocation() {
-	const [modal, setModal] = useAtom(atomModalLocation)
-
-	const { data } = useLocation({ id: modal?.id })
+type props = {
+	id?: string
+	open: boolean
+	setOpen: (val: boolean) => void
+}
+export default function ModalDetailLocation({ id, open, setOpen }: props) {
+	const { data } = useLocation({ id })
 	const { mutate, isPending } = useUpdateLocation()
 
 	const form = useForm<Form>({
@@ -48,13 +48,16 @@ export default function ModalDetailLocation() {
 		},
 	})
 
-	const onClose = () => setModal(null)
+	const onClose = () => {
+		form.reset()
+		setOpen(false)
+	}
 
 	const submit = (payload: Form) => {
-		if (!modal?.id) return
+		if (!id) return
 
 		mutate(
-			{ ...payload, id: modal.id },
+			{ ...payload, id },
 			{
 				onSuccess: handleFormSuccess(onClose),
 				onError: handleFormError<Form>(form),
@@ -71,24 +74,17 @@ export default function ModalDetailLocation() {
 	}, [data])
 
 	useEffect(() => {
-		if (!modal?.open) {
+		if (!open) {
 			form.reset({
 				name: '',
 			})
 		}
-	}, [modal?.open])
+	}, [open])
 
 	return (
-		<Dialog
-			open={modal?.open}
-			onOpenChange={(open) => {
-				if (modal) {
-					setModal({ ...modal, open })
-				}
-			}}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent className='p-6'>
-				<DialogTitle>Lokasi</DialogTitle>
+				<DialogTitle>Gudang</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
@@ -113,7 +109,7 @@ export default function ModalDetailLocation() {
 
 						<DialogFooter>
 							<div className='flex justify-between w-full pt-4'>
-								<ModalDeleteLocation />
+								<ModalDeleteLocation id={id} setOpen={setOpen} />
 								<div className='flex justify-end gap-4 items-center'>
 									<DialogClose asChild>
 										<Button variant='outline' type='button'>

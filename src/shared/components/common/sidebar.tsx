@@ -181,7 +181,7 @@ const inventoryLink: SidebarLinkGroup[] = [
 			{
 				href: paths.inventoryMasterdataLocation,
 				icon: <Warehouse size={20} strokeWidth={2} />,
-				name: 'Lokasi',
+				name: 'Gudang',
 			},
 			{
 				href: paths.inventoryMasterdataBrand,

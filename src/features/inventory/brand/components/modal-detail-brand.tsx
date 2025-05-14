@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { atom, useAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { ImageUpload } from '@/shared/components/common/image-upload'
@@ -33,12 +33,12 @@ type Form = {
 	name: string
 	photoUrl?: File | string | null
 }
-
-export const atomModalBrand = atom<{ open: boolean; id: string } | null>(null)
-export default function ModalDetailBrand() {
-	const [modal, setModal] = useAtom(atomModalBrand)
-
-	const { data } = useBrand({ id: modal?.id })
+type props = {
+	id?: string
+}
+export default function ModalDetailBrand({ id }: props) {
+	const [open, setOpen] = useState(false)
+	const { data } = useBrand({ id })
 	const { mutate, isPending } = useUpdateBrand()
 	const { mutate: destroyPhoto } = useDestroyPhotoBrand()
 
@@ -50,12 +50,16 @@ export default function ModalDetailBrand() {
 	})
 	const photoWatch = form.watch('photoUrl')
 
-	const onClose = () => setModal(null)
+	const onClose = () => {
+		form.reset()
+		setOpen(false)
+	}
 
 	const submit = (payload: Form) => {
-		if (!modal?.id) return
+		if (!id) return
+
 		if (payload.photoUrl === null) {
-			destroyPhoto({ id: modal.id })
+			destroyPhoto({ id })
 		}
 
 		const data = payload
@@ -64,7 +68,7 @@ export default function ModalDetailBrand() {
 		}
 
 		mutate(
-			{ ...data, id: modal?.id },
+			{ ...data, id },
 			{
 				onSuccess: handleFormSuccess(onClose),
 				onError: handleFormError<Form>(form),
@@ -75,8 +79,8 @@ export default function ModalDetailBrand() {
 	useEffect(() => {
 		if (data) {
 			form.reset({
-				name: data.data?.data.name,
-				photoUrl: data.data?.data.photoUrl,
+				name: data.data?.name,
+				photoUrl: data.data?.photoUrl,
 			})
 		}
 	}, [data])
@@ -91,14 +95,7 @@ export default function ModalDetailBrand() {
 	}, [open])
 
 	return (
-		<Dialog
-			open={modal?.open}
-			onOpenChange={(open) => {
-				if (modal) {
-					setModal({ ...modal, open })
-				}
-			}}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent className='p-6'>
 				<DialogTitle>Merek</DialogTitle>
 				<DialogDescription>
@@ -132,7 +129,7 @@ export default function ModalDetailBrand() {
 
 						<DialogFooter>
 							<div className='flex justify-between w-full pt-4'>
-								<ModalDeleteBrand />
+								<ModalDeleteBrand id={id} setOpen={setOpen} />
 								<div className='flex justify-end gap-4 items-center'>
 									<DialogClose asChild>
 										<Button variant='outline' type='button'>

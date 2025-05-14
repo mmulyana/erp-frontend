@@ -117,3 +117,10 @@ export type User = {
 	role: Role
 	username: string
 }
+
+export type Link = {
+	icon?: React.ReactNode
+	name: string
+	path: string
+	hideName?: boolean
+}

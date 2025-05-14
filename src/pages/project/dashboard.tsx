@@ -1,10 +1,12 @@
-import Attachment from '@/features/projects/project/components/attachment'
-import TopClient from '@/features/projects/client/components/top-client'
-import ProjectStatus from '@/features/projects/project/components/project-status'
-import CardV1 from '@/shared/components/common/card-v1'
-import { DefaultLayout } from '@/shared/layout/default-layout'
 import { Wallet } from 'lucide-react'
+
+import ProjectStatus from '@/features/projects/project/components/project-status'
+import Attachment from '@/features/projects/project/components/attachment'
 import BarReport from '@/features/projects/project/components/bar-report'
+import TopClient from '@/features/projects/client/components/top-client'
+
+import { DefaultLayout } from '@/shared/layout/default-layout'
+import CardV1 from '@/shared/components/common/card-v1'
 
 export default function DashboardProject() {
 	return (

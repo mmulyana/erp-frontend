@@ -1,17 +1,16 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { useSetAtom } from 'jotai'
+import { useNavigate } from 'react-router-dom'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { paths } from '@/shared/constants/paths'
 
-import { atomModalLocation } from './modal-detail-location'
 import { useLocations } from '../api/use-locations'
 import { Location } from '../types'
 
 export default function TableLocation() {
-	const setModal = useSetAtom(atomModalLocation)
-
 	const { limit, page, q } = usePagination()
+	const navigate = useNavigate()
 
 	const { isLoading, data } = useLocations({
 		limit,
@@ -45,7 +44,9 @@ export default function TableLocation() {
 				totalPages={data?.data.total_pages}
 				withPagination
 				nonClickableColumns={[]}
-				onCellClick={({ id }) => setModal({ id, open: true })}
+				onCellClick={({ id }) =>
+					navigate(`${paths.inventoryMasterdataLocation}/${id}`)
+				}
 			/>
 		</>
 	)

@@ -32,7 +32,9 @@ const InventoryDashboard = lazy(() => import('./pages/inventory/dashboard'))
 const Item = lazy(() => import('./pages/inventory/item'))
 const ItemDetail = lazy(() => import('./pages/inventory/detail-item'))
 const Location = lazy(() => import('./pages/inventory/location'))
+const LocationDetail = lazy(() => import('./pages/inventory/location-detail'))
 const Brand = lazy(() => import('./pages/inventory/brand'))
+const BrandDetail = lazy(() => import('./pages/inventory/brand-detail'))
 const Supplier = lazy(() => import('./pages/inventory/supplier'))
 const SupplierDetail = lazy(() => import('./pages/inventory/detail-supplier'))
 const StockIn = lazy(() => import('./pages/inventory/stock-in'))
@@ -135,8 +137,16 @@ const routes: RoutesConfig[] = [
 		component: <Brand />,
 	},
 	{
+		path: paths.inventoryMasterdataBrandDetail,
+		component: <BrandDetail />,
+	},
+	{
 		path: paths.inventoryMasterdataLocation,
 		component: <Location />,
+	},
+	{
+		path: paths.inventoryMasterdataLocationDetail,
+		component: <LocationDetail />,
 	},
 	{
 		path: paths.inventoryMasterdataSupplier,

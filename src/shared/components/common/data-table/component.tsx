@@ -76,19 +76,17 @@ export function Pagination({ totalItems, totalPages }: PaginationProps) {
 						/>
 					</button>
 				)}
-				<ul className='flex'>
+				<ul className='flex gap-1'>
 					{getPageNumbers().map((number, index) => (
 						<li key={index}>
 							<button
 								className={cn(
 									'w-8 h-8 flex justify-center items-center border text-base rounded-md select-none',
 									currentPage === number
-										? 'border-brand text-brand rounded-none bg-white'
+										? 'border-brand text-white bg-brand'
 										: number === '...'
-										? 'border-border rounded-none border-l-0 text-muted-foreground'
-										: 'border-border rounded-none border-l-0 hover:bg-white hover:border-[#D4D7DF]',
-									index === 0 && 'rounded-r-none rounded-l-md border-l',
-									index + 1 == getPageNumbers().length && 'rounded-r-md'
+										? 'border-border text-muted-foreground'
+										: 'border-border hover:bg-white hover:border-[#D4D7DF]'
 								)}
 								onClick={() => {
 									if (typeof number === 'number') {
