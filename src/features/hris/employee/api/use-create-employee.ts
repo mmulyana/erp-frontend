@@ -9,10 +9,12 @@ import { toFormData } from '@/shared/utils'
 import http from '@/shared/utils/http'
 
 import { EmployeeForm } from '../types'
+import { useNavigate } from 'react-router-dom'
+import { paths } from '@/shared/constants/paths'
 
 export const useCreateEmployee = () => {
 	const queryClient = useQueryClient()
-
+	const navigate = useNavigate()
 	return useMutation({
 		mutationFn: async (payload: Partial<EmployeeForm>) => {
 			const formData = toFormData(payload)
@@ -28,7 +30,14 @@ export const useCreateEmployee = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.employee] })
-			toast.success(data.data.message)
+			toast.success(data.data.message, {
+				duration: 2000,
+				action: {
+					label: 'Lihat',
+					onClick: () =>
+						navigate(`${paths.hrisMasterdataEmployee}/${data.data.data?.id}`),
+				},
+			})
 		},
 		onError: (error: AxiosError<any>) => {
 			if (error.response?.data.errors[0].message) {

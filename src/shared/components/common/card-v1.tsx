@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
 
 type props = {
 	icon?: React.ReactNode
-	title: string
+	title?: string
 	children?: React.ReactNode
 	footer?: React.ReactNode
 	action?: React.ReactNode

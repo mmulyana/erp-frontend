@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
 import ProgressBar from '@/shared/components/common/progress-bar'
+import { handleFormError } from '@/shared/utils/form'
+import { delay } from '@/shared/utils'
 
 const links: Link[] = [
 	{
@@ -47,12 +49,11 @@ export default function NewEmployee() {
 
 	const onSubmit = (payload: EmployeeForm) => {
 		mutate(payload, {
-			onSuccess: (data) => {
+			onSuccess: () => {
 				form.reset()
-				navigate(
-					`${paths.hrisMasterdataEmployee}/${data.data?.data?.id}` as string
-				)
+				delay(2000, () => navigate(paths.hrisMasterdataEmployee))
 			},
+			onError: handleFormError(form),
 		})
 	}
 

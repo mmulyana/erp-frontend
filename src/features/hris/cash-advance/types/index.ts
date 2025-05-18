@@ -7,6 +7,7 @@ export type CashAdvance = {
 	amount: number
 	date: string
 	note?: string
+	status: "notYetPaidOff" | "paidOff"
 
 	craetedAt: string
 	updatedAt: string

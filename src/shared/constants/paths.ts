@@ -9,6 +9,7 @@ export const paths = {
 	hrisMasterdataEmployeeDetail: '/hris/masterdata/employee/:id',
 	hrisMasterdataEmployeeCreate: '/hris/masterdata/new-employee',
 	hrisCashAdvance: '/hris/cash-advance',
+	hrisCashAdvanceDetail: '/hris/cash-advance/:id',
 	hrisAttendanceRegular: '/hris/attendance/regular',
 	hrisAttendanceOvertime: '/hris/attendance/overtime',
 	hrisPayroll: '/hris/payroll',

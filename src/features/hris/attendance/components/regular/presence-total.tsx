@@ -9,7 +9,7 @@ import { cn } from '@/shared/utils/cn'
 import { useReportByDate } from '../../api/regular/use-report-by-date'
 
 export default function PresenceTotal() {
-	const barColors = ['#EAEAEB', '#EAEAEB', '#EAEAEB', '#EE682F']
+	const barColors = ['#EAEAEB', '#EAEAEB', '#EAEAEB', '#47AF97']
 	const [query] = useQueryStates({
 		date: parseAsTimestamp,
 	})

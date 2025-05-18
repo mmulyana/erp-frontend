@@ -9,7 +9,6 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { testIds } from '@/shared/constants/testId'
 
-import LogoGoogle from '/images/logo-google.png'
 import Logo from '/images/logo.png'
 
 import { useLogin } from '../api/use-login'
@@ -91,22 +90,6 @@ export default function LoginForm() {
 							data-testid={testIds.loginButtonSubmit}
 						>
 							Login
-						</Button>
-
-						<div className='relative mt-2'>
-							<div className='h-[1px] w-full bg-[#EFEFEF] absolute top-1/2 left-0 -translate-y-1/2'></div>
-							<div className='bg-white px-4 absolute  top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
-								<p className='text-ink-light text-sm'>Atau</p>
-							</div>
-						</div>
-
-						<Button
-							type='button'
-							variant='outline'
-							className='text-ink-light font-medium bg-white gap-2 py-2.5 border-[#EFEFEF] h-fit'
-						>
-							<img src={LogoGoogle} className='w-5 h-5' />
-							Masuk dengan google
 						</Button>
 					</form>
 				</Form>

@@ -1,5 +1,5 @@
 import { Label, Pie, PieChart } from 'recharts'
-import { Users } from 'lucide-react'
+import { GraduationCap } from 'lucide-react'
 import { useMemo } from 'react'
 
 import CardV1 from '@/shared/components/common/card-v1'
@@ -26,8 +26,8 @@ export default function LastEducation({ variant }: props) {
 
 	return (
 		<CardV1
-			title='Pegawai'
-			icon={<Users size={20} className='stroke-ink-primary' />}
+			title='Pendidikan Terakhir'
+			icon={<GraduationCap size={20} className='stroke-ink-primary' />}
 			style={{
 				card: cn(
 					'h-fit col-span-2 xl:col-span-1 w-full',
@@ -43,7 +43,8 @@ export default function LastEducation({ variant }: props) {
 				config={{} as ChartConfig}
 				className={cn(
 					'mx-auto w-full h-[180px]',
-					variant === 'compact' && 'h-[132px] w-[132px] mx-0 -ml-4 absolute -mt-2'
+					variant === 'compact' &&
+						'h-[132px] w-[132px] mx-0 -ml-4 absolute -mt-2'
 				)}
 			>
 				<PieChart>
@@ -100,23 +101,27 @@ export default function LastEducation({ variant }: props) {
 			<div
 				className={cn(
 					'flex justify-center gap-2 flex-wrap',
-					variant === 'compact' && 'max-w-[180px] justify-start items-start ml-32 -mt-2'
+					variant === 'compact' &&
+						'max-w-[180px] justify-start items-start ml-32 -mt-2'
 				)}
 			>
-				{data?.data?.map((i, idx) => (
-					<Badge variant='outline' key={idx}>
-						<div
-							className='w-1.5 h-1.5 rounded-full'
-							style={{ background: i.fill }}
-						></div>
-						<span className='px-1 text-ink-primary/80 text-sm font-normal uppercase'>
-							{i.name}
-						</span>
-						<span className='block ml-1 text-sm font-medium text-ink-primary'>
-							{i.total}
-						</span>
-					</Badge>
-				))}
+				{data?.data?.map((i, idx) => {
+					if (i.name === 'Belum diisi') return null
+					return (
+						<Badge variant='outline' key={idx}>
+							<div
+								className='w-1.5 h-1.5 rounded-full'
+								style={{ background: i.fill }}
+							></div>
+							<span className='px-1 text-ink-primary/80 text-sm font-normal uppercase'>
+								{i.name}
+							</span>
+							<span className='block ml-1 text-sm font-medium text-ink-primary'>
+								{i.total}
+							</span>
+						</Badge>
+					)
+				})}
 			</div>
 		</CardV1>
 	)

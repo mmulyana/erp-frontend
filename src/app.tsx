@@ -15,6 +15,7 @@ const Employee = lazy(() => import('./pages/hris/employee'))
 const NewEmployee = lazy(() => import('./pages/hris/new-employee'))
 const DetailEmployee = lazy(() => import('./pages/hris/detail-employee'))
 const CashAdvance = lazy(() => import('./pages/hris/cash-advance'))
+const CashAdvanceDetail = lazy(() => import('./pages/hris/cash-advance-detail'))
 const Regular = lazy(() => import('./pages/hris/regular'))
 const Overtime = lazy(() => import('./pages/hris/overtime'))
 const Payroll = lazy(() => import('./pages/hris/payroll'))
@@ -105,6 +106,10 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.hrisCashAdvance,
 		component: <CashAdvance />,
+	},
+	{
+		path: paths.hrisCashAdvanceDetail,
+		component: <CashAdvanceDetail />,
 	},
 	{
 		path: paths.hrisAttendanceRegular,

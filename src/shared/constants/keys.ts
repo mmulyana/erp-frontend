@@ -18,6 +18,7 @@ export const keys = {
 	cashAdvances: 'cash_advances',
 	cashAdvancesDetail: 'cash_advances-detail',
 	cashAdvancesReport: 'cash_advances-report',
+	cashAdvanceTransactions: 'cash_advance-transactions',
 
 	attendance: 'attendance',
 	attendanceTotalPerDay: 'attendance-total-per-day',

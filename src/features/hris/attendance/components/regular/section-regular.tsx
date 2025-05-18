@@ -9,6 +9,7 @@ import { cn } from '@/shared/utils/cn'
 
 import TableRegular from './table-regular'
 import ViewType from './view-type'
+import HeadPage from '@/shared/components/common/head-page'
 
 export default function SectionRegular() {
 	const [query, setQuery] = useQueryStates({
@@ -17,16 +18,10 @@ export default function SectionRegular() {
 
 	return (
 		<div className='w-full space-y-6'>
-			<div className='flex gap-8 lg:gap-20 items-center flex-col md:flex-row w-fit'>
-				<div>
-					<p className='text-ink-primary leading-none mb-2 font-medium'>
-						Reguler
-					</p>
-					<p className='text-ink-primary/50 leading-none'>
-						Kelola absensi reguler pegawai harian
-					</p>
-				</div>
-			</div>
+			<HeadPage
+				title='Reguler'
+				subtitle='Kelola absensi reguler pegawai harian'
+			/>
 			<div className='p-6 bg-white rounded-xl border border-line space-y-6'>
 				<div className='flex gap-4 items-center flex-wrap md:flex-nowrap w-full'>
 					<SearchV3 />
