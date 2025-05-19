@@ -106,8 +106,8 @@ export type CashAdvanceTransaction = {
 export type PayrollPeriod = {
 	id: string
 	name: string
-	startDate: Date
-	endDate: Date
+	startDate: string
+	endDate: string
 	payType: PayType
 	status: PeriodStatus
 	createdAt: string

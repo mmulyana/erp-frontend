@@ -12,7 +12,7 @@ export default function SortButton({ children }: props) {
 			<PopoverTrigger asChild>
 				<Button variant='outline'>
 					<ListFilter size={18} className='stroke-ink-primary' />
-					<span className='px-0.5 text-ink-primary/50'>Filter</span>
+					<span className='px-0.5 text-ink-primary/50'>Sort</span>
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent>{children}</PopoverContent>

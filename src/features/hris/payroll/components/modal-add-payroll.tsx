@@ -2,9 +2,12 @@ import { Loader, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
+import { cn } from '@/shared/utils/cn'
 import {
 	Dialog,
 	DialogClose,
@@ -22,10 +25,8 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
+
 import { useCreatePeriod } from '../api/use-create-period'
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
-import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
-import { cn } from '@/shared/utils/cn'
 
 type Form = {
 	name: string
@@ -118,6 +119,7 @@ export default function ModalAddPayroll() {
 										<DatePickerField
 											value={field.value}
 											onChange={field.onChange}
+											disabledDate={() => false}
 										/>
 										<FormMessage />
 									</FormItem>
@@ -132,6 +134,7 @@ export default function ModalAddPayroll() {
 										<DatePickerField
 											value={field.value}
 											onChange={field.onChange}
+											disabledDate={() => false}
 										/>
 										<FormMessage />
 									</FormItem>

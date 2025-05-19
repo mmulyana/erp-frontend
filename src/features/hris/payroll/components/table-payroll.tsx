@@ -49,13 +49,13 @@ export default function TablePayroll() {
 						<div
 							className={cn(
 								'h-1.5 w-1.5 rounded-full',
-								isDone ? 'bg-success' : 'bg-[#475DEF]'
+								isDone ? 'bg-success' : 'bg-[#4795EF]'
 							)}
 						></div>
 						<p
 							className={cn(
 								'text-sm text-nowrap',
-								isDone ? 'text-success' : 'text-[#475DEF]'
+								isDone ? 'text-success' : 'text-[#4795EF]'
 							)}
 						>
 							{isDone ? 'Selesai' : 'Sedang diproses'}

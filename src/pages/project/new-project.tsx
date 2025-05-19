@@ -1,13 +1,15 @@
+import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import { House } from 'lucide-react'
 
-import FormLayout, { Link } from '@/shared/layout/form-layout'
-import { paths } from '@/shared/constants/paths'
 import FormNewProject from '@/features/projects/project/components/form-new-project'
 import ProgressBar from '@/shared/components/common/progress-bar'
-import { useForm } from 'react-hook-form'
-import { ProjectForm } from '@/features/projects/project/types'
+import DetailLayout from '@/shared/layout/detail-layout'
+import { paths } from '@/shared/constants/paths'
+import { Link } from '@/shared/types'
+
 import { useCreateProject } from '@/features/projects/project/api/use-create-project'
-import { useNavigate } from 'react-router-dom'
+import { ProjectForm } from '@/features/projects/project/types'
 
 const links: Link[] = [
 	{
@@ -43,13 +45,13 @@ export default function NewProject() {
 	}
 
 	return (
-		<FormLayout
+		<DetailLayout
 			links={links}
 			titleAction='Simpan'
 			action={() => form.handleSubmit(onSubmit)()}
 		>
 			<ProgressBar />
 			<FormNewProject form={form} onSubmit={onSubmit} />
-		</FormLayout>
+		</DetailLayout>
 	)
 }

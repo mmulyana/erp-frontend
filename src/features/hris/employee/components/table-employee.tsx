@@ -65,7 +65,7 @@ export default function TableEmployee() {
 		},
 		{
 			id: 'status',
-			accessorKey: 'status',
+			accessorKey: 'active',
 			header: 'Status',
 			cell: ({ row }) => (
 				<div className='w-[120px]'>

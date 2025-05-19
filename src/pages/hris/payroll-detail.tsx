@@ -29,7 +29,10 @@ import SearchV3 from '@/shared/components/common/search-v3'
 import FilterButton from '@/shared/components/common/filter-button'
 import SortButton from '@/shared/components/common/sort-button'
 import { usePayrolls } from '@/features/hris/payroll/api/use-payrolls'
-import { Payroll } from '@/shared/types/api'
+import { Payroll, PayrollStatus } from '@/shared/types/api'
+import ModalProcessPayroll from '@/features/hris/payroll/components/modal-process-payroll'
+import PayrollProgress from '@/features/hris/payroll/components/payroll-progress'
+import PayrollDetailTotal from '@/features/hris/payroll/components/payroll-detail-total'
 
 const links: Link[] = [
 	{
@@ -73,7 +76,7 @@ export default function PayrolleDetail() {
 		condition: !!(id && data?.data),
 	})
 
-	const column: ColumnDef<Payroll>[] = [
+	const column: ColumnDef<Payroll & { salary: number }>[] = [
 		{
 			header: 'Nama',
 			cell: ({ row }) => row.original.employee.fullname,
@@ -89,10 +92,58 @@ export default function PayrolleDetail() {
 		{
 			header: 'Potongan',
 			accessorKey: 'deduction',
+			cell: ({ row }) => `Rp ${formatThousands(row.original.deduction)}`,
 		},
 		{
 			header: 'Catatan',
 			accessorKey: 'note',
+			cell: ({ row }) => row.original.note && row.original.note.split('|')[0],
+		},
+		{
+			id: 'total',
+			header: 'Gaji diterima',
+			cell: ({ row }) => `Rp ${formatThousands(row.original.salary)}`,
+		},
+		{
+			header: 'Status',
+			cell: ({ row }) => {
+				const isDone = row.original.status === PayrollStatus.DONE
+				return (
+					<Badge variant='outline' className='gap-1'>
+						<div
+							className={cn(
+								'h-1.5 w-1.5 rounded-full',
+								isDone ? 'bg-success' : 'bg-[#4795EF]'
+							)}
+						></div>
+						<p
+							className={cn(
+								'text-sm text-nowrap',
+								isDone ? 'text-success' : 'text-[#4795EF]'
+							)}
+						>
+							{isDone ? 'Selesai' : 'Draf'}
+						</p>
+					</Badge>
+				)
+			},
+		},
+		{
+			id: 'action',
+			header: '',
+			cell: ({ row }) => {
+				const isDone = row.original.status === PayrollStatus.DONE
+				if (isDone) return null
+
+				return (
+					<ModalProcessPayroll
+						id={row.original.id}
+						employeeId={row.original.employeeId}
+						startDate={data?.data?.startDate}
+						endDate={data?.data?.endDate}
+					/>
+				)
+			},
 		},
 	]
 
@@ -110,6 +161,10 @@ export default function PayrolleDetail() {
 			}}
 		>
 			<div className='mx-auto w-[1072px] max-w-full px-4 md:px-0 pt-6 space-y-6'>
+				<div className='flex gap-4 flex-col md:flex-row'>
+					<PayrollProgress />
+					<PayrollDetailTotal />
+				</div>
 				<div className='p-6 rounded-xl border border-border bg-white space-y-6'>
 					<div className='flex gap-4 flex-wrap md:flex-nowrap'>
 						<SearchV3 />

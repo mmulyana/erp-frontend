@@ -1,16 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { IApiPagination } from '@/shared/types'
+import { IApiPagination, Pagination } from '@/shared/types'
 
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
-import http from '@/shared/utils/http'
 import { Payroll } from '@/shared/types/api'
+import http from '@/shared/utils/http'
 
-type Params = {
-	search?: string
-	page?: string
-	limit?: string
+type Params = Pagination & {
 	periodId?: string
 	status?: string
 	enabled?: boolean
@@ -18,7 +15,7 @@ type Params = {
 
 export const usePayrolls = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.payroll, params],
+		queryKey: [keys.payroll, params?.periodId, params],
 		queryFn: async (): Promise<IApiPagination<Payroll[]>> => {
 			const { data } = await http(urls.payroll, {
 				params,
