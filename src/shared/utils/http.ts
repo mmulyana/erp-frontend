@@ -38,6 +38,7 @@ http.interceptors.response.use(
 
 		if (
 			statusCode === 401 ||
+			statusCode === 403 ||
 			responseData?.message?.toLowerCase().includes('token expired') ||
 			responseData?.message?.toLowerCase().includes('token invalid') ||
 			responseData?.message?.toLowerCase().includes('invalid token')

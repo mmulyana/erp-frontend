@@ -7,7 +7,7 @@ import LastEducation from '@/features/hris/employee/components/last-education'
 
 export default function Employee() {
 	return (
-		<DefaultLayout module='hris'>
+		<DefaultLayout module='hris' className='space-y-6'>
 			<div className='flex gap-6 flex-wrap'>
 				<TotalEmployee variant='compact' />
 				<LastEducation variant='compact' />

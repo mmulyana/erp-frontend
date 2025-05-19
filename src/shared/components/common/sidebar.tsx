@@ -307,8 +307,8 @@ export default function AppSidebar({ module }: AppSidebarProps) {
 				)}
 			</SidebarHeader>
 
-			<ScrollArea className='px-6 pt-0 md:pt-6'>
-				<SidebarContent>
+			<ScrollArea>
+				<SidebarContent className='px-6 pt-0 md:pt-6'>
 					{isMobile ? (
 						<Tabs
 							value={activeMobileModule}

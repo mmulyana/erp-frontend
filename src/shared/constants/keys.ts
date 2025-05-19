@@ -32,6 +32,10 @@ export const keys = {
 	overtimeReport: 'overtime-report',
 	overtimeByDate: 'overtime-by-date',
 
+	payrollPeriod: 'payroll-period',
+	payrollPeriodDetail: 'payroll-period-detail',
+	payroll: 'payroll',
+
 	hrisDashboardTotal: 'hris-dashboard-total',
 	hrisDashboardExpireCertif: 'hris-dashboard-expire-certif',
 	hrisDashboardExpireSafetyInduction: 'hris-dashboard-expire-safety',
@@ -79,5 +83,5 @@ export const keys = {
 	stockLoanDetail: 'stock-loan-detail',
 
 	stockInReportByMonth: 'stock-in-report-by-month',
-	stockOutReportByMonth: 'stock-out-report-by-month'
+	stockOutReportByMonth: 'stock-out-report-by-month',
 }

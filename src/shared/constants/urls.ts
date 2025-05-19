@@ -14,7 +14,8 @@ export const urls = {
 	cashAdvances: api + '/cash-advance',
 	attendance: api + '/attendance',
 	overtime: api + '/overtime',
-	certificate: api + '/employee/data/certificate',
+	payrollPeriod: api + '/payroll-period',
+	payroll: api + '/payroll',
 
 	// DASHBOARD
 	dashboardHris: api + '/dashboard/hris',
@@ -29,7 +30,7 @@ export const urls = {
 	kanbanBoard: api + '/board',
 
 	// INVENTORY
-	location: api + '/location',
+	location: api + '/warehouse',
 	supplier: api + '/supplier',
 	brand: api + '/brand',
 	item: api + '/item',

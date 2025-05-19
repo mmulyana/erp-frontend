@@ -1,0 +1,132 @@
+import { History, House, Pencil, Wallet } from 'lucide-react'
+import { ColumnDef } from '@tanstack/react-table'
+import { useParams } from 'react-router-dom'
+import { id as ind } from 'date-fns/locale'
+import { useState } from 'react'
+import { format } from 'date-fns'
+
+import ModalDetailBrand from '@/features/inventory/brand/components/modal-detail-brand'
+import { useCashAdvance } from '@/features/hris/cash-advance/api/use-cash-advance'
+import { useItems } from '@/features/inventory/item/api/use-items'
+
+import HeadPage from '@/shared/components/common/head-page'
+import DetailLayout from '@/shared/layout/detail-layout'
+import CardV1 from '@/shared/components/common/card-v1'
+import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import { DataTable } from '@/shared/components/common/data-table'
+import { usePagination } from '@/shared/hooks/use-pagination'
+import { Button } from '@/shared/components/ui/button'
+import { useDynamicLinks } from '@/shared/utils/link'
+import { Badge } from '@/shared/components/ui/badge'
+import { formatThousands } from '@/shared/utils'
+import { paths } from '@/shared/constants/paths'
+import { Link } from '@/shared/types'
+import { cn } from '@/shared/utils/cn'
+import { useTransactions } from '@/features/hris/cash-advance/api/use-transaction'
+import ModalAddTransaction from '@/features/hris/cash-advance/components/modal-add-transaction'
+import { usePeriod } from '@/features/hris/payroll/api/use-period'
+import SearchV3 from '@/shared/components/common/search-v3'
+import FilterButton from '@/shared/components/common/filter-button'
+import SortButton from '@/shared/components/common/sort-button'
+import { usePayrolls } from '@/features/hris/payroll/api/use-payrolls'
+import { Payroll } from '@/shared/types/api'
+
+const links: Link[] = [
+	{
+		icon: <House size={20} />,
+		name: 'Dashboard',
+		path: paths.hris,
+		hideName: true,
+	},
+	{
+		name: 'Payroll',
+		path: paths.hrisPayroll,
+	},
+	{
+		name: 'Detail',
+		path: paths.hrisPayroll,
+	},
+]
+export default function PayrolleDetail() {
+	const { id } = useParams()
+	const [open, setOpen] = useState(false)
+	const { limit, page, q } = usePagination()
+
+	const { data, isPending } = usePeriod({ id })
+	const { data: payrolls } = usePayrolls({
+		limit,
+		page,
+		search: q,
+		periodId: id,
+		enabled: id !== null && id !== undefined && id !== '',
+	})
+
+	const linkMemo = useDynamicLinks({
+		baseLinks: links,
+		replaceName: 'Detail',
+		newLink: data?.data
+			? {
+					name: data.data.name ?? '',
+					path: `${paths.hrisPayroll}/${data.data.id}`,
+			  }
+			: undefined,
+		condition: !!(id && data?.data),
+	})
+
+	const column: ColumnDef<Payroll>[] = [
+		{
+			header: 'Nama',
+			cell: ({ row }) => row.original.employee.fullname,
+		},
+		{
+			header: 'Hari kerja',
+			accessorKey: 'workDay',
+		},
+		{
+			header: 'Lembur (jam)',
+			accessorKey: 'overtimeHour',
+		},
+		{
+			header: 'Potongan',
+			accessorKey: 'deduction',
+		},
+		{
+			header: 'Catatan',
+			accessorKey: 'note',
+		},
+	]
+
+	return (
+		<DetailLayout
+			links={linkMemo}
+			buttonAction={
+				<Button variant='outline' onClick={() => setOpen(true)}>
+					<Pencil size={16} className='text-ink-light' />
+					<span className='px-1 text-ink-primary'>Ubah</span>
+				</Button>
+			}
+			style={{
+				header: 'w-[1072px]',
+			}}
+		>
+			<div className='mx-auto w-[1072px] max-w-full px-4 md:px-0 pt-6 space-y-6'>
+				<div className='p-6 rounded-xl border border-border bg-white space-y-6'>
+					<div className='flex gap-4 flex-wrap md:flex-nowrap'>
+						<SearchV3 />
+						<div className='flex gap-4 ml-0 md:ml-auto'>
+							<FilterButton></FilterButton>
+							<SortButton></SortButton>
+						</div>
+					</div>
+					<DataTable
+						columns={column}
+						data={payrolls?.data.data || []}
+						totalItems={payrolls?.data.total}
+						totalPages={payrolls?.data.total_pages}
+						withPagination
+					/>
+				</div>
+			</div>
+		</DetailLayout>
+	)
+}
