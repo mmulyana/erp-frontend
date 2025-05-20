@@ -5,12 +5,30 @@ export const usePagination = () => {
 		q: parseAsString.withDefault(''),
 		page: parseAsString.withDefault('1'),
 		limit: parseAsString.withDefault('10'),
+		sort: parseAsString,
+		status: parseAsString,
 	})
-	const { q, page, limit } = query
+
+	const status = query.status === '' ? undefined : query.status
+
+	let sortBy: 'createdAt' | 'startDate' | 'endDate' | undefined
+	let sortOrder: 'asc' | 'desc' | undefined
+
+	if (query.sort) {
+		const [by, order] = query.sort.split(':') as [
+			typeof sortBy,
+			typeof sortOrder
+		]
+		sortBy = by
+		sortOrder = order
+	}
 
 	return {
-		q,
-		page,
-		limit,
+		q: query.q,
+		page: query.page,
+		limit: query.limit,
+		sortBy,
+		sortOrder,
+		status: status as string,
 	}
 }

@@ -8,6 +8,7 @@ export type FormProcess = {
 		type: string
 		name: string
 		amount: number
+		referenceId?: string
 	}[]
 	paymentType: string
 }

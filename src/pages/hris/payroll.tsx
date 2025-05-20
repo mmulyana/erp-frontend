@@ -7,7 +7,8 @@ import SortButton from '@/shared/components/common/sort-button'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import SearchV3 from '@/shared/components/common/search-v3'
 import HeadPage from '@/shared/components/common/head-page'
-
+import CreateSelect from '@/shared/components/common/select/created-select'
+import BaseSelect from '@/shared/components/common/select/base-select'
 
 export default function Payroll() {
 	return (
@@ -22,8 +23,44 @@ export default function Payroll() {
 				<div className='flex justify-between items-center'>
 					<SearchV3 />
 					<div className='flex gap-4 items-center'>
-						<FilterButton></FilterButton>
-						<SortButton></SortButton>
+						<FilterButton>
+							<BaseSelect
+								label='Status'
+								options={[
+									{
+										label: 'Selesai',
+										value: 'done',
+									},
+									{
+										label: 'Sedang diproses',
+										value: 'processing',
+									},
+								]}
+								urlName='status'
+							/>
+						</FilterButton>
+						<SortButton>
+							<CreateSelect
+								options={[
+									{
+										label: 'Tanggal Mulai (Terbaru)',
+										value: 'startDate:asc',
+									},
+									{
+										label: 'Tanggal Mulai (Terlama)',
+										value: 'startDate:desc',
+									},
+									{
+										label: 'Tanggal Berakhir (Terbaru)',
+										value: 'endDate:asc',
+									},
+									{
+										label: 'Tanggal Berakhir (Terlama)',
+										value: 'endDate:desc',
+									},
+								]}
+							/>
+						</SortButton>
 					</div>
 				</div>
 				<TablePayroll />

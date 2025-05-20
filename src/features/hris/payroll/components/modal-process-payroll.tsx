@@ -1,8 +1,8 @@
 import { useFieldArray, useForm } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
-import { Plus, RotateCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { id as ind } from 'date-fns/locale'
+import { Pencil, RotateCcw } from 'lucide-react'
 import { format } from 'date-fns'
 
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
@@ -31,8 +31,12 @@ import {
 import { useSummaryEmployee } from '../../employee/api/use-summary-employee'
 import { useEmployee } from '../../employee/api/use-employee'
 import { useUpdatePayroll } from '../api/use-update-payroll'
+import ModalAddDeduction from './modal-add-deduction'
 import { usePayroll } from '../api/use-payroll'
 import { FormProcess } from '../types'
+import { useCreateTransaction } from '../../cash-advance/api/use-create-transaction'
+import { useQueryClient } from '@tanstack/react-query'
+import { keys } from '@/shared/constants/keys'
 
 const optionsPayment = [
 	{
@@ -49,17 +53,24 @@ const optionsPayment = [
 
 type props = {
 	id?: string
+	name?: string
 	employeeId?: string
 	startDate?: string
 	endDate?: string
+	variant?: 'default' | 'update'
 }
 export default function ModalProcessPayroll({
 	id,
 	employeeId,
 	startDate,
 	endDate,
+	name,
+	variant = 'default',
 }: props) {
+	const queryClient = useQueryClient()
+
 	const [open, setOpen] = useState(false)
+	const [cashAdvances, setCashAdvances] = useState<string[]>([])
 	const [isPayment, setIsPayment] = useState(false)
 
 	const { data: payroll } = usePayroll({ id: open ? id : '' })
@@ -70,6 +81,7 @@ export default function ModalProcessPayroll({
 	})
 	const { data: employee } = useEmployee(open ? employeeId : '')
 
+	const { mutateAsync } = useCreateTransaction()
 	const { mutate } = useUpdatePayroll()
 
 	const form = useForm<FormProcess>({
@@ -106,22 +118,59 @@ export default function ModalProcessPayroll({
 	useEffect(() => {
 		if (isPending) return
 		form.reset({
-			workDay: summary?.total.presence,
-			overtimeHour: summary?.total.overtimes,
+			workDay: payroll?.workDay || summary?.total.presence,
+			overtimeHour: payroll?.overtimeHour || summary?.total.overtimes,
 			overtimeSalary: payroll?.overtimeSalary,
 			salary: payroll?.salary,
 		})
+
+		if (payroll?.note) {
+			const [namesStr, amountsStr, typesStr] = payroll.note.split('|')
+
+			if (namesStr && amountsStr && typesStr) {
+				const names = namesStr.split(',')
+				const amounts = amountsStr.split(',')
+				const types = typesStr.split(',')
+
+				if (names.length === amounts.length && names.length === types.length) {
+					names.forEach((name, index) => {
+						append({
+							name: name,
+							type: types[index],
+							amount: Number(amounts[index]),
+						})
+					})
+				}
+			}
+		}
 	}, [summary, isPending])
 
-	const submit = (data: FormProcess) => {
+	const submit = async (data: FormProcess) => {
 		if (!payroll?.id) return
+
+		if (cashAdvances.length > 0) {
+			const promises = cashAdvances.map((id) =>
+				mutateAsync({
+					cashAdvanceId: id,
+					date: new Date(),
+					note: `Dipotong gaji - ${name}`,
+					amount: summary?.cashAdvances.find((i) => i.id === id)?.amount,
+				})
+			)
+
+			await Promise.all(promises)
+		}
+
 		const noteNames = data.deductions?.map((i) => i.name).join(',')
 		const noteValue = data.deductions?.map((i) => i.amount).join(',')
 		const noteType = data.deductions?.map((i) => i.type).join(',')
+		const noteReference = data.deductions?.map((i) => i.referenceId).join(',')
 
 		const note =
 			noteNames !== ''
-				? [noteNames, '|', noteValue, '|', noteType].join('')
+				? [noteNames, '|', noteValue, '|', noteType, '|', noteReference].join(
+						''
+				  )
 				: ''
 
 		mutate(
@@ -130,10 +179,22 @@ export default function ModalProcessPayroll({
 				deduction: totalDeduction,
 				id: payroll?.id,
 				status: 'done',
+				doneAt: new Date().toLocaleString(),
 				note,
 			},
 			{
-				onSuccess: handleFormSuccess(setOpen),
+				onSuccess: handleFormSuccess(setOpen, () => {
+					queryClient.invalidateQueries({
+						predicate: (query) =>
+							Array.isArray(query.queryKey) &&
+							query.queryKey[0] === keys.payrollTotal,
+					})
+					queryClient.invalidateQueries({
+						predicate: (query) =>
+							Array.isArray(query.queryKey) &&
+							query.queryKey[0] === keys.payrollProgress,
+					})
+				}),
 				onError: handleFormError<FormProcess>(form),
 			}
 		)
@@ -142,7 +203,12 @@ export default function ModalProcessPayroll({
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant='outline'>Proses gaji</Button>
+				<Button variant='outline'>
+					{variant !== 'default' && <Pencil size={16} />}
+					<span className='px-0.5'>
+						{variant == 'default' ? 'Proses gaji' : 'Ubah'}
+					</span>
+				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle className='text-center'>Proses Gaji</DialogTitle>
@@ -347,7 +413,14 @@ export default function ModalProcessPayroll({
 												<Button
 													variant='ghost'
 													className='text-sm hover:text-error'
-													onClick={() => remove(index)}
+													onClick={() => {
+														if (i.referenceId !== '') {
+															setCashAdvances(
+																cashAdvances.filter((c) => c !== i.referenceId)
+															)
+														}
+														remove(index)
+													}}
 													type='button'
 												>
 													Batal
@@ -394,6 +467,9 @@ export default function ModalProcessPayroll({
 																									Number(values.value)
 																								)
 																							}}
+																							disabled={
+																								i.referenceId !== undefined
+																							}
 																						/>
 																					</div>
 																				</FormControl>
@@ -417,6 +493,40 @@ export default function ModalProcessPayroll({
 											})
 										}}
 									/>
+									<div>
+										<p className='text-ink-primary font-medium'>Kasbon</p>
+										<p className='text-ink-primary/50'>
+											Pilih kasbon sebagai potongan
+										</p>
+										<div className='flex gap-2 flex-wrap mt-2'>
+											{summary?.cashAdvances
+												.filter((i) => !cashAdvances.includes(i.id))
+												.map((i) => (
+													<Button
+														variant='outline'
+														type='button'
+														className='rounded-full gap-0.5'
+														onClick={() => {
+															append({
+																type: 'numeric',
+																amount: i.amount,
+																name: `kasbon-${format(
+																	new Date(i.date),
+																	'dd/MM/yyyy'
+																)}`,
+																referenceId: i.id,
+															})
+															setCashAdvances((prev) => [...prev, i.id])
+														}}
+													>
+														<p>Rp {formatThousands(i.amount)}</p>-
+														<p>
+															{format(new Date(i.date), 'PPP', { locale: ind })}
+														</p>
+													</Button>
+												))}
+										</div>
+									</div>
 								</div>
 								<div className='pt-4 border-border flex justify-between items-start'>
 									<p className='text-ink-primary font-medium'>Subtotal</p>
@@ -486,135 +596,6 @@ export default function ModalProcessPayroll({
 									{isPayment && <Button>Simpan</Button>}
 								</div>
 							</div>
-						</DialogFooter>
-					</form>
-				</Form>
-			</DialogContent>
-		</Dialog>
-	)
-}
-
-const options = [
-	{
-		name: 'Persenan',
-		value: 'percent',
-	},
-	{
-		name: 'Angka',
-		value: 'numeric',
-	},
-]
-
-type modalProps = {
-	onClick: (name: string, type: string) => void
-}
-function ModalAddDeduction({ onClick }: modalProps) {
-	const [open, setOpen] = useState(false)
-
-	const defaultValues = {
-		name: '',
-		type: '',
-	}
-
-	type deductionForm = {
-		name: string
-		type: string
-	}
-	const form = useForm<deductionForm>({
-		defaultValues,
-	})
-
-	const submit = (data: deductionForm) => {
-		onClick(data.name, data.type)
-		setOpen(false)
-	}
-
-	useEffect(() => {
-		if (!open) form.reset(defaultValues)
-		return () => form.reset(defaultValues)
-	}, [open])
-
-	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>
-				<Button variant='outline' type='button'>
-					<Plus size={18} />
-					<span className='px-0.5'>Tambah</span>
-				</Button>
-			</DialogTrigger>
-			<DialogContent className='max-w-[400px]'>
-				<DialogTitle className='text-center mb-2'>Potongan Baru</DialogTitle>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(submit)} className='space-y-6 px-6'>
-						<FormField
-							control={form.control}
-							name='name'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Nama potongan</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='type'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Jenis potongan</FormLabel>
-									<FormControl>
-										<div>
-											<RadioGroup
-												value={field.value}
-												onValueChange={field.onChange}
-												className='grid grid-cols-1 md:grid-cols-2 gap-4'
-											>
-												{options.map((option) => (
-													<label
-														key={option.value}
-														htmlFor={option.value}
-														className={cn(
-															'relative flex items-center rounded-lg border p-2 cursor-pointer transition-colors',
-															field.value === option.value
-																? 'bg-blue-50 border-brand'
-																: 'bg-white border-gray-200 hover:border-gray-300'
-														)}
-													>
-														<p>{option.name}</p>
-														<div className='ml-auto'>
-															<RadioGroupItem
-																value={option.value}
-																id={option.value}
-																className={cn(
-																	'h-6 w-6 border-2',
-																	field.value === option.value
-																		? 'border-brand text-brand'
-																		: 'border-gray-300'
-																)}
-															/>
-														</div>
-													</label>
-												))}
-											</RadioGroup>
-										</div>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<DialogFooter>
-							<DialogClose>
-								<Button variant='outline'>Batal</Button>
-							</DialogClose>
-							<Button
-								type='button'
-								onClick={() => {
-									form.handleSubmit(submit)()
-								}}
-							>
-								Simpan
-							</Button>
 						</DialogFooter>
 					</form>
 				</Form>

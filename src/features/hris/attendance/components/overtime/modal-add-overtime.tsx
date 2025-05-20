@@ -106,6 +106,7 @@ export default function ModalAddOvertime() {
 										<DatePickerField
 											value={field.value}
 											onChange={field.onChange}
+											disabledDate={() => false}
 										/>
 										<FormMessage />
 									</FormItem>

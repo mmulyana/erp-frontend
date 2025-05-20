@@ -36,6 +36,9 @@ export const keys = {
 	payrollPeriod: 'payroll-period',
 	payrollPeriodDetail: 'payroll-period-detail',
 	payroll: 'payroll',
+	payrollDetail: 'payroll-detail',
+	payrollTotal: 'payroll-total',
+	payrollProgress: 'payroll-progress',
 
 	hrisDashboardTotal: 'hris-dashboard-total',
 	hrisDashboardExpireCertif: 'hris-dashboard-expire-certif',

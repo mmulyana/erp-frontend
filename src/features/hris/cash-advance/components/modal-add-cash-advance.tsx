@@ -52,7 +52,6 @@ export default function ModalAddCashAdvance() {
 		mutate(
 			{
 				...data,
-				date: convertUTCToWIB(data.date),
 			},
 			{
 				onSuccess: handleFormSuccess(setOpen),

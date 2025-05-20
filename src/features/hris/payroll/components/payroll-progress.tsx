@@ -11,6 +11,8 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/shared/components/ui/chart'
+import { useProgressPayroll } from '../api/use-progress-payroll'
+import { useParams } from 'react-router-dom'
 
 const chartData = [
 	{
@@ -25,11 +27,12 @@ const chartData = [
 	},
 ]
 export default function PayrollProgress() {
-	// const { data } = useLastEducation()
+	const { id } = useParams()
+	const { data } = useProgressPayroll({ periodId: id })
 
 	const total = useMemo(() => {
-		return chartData.reduce((acc, curr) => acc + curr.total, 0)
-	}, [])
+		return data?.data.reduce((acc, curr) => acc + curr.total, 0)
+	}, [data])
 
 	return (
 		<CardV1
@@ -51,7 +54,7 @@ export default function PayrollProgress() {
 						content={<ChartTooltipContent hideLabel />}
 					/>
 					<Pie
-						data={chartData}
+						data={data?.data}
 						dataKey='total'
 						nameKey='name'
 						innerRadius={32}
@@ -92,7 +95,7 @@ export default function PayrollProgress() {
 				</PieChart>
 			</ChartContainer>
 			<div className='flex gap-2 flex-wrap max-w-[140px] justify-start items-start ml-32 -mt-2'>
-				{chartData?.map((i, idx) => {
+				{data?.data?.map((i, idx) => {
 					if (i.name === 'Belum diisi') return null
 					return (
 						<Badge variant='outline' key={idx}>

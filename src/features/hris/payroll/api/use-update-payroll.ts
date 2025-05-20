@@ -19,6 +19,7 @@ export const useUpdatePayroll = () => {
 				status: 'done' | 'draft'
 				id: string
 				note?: string
+				doneAt?: string
 			}
 		) => {
 			const { data } = await http.patch<IApi<Payroll>>(
@@ -28,6 +29,9 @@ export const useUpdatePayroll = () => {
 			return data
 		},
 		onSuccess: (data) => {
+			queryClient.invalidateQueries({
+				queryKey: [keys.payrollDetail, data.data?.id],
+			})
 			queryClient.invalidateQueries({
 				queryKey: [keys.payroll, data.data?.periodId],
 			})

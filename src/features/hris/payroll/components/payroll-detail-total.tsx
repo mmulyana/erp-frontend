@@ -18,13 +18,12 @@ import {
 } from '@/shared/components/ui/select'
 import { formatThousands } from '@/shared/utils'
 import { cn } from '@/shared/utils/cn'
+import { useAmountTotal } from '../api/use-amount-total'
+import { useParams } from 'react-router-dom'
 
 export default function PayrollDetailTotal() {
-	// const { data } = useTotalByMonth({
-	//   month: String(selectedMonth),
-	//   year: new Date().getFullYear().toString(),
-	// })
-
+	const { id } = useParams()
+	const { data } = useAmountTotal({ periodId: id })
 	return (
 		<CardV1
 			title='Total pengeluaran'
@@ -46,7 +45,7 @@ export default function PayrollDetailTotal() {
 				<div className='flex items-end gap-1'>
 					<p className='text-ink-primary/50 text-lg'>Rp</p>
 					<p className='text-2xl font-medium text-ink-primary'>
-						{formatThousands(120000)}
+						{formatThousands(data?.total)}
 					</p>
 				</div>
 			</div>

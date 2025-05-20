@@ -55,7 +55,6 @@ export default function ModalAddTransaction() {
 		mutate(
 			{
 				...data,
-				date: convertUTCToWIB(data.date),
 				cashAdvanceId: id,
 			},
 			{

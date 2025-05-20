@@ -1,4 +1,5 @@
 import React from 'react'
+import { string } from 'zod'
 
 export type RoutesConfig = {
 	path: string
@@ -123,4 +124,9 @@ export type Link = {
 	name: string
 	path: string
 	hideName?: boolean
+}
+
+export type selectOption = {
+	label: string
+	value: string
 }

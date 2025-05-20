@@ -70,11 +70,11 @@ export default function TableEmployee() {
 			cell: ({ row }) => (
 				<div className='w-[120px]'>
 					<ToggleSwitch
-						value={row.original.status}
+						value={row.original.active}
 						label={{ true: 'Aktif', false: 'Nonaktif' }}
 						onCheck={(val) => {
 							mutate(
-								{ id: row.original.id, status: val },
+								{ id: row.original.id, active: val },
 								{
 									onSuccess: () => {
 										queryClient.invalidateQueries({

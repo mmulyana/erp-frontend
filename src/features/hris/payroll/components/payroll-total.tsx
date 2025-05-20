@@ -12,16 +12,18 @@ import {
 } from '@/shared/components/ui/select'
 import { formatThousands } from '@/shared/utils'
 import { cn } from '@/shared/utils/cn'
+import { useAmountTotal } from '../api/use-amount-total'
 
 export default function PayrollTotal() {
 	const [selectedMonth, setSelectedMonth] = useState<number | null>(
 		new Date().getMonth()
 	)
 
-	// const { data } = useTotalByMonth({
-	//   month: String(selectedMonth),
-	//   year: new Date().getFullYear().toString(),
-	// })
+	const { data } = useAmountTotal({
+		month: String(selectedMonth),
+	})
+
+	const percentage = data?.percentage || 0
 
 	return (
 		<CardV1
@@ -52,17 +54,21 @@ export default function PayrollTotal() {
 						<div className='flex items-end gap-1'>
 							<p className='text-ink-primary/50 text-lg'>Rp</p>
 							<p className='text-2xl font-medium text-ink-primary'>
-								{formatThousands(120000)}
+								{formatThousands(data?.total)}
 							</p>
 						</div>
 						<div
 							className={cn(
 								'rounded-full flex text-xs px-1.5 py-0.5 gap-1',
-								10 > 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error'
+								percentage > 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error'
 							)}
 						>
-							{10 > 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
-							<p>10%</p>
+							{percentage > 0 ? (
+								<TrendingUp size={16} />
+							) : (
+								<TrendingDown size={16} />
+							)}
+							<p>{percentage}%</p>
 						</div>
 					</div>
 					<p className='text-sm text-ink-primary/50'>Dibanding bulan kemarin</p>

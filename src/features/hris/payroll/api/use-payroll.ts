@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import { Payroll } from '@/shared/types/api'
-import { IApi } from '@/shared/types'
 import http from '@/shared/utils/http'
 
 type Params = {
@@ -12,7 +11,7 @@ type Params = {
 
 export const usePayroll = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.payroll, params],
+		queryKey: [keys.payrollDetail, params?.id],
 		queryFn: async (): Promise<Payroll> => {
 			const { data } = await http(`${urls.payroll}/${params?.id}`)
 			return data.data

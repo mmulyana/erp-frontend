@@ -11,6 +11,8 @@ type Params = Pagination & {
 	periodId?: string
 	status?: string
 	enabled?: boolean
+	sortBy?: string
+	sortOrder?: string
 }
 
 export const usePayrolls = (params?: Params) => {

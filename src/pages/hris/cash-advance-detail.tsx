@@ -5,9 +5,9 @@ import { id as ind } from 'date-fns/locale'
 import { useState } from 'react'
 import { format } from 'date-fns'
 
-import ModalDetailBrand from '@/features/inventory/brand/components/modal-detail-brand'
+import ModalAddTransaction from '@/features/hris/cash-advance/components/modal-add-transaction'
 import { useCashAdvance } from '@/features/hris/cash-advance/api/use-cash-advance'
-import { useItems } from '@/features/inventory/item/api/use-items'
+import { useTransactions } from '@/features/hris/cash-advance/api/use-transaction'
 
 import HeadPage from '@/shared/components/common/head-page'
 import DetailLayout from '@/shared/layout/detail-layout'
@@ -22,8 +22,6 @@ import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { Link } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
-import { useTransactions } from '@/features/hris/cash-advance/api/use-transaction'
-import ModalAddTransaction from '@/features/hris/cash-advance/components/modal-add-transaction'
 
 const links: Link[] = [
 	{

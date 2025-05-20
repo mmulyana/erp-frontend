@@ -83,7 +83,7 @@ export type CashAdvance = {
 	employeeId: string
 	createdBy: string
 	amount: number
-	date: Date
+	date: string
 	note?: string
 	status: CashAdvanceStatus
 	createdAt: string

@@ -6,16 +6,24 @@ import { DataTable } from '@/shared/components/common/data-table'
 import { PayrollPeriod, PeriodStatus } from '@/shared/types/api'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import { Badge } from '@/shared/components/ui/badge'
+import { paths } from '@/shared/constants/paths'
 import { formatThousands } from '@/shared/utils'
 import { cn } from '@/shared/utils/cn'
 
 import { usePeriods } from '../api/use-periods'
-import { paths } from '@/shared/constants/paths'
 
 export default function TablePayroll() {
 	const navigate = useNavigate()
-	const { limit, page, q } = usePagination()
-	const { data } = usePeriods({ limit, page, search: q })
+	const { limit, page, q, status, sortBy, sortOrder } = usePagination()
+
+	const { data } = usePeriods({
+		limit,
+		page,
+		search: q,
+		sortBy,
+		sortOrder,
+		status,
+	})
 
 	const column: ColumnDef<PayrollPeriod & { totalSpending: number }>[] = [
 		{

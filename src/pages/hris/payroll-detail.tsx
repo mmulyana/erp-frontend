@@ -1,38 +1,30 @@
-import { History, House, Pencil, Wallet } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
+import { House, Pencil } from 'lucide-react'
 import { useParams } from 'react-router-dom'
-import { id as ind } from 'date-fns/locale'
 import { useState } from 'react'
-import { format } from 'date-fns'
 
-import ModalDetailBrand from '@/features/inventory/brand/components/modal-detail-brand'
-import { useCashAdvance } from '@/features/hris/cash-advance/api/use-cash-advance'
-import { useItems } from '@/features/inventory/item/api/use-items'
+import ModalProcessPayroll from '@/features/hris/payroll/components/modal-process-payroll'
+import PayrollDetailTotal from '@/features/hris/payroll/components/payroll-detail-total'
+import PayrollProgress from '@/features/hris/payroll/components/payroll-progress'
+import { usePayrolls } from '@/features/hris/payroll/api/use-payrolls'
+import { usePeriod } from '@/features/hris/payroll/api/use-period'
 
-import HeadPage from '@/shared/components/common/head-page'
+import CreateSelect from '@/shared/components/common/select/created-select'
+import BaseSelect from '@/shared/components/common/select/base-select'
+import FilterButton from '@/shared/components/common/filter-button'
+import SortButton from '@/shared/components/common/sort-button'
+import SearchV3 from '@/shared/components/common/search-v3'
 import DetailLayout from '@/shared/layout/detail-layout'
-import CardV1 from '@/shared/components/common/card-v1'
-import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { Payroll, PayrollStatus } from '@/shared/types/api'
 import { Button } from '@/shared/components/ui/button'
 import { useDynamicLinks } from '@/shared/utils/link'
 import { Badge } from '@/shared/components/ui/badge'
 import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
-import { Link } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
-import { useTransactions } from '@/features/hris/cash-advance/api/use-transaction'
-import ModalAddTransaction from '@/features/hris/cash-advance/components/modal-add-transaction'
-import { usePeriod } from '@/features/hris/payroll/api/use-period'
-import SearchV3 from '@/shared/components/common/search-v3'
-import FilterButton from '@/shared/components/common/filter-button'
-import SortButton from '@/shared/components/common/sort-button'
-import { usePayrolls } from '@/features/hris/payroll/api/use-payrolls'
-import { Payroll, PayrollStatus } from '@/shared/types/api'
-import ModalProcessPayroll from '@/features/hris/payroll/components/modal-process-payroll'
-import PayrollProgress from '@/features/hris/payroll/components/payroll-progress'
-import PayrollDetailTotal from '@/features/hris/payroll/components/payroll-detail-total'
+import { Link } from '@/shared/types'
 
 const links: Link[] = [
 	{
@@ -53,15 +45,18 @@ const links: Link[] = [
 export default function PayrolleDetail() {
 	const { id } = useParams()
 	const [open, setOpen] = useState(false)
-	const { limit, page, q } = usePagination()
+	const { limit, page, q, sortBy, sortOrder, status } = usePagination()
 
-	const { data, isPending } = usePeriod({ id })
+	const { data } = usePeriod({ id })
 	const { data: payrolls } = usePayrolls({
 		limit,
 		page,
 		search: q,
 		periodId: id,
 		enabled: id !== null && id !== undefined && id !== '',
+		sortBy,
+		sortOrder,
+		status,
 	})
 
 	const linkMemo = useDynamicLinks({
@@ -133,14 +128,15 @@ export default function PayrolleDetail() {
 			header: '',
 			cell: ({ row }) => {
 				const isDone = row.original.status === PayrollStatus.DONE
-				if (isDone) return null
 
 				return (
 					<ModalProcessPayroll
 						id={row.original.id}
+						name={data?.data?.name}
 						employeeId={row.original.employeeId}
 						startDate={data?.data?.startDate}
 						endDate={data?.data?.endDate}
+						variant={isDone ? 'update' : 'default'}
 					/>
 				)
 			},
@@ -169,8 +165,36 @@ export default function PayrolleDetail() {
 					<div className='flex gap-4 flex-wrap md:flex-nowrap'>
 						<SearchV3 />
 						<div className='flex gap-4 ml-0 md:ml-auto'>
-							<FilterButton></FilterButton>
-							<SortButton></SortButton>
+							<FilterButton>
+								<BaseSelect
+									label='Status'
+									options={[
+										{
+											label: 'Selesai',
+											value: 'done',
+										},
+										{
+											label: 'Draf',
+											value: 'draft',
+										},
+									]}
+									urlName='status'
+								/>
+							</FilterButton>
+							<SortButton>
+								<CreateSelect
+									options={[
+										{
+											label: 'Tanggal Selesai (Terbaru)',
+											value: 'doneAt:asc',
+										},
+										{
+											label: 'Tanggal Selesai (Terlama)',
+											value: 'doneAt:desc',
+										},
+									]}
+								/>
+							</SortButton>
 						</div>
 					</div>
 					<DataTable
