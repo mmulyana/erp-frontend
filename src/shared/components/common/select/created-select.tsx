@@ -16,7 +16,7 @@ const baseOption = [
 type props = {
 	options?: selectOption[]
 }
-export default function CreateSelect({ options }: props) {
+export default function CreatedSelect({ options }: props) {
 	const [sortParam, setSortParam] = useQueryState('sort', {
 		history: 'replace',
 		shallow: false,

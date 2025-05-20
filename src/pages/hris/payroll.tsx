@@ -7,8 +7,39 @@ import SortButton from '@/shared/components/common/sort-button'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import SearchV3 from '@/shared/components/common/search-v3'
 import HeadPage from '@/shared/components/common/head-page'
-import CreateSelect from '@/shared/components/common/select/created-select'
+import CreatedSelect from '@/shared/components/common/select/created-select'
 import BaseSelect from '@/shared/components/common/select/base-select'
+import { selectOption } from '@/shared/types'
+
+const statusOptions: selectOption[] = [
+	{
+		label: 'Selesai',
+		value: 'done',
+	},
+	{
+		label: 'Sedang diproses',
+		value: 'processing',
+	},
+]
+
+const createdOptions: selectOption[] = [
+	{
+		label: 'Tanggal Mulai (Terbaru)',
+		value: 'startDate:asc',
+	},
+	{
+		label: 'Tanggal Mulai (Terlama)',
+		value: 'startDate:desc',
+	},
+	{
+		label: 'Tanggal Berakhir (Terbaru)',
+		value: 'endDate:asc',
+	},
+	{
+		label: 'Tanggal Berakhir (Terlama)',
+		value: 'endDate:desc',
+	},
+]
 
 export default function Payroll() {
 	return (
@@ -26,40 +57,12 @@ export default function Payroll() {
 						<FilterButton>
 							<BaseSelect
 								label='Status'
-								options={[
-									{
-										label: 'Selesai',
-										value: 'done',
-									},
-									{
-										label: 'Sedang diproses',
-										value: 'processing',
-									},
-								]}
+								options={statusOptions}
 								urlName='status'
 							/>
 						</FilterButton>
 						<SortButton>
-							<CreateSelect
-								options={[
-									{
-										label: 'Tanggal Mulai (Terbaru)',
-										value: 'startDate:asc',
-									},
-									{
-										label: 'Tanggal Mulai (Terlama)',
-										value: 'startDate:desc',
-									},
-									{
-										label: 'Tanggal Berakhir (Terbaru)',
-										value: 'endDate:asc',
-									},
-									{
-										label: 'Tanggal Berakhir (Terlama)',
-										value: 'endDate:desc',
-									},
-								]}
-							/>
+							<CreatedSelect options={createdOptions} />
 						</SortButton>
 					</div>
 				</div>
