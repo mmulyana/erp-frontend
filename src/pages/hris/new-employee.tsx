@@ -1,15 +1,17 @@
-import DetailLayout, { Link } from '@/shared/layout/detail-layout'
-import { paths } from '@/shared/constants/paths'
+import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { House } from 'lucide-react'
 
 import FormNewEmployee from '@/features/hris/employee/components/form-new-employee'
-import { House } from 'lucide-react'
-import { EmployeeForm } from '@/features/hris/employee/types'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { useCreateEmployee } from '@/features/hris/employee/api/use-create-employee'
+
 import ProgressBar from '@/shared/components/common/progress-bar'
+import DetailLayout from '@/shared/layout/detail-layout'
+import { EmployeeForm } from '@/features/hris/employee/types'
 import { handleFormError } from '@/shared/utils/form'
+import { paths } from '@/shared/constants/paths'
 import { delay } from '@/shared/utils'
+import { Link } from '@/shared/types'
 
 const links: Link[] = [
 	{
