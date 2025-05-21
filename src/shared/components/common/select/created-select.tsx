@@ -30,7 +30,7 @@ export default function CreatedSelect({ options }: props) {
 		<div className='space-y-2'>
 			<p className='text-ink-primary font-medium text-sm'>Urut berdasarkan</p>
 			<Select value={sortParam ?? 'createdAt:asc'} onValueChange={handleChange}>
-				<SelectTrigger className='w-[260px]'>
+				<SelectTrigger className='w-full'>
 					<SelectValue placeholder='Urutkan' />
 				</SelectTrigger>
 				<SelectContent>
