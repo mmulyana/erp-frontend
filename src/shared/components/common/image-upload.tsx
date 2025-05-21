@@ -2,8 +2,8 @@ import { Image, X } from 'lucide-react'
 import { useRef } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
-import { cn } from '@/shared/utils/cn'
 import { baseUrl } from '@/shared/constants/urls'
+import { cn } from '@/shared/utils/cn'
 
 interface ImageUploadProps {
 	value?: File | string | null

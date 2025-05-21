@@ -5,8 +5,11 @@ import { Button } from '../ui/button'
 
 type props = {
 	children?: React.ReactNode
+	style?: {
+		content?: string
+	}
 }
-export default function SortButton({ children }: props) {
+export default function SortButton({ children, style }: props) {
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
@@ -15,7 +18,7 @@ export default function SortButton({ children }: props) {
 					<span className='px-0.5 text-ink-primary/50'>Sort</span>
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent>{children}</PopoverContent>
+			<PopoverContent className={style?.content}>{children}</PopoverContent>
 		</Popover>
 	)
 }

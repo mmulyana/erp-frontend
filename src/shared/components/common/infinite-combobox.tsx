@@ -58,9 +58,14 @@ export default function InfiniteCombobox<T extends BaseItem>({
 	const commandListRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
-		if (fetchItemById && defaultValue) {
+		if (!defaultValue) {
+			setSelectedItem(null)
+			return
+		}
+
+		if (fetchItemById) {
 			fetchItemById(defaultValue).then((item) => {
-				if (item) setSelectedItem(item)
+				setSelectedItem(item)
 			})
 		}
 	}, [defaultValue, fetchItemById])
