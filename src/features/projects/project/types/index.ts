@@ -61,4 +61,11 @@ export type AttachmentForm = {
 	projectId: string
 }
 
+export type ReportMutate = {
+	message: string
+	type: string
+	projectId: string
+	attachments?: (File | null)[]
+}
+
 export type Attachment = Base & AttachmentForm
