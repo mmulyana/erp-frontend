@@ -1,4 +1,4 @@
-import { Pencil, SignalHigh, SignalLow, SignalZero, Tally2 } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 
 import ProgressPercentage from '@/shared/components/common/progress-percentage'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
