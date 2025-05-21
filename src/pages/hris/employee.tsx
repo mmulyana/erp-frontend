@@ -1,6 +1,7 @@
-import { DefaultLayout } from '@/shared/layout/default-layout'
 import HeadPage from '@/shared/components/common/head-page'
+import { DefaultLayout } from '@/shared/layout/default-layout'
 import { paths } from '@/shared/constants/paths'
+
 import TableEmployee from '@/features/hris/employee/components/table-employee'
 import TotalEmployee from '@/features/hris/employee/components/total-employee'
 import LastEducation from '@/features/hris/employee/components/last-education'
