@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { IApi, IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
+import { IApi } from '@/shared/types'
 import http from '@/shared/utils/http'
 
 type Params = {
