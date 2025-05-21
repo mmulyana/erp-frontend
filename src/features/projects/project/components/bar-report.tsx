@@ -18,6 +18,9 @@ import {
 	ChartConfig,
 } from '@/shared/components/ui/chart'
 import DateRangePicker from '@/shared/components/common/date-range-picker'
+import { useWeek } from '@/features/hris/dashboard/hooks/use-week'
+import { parseAsIsoDate, useQueryStates } from 'nuqs'
+import { useProjectReportChart } from '../../dashboard/api/use-project-report-chart'
 
 const chartConfig = {
 	total: {
@@ -34,6 +37,18 @@ const chartData = [
 ]
 
 export default function BarReport() {
+	const { startOfWeek, endOfWeek } = useWeek()
+
+	const [{ startDate, endDate }] = useQueryStates({
+		startDate: parseAsIsoDate.withDefault(startOfWeek),
+		endDate: parseAsIsoDate.withDefault(endOfWeek),
+	})
+
+	const { data } = useProjectReportChart({
+		endDate: endDate.toString(),
+		startDate: startDate.toString(),
+	})
+
 	return (
 		<CardV1
 			title='Laporan'
@@ -45,7 +60,7 @@ export default function BarReport() {
 				<div className='h-[220px]'>
 					<ResponsiveContainer width='100%' height='100%'>
 						<BarChart
-							data={chartData}
+							data={data?.data}
 							barGap={8}
 							barCategoryGap={20}
 							margin={{ top: 8, bottom: -8 }}
