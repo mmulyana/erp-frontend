@@ -55,7 +55,7 @@ export default function DetailProject() {
 				</div>
 				<div className='space-y-6'>
 					<ProjectAssignedEmployees id={id} />
-					<ProjectAttachment id={id} />
+					<ProjectAttachment id={id} showButton />
 				</div>
 			</div>
 		</DetailLayout>
