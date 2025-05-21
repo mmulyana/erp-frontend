@@ -24,7 +24,7 @@ import { Badge } from '@/shared/components/ui/badge'
 import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
-import { Link } from '@/shared/types'
+import { Link, selectOption } from '@/shared/types'
 
 const links: Link[] = [
 	{
@@ -40,6 +40,26 @@ const links: Link[] = [
 	{
 		name: 'Detail',
 		path: paths.hrisPayroll,
+	},
+]
+const statusOptions: selectOption[] = [
+	{
+		label: 'Selesai',
+		value: 'done',
+	},
+	{
+		label: 'Draf',
+		value: 'draft',
+	},
+]
+const createdOptions: selectOption[] = [
+	{
+		label: 'Tanggal Selesai (Terbaru)',
+		value: 'doneAt:asc',
+	},
+	{
+		label: 'Tanggal Selesai (Terlama)',
+		value: 'doneAt:desc',
 	},
 ]
 export default function PayrolleDetail() {
@@ -168,32 +188,12 @@ export default function PayrolleDetail() {
 							<FilterButton>
 								<BaseSelect
 									label='Status'
-									options={[
-										{
-											label: 'Selesai',
-											value: 'done',
-										},
-										{
-											label: 'Draf',
-											value: 'draft',
-										},
-									]}
+									options={statusOptions}
 									urlName='status'
 								/>
 							</FilterButton>
 							<SortButton>
-								<CreateSelect
-									options={[
-										{
-											label: 'Tanggal Selesai (Terbaru)',
-											value: 'doneAt:asc',
-										},
-										{
-											label: 'Tanggal Selesai (Terlama)',
-											value: 'doneAt:desc',
-										},
-									]}
-								/>
+								<CreateSelect options={createdOptions} />
 							</SortButton>
 						</div>
 					</div>
