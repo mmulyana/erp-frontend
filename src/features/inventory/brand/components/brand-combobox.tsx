@@ -1,9 +1,10 @@
+import { Check } from 'lucide-react'
+
 import InfiniteCombobox from '@/shared/components/common/infinite-combobox'
-import { baseUrl } from '@/shared/constants/urls'
+import { baseUrl, urls } from '@/shared/constants/urls'
+import http from '@/shared/utils/http'
 
 import { useBrandInfinite } from '../api/use-brands-infinite'
-import { useBrand } from '../api/use-brand'
-import { Check } from 'lucide-react'
 
 export default function BrandCombobox(props: {
 	onSelect?: (val: string) => void
@@ -12,11 +13,10 @@ export default function BrandCombobox(props: {
 	return (
 		<InfiniteCombobox
 			{...props}
-			useInfiniteQuery={({ search }) => useBrandInfinite({ search, limit: 10 })}
-			fetchItemById={async (id) => {
-				const { data } = await useBrand({ id })
-				return data?.data ?? null
-			}}
+			useInfiniteQuery={({ search }) =>
+				useBrandInfinite({ search, limit: '10' })
+			}
+			fetchItemById={fetchItemById}
 			label={(item) => item.name}
 			placeholder='Pilih merek'
 			renderItem={(item, isSelected) => (
@@ -35,4 +35,9 @@ export default function BrandCombobox(props: {
 			)}
 		/>
 	)
+}
+
+const fetchItemById = async (id: string) => {
+	const { data } = await http(`${urls.brand}/${id}`)
+	return data.data ?? null
 }

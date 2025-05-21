@@ -4,6 +4,8 @@ import InfiniteCombobox from '@/shared/components/common/infinite-combobox'
 
 import { useClientInfinite } from '../api/use-client-infinite'
 import { useClient } from '../api/use-client'
+import http from '@/shared/utils/http'
+import { urls } from '@/shared/constants/urls'
 
 export default function ClientCombobox(props: {
 	onSelect?: (val: string) => void
@@ -15,10 +17,7 @@ export default function ClientCombobox(props: {
 			useInfiniteQuery={({ search }) =>
 				useClientInfinite({ search, limit: 10 })
 			}
-			fetchItemById={async (id) => {
-				const { data } = await useClient({ id })
-				return data?.data ?? null
-			}}
+			fetchItemById={fetchItemById}
 			label={(item) => item.name}
 			placeholder='Pilih'
 			renderItem={(item, isSelected) => (
@@ -29,4 +28,9 @@ export default function ClientCombobox(props: {
 			)}
 		/>
 	)
+}
+
+const fetchItemById = async (id: string) => {
+	const { data } = await http(`${urls.client}/${id}`)
+	return data.data ?? null
 }

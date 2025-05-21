@@ -5,7 +5,6 @@ import { baseUrl, urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
 import { useItemInfinite } from '../api/use-items-infinite'
-import { useItem } from '../api/use-item'
 
 export default function ItemCombobox(props: {
 	onSelect?: (val: string) => void
@@ -14,7 +13,9 @@ export default function ItemCombobox(props: {
 	return (
 		<InfiniteCombobox
 			{...props}
-			useInfiniteQuery={({ search }) => useItemInfinite({ search, limit: 10 })}
+			useInfiniteQuery={({ search }) =>
+				useItemInfinite({ search, limit: '10' })
+			}
 			fetchItemById={fetchItemById}
 			label={(item) => item.name}
 			placeholder='Pilih barang'
