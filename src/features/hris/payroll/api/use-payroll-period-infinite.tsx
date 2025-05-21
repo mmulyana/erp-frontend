@@ -1,21 +1,21 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { PayrollPeriod } from '@/shared/types/api'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import { Pagination } from '@/shared/types'
 import http from '@/shared/utils/http'
-import { Brand } from '../types'
 
 type NormalizedResponse = {
-	data: Brand[]
+	data: PayrollPeriod[]
 	nextPage?: number
 }
 
-export function useBrandInfinite(params: Pagination) {
+export function usePayrollPeriodInfinite(params: Pagination) {
 	return useInfiniteQuery<NormalizedResponse>({
-		queryKey: [keys.brandInfinite, params],
+		queryKey: [keys.payrollPeriodInfinite, params],
 		queryFn: async ({ pageParam = 1 }) => {
-			const { data } = await http(urls.brand + '/data/infinite', {
+			const { data } = await http(urls.payrollPeriod + '/data/infinite', {
 				params: {
 					...params,
 					limit: String(params.limit),
