@@ -1,5 +1,5 @@
-import { FileText, Plus } from 'lucide-react'
-import { useParams } from 'react-router-dom'
+import { Download, FileText, FileTextIcon, Plus } from 'lucide-react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { format } from 'date-fns'
@@ -9,9 +9,8 @@ import ButtonSubmit from '@/shared/components/common/button-submit'
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import FileUpload from '@/shared/components/common/file-upload'
 import { usePagination } from '@/shared/hooks/use-pagination'
-import { Button } from '@/shared/components/ui/button'
+import { Button, buttonVariants } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { Card } from '@/shared/components/ui/card'
 import {
 	Dialog,
 	DialogClose,
@@ -32,65 +31,98 @@ import {
 import { useCreateAttachment } from '../api/attachment/use-create-attachment'
 import { useAttachments } from '../api/attachment/use-attachments'
 import { AttachmentForm } from '../types'
+import EmptyState from '@/shared/components/common/empty-state'
+import CardV1 from '@/shared/components/common/card-v1'
+import SearchV3 from '@/shared/components/common/search-v3'
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from '@/shared/components/ui/select'
+import ToggleSwitch from '@/shared/components/common/toggle-switch'
+import { baseUrl } from '@/shared/constants/urls'
+import { Badge } from '@/shared/components/ui/badge'
+import { paths } from '@/shared/constants/paths'
 
-export default function ProjectAttachment({ id }: { id?: string }) {
-	const [open, setOpen] = useState(false)
+export default function ProjectAttachment({
+	id,
+	showButton,
+}: {
+	id?: string
+	showButton?: boolean
+}) {
 	const { q } = usePagination()
-	
-	const { data } = useAttachments({ id, search: q })
+
+	const { data } = useAttachments({ projectId: id, search: q })
+
+	const attachments = data?.data
+	const anyAttachment = attachments && attachments.length > 0
 
 	return (
 		<>
-			<Card className='p-0 overflow-hidden'>
-				<div className='flex items-center justify-between px-6 pt-6'>
-					<p className='text-ink-primary'>Dokumen</p>
-					<Button
-						variant='outline'
-						className='gap-1'
-						onClick={() => setOpen(true)}
-					>
-						<Plus strokeWidth={2} size={16} />
-						<span className='px-0.5 flex gap-1'>Tambah</span>
-					</Button>
-				</div>
-				<ScrollArea className='h-[280px] px-6 pt-2'>
-					<div className='flex flex-col gap-4'>
-						{data?.data?.map((i, index) => (
+			<CardV1
+				title='Dokumen'
+				icon={<FileTextIcon size={20} className='text-ink-primary' />}
+				action={<SearchV3 className='max-w-[140px]' />}
+			>
+				<ScrollArea className='h-[280px] pt-2 flex flex-col gap-4'>
+					{anyAttachment ? (
+						attachments?.map((i, index) => (
 							<div key={index} className='flex justify-between items-center'>
 								<div className='flex gap-2 items-center'>
-									<FileText className='text-ink-light w-[32px]' />
-									<div>
-										<p className='text-ink-secondary w-[280px] truncate'>
+									<FileText className='text-[#565659]' size={28} />
+									<div className='space-y-1'>
+										<p className='text-ink-primary w-[240px] truncate font-medium'>
 											{i.name}
 										</p>
-										<div className='flex gap-2 items-center flex-wrap'>
-											<p className='text-ink-light'>{i.type}</p>
-											<div className='w-1.5 h-1.5 rounded-full bg-ink-light'></div>
-											<p className='text-ink-light'>(12 mb)</p>
-											<div className='w-1.5 h-1.5 rounded-full bg-ink-light'></div>
-											<p className='text-ink-light'>
-												{format(i.createdAt, 'ee/mm/yyyy')}
-											</p>
+										<div className='flex gap-2.5 items-center flex-wrap'>
+											{!id && (
+												<Link
+													to={`${paths.projectMasterdataProjects}/${i.project.id}`}
+												>
+													<Badge variant='outline'>{i.project.name}</Badge>
+												</Link>
+											)}
+											{!id && (
+												<div className='w-1.5 h-1.5 rounded-full bg-ink-primary/50' />
+											)}
+											<p className='text-ink-primary/50 text-sm'>{i.type}</p>
 										</div>
 									</div>
 								</div>
+								<Link
+									to={`${baseUrl}/${i.fileUrl}`}
+									className={buttonVariants({ variant: 'ghost' })}
+								>
+									<Download size={20} />
+								</Link>
 							</div>
-						))}
-					</div>
+						))
+					) : (
+						<EmptyState className='h-full w-full' />
+					)}
 				</ScrollArea>
-			</Card>
-			<ModalAttachment open={open} setOpen={setOpen} />
+				{showButton && <ModalAttachment />}
+			</CardV1>
 		</>
 	)
 }
 
-function ModalAttachment({
-	open,
-	setOpen,
-}: {
-	open: boolean
-	setOpen: (val: boolean) => void
-}) {
+const typesOptions = [
+	'Berita acara',
+	'Kalkulasi',
+	'Penawaran',
+	'JSA',
+	'Purchase Order',
+	'Lain-lain',
+]
+function ModalAttachment() {
+	const [open, setOpen] = useState(false)
+
 	const { mutate, isPending } = useCreateAttachment()
 	const { id } = useParams()
 
@@ -125,9 +157,13 @@ function ModalAttachment({
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild></DialogTrigger>
+			<DialogTrigger asChild>
+				<Button variant='outline' className='w-full'>
+					Tambah
+				</Button>
+			</DialogTrigger>
 			<DialogContent className='p-6'>
-				<DialogTitle className='text-center'>Sertifikat Baru</DialogTitle>
+				<DialogTitle className='text-center'>Lampiran Baru</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
@@ -166,7 +202,41 @@ function ModalAttachment({
 								<FormItem>
 									<FormLabel>Tipe</FormLabel>
 									<FormControl>
-										<Input {...field} />
+										<Select value={field.value} onValueChange={field.onChange}>
+											<SelectTrigger className='w-full'>
+												<SelectValue placeholder='Tipe lampiran' />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectGroup>
+													<SelectLabel>Tipe lampiran</SelectLabel>
+													{typesOptions.map((i) => (
+														<SelectItem key={i} value={i}>
+															{i}
+														</SelectItem>
+													))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='secret'
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<ToggleSwitch
+											value={field.value}
+											label={{
+												true: 'Berkas rahasia',
+												false: 'Berkas rahasia',
+											}}
+											onCheck={(val) => {
+												field.onChange(val)
+											}}
+										/>
 									</FormControl>
 								</FormItem>
 							)}
