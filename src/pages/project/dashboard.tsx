@@ -1,12 +1,12 @@
-import { Wallet } from 'lucide-react'
-
 import ProjectStatus from '@/features/projects/project/components/project-status'
-import Attachment from '@/features/projects/project/components/attachment'
+import TotalRevenue from '@/features/projects/dashboard/components/total-revenue'
 import BarReport from '@/features/projects/project/components/bar-report'
 import TopClient from '@/features/projects/client/components/top-client'
 
 import { DefaultLayout } from '@/shared/layout/default-layout'
-import CardV1 from '@/shared/components/common/card-v1'
+import TotalEstimateRevenue from '@/features/projects/dashboard/components/total-estimate-revenue'
+import ProjectAttachment from '@/features/projects/project/components/project-attachment'
+import ProjectReport from '@/features/projects/project/components/project-report'
 
 export default function DashboardProject() {
 	return (
@@ -15,22 +15,17 @@ export default function DashboardProject() {
 				<div className='space-y-6'>
 					<div className='grid grid-cols-1 xl:grid-cols-[1fr_290px] gap-0 xl:gap-6'>
 						<ProjectStatus />
-						<div className='space-y-6 mt-6 xl:mt-0'>
-							<CardV1
-								title='Pendapatan'
-								icon={<Wallet size={20} className='text-ink-primary' />}
-							></CardV1>
-							<CardV1
-								title='Estimasi Pendapatan'
-								icon={<Wallet size={20} className='text-ink-primary' />}
-							></CardV1>
+						<div className='flex justify-between flex-col gap-6 mt-6 xl:mt-0'>
+							<TotalRevenue />
+							<TotalEstimateRevenue />
 						</div>
 					</div>
 					<BarReport />
+					<ProjectReport variant='dashboard' limit={10} />
 				</div>
 				<div className='space-y-6'>
 					<TopClient />
-					<Attachment />
+					<ProjectAttachment />
 				</div>
 			</div>
 		</DefaultLayout>
