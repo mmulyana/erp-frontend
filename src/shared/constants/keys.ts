@@ -35,6 +35,7 @@ export const keys = {
 
 	payrollPeriod: 'payroll-period',
 	payrollPeriodDetail: 'payroll-period-detail',
+	payrollPeriodInfinite: 'payroll-period-infinite',
 	payroll: 'payroll',
 	payrollDetail: 'payroll-detail',
 	payrollTotal: 'payroll-total',
@@ -51,11 +52,16 @@ export const keys = {
 	projectEmployee: 'project-employee',
 	projectAttachment: 'project-attachment',
 	projectInfinite: 'project-infinite',
+	projectReport: 'project-report',
+	projectReportChart: 'project-report-chart',
+	projectReportStatus: 'project-report-status',
+	projectTotalRevenue: 'project-total-revenue',
+	projectTotalEstimate: 'project-total-estimate',
 
 	client: 'client',
 	clientDetail: 'client-detail',
 	clientInfinite: 'client-infinite',
-	topClient: 'top-client',
+	clientRangking: 'client-rangking',
 
 	companyClient: 'client-company',
 	companyClientInfinite: 'client-company-infinite',
