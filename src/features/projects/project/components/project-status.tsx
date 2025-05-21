@@ -1,7 +1,8 @@
 import { Pie, PieChart } from 'recharts'
-import { HardHat, PieChartIcon, Users } from 'lucide-react'
+import { HardHat } from 'lucide-react'
 
 import CardV1 from '@/shared/components/common/card-v1'
+import { Badge } from '@/shared/components/ui/badge'
 import { cn } from '@/shared/utils/cn'
 import {
 	ChartConfig,
@@ -9,25 +10,22 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/shared/components/ui/chart'
-import { Badge } from '@/shared/components/ui/badge'
 
-const chartData = [
-	{ name: 'Penawaran', total: 40, fill: '#A36DFF' },
-	{ name: 'Sedang dikerjakan', total: 10, fill: '#2B5BD5' },
-	{ name: 'Penagihan', total: 4, fill: '#27B5E9' },
-	{ name: 'Selesai', total: 4, fill: '#47AF97' },
-]
+import { useProjectStatus } from '../api/use-project-status'
+
 type props = {
 	variant?: 'default' | 'compact'
 }
-export default function ProjectStatus({ variant }: props) {
+export default function ProjectStatus({ variant = 'default' }: props) {
+	const { data } = useProjectStatus()
+
 	return (
 		<CardV1
 			title='Proyek'
 			icon={<HardHat size={20} className='stroke-ink-primary' />}
 			style={{
 				card: cn(
-					'h-fit col-span-2 xl:col-span-1 w-full',
+					'h-full col-span-2 xl:col-span-1 w-full',
 					variant === 'compact' && 'h-fit w-fit'
 				),
 				content: cn(
@@ -50,10 +48,10 @@ export default function ProjectStatus({ variant }: props) {
 						content={<ChartTooltipContent hideLabel />}
 					/>
 					<Pie
-						data={chartData}
+						data={data?.data}
 						dataKey='total'
 						nameKey='name'
-						innerRadius={variant === 'default' ? 48 : 48}
+						innerRadius={variant === 'default' ? 40 : 32}
 						strokeWidth={5}
 						paddingAngle={5}
 						cornerRadius={variant == 'default' ? 6 : 3}
@@ -67,7 +65,7 @@ export default function ProjectStatus({ variant }: props) {
 						'max-w-[180px] justify-start items-start ml-32 -mt-2'
 				)}
 			>
-				{chartData.map((i, idx) => (
+				{data?.data?.map((i, idx) => (
 					<Badge
 						variant='outline'
 						key={idx}
