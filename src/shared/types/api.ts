@@ -131,7 +131,9 @@ export type Payroll = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+	doneAt?: string
 
+	period: PayrollPeriod
 	employee: Employee
 }
 
@@ -174,6 +176,8 @@ export type ProjectAttachment = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	project: Project
 }
 
 export type ProjectReport = {
@@ -181,11 +185,20 @@ export type ProjectReport = {
 	projectId: string
 	createdBy: string
 	message: string
-	date: Date
 	type: ReportType
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	project: Project
+	user: User
+	attachments: ReportAttachment[]
+	comments: ReportComment[]
+
+	_count: {
+		attachments: number
+		comments: number
+	}
 }
 
 export type ReportAttachment = {
@@ -216,6 +229,11 @@ export type Client = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	company?: CompanyClient
+	_count?: {
+		project?: number
+	}
 }
 
 export type CompanyClient = {
