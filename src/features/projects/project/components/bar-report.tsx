@@ -18,7 +18,7 @@ import {
 	ChartConfig,
 } from '@/shared/components/ui/chart'
 import DateRangePicker from '@/shared/components/common/date-range-picker'
-import { useWeek } from '@/features/hris/dashboard/hooks/use-week'
+import { useWeek } from '@/shared/hooks/use-week'
 import { parseAsIsoDate, useQueryStates } from 'nuqs'
 import { useProjectReportChart } from '../../dashboard/api/use-project-report-chart'
 
