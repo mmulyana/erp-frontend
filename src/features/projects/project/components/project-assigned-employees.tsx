@@ -1,4 +1,4 @@
-import { ChevronRight, Plus } from 'lucide-react'
+import { ChevronRight, Plus, Users } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { format } from 'date-fns'
 import { useState } from 'react'
@@ -31,19 +31,23 @@ import {
 
 import { useCreateAssignProject } from '../api/assigned/use-create-assign-project'
 import { useProjectEmployeee } from '../api/assigned/use-project-employee'
+import CardV1 from '@/shared/components/common/card-v1'
+import SearchV3 from '@/shared/components/common/search-v3'
 
 export default function ProjectAssignedEmployees({ id }: { id?: string }) {
+	const [search, setSearch] = useState('')
 	const { data } = useProjectEmployeee({ id })
 
 	const isEmpty = data?.data?.length === 0
 
 	return (
-		<Card className='p-0 overflow-hidden'>
-			<div className='flex items-center justify-between px-6 pt-6'>
-				<p className='text-ink-primary'>Pegawai</p>
-				<ModalAddEmployee id={id} />
-			</div>
-			<ScrollArea className='h-[280px] px-6 pt-2'>
+		<CardV1
+			title='Pegawai'
+			icon={<Users size={20} className='text-ink-primary' />}
+			action={<SearchV3 value={search} onValueChange={setSearch} />}
+			style={{ content: 'px-4' }}
+		>
+			<ScrollArea className='h-[280px] pt-2'>
 				{isEmpty && (
 					<div className='h-full flex justify-center items-center'>
 						<EmptyState />
@@ -61,15 +65,17 @@ export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 									style={{ img: 'h-10 w-10' }}
 								/>
 								<div>
-									<p className='text-ink-secondary'>{i.employee?.fullname}</p>
-									<p className='text-ink-light text-sm -mt-1.5'>
+									<p className='text-ink-primary font-medium'>
+										{i.employee?.fullname}
+									</p>
+									<p className='text-ink-primary/50 text-sm -mt-0.5'>
 										{i.employee?.position}
 									</p>
 								</div>
 							</div>
 							<div className='flex gap-2 items-center'>
 								<p className='text-ink-light'>
-									{format(i.startDate, 'dd/mm/yyyy')}
+									{format(new Date(i.startDate), 'dd/MM/yyyy')}
 								</p>
 								<Button
 									variant='outline'
@@ -82,7 +88,8 @@ export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 					))}
 				</div>
 			</ScrollArea>
-		</Card>
+			<ModalAddEmployee id={id} />
+		</CardV1>
 	)
 }
 
@@ -104,7 +111,7 @@ function ModalAddEmployee({ id }: { id?: string }) {
 			{
 				employeeId: data.employeeId,
 				projectId: id,
-				startDate: new Date().toString(),
+				startDate: new Date().toDateString(),
 			},
 			{
 				onSuccess: () => {
@@ -117,7 +124,7 @@ function ModalAddEmployee({ id }: { id?: string }) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant='outline' className='gap-1'>
+				<Button variant='outline' className='gap-1 w-full h-10'>
 					<Plus size={16} />
 					<span className='px-0.5'>Tambah</span>
 				</Button>
