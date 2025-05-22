@@ -27,7 +27,6 @@ export const urls = {
 	companyClient: api + '/company-client',
 	activity: api + '/activity',
 	attachment: api + '/attachment',
-	kanbanBoard: api + '/board',
 
 	// INVENTORY
 	location: api + '/warehouse',
@@ -36,4 +35,5 @@ export const urls = {
 	item: api + '/item',
 	stockIn: api + '/stock-in',
 	stockOut: api + '/stock-out',
+	ledger: api + '/ledger',
 }

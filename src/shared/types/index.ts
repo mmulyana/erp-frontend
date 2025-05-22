@@ -120,3 +120,8 @@ export type BadgeOption = {
 	label: string
 	color: string
 }
+
+export type DateRange = {
+	startDate?: Date
+	endDate?: Date
+}

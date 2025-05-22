@@ -287,6 +287,8 @@ export type StockLedger = {
 	date: Date
 	note?: string
 	createdAt: string
+
+	inventory: Inventory
 }
 
 export type StockIn = {

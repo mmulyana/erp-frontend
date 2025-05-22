@@ -44,8 +44,6 @@ export const keys = {
 	hrisDashboardTotal: 'hris-dashboard-total',
 	hrisDashboardExpireCertif: 'hris-dashboard-expire-certif',
 	hrisDashboardExpireSafetyInduction: 'hris-dashboard-expire-safety',
-	hrisDashboardEmployeePosition: 'hris-dashboard-employee-position',
-	hrisDashboardEmployeeEducation: 'hris-dashboard-employee-education',
 
 	project: 'project',
 	projectDetail: 'project-detail',
@@ -56,7 +54,6 @@ export const keys = {
 	projectReportChart: 'project-report-chart',
 	projectReportStatus: 'project-report-status',
 	projectTotalRevenue: 'project-total-revenue',
-	projectTotalEstimate: 'project-total-estimate',
 
 	client: 'client',
 	clientDetail: 'client-detail',
@@ -99,4 +96,7 @@ export const keys = {
 	user: 'user',
 	userDetail: 'user-detail',
 	userInfinite: 'user-infinite',
+
+	ledgerChart: 'ledger-chart',
+	ledgerActivity: 'ledger-activity',
 }
