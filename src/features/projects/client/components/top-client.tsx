@@ -31,6 +31,7 @@ export default function TopClient() {
 					options={sortOptions}
 					urlName='sortProject'
 					style={{ trigger: 'w-fit gap-2 rounded-xl' }}
+					defaultValue='desc'
 				/>
 			}
 		>

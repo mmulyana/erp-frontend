@@ -6,7 +6,8 @@ import { usePagination } from '@/shared/hooks/use-pagination'
 
 import { atomModalClient } from './modal-detail-client'
 import { useClients } from '../api/use-clients'
-import { Client } from '../types'
+import PhotoUrl from '@/shared/components/common/photo-url'
+import { Client } from '@/shared/types/api'
 
 export default function TableClient() {
 	const setModal = useSetAtom(atomModalClient)
@@ -40,7 +41,23 @@ export default function TableClient() {
 		{
 			id: 'company',
 			header: 'Perusahaan',
-			cell: ({ row }) => row.original?.company?.name,
+			cell: ({ row }) => {
+				if (!row.original.company) return null
+				return (
+					<div className='flex gap-2 items-center'>
+						<PhotoUrl
+							url={row.original.company?.photoUrl || ''}
+							style={{ img: 'h-8 w-8', icon: 'h-5 w-5' }}
+						/>
+						<p className='text-ink-primary'>{row.original.company?.name}</p>
+					</div>
+				)
+			},
+		},
+		{
+			id: 'total',
+			header: 'Jml proyek',
+			cell: ({ row }) => row.original._count?.project,
 		},
 	]
 	// COLUMNS
