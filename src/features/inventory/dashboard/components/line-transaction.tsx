@@ -46,7 +46,7 @@ export function LineTransaction() {
 			icon={<LineChartIcon size={20} className='text-ink-primary' />}
 			style={{ content: 'pb-4' }}
 		>
-			<ChartContainer config={chartConfig} className='h-[280px] w-full'>
+			<ChartContainer config={chartConfig} className='max-h-[280px] w-full'>
 				<ResponsiveContainer width='100%' height='100%'>
 					<LineChart
 						accessibilityLayer

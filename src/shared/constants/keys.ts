@@ -76,6 +76,7 @@ export const keys = {
 	item: 'item',
 	itemDetail: 'item-detail',
 	itemInfinite: 'item-infinite',
+	itemStatusChart: 'item-status-chart',
 
 	brand: 'brand',
 	brandDetail: 'brand-detail',

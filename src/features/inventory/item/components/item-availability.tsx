@@ -10,6 +10,7 @@ import {
 	ChartTooltipContent,
 } from '@/shared/components/ui/chart'
 import { Badge } from '@/shared/components/ui/badge'
+import { useStatusChart } from '../api/use-status-chart'
 
 type props = {
 	variant?: 'default' | 'compact'
@@ -20,6 +21,7 @@ const chartData = [
 	{ name: 'Habis', total: 4, fill: '#D52B42' },
 ]
 export default function ItemAvailability({ variant = 'default' }: props) {
+	const { data } = useStatusChart()
 	return (
 		<CardV1
 			title='Ketersediaan Barang'
@@ -49,7 +51,7 @@ export default function ItemAvailability({ variant = 'default' }: props) {
 						content={<ChartTooltipContent hideLabel />}
 					/>
 					<Pie
-						data={chartData}
+						data={data?.data}
 						dataKey='total'
 						nameKey='name'
 						innerRadius={variant === 'default' ? 48 : 32}
@@ -66,7 +68,7 @@ export default function ItemAvailability({ variant = 'default' }: props) {
 						'max-w-[180px] justify-start items-start ml-32 -mt-2'
 				)}
 			>
-				{chartData.map((i, idx) => (
+				{data?.data?.map((i, idx) => (
 					<Badge
 						variant='outline'
 						key={idx}
