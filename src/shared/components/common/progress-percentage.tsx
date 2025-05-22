@@ -1,5 +1,4 @@
 import { cn } from '@/shared/utils/cn'
-import React from 'react'
 
 interface ProgressBarProps {
 	percentage: number
@@ -23,7 +22,7 @@ export default function ProgressPercentage({
 					style={{ width: `${percentage}%` }}
 				></div>
 			</div>
-			<p className='text-ink-secondary'>{percentage}%</p>
+			<p className='text-ink-secondary w-9'>{percentage}%</p>
 		</div>
 	)
 }

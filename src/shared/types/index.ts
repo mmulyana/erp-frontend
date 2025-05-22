@@ -103,22 +103,6 @@ export type Base = {
 	updatedAt?: string
 }
 
-export type Role = {
-	id: string
-	name: string
-	permissions: string[]
-}
-
-export type User = {
-	id: string
-	email: string
-	permissions: string[]
-	phone: string
-	photoUrl: string | null
-	role: Role
-	username: string
-}
-
 export type Link = {
 	icon?: React.ReactNode
 	name: string
@@ -129,4 +113,10 @@ export type Link = {
 export type selectOption = {
 	label: string
 	value: string
+}
+
+export type BadgeOption = {
+	value: string
+	label: string
+	color: string
 }

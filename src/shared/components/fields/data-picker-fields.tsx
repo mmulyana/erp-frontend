@@ -11,10 +11,11 @@ import { Button } from '../ui/button'
 
 type props = {
 	value?: Date
-	onChange?: (date: Date | undefined) => void
+	onChange?: (date: Date | undefined | null) => void
 	placeholder?: string
 	disabledDate?: (date: Date) => boolean
 	customTrigger?: ReactNode
+	showReset?: boolean
 }
 
 export function DatePickerField({
@@ -23,6 +24,7 @@ export function DatePickerField({
 	placeholder = 'Pilih tanggal',
 	disabledDate = (date) => date > new Date() || date < new Date('1900-01-01'),
 	customTrigger,
+	showReset = false,
 }: props) {
 	return (
 		<Popover>
@@ -54,6 +56,17 @@ export function DatePickerField({
 					disabled={disabledDate}
 					initialFocus
 				/>
+				<div className='px-4 pb-2'>
+					{showReset && value && (
+						<Button
+							variant='ghost'
+							className='hover:bg-transparent p-0 text-error'
+							onClick={() => onChange?.(null)}
+						>
+							Hapus
+						</Button>
+					)}
+				</div>
 			</PopoverContent>
 		</Popover>
 	)

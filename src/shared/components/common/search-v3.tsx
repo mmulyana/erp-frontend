@@ -8,19 +8,39 @@ import { cn } from '@/shared/utils/cn'
 type Props = {
 	placeholder?: string
 	className?: string
+	value?: string
+	onValueChange?: (value: string) => void
 }
 
-export default function SearchV3({ placeholder, className }: Props) {
+export default function SearchV3({
+	placeholder,
+	className,
+	value,
+	onValueChange,
+}: Props) {
+	const isControlled = typeof onValueChange === 'function' && typeof value === 'string'
+
 	const [query, setQuery] = useQueryState('q', parseAsString.withDefault(''))
-	const [inputValue, setInputValue] = useState(query)
+	const [inputValue, setInputValue] = useState(value ?? query)
 
 	useEffect(() => {
-		setInputValue(query)
-	}, [query])
+		if (isControlled) {
+			setInputValue(value!)
+		} else {
+			setInputValue(query)
+		}
+	}, [value, query, isControlled])
 
-	const debouncedSetQuery = useMemo(
-		() => debounce((value: string) => setQuery(value || null), 300),
-		[setQuery]
+	const debouncedSet = useMemo(
+		() =>
+			debounce((val: string) => {
+				if (isControlled) {
+					onValueChange!(val)
+				} else {
+					setQuery(val || null)
+				}
+			}, 300),
+		[isControlled, setQuery, onValueChange]
 	)
 
 	return (
@@ -34,7 +54,7 @@ export default function SearchV3({ placeholder, className }: Props) {
 				value={inputValue}
 				onChange={(e) => {
 					setInputValue(e.target.value)
-					debouncedSetQuery(e.target.value)
+					debouncedSet(e.target.value)
 				}}
 				placeholder={placeholder || 'Cari data'}
 				className={cn(
