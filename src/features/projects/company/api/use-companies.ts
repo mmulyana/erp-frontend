@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { CompanyClient } from '@/shared/types/api'
 import { IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
-import { Company } from '../types'
 
 type Params = {
 	search?: string
@@ -15,7 +15,7 @@ type Params = {
 export const useCompanies = (params?: Params) => {
 	return useQuery({
 		queryKey: [keys.companyClient, params],
-		queryFn: async (): Promise<IApiPagination<Company[]>> => {
+		queryFn: async (): Promise<IApiPagination<CompanyClient[]>> => {
 			const { data } = await http(urls.companyClient, {
 				params,
 			})

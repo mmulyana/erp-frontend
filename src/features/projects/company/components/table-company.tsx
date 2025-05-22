@@ -6,7 +6,7 @@ import { usePagination } from '@/shared/hooks/use-pagination'
 
 import { atomModalCompany } from './modal-detail-company'
 import { useCompanies } from '../api/use-companies'
-import { Company } from '../types'
+import { CompanyClient } from '@/shared/types/api'
 
 export default function TableCompany() {
 	const setModal = useSetAtom(atomModalCompany)
@@ -19,23 +19,28 @@ export default function TableCompany() {
 	})
 
 	// COLUMNS EMPLOYEE
-	const columns: ColumnDef<Company>[] = [
+	const columns: ColumnDef<CompanyClient>[] = [
 		{
 			id: 'name',
 			accessorKey: 'name',
 			header: 'Nama',
 		},
 		{
+			accessorKey: 'phone',
+			header: 'No. telp (Kantor)',
+		},
+		{
 			accessorKey: 'email',
 			header: 'Email',
 		},
 		{
-			accessorKey: 'phone',
-			header: 'Nomor telp',
+			accessorKey: 'address',
+			header: 'Alamat',
 		},
 		{
-			accessorKey: 'position',
-			header: 'Jabatan',
+			accessorKey: 'employees',
+			header: 'Jml klien',
+			cell: ({ row }) => row.original._count.employees,
 		},
 	]
 	// COLUMNS
