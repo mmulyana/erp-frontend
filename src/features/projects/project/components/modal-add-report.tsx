@@ -168,9 +168,9 @@ export function ModalAddReport({ projectId }: { projectId?: string }) {
 								<div className='flex w-full flex-col gap-3'>
 									<div className='flex items-center justify-between gap-2'>
 										<h3 className='truncate text-sm font-medium'>
-											Uploaded Files ({files.length})
+											File terupload ({files.length})
 										</h3>
-										<div className='flex gap-4 items-center'>
+										<div className='flex gap-2 items-center'>
 											<Button
 												type='button'
 												className='bg-error hover:bg-red-600'
@@ -182,7 +182,6 @@ export function ModalAddReport({ projectId }: { projectId?: string }) {
 											<Button
 												type='button'
 												variant='outline'
-												size='sm'
 												onClick={openFileDialog}
 												disabled={files.length >= 10}
 											>
