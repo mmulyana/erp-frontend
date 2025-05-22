@@ -152,18 +152,20 @@ export default function StockInDetail() {
 						<PhotoUrl
 							url={photoUrl || ''}
 							style={{
-								img: 'rounded-md w-full h-auto border',
+								img: 'rounded-md w-full min-h-40 border',
 							}}
 						/>
-						<div className='flex justify-between items-center pt-2'>
-							<p className='text-ink-primary/50 text-sm'>{photoUrl}</p>
-							<Link
-								className='text-sm text-ink-primary font-medium'
-								to={`${baseUrl}/${photoUrl}`}
-							>
-								Unduh
-							</Link>
-						</div>
+						{photoUrl && (
+							<div className='flex justify-between items-center pt-2'>
+								<p className='text-ink-primary/50 text-sm'>{photoUrl}</p>
+								<Link
+									className='text-sm text-ink-primary font-medium'
+									to={`${baseUrl}/${photoUrl}`}
+								>
+									Unduh
+								</Link>
+							</div>
+						)}
 					</CardV1>
 				</div>
 

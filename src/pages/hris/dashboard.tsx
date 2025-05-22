@@ -9,7 +9,7 @@ import BarRegular from '@/features/hris/attendance/components/regular/bar-regula
 import ReminderCertif from '@/features/hris/dashboard/components/reminder-certif'
 import ReminderSafety from '@/features/hris/dashboard/components/reminder-safety'
 import TotalEmployee from '@/features/hris/employee/components/total-employee'
-import { useWeek } from '@/features/hris/dashboard/hooks/use-week'
+import { useWeek } from '@/shared/hooks/use-week'
 
 export default function DashboardHris() {
 	const { startOfWeek, endOfWeek } = useWeek()
