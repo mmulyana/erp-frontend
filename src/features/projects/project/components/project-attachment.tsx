@@ -55,8 +55,8 @@ export default function ProjectAttachment({
 	id?: string
 	showButton?: boolean
 }) {
+	const [search, setSearch] = useState('')
 	const { q } = usePagination()
-
 	const { data } = useAttachments({ projectId: id, search: q })
 
 	const attachments = data?.data
@@ -67,44 +67,52 @@ export default function ProjectAttachment({
 			<CardV1
 				title='Dokumen'
 				icon={<FileTextIcon size={20} className='text-ink-primary' />}
-				action={<SearchV3 className='max-w-[140px]' />}
+				action={
+					<SearchV3
+						className='max-w-[140px]'
+						value={search}
+						onValueChange={setSearch}
+					/>
+				}
 			>
-				<ScrollArea className='h-[280px] pt-2 flex flex-col gap-4'>
-					{anyAttachment ? (
-						attachments?.map((i, index) => (
-							<div key={index} className='flex justify-between items-center'>
-								<div className='flex gap-2 items-center'>
-									<FileText className='text-[#565659]' size={28} />
-									<div className='space-y-1'>
-										<p className='text-ink-primary w-[240px] truncate font-medium'>
-											{i.name}
-										</p>
-										<div className='flex gap-2.5 items-center flex-wrap'>
-											{!id && (
-												<Link
-													to={`${paths.projectMasterdataProjects}/${i.project.id}`}
-												>
-													<Badge variant='outline'>{i.project.name}</Badge>
-												</Link>
-											)}
-											{!id && (
-												<div className='w-1.5 h-1.5 rounded-full bg-ink-primary/50' />
-											)}
-											<p className='text-ink-primary/50 text-sm'>{i.type}</p>
+				<ScrollArea className='h-[280px] pt-2 '>
+					<div className='flex flex-col gap-4'>
+						{anyAttachment ? (
+							attachments?.map((i, index) => (
+								<div key={index} className='flex justify-between items-center'>
+									<div className='flex gap-2 items-center'>
+										<FileText className='text-[#565659]' size={28} />
+										<div className='space-y-1'>
+											<p className='text-ink-primary w-[240px] truncate font-medium'>
+												{i.name}
+											</p>
+											<div className='flex gap-2.5 items-center flex-wrap'>
+												{!id && (
+													<Link
+														to={`${paths.projectMasterdataProjects}/${i.project.id}`}
+													>
+														<Badge variant='outline'>{i.project.name}</Badge>
+													</Link>
+												)}
+												{!id && (
+													<div className='w-1.5 h-1.5 rounded-full bg-ink-primary/50' />
+												)}
+												<p className='text-ink-primary/50 text-sm'>{i.type}</p>
+											</div>
 										</div>
 									</div>
+									<Link
+										to={`${baseUrl}/${i.fileUrl}`}
+										className={buttonVariants({ variant: 'ghost' })}
+									>
+										<Download size={20} />
+									</Link>
 								</div>
-								<Link
-									to={`${baseUrl}/${i.fileUrl}`}
-									className={buttonVariants({ variant: 'ghost' })}
-								>
-									<Download size={20} />
-								</Link>
-							</div>
-						))
-					) : (
-						<EmptyState className='h-full w-full' />
-					)}
+							))
+						) : (
+							<EmptyState className='h-full w-full' />
+						)}
+					</div>
 				</ScrollArea>
 				{showButton && <ModalAttachment />}
 			</CardV1>
@@ -158,8 +166,9 @@ function ModalAttachment() {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant='outline' className='w-full'>
-					Tambah
+				<Button variant='outline' className='gap-1 w-full h-10'>
+					<Plus size={16} />
+					<span className='px-0.5'>Tambah</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent className='p-6'>

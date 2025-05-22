@@ -6,6 +6,7 @@ import PhotoUrl from '@/shared/components/common/photo-url'
 import {
 	AlertTriangle,
 	Calendar,
+	History,
 	Image,
 	MessageSquare,
 	MessageSquareMoreIcon,
@@ -40,9 +41,12 @@ export default function ProjectReport({ projectId, variant, limit }: props) {
 							</div>
 						</>
 					) : (
-						<p className='text-ink-secondary font-medium mb-2'>
-							Laporan Terbaru
-						</p>
+						<>
+							<History size={20} className='text-ink-primary' />
+							<p className='text-ink-secondary font-medium mb-2'>
+								Laporan Terbaru
+							</p>
+						</>
 					)}
 				</div>
 
