@@ -1,32 +1,5 @@
 import { Base } from '@/shared/types'
 
-export type Project = {
-	id?: string
-	name: string
-	description?: string
-	endedAt?: string
-	startedAt?: string
-	netValue?: number
-	progressPercentage: number
-	paymentPercentage: number
-
-	client?: {
-		id: string
-		name: string
-	}
-
-	lead?: {
-		id: string
-		username: string
-	}
-
-	archivedAt?: string
-	createdAt?: string
-	updatedAt?: string
-	deletedAt?: string
-	deadlineAt?: string
-}
-
 export type ProjectForm = {
 	name: string
 	leadId?: string
@@ -35,10 +8,10 @@ export type ProjectForm = {
 	progressPercentage?: number
 	paymentPercentage?: number
 	netValue?: number
-
-	startedAt?: string
-	endedAt?: string
-	archivedAt?: string
+	deadlineAt?: Date
+	doneAt?: Date
+	status?: string
+	priority?: string
 }
 
 export type ProjectEmployee = {
