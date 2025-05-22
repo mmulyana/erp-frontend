@@ -145,13 +145,22 @@ export type Project = {
 	description?: string
 	progressPercentage: number
 	paymentPercentage: number
-	netValue?: bigint
+	netValue?: number
 	status: ProjectStatus
-	deadlineAt?: Date
+	deadlineAt?: string
 	priority?: ProjectPriority
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+	doneAt?: string
+
+	client?: Client
+	lead?: User
+	stockOut?: StockOut[]
+	loans: Loan[]
+	employees: Employee[]
+	reports: ProjectReport[]
+	attachments: ProjectAttachment[]
 }
 
 export type AssignedEmployee = {
@@ -246,6 +255,10 @@ export type CompanyClient = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	_count: {
+		employees: number
+	}
 }
 
 export type Inventory = {

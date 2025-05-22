@@ -39,7 +39,7 @@ export default function DetailLayout({
 }: Props) {
 	return (
 		<>
-			<div className='px-6 h-16 w-full bg-white fixed top-0 left-0 flex justify-between items-center z-10'>
+			<div className='px-6 h-16 w-full bg-white fixed top-0 left-0 flex justify-between items-center z-50'>
 				<div
 					className={cn(
 						'w-[800px] max-w-full mx-auto flex justify-between items-center',

@@ -94,4 +94,8 @@ export const keys = {
 
 	stockInReportByMonth: 'stock-in-report-by-month',
 	stockOutReportByMonth: 'stock-out-report-by-month',
+
+	user: 'user',
+	userDetail: 'user-detail',
+	userInfinite: 'user-infinite',
 }
