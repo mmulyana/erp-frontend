@@ -57,6 +57,7 @@ export default function Projects() {
 				title='Proyek'
 				subtitle='Kelola data proyek dalam perusahaan'
 				url={paths.projectNew}
+				actionLabel='Tambah Proyek'
 			/>
 			<div className='p-6 rounded-xl bg-white border border-border space-y-6'>
 				<div className='flex justify-between items-center'>

@@ -7,6 +7,7 @@ import HeadPage from '@/shared/components/common/head-page'
 import ModalDetailClient from '@/features/projects/client/components/modal-detail-client'
 import ModalAddClient from '@/features/projects/client/components/modal-add-client'
 import TableClient from '@/features/projects/client/components/table-client'
+import CreatedSelect from '@/shared/components/common/select/created-select'
 
 export default function Client() {
 	return (
@@ -20,8 +21,9 @@ export default function Client() {
 				<div className='flex justify-between items-center'>
 					<SearchV3 />
 					<div className='flex gap-4 items-center'>
-						<FilterButton></FilterButton>
-						<SortButton></SortButton>
+						<SortButton>
+							<CreatedSelect />
+						</SortButton>
 					</div>
 				</div>
 				<TableClient />
