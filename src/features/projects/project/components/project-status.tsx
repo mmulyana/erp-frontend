@@ -62,7 +62,7 @@ export default function ProjectStatus({ variant = 'default' }: props) {
 				className={cn(
 					'flex justify-center gap-2 flex-wrap',
 					variant === 'compact' &&
-						'max-w-[180px] justify-start items-start ml-32 -mt-2'
+						'max-w-[180px] justify-start items-start ml-32 -mt-2 gap-0'
 				)}
 			>
 				{data?.data?.map((i, idx) => (
