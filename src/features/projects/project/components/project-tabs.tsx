@@ -5,10 +5,11 @@ import {
 	TabsTrigger,
 } from '@/shared/components/ui/tabs'
 import ProjectReport from './project-report'
+import ProjectLoan from './project-loan'
 
 export default function ProjectTabs({ id }: { id?: string }) {
 	return (
-		<Tabs defaultValue='Laporan'>
+		<Tabs defaultValue='Peminjaman'>
 			<TabsList className='border-b w-full'>
 				{['Laporan', 'Pemakaian', 'Peminjaman'].map((i) => (
 					<TabsTrigger
@@ -24,8 +25,8 @@ export default function ProjectTabs({ id }: { id?: string }) {
 			<TabsContent value='Laporan'>
 				<ProjectReport projectId={id} variant='detail' limit={10} />
 			</TabsContent>
-			<TabsContent value='Pemakaian'>
-				<div className='p-6'></div>
+			<TabsContent value='Peminjaman'>
+				<ProjectLoan id={id} />
 			</TabsContent>
 		</Tabs>
 	)
