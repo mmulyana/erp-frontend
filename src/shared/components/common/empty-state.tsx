@@ -4,11 +4,13 @@ type Props = {
 	className?: string
 	textStyle?: string
 	text?: string
+	styleImg?: string
 }
 export default function EmptyState({
 	className,
 	textStyle,
 	text = 'Masih kosong',
+	styleImg,
 }: Props) {
 	return (
 		<div
@@ -17,10 +19,11 @@ export default function EmptyState({
 				className
 			)}
 		>
-			<img src='/icons/empty-box.png' className='w-20 aspect-square' />
-			<p className={cn('text-ink-secondary text-sm mt-2', textStyle)}>
-				{text}
-			</p>
+			<img
+				src='/icons/empty-box.png'
+				className={cn('w-20 aspect-square', styleImg)}
+			/>
+			<p className={cn('text-ink-secondary text-sm mt-2', textStyle)}>{text}</p>
 		</div>
 	)
 }

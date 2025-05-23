@@ -1,3 +1,5 @@
+import { FieldValues, Path, UseFormReturn } from 'react-hook-form'
+
 export function handleFormSuccess(
 	setOpen: (open: boolean) => void,
 	...callbacks: (() => void)[]
@@ -8,16 +10,15 @@ export function handleFormSuccess(
 	}
 }
 
-export function handleFormError<T extends Record<string, any>>(form: {
-	setError: (field: keyof T, error: { message: string }) => void
-}) {
+export function handleFormError<T extends FieldValues>(
+	form: Pick<UseFormReturn<T>, 'setError'>
+) {
 	return (error: any) => {
 		if (error?.response?.data?.errors) {
 			error.response.data.errors.forEach((err: any) => {
-				const field = err.path?.[0]
-				const message = err.message
-				if (field) {
-					form.setError(field, { message })
+				const fieldPath = err.path?.join('.') as Path<T>
+				if (fieldPath) {
+					form.setError(fieldPath, { message: err.message })
 				}
 			})
 		}

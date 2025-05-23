@@ -93,6 +93,7 @@ export const keys = {
 	stockOutDetail: 'stock-out-detail',
 	stockLoan: 'stock-loan',
 	stockLoanDetail: 'stock-loan-detail',
+	stockLoanStatus: 'stock-loan-status',
 
 	stockInReportByMonth: 'stock-in-report-by-month',
 	stockOutReportByMonth: 'stock-out-report-by-month',
