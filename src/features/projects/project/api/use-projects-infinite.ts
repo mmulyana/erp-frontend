@@ -1,10 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { NormalizedResponse } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
+import { Project } from '@/shared/types/api'
 import http from '@/shared/utils/http'
-import { Project } from '../types'
-import { NormalizedResponse } from '@/shared/types'
 
 type Params = {
 	search?: string
