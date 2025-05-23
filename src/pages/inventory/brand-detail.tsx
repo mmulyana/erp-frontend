@@ -1,22 +1,24 @@
-import { useBrand } from '@/features/inventory/brand/api/use-brand'
-import { Item } from '@/features/inventory/item/types'
-import CardV1 from '@/shared/components/common/card-v1'
-import PhotoUrl from '@/shared/components/common/photo-url'
-import { Button } from '@/shared/components/ui/button'
-import { paths } from '@/shared/constants/paths'
-import DetailLayout from '@/shared/layout/detail-layout'
-import { Link } from '@/shared/types'
-import { ColumnDef } from '@tanstack/react-table'
 import { CalendarDays, House, Package, Pencil, Tag } from 'lucide-react'
-import { format } from 'date-fns'
+import { ColumnDef } from '@tanstack/react-table'
+import { useParams } from 'react-router-dom'
 import { id as ind } from 'date-fns/locale'
 import { useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import FilterButton from '@/shared/components/common/filter-button'
-import { DataTable } from '@/shared/components/common/data-table'
-import { useItems } from '@/features/inventory/item/api/use-items'
-import { usePagination } from '@/shared/hooks/use-pagination'
+import { format } from 'date-fns'
+
 import ModalDetailBrand from '@/features/inventory/brand/components/modal-detail-brand'
+import { useBrand } from '@/features/inventory/brand/api/use-brand'
+import { useItems } from '@/features/inventory/item/api/use-items'
+
+import FilterButton from '@/shared/components/common/filter-button'
+import PhotoUrl from '@/shared/components/common/photo-url'
+import DetailLayout from '@/shared/layout/detail-layout'
+import CardV1 from '@/shared/components/common/card-v1'
+import { DataTable } from '@/shared/components/common/data-table'
+import { usePagination } from '@/shared/hooks/use-pagination'
+import { Button } from '@/shared/components/ui/button'
+import { paths } from '@/shared/constants/paths'
+import { Inventory } from '@/shared/types/api'
+import { Link } from '@/shared/types'
 
 const links: Link[] = [
 	{
@@ -44,6 +46,7 @@ export default function BrandDetail() {
 		page,
 		limit,
 		search: q,
+		brandId: id,
 	})
 
 	const linkMemo: Link[] = useMemo(() => {
@@ -58,7 +61,7 @@ export default function BrandDetail() {
 		]
 	}, [id, data])
 
-	const column: ColumnDef<Item>[] = [
+	const column: ColumnDef<Inventory>[] = [
 		{
 			id: 'name',
 			header: 'Barang',
