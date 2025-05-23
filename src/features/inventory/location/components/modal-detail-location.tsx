@@ -49,7 +49,6 @@ export default function ModalDetailLocation({ id, open, setOpen }: props) {
 	})
 
 	const onClose = () => {
-		form.reset()
 		setOpen(false)
 	}
 

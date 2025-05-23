@@ -169,12 +169,17 @@ export default function FormCreateStockOut({
 										<TableCell>
 											<FormField
 												control={form.control}
-												name={`items.${index}.productId`}
+												name={`items.${index}.itemId`}
 												render={({ field }) => (
-													<ItemCombobox
-														onSelect={field.onChange}
-														defaultValue={field.value || ''}
-													/>
+													<FormItem className='relative'>
+														<FormControl>
+															<ItemCombobox
+																onSelect={field.onChange}
+																defaultValue={field.value || ''}
+															/>
+														</FormControl>
+														<FormMessage className='absolute text-nowrap text-sm -bottom-5' />
+													</FormItem>
 												)}
 											/>
 										</TableCell>
@@ -182,16 +187,21 @@ export default function FormCreateStockOut({
 											<FormField
 												control={form.control}
 												name={`items.${index}.quantity`}
-												render={({ field }) => (
-													<FormItem>
+												render={({ field, fieldState: { error } }) => (
+													<FormItem className='relative'>
 														<FormControl>
 															<Input
 																type='number'
 																{...field}
-																className='min-w-14'
+																className={cn(
+																	'min-w-14',
+																	error?.message &&
+																		error.message !== '' &&
+																		'!border-error'
+																)}
 															/>
 														</FormControl>
-														<FormMessage />
+														<FormMessage className='absolute text-nowrap text-sm -bottom-5' />
 													</FormItem>
 												)}
 											/>
@@ -250,7 +260,7 @@ export default function FormCreateStockOut({
 					<Button
 						type='button'
 						variant='outline'
-						onClick={() => append({ productId: '', quantity: 0, price: 0 })}
+						onClick={() => append({ itemId: '', quantity: 0, price: 0 })}
 					>
 						Tambah Barang
 					</Button>
