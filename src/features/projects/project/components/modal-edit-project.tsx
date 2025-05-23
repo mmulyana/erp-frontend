@@ -1,4 +1,18 @@
+import { NumericFormat } from 'react-number-format'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Pencil } from 'lucide-react'
+
+import UserCombobox from '@/features/user/components/user-combobox'
+
+import ButtonSubmit from '@/shared/components/common/button-submit'
+import { EditorDescription } from '@/shared/components/common/tiptap/editor-description'
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { Button } from '@/shared/components/ui/button'
+import { Slider } from '@/shared/components/ui/slider'
+import { Input } from '@/shared/components/ui/input'
 import {
 	Dialog,
 	DialogClose,
@@ -6,6 +20,7 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
+	DialogTitle,
 	DialogTrigger,
 } from '@/shared/components/ui/dialog'
 import {
@@ -16,21 +31,6 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
-import { Pencil } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { ProjectForm } from '../types'
-import { Input } from '@/shared/components/ui/input'
-import { EditorDescription } from '@/shared/components/common/tiptap/editor-description'
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
-import ButtonSubmit from '@/shared/components/common/button-submit'
-import { useUpdateProject } from '../api/use-update-project'
-import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
-import { useProject } from '../api/use-project'
-import { Slider } from '@/shared/components/ui/slider'
-import { cn } from '@/shared/utils/cn'
-import { DialogTitle } from '@radix-ui/react-dialog'
 import {
 	Select,
 	SelectContent,
@@ -38,10 +38,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/shared/components/ui/select'
-import { priorityOption, statusBadges } from '../constant/types'
+
 import ClientCombobox from '../../client/components/client-combobox'
-import UserCombobox from '@/features/user/components/user-combobox'
-import { NumericFormat } from 'react-number-format'
+import { priorityOption, statusBadges } from '../constant/types'
+import { useUpdateProject } from '../api/use-update-project'
+import { useProject } from '../api/use-project'
+import { ProjectForm } from '../types'
 
 type FormValues = Partial<ProjectForm>
 
@@ -49,9 +51,6 @@ type props = {
 	variant: 'info' | 'detail'
 }
 export default function ModalEditProject({ variant }: props) {
-	const skipInterval = 20
-	const ticks = [...Array(100 + 1)].map((_, i) => i)
-
 	const [open, setOpen] = useState(false)
 
 	const { id } = useParams()
@@ -86,16 +85,16 @@ export default function ModalEditProject({ variant }: props) {
 			const res = data.data
 			form.reset({
 				name: res.name,
-				clientId: res.clientId,
+				clientId: res.clientId || undefined,
 				deadlineAt: res.deadlineAt ? new Date(res.deadlineAt) : undefined,
-				description: res.description,
+				description: res.description || undefined,
 				doneAt: res.doneAt ? new Date(res.doneAt) : undefined,
-				leadId: res.leadId,
-				netValue: res.netValue,
-				paymentPercentage: res.paymentPercentage,
-				priority: res.priority,
-				progressPercentage: res.progressPercentage,
-				status: res.status,
+				leadId: res.leadId || undefined,
+				netValue: res.netValue || undefined,
+				paymentPercentage: res.paymentPercentage || undefined,
+				priority: res.priority || undefined,
+				progressPercentage: res.progressPercentage || undefined,
+				status: res.status || undefined,
 			})
 		}
 	}, [data])
@@ -186,7 +185,7 @@ export default function ModalEditProject({ variant }: props) {
 					render={({ field }) => {
 						const usedField = { ...field }
 						delete (usedField as any).onChange
-						
+
 						return (
 							<FormItem>
 								<FormLabel>Nilai proyek</FormLabel>
