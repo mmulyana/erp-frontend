@@ -1,19 +1,16 @@
-import { ChevronDown, ChevronsUpDown } from 'lucide-react'
+import { ChevronsUpDown } from 'lucide-react'
 import { useAtomValue } from 'jotai'
 
 import { SidebarTrigger } from '@/shared/components/ui/sidebar'
 import { Button } from '@/shared/components/ui/button'
-import { baseUrl } from '@/shared/constants/urls'
 import { userAtom } from '@/shared/store/auth'
 import { cn } from '@/shared/utils/cn'
 
-import logo from '/public/images/logo.png'
-
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { useIsMobile } from '../../hooks/use-mobile'
 import TopNavigation from './top-navigation'
-import PhotoUrl from './photo-url'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import SearchAction from './search-action'
+import PhotoUrl from './photo-url'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)
@@ -29,7 +26,7 @@ export default function Header() {
 			<div className='flex gap-2 md:gap-8 items-center'>
 				{isMobile && <SidebarTrigger />}
 				<div className='flex gap-2 items-center'>
-					<img src={logo} className='w-8 h-8' />
+					<img src='/images/logo.png' className='w-8 h-8' />
 					<div className='gap-1 items-center hidden md:flex'>
 						<p className='font-medium text-[#2D2F36]'>Barokah</p>
 						<span className='rounded-md px-1 py-0.5 bg-brand flex items-center justify-center text-xs text-white'>

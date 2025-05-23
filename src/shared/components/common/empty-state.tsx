@@ -1,7 +1,5 @@
 import { cn } from '@/shared/utils/cn'
 
-import EmptyImg from '/public/icons/empty-box.png'
-
 type Props = {
 	className?: string
 	textStyle?: string
@@ -19,7 +17,7 @@ export default function EmptyState({
 				className
 			)}
 		>
-			<img src={EmptyImg} className='w-20 aspect-square' />
+			<img src='/icons/empty-box.png' className='w-20 aspect-square' />
 			<p className={cn('text-ink-secondary text-sm mt-2', textStyle)}>
 				{text}
 			</p>
