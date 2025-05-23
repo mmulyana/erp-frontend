@@ -51,7 +51,7 @@ export default function ItemAvailability({ variant = 'default' }: props) {
 						content={<ChartTooltipContent hideLabel />}
 					/>
 					<Pie
-						data={data?.data}
+						data={data?.data || []}
 						dataKey='total'
 						nameKey='name'
 						innerRadius={variant === 'default' ? 48 : 32}
