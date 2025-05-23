@@ -1,14 +1,14 @@
 import { ColumnDef } from '@tanstack/react-table'
+import { useNavigate } from 'react-router-dom'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
-
-import { useItems } from '../api/use-items'
-import { useNavigate } from 'react-router-dom'
+import StatusBadge from '@/shared/components/common/status-badge'
+import PhotoUrl from '@/shared/components/common/photo-url'
 import { paths } from '@/shared/constants/paths'
 import { Inventory } from '@/shared/types/api'
-import PhotoUrl from '@/shared/components/common/photo-url'
-import StatusBadge from '@/shared/components/common/status-badge'
+
+import { useItems } from '../api/use-items'
 import { statusItem } from '../constant'
 
 export default function TableItem() {

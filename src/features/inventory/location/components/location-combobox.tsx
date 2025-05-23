@@ -1,7 +1,8 @@
 import InfiniteCombobox from '@/shared/components/common/infinite-combobox'
+import http from '@/shared/utils/http'
+import { urls } from '@/shared/constants/urls'
 
 import { useLocationInfinite } from '../api/use-locations-infinite'
-import { useLocation } from '../api/use-location'
 
 export default function LocationCombobox(props: {
 	onSelect?: (val: string) => void
@@ -11,14 +12,16 @@ export default function LocationCombobox(props: {
 		<InfiniteCombobox
 			{...props}
 			useInfiniteQuery={({ search }) =>
-				useLocationInfinite({ search, limit: 10 })
+				useLocationInfinite({ search, limit: '10' })
 			}
-			fetchItemById={async (id) => {
-				const { data } = await useLocation({ id })
-				return data?.data ?? null
-			}}
+			fetchItemById={fetchItemById}
 			label={(item) => item.name}
 			placeholder='Pilih lokasi'
 		/>
 	)
+}
+
+const fetchItemById = async (id: string) => {
+	const { data } = await http(`${urls.location}/${id}`)
+	return data.data ?? null
 }
