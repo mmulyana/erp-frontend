@@ -8,14 +8,17 @@ import { useMemo } from 'react'
 import { useStockIn } from '@/features/inventory/stock-in/api/use-stock-in'
 import { Item } from '@/features/inventory/stock-in/type'
 
-import DetailLayout, { Link as Links } from '@/shared/layout/detail-layout'
-import { DataTable } from '@/shared/components/common/data-table'
+import EmptyState from '@/shared/components/common/empty-state'
 import PhotoUrl from '@/shared/components/common/photo-url'
+import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
+
+import { DataTable } from '@/shared/components/common/data-table'
 import { Button } from '@/shared/components/ui/button'
 import { baseUrl } from '@/shared/constants/urls'
 import { paths } from '@/shared/constants/paths'
 import { formatThousands } from '@/shared/utils'
+import { Link as Links } from '@/shared/types'
 
 const links: Links[] = [
 	{
@@ -149,22 +152,26 @@ export default function StockInDetail() {
 						icon={<Image size={20} className='text-ink-primary' />}
 						style={{ content: 'pt-4' }}
 					>
-						<PhotoUrl
-							url={photoUrl || ''}
-							style={{
-								img: 'rounded-md w-full min-h-40 border',
-							}}
-						/>
-						{photoUrl && (
-							<div className='flex justify-between items-center pt-2'>
-								<p className='text-ink-primary/50 text-sm'>{photoUrl}</p>
-								<Link
-									className='text-sm text-ink-primary font-medium'
-									to={`${baseUrl}/${photoUrl}`}
-								>
-									Unduh
-								</Link>
-							</div>
+						{photoUrl ? (
+							<>
+								<PhotoUrl
+									url={photoUrl || ''}
+									style={{
+										img: 'rounded-md w-full h-auto border',
+									}}
+								/>
+								<div className='flex justify-between items-center pt-2'>
+									<p className='text-ink-primary/50 text-sm'>{photoUrl}</p>
+									<Link
+										className='text-sm text-ink-primary font-medium'
+										to={`${baseUrl}/${photoUrl}`}
+									>
+										Unduh
+									</Link>
+								</div>
+							</>
+						) : (
+							<EmptyState text='Tidak ada bukti' />
 						)}
 					</CardV1>
 				</div>

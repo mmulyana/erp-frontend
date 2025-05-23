@@ -7,15 +7,17 @@ import { useMemo } from 'react'
 
 import { useStockOut } from '@/features/inventory/stock-out/api/use-stock-out'
 
-import DetailLayout, { Link as Links } from '@/shared/layout/detail-layout'
-import { DataTable } from '@/shared/components/common/data-table'
+import EmptyState from '@/shared/components/common/empty-state'
 import PhotoUrl from '@/shared/components/common/photo-url'
+import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
+
+import { DataTable } from '@/shared/components/common/data-table'
 import { Button } from '@/shared/components/ui/button'
 import { baseUrl } from '@/shared/constants/urls'
 import { paths } from '@/shared/constants/paths'
 import { formatThousands } from '@/shared/utils'
-import { Item, StockOut } from '@/features/inventory/stock-out/types'
+import { Link as Links } from '@/shared/types'
 
 const links: Links[] = [
 	{
@@ -25,7 +27,7 @@ const links: Links[] = [
 		hideName: true,
 	},
 	{
-		name: 'Stock masuk',
+		name: 'Stock keluar',
 		path: paths.inventoryStockIn,
 	},
 	{
@@ -51,7 +53,7 @@ export default function StockInDetail() {
 
 	const { date, photoUrl, user, note, items, totalPrice } = data?.data || {}
 
-	const columns: ColumnDef<Item>[] = [
+	const columns: ColumnDef<any>[] = [
 		{
 			id: 'item',
 			header: 'Barang',
@@ -133,21 +135,27 @@ export default function StockInDetail() {
 						icon={<Image size={20} className='text-ink-primary' />}
 						style={{ content: 'pt-4' }}
 					>
-						<PhotoUrl
-							url={photoUrl || ''}
-							style={{
-								img: 'rounded-md w-full h-auto border',
-							}}
-						/>
-						<div className='flex justify-between items-center pt-2'>
-							<p className='text-ink-primary/50 text-sm'>{photoUrl}</p>
-							<Link
-								className='text-sm text-ink-primary font-medium'
-								to={`${baseUrl}/${photoUrl}`}
-							>
-								Unduh
-							</Link>
-						</div>
+						{photoUrl ? (
+							<>
+								<PhotoUrl
+									url={photoUrl || ''}
+									style={{
+										img: 'rounded-md w-full h-auto border',
+									}}
+								/>
+								<div className='flex justify-between items-center pt-2'>
+									<p className='text-ink-primary/50 text-sm'>{photoUrl}</p>
+									<Link
+										className='text-sm text-ink-primary font-medium'
+										to={`${baseUrl}/${photoUrl}`}
+									>
+										Unduh
+									</Link>
+								</div>
+							</>
+						) : (
+							<EmptyState text='Tidak ada bukti' />
+						)}
 					</CardV1>
 				</div>
 
