@@ -324,6 +324,14 @@ export type StockOut = {
 	projectId?: string
 	createdAt: string
 	updatedAt: string
+
+	project?: Project
+	user: User
+	items: StockOutItem[]
+	_count: {
+		items: number
+	}
+	totalPrice: number
 }
 
 export type StockOutItem = {
