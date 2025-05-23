@@ -4,9 +4,12 @@ import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
 
 import { useItems } from '../api/use-items'
-import { Item } from '../types'
 import { useNavigate } from 'react-router-dom'
 import { paths } from '@/shared/constants/paths'
+import { Inventory } from '@/shared/types/api'
+import PhotoUrl from '@/shared/components/common/photo-url'
+import StatusBadge from '@/shared/components/common/status-badge'
+import { statusItem } from '../constant'
 
 export default function TableItem() {
 	const { limit, page, q } = usePagination()
@@ -19,11 +22,30 @@ export default function TableItem() {
 	})
 
 	// COLUMNS EMPLOYEE
-	const columns: ColumnDef<Item>[] = [
+	const columns: ColumnDef<Inventory>[] = [
 		{
 			id: 'name',
-			accessorKey: 'name',
 			header: 'Nama',
+			cell: ({ row }) => (
+				<div className='flex gap-2 items-center py-2'>
+					<PhotoUrl
+						url={row.original.photoUrl || ''}
+						style={{ img: 'h-12 w-12 rounded-md' }}
+					/>
+					<p className='text-ink-primary'>{row.original.name}</p>
+				</div>
+			),
+		},
+		{
+			id: 'total',
+			header: 'Total',
+			cell: ({ row }) =>
+				`${row.original.totalStock} ${row.original.unitOfMeasurement}`,
+		},
+		{
+			id: 'location',
+			header: 'Gudang',
+			cell: ({ row }) => row.original?.warehouse?.name,
 		},
 		{
 			id: 'brand',
@@ -31,9 +53,12 @@ export default function TableItem() {
 			cell: ({ row }) => row.original?.brand?.name,
 		},
 		{
-			id: 'location',
-			header: 'Lokasi',
-			cell: ({ row }) => row.original?.location?.name,
+			id: 'status',
+			header: 'Status',
+			accessorKey: 'status',
+			cell: ({ row }) => (
+				<StatusBadge options={statusItem} value={row.original.status} />
+			),
 		},
 	]
 	// COLUMNS
