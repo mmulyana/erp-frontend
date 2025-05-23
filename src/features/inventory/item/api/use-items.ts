@@ -7,7 +7,12 @@ import { urls } from '@/shared/constants/urls'
 import { Inventory } from '@/shared/types/api'
 import http from '@/shared/utils/http'
 
-export const useItems = (params?: Pagination) => {
+export const useItems = (
+	params?: Pagination & {
+		brandId?: string
+		warehouseId?: string
+	}
+) => {
 	return useQuery({
 		queryKey: [keys.item, params],
 		queryFn: async (): Promise<IApiPagination<Inventory[]>> => {
