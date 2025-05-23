@@ -1,14 +1,17 @@
-import { useItem } from '@/features/inventory/item/api/use-item'
-import ItemDetail from '@/features/inventory/item/components/item-detail'
-import ItemInfo from '@/features/inventory/item/components/item-info'
-import ItemStock from '@/features/inventory/item/components/item-stock'
-import ItemSupplier from '@/features/inventory/item/components/item-supplier'
-import ItemTabs from '@/features/inventory/item/components/item-tabs'
-import { paths } from '@/shared/constants/paths'
-import DetailLayout, { Link } from '@/shared/layout/detail-layout'
-import { House } from 'lucide-react'
-import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
+import { House } from 'lucide-react'
+
+import { useItem } from '@/features/inventory/item/api/use-item'
+import ItemSupplier from '@/features/inventory/item/components/item-supplier'
+import ItemDetail from '@/features/inventory/item/components/item-detail'
+import ItemStock from '@/features/inventory/item/components/item-stock'
+import ItemInfo from '@/features/inventory/item/components/item-info'
+import ItemTabs from '@/features/inventory/item/components/item-tabs'
+
+import DetailLayout from '@/shared/layout/detail-layout'
+import { useDynamicLinks } from '@/shared/utils/link'
+import { paths } from '@/shared/constants/paths'
+import { Link } from '@/shared/types'
 
 const links: Link[] = [
 	{
@@ -18,7 +21,7 @@ const links: Link[] = [
 		hideName: true,
 	},
 	{
-		name: 'Item',
+		name: 'Barang',
 		path: paths.inventoryMasterdataItem,
 	},
 	{
@@ -32,28 +35,29 @@ export default function DetailItem() {
 
 	const { data, isPending } = useItem({ id })
 
-	const linkMemo: Link[] = useMemo(() => {
-		if (!id || isPending || !data?.data) return links
-		return [
-			...links.filter((i) => i.name !== 'Detail'),
-			{
-				name: data?.data?.name,
-				path: `${paths.inventoryMasterdataItem}/${data.data.id}`,
-			},
-		]
-	}, [id, data, isPending])
+	const dynamicLink = useDynamicLinks({
+		baseLinks: links,
+		replaceName: 'Detail',
+		newLink: data?.data
+			? {
+					name: data.data.name ?? '',
+					path: `${paths.inventoryMasterdataItem}/${data.data.id}`,
+			  }
+			: undefined,
+		condition: !!(id && data?.data),
+	})
 
 	return (
-		<DetailLayout links={linkMemo} style={{ header: 'w-[1020px]' }}>
-			<div className='grid grid-cols-1 md:grid-cols-[640px_1fr] gap-8 w-[1020px] max-w-full px-4 md:px-0 mx-auto pt-6'>
+		<DetailLayout links={dynamicLink} style={{ header: 'w-[1020px]' }}>
+			<div className='grid grid-cols-1 xl:grid-cols-[640px_1fr] gap-8 w-[1020px] max-w-full px-4 xl:px-0 mx-auto pt-6'>
 				<div className='space-y-6'>
 					<ItemInfo id={id} />
 					<ItemDetail id={id} />
 					<ItemTabs />
 				</div>
 				<div className='space-y-6'>
-					<ItemStock />
-					<ItemSupplier />
+					<ItemStock id={id} />
+					<ItemSupplier id={id} />
 				</div>
 			</div>
 		</DetailLayout>
