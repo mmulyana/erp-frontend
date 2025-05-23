@@ -59,6 +59,7 @@ export default function NewStockIn() {
 
 	const form = useForm<StockInForm>({
 		defaultValues: {
+			supplierId: undefined,
 			items: [{ itemId: '', quantity: 0, unitPrice: 0 }],
 		},
 	})
