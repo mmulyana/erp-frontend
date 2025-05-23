@@ -11,6 +11,7 @@ import { useProject } from '@/features/projects/project/api/use-project'
 
 import DetailLayout, { Link } from '@/shared/layout/detail-layout'
 import { paths } from '@/shared/constants/paths'
+import { useDynamicLinks } from '@/shared/utils/link'
 
 const links: Link[] = [
 	{
@@ -34,19 +35,20 @@ export default function DetailProject() {
 
 	const { data } = useProject({ id })
 
-	const linkMemo: Link[] = useMemo(() => {
-		if (!id || !data?.data) return links
-		return [
-			...links.filter((i) => i.name !== 'Detail'),
-			{
-				name: data?.data?.name || id,
-				path: paths.projectMasterdataProjectsDetail,
-			},
-		]
-	}, [id, data])
+	const dynamicLink = useDynamicLinks({
+		baseLinks: links,
+		replaceName: 'Detail',
+		newLink: data?.data
+			? {
+					name: data.data.name ?? '',
+					path: `${paths.projectMasterdataProjects}/${data.data.id}`,
+			  }
+			: undefined,
+		condition: !!(id && data?.data),
+	})
 
 	return (
-		<DetailLayout links={linkMemo} style={{ header: 'w-[1020px]' }}>
+		<DetailLayout links={dynamicLink} style={{ header: 'w-[1020px]' }}>
 			<div className='grid grid-cols-1 md:grid-cols-[640px_380px] gap-8 w-[1020px] max-w-full px-4 md:px-0 mx-auto pt-6'>
 				<div className='space-y-6'>
 					<ProjectInfo id={id} />
