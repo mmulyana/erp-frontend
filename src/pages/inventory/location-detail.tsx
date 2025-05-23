@@ -7,15 +7,17 @@ import { format } from 'date-fns'
 
 import ModalDetailLocation from '@/features/inventory/location/components/modal-detail-location'
 import { useLocation } from '@/features/inventory/location/api/use-location'
-import { Item } from '@/features/inventory/item/types'
+import { useItems } from '@/features/inventory/item/api/use-items'
 
 import FilterButton from '@/shared/components/common/filter-button'
 import PhotoUrl from '@/shared/components/common/photo-url'
 import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
 import { DataTable } from '@/shared/components/common/data-table'
+import { usePagination } from '@/shared/hooks/use-pagination'
 import { Button } from '@/shared/components/ui/button'
 import { paths } from '@/shared/constants/paths'
+import { Inventory } from '@/shared/types/api'
 import { Link } from '@/shared/types'
 
 const links: Link[] = [
@@ -37,8 +39,16 @@ const links: Link[] = [
 export default function LocationDetail() {
 	const { id } = useParams()
 	const [open, setOpen] = useState(false)
+	const { page, limit, q } = usePagination()
 
 	const { data } = useLocation({ id })
+
+	const { data: items } = useItems({
+		page,
+		limit,
+		search: q,
+		warehouseId: id,
+	})
 
 	const linkMemo: Link[] = useMemo(() => {
 		if (!id || !data?.data) return links
@@ -52,7 +62,7 @@ export default function LocationDetail() {
 		]
 	}, [id, data])
 
-	const column: ColumnDef<Item>[] = [
+	const column: ColumnDef<Inventory>[] = [
 		{
 			id: 'name',
 			header: 'Barang',
@@ -124,9 +134,11 @@ export default function LocationDetail() {
 				>
 					<DataTable
 						columns={column}
-						data={data?.data?.inventories || []}
+						data={items?.data.data || []}
 						withPagination
 						autoRedirect
+						totalItems={items?.data?.total}
+						totalPages={items?.data?.total_pages}
 					/>
 				</CardV1>
 			</div>
