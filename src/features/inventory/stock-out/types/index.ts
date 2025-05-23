@@ -18,7 +18,7 @@ export type StockOutForm = {
 	photoUrl: string | File | null
 	projectId?: string
 	items: {
-		productId: string
+		itemId: string
 		quantity: number
 		price: number
 	}[]
