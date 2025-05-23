@@ -14,11 +14,11 @@ export default function StatusBadge({ value, options }: Props) {
 	return (
 		<Badge variant='outline'>
 			<div
-				className='h-1 w-1 rounded-full'
+				className='h-1.5 w-1.5 rounded-full'
 				style={{ background: matched.color }}
 			></div>
 			<span
-				className='px-0.5 text-sm font-normal text-nowrap'
+				className='px-1 text-sm font-normal text-nowrap'
 				style={{ color: matched.color }}
 			>
 				{matched.label}
