@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
-import http from '@/shared/utils/http'
+import { Supplier } from '@/shared/types/api'
 import { IApi } from '@/shared/types'
-import { Supplier } from '../types'
+import http from '@/shared/utils/http'
 
 type Params = {
 	id?: string

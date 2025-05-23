@@ -2,9 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
-import http from '@/shared/utils/http'
 import { IApi } from '@/shared/types'
-import { Item } from '../types'
+import http from '@/shared/utils/http'
 
 export const useStatusChart = () => {
 	return useQuery({

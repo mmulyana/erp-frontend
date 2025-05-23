@@ -6,12 +6,13 @@ import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
 import { toFormData } from '@/shared/utils'
 import http from '@/shared/utils/http'
+import { ItemForm } from '../types'
 
 export const useUpdateItem = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (payload: any) => {
+		mutationFn: async (payload: ItemForm & { id: string }) => {
 			const formData = toFormData(payload)
 			const res = await http.patch(`${urls.item}/${payload.id}`, formData, {
 				headers: {

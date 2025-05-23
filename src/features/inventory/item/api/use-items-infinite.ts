@@ -3,12 +3,11 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { NormalizedResponse, Pagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
+import { Inventory } from '@/shared/types/api'
 import http from '@/shared/utils/http'
 
-import { Item } from '../types'
-
 export function useItemInfinite(params: Pagination) {
-	return useInfiniteQuery<NormalizedResponse<Item>>({
+	return useInfiniteQuery<NormalizedResponse<Inventory>>({
 		queryKey: [keys.itemInfinite, params],
 		queryFn: async ({ pageParam = 1 }) => {
 			const { data } = await http(urls.item + '/data/infinite', {

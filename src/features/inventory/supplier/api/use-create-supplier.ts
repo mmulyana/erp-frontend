@@ -8,7 +8,8 @@ import { keys } from '@/shared/constants/keys'
 import { toFormData } from '@/shared/utils'
 import { IApi } from '@/shared/types'
 
-import { Supplier, SupplierForm } from '../types'
+import { SupplierForm } from '../types'
+import { Supplier } from '@/shared/types/api'
 
 export const useCreateSupplier = () => {
 	const queryClient = useQueryClient()

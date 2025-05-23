@@ -10,14 +10,24 @@ type Params = {
 	id?: string
 }
 
-export const useItem = (params?: Params) => {
+export const useSupplierItem = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.itemDetail, params?.id],
-		queryFn: async (): Promise<IApi<Inventory>> => {
-			const { data } = await http(`${urls.item}/${params?.id}`, {
+		queryKey: [keys.itemSupplier, params?.id],
+		queryFn: async (): Promise<
+			IApi<
+				{
+					supplierId: string
+					name: string
+					stockInId: string
+					photoUrl?: string
+					date?: string
+				}[]
+			>
+		> => {
+			const { data } = await http(`${urls.item}/${params?.id}/supplier`, {
 				params,
 			})
-			return data.data
+			return data
 		},
 		enabled:
 			params?.id !== null && params?.id !== undefined && params?.id !== '',
