@@ -14,6 +14,8 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteLocation } from '../api/use-delete-location'
+import { useNavigate } from 'react-router-dom'
+import { paths } from '@/shared/constants/paths'
 
 type props = {
 	setOpen: (val: boolean) => void
@@ -21,6 +23,7 @@ type props = {
 }
 export default function ModalDeleteLocation({ setOpen, id }: props) {
 	const { mutate } = useDeleteLocation()
+	const navigate = useNavigate()
 
 	return (
 		<AlertDialog>
@@ -52,6 +55,9 @@ export default function ModalDeleteLocation({ setOpen, id }: props) {
 									{
 										onSuccess: () => {
 											setOpen(false)
+											navigate(paths.inventoryMasterdataLocation, {
+												replace: true,
+											})
 										},
 									}
 								)
