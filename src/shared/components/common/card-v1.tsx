@@ -1,5 +1,6 @@
 import { cn } from '@/shared/utils/cn'
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
+import { Card, CardContent, CardFooter } from '../ui/card'
+import { Badge } from '../ui/badge'
 
 type props = {
 	icon?: React.ReactNode
@@ -11,6 +12,7 @@ type props = {
 		card?: string
 		content?: string
 	}
+	count?: number
 }
 
 export default function CardV1({
@@ -20,6 +22,7 @@ export default function CardV1({
 	footer,
 	action,
 	style,
+	count,
 }: props) {
 	return (
 		<Card
@@ -38,6 +41,14 @@ export default function CardV1({
 					<p className='text-ink-primary text-nowrap font-medium text-[15px]'>
 						{title}
 					</p>
+					{count && (
+						<Badge
+							variant='secondary'
+							className='bg-[#E3E3E3] px-2.5 ml-1 py-0 h-fit leading-none text-[15px] rounded-lg'
+						>
+							{count}
+						</Badge>
+					)}
 				</div>
 				<div className='flex-1 h-fit flex justify-end'>{action}</div>
 			</div>
