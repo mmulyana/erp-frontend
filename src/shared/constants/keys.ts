@@ -67,13 +67,16 @@ export const keys = {
 	supplier: 'supplier',
 	supplierDetail: 'supplier-detail',
 	supplierInfinite: 'supplier-infinite',
-
+	supplierTotal: 'supplier-total',
 	supplierTransaction: 'supplier-transaction',
 
 	item: 'item',
 	itemDetail: 'item-detail',
 	itemInfinite: 'item-infinite',
 	itemStatusChart: 'item-status-chart',
+	itemLowStock: 'item-low-stock',
+	itemTotal: 'item-total',
+	itemSupplier: 'item-supplier',
 
 	brand: 'brand',
 	brandDetail: 'brand-detail',
@@ -82,6 +85,7 @@ export const keys = {
 	location: 'location',
 	locationDetail: 'location-detail',
 	locationInfinite: 'location-infinite',
+	locationTotal: 'location-total',
 
 	stockIn: 'stock-in',
 	stockInDetail: 'stock-in-detail',

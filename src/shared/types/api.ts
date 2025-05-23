@@ -276,6 +276,10 @@ export type Inventory = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+	status?: string
+
+	brand: BrandInventory
+	warehouse: Warehouse
 }
 
 export type StockLedger = {
