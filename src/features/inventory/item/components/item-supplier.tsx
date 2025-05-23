@@ -1,29 +1,51 @@
-import PhotoUrl from '@/shared/components/common/photo-url'
-import { Card } from '@/shared/components/ui/card'
+import { ExternalLink, Store } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
+import { paths } from '@/shared/constants/paths'
+import PhotoUrl from '@/shared/components/common/photo-url'
+import CardV1 from '@/shared/components/common/card-v1'
+
+import { useSupplierItem } from '../api/use-supplier-item'
 
 type props = {
 	id?: string
 }
 export default function ItemSupplier({ id }: props) {
+	const { data } = useSupplierItem({ id })
 	return (
-		<Card className='p-0 overflow-hidden'>
-			<div className='flex items-center justify-between px-6 pt-6'>
-				<p className='text-ink-primary'>Suplier</p>
-			</div>
-			<ScrollArea className='h-[280px] px-6 pt-2'>
+		<CardV1
+			title='Supplier'
+			icon={<Store size={20} className='text-ink-primary' />}
+			style={{ content: 'overflow-hidden pt-4' }}
+		>
+			<ScrollArea className='h-[280px]'>
 				<div className='flex flex-col gap-4'>
-					{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i, index) => (
-						<div key={index} className='flex justify-between items-center'>
+					{data?.data?.map((i) => (
+						<div
+							key={i.stockInId}
+							className='flex justify-between items-center'
+						>
 							<div className='flex gap-2 items-center'>
-								<PhotoUrl url='' style={{img: 'w-10 h-10'}} />
-								<p className='text-ink-secondary'>Toko sinar</p>
+								<PhotoUrl
+									url={i.photoUrl || ''}
+									style={{ img: 'w-14 h-14 rounded-md' }}
+								/>
+								<div>
+									<p className='text-ink-secondary'>{i.name}</p>
+								</div>
 							</div>
-							<p className='text-ink-light'>12/10/2024</p>
+							<Link
+								to={`${paths.inventoryMasterdataSupplier}/${i.supplierId}`}
+								className='flex gap-2 items-center'
+							>
+								<span className='px-0.5'>Lihat</span>
+								<ExternalLink size={16} />
+							</Link>
 						</div>
 					))}
 				</div>
 			</ScrollArea>
-		</Card>
+		</CardV1>
 	)
 }
