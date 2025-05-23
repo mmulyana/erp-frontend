@@ -43,7 +43,7 @@ export default function ModalAddItem() {
 		name: '',
 		photoUrl: undefined,
 		brandId: null,
-		locationId: null,
+		warehouseId: null,
 		description: '',
 		minimum: 1,
 		unitOfMeasurement: '',
@@ -167,7 +167,7 @@ export default function ModalAddItem() {
 								)}
 							/>
 							<FormField
-								name='locationId'
+								name='warehouseId'
 								control={form.control}
 								render={({ field }) => (
 									<FormItem className='flex flex-col'>
