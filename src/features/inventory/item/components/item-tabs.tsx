@@ -14,31 +14,20 @@ type props = {
 }
 export default function ItemTabs({ id }: props) {
 	return (
-		<Tabs defaultValue='tab-1'>
+		<Tabs defaultValue='Stok masuk'>
 			<TabsList className='border-b w-full'>
-				<TabsTrigger
-					value='tab-1'
-					className='bg-muted pt-0 pb-3 data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
-				>
-					<p>Stok Masuk</p>
-					<div className='hidden group-data-[state=active]:block w-full h-[3px] bg-brand absolute bottom-0'></div>
-				</TabsTrigger>
-				<TabsTrigger
-					value='tab-2'
-					className='bg-muted pt-0 pb-3 data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
-				>
-					<p>Stok Keluar</p>
-					<div className='hidden group-data-[state=active]:block w-full h-[3px] bg-brand absolute bottom-0'></div>
-				</TabsTrigger>
-				<TabsTrigger
-					value='tab-3'
-					className='bg-muted pt-0 pb-3 data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
-				>
-					<p>Peminjaman</p>
-					<div className='hidden group-data-[state=active]:block w-full h-[3px] bg-brand absolute bottom-0'></div>
-				</TabsTrigger>
+				{['Stok masuk', 'Stok keluar', 'Peminjaman'].map((i) => (
+					<TabsTrigger
+						value={i}
+						key={i}
+						className='!bg-transparent pt-0 pb-3 data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
+					>
+						<p className='text-base'>{i}</p>
+						<div className='hidden group-data-[state=active]:block w-full h-[3px] bg-brand absolute bottom-0'></div>
+					</TabsTrigger>
+				))}
 			</TabsList>
-			<TabsContent value='tab-1'>
+			<TabsContent value='Stok masuk'>
 				<div className='pt-6'>
 					<div className='flex justify-between items-start md:items-center'>
 						<div className='flex gap-2 items-center'>
@@ -70,7 +59,7 @@ export default function ItemTabs({ id }: props) {
 					</ScrollArea>
 				</div>
 			</TabsContent>
-			<TabsContent value='tab-2'>
+			<TabsContent value='Stok keluar'>
 				<div className='p-6'></div>
 			</TabsContent>
 		</Tabs>
