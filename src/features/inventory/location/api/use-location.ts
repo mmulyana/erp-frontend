@@ -17,7 +17,7 @@ export const useLocation = (params?: Params) => {
 			const { data } = await http(`${urls.location}/${params?.id}`, {
 				params,
 			})
-			return data.data
+			return data
 		},
 		enabled:
 			params?.id !== null && params?.id !== undefined && params?.id !== '',
