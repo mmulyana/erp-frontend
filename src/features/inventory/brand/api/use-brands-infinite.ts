@@ -1,13 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { BrandInventory } from '@/shared/types/api'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import { Pagination } from '@/shared/types'
 import http from '@/shared/utils/http'
-import { Brand } from '../types'
 
 type NormalizedResponse = {
-	data: Brand[]
+	data: BrandInventory[]
 	nextPage?: number
 }
 
