@@ -36,4 +36,5 @@ export const urls = {
 	stockIn: api + '/stock-in',
 	stockOut: api + '/stock-out',
 	ledger: api + '/ledger',
+	loan: api + '/loan',
 }

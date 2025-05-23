@@ -347,6 +347,10 @@ export type Loan = {
 	PhotoUrlOut?: string
 	PhotoUrlIn?: string
 	projectId: string
+
+	item: Inventory
+	borrower: User
+	project: Project
 }
 
 export type Supplier = {

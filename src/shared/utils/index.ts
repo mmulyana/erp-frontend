@@ -59,7 +59,6 @@ export function toFormData(payload: Record<string, any>): FormData {
 		} else if (value instanceof Date) {
 			formData.append(key, value.toISOString())
 		} else if (
-			value === null ||
 			typeof value === 'string' ||
 			typeof value === 'number' ||
 			typeof value === 'boolean'

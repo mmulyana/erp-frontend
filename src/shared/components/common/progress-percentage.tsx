@@ -22,7 +22,7 @@ export default function ProgressPercentage({
 					style={{ width: `${percentage}%` }}
 				></div>
 			</div>
-			<p className='text-ink-secondary w-9'>{percentage}%</p>
+			<p className='text-ink-primary w-9 text-right'>{percentage}%</p>
 		</div>
 	)
 }
