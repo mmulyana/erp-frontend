@@ -8,11 +8,14 @@ import { format } from 'date-fns'
 import ModalDetailLocation from '@/features/inventory/location/components/modal-detail-location'
 import { useLocation } from '@/features/inventory/location/api/use-location'
 import { useItems } from '@/features/inventory/item/api/use-items'
+import { statusItem } from '@/features/inventory/item/constant'
 
 import FilterButton from '@/shared/components/common/filter-button'
+import StatusBadge from '@/shared/components/common/status-badge'
 import PhotoUrl from '@/shared/components/common/photo-url'
 import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
+
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import { Button } from '@/shared/components/ui/button'
@@ -85,17 +88,19 @@ export default function LocationDetail() {
 			header: 'Merek',
 			cell: ({ row }) => row.original.brand.name,
 		},
+		{
+			id: 'status',
+			header: 'Status',
+			accessorKey: 'status',
+			cell: ({ row }) => (
+				<StatusBadge options={statusItem} value={row.original.status} />
+			),
+		},
 	]
 
 	return (
 		<DetailLayout
 			links={linkMemo}
-			buttonAction={
-				<Button variant='outline' onClick={() => setOpen(true)}>
-					<Pencil size={16} className='text-ink-light' />
-					<span className='px-1 text-ink-primary'>Ubah</span>
-				</Button>
-			}
 			style={{
 				header: 'w-[940px]',
 			}}
@@ -105,15 +110,20 @@ export default function LocationDetail() {
 					title='Gudang'
 					icon={<Warehouse size={20} className='text-ink-primary' />}
 					style={{
-						content: 'grid grid-cols-[80px_1fr] gap-4 pt-2',
+						content: 'pt-2',
 					}}
+					action={
+						<Button variant='outline' onClick={() => setOpen(true)}>
+							<Pencil size={16} className='text-ink-light' />
+							<span className='px-1 text-ink-primary'>Ubah</span>
+						</Button>
+					}
 				>
-					<PhotoUrl url='' style={{ img: 'h-20 w-20' }} />
 					<div className='flex flex-col'>
-						<p className='text-ink-primary text-xl mb-1 font-medium'>
+						<p className='text-ink-primary text-xl mb-2 font-medium'>
 							{data?.data?.name}
 						</p>
-						<p className='text-ink-primary/50 mb-0.5'>Dibuat sejak</p>
+						<p className='text-ink-primary/50 mb-0.5 text-sm'>Dibuat sejak</p>
 						<div className='flex gap-1 items-center'>
 							<CalendarDays size={16} className='text-ink-light text-sm' />
 							{data?.data?.createdAt && (
@@ -131,6 +141,7 @@ export default function LocationDetail() {
 					icon={<Package size={20} className='text-ink-primary' />}
 					action={<FilterButton></FilterButton>}
 					style={{ content: 'pt-4' }}
+					count={data?.data?._count.inventories}
 				>
 					<DataTable
 						columns={column}

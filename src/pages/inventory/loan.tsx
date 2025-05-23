@@ -9,7 +9,7 @@ import SearchV3 from '@/shared/components/common/search-v3'
 export default function Loan() {
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
-			<div className='h-fit w-[320px] max-w-full'>
+			<div className='h-fit w-[380px] max-w-full'>
 				<PieLoan />
 			</div>
 			<HeadPage
