@@ -76,9 +76,9 @@ export default function ProjectAttachment({
 				}
 			>
 				<ScrollArea className='h-[280px] pt-2 '>
-					<div className='flex flex-col gap-4'>
-						{anyAttachment ? (
-							attachments?.map((i, index) => (
+					{anyAttachment ? (
+						<div className='flex flex-col gap-4'>
+							{attachments?.map((i, index) => (
 								<div key={index} className='flex justify-between items-center'>
 									<div className='flex gap-2 items-center'>
 										<FileText className='text-[#565659]' size={28} />
@@ -108,11 +108,11 @@ export default function ProjectAttachment({
 										<Download size={20} />
 									</Link>
 								</div>
-							))
-						) : (
-							<EmptyState className='h-full w-full' />
-						)}
-					</div>
+							))}
+						</div>
+					) : (
+						<EmptyState className='h-full w-full' />
+					)}
 				</ScrollArea>
 				{showButton && <ModalAttachment />}
 			</CardV1>

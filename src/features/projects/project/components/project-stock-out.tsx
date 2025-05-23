@@ -114,7 +114,8 @@ function ModalAddStockOut({ id }: props & { callback?: () => void }) {
 	const form = useForm<StockOutForm>({
 		defaultValues: {
 			projectId: id,
-			items: [{ productId: '', quantity: 0, price: 0 }],
+			date: new Date(),
+			items: [{ itemId: '', quantity: 0, price: 0 }],
 		},
 	})
 
@@ -128,7 +129,7 @@ function ModalAddStockOut({ id }: props & { callback?: () => void }) {
 			{
 				date: payload.date,
 				items: payload.items.map((i) => ({
-					itemId: i.productId,
+					itemId: i.itemId,
 					quantity: i.quantity,
 					unitPrice: i.price,
 				})),
@@ -138,7 +139,7 @@ function ModalAddStockOut({ id }: props & { callback?: () => void }) {
 			},
 			{
 				onSuccess: handleFormSuccess(handleSuccess),
-				onError: handleFormError<StockOutForm>(form),
+				onError: handleFormError(form),
 			}
 		)
 	}
