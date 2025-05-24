@@ -33,7 +33,7 @@ const links: Link[] = [
 export default function DetailItem() {
 	const { id } = useParams()
 
-	const { data, isPending } = useItem({ id })
+	const { data } = useItem({ id })
 
 	const dynamicLink = useDynamicLinks({
 		baseLinks: links,
