@@ -1,20 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { NormalizedResponse } from '@/shared/types'
+import { NormalizedResponse, Pagination } from '@/shared/types'
+import { CompanyClient } from '@/shared/types/api'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
-import { Company } from '../types'
-
-type Params = {
-	search?: string
-	limit?: number
-	page?: string
-}
-
-export function useCompanyInfinite(params: Params) {
-	return useInfiniteQuery<NormalizedResponse<Company>>({
+export function useCompanyInfinite(params: Pagination) {
+	return useInfiniteQuery<NormalizedResponse<CompanyClient>>({
 		queryKey: [keys.companyClientInfinite, params],
 		queryFn: async ({ pageParam = 1 }) => {
 			const { data } = await http(urls.companyClient + '/data/infinite', {
