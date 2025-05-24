@@ -1,6 +1,8 @@
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Pencil } from 'lucide-react'
 import { atom, useAtom } from 'jotai'
-import { useEffect } from 'react'
 
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { ImageUpload } from '@/shared/components/common/image-upload'
@@ -15,6 +17,7 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogTitle,
+	DialogTrigger,
 } from '@/shared/components/ui/dialog'
 import {
 	Form,
@@ -25,15 +28,15 @@ import {
 	FormMessage,
 } from '@/shared/components/ui/form'
 
+import ModalDeleteCompany from './modal-delete-company'
 import { useDestroyPhotoCompany } from '../api/use-destroy-photo-company'
 import { useUpdateCompany } from '../api/use-update-company'
-import ModalDeleteCompany from './modal-delete-company'
 import { useCompany } from '../api/use-company'
 import { CompanyForm } from '../types'
 
-export const atomModalCompany = atom<{ id: string; open: boolean } | null>(null)
 export default function ModalDetailCompany() {
-	const [modal, setModal] = useAtom(atomModalCompany)
+	const { id } = useParams()
+	const [open, setOpen] = useState(false)
 
 	const defaultValues: CompanyForm = {
 		name: '',
@@ -43,7 +46,7 @@ export default function ModalDetailCompany() {
 		photoUrl: null,
 	}
 
-	const { data } = useCompany({ id: modal?.id })
+	const { data } = useCompany({ id })
 	const { mutate, isPending } = useUpdateCompany()
 	const { mutate: destroyPhoto } = useDestroyPhotoCompany()
 
@@ -52,13 +55,11 @@ export default function ModalDetailCompany() {
 	})
 	const photoWatch = form.watch('photoUrl')
 
-	const onClose = () => setModal(null)
-
 	const submit = (payload: CompanyForm) => {
-		if (!modal?.id) return
+		if (!id) return
 
 		if (payload.photoUrl === null) {
-			destroyPhoto({ id: modal?.id })
+			destroyPhoto({ id })
 		}
 		const data = payload
 		if (typeof data.photoUrl === 'string') {
@@ -66,9 +67,11 @@ export default function ModalDetailCompany() {
 		}
 
 		mutate(
-			{ ...data, id: modal?.id },
+			{ ...data, id },
 			{
-				onSuccess: handleFormSuccess(onClose),
+				onSuccess: handleFormSuccess(setOpen, () => {
+					form.reset(defaultValues)
+				}),
 				onError: handleFormError<CompanyForm>(form),
 			}
 		)
@@ -93,14 +96,13 @@ export default function ModalDetailCompany() {
 	}, [open])
 
 	return (
-		<Dialog
-			open={modal?.open}
-			onOpenChange={(open) => {
-				if (modal) {
-					setModal({ ...modal, open })
-				}
-			}}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<Button variant='outline'>
+					<Pencil size={16} />
+					<span className='px-0.5'>Edit</span>
+				</Button>
+			</DialogTrigger>
 			<DialogContent className='p-6'>
 				<DialogTitle>Perusahaan</DialogTitle>
 				<DialogDescription>

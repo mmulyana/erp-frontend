@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Plus } from 'lucide-react'
+import { useState } from 'react'
 
-import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import ButtonSubmit from '@/shared/components/common/button-submit'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import {
@@ -24,18 +24,18 @@ import {
 	FormMessage,
 } from '@/shared/components/ui/form'
 
+import CompanyCombobox from '../../company/components/company-combobox'
 import { useCreateClient } from '../api/use-create-client'
 import { ClientForm } from '../types'
-import CompanyCombobox from '../../company/components/company-combobox'
 
-export default function ModalAddClient() {
+export default function ModalAddClient({ companyId }: { companyId?: string }) {
 	const [open, setOpen] = useState(false)
 
 	const defaultValues = {
 		name: '',
 		email: '',
 		phone: '',
-		companyId: null,
+		companyId: companyId || null,
 		position: '',
 	}
 
@@ -46,16 +46,12 @@ export default function ModalAddClient() {
 
 	const submit = (payload: ClientForm) => {
 		mutate(payload, {
-			onSuccess: handleFormSuccess(setOpen),
+			onSuccess: handleFormSuccess(setOpen, () => {
+				form.reset(defaultValues)
+			}),
 			onError: handleFormError<ClientForm>(form),
 		})
 	}
-
-	useEffect(() => {
-		if (!open) {
-			form.reset(defaultValues)
-		}
-	}, [open])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -135,6 +131,7 @@ export default function ModalAddClient() {
 									<FormLabel>Perusahaan</FormLabel>
 									<FormControl>
 										<CompanyCombobox
+											defaultValue={field.value || ''}
 											onSelect={(e) => field.onChange(e)}
 											style={{ value: 'bg-surface' }}
 										/>

@@ -1,6 +1,7 @@
-import { useAtom } from 'jotai'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/shared/components/ui/button'
+import { paths } from '@/shared/constants/paths'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -14,12 +15,12 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteCompany } from '../api/use-delete-company'
-import { atomModalCompany } from './modal-detail-company'
 
 export default function ModalDeleteCompany() {
-	const [modal, setModal] = useAtom(atomModalCompany)
+	const navigate = useNavigate()
 
 	const { mutate } = useDeleteCompany()
+	const { id } = useParams()
 
 	return (
 		<AlertDialog>
@@ -47,12 +48,14 @@ export default function ModalDeleteCompany() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (modal?.id) {
+							if (id) {
 								mutate(
-									{ id: modal.id },
+									{ id },
 									{
 										onSuccess: () => {
-											setModal(null)
+											navigate(paths.projectMasterdataClientCompany, {
+												replace: true,
+											})
 										},
 									}
 								)
