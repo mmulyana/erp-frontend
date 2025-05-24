@@ -352,8 +352,8 @@ export type Loan = {
 	returnDate?: Date
 	note?: string
 	status: LoanStatus
-	PhotoUrlOut?: string
-	PhotoUrlIn?: string
+	photoUrlOut?: string
+	photoUrlIn?: string
 	projectId: string
 
 	item: Inventory
