@@ -1,15 +1,15 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { useSetAtom } from 'jotai'
+import { useNavigate } from 'react-router-dom'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
-
-import { atomModalCompany } from './modal-detail-company'
-import { useCompanies } from '../api/use-companies'
 import { CompanyClient } from '@/shared/types/api'
 
+import { useCompanies } from '../api/use-companies'
+import { paths } from '@/shared/constants/paths'
+
 export default function TableCompany() {
-	const setModal = useSetAtom(atomModalCompany)
+	const navigate = useNavigate()
 	const { limit, page, q } = usePagination()
 
 	const { isLoading, data } = useCompanies({
@@ -56,7 +56,9 @@ export default function TableCompany() {
 				totalPages={data?.data.total_pages}
 				withPagination
 				nonClickableColumns={[]}
-				onCellClick={({ id }) => setModal({ id, open: true })}
+				onCellClick={({ id }) =>
+					navigate(`${paths.projectMasterdataClientCompany}/${id}`)
+				}
 			/>
 		</>
 	)
