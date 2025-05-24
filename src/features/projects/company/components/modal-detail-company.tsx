@@ -29,7 +29,6 @@ import {
 } from '@/shared/components/ui/form'
 
 import ModalDeleteCompany from './modal-delete-company'
-import { useDestroyPhotoCompany } from '../api/use-destroy-photo-company'
 import { useUpdateCompany } from '../api/use-update-company'
 import { useCompany } from '../api/use-company'
 import { CompanyForm } from '../types'
@@ -51,7 +50,6 @@ export default function ModalDetailCompany() {
 
 	const { data } = useCompany({ id })
 	const { mutate, isPending } = useUpdateCompany()
-	const { mutate: destroyPhoto } = useDestroyPhotoCompany()
 
 	const form = useForm<CompanyForm>({
 		defaultValues,
