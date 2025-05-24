@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom'
 import { House } from 'lucide-react'
 
+import ModalReturnLoan from '@/features/inventory/loan/components/modal-return-loan'
 import LoanEvidence from '@/features/inventory/loan/components/loan-evidence'
 import LoanInfo from '@/features/inventory/loan/components/loan-info'
 import { useLoan } from '@/features/inventory/loan/api/use-loan'
 
 import DetailLayout from '@/shared/layout/detail-layout'
-import { Button } from '@/shared/components/ui/button'
 import { useDynamicLinks } from '@/shared/utils/link'
 import { paths } from '@/shared/constants/paths'
 import { Link } from '@/shared/types'
@@ -46,14 +46,7 @@ export default function LoanDetail() {
 		<DetailLayout
 			links={dynamicLink}
 			style={{ header: 'w-[600px]' }}
-			buttonAction={
-				<Button
-					variant='secondary'
-					className='text-ink-primary px-3 bg-amber-400 hover:bg-amber-500'
-				>
-					Kembalikan
-				</Button>
-			}
+			buttonAction={<ModalReturnLoan id={id} />}
 		>
 			<div className='space-y-8 w-[600px] max-w-full px-4 xl:px-0 mx-auto pt-6 pb-10'>
 				<LoanInfo id={id} />
