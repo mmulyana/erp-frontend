@@ -28,7 +28,7 @@ const links: Link[] = [
 		hideName: true,
 	},
 	{
-		name: 'Gudang',
+		name: 'Merek',
 		path: paths.inventoryMasterdataBrand,
 	},
 	{
@@ -101,7 +101,7 @@ export default function BrandDetail() {
 		>
 			<div className='w-[940px] mx-auto pt-6 max-w-full px-4 md:px-0 grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6 items-start'>
 				<CardV1
-					title='Gudang'
+					title='Merek'
 					icon={<Tag size={20} className='text-ink-primary' />}
 					style={{
 						content: 'grid grid-cols-[80px_1fr] gap-4 pt-2',

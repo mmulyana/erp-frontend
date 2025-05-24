@@ -10,14 +10,16 @@ import { Client } from '@/shared/types/api'
 
 import { useClients } from '../api/use-clients'
 
-export default function TableClient() {
+export default function TableClient({ companyId }: { companyId?: string }) {
 	const navigate = useNavigate()
-	const { limit, page, q } = usePagination()
+	const { limit, page, q, sortOrder } = usePagination()
 
 	const { isLoading, data } = useClients({
 		limit,
 		page,
 		search: q,
+		sortOrder,
+		companyId,
 	})
 
 	// COLUMNS EMPLOYEE
@@ -50,7 +52,7 @@ export default function TableClient() {
 							url={row.original.company?.photoUrl || ''}
 							style={{ img: 'h-8 w-8', icon: 'h-5 w-5' }}
 						/>
-						<p className='text-ink-primary'>{row.original.company?.name}</p>
+						<p className='text-ink-primary text-nowrap'>{row.original.company?.name}</p>
 					</div>
 				)
 			},

@@ -4,7 +4,6 @@ import { DefaultLayout } from '@/shared/layout/default-layout'
 import HeadPage from '@/shared/components/common/head-page'
 import SearchV3 from '@/shared/components/common/search-v3'
 
-import ModalDetailCompany from '@/features/projects/company/components/modal-detail-company'
 import ModalAddCompany from '@/features/projects/company/components/modal-add-company'
 import TableCompany from '@/features/projects/company/components/table-company'
 
@@ -26,7 +25,6 @@ export default function Company() {
 				</div>
 				<TableCompany />
 			</div>
-			<ModalDetailCompany />
 		</DefaultLayout>
 	)
 }

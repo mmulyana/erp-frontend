@@ -33,8 +33,11 @@ import { useDestroyPhotoCompany } from '../api/use-destroy-photo-company'
 import { useUpdateCompany } from '../api/use-update-company'
 import { useCompany } from '../api/use-company'
 import { CompanyForm } from '../types'
+import { useQueryClient } from '@tanstack/react-query'
+import { keys } from '@/shared/constants/keys'
 
 export default function ModalDetailCompany() {
+	const queryClient = useQueryClient()
 	const { id } = useParams()
 	const [open, setOpen] = useState(false)
 
@@ -58,19 +61,12 @@ export default function ModalDetailCompany() {
 	const submit = (payload: CompanyForm) => {
 		if (!id) return
 
-		if (payload.photoUrl === null) {
-			destroyPhoto({ id })
-		}
-		const data = payload
-		if (typeof data.photoUrl === 'string') {
-			delete data.photoUrl
-		}
-
 		mutate(
-			{ ...data, id },
+			{ ...payload, id },
 			{
 				onSuccess: handleFormSuccess(setOpen, () => {
 					form.reset(defaultValues)
+					queryClient.invalidateQueries({ queryKey: [keys.client] })
 				}),
 				onError: handleFormError<CompanyForm>(form),
 			}

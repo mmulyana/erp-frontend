@@ -12,6 +12,7 @@ import { useTransactions } from '@/features/hris/cash-advance/api/use-transactio
 import HeadPage from '@/shared/components/common/head-page'
 import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
+
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
@@ -27,7 +28,7 @@ const links: Link[] = [
 	{
 		icon: <House size={20} />,
 		name: 'Dashboard',
-		path: paths.inventory,
+		path: paths.hris,
 		hideName: true,
 	},
 	{

@@ -67,14 +67,11 @@ export default function DetailCompany() {
 					<div className='p-6 rounded-xl bg-white border border-border space-y-6'>
 						<div className='flex items-center gap-4 flex-wrap'>
 							<SearchV3 />
-							<FilterButton
-								style={{ trigger: 'ml-0 md:ml-auto' }}
-							></FilterButton>
-							<SortButton>
+							<SortButton style={{ trigger: 'ml-0 md:ml-auto' }}>
 								<CreatedSelect />
 							</SortButton>
 						</div>
-						<TableClient />
+						<TableClient companyId={id} />
 					</div>
 				</div>
 			</div>
