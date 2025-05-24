@@ -85,12 +85,6 @@ export default function ModalDetailCompany() {
 		}
 	}, [data])
 
-	useEffect(() => {
-		if (!open) {
-			form.reset(defaultValues)
-		}
-	}, [open])
-
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>

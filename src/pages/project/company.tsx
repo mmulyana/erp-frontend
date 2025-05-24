@@ -6,6 +6,7 @@ import SearchV3 from '@/shared/components/common/search-v3'
 
 import ModalAddCompany from '@/features/projects/company/components/modal-add-company'
 import TableCompany from '@/features/projects/company/components/table-company'
+import CreatedSelect from '@/shared/components/common/select/created-select'
 
 export default function Company() {
 	return (
@@ -19,8 +20,9 @@ export default function Company() {
 				<div className='flex justify-between items-center'>
 					<SearchV3 />
 					<div className='flex gap-4 items-center'>
-						<FilterButton></FilterButton>
-						<SortButton></SortButton>
+						<SortButton>
+							<CreatedSelect />
+						</SortButton>
 					</div>
 				</div>
 				<TableCompany />

@@ -7,15 +7,17 @@ import { CompanyClient } from '@/shared/types/api'
 
 import { useCompanies } from '../api/use-companies'
 import { paths } from '@/shared/constants/paths'
+import PhotoUrl from '@/shared/components/common/photo-url'
 
 export default function TableCompany() {
 	const navigate = useNavigate()
-	const { limit, page, q } = usePagination()
+	const { limit, page, q, sortOrder } = usePagination()
 
 	const { isLoading, data } = useCompanies({
 		limit,
 		page,
 		search: q,
+		sortOrder,
 	})
 
 	// COLUMNS EMPLOYEE
@@ -23,7 +25,15 @@ export default function TableCompany() {
 		{
 			id: 'name',
 			accessorKey: 'name',
-			header: 'Nama',
+			cell: ({ row }) => (
+				<div className='flex gap-2 items-center py-2'>
+					<PhotoUrl
+						url={row.original?.photoUrl || ''}
+						style={{ img: 'h-8 w-8', icon: 'h-5 w-5' }}
+					/>
+					<p className='text-ink-primary text-nowrap'>{row.original?.name}</p>
+				</div>
+			),
 		},
 		{
 			accessorKey: 'phone',
