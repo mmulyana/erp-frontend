@@ -75,7 +75,7 @@ export default function DateRangePicker({
 								if (date && startDate && date < startDate) return
 								setDates({ endDate: date ?? undefined })
 							}}
-							disabled={(date) => date > new Date()}
+							disabled={() => false}
 							weekStartsOn={1}
 							locale={id}
 						/>
