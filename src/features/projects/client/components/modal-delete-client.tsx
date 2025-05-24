@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
@@ -15,10 +15,13 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteClient } from '../api/use-delete-client'
+import { paths } from '@/shared/constants/paths'
 
 export default function ModalDeleteClient() {
-	const { id } = useParams()
+	const navigate = useNavigate()
+
 	const { mutate } = useDeleteClient()
+	const { id } = useParams()
 
 	const [open, setOpen] = useState(false)
 
@@ -52,6 +55,9 @@ export default function ModalDeleteClient() {
 									{
 										onSuccess: () => {
 											setOpen(false)
+											navigate(paths.projectMasterdataClient, {
+												replace: true,
+											})
 										},
 									}
 								)

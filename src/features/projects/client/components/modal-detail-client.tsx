@@ -1,6 +1,7 @@
+import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { atom, useAtom } from 'jotai'
+import { Pencil } from 'lucide-react'
 
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import ButtonSubmit from '@/shared/components/common/button-submit'
@@ -13,6 +14,7 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogTitle,
+	DialogTrigger,
 } from '@/shared/components/ui/dialog'
 import {
 	Form,
@@ -24,14 +26,19 @@ import {
 } from '@/shared/components/ui/form'
 
 import CompanyCombobox from '../../company/components/company-combobox'
-import { useUpdateClient } from '../api/use-update-client'
 import ModalDeleteClient from './modal-delete-client'
+
+import { useUpdateClient } from '../api/use-update-client'
 import { useClient } from '../api/use-client'
 import { ClientForm } from '../types'
 
-export const atomModalClient = atom<{ open: boolean; id: string } | null>(null)
-export default function ModalDetailClient() {
-	const [modal, setModal] = useAtom(atomModalClient)
+type props = {
+	variant: 'info' | 'company'
+}
+export default function ModalDetailClient({ variant }: props) {
+	const { id } = useParams()
+
+	const [open, setOpen] = useState(false)
 
 	const defaultValues = {
 		name: '',
@@ -41,22 +48,100 @@ export default function ModalDetailClient() {
 		position: '',
 	}
 
-	const { data } = useClient({ id: modal?.id })
+	const { data } = useClient({ id })
 	const { mutate, isPending } = useUpdateClient()
 
 	const form = useForm<ClientForm>({
 		defaultValues,
 	})
 
-	const onClose = () => setModal(null)
+	const FormType = {
+		info: (
+			<div className='space-y-4'>
+				<FormField
+					control={form.control}
+					name='name'
+					render={({ field }) => (
+						<FormItem className='flex flex-col'>
+							<FormLabel>Nama</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name='email'
+					render={({ field }) => (
+						<FormItem className='flex flex-col'>
+							<FormLabel>Email</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name='phone'
+					render={({ field }) => (
+						<FormItem className='flex flex-col'>
+							<FormLabel>Nomor telepon</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name='position'
+					render={({ field }) => (
+						<FormItem className='flex flex-col'>
+							<FormLabel>Jabatan</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			</div>
+		),
+		company: (
+			<div className='space-y-4'>
+				<FormField
+					control={form.control}
+					name='companyId'
+					render={({ field }) => (
+						<FormItem className='flex flex-col'>
+							<FormLabel>Perusahaan</FormLabel>
+							<FormControl>
+								<CompanyCombobox
+									onSelect={(e) => field.onChange(e)}
+									style={{ value: 'bg-surface' }}
+									defaultValue={field.value ?? ''}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			</div>
+		),
+	}
 
 	const submit = (payload: ClientForm) => {
-		if (!modal?.id) return
+		if (!id) return
 
 		mutate(
-			{ ...payload, id: modal.id },
+			{ ...payload, id },
 			{
-				onSuccess: handleFormSuccess(onClose),
+				onSuccess: handleFormSuccess(setOpen),
 				onError: handleFormError<ClientForm>(form),
 			}
 		)
@@ -74,101 +159,22 @@ export default function ModalDetailClient() {
 		}
 	}, [data])
 
-	useEffect(() => {
-		if (!open) {
-			form.reset(defaultValues)
-		}
-	}, [open])
-
 	return (
-		<Dialog
-			open={modal?.open}
-			onOpenChange={(open) => {
-				if (modal) {
-					setModal({ ...modal, open })
-				}
-			}}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<Button variant='outline'>
+					<Pencil size={16} />
+					<span className='px-0.5'>Edit</span>
+				</Button>
+			</DialogTrigger>
 			<DialogContent className='p-6'>
 				<DialogTitle>Klien</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
 				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(submit)}
-						className='flex gap-4 flex-col pt-4'
-					>
-						<FormField
-							control={form.control}
-							name='name'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Nama</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='email'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='phone'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Nomor telepon</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='position'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Jabatan</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='companyId'
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Perusahaan</FormLabel>
-									<FormControl>
-										<CompanyCombobox
-											onSelect={(e) => field.onChange(e)}
-											style={{ value: 'bg-surface' }}
-											defaultValue={field.value ?? ''}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
+					<form onSubmit={form.handleSubmit(submit)} className='pt-4'>
+						{FormType[variant]}
 						<DialogFooter>
 							<div className='flex justify-between w-full pt-4'>
 								<ModalDeleteClient />
