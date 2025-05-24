@@ -96,7 +96,7 @@ function ModalEditLoan({ id }: { id?: string }) {
 
 	const { data } = useLoan({ id })
 
-	const { mutate } = useUpdateLoan()
+	const { mutate, isPending } = useUpdateLoan()
 	const form = useForm<loanForm>({
 		defaultValues: {
 			projectId: id,
@@ -105,7 +105,6 @@ function ModalEditLoan({ id }: { id?: string }) {
 
 	const submit = (payload: loanForm) => {
 		if (!id) return
-		console.log('payload', payload)
 		mutate(
 			{
 				id,
@@ -153,6 +152,7 @@ function ModalEditLoan({ id }: { id?: string }) {
 					onSubmit={submit}
 					variant='edit'
 					projectId={id}
+					isPending={isPending}
 				/>
 			</DialogContent>
 		</Dialog>
