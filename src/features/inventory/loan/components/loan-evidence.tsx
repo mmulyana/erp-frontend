@@ -11,7 +11,7 @@ import { useLoan } from '../api/use-loan'
 export default function LoanEvidence({ id }: { id?: string }) {
 	const { data } = useLoan({ id })
 
-	const photoUrlIn = data?.data?.photoUrlIn
+	const { photoUrlIn, photoUrlOut } = data?.data || {}
 
 	return (
 		<CardV1
@@ -33,6 +33,33 @@ export default function LoanEvidence({ id }: { id?: string }) {
 							</div>
 							<Link
 								to={`${baseUrl}/${photoUrlIn}`}
+								download
+								target='_blank'
+								className='flex gap-2 items-center'
+							>
+								<span className='px-0.5'>Unduh</span>
+								<DownloadIcon />
+							</Link>
+						</div>
+					) : (
+						<EmptyState />
+					)}
+				</div>
+			</div>
+			<div>
+				<p className='text-ink-primary mb-2 font-medium'>Bukti barang masuk</p>
+				<div className='space-y-4'>
+					{photoUrlOut ? (
+						<div className='flex justify-between items-center'>
+							<div className='flex gap-2 items-center'>
+								<PhotoUrl
+									url={photoUrlOut}
+									style={{ img: 'h-16 w-16 rounded-md' }}
+								/>
+								<p>{photoUrlOut}</p>
+							</div>
+							<Link
+								to={`${baseUrl}/${photoUrlOut}`}
 								download
 								target='_blank'
 								className='flex gap-2 items-center'
