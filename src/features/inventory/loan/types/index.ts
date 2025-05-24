@@ -4,6 +4,6 @@ export type loanForm = {
 	inventoryId: string
 	projectId: string
 	note?: string
-	filephotoUrlIn: File[] | null
-	filephotoUrlOut: File[] | null
+	photoUrlIn?: string | File | null
+	photoUrlOut?: string | File | null
 }
