@@ -27,6 +27,7 @@ const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
 const Projects = lazy(() => import('./pages/project/projects'))
 const ProjectNew = lazy(() => import('./pages/project/new-project'))
 const Client = lazy(() => import('./pages/project/client'))
+const ClientDetail = lazy(() => import('./pages/project/detail-client'))
 const Company = lazy(() => import('./pages/project/company'))
 const DetailProject = lazy(() => import('./pages/project/detail-project'))
 
@@ -78,6 +79,10 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.projectMasterdataClient,
 		component: <Client />,
+	},
+	{
+		path: paths.projectMasterdataClientDetail,
+		component: <ClientDetail />,
 	},
 	{
 		path: paths.projectMasterdataClientCompany,
