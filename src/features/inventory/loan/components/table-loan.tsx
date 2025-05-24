@@ -1,18 +1,19 @@
+import { Link, useNavigate } from 'react-router-dom'
 import { ColumnDef } from '@tanstack/react-table'
+import { ExternalLink } from 'lucide-react'
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 
+import PhotoUrl from '@/shared/components/common/photo-url'
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
-import PhotoUrl from '@/shared/components/common/photo-url'
+import { paths } from '@/shared/constants/paths'
 import { Loan } from '@/shared/types/api'
 
 import { useLoans } from '../api/use-loans'
-import { Link } from 'react-router-dom'
-import { paths } from '@/shared/constants/paths'
-import { ExternalLink } from 'lucide-react'
 
 export default function TableLoan() {
+	const navigate = useNavigate()
 	const { q, limit, page } = usePagination()
 	const { data } = useLoans({
 		page,
@@ -91,6 +92,8 @@ export default function TableLoan() {
 			withPagination
 			totalItems={data?.data?.total}
 			totalPages={data?.data?.total_pages}
+			autoRedirect
+			onCellClick={({ id }) => navigate(`${paths.inventoryStockLoan}/${id}`)}
 		/>
 	)
 }

@@ -20,8 +20,8 @@ import {
 	DialogTrigger,
 } from '@/shared/components/ui/dialog'
 
-import { useUpdateLoan } from '../api/use-update-loan'
 import FormCreateLoan from './form-create-loan'
+import { useUpdateLoan } from '../api/use-update-loan'
 import { useLoan } from '../api/use-loan'
 import { statusLoan } from '../constant'
 import { loanForm } from '../types'
