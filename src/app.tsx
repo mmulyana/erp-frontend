@@ -27,8 +27,9 @@ const ProjectDashboard = lazy(() => import('./pages/project/dashboard'))
 const Projects = lazy(() => import('./pages/project/projects'))
 const ProjectNew = lazy(() => import('./pages/project/new-project'))
 const Client = lazy(() => import('./pages/project/client'))
-const ClientDetail = lazy(() => import('./pages/project/detail-client'))
 const Company = lazy(() => import('./pages/project/company'))
+const DetailClient = lazy(() => import('./pages/project/detail-client'))
+const DetailCompany = lazy(() => import('./pages/project/detail-company'))
 const DetailProject = lazy(() => import('./pages/project/detail-project'))
 
 // INVENTORY
@@ -82,11 +83,15 @@ const routes: RoutesConfig[] = [
 	},
 	{
 		path: paths.projectMasterdataClientDetail,
-		component: <ClientDetail />,
+		component: <DetailClient />,
 	},
 	{
 		path: paths.projectMasterdataClientCompany,
 		component: <Company />,
+	},
+	{
+		path: paths.projectMasterdataClientCompanyDetail,
+		component: <DetailCompany />,
 	},
 	{
 		path: paths.projectNew,
