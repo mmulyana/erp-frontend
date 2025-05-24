@@ -148,7 +148,7 @@ export default function ProjectLoan({ id }: props) {
 
 function ModalAddStockOut({ id, callback }: props & { callback?: () => void }) {
 	const [open, setOpen] = useState(false)
-	const { mutate } = useCreateLoan()
+	const { mutate, isPending } = useCreateLoan()
 	const form = useForm<loanForm>({
 		defaultValues: {
 			projectId: id,
@@ -186,6 +186,7 @@ function ModalAddStockOut({ id, callback }: props & { callback?: () => void }) {
 					projectId={id}
 					form={form}
 					onSubmit={submit}
+					isPending={isPending}
 				/>
 			</DialogContent>
 		</Dialog>
