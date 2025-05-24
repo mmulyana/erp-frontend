@@ -1,9 +1,20 @@
+import { Calendar, ExternalLink, Plus } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { format } from 'date-fns'
+import { useState } from 'react'
+
+import FormCreateLoan from '@/features/inventory/loan/components/form-create-loan'
 import { useCreateLoan } from '@/features/inventory/loan/api/use-create-loan'
 import { useLoans } from '@/features/inventory/loan/api/use-loans'
-import FormCreateLoan from '@/features/inventory/loan/components/form-create-loan'
 import { loanForm } from '@/features/inventory/loan/types'
+
 import PhotoUrl from '@/shared/components/common/photo-url'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import { ScrollArea } from '@/shared/components/ui/scroll-area'
+import { usePagination } from '@/shared/hooks/use-pagination'
 import { Button } from '@/shared/components/ui/button'
+import { paths } from '@/shared/constants/paths'
 import {
 	Dialog,
 	DialogContent,
@@ -12,13 +23,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/shared/components/ui/dialog'
-import { ScrollArea } from '@/shared/components/ui/scroll-area'
-import { usePagination } from '@/shared/hooks/use-pagination'
-import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
-import { format } from 'date-fns'
-import { Calendar, Plus } from 'lucide-react'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 
 type props = {
 	id?: string
@@ -52,32 +56,41 @@ export default function ProjectLoan({ id }: props) {
 							className='bg-white rounded-xl border border-border p-4 relative'
 							key={i.id}
 						>
-							<div className='flex justify-between items-center'>
-								<div className='flex gap-4 items-center'>
-									<PhotoUrl
-										url={i.item.photoUrl || ''}
-										style={{ img: 'h-14 w-14 rounded' }}
-									/>
-									<p className='text-ink-primary'>{i.item.name}</p>
-								</div>
-								<div>
-									<div className='flex justify-between mt-2'>
-										<p className='text-ink-primary/50 w-[160px]'>
-											Jumlah dipinjam
-										</p>
-										<p className='text-ink-primary font-medium'>
-											{i.requestQuantity}
-										</p>
+							<div className='flex justify-between items-start'>
+								<div className='flex flex-col w-full'>
+									<div className='flex gap-4 items-center'>
+										<PhotoUrl
+											url={i.item.photoUrl || ''}
+											style={{ img: 'h-14 w-14 rounded' }}
+										/>
+										<p className='text-ink-primary'>{i.item.name}</p>
 									</div>
-									<div className='flex justify-between'>
-										<p className='text-ink-primary/50 w-[160px]'>
-											Jumlah dikembalikan
-										</p>
-										<p className='text-ink-primary font-medium'>
-											{i.returnedQuantity}
-										</p>
+									<div className='max-w-[200px]'>
+										<div className='flex justify-between mt-2'>
+											<p className='text-ink-primary/50 w-[160px]'>
+												Jumlah dipinjam
+											</p>
+											<p className='text-ink-primary font-medium'>
+												{i.requestQuantity}
+											</p>
+										</div>
+										<div className='flex justify-between'>
+											<p className='text-ink-primary/50 w-[160px]'>
+												Jumlah dikembalikan
+											</p>
+											<p className='text-ink-primary font-medium'>
+												{i.returnedQuantity}
+											</p>
+										</div>
 									</div>
 								</div>
+								<Link
+									to={`${paths.inventoryStockLoan}/${i.id}`}
+									className='flex gap-2 items-center'
+								>
+									<span className='px-0.5'>Lihat</span>
+									<ExternalLink size={16} />
+								</Link>
 							</div>
 							<div className='pt-4 flex justify-between items-end'>
 								<div className='flex gap-4'>
@@ -107,16 +120,16 @@ export default function ProjectLoan({ id }: props) {
 									</div>
 								</div>
 								<div className='space-y-2 w-[200px]'>
-									<div className='flex flex-col items-end h-full justify-end'>
+									<div className='flex justify-end flex-col items-end'>
+										<p className='text-ink-primary/50 leading-none text-right mb-0.5'>
+											Dibuat oleh
+										</p>
 										<div className='flex gap-2 items-center'>
 											<PhotoUrl
 												url={i.borrower.photoUrl || ''}
 												style={{ img: 'h-10 w-10' }}
 											/>
 											<div>
-												<p className='text-ink-primary/50 leading-none'>
-													peminjam
-												</p>
 												<p className='text-ink-primary font-medium'>
 													{i.borrower.username}
 												</p>
