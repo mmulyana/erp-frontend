@@ -28,12 +28,14 @@ type props = {
 	callback?: () => void
 	form: UseFormReturn<loanForm>
 	onSubmit: (data: loanForm) => void
+	isPending?: boolean
 }
 export default function FormCreateLoan({
 	variant,
 	projectId,
 	form,
 	onSubmit,
+	isPending,
 }: props) {
 	const isEdit = variant === 'edit'
 	return (
@@ -156,7 +158,7 @@ export default function FormCreateLoan({
 						<DialogClose asChild>
 							<Button variant='outline'>Batal</Button>
 						</DialogClose>
-						<ButtonSubmit isPending={false} />
+						<ButtonSubmit isPending={isPending || false} />
 					</div>
 				)}
 			</form>
