@@ -58,13 +58,15 @@ export default function ProjectDetail({ id }: { id?: string }) {
 			</div>
 			<div className='flex justify-between items-center'>
 				<p className='text-ink-light'>Penanggung Jawab</p>
-				<div className='flex gap-2 items-center'>
-					<PhotoUrl
-						url={data?.data?.lead?.photoUrl || ''}
-						style={{ img: 'h-8 w-8', icon: 'h-5 w-5' }}
-					/>
-					<p className='text-ink-primary'>{data?.data?.lead?.username}</p>
-				</div>
+				{data?.data?.lead && (
+					<div className='flex gap-2 items-center'>
+						<PhotoUrl
+							url={data?.data?.lead?.photoUrl || ''}
+							style={{ img: 'h-8 w-8', icon: 'h-5 w-5' }}
+						/>
+						<p className='text-ink-primary'>{data?.data?.lead?.username}</p>
+					</div>
+				)}
 			</div>
 		</CardV1>
 	)
