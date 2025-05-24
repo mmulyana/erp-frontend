@@ -1,4 +1,5 @@
-import { useAtom } from 'jotai'
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -14,15 +15,15 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteClient } from '../api/use-delete-client'
-import { atomModalClient } from './modal-detail-client'
 
 export default function ModalDeleteClient() {
-	const [modal, setModal] = useAtom(atomModalClient)
-
+	const { id } = useParams()
 	const { mutate } = useDeleteClient()
 
+	const [open, setOpen] = useState(false)
+
 	return (
-		<AlertDialog>
+		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button
 					variant='ghost'
@@ -45,12 +46,12 @@ export default function ModalDeleteClient() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (modal?.id) {
+							if (!id) {
 								mutate(
-									{ id: modal.id },
+									{ id },
 									{
 										onSuccess: () => {
-											setModal(null)
+											setOpen(false)
 										},
 									}
 								)
