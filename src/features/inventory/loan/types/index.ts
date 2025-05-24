@@ -7,3 +7,9 @@ export type loanForm = {
 	photoUrlIn?: string | File | null
 	photoUrlOut?: string | File | null
 }
+
+export type returnForm = {
+	returnDate: Date
+	returnedQuantity: number
+	photoUrlOut?: string | File | null
+}
