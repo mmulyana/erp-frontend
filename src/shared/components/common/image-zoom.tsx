@@ -185,7 +185,7 @@ export default function ImageZoom({ url }: Props) {
 	}
 
 	return (
-		<div className='w-full h-full relative'>
+		<div className='w-full h-[320px] md:h-full relative'>
 			<div className='flex justify-center gap-2 absolute z-10 right-4 top-4'>
 				<Button
 					onClick={() => handleZoomOut()}
@@ -213,7 +213,7 @@ export default function ImageZoom({ url }: Props) {
 
 			<div
 				ref={containerRef}
-				className='relative w-full h-full bg-black/50 overflow-hidden border border-gray-200 select-none rounded-l-lg'
+				className='relative w-full h-full bg-black/50 overflow-hidden select-none rounded-l-none md:rounded-l-lg'
 				onWheel={handleWheel}
 				onMouseDown={handleMouseDown}
 				onMouseMove={handleMouseMove}
