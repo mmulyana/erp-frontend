@@ -55,6 +55,8 @@ export const keys = {
 	projectReportStatus: 'project-report-status',
 	projectTotalRevenue: 'project-total-revenue',
 
+	reportDetail: "report-detail",
+
 	client: 'client',
 	clientDetail: 'client-detail',
 	clientInfinite: 'client-infinite',
