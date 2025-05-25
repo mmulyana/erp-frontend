@@ -1,10 +1,13 @@
-import { List } from 'lucide-react'
+import { ExternalLink, List } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import ProgressPercentage from '@/shared/components/common/progress-percentage'
 import StatusBadge from '@/shared/components/common/status-badge'
 import PhotoUrl from '@/shared/components/common/photo-url'
 import CardV1 from '@/shared/components/common/card-v1'
+
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import { paths } from '@/shared/constants/paths'
 import { formatThousands } from '@/shared/utils'
 
 import { statusBadges } from '../constant/types'
@@ -53,7 +56,16 @@ export default function ProjectDetail({ id }: { id?: string }) {
 			<div className='flex justify-between items-center'>
 				<p className='text-ink-light'>Klien</p>
 				<LoaderWrapper isLoading={isPending}>
-					<p className='text-ink-primary'>{data?.data?.client?.name}</p>
+					<div className='flex gap-2'>
+						<p className='text-ink-primary'>{data?.data?.client?.name}</p>
+						<Link
+							to={`${paths.projectMasterdataClient}/${data?.data?.clientId}`}
+							className='flex gap-2 items-center'
+						>
+							<span className='px-0.5'>Lihat</span>
+							<ExternalLink size={16} />
+						</Link>
+					</div>
 				</LoaderWrapper>
 			</div>
 			<div className='flex justify-between items-center'>
