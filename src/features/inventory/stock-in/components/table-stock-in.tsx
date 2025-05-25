@@ -17,7 +17,7 @@ import {
 } from '@/shared/components/ui/table'
 
 import { formatThousands } from '@/shared/utils'
-import { StockIn } from '../type'
+import { StockIn } from '@/shared/types/api'
 
 type props = {
 	data: StockIn[]
@@ -142,12 +142,12 @@ export default function TableStockIn({ data }: props) {
 												</TableRow>
 											</TableHeader>
 											<TableBody>
-												{stock.items.map((item, indexItem) => (
+												{stock.items?.map((item, indexItem) => (
 													<TableRow key={`${item.id}-${indexItem}`}>
 														<TableCell className='p-2 pl-4'>
 															<div className='flex items-center gap-2'>
 																<PhotoUrl
-																	url={item.item.photoUrl}
+																	url={item.item.photoUrl || ''}
 																	style={{ img: 'h-8 w-8' }}
 																/>
 																{item.item?.name || '-'}

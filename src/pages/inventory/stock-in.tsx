@@ -1,25 +1,33 @@
-import { useStockIns } from '@/features/inventory/stock-in/api/use-stock-ins'
+import { parseAsString, useQueryStates } from 'nuqs'
+
+import SupplierCombobox from '@/features/inventory/supplier/components/supplier-combobox'
 import StockInTotal from '@/features/inventory/stock-in/components/stock-in-total'
 import TableStockIn from '@/features/inventory/stock-in/components/table-stock-in'
-import { Pagination } from '@/shared/components/common/data-table/component'
+import { useStockIns } from '@/features/inventory/stock-in/api/use-stock-ins'
+
+import CreatedSelect from '@/shared/components/common/select/created-select'
 import FilterButton from '@/shared/components/common/filter-button'
+import SortButton from '@/shared/components/common/sort-button'
 import HeadPage from '@/shared/components/common/head-page'
 import SearchV3 from '@/shared/components/common/search-v3'
-import SortButton from '@/shared/components/common/sort-button'
-import { buttonVariants } from '@/shared/components/ui/button'
-import { paths } from '@/shared/constants/paths'
-import { usePagination } from '@/shared/hooks/use-pagination'
+
+import { Pagination } from '@/shared/components/common/data-table/component'
 import { DefaultLayout } from '@/shared/layout/default-layout'
-import { Plus } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { usePagination } from '@/shared/hooks/use-pagination'
+import { paths } from '@/shared/constants/paths'
 
 export default function StockIn() {
+	const [query, setQuery] = useQueryStates({
+		supplierId: parseAsString.withDefault(''),
+	})
+
 	const { page, limit, q } = usePagination()
 
 	const { data } = useStockIns({
 		limit,
 		page,
 		search: q,
+		supplierId: query.supplierId,
 	})
 
 	return (
@@ -34,8 +42,19 @@ export default function StockIn() {
 				<div className='flex justify-between items-center'>
 					<SearchV3 />
 					<div className='flex gap-4 items-center'>
-						<FilterButton></FilterButton>
-						<SortButton></SortButton>
+						<FilterButton>
+							<SupplierCombobox
+								defaultValue={query.supplierId}
+								onSelect={(val) =>
+									setQuery({
+										supplierId: val,
+									})
+								}
+							/>
+						</FilterButton>
+						<SortButton>
+							<CreatedSelect />
+						</SortButton>
 					</div>
 				</div>
 				<TableStockIn data={data?.data.data || []} />

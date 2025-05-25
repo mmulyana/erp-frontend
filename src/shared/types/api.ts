@@ -302,9 +302,19 @@ export type StockIn = {
 	referenceNumber?: string
 	note?: string
 	date: Date
+	totalPrice: number
 	photoUrl?: string
+
 	createdAt: string
 	updatedAt: string
+
+	_count: {
+		items?: number
+	}
+
+	user: User
+	supplier?: Supplier
+	items?: StockInItem[]
 }
 
 export type StockInItem = {
@@ -313,6 +323,8 @@ export type StockInItem = {
 	itemId: string
 	quantity: number
 	unitPrice: number
+
+	item: Inventory
 }
 
 export type StockOut = {
@@ -390,6 +402,10 @@ export type BrandInventory = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	_count: {
+		inventories?: number
+	}
 }
 
 export enum PayType {
