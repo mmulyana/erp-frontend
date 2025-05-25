@@ -24,7 +24,7 @@ export default function ReportAttachment({ id }: { id?: string }) {
 	if (!imagesLength) return null
 
 	return (
-		<div className='flex-1 relative flex items-center justify-center h-[40vh] lg:h-full flex-col overflow-hidden'>
+		<div className='flex-1 relative flex items-center justify-center h-[320px] lg:h-full flex-col overflow-hidden bg-red-400'>
 			<ImageZoom
 				url={`${baseUrl}/${data?.data?.attachments[currentImageIndex].photoUrl}`}
 			/>
