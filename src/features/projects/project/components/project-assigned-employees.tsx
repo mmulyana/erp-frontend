@@ -1,16 +1,20 @@
 import { ChevronRight, Plus, Users } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { useState } from 'react'
 
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import ButtonSubmit from '@/shared/components/common/button-submit'
-import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import EmptyState from '@/shared/components/common/empty-state'
+import SearchV3 from '@/shared/components/common/search-v3'
 import PhotoUrl from '@/shared/components/common/photo-url'
+import CardV1 from '@/shared/components/common/card-v1'
+
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import { Button } from '@/shared/components/ui/button'
-import { Card } from '@/shared/components/ui/card'
+import { paths } from '@/shared/constants/paths'
 import {
 	Dialog,
 	DialogClose,
@@ -31,8 +35,6 @@ import {
 
 import { useCreateAssignProject } from '../api/assigned/use-create-assign-project'
 import { useProjectEmployeee } from '../api/assigned/use-project-employee'
-import CardV1 from '@/shared/components/common/card-v1'
-import SearchV3 from '@/shared/components/common/search-v3'
 
 export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 	const [search, setSearch] = useState('')
@@ -65,9 +67,12 @@ export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 									style={{ img: 'h-10 w-10' }}
 								/>
 								<div>
-									<p className='text-ink-primary font-medium'>
+									<Link
+										to={`${paths.hrisMasterdataEmployee}/${i.employee.id}`}
+										className='text-ink-primary font-medium'
+									>
 										{i.employee?.fullname}
-									</p>
+									</Link>
 									<p className='text-ink-primary/50 text-sm -mt-0.5'>
 										{i.employee?.position}
 									</p>
