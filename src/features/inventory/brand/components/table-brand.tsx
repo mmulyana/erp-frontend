@@ -6,6 +6,7 @@ import { usePagination } from '@/shared/hooks/use-pagination'
 import { useBrands } from '../api/use-brands'
 import { useNavigate } from 'react-router-dom'
 import { paths } from '@/shared/constants/paths'
+import { BrandInventory } from '@/shared/types/api'
 
 export default function TableBrand() {
 	const navigate = useNavigate()
@@ -18,7 +19,7 @@ export default function TableBrand() {
 	})
 
 	// COLUMNS EMPLOYEE
-	const columns: ColumnDef<any>[] = [
+	const columns: ColumnDef<BrandInventory>[] = [
 		{
 			id: 'name',
 			accessorKey: 'name',
@@ -26,7 +27,10 @@ export default function TableBrand() {
 		},
 		{
 			id: 'count',
-			header: 'Jumlah item',
+			header: () => <p className='text-center'>Jumlah barang</p>,
+			cell: ({ row }) => (
+				<p className='text-center'>{row.original?._count?.inventories}</p>
+			),
 		},
 	]
 	// COLUMNS
