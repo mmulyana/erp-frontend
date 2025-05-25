@@ -4,6 +4,7 @@ import { id as ind } from 'date-fns/locale'
 import { useAtomValue } from 'jotai'
 import { format } from 'date-fns'
 
+import DropdownMenuV1 from '@/shared/components/common/dropdown-menu-v1'
 import EmptyState from '@/shared/components/common/empty-state'
 import PhotoUrl from '@/shared/components/common/photo-url'
 
@@ -21,6 +22,7 @@ import {
 	AvatarImage,
 } from '@/shared/components/ui/avatar'
 
+import { ModalEditReport } from './modal-edit-report'
 import { useReport } from '../api/report/use-report'
 import { warningTypes } from '../constant/types'
 
@@ -193,8 +195,8 @@ export default function ReportComment({ id }: { id?: string }) {
 	return (
 		<div
 			className={cn(
-				'bg-white flex flex-col h-full relative',
-				imagesLength ? 'w-[480px]' : 'w-full'
+				'bg-white flex flex-col h-[calc(100svh-370px)] md:h-full relative',
+				imagesLength ? 'w-full md:w-[480px]' : 'w-full'
 			)}
 		>
 			<div className='p-4 border-b'>
@@ -204,15 +206,33 @@ export default function ReportComment({ id }: { id?: string }) {
 						style={{ img: 'w-10 h-10' }}
 					/>
 					<div>
-						<p className='text-ink-primary font-medium lowercase mb-2'>
-							{data?.data?.user.username}{' '}
-							<span className='opacity-50 font-normal'>
-								{isWarning ? 'Melaporkan' : 'Menambahkan laporan'}{' '}
-							</span>
-							{data?.data?.type}{' '}
-						</p>
-						<p>"{data?.data?.message}"</p>
+						<div className='flex flex-wrap gap-4 items-center mb-2'>
+							<p className='text-ink-primary font-medium lowercase'>
+								{data?.data?.user.username}{' '}
+								<span className='opacity-50 font-normal'>
+									{isWarning ? 'Melaporkan' : 'Menambahkan laporan'}{' '}
+								</span>
+								{data?.data?.type}
+							</p>
+						</div>
+						<p className='text-ink-primary'>{data?.data?.message}</p>
 					</div>
+				</div>
+				<div className='absolute -top-4 -right-4'>
+					<DropdownMenuV1
+						style={{
+							content: 'min-w-[96px]',
+						}}
+					>
+						<ModalEditReport
+							reportId={id}
+							defaultValues={{
+								attachments: data?.data?.attachments || [],
+								message: data?.data?.message || '',
+								type: data?.data?.type || '',
+							}}
+						/>
+					</DropdownMenuV1>
 				</div>
 				<div className='flex gap-4 items-center pl-14 pt-4'>
 					<div className='flex gap-2 items-center'>
