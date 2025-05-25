@@ -1,16 +1,33 @@
 import { Download, FileText, FileTextIcon, Plus } from 'lucide-react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
+import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { format } from 'date-fns'
 
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
-import ButtonSubmit from '@/shared/components/common/button-submit'
-import { ScrollArea } from '@/shared/components/ui/scroll-area'
-import FileUpload from '@/shared/components/common/file-upload'
-import { usePagination } from '@/shared/hooks/use-pagination'
 import { Button, buttonVariants } from '@/shared/components/ui/button'
+import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import { Input } from '@/shared/components/ui/input'
+
+import ButtonSubmit from '@/shared/components/common/button-submit'
+import ToggleSwitch from '@/shared/components/common/toggle-switch'
+import EmptyState from '@/shared/components/common/empty-state'
+import FileUpload from '@/shared/components/common/file-upload'
+import SearchV3 from '@/shared/components/common/search-v3'
+import CardV1 from '@/shared/components/common/card-v1'
+import { Badge } from '@/shared/components/ui/badge'
+import { baseUrl } from '@/shared/constants/urls'
+import { paths } from '@/shared/constants/paths'
+import { keys } from '@/shared/constants/keys'
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from '@/shared/components/ui/select'
 import {
 	Dialog,
 	DialogClose,
@@ -31,22 +48,6 @@ import {
 import { useCreateAttachment } from '../api/attachment/use-create-attachment'
 import { useAttachments } from '../api/attachment/use-attachments'
 import { AttachmentForm } from '../types'
-import EmptyState from '@/shared/components/common/empty-state'
-import CardV1 from '@/shared/components/common/card-v1'
-import SearchV3 from '@/shared/components/common/search-v3'
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from '@/shared/components/ui/select'
-import ToggleSwitch from '@/shared/components/common/toggle-switch'
-import { baseUrl } from '@/shared/constants/urls'
-import { Badge } from '@/shared/components/ui/badge'
-import { paths } from '@/shared/constants/paths'
 
 export default function ProjectAttachment({
 	id,
@@ -56,8 +57,7 @@ export default function ProjectAttachment({
 	showButton?: boolean
 }) {
 	const [search, setSearch] = useState('')
-	const { q } = usePagination()
-	const { data } = useAttachments({ projectId: id, search: q })
+	const { data } = useAttachments({ projectId: id, search })
 
 	const attachments = data?.data
 	const anyAttachment = attachments && attachments.length > 0
@@ -129,6 +129,7 @@ const typesOptions = [
 	'Lain-lain',
 ]
 function ModalAttachment() {
+	const queryClient = useQueryClient()
 	const [open, setOpen] = useState(false)
 
 	const { mutate, isPending } = useCreateAttachment()
@@ -158,6 +159,9 @@ function ModalAttachment() {
 		mutate(payload, {
 			onSuccess: handleFormSuccess(setOpen, () => {
 				form.reset(defaultValues)
+				queryClient.invalidateQueries({
+					queryKey: [keys.projectAttachment],
+				})
 			}),
 			onError: handleFormError<AttachmentForm>(form),
 		})
