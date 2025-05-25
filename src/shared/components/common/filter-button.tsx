@@ -20,7 +20,7 @@ export default function FilterButton({ children, style }: props) {
 					<span className='px-0.5 text-ink-primary/50'>Filter</span>
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className={cn('space-y-4 px-4', style?.content)}>
+			<PopoverContent className={cn('space-y-4 px-4', style?.content)} align='end'>
 				{children}
 			</PopoverContent>
 		</Popover>

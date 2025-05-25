@@ -19,7 +19,9 @@ export default function SortButton({ children, style }: props) {
 					<span className='px-0.5 text-ink-primary/50'>Sort</span>
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className={style?.content}>{children}</PopoverContent>
+			<PopoverContent className={style?.content} align='end'>
+				{children}
+			</PopoverContent>
 		</Popover>
 	)
 }
