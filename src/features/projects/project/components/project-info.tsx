@@ -43,8 +43,8 @@ export default function ProjectInfo({ id }: { id?: string }) {
 									variant='secondary'
 									className='text-xs text-ink-secondary'
 								>
-									{differenceInDays(new Date(data.data.createdAt), new Date())}{' '}
-									hari terlewat
+									{differenceInDays(new Date(data.data.createdAt), new Date()) * -1}{' '}
+									hari terlewati
 								</Badge>
 							</div>
 						)}
