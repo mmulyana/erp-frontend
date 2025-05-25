@@ -1,10 +1,10 @@
 import { Check } from 'lucide-react'
 
 import InfiniteCombobox from '@/shared/components/common/infinite-combobox'
-import { useSupplierInfinite } from '../api/use-suppliers-infinite'
-import { useSupplier } from '../api/use-supplier'
-import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
+import { urls } from '@/shared/constants/urls'
+
+import { useSupplierInfinite } from '../api/use-suppliers-infinite'
 
 export default function SupplierCombobox(props: {
 	onSelect?: (val: string) => void
@@ -16,10 +16,7 @@ export default function SupplierCombobox(props: {
 			useInfiniteQuery={({ search }) =>
 				useSupplierInfinite({ search, limit: '10' })
 			}
-			fetchItemById={async (id) => {
-				const { data } = await http(`${urls.supplier}/${id}`)
-				return data?.data ?? null
-			}}
+			fetchItemById={fetchItemById}
 			label={(item) => item.name || ''}
 			placeholder='Pilih Supplier'
 			renderItem={(item, isSelected) => (
@@ -32,4 +29,9 @@ export default function SupplierCombobox(props: {
 			)}
 		/>
 	)
+}
+
+const fetchItemById = async (id: string) => {
+	const { data } = await http(`${urls.supplier}/${id}`)
+	return data?.data ?? null
 }
