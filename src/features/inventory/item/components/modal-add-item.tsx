@@ -74,11 +74,11 @@ export default function ModalAddItem() {
 			<DialogTrigger asChild>
 				<Button className='gap-2'>
 					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah Item</span>
+					<span className='px-0.5'>Tambah Barang</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent className='p-6'>
-				<DialogTitle>Item baru</DialogTitle>
+				<DialogTitle>Barang baru</DialogTitle>
 				<DialogDescription>
 					Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 				</DialogDescription>
