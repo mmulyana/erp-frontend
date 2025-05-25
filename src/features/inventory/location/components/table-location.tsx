@@ -27,8 +27,10 @@ export default function TableLocation() {
 		},
 		{
 			id: 'count',
-			header: 'Jumlah item',
-			cell: ({ row }) => row.original._count.inventories,
+			header: () => <p className='text-center'>Jumlah barang</p>,
+			cell: ({ row }) => (
+				<p className='text-center'>{row.original._count.inventories}</p>
+			),
 		},
 	]
 	// COLUMNS
