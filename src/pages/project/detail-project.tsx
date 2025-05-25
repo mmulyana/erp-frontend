@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
 import { House } from 'lucide-react'
-import { useMemo } from 'react'
 
 import ProjectAssignedEmployees from '@/features/projects/project/components/project-assigned-employees'
 import ProjectAttachment from '@/features/projects/project/components/project-attachment'
@@ -9,9 +8,10 @@ import ProjectInfo from '@/features/projects/project/components/project-info'
 import ProjectTabs from '@/features/projects/project/components/project-tabs'
 import { useProject } from '@/features/projects/project/api/use-project'
 
-import DetailLayout, { Link } from '@/shared/layout/detail-layout'
-import { paths } from '@/shared/constants/paths'
+import DetailLayout from '@/shared/layout/detail-layout'
 import { useDynamicLinks } from '@/shared/utils/link'
+import { paths } from '@/shared/constants/paths'
+import { Link } from '@/shared/types'
 
 const links: Link[] = [
 	{
