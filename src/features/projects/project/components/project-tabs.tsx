@@ -11,7 +11,7 @@ import ProjectLoan from './project-loan'
 
 export default function ProjectTabs({ id }: { id?: string }) {
 	return (
-		<Tabs defaultValue='Pemakaian'>
+		<Tabs defaultValue='Laporan'>
 			<TabsList className='border-b w-full'>
 				{['Laporan', 'Pemakaian', 'Peminjaman'].map((i) => (
 					<TabsTrigger
