@@ -1,12 +1,14 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
 import { ReportMutate } from '../../types'
+import { keys } from '@/shared/constants/keys'
 
 export const useCreateReport = () => {
+	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: async (payload: ReportMutate) => {
 			const formData = new FormData()
@@ -24,9 +26,12 @@ export const useCreateReport = () => {
 				},
 			})
 
-			return res.data
+			return res.data.data
 		},
 		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [keys.projectReport],
+			})
 			toast.success('Report berhasil dikirim.')
 		},
 		onError: () => {
