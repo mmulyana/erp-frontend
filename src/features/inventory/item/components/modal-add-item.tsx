@@ -43,6 +43,7 @@ export default function ModalAddItem() {
 		name: '',
 		photoUrl: undefined,
 		brandId: null,
+		category: '',
 		warehouseId: null,
 		description: '',
 		minimum: 1,
@@ -118,6 +119,19 @@ export default function ModalAddItem() {
 											content={field.value}
 											onChange={field.onChange}
 										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							name='category'
+							control={form.control}
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Kategori</FormLabel>
+									<FormControl>
+										<Input {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
