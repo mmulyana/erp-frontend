@@ -1,4 +1,4 @@
-import { House, Image, List, Package } from 'lucide-react'
+import { ExternalLink, House, Image, List, Package } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { ColumnDef } from '@tanstack/react-table'
 import { id as ind } from 'date-fns/locale'
@@ -6,7 +6,6 @@ import { format } from 'date-fns'
 import { useMemo } from 'react'
 
 import { useStockIn } from '@/features/inventory/stock-in/api/use-stock-in'
-import { Item } from '@/features/inventory/stock-in/type'
 
 import EmptyState from '@/shared/components/common/empty-state'
 import PhotoUrl from '@/shared/components/common/photo-url'
@@ -14,11 +13,12 @@ import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
 
 import { DataTable } from '@/shared/components/common/data-table'
-import { Button } from '@/shared/components/ui/button'
 import { baseUrl } from '@/shared/constants/urls'
 import { paths } from '@/shared/constants/paths'
 import { formatThousands } from '@/shared/utils'
 import { Link as Links } from '@/shared/types'
+import { StockInItem } from '@/shared/types/api'
+import ModalDetailStockIn from '@/features/inventory/stock-in/components/modal-detail-stock-in'
 
 const links: Links[] = [
 	{
@@ -63,14 +63,14 @@ export default function StockInDetail() {
 		totalPrice,
 	} = data?.data || {}
 
-	const columns: ColumnDef<Item>[] = [
+	const columns: ColumnDef<StockInItem>[] = [
 		{
 			id: 'item',
 			header: 'Barang',
 			cell: ({ row }) => (
 				<div className='flex gap-2 items-center py-2'>
 					<PhotoUrl
-						url={row.original.item.photoUrl}
+						url={row.original.item.photoUrl || ''}
 						style={{ img: 'h-12 w-12 rounded-lg' }}
 					/>
 					<p className='text-ink-primary'>{row.original.item.name}</p>
@@ -107,7 +107,6 @@ export default function StockInDetail() {
 			style={{
 				header: 'w-[940px] max-w-full px-6 md:px-0',
 			}}
-			buttonAction={<Button variant='outline'>Update</Button>}
 		>
 			<div className='flex flex-col md:grid md:grid-cols-[320px_1fr] w-[940px] max-w-full px-4 md:px-0 mx-auto pt-6 gap-6'>
 				<div className='space-y-6'>
@@ -115,6 +114,7 @@ export default function StockInDetail() {
 						title='Detail'
 						icon={<List size={20} className='text-ink-primary' />}
 						style={{ content: 'space-y-6 pt-4' }}
+						action={<ModalDetailStockIn />}
 					>
 						<div className='flex justify-between items-center'>
 							<p className='text-ink-primary/50'>Tanggal</p>
@@ -138,9 +138,18 @@ export default function StockInDetail() {
 								<p className='text-ink-primary'>{user?.username}</p>
 							</div>
 						</div>
-						<div className='flex justify-between items-center'>
-							<p className='text-ink-primary/50'>Tanggal</p>
-							<p className='text-ink-primary'>{supplier?.name}</p>
+						<div className='flex justify-between items-start'>
+							<p className='text-ink-primary/50'>Supplier</p>
+							<div className='flex items-end gap-2 flex-col'>
+								<p className='text-ink-primary font-medium'>{supplier?.name}</p>
+								<Link
+									to={`${paths.inventoryMasterdataSupplier}/${supplier?.id}`}
+									className='text-ink-primary flex gap-2 items-center'
+								>
+									<span className='px-0.5'>Lihat</span>
+									<ExternalLink size={16} />
+								</Link>
+							</div>
 						</div>
 						<div>
 							<p className='text-ink-primary/50'>Catatan</p>
