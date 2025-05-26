@@ -89,12 +89,6 @@ export default function BrandDetail() {
 	return (
 		<DetailLayout
 			links={linkMemo}
-			buttonAction={
-				<Button variant='outline' onClick={() => setOpen(true)}>
-					<Pencil size={16} className='text-ink-light' />
-					<span className='px-1 text-ink-primary'>Ubah</span>
-				</Button>
-			}
 			style={{
 				header: 'w-[940px]',
 			}}
@@ -106,8 +100,12 @@ export default function BrandDetail() {
 					style={{
 						content: 'grid grid-cols-[80px_1fr] gap-4 pt-2',
 					}}
+					action={<ModalDetailBrand />}
 				>
-					<PhotoUrl url='' style={{ img: 'h-20 w-20' }} />
+					<PhotoUrl
+						url={data?.data?.photoUrl || ''}
+						style={{ img: 'h-20 w-20' }}
+					/>
 					<div className='flex flex-col'>
 						<p className='text-ink-primary text-xl mb-1 font-medium'>
 							{data?.data?.name}
@@ -141,7 +139,6 @@ export default function BrandDetail() {
 					/>
 				</CardV1>
 			</div>
-			<ModalDetailBrand id={id} />
 		</DetailLayout>
 	)
 }
