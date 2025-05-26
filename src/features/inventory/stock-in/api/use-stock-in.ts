@@ -4,8 +4,7 @@ import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 import { IApi } from '@/shared/types'
-
-import { StockIn } from '../type'
+import { StockIn } from '@/shared/types/api'
 
 type Params = {
 	id?: string
