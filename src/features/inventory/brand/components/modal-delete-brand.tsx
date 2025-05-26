@@ -14,6 +14,8 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteBrand } from '../api/use-delete-brand'
+import { useNavigate } from 'react-router-dom'
+import { paths } from '@/shared/constants/paths'
 
 type props = {
 	setOpen: (val: boolean) => void
@@ -21,6 +23,7 @@ type props = {
 }
 export default function ModalDeleteBrand({ id, setOpen }: props) {
 	const { mutate } = useDeleteBrand()
+	const navigate = useNavigate()
 
 	return (
 		<AlertDialog>
@@ -52,6 +55,9 @@ export default function ModalDeleteBrand({ id, setOpen }: props) {
 									{
 										onSuccess: () => {
 											setOpen(false)
+											navigate(paths.inventoryMasterdataBrand, {
+												replace: true,
+											})
 										},
 									}
 								)
