@@ -35,7 +35,7 @@ export default function NewStockOut() {
 
 	const form = useForm<StockOutForm>({
 		defaultValues: {
-			items: [{ productId: '', quantity: 0, price: 0 }],
+			items: [{ itemId: '', quantity: 0, price: 0 }],
 		},
 	})
 
@@ -49,7 +49,7 @@ export default function NewStockOut() {
 			{
 				date: payload.date,
 				items: payload.items.map((i) => ({
-					itemId: i.productId,
+					itemId: i.itemId,
 					quantity: i.quantity,
 					unitPrice: i.price,
 				})),
