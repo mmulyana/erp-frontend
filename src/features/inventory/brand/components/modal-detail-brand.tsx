@@ -14,6 +14,7 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogTitle,
+	DialogTrigger,
 } from '@/shared/components/ui/dialog'
 import {
 	Form,
@@ -28,15 +29,16 @@ import { useDestroyPhotoBrand } from '../api/use-destroy-photo-brand'
 import { useUpdateBrand } from '../api/use-update-brand'
 import ModalDeleteBrand from './modal-delete-brand'
 import { useBrand } from '../api/use-brand'
+import { useParams } from 'react-router-dom'
+import { Pencil } from 'lucide-react'
 
 type Form = {
 	name: string
 	photoUrl?: File | string | null
 }
-type props = {
-	id?: string
-}
-export default function ModalDetailBrand({ id }: props) {
+export default function ModalDetailBrand() {
+	const { id } = useParams()
+
 	const [open, setOpen] = useState(false)
 	const { data } = useBrand({ id })
 	const { mutate, isPending } = useUpdateBrand()
@@ -77,7 +79,7 @@ export default function ModalDetailBrand({ id }: props) {
 	}
 
 	useEffect(() => {
-		if (data) {
+		if (data?.data) {
 			form.reset({
 				name: data.data?.name,
 				photoUrl: data.data?.photoUrl,
@@ -85,17 +87,14 @@ export default function ModalDetailBrand({ id }: props) {
 		}
 	}, [data])
 
-	useEffect(() => {
-		if (!open) {
-			form.reset({
-				name: '',
-				photoUrl: undefined,
-			})
-		}
-	}, [open])
-
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<Button variant='outline'>
+					<Pencil size={16} />
+					<span className='px-0.5'>Edit</span>
+				</Button>
+			</DialogTrigger>
 			<DialogContent className='p-6'>
 				<DialogTitle>Merek</DialogTitle>
 				<DialogDescription>
