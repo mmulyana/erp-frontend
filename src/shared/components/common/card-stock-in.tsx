@@ -40,6 +40,7 @@ export default function CardStockIn({ data }: { data: StockIn }) {
 								<Link
 									className='flex gap-2 items-center'
 									to={`${baseUrl}/${data.photoUrl}`}
+									target='_blank'
 								>
 									<span className='px-0.5'>Lihat Foto</span>
 									<Eye size={16} className='text-ink-primary' />
