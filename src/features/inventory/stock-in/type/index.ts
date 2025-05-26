@@ -1,6 +1,3 @@
-import { User } from '@/shared/types'
-import { Supplier } from '../../supplier/types'
-
 export type StockInItem = {
 	itemId: string
 	quantity: number
@@ -28,22 +25,6 @@ export type Item = {
 	}
 	quantity: number
 	unitPrice: number
-}
-
-export type StockIn = {
-	id: string
-	createdBy: string
-	createdAt: string
-	date: string
-	items: Item[]
-	note?: string
-	referenceNumber?: string
-	supplier: Supplier
-	totalPrice: number
-	user: User
-	_count: {
-		items: number
-	}
 }
 
 export type StockInForm = {
