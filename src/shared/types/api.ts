@@ -314,7 +314,7 @@ export type StockIn = {
 
 	user: User
 	supplier?: Supplier
-	items?: StockInItem[]
+	items: StockInItem[]
 }
 
 export type StockInItem = {
@@ -323,6 +323,7 @@ export type StockInItem = {
 	itemId: string
 	quantity: number
 	unitPrice: number
+	totalPrice?: number
 
 	item: Inventory
 }
