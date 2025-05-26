@@ -18,6 +18,7 @@ import { baseUrl } from '@/shared/constants/urls'
 import { paths } from '@/shared/constants/paths'
 import { formatThousands } from '@/shared/utils'
 import { Link as Links } from '@/shared/types'
+import ModalDetailStockOut from '@/features/inventory/stock-out/components/modal-detail-stock-out'
 
 const links: Links[] = [
 	{
@@ -28,11 +29,11 @@ const links: Links[] = [
 	},
 	{
 		name: 'Stock keluar',
-		path: paths.inventoryStockIn,
+		path: paths.inventoryStockOut,
 	},
 	{
 		name: 'Detail',
-		path: paths.inventoryStockInNew,
+		path: paths.inventoryStockOutNew,
 	},
 ]
 
@@ -46,7 +47,7 @@ export default function StockInDetail() {
 			...links.filter((i) => i.name !== 'Detail'),
 			{
 				name: data?.data?.id || 'Detail',
-				path: `${paths.inventoryStockIn}/${id}`,
+				path: `${paths.inventoryStockOut}/${id}`,
 			},
 		]
 	}, [id, data])
@@ -97,7 +98,6 @@ export default function StockInDetail() {
 			style={{
 				header: 'w-[940px] max-w-full px-6 md:px-0',
 			}}
-			buttonAction={<Button variant='outline'>Update</Button>}
 		>
 			<div className='flex flex-col md:grid md:grid-cols-[320px_1fr] w-[940px] max-w-full px-4 md:px-0 mx-auto pt-6 gap-6'>
 				<div className='space-y-6'>
@@ -105,6 +105,7 @@ export default function StockInDetail() {
 						title='Detail'
 						icon={<List size={20} className='text-ink-primary' />}
 						style={{ content: 'space-y-6 pt-4' }}
+						action={<ModalDetailStockOut />}
 					>
 						<div className='flex justify-between items-center'>
 							<p className='text-ink-primary/50'>Tanggal</p>
