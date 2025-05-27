@@ -49,11 +49,11 @@ export default function DetailItem() {
 
 	return (
 		<DetailLayout links={dynamicLink} style={{ header: 'w-[1020px]' }}>
-			<div className='grid grid-cols-1 xl:grid-cols-[640px_1fr] gap-8 w-[1020px] max-w-full px-4 xl:px-0 mx-auto pt-6'>
+			<div className='grid grid-cols-1 xl:grid-cols-[640px_1fr] gap-8 w-[1020px] max-w-full px-4 xl:px-0 mx-auto pt-6 pb-10'>
 				<div className='space-y-6'>
 					<ItemInfo id={id} />
 					<ItemDetail id={id} />
-					<ItemTabs />
+					<ItemTabs id={id} />
 				</div>
 				<div className='space-y-6'>
 					<ItemStock id={id} />
