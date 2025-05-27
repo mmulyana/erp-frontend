@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react'
 
-import InfiniteCombobox from '@/shared/components/common/infinite-combobox'
 import { baseUrl, urls } from '@/shared/constants/urls'
+import InfiniteCombobox from '@/shared/components/common/infinite-combobox'
 import http from '@/shared/utils/http'
 
 import { useBrandInfinite } from '../api/use-brands-infinite'
