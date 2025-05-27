@@ -1,7 +1,10 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { parseAsInteger, useQueryStates } from 'nuqs'
+import { useRef } from 'react'
 
+import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import { useIsMobile } from '@/shared/hooks/use-mobile'
+import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 import {
 	Select,
@@ -147,5 +150,62 @@ export function Pagination({ totalItems, totalPages }: PaginationProps) {
 				</div>
 			)}
 		</div>
+	)
+}
+
+type SimplePaginationProps = {
+	totalPages: number
+	children: React.ReactNode
+}
+
+export function SimplePagination({
+	totalPages,
+	children,
+}: SimplePaginationProps) {
+	const [query, setQuery] = useQueryStates({
+		page: parseAsInteger.withDefault(1),
+		limit: parseAsInteger.withDefault(10),
+	})
+
+	const currentPage = query.page || 1
+	const scrollRef = useRef<HTMLDivElement>(null)
+
+	const handlePageChange = (newPage: number) => {
+		setQuery({ page: newPage })
+		scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+	}
+
+	return (
+		<ScrollArea className='h-[400px]'>
+			<div ref={scrollRef} className='w-full flex flex-col gap-4'>
+				{currentPage > 1 && (
+					<div className='flex justify-center'>
+						<Button
+							variant='secondary'
+							className='bg-gray-500/10 hover:bg-gray-500/20'
+							onClick={() => handlePageChange(currentPage - 1)}
+						>
+							<ChevronLeft size={16} strokeWidth={3.2} />
+							Sebelumnya
+						</Button>
+					</div>
+				)}
+
+				{children}
+
+				{currentPage < totalPages && (
+					<div className='flex justify-center'>
+						<Button
+							variant='secondary'
+							className='bg-gray-500/10 hover:bg-gray-500/20'
+							onClick={() => handlePageChange(currentPage + 1)}
+						>
+							Selanjutnya
+							<ChevronRight size={16} strokeWidth={3.2} />
+						</Button>
+					</div>
+				)}
+			</div>
+		</ScrollArea>
 	)
 }
