@@ -55,7 +55,7 @@ export const keys = {
 	projectReportStatus: 'project-report-status',
 	projectTotalRevenue: 'project-total-revenue',
 
-	reportDetail: "report-detail",
+	reportDetail: 'report-detail',
 
 	client: 'client',
 	clientDetail: 'client-detail',
@@ -104,6 +104,7 @@ export const keys = {
 	userDetail: 'user-detail',
 	userInfinite: 'user-infinite',
 
+	ledger: 'ledger',
 	ledgerChart: 'ledger-chart',
 	ledgerActivity: 'ledger-activity',
 }

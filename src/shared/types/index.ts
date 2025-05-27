@@ -66,6 +66,9 @@ export type Pagination = {
 	page?: string
 	limit?: string
 	search?: string
+
+	sortOrder?: string
+	sortBy?: string
 }
 
 export type StatusItem = {
