@@ -1,22 +1,30 @@
-import { Button } from '@/shared/components/ui/button'
-import { ScrollArea } from '@/shared/components/ui/scroll-area'
+import { useQueryState } from 'nuqs'
+
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 } from '@/shared/components/ui/tabs'
-import { Filter } from 'lucide-react'
-import ItemTransactionDetail from './item-transaction-detail'
+
+import ItemTransaction from './item-transaction'
 
 type props = {
 	id?: string
 }
+
+const tabOptions = ['Stok masuk', 'Stok keluar', 'Peminjaman'] as const
+
 export default function ItemTabs({ id }: props) {
+	const [tab, setTab] = useQueryState('tab', {
+		defaultValue: 'Stok masuk',
+		history: 'replace',
+	})
+
 	return (
-		<Tabs defaultValue='Stok masuk'>
+		<Tabs value={tab} onValueChange={(val) => setTab(val)}>
 			<TabsList className='border-b w-full'>
-				{['Stok masuk', 'Stok keluar', 'Peminjaman'].map((i) => (
+				{tabOptions.map((i) => (
 					<TabsTrigger
 						value={i}
 						key={i}
@@ -27,40 +35,15 @@ export default function ItemTabs({ id }: props) {
 					</TabsTrigger>
 				))}
 			</TabsList>
-			<TabsContent value='Stok masuk'>
-				<div className='pt-6'>
-					<div className='flex justify-between items-start md:items-center'>
-						<div className='flex gap-2 items-center'>
-							<p className='text-ink-secondary font-medium'>Stok Masuk</p>
-							<div className='bg-[#e3e3e3] rounded-md px-2 py-0.5'>
-								<p className='text-xs text-brand font-medium'>10</p>
-							</div>
-						</div>
 
-						<div className='flex gap-2 items-center flex-wrap justify-end md:justify-between'>
-							<Button variant='outline' className='gap-1 bg-transparent'>
-								<Filter size={14} className='text-ink-light' />
-								<span className='px-0.5 text-ink-secondary'>Filter</span>
-							</Button>
-						</div>
-					</div>
-					<ScrollArea className='max-h-[400px]'>
-						{[
-							{
-								user: {
-									photoUrl: '',
-									username: 'Muhamad Mulyana',
-								},
-								qty: 12,
-							},
-						].map((data, index) => (
-							<ItemTransactionDetail key={index} {...data} />
-						))}
-					</ScrollArea>
-				</div>
+			<TabsContent value='Stok masuk'>
+				<ItemTransaction id={id} variant='STOCK_IN' />
 			</TabsContent>
 			<TabsContent value='Stok keluar'>
-				<div className='p-6'></div>
+				<ItemTransaction id={id} variant='STOCK_OUT' />
+			</TabsContent>
+			<TabsContent value='Peminjaman'>
+				<ItemTransaction id={id} variant='LOAN' />
 			</TabsContent>
 		</Tabs>
 	)
