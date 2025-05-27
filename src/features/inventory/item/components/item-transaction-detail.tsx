@@ -1,70 +1,81 @@
-import PhotoUrl from '@/shared/components/common/photo-url'
-import {
-	File as FileIcon,
-	FileText,
-	Image as ImageIcon,
-	MessageSquareText,
-} from 'lucide-react'
-import { format } from 'date-fns'
-import { id } from 'date-fns/locale'
+import { id as ind } from 'date-fns/locale'
+import { ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { format } from 'date-fns'
 
-type Attachment = {
-	type: 'file' | 'image'
-	name: string
-	size: string
-	url?: string
+import StatusBadge from '@/shared/components/common/status-badge'
+import { Card } from '@/shared/components/ui/card'
+import { StockLedger } from '@/shared/types/api'
+import { paths } from '@/shared/constants/paths'
+import { BadgeOption } from '@/shared/types'
+
+export const statusLoan: BadgeOption[] = [
+	{
+		color: '#D52B42',
+		label: 'Dipinjam',
+		value: 'LOAN',
+	},
+	{
+		color: '#475DEF',
+		label: 'Dikembalikan',
+		value: 'RETURNED',
+	},
+]
+
+type Props = {
+	variant: 'STOCK_IN' | 'STOCK_OUT' | 'LOAN'
+	data?: StockLedger
 }
 
-export type ReportCardProps = {
-	user: { photoUrl: string; username: string }
-	qty: number
-	createdAt?: string
-	type?: 'stock-in' | 'stock-out' | 'loan'
-	evidenceUrl?: string
-}
+const types = ['RETURNED', 'LOAN']
 
-export default function ItemTransactionDetail({
-	user,
-	qty,
-	createdAt,
-	evidenceUrl,
-}: ReportCardProps) {
+export default function ItemTransactionDetail({ data }: Props) {
+	if (!data) return null
+
+	const { quantity, date, note, referenceId, type } = data
+
+	const hrefs = {
+		STOCK_IN: paths.inventoryStockIn,
+		STOCK_OUT: paths.inventoryStockOut,
+		LOAN: paths.inventoryStockLoan,
+		RETURNED: paths.inventoryStockLoan,
+	}
+
 	return (
-		<div className='w-full flex gap-4 pt-4'>
-			<div className='w-9 relative'>
-				<div className='w-9 h-9 rounded-full bg-[#e5e8f6] z-10 relative flex justify-center items-center'>
-					<PhotoUrl url={user.photoUrl} style={{ img: 'w-full h-full' }} />
-				</div>
-				<div className='absolute h-[calc(100%+18px)] w-[1px] bg-[#e6e6e6] left-1/2 -translate-x-1/2 top-0'></div>
-			</div>
-			<div className='w-full flex flex-col gap-2 pt-2'>
-				<div className='flex items-center'>
-					<div className='flex gap-2 items-center  flex-wrap'>
-						<span className='font-medium text-sm text-ink-primary'>
-							{user.username}
-						</span>
-						<p className='text-ink-light'>Menambahkan stock sebanyak</p>
-						<p className='text-ink-primary font-medium'>{qty}</p>
-						<div className='w-1 h-1 rounded-full bg-gray-400'></div>
-						<p>{format(new Date(), 'PPP', { locale: id })}</p>
-					</div>
-				</div>
+		<Card className='p-6 grid grid-cols-1 md:grid-cols-2 relative pb-14 md:pb-6'>
+			<div className='space-y-2 w-full md:w-[280px]'>
+				{types.includes(type) && (
+					<div className='flex justify-between items-center gap-2'>
+						<p className='text-ink-primary/50 text-sm'>Status</p>
 
-				<div className='flex flex-wrap items-center gap-2'>
-					<div className='flex items-center space-x-2 bg-[#F0F0F0] rounded-md p-2 pr-4 text-xs w-fit'>
-						<ImageIcon className='w-6 h-6 text-gray-500' />
-
-						<div className='flex flex-col'>
-							<span className='font-medium'>IMG_1244.jpeg</span>
-							<span className='text-gray-500'>12 MB</span>
-						</div>
+						<StatusBadge options={statusLoan} value={type} />
 					</div>
-					<Link className='underline text-brand' to='/'>
-						Lihat transaksi
-					</Link>
+				)}
+				<div className='flex justify-between items-center gap-2'>
+					<p className='text-ink-primary/50'>Tanggal</p>
+					<p className='text-ink-primary'>
+						{format(new Date(date), 'PPP', { locale: ind })}
+					</p>
 				</div>
+				<div className='flex justify-between items-center gap-2'>
+					<p className='text-ink-primary/50'>Kuantitas</p>
+					<p className='text-ink-primary'>{quantity}</p>
+				</div>
+				{note && (
+					<div>
+						<p className='text-ink-primary/50 text-sm'>Catatan</p>
+						<p className='text-ink-primary'>{note}</p>
+					</div>
+				)}
 			</div>
-		</div>
+
+			<Link
+				to={`${hrefs[type]}/${referenceId}`}
+				className='flex items-center gap-2 absolute top-[calc(100%-40px)] md:top-4 right-4'
+			>
+				<span className='px-0.5'>Lihat transaksi</span>
+				<ExternalLink size={18} />
+			</Link>
+		</Card>
 	)
 }
