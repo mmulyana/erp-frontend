@@ -213,7 +213,7 @@ export default function ImageZoom({ url }: Props) {
 
 			<div
 				ref={containerRef}
-				className='relative w-full h-full bg-black/50 overflow-hidden select-none rounded-l-none md:rounded-l-lg'
+				className='relative w-full h-full bg-ink-primary/80 overflow-hidden select-none rounded-l-none md:rounded-l-lg'
 				onWheel={handleWheel}
 				onMouseDown={handleMouseDown}
 				onMouseMove={handleMouseMove}

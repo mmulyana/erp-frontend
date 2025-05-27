@@ -1,4 +1,4 @@
-import { ExternalLink, List, Pencil } from 'lucide-react'
+import { ExternalLink, ExternalLinkIcon, List, Pencil } from 'lucide-react'
 import { id as ind } from 'date-fns/locale'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -47,6 +47,23 @@ export default function LoanInfo({ id }: { id?: string }) {
 						{format(new Date(data?.data?.requestDate), 'PPP', { locale: ind })}
 					</p>
 				)}
+			</div>
+			<div className='flex justify-between items-center'>
+				<p className='text-ink-primary/50'>Alat</p>
+				<div className='flex gap-2 items-center'>
+					<PhotoUrl
+						url={data?.data?.item.photoUrl || ''}
+						style={{ img: 'h-10 w-10 rounded-md' }}
+					/>
+					<p className='text-ink-primary'>{data?.data?.item.name}</p>
+					<Link
+						to={`${paths.inventoryMasterdataItem}/${data?.data?.inventoryId}`}
+						className='flex gap-2 items-center'
+					>
+						<span className='px-0.5'>Lihat</span>
+						<ExternalLinkIcon size={16} />
+					</Link>
+				</div>
 			</div>
 			<div className='flex justify-between items-center'>
 				<p className='text-ink-primary/50'>Kuantitas</p>

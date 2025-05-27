@@ -1,4 +1,12 @@
-import { Calendar, Image, MessageSquareMoreIcon, Send, X } from 'lucide-react'
+import {
+	Calendar,
+	Image,
+	MessageSquareMoreIcon,
+	Pencil,
+	Send,
+	Trash,
+	X,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { id as ind } from 'date-fns/locale'
 import { useAtomValue } from 'jotai'
@@ -25,6 +33,7 @@ import {
 import { ModalEditReport } from './modal-edit-report'
 import { useReport } from '../api/report/use-report'
 import { warningTypes } from '../constant/types'
+import { DropdownMenuItem } from '@/shared/components/ui/dropdown-menu'
 
 type Comment = {
 	id: string
@@ -42,13 +51,13 @@ export default function ReportComment({ id }: { id?: string }) {
 	const user = useAtomValue(userAtom)
 
 	const { data } = useReport({ id })
-
 	const imagesLength = data?.data?.attachments.length || 0
 
 	const [comments, setComments] = useState<Comment[]>([])
 	const [newComment, setNewComment] = useState('')
 	const [replyTo, setReplyTo] = useState<Comment | null>(null)
 	const [inlineReplies, setInlineReplies] = useState<Record<string, string>>({})
+	const [editingCommentId, setEditingCommentId] = useState<string | null>(null)
 
 	useEffect(() => {
 		if (!id) return
@@ -57,17 +66,18 @@ export default function ReportComment({ id }: { id?: string }) {
 		socket.emit('report-comment:findAll', id)
 
 		const handleAll = (data: Comment[]) => setComments(data)
-		const handleCreated = (comment: Comment) => {
+		const handleCreated = (comment: Comment) =>
 			setComments((prev) => [...prev, comment])
-		}
-		const handleUpdated = (comment: Comment) => {
+		const handleUpdated = (comment: Comment) =>
 			setComments((prev) =>
 				prev.map((c) => (c.id === comment.id ? comment : c))
 			)
-		}
-		const handleDeleted = (deletedId: string) => {
-			setComments((prev) => prev.filter((c) => c.id !== deletedId))
-		}
+		const handleDeleted = (deletedId: string) =>
+			setComments((prev) =>
+				prev.map((c) =>
+					c.id === deletedId ? { ...c, deletedAt: new Date().toISOString() } : c
+				)
+			)
 
 		socket.on('report-comment:all', handleAll)
 		socket.on('report-comment:created', handleCreated)
@@ -82,34 +92,57 @@ export default function ReportComment({ id }: { id?: string }) {
 		}
 	}, [id])
 
-	const handleAddComment = (
-		parentId?: string | null,
-		messageOverride?: string
-	) => {
-		const message = messageOverride ?? newComment
-		if (!message.trim() || !id) return
+	const handleAddComment = () => {
+		if (!newComment.trim() || !id) return
+
+		if (editingCommentId) {
+			socket.emit('report-comment:update', {
+				id: editingCommentId,
+				message: newComment,
+			})
+			setEditingCommentId(null)
+			setNewComment('')
+			return
+		}
 
 		socket.emit('report-comment:create', {
-			message,
+			message: newComment,
 			reportId: id,
-			commentId: parentId || replyTo?.id || null,
+			commentId: replyTo?.id || null,
 			createdBy: user?.id,
 		})
 
 		setNewComment('')
 		setReplyTo(null)
-		if (parentId) {
-			setInlineReplies((prev) => ({ ...prev, [parentId]: '' }))
+	}
+
+	const handleInlineReply = (commentId: string, message: string) => {
+		if (!message.trim() || !id) return
+
+		socket.emit('report-comment:create', {
+			message,
+			reportId: id,
+			commentId,
+			createdBy: user?.id,
+		})
+
+		setInlineReplies((prev) => ({ ...prev, [commentId]: '' }))
+	}
+
+	const handleEditComment = (id: string, message: string) => {
+		setEditingCommentId(id)
+		setNewComment(message)
+		setReplyTo(null)
+	}
+
+	const handleDeleteComment = (id: string) => {
+		if (confirm('Are you sure you want to delete this comment?')) {
+			socket.emit('report-comment:delete', id)
 		}
 	}
 
-	const renderComments = (
-		parentId: string | null = null,
-		depth: number = 0
-	) => {
-		if (!comments.length) {
-			return <EmptyState className='h-[400px]' />
-		}
+	const renderComments = (parentId: string | null = null, depth = 0) => {
+		if (!comments.length) return <EmptyState className='h-[400px]' />
 
 		return comments
 			.filter((c) => c.commentId === parentId)
@@ -118,7 +151,7 @@ export default function ReportComment({ id }: { id?: string }) {
 					key={comment.id}
 					className={cn('space-y-2 mt-4', depth > 0 && 'pl-8')}
 				>
-					<div className='flex gap-3'>
+					<div className='flex gap-3 relative'>
 						<Avatar className='h-8 w-8'>
 							<AvatarImage src={comment.user.photoUrl} />
 							<AvatarFallback className='uppercase'>
@@ -126,22 +159,58 @@ export default function ReportComment({ id }: { id?: string }) {
 							</AvatarFallback>
 						</Avatar>
 						<div className='flex-1 space-y-1'>
-							<div className='flex items-center gap-2'>
-								<span className='font-medium text-sm'>
-									{comment.user.username}
-								</span>
-								<span className='text-xs text-muted-foreground'>
-									{new Date(comment.createdAt).toLocaleTimeString()}
-								</span>
+							<div className='flex justify-between items-center'>
+								<div className='flex items-center gap-2'>
+									<p className='font-medium text-ink-primary'>
+										{comment.user.username}
+									</p>
+									<p className='text-ink-primary/80'>
+										{new Date(comment.createdAt).toLocaleTimeString()}
+									</p>
+								</div>
+								{comment.createdBy === user?.id && (
+									<DropdownMenuV1
+										style={{
+											trigger: 'p-0 h-6 w-6 bg-transparent',
+										}}
+									>
+										<DropdownMenuItem
+											onClick={() =>
+												handleEditComment(comment.id, comment.message)
+											}
+										>
+											<Pencil className='mr-2 h-4 w-4' />
+											Edit
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											onClick={() => handleDeleteComment(comment.id)}
+										>
+											<Trash className='mr-2 h-4 w-4' />
+											Delete
+										</DropdownMenuItem>
+									</DropdownMenuV1>
+								)}
 							</div>
-							<p className='text-sm text-gray-700'>{comment.message}</p>
-							{depth < 2 && (
-								<button
-									className='text-xs text-blue-600 hover:underline'
-									onClick={() => setReplyTo(comment)}
+							<p
+								className={cn(
+									'text-ink-primary',
+									comment.deletedAt && 'text-ink-primary/30 line-through'
+								)}
+							>
+								{comment.deletedAt ? 'Komentar dihapus' : comment.message}
+							</p>
+							{!comment.deletedAt && depth < 2 && (
+								<Button
+									variant='link'
+									className='text-sm !no-underline text-brand p-0'
+									onClick={() => {
+										setReplyTo(comment)
+										setEditingCommentId(null)
+										setNewComment('')
+									}}
 								>
-									Reply
-								</button>
+									Balas
+								</Button>
 							)}
 						</div>
 					</div>
@@ -149,7 +218,12 @@ export default function ReportComment({ id }: { id?: string }) {
 					<div>{renderComments(comment.id, depth + 1)}</div>
 
 					{depth < 2 && comments.some((c) => c.commentId === comment.id) && (
-						<div className='pl-8 flex items-start gap-2'>
+						<div
+							className={cn(
+								'pl-8 flex items-start gap-2',
+								depth == 1 && 'pb-4'
+							)}
+						>
 							<Avatar className='h-8 w-8'>
 								<AvatarImage src={user?.photoUrl || ''} />
 								<AvatarFallback className='uppercase font-medium'>
@@ -158,7 +232,6 @@ export default function ReportComment({ id }: { id?: string }) {
 							</Avatar>
 							<div className='flex-1 flex gap-2'>
 								<Input
-									placeholder='Write a reply...'
 									value={inlineReplies[comment.id] || ''}
 									className='h-10'
 									onChange={(e) =>
@@ -170,14 +243,14 @@ export default function ReportComment({ id }: { id?: string }) {
 									onKeyDown={(e) => {
 										if (e.key === 'Enter' && !e.shiftKey) {
 											e.preventDefault()
-											handleAddComment(comment.id, inlineReplies[comment.id])
+											handleInlineReply(comment.id, inlineReplies[comment.id])
 										}
 									}}
 								/>
 								<Button
 									className='h-10 w-12'
 									onClick={() =>
-										handleAddComment(comment.id, inlineReplies[comment.id])
+										handleInlineReply(comment.id, inlineReplies[comment.id])
 									}
 									disabled={!inlineReplies[comment.id]?.trim()}
 								>
@@ -218,12 +291,8 @@ export default function ReportComment({ id }: { id?: string }) {
 						<p className='text-ink-primary'>{data?.data?.message}</p>
 					</div>
 				</div>
-				<div className='absolute -top-4 -right-4'>
-					<DropdownMenuV1
-						style={{
-							content: 'min-w-[96px]',
-						}}
-					>
+				<div className='absolute top-4 right-4'>
+					<DropdownMenuV1 style={{ content: 'min-w-[96px]' }}>
 						<ModalEditReport
 							reportId={id}
 							defaultValues={{
@@ -261,12 +330,20 @@ export default function ReportComment({ id }: { id?: string }) {
 			</ScrollArea>
 
 			<div className='p-4 border-t space-y-2 absolute left-0 bottom-0 w-full bg-white'>
-				{replyTo && (
+				{(replyTo || editingCommentId) && (
 					<div className='flex items-center justify-between bg-muted px-3 py-2 rounded'>
 						<span className='text-sm text-muted-foreground truncate'>
-							Replying to: {replyTo.message}
+							{editingCommentId
+								? 'Editing comment...'
+								: `Replying to: ${replyTo?.message}`}
 						</span>
-						<button onClick={() => setReplyTo(null)}>
+						<button
+							onClick={() => {
+								setReplyTo(null)
+								setEditingCommentId(null)
+								setNewComment('')
+							}}
+						>
 							<X className='h-4 w-4 text-muted-foreground' />
 						</button>
 					</div>
@@ -280,7 +357,7 @@ export default function ReportComment({ id }: { id?: string }) {
 					</Avatar>
 					<div className='flex-1 flex gap-2'>
 						<Input
-							placeholder='Add a comment...'
+							placeholder='Tambahkan komentar'
 							value={newComment}
 							onChange={(e) => setNewComment(e.target.value)}
 							onKeyDown={(e) => {
@@ -295,7 +372,7 @@ export default function ReportComment({ id }: { id?: string }) {
 							onClick={() => handleAddComment()}
 							disabled={!newComment.trim()}
 						>
-							<Send className='h-4 w-4' />
+							{editingCommentId ? 'Save' : <Send className='h-4 w-4' />}
 						</Button>
 					</div>
 				</div>
