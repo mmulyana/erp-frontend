@@ -42,11 +42,14 @@ export default function LoanDetail() {
 			: undefined,
 		condition: !!(id && data?.data),
 	})
+
+	const showButtonReturn = data?.data?.status !== 'RETURNED'
+
 	return (
 		<DetailLayout
 			links={dynamicLink}
 			style={{ header: 'w-[600px]' }}
-			buttonAction={<ModalReturnLoan id={id} />}
+			buttonAction={showButtonReturn && <ModalReturnLoan id={id} />}
 		>
 			<div className='space-y-8 w-[600px] max-w-full px-4 xl:px-0 mx-auto pt-6 pb-10'>
 				<LoanInfo id={id} />
