@@ -30,7 +30,7 @@ export default function TopClient() {
 				<BaseSelect
 					options={sortOptions}
 					urlName='sortProject'
-					style={{ trigger: 'w-fit gap-2 rounded-xl' }}
+					style={{ trigger: 'w-fit gap-2 rounded-xl h-8' }}
 					defaultValue='desc'
 				/>
 			}
