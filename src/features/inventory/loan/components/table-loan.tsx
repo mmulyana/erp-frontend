@@ -11,14 +11,30 @@ import { paths } from '@/shared/constants/paths'
 import { Loan } from '@/shared/types/api'
 
 import { useLoans } from '../api/use-loans'
+import { parseAsString, useQueryStates } from 'nuqs'
+import StatusBadge from '@/shared/components/common/status-badge'
+import { statusLoan } from '../constant'
 
 export default function TableLoan() {
 	const navigate = useNavigate()
-	const { q, limit, page } = usePagination()
+
+	const [query] = useQueryStates({
+		inventoryId: parseAsString.withDefault(''),
+		projectId: parseAsString.withDefault(''),
+		userId: parseAsString.withDefault(''),
+	})
+	const { q, limit, page, sortBy, sortOrder, status } = usePagination()
+
 	const { data } = useLoans({
 		page,
 		limit,
 		search: q,
+		borrowerId: query.userId,
+		inventoryId: query.inventoryId,
+		projectId: query.projectId,
+		sortBy,
+		sortOrder,
+		status,
 	})
 
 	const column: ColumnDef<Loan>[] = [
@@ -82,6 +98,9 @@ export default function TableLoan() {
 		},
 		{
 			id: 'status',
+			cell: ({ row }) => (
+				<StatusBadge options={statusLoan} value={row.original.status} />
+			),
 		},
 	]
 
