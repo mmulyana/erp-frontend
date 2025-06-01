@@ -1,3 +1,5 @@
+import { useQueryState } from 'nuqs'
+
 import {
 	Tabs,
 	TabsContent,
@@ -10,13 +12,16 @@ import ProjectReport from './project-report'
 import ProjectLoan from './project-loan'
 
 export default function ProjectTabs({ id }: { id?: string }) {
+	const [query, setQuery] = useQueryState('tab')
+
 	return (
-		<Tabs defaultValue='Laporan'>
+		<Tabs defaultValue={query || 'Laporan'}>
 			<TabsList className='border-b w-full'>
 				{['Laporan', 'Pemakaian', 'Peminjaman'].map((i) => (
 					<TabsTrigger
 						key={i}
 						value={i}
+						onClick={() => setQuery(i)}
 						className='pt-0 !bg-transparent pb-3 data-[state=active]:text-ink-primary px-4 rounded-none data-[state=active]:bg-transparent relative group'
 					>
 						<p className='text-base'>{i}</p>
