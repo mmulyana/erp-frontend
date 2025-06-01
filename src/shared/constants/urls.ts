@@ -5,6 +5,7 @@ export const urls = {
 	login: api + '/auth/login',
 	me: api + '/auth/me',
 	user: api + '/user',
+	account: api + '/account',
 	role: api + '/role',
 	permissionGroup: api + '/permission/group',
 	permission: api + '/permission/item',
