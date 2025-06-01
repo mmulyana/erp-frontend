@@ -1,27 +1,39 @@
+import { parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from 'react-router-dom'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import { paths } from '@/shared/constants/paths'
-
-import { useProjects } from '../api/use-projects'
 import { Project } from '@/shared/types/api'
-import PhotoUrl from '@/shared/components/common/photo-url'
-import Priority from './priority'
-import ProgressPercentage from '@/shared/components/common/progress-percentage'
 import CircularProgress from '@/shared/components/common/circular-progress'
 import StatusBadge from '@/shared/components/common/status-badge'
+import PhotoUrl from '@/shared/components/common/photo-url'
+
+import { useProjects } from '../api/use-projects'
 import { statusBadges } from '../constant/types'
+import Priority from './priority'
 
 export default function TableProject() {
-	const { limit, page, q } = usePagination()
+	const { limit, page, q, status, sortBy, sortOrder } = usePagination()
 	const navigate = useNavigate()
+
+	const [query] = useQueryStates({
+		priority: parseAsString.withDefault(''),
+		leadId: parseAsString.withDefault(''),
+		clientId: parseAsString.withDefault(''),
+	})
 
 	const { isLoading, data } = useProjects({
 		limit,
 		page,
+		sortBy,
+		sortOrder,
+		status,
 		search: q,
+		leadId: query.leadId,
+		clientId: query.clientId,
+		priority: query.priority,
 	})
 
 	// COLUMNS EMPLOYEE
@@ -67,7 +79,9 @@ export default function TableProject() {
 		{
 			id: 'progress',
 			header: 'Progress',
-			cell: ({ row }) => <CircularProgress progress={row.original.progressPercentage} />,
+			cell: ({ row }) => (
+				<CircularProgress progress={row.original.progressPercentage} />
+			),
 		},
 		{
 			id: 'status',
