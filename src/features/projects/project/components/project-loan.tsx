@@ -1,4 +1,4 @@
-import { Calendar, ExternalLink, Plus } from 'lucide-react'
+import { ExternalLink, Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
@@ -7,8 +7,10 @@ import { useState } from 'react'
 import FormCreateLoan from '@/features/inventory/loan/components/form-create-loan'
 import { useCreateLoan } from '@/features/inventory/loan/api/use-create-loan'
 import { useLoans } from '@/features/inventory/loan/api/use-loans'
+import { statusLoan } from '@/features/inventory/loan/constant'
 import { loanForm } from '@/features/inventory/loan/types'
 
+import StatusBadge from '@/shared/components/common/status-badge'
 import PhotoUrl from '@/shared/components/common/photo-url'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
@@ -56,60 +58,49 @@ export default function ProjectLoan({ id }: props) {
 							className='bg-white rounded-xl border border-border p-4 relative'
 							key={i.id}
 						>
-							<div className='flex justify-between items-start'>
-								<div className='flex flex-col w-full'>
-									<div className='flex gap-4 items-center'>
-										<PhotoUrl
-											url={i.item.photoUrl || ''}
-											style={{ img: 'h-14 w-14 rounded' }}
-										/>
-										<p className='text-ink-primary'>{i.item.name}</p>
-									</div>
-									<div className='max-w-[200px]'>
-										<div className='flex justify-between mt-2'>
-											<p className='text-ink-primary/50 w-[160px]'>
-												Jumlah dipinjam
-											</p>
-											<p className='text-ink-primary font-medium'>
-												{i.requestQuantity}
-											</p>
-										</div>
-										<div className='flex justify-between'>
-											<p className='text-ink-primary/50 w-[160px]'>
-												Jumlah dikembalikan
-											</p>
-											<p className='text-ink-primary font-medium'>
-												{i.returnedQuantity}
-											</p>
+							<div className='flex justify-between'>
+								<div className='space-y-4 w-[280px]'>
+									<div className='space-y-1'>
+										<p className='text-ink-primary/50'>Barang dipinjam</p>
+										<div className='flex gap-2 items-center'>
+											<PhotoUrl
+												url={i.item.photoUrl || ''}
+												style={{ img: 'h-10 w-10 rounded-md' }}
+											/>
+											<Link
+												to={`${paths.inventoryMasterdataItem}/${i.item.id}?scroll=true`}
+												className='text-ink-primary'
+											>
+												{i.item.name}
+											</Link>
 										</div>
 									</div>
-								</div>
-								<Link
-									to={`${paths.inventoryStockLoan}/${i.id}`}
-									className='flex gap-2 items-center'
-								>
-									<span className='px-0.5'>Lihat</span>
-									<ExternalLink size={16} />
-								</Link>
-							</div>
-							<div className='pt-4 flex justify-between items-end'>
-								<div className='flex gap-4'>
-									<div className='flex gap-2 items-start'>
-										<Calendar size={20} className='text-ink-light' />
-										<div className='-mt-0.5'>
-											<p className='text-sm text-ink-primary/50'>
-												Tanggal dipinjam
+									<div className='grid grid-cols-2 gap-2'>
+										<div>
+											<p className='text-ink-primary/50 text-sm'>
+												Jml dipinjam
+											</p>
+											<p className='text-ink-primary'>{i.requestQuantity}</p>
+										</div>
+										<div>
+											<p className='text-ink-primary/50 text-sm'>
+												Jml dikembalikan
+											</p>
+											<p className='text-ink-primary'>{i.returnedQuantity}</p>
+										</div>
+									</div>
+									<div className='grid grid-cols-2 gap-2'>
+										<div className='flex-1'>
+											<p className='text-ink-primary/50 text-sm'>
+												Tggl dipinjam
 											</p>
 											<p className='text-ink-primary'>
 												{format(new Date(i.requestDate), 'dd/MM/yyyy')}
 											</p>
 										</div>
-									</div>
-									<div className='flex gap-2 items-start'>
-										<Calendar size={20} className='text-ink-light' />
-										<div className='-mt-0.5'>
-											<p className='text-sm text-ink-primary/50'>
-												Tanggal dikembalikan
+										<div className='flex-1'>
+											<p className='text-ink-primary/50 text-sm'>
+												Tggl dikembalikan
 											</p>
 											{i.returnDate && (
 												<p className='text-ink-primary'>
@@ -119,7 +110,20 @@ export default function ProjectLoan({ id }: props) {
 										</div>
 									</div>
 								</div>
-								<div className='space-y-2 w-[200px]'>
+								<div className='flex flex-col justify-between items-end'>
+									<Link
+										to={`${paths.inventoryStockLoan}/${i.id}`}
+										className='flex gap-2 items-center'
+									>
+										<span className='px-0.5'>Lihat</span>
+										<ExternalLink size={16} />
+									</Link>
+
+									<div>
+										<p className='text-ink-primary/50 text-right'>Status</p>
+										<StatusBadge options={statusLoan} value={i.status} />
+									</div>
+
 									<div className='flex justify-end flex-col items-end'>
 										<p className='text-ink-primary/50 leading-none text-right mb-0.5'>
 											Dibuat oleh
