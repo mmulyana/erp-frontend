@@ -21,6 +21,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
+import { paths } from '@/shared/constants/paths'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)
@@ -67,11 +68,11 @@ export default function Header() {
 								url={user?.photoUrl || ''}
 								style={{ img: 'h-8 w-8 rounded-full', icon: 'h-[18px]' }}
 							/>
-							<div className=''>
-								<p className='text-sm text-ink-primary leading-none font-medium'>
+							<div className='space-y-[3px]'>
+								<p className='text-sm text-ink-primary leading-none font-medium text-left'>
 									{user?.username}
 								</p>
-								<p className='text-xs text-ink-primary/50 leading-none'>
+								<p className='text-[13px] text-ink-primary/50 leading-none text-left'>
 									{user?.role?.name}
 								</p>
 							</div>
@@ -82,7 +83,10 @@ export default function Header() {
 						<DropdownMenuLabel>Akun saya</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem className='flex gap-2'>
+							<DropdownMenuItem
+								className='flex gap-2'
+								onClick={() => navigate(paths.account)}
+							>
 								<User size={18} />
 								Akun
 							</DropdownMenuItem>
