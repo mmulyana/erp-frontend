@@ -1,3 +1,4 @@
+import { parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,16 +11,20 @@ import { Client } from '@/shared/types/api'
 
 import { useClients } from '../api/use-clients'
 
-export default function TableClient({ companyId }: { companyId?: string }) {
+export default function TableClient() {
 	const navigate = useNavigate()
 	const { limit, page, q, sortOrder } = usePagination()
+
+	const [query] = useQueryStates({
+		companyId: parseAsString.withDefault(''),
+	})
 
 	const { isLoading, data } = useClients({
 		limit,
 		page,
 		search: q,
 		sortOrder,
-		companyId,
+		companyId: query.companyId,
 	})
 
 	// COLUMNS EMPLOYEE
@@ -52,7 +57,9 @@ export default function TableClient({ companyId }: { companyId?: string }) {
 							url={row.original.company?.photoUrl || ''}
 							style={{ img: 'h-8 w-8', icon: 'h-5 w-5' }}
 						/>
-						<p className='text-ink-primary text-nowrap'>{row.original.company?.name}</p>
+						<p className='text-ink-primary text-nowrap'>
+							{row.original.company?.name}
+						</p>
 					</div>
 				)
 			},
