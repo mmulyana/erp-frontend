@@ -354,7 +354,9 @@ export type StockOutItem = {
 	stockOutId: string
 	itemId: string
 	quantity: number
-	unitPrice?: number
+	unitPrice: number
+
+	item: Inventory
 }
 
 export type Loan = {
