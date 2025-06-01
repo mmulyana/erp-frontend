@@ -10,6 +10,8 @@ export type User = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	role?: Role
 }
 
 export type Role = {
