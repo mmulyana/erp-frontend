@@ -10,6 +10,7 @@ import { useUserInfinite } from '../api/use-user-infinite'
 export default function UserCombobox(props: {
 	onSelect?: (val: string) => void
 	defaultValue?: string
+	className?: string
 }) {
 	return (
 		<InfiniteCombobox
@@ -17,6 +18,7 @@ export default function UserCombobox(props: {
 			useInfiniteQuery={({ search }) =>
 				useUserInfinite({ search, limit: '10' })
 			}
+			style={{ value: props.className }}
 			defaultValue={props.defaultValue}
 			fetchItemById={fetchItemById}
 			label={(item) => item.username}
