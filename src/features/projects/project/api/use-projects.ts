@@ -13,6 +13,7 @@ export const useProjects = (
 		status?: string
 		sortBy?: string
 		sortOrder?: string
+		priority?: string
 	}
 ) => {
 	return useQuery({
