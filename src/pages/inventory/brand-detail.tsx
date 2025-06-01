@@ -1,4 +1,4 @@
-import { CalendarDays, House, Package, Pencil, Tag } from 'lucide-react'
+import { CalendarDays, House, Package, Tag } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 import { useParams } from 'react-router-dom'
 import { id as ind } from 'date-fns/locale'
@@ -15,10 +15,10 @@ import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
-import { Button } from '@/shared/components/ui/button'
 import { paths } from '@/shared/constants/paths'
 import { Inventory } from '@/shared/types/api'
 import { Link } from '@/shared/types'
+import { useDynamicLinks } from '@/shared/utils/link'
 
 const links: Link[] = [
 	{
@@ -38,7 +38,6 @@ const links: Link[] = [
 ]
 export default function BrandDetail() {
 	const { id } = useParams()
-	const [open, setOpen] = useState(false)
 	const { limit, page, q } = usePagination()
 
 	const { data } = useBrand({ id })
@@ -49,17 +48,17 @@ export default function BrandDetail() {
 		brandId: id,
 	})
 
-	const linkMemo: Link[] = useMemo(() => {
-		if (!id || !data?.data) return links
-
-		return [
-			...links.filter((i) => i.name !== 'Detail'),
-			{
-				name: data?.data?.name || id,
-				path: `${paths.inventoryMasterdataBrand}/${data.data.id}`,
-			},
-		]
-	}, [id, data])
+	const dynamicLink = useDynamicLinks({
+		baseLinks: links,
+		replaceName: 'Detail',
+		newLink: data?.data
+			? {
+					name: data.data.name ?? '',
+					path: `${paths.projectMasterdataClient}/${data.data.id}`,
+			  }
+			: undefined,
+		condition: !!(id && data?.data),
+	})
 
 	const column: ColumnDef<Inventory>[] = [
 		{
@@ -88,7 +87,7 @@ export default function BrandDetail() {
 
 	return (
 		<DetailLayout
-			links={linkMemo}
+			links={dynamicLink}
 			style={{
 				header: 'w-[940px]',
 			}}
