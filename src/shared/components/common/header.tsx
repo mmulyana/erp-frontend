@@ -1,19 +1,37 @@
-import { ChevronsUpDown } from 'lucide-react'
+import { ChevronsUpDown, Power, User } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 
+import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
 import { SidebarTrigger } from '@/shared/components/ui/sidebar'
 import { Button } from '@/shared/components/ui/button'
 import { userAtom } from '@/shared/store/auth'
 import { cn } from '@/shared/utils/cn'
 
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { useIsMobile } from '../../hooks/use-mobile'
 import TopNavigation from './top-navigation'
 import SearchAction from './search-action'
 import PhotoUrl from './photo-url'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)
+	const navigate = useNavigate()
+
+	const onLogout = () => {
+		CookieStorage.remove(CookieKeys.AuthToken)
+		navigate('/', {
+			replace: true,
+		})
+	}
 
 	const isMobile = useIsMobile()
 
@@ -39,8 +57,8 @@ export default function Header() {
 
 			<div className='flex gap-6 items-center'>
 				<SearchAction />
-				<Popover>
-					<PopoverTrigger asChild>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
 						<Button
 							variant='ghost'
 							className='flex gap-2 items-center px-0 hover:bg-transparent'
@@ -54,16 +72,28 @@ export default function Header() {
 									{user?.username}
 								</p>
 								<p className='text-xs text-ink-primary/50 leading-none'>
-									{user?.role.name}
+									{user?.role?.name}
 								</p>
 							</div>
 							<ChevronsUpDown size={18} className='stroke-ink-primary/40' />
 						</Button>
-					</PopoverTrigger>
-					<PopoverContent>
-						<p>Test</p>
-					</PopoverContent>
-				</Popover>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align='end' className='w-56'>
+						<DropdownMenuLabel>Akun saya</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+						<DropdownMenuGroup>
+							<DropdownMenuItem className='flex gap-2'>
+								<User size={18} />
+								Akun
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem className='flex gap-2' onClick={onLogout}>
+							<Power size={18} />
+							Keluar
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 		</div>
 	)
