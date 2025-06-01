@@ -10,6 +10,7 @@ import { urls } from '@/shared/constants/urls'
 export default function ClientCombobox(props: {
 	onSelect?: (val: string) => void
 	defaultValue?: string
+	className?: string
 }) {
 	return (
 		<InfiniteCombobox
@@ -26,6 +27,7 @@ export default function ClientCombobox(props: {
 					{isSelected && <Check className='h-4 w-4' />}
 				</div>
 			)}
+			style={{ value: props.className }}
 		/>
 	)
 }
