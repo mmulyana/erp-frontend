@@ -41,7 +41,7 @@ export default function ProtectedRoute({
 
 	useEffect(() => {
 		if (account?.data) {
-			setPermissionAtom(account?.data.permissions)
+			setPermissionAtom(account?.data.permissions as string[])
 			setUserAtom(account.data)
 		}
 	}, [account, isLoading, id])
