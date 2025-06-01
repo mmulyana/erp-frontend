@@ -1,9 +1,10 @@
 import ModalAddUser from '@/features/user/components/modal-add-user'
 import TableUser from '@/features/user/components/table-user'
-import HeadPage from '@/shared/components/common/head-page'
-import SearchV3 from '@/shared/components/common/search-v3'
+
 import CreatedSelect from '@/shared/components/common/select/created-select'
 import SortButton from '@/shared/components/common/sort-button'
+import HeadPage from '@/shared/components/common/head-page'
+import SearchV3 from '@/shared/components/common/search-v3'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 
 export default function User() {
