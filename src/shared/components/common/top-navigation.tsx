@@ -1,6 +1,6 @@
 import { cn } from '@/shared/utils/cn'
 import { paths } from '@/shared/constants/paths'
-import { HardHat, Package2, Users } from 'lucide-react'
+import { HardHat, Package2, UserCircle2, Users } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
 const tabs = [
@@ -18,6 +18,11 @@ const tabs = [
 		to: paths.inventory,
 		icon: <Package2 size={18} />,
 		label: 'Inventory',
+	},
+	{
+		to: paths.adminUser,
+		icon: <UserCircle2 size={18} />,
+		label: 'Admin',
 	},
 ]
 
