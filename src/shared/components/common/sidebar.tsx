@@ -9,10 +9,12 @@ import {
 	FolderClosed,
 	Hammer,
 	House,
+	Key,
 	PackageMinus,
 	PackagePlus,
 	Store,
 	Tag,
+	User,
 	Users,
 	Warehouse,
 } from 'lucide-react'
@@ -212,6 +214,23 @@ const inventoryLink: SidebarLinkGroup[] = [
 	},
 ]
 
+const adminLink: SidebarLinkGroup[] = [
+	{
+		links: [
+			{
+				href: paths.adminUser,
+				icon: <User size={20} strokeWidth={2} />,
+				name: 'User',
+			},
+			{
+				href: paths.adminRole,
+				icon: <Key size={20} strokeWidth={2} />,
+				name: 'Role',
+			},
+		],
+	},
+]
+
 const allLink: Links[] = [
 	{
 		module: 'hris',
@@ -224,6 +243,10 @@ const allLink: Links[] = [
 	{
 		module: 'inventory',
 		items: inventoryLink,
+	},
+	{
+		module: 'admin',
+		items: adminLink,
 	},
 ]
 
