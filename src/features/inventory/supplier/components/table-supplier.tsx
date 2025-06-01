@@ -9,13 +9,15 @@ import { useSuppliers } from '../api/use-suppliers'
 import { Supplier } from '@/shared/types/api'
 
 export default function TableSupplier() {
-	const { limit, page, q } = usePagination()
+	const { limit, page, q, sortBy, sortOrder } = usePagination()
 	const navigate = useNavigate()
 
 	const { data, isLoading } = useSuppliers({
 		limit,
 		page,
 		search: q,
+		sortBy,
+		sortOrder,
 	})
 
 	const columns: ColumnDef<Supplier>[] = [
