@@ -10,6 +10,7 @@ import PhotoUrl from '@/shared/components/common/photo-url'
 export default function ItemCombobox(props: {
 	onSelect?: (val: string) => void
 	defaultValue?: string
+	className?: string
 }) {
 	return (
 		<InfiniteCombobox
@@ -17,6 +18,7 @@ export default function ItemCombobox(props: {
 			useInfiniteQuery={({ search }) =>
 				useItemInfinite({ search, limit: '10' })
 			}
+			style={{ value: props.className }}
 			fetchItemById={fetchItemById}
 			label={(item) => item.name}
 			placeholder='Pilih barang'
