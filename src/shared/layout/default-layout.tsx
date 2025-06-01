@@ -10,7 +10,7 @@ export function DefaultLayout({
 	module,
 }: React.PropsWithChildren & {
 	className?: string
-	module: 'hris' | 'project' | 'inventory'
+	module: 'hris' | 'project' | 'inventory' | 'admin'
 }) {
 	return (
 		<SidebarProvider>
