@@ -9,13 +9,15 @@ import { useLocations } from '../api/use-locations'
 import { Location } from '../types'
 
 export default function TableLocation() {
-	const { limit, page, q } = usePagination()
+	const { limit, page, q, sortBy, sortOrder } = usePagination()
 	const navigate = useNavigate()
 
 	const { isLoading, data } = useLocations({
 		limit,
 		page,
 		search: q,
+		sortBy,
+		sortOrder,
 	})
 
 	// COLUMNS EMPLOYEE
