@@ -16,11 +16,14 @@ import { Pagination } from '@/shared/components/common/data-table/component'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import { paths } from '@/shared/constants/paths'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
+import FilterReset from '@/shared/components/common/filter-reset'
 
 export default function StockOut() {
 	const [query, setQuery] = useQueryStates({
 		projectId: parseAsString.withDefault(''),
 		userId: parseAsString.withDefault(''),
+		sort: parseAsString.withDefault(''),
 	})
 	const { page, limit, q, sortBy, sortOrder } = usePagination()
 
@@ -34,6 +37,8 @@ export default function StockOut() {
 		sortOrder,
 	})
 
+	const hasQuery = useHasQueryValue(query)
+
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
 			<StockOutTotal />
@@ -43,31 +48,39 @@ export default function StockOut() {
 				url={paths.inventoryStockOutNew}
 			/>
 			<div className='p-6 bg-white rounded-xl border border-border space-y-6'>
-				<div className='flex justify-between items-center'>
+				<div className='flex items-center gap-4'>
 					<SearchV3 />
-					<div className='flex gap-4 items-center'>
-						<FilterButton>
-							<div>
-								<p className='text-sm text-ink-primary font-medium'>Proyek</p>
-								<ProjectCombobox
-									defaultValue={query.projectId}
-									onSelect={(val) => setQuery({ projectId: val })}
-								/>
-							</div>
-							<div>
-								<p className='text-sm text-ink-primary font-medium'>
-									Dibuat oleh
-								</p>
-								<UserCombobox
-									defaultValue={query.userId}
-									onSelect={(val) => setQuery({ userId: val })}
-								/>
-							</div>
-						</FilterButton>
-						<SortButton>
-							<CreatedSelect />
-						</SortButton>
-					</div>
+					<FilterReset
+						show={hasQuery}
+						onClick={() =>
+							setQuery({
+								sort: null,
+								userId: null,
+								projectId: null,
+							})
+						}
+					/>
+					<FilterButton style={{ trigger: 'ml-0 md:ml-auto' }}>
+						<div>
+							<p className='text-sm text-ink-primary font-medium'>Proyek</p>
+							<ProjectCombobox
+								defaultValue={query.projectId}
+								onSelect={(val) => setQuery({ projectId: val })}
+							/>
+						</div>
+						<div>
+							<p className='text-sm text-ink-primary font-medium'>
+								Dibuat oleh
+							</p>
+							<UserCombobox
+								defaultValue={query.userId}
+								onSelect={(val) => setQuery({ userId: val })}
+							/>
+						</div>
+					</FilterButton>
+					<SortButton>
+						<CreatedSelect />
+					</SortButton>
 				</div>
 				<TableStockOut data={data?.data.data || []} />
 				<Pagination
