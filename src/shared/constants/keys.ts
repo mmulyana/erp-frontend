@@ -1,9 +1,7 @@
 export const keys = {
 	me: 'me',
-	// user: 'user',
-	// userDetail: 'user-detail',
-	// roles: 'roles',
-	// rolesDetail: 'roles-detail',
+	roles: 'roles',
+	rolesDetail: 'roles-detail',
 
 	employee: 'employee',
 	employeeInfinite: 'employee-infinite',
