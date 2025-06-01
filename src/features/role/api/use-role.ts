@@ -17,7 +17,7 @@ export const useRole = (params?: Params) => {
     const { data } = await http(`${urls.role}/${params?.id}`, {
 				params,
 			})
-			return data.data
+			return data
 		},
 		enabled:
 			params?.id !== null && params?.id !== undefined && params?.id !== '',
