@@ -3,6 +3,7 @@ export const paths = {
 	login: '/login',
 	forgot: '/forgot',
 	notFound: '*',
+	account: '/account',
 
 	hris: '/hris',
 	hrisMasterdataEmployee: '/hris/masterdata/employee',
@@ -46,7 +47,7 @@ export const paths = {
 	inventoryStockLoanNew: '/inventory/new-stock-loan',
 	inventoryStockLoanDetail: '/inventory/stock-loan/:id',
 
-	adminUser: '/dashboard/admin/users',
-	adminRole: '/dashboard/admin/role',
-	adminPermission: '/dashboard/admin/permission',
+	adminUser: '/admin/user',
+	adminRole: '/admin/role',
+	adminPermission: '/admin/permission',
 }
