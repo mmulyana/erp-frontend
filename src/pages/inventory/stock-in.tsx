@@ -15,20 +15,29 @@ import { Pagination } from '@/shared/components/common/data-table/component'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import { paths } from '@/shared/constants/paths'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
+import FilterReset from '@/shared/components/common/filter-reset'
+import UserCombobox from '@/features/user/components/user-combobox'
 
 export default function StockIn() {
 	const [query, setQuery] = useQueryStates({
 		supplierId: parseAsString.withDefault(''),
+		sort: parseAsString.withDefault(''),
+		createdBy: parseAsString.withDefault(''),
 	})
 
-	const { page, limit, q } = usePagination()
+	const { page, limit, q, sortBy, sortOrder } = usePagination()
 
 	const { data } = useStockIns({
 		limit,
 		page,
 		search: q,
 		supplierId: query.supplierId,
+		sortBy,
+		sortOrder,
 	})
+
+	const hasQuery = useHasQueryValue(query)
 
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
@@ -39,10 +48,21 @@ export default function StockIn() {
 				url={paths.inventoryStockInNew}
 			/>
 			<div className='p-6 bg-white rounded-xl border border-border space-y-6'>
-				<div className='flex justify-between items-center'>
+				<div className='flex gap-4 items-center'>
 					<SearchV3 />
-					<div className='flex gap-4 items-center'>
-						<FilterButton>
+					<FilterReset
+						show={hasQuery}
+						onClick={() =>
+							setQuery({
+								sort: null,
+								supplierId: null,
+								createdBy: null,
+							})
+						}
+					/>
+					<FilterButton style={{ trigger: 'ml-0 md:ml-auto' }}>
+						<div className='space-y-1'>
+							<p className='text-ink-primary/50'>Supplier</p>
 							<SupplierCombobox
 								defaultValue={query.supplierId}
 								onSelect={(val) =>
@@ -51,11 +71,22 @@ export default function StockIn() {
 									})
 								}
 							/>
-						</FilterButton>
-						<SortButton>
-							<CreatedSelect />
-						</SortButton>
-					</div>
+						</div>
+						<div className='space-y-1'>
+							<p className='text-ink-primary/50'>Dibuat Oleh</p>
+							<UserCombobox
+								defaultValue={query.createdBy}
+								onSelect={(val) =>
+									setQuery({
+										createdBy: val,
+									})
+								}
+							/>
+						</div>
+					</FilterButton>
+					<SortButton>
+						<CreatedSelect />
+					</SortButton>
 				</div>
 				<TableStockIn data={data?.data.data || []} />
 				<Pagination
