@@ -4,7 +4,8 @@ import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
 
-import { IApi, User } from '../types'
+import { IApi } from '../types'
+import { User } from '../types/api'
 
 export const useGetme = () => {
 	return useQuery({
