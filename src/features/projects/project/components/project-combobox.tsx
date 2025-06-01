@@ -10,6 +10,7 @@ export default function ProjectCombobox(props: {
 	onSelect?: (val: string) => void
 	defaultValue?: string
 	disabled?: boolean
+	className?: string
 }) {
 	return (
 		<InfiniteCombobox
@@ -17,6 +18,7 @@ export default function ProjectCombobox(props: {
 			useInfiniteQuery={({ search }) =>
 				useProjectInfinite({ search, limit: 10 })
 			}
+			style={{ value: props.className }}
 			fetchItemById={fetchItemById}
 			label={(item) => item.name}
 			placeholder='Pilih proyek'
