@@ -12,13 +12,14 @@ export type User = {
 	deletedAt?: string
 
 	role?: Role
+	permissions?: string[]
 }
 
 export type Role = {
 	id: string
 	name: string
 	description?: string
-	permissions?: string
+	permissions?: string[]
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string

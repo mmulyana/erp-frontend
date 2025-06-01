@@ -49,5 +49,5 @@ export const paths = {
 
 	adminUser: '/admin/user',
 	adminRole: '/admin/role',
-	adminPermission: '/admin/permission',
+	adminRoleDetail: '/admin/role/:id',
 }

@@ -3,6 +3,8 @@ export const keys = {
 	roles: 'roles',
 	rolesDetail: 'roles-detail',
 
+	permission: 'permission',
+
 	employee: 'employee',
 	employeeInfinite: 'employee-infinite',
 	employeeDetail: 'employee-detail',

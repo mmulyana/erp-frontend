@@ -7,8 +7,7 @@ export const urls = {
 	user: api + '/user',
 	account: api + '/account',
 	role: api + '/role',
-	permissionGroup: api + '/permission/group',
-	permission: api + '/permission/item',
+	permission: api + '/permission',
 
 	// HRIS
 	employee: api + '/employee',
