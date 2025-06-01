@@ -8,6 +8,7 @@ import { paths } from '@/shared/constants/paths'
 import ModalEditItem from './modal-edit-item'
 import { useItem } from '../api/use-item'
 import { statusItem } from '../constant'
+import Visible from '@/shared/components/common/visible'
 
 type props = {
 	id?: string
@@ -39,29 +40,37 @@ export default function ItemDetail({ id }: props) {
 			</div>
 			<div className='flex justify-between items-center'>
 				<p className='text-ink-primary/50'>Lokasi</p>
-				<div className='flex gap-1 items-center'>
-					<p className='text-ink-primary'>{data?.data?.warehouse?.name}</p>
-					<Link
-						to={`${paths.inventoryMasterdataLocation}/${data?.data?.warehouseId}`}
-						className='flex gap-1 items-center'
-					>
-						<span className='px-0.5'>Lihat</span>
-						<ExternalLink size={16} />
-					</Link>
-				</div>
+				{data?.data?.warehouseId && (
+					<Visible deletedAt={data?.data?.warehouse.deletedAt}>
+						<div className='flex gap-1 items-center'>
+							<p className='text-ink-primary'>{data?.data?.warehouse?.name}</p>
+							<Link
+								to={`${paths.inventoryMasterdataLocation}/${data?.data?.warehouseId}`}
+								className='flex gap-1 items-center'
+							>
+								<span className='px-0.5'>Lihat</span>
+								<ExternalLink size={16} />
+							</Link>
+						</div>
+					</Visible>
+				)}
 			</div>
 			<div className='flex justify-between items-center'>
 				<p className='text-ink-primary/50'>Merek</p>
-				<div className='flex gap-2 items-center'>
-					<p className='text-ink-primary'>{data?.data?.brand?.name}</p>
-					<Link
-						to={`${paths.inventoryMasterdataBrand}/${data?.data?.brandId}`}
-						className='flex gap-1 items-center'
-					>
-						<span className='px-0.5'>Lihat</span>
-						<ExternalLink size={16} />
-					</Link>
-				</div>
+				{data?.data?.brandId && (
+					<Visible deletedAt={data?.data?.brand.deletedAt}>
+						<div className='flex gap-2 items-center'>
+							<p className='text-ink-primary'>{data?.data?.brand?.name}</p>
+							<Link
+								to={`${paths.inventoryMasterdataBrand}/${data?.data?.brandId}`}
+								className='flex gap-1 items-center'
+							>
+								<span className='px-0.5'>Lihat</span>
+								<ExternalLink size={16} />
+							</Link>
+						</div>
+					</Visible>
+				)}
 			</div>
 		</CardV1>
 	)
