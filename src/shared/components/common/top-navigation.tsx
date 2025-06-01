@@ -6,21 +6,25 @@ import { Link, useLocation } from 'react-router-dom'
 const tabs = [
 	{
 		to: paths.hris,
+		match: '/hris',
 		icon: <Users size={18} />,
 		label: 'HRIS',
 	},
 	{
 		to: paths.project,
+		match: '/project',
 		icon: <HardHat size={18} />,
 		label: 'Project',
 	},
 	{
 		to: paths.inventory,
+		match: '/inventory',
 		icon: <Package2 size={18} />,
 		label: 'Inventory',
 	},
 	{
 		to: paths.adminUser,
+		match: '/admin',
 		icon: <UserCircle2 size={18} />,
 		label: 'Admin',
 	},
@@ -31,8 +35,8 @@ export default function TopNavigation() {
 
 	return (
 		<div className='flex gap-4'>
-			{tabs.map(({ to, icon, label }) => {
-				const isActive = pathname.includes(to)
+			{tabs.map(({ to, icon, label, match }) => {
+				const isActive = pathname.startsWith(match)
 
 				return (
 					<Link
