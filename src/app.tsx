@@ -53,7 +53,9 @@ const LoanDetail = lazy(() => import('./pages/inventory/loan-detail'))
 const NewLoan = lazy(() => import('./pages/inventory/new-loan'))
 
 const Account = lazy(() => import('./pages/account'))
-const User = lazy(() => import('./pages/user'))
+const User = lazy(() => import('./pages/admin/user'))
+const Role = lazy(() => import('./pages/admin/role'))
+const RoleDetail = lazy(() => import('./pages/admin/detail-role'))
 
 const routes: RoutesConfig[] = [
 	{
@@ -229,6 +231,14 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.adminUser,
 		component: <User />,
+	},
+	{
+		path: paths.adminRole,
+		component: <Role />,
+	},
+	{
+		path: paths.adminRoleDetail,
+		component: <RoleDetail />,
 	},
 ]
 
