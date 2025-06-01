@@ -10,15 +10,26 @@ import { Inventory } from '@/shared/types/api'
 
 import { useItems } from '../api/use-items'
 import { statusItem } from '../constant'
+import { parseAsString, useQueryStates } from 'nuqs'
 
 export default function TableItem() {
-	const { limit, page, q } = usePagination()
+	const { limit, page, q, sortBy, sortOrder } = usePagination()
+	const [query] = useQueryStates({
+		warehouseId: parseAsString.withDefault(''),
+		brandId: parseAsString.withDefault(''),
+		status: parseAsString.withDefault('')
+	})
 	const navigate = useNavigate()
 
 	const { isLoading, data } = useItems({
 		limit,
 		page,
 		search: q,
+		sortBy,
+		sortOrder,
+		brandId: query.brandId,
+		warehouseId: query.warehouseId,
+		status: query.status
 	})
 
 	// COLUMNS EMPLOYEE
@@ -45,12 +56,16 @@ export default function TableItem() {
 		{
 			id: 'location',
 			header: 'Gudang',
-			cell: ({ row }) => row.original?.warehouse?.name,
+			cell: ({ row }) =>
+				row.original.warehouse?.deletedAt
+					? ''
+					: row.original.warehouse?.name ?? '',
 		},
 		{
 			id: 'brand',
 			header: 'Merek',
-			cell: ({ row }) => row.original?.brand?.name,
+			cell: ({ row }) =>
+				row.original.brand?.deletedAt ? '' : row.original.brand?.name ?? '',
 		},
 		{
 			id: 'status',
