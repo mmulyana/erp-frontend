@@ -52,6 +52,9 @@ const Loan = lazy(() => import('./pages/inventory/loan'))
 const LoanDetail = lazy(() => import('./pages/inventory/loan-detail'))
 const NewLoan = lazy(() => import('./pages/inventory/new-loan'))
 
+const Account = lazy(() => import('./pages/account'))
+const User = lazy(() => import('./pages/user'))
+
 const routes: RoutesConfig[] = [
 	{
 		path: paths.notFound,
@@ -62,6 +65,10 @@ const routes: RoutesConfig[] = [
 		path: paths.base,
 		component: <Login />,
 		withoutAuth: true,
+	},
+	{
+		path: paths.account,
+		component: <Account />,
 	},
 
 	// project
@@ -216,6 +223,12 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.inventoryStockLoanNew,
 		component: <NewLoan />,
+	},
+
+	// admin
+	{
+		path: paths.adminUser,
+		component: <User />,
 	},
 ]
 
