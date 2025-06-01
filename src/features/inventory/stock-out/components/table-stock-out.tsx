@@ -17,7 +17,7 @@ import {
 } from '@/shared/components/ui/table'
 
 import { formatThousands } from '@/shared/utils'
-import { StockOut } from '../types'
+import { StockOut } from '@/shared/types/api'
 
 type props = {
 	data: StockOut[]
