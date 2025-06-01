@@ -11,6 +11,7 @@ export const useItems = (
 	params?: Pagination & {
 		brandId?: string
 		warehouseId?: string
+		status?: string
 	}
 ) => {
 	return useQuery({
