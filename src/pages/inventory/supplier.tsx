@@ -6,8 +6,17 @@ import { DefaultLayout } from '@/shared/layout/default-layout'
 import ModalAddSupplier from '@/features/inventory/supplier/components/modal-add-supplier'
 import TableSupplier from '@/features/inventory/supplier/components/table-supplier'
 import CreatedSelect from '@/shared/components/common/select/created-select'
+import { parseAsString, useQueryStates } from 'nuqs'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
+import FilterReset from '@/shared/components/common/filter-reset'
 
 export default function Supplier() {
+	const [query, setQuery] = useQueryStates({
+		sort: parseAsString.withDefault(''),
+	})
+
+	const hasQuery = useHasQueryValue(query)
+
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
 			<HeadPage
@@ -17,13 +26,19 @@ export default function Supplier() {
 			/>
 
 			<div className='p-6 rounded-xl border borde-border bg-white space-y-6'>
-				<div className='flex justify-between items-center'>
+				<div className='flex justify-between items-center gap-4'>
 					<SearchV3 />
-					<div className='flex gap-4 items-center'>
-						<SortButton>
-							<CreatedSelect />
-						</SortButton>
-					</div>
+					<FilterReset
+						show={hasQuery}
+						onClick={() =>
+							setQuery({
+								sort: null,
+							})
+						}
+					/>
+					<SortButton style={{ trigger: 'ml-0 md:ml-auto' }}>
+						<CreatedSelect />
+					</SortButton>
 				</div>
 				<TableSupplier />
 			</div>
