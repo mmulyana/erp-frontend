@@ -6,8 +6,17 @@ import TableLocation from '@/features/inventory/location/components/table-locati
 import CreatedSelect from '@/shared/components/common/select/created-select'
 import SortButton from '@/shared/components/common/sort-button'
 import HeadPage from '@/shared/components/common/head-page'
+import { parseAsString, useQueryStates } from 'nuqs'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
+import FilterReset from '@/shared/components/common/filter-reset'
 
 export default function Location() {
+	const [query, setQuery] = useQueryStates({
+		sort: parseAsString.withDefault(''),
+	})
+
+	const hasQuery = useHasQueryValue(query)
+
 	return (
 		<DefaultLayout className='space-y-6' module='inventory'>
 			<HeadPage
@@ -17,13 +26,19 @@ export default function Location() {
 			/>
 
 			<div className='p-6 rounded-xl border borde-border bg-white space-y-6'>
-				<div className='flex justify-between items-center'>
+				<div className='flex justify-between items-center gap-4'>
 					<SearchV3 />
-					<div className='flex gap-4 items-center'>
-						<SortButton>
-							<CreatedSelect />
-						</SortButton>
-					</div>
+					<FilterReset
+						show={hasQuery}
+						onClick={() =>
+							setQuery({
+								sort: null,
+							})
+						}
+					/>
+					<SortButton style={{ trigger: 'ml-0 md:ml-auto' }}>
+						<CreatedSelect />
+					</SortButton>
 				</div>
 				<TableLocation />
 			</div>
