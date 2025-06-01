@@ -9,6 +9,9 @@ import { Loan } from '@/shared/types/api'
 export const useLoans = (
 	params?: Pagination & {
 		projectId?: string
+		status?: string
+		inventoryId?: string
+		borrowerId?: string
 	}
 ) => {
 	return useQuery({
