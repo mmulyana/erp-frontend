@@ -10,12 +10,14 @@ import { BrandInventory } from '@/shared/types/api'
 
 export default function TableBrand() {
 	const navigate = useNavigate()
-	const { limit, page, q } = usePagination()
+	const { limit, page, q, sortBy, sortOrder } = usePagination()
 
 	const { isLoading, data } = useBrands({
 		limit,
 		page,
 		search: q,
+		sortBy,
+		sortOrder,
 	})
 
 	// COLUMNS EMPLOYEE
