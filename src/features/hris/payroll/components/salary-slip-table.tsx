@@ -8,6 +8,7 @@ import { formatThousands } from '@/shared/utils'
 import { Payroll } from '@/shared/types/api'
 
 import { usePayrolls } from '../api/use-payrolls'
+import { DrawerSalarySlip } from './drawer-salary-slip'
 
 export default function SalarySlipTable() {
 	const { page, limit, q, sortBy, sortOrder } = usePagination()
@@ -49,6 +50,7 @@ export default function SalarySlipTable() {
 		},
 		{
 			id: 'action',
+			cell: ({ row }) => <DrawerSalarySlip id={row.original.id} />,
 		},
 	]
 

@@ -26,6 +26,7 @@ import { Link, selectOption } from '@/shared/types'
 import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
+import ModalDetailPayroll from '@/features/hris/payroll/components/modal-detail-payroll'
 
 const links: Link[] = [
 	{
@@ -166,12 +167,7 @@ export default function PayrolleDetail() {
 	return (
 		<DetailLayout
 			links={linkMemo}
-			buttonAction={
-				<Button variant='outline' onClick={() => setOpen(true)}>
-					<Pencil size={16} className='text-ink-light' />
-					<span className='px-1 text-ink-primary'>Ubah</span>
-				</Button>
-			}
+			buttonAction={<ModalDetailPayroll />}
 			style={{
 				header: 'w-[1072px]',
 			}}

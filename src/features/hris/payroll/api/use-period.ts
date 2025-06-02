@@ -12,7 +12,7 @@ type Params = {
 
 export const usePeriod = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.payrollPeriodDetail, params],
+		queryKey: [keys.payrollPeriodDetail, params.id],
 		queryFn: async (): Promise<IApi<PayrollPeriod>> => {
 			const { data } = await http(`${urls.payrollPeriod}/${params?.id}`, {
 				params,

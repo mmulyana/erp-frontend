@@ -10,6 +10,9 @@ import SearchV3 from '@/shared/components/common/search-v3'
 import HeadPage from '@/shared/components/common/head-page'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import { selectOption } from '@/shared/types'
+import { parseAsString, useQueryStates } from 'nuqs'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
+import FilterReset from '@/shared/components/common/filter-reset'
 
 const statusOptions: selectOption[] = [
 	{
@@ -42,6 +45,13 @@ const createdOptions: selectOption[] = [
 ]
 
 export default function Payroll() {
+	const [query, setQuery] = useQueryStates({
+		status: parseAsString.withDefault(''),
+		sort: parseAsString.withDefault(''),
+	})
+
+	const hasValue = useHasQueryValue(query)
+
 	return (
 		<DefaultLayout module='hris' className='space-y-6'>
 			<PayrollTotal />
@@ -51,20 +61,28 @@ export default function Payroll() {
 				action={<ModalAddPayroll />}
 			/>
 			<div className='p-6 rounded-xl border-border bg-white space-y-6'>
-				<div className='flex justify-between items-center'>
+				<div className='flex items-center gap-4'>
 					<SearchV3 />
-					<div className='flex gap-4 items-center'>
-						<FilterButton>
-							<BaseSelect
-								label='Status'
-								options={statusOptions}
-								urlName='status'
-							/>
-						</FilterButton>
-						<SortButton>
-							<CreatedSelect options={createdOptions} />
-						</SortButton>
-					</div>
+					<FilterReset
+						show={hasValue}
+						onClick={() => {
+							setQuery({
+								sort: null,
+								status: null,
+							})
+						}}
+					/>
+					<FilterButton style={{ trigger: 'ml-0 md:ml-auto' }}>
+						<BaseSelect
+							label='Status'
+							options={statusOptions}
+							urlName='status'
+							defaultValue=''
+						/>
+					</FilterButton>
+					<SortButton>
+						<CreatedSelect options={createdOptions} />
+					</SortButton>
 				</div>
 				<TablePayroll />
 			</div>

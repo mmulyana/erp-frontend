@@ -1,9 +1,9 @@
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { NumericFormat } from 'react-number-format'
-import { Pencil, RotateCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { id as ind } from 'date-fns/locale'
+import { Pencil } from 'lucide-react'
 import { format } from 'date-fns'
 
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
@@ -30,15 +30,15 @@ import {
 	FormLabel,
 } from '@/shared/components/ui/form'
 
+import ModalSummaryOvertime from '../../attendance/components/overtime/modal-summary'
+import ModalSummaryRegular from '../../attendance/components/regular/modal-summary'
 import { useCreateTransaction } from '../../cash-advance/api/use-create-transaction'
 import { useSummaryEmployee } from '../../employee/api/use-summary-employee'
 import { useEmployee } from '../../employee/api/use-employee'
 import { useUpdatePayroll } from '../api/use-update-payroll'
+import ModalAddDeduction from './modal-add-deduction'
 import { usePayroll } from '../api/use-payroll'
 import { FormProcess } from '../types'
-import ModalAddDeduction from './modal-add-deduction'
-import ModalSummaryRegular from '../../attendance/components/regular/modal-summary'
-import ModalSummaryOvertime from '../../attendance/components/overtime/modal-summary'
 
 const optionsPayment = [
 	{

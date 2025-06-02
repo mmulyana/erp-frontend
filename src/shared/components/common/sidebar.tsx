@@ -332,16 +332,16 @@ export default function AppSidebar({ module }: AppSidebarProps) {
 							value={activeMobileModule}
 							onValueChange={setActiveMobileModule}
 						>
-							<TabsList className='mb-4 bg-gray-200 w-full p-1 rounded-xl gap-2'>
+							<TabsList className='mb-4 border-b w-full rounded border-ink-primary/10'>
 								{allModules.map((mod) => (
 									<TabsTrigger
 										key={mod}
 										value={mod}
 										className={cn(
-											'flex-1 data-[state=active]:bg-white data-[state=inactive]:bg-gray-200 capitalize font-medium data-[state=inactive]:hover:bg-gray-300 data-[state=active]:text-brand data-[state=active]:shadow-md data-[state=active]:shadow-gray-500/40'
+											'flex-1 data-[state=active]:bg-white data-[state=inactive]:bg-transparent capitalize rounded-none font-medium data-[state=inactive]:hover:bg-gray-200 data-[state=active]:text-ink-primary data-[state=active]:before:bg-brand data-[state=active]:before:absolute data-[state=active]:before:w-full data-[state=active]:before:h-1 data-[state=active]:before:bottom-0 relative py-3'
 										)}
 									>
-										{mod}
+										{mod === 'hris' ? 'HRIS' : mod}
 									</TabsTrigger>
 								))}
 							</TabsList>

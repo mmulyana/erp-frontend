@@ -34,6 +34,7 @@ import { ModalEditReport } from './modal-edit-report'
 import { useReport } from '../api/report/use-report'
 import { warningTypes } from '../constant/types'
 import { DropdownMenuItem } from '@/shared/components/ui/dropdown-menu'
+import { baseUrl } from '@/shared/constants/urls'
 
 type Comment = {
 	id: string
@@ -153,7 +154,9 @@ export default function ReportComment({ id }: { id?: string }) {
 				>
 					<div className='flex gap-3 relative'>
 						<Avatar className='h-8 w-8'>
-							<AvatarImage src={comment.user.photoUrl} />
+							<AvatarImage
+								src={baseUrl + '/' + comment.user.photoUrl}
+							/>
 							<AvatarFallback className='uppercase'>
 								{comment.user.username[0]}
 							</AvatarFallback>
@@ -225,7 +228,7 @@ export default function ReportComment({ id }: { id?: string }) {
 							)}
 						>
 							<Avatar className='h-8 w-8'>
-								<AvatarImage src={user?.photoUrl || ''} />
+								<AvatarImage src={baseUrl + '/' + user?.photoUrl || ''} />
 								<AvatarFallback className='uppercase font-medium'>
 									{user?.username.at(1)}
 								</AvatarFallback>
@@ -350,7 +353,7 @@ export default function ReportComment({ id }: { id?: string }) {
 				)}
 				<div className='flex gap-2'>
 					<Avatar className='h-10 w-10'>
-						<AvatarImage src={user?.photoUrl || ''} />
+						<AvatarImage src={baseUrl + '/' + user?.photoUrl || ''} />
 						<AvatarFallback className='uppercase font-medium'>
 							{user?.username.at(1)}
 						</AvatarFallback>

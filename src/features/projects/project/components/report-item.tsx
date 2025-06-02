@@ -78,7 +78,7 @@ export default function ReportItem({
 								</>
 							)}
 						</p>
-						<p>"{item.message}"</p>
+						<p className='text-ink-primary'>{item.message}</p>
 					</div>
 				</div>
 				<div className='flex gap-4 items-center pl-14 pt-4'>
