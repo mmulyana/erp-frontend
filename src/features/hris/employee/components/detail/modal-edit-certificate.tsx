@@ -28,18 +28,16 @@ import {
 } from '@/shared/components/ui/form'
 
 import { useUpdateCertificate } from '../../api/use-update-certificate'
-import { atomModalCertificate } from './modal-detail-certificate'
 import { useCertificate } from '../../api/use-certificate'
 import { CertificateForm } from '../../types'
 
-export default function ModalEditCertificate() {
-	const modal = useAtomValue(atomModalCertificate)
+export default function ModalEditCertificate({ id }: { id?: string }) {
 	const { id: employeeId } = useParams()
 
 	const [open, setOpen] = useState(false)
 
 	const { mutate, isPending } = useUpdateCertificate()
-	const { data } = useCertificate(modal?.id)
+	const { data } = useCertificate(id)
 
 	const form = useForm<Partial<CertificateForm>>({
 		defaultValues: {
@@ -64,7 +62,7 @@ export default function ModalEditCertificate() {
 
 	const submit = async (payload: Partial<CertificateForm>) => {
 		mutate(
-			{ ...payload, id: modal?.id, employeeId },
+			{ ...payload, id, employeeId },
 			{
 				onSuccess: handleFormSuccess(setOpen),
 				onError: handleFormError<Partial<CertificateForm>>(form),

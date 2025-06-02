@@ -54,6 +54,7 @@ export const keys = {
 	projectReportChart: 'project-report-chart',
 	projectReportStatus: 'project-report-status',
 	projectTotalRevenue: 'project-total-revenue',
+	projectTotalEstimate: 'project-total-estimate',
 
 	reportDetail: 'report-detail',
 

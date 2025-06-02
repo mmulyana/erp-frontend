@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
 import { Trash } from 'lucide-react'
-import { useAtom } from 'jotai'
 
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -16,15 +15,15 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteCertificate } from '../../api/use-delete-certificate'
-import { atomModalCertificate } from './modal-detail-certificate'
+import { useState } from 'react'
 
-export default function ModalDeleteCertificate() {
-	const [modal, setModal] = useAtom(atomModalCertificate)
+export default function ModalDeleteCertificate({ id }: { id?: string }) {
+	const [open, setOpen] = useState(false)
 	const { mutate } = useDeleteCertificate()
 	const { id: employeeId } = useParams()
 
 	return (
-		<AlertDialog>
+		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button
 					variant='ghost'
@@ -50,12 +49,12 @@ export default function ModalDeleteCertificate() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (modal?.id && employeeId) {
+							if (id && employeeId) {
 								mutate(
-									{ id: modal.id, employeeId },
+									{ id, employeeId },
 									{
 										onSuccess: () => {
-											setModal(null)
+											setOpen(false)
 										},
 									}
 								)

@@ -1,23 +1,22 @@
 import { FileText, FileBadgeIcon } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 import { useParams } from 'react-router-dom'
-import { useSetAtom } from 'jotai'
+import { useState } from 'react'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import SearchV3 from '@/shared/components/common/search-v3'
 
+import ModalDetailCertificate from './modal-detail-certificate'
 import { useCertificates } from '../../api/use-certificates'
 import ModalAddCertificate from './modal-add-certificate'
-import ModalDetailCertificate, {
-	atomModalCertificate,
-} from './modal-detail-certificate'
 
 export default function EmployeeCertificate() {
+	const [open, setOpen] = useState(false)
+	const [selectedId, setSelectedId] = useState('')
+
 	const { limit, page, q } = usePagination()
 	const { id } = useParams()
-
-	const setModal = useSetAtom(atomModalCertificate)
 
 	const { data, isLoading } = useCertificates({
 		id,
@@ -60,13 +59,11 @@ export default function EmployeeCertificate() {
 				nonClickableColumns={[]}
 				isLoading={isLoading}
 				onCellClick={(e) => {
-					setModal({
-						id: e.id,
-						open: true,
-					})
+					setSelectedId(e.id)
+					setOpen(true)
 				}}
 			/>
-			<ModalDetailCertificate />
+			<ModalDetailCertificate id={selectedId} open={open} setOpen={setOpen} />
 		</div>
 	)
 }

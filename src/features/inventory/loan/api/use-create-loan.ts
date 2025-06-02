@@ -19,8 +19,8 @@ export function useCreateLoan() {
 			if (payload.note) formData.append('note', payload.note)
 			if (payload.projectId) formData.append('projectId', payload.projectId)
 
-			if (payload.filephotoUrlIn && Array.isArray(payload.filephotoUrlIn)) {
-				for (const file of payload.filephotoUrlIn) {
+			if (payload.photoUrlIn && Array.isArray(payload.photoUrlIn)) {
+				for (const file of payload.photoUrlIn) {
 					if (file instanceof File) {
 						formData.append('photoUrl', file)
 					}

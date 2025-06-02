@@ -14,15 +14,17 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteOvertime } from '../../api/overtime/use-delete-overtime'
-import { atomModalOvertime } from './modal-detail-overtime'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 export default function ModalDeleteOvertime() {
-	const [modal, setModal] = useAtom(atomModalOvertime)
+	const [open, setOpen] = useState(false)
 
+	const { id } = useParams()
 	const { mutate } = useDeleteOvertime()
 
 	return (
-		<AlertDialog>
+		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button
 					variant='ghost'
@@ -45,12 +47,12 @@ export default function ModalDeleteOvertime() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (modal?.id) {
+							if (id) {
 								mutate(
-									{ id: modal.id },
+									{ id },
 									{
 										onSuccess: () => {
-											setModal(null)
+											setOpen(false)
 										},
 									}
 								)

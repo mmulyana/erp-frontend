@@ -55,7 +55,7 @@ export default function CompanyCombobox({
 	const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading } =
 		useCompanyInfinite({
 			search: debouncedSearchTerm,
-			limit: 10,
+			limit: '10',
 		})
 
 	useEffect(() => {

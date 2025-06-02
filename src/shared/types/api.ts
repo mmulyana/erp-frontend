@@ -75,7 +75,7 @@ export type Overtime = {
 	createdBy: string
 	totalHour: number
 	note?: string
-	date: Date
+	date: string
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string

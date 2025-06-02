@@ -14,15 +14,17 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteCashAdvance } from '../api/use-delete-cash-advance'
-import { ModalCashAdvance } from './modal-detail-cash-advance'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 export default function ModalDeleteCashAdvance() {
-	const [modal, setModal] = useAtom(ModalCashAdvance)
+	const [open, setOpen] = useState(false)
 
+	const { id } = useParams()
 	const { mutate } = useDeleteCashAdvance()
 
 	return (
-		<AlertDialog>
+		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button
 					variant='ghost'
@@ -45,12 +47,12 @@ export default function ModalDeleteCashAdvance() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (modal?.id) {
+							if (id) {
 								mutate(
-									{ id: modal.id },
+									{ id },
 									{
 										onSuccess: () => {
-											setModal(null)
+											setOpen(false)
 										},
 									}
 								)

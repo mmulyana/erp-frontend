@@ -11,7 +11,7 @@ export const useDeleteCertificate = () => {
 
 	return useMutation({
 		mutationFn: async (payload: { id: string; employeeId: string }) => {
-			const res = await http.delete(`${urls.certificate}/${payload.id}`)
+			const res = await http.delete(`${urls.employee}/data/certificate/${payload.id}`)
 			return {
 				res,
 				employeeId: payload.employeeId,

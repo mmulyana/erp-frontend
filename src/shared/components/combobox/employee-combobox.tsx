@@ -10,6 +10,7 @@ import InfiniteCombobox from '../common/infinite-combobox'
 export default function EmployeeCombobox(props: {
 	onSelect?: (val: string) => void
 	defaultValue?: string
+	disabled?: boolean
 }) {
 	return (
 		<InfiniteCombobox

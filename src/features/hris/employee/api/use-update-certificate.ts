@@ -16,7 +16,7 @@ export const useUpdateCertificate = () => {
 		mutationFn: async (payload: Partial<CertificateForm & { id: string, employeeId: string }>) => {
 			const formData = toFormData(payload)
 			const res = await http.patch(
-				`${urls.certificate}/${payload.id}`,
+				`${urls.employee}/data/certificate/${payload.id}`,
 				formData,
 				{
 					headers: {

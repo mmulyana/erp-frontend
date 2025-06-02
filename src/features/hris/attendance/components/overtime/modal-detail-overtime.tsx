@@ -33,12 +33,15 @@ import { useOvertime } from '../../api/overtime/use-overtime'
 import ModalDeleteOvertime from './modal-delete-overtime'
 import { OvertimeForm } from '../../types'
 
-export const atomModalOvertime = atom<{ open: boolean; id: string } | null>(
-	null
-)
-export default function ModalDetailOvertime() {
-	const [modal, setModal] = useAtom(atomModalOvertime)
-
+export default function ModalDetailOvertime({
+	id,
+	open,
+	setOpen,
+}: {
+	id?: string
+	open: boolean
+	setOpen: (val: boolean) => void
+}) {
 	const defaultValues = {
 		date: new Date(),
 		employeeId: '',
@@ -46,7 +49,7 @@ export default function ModalDetailOvertime() {
 		totalHour: 0,
 	}
 
-	const { data } = useOvertime({ id: modal?.id })
+	const { data } = useOvertime({ id: open ? id : '' })
 	const { mutate, isPending } = useUpdateOvertime()
 
 	const form = useForm<OvertimeForm>({
@@ -65,36 +68,27 @@ export default function ModalDetailOvertime() {
 	}, [data])
 
 	useEffect(() => {
-		if (!modal?.open) {
+		if (!open) {
 			form.reset(defaultValues)
 		}
-	}, [modal?.open])
-
-	const onClose = () => setModal(null)
+	}, [open])
 
 	const submit = (data: OvertimeForm) => {
-		if (!modal?.id) {
+		if (!id) {
 			toast.error('Id tidak boleh kosong')
 			return
 		}
 		mutate(
-			{ ...data, totalHour: Number(data.totalHour), id: modal?.id },
+			{ ...data, totalHour: Number(data.totalHour), id: id },
 			{
-				onSuccess: handleFormSuccess(onClose),
+				onSuccess: handleFormSuccess(setOpen),
 				onError: handleFormError<OvertimeForm>(form),
 			}
 		)
 	}
 
 	return (
-		<Dialog
-			open={modal?.open}
-			onOpenChange={(open) => {
-				if (modal) {
-					setModal({ ...modal, open })
-				}
-			}}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent className='p-6'>
 				<DialogTitle>Lembur</DialogTitle>
 				<DialogDescription>
@@ -114,7 +108,6 @@ export default function ModalDetailOvertime() {
 									<FormControl>
 										<EmployeeCombobox
 											onSelect={(e) => field.onChange(e)}
-											style={{ value: 'bg-surface' }}
 											defaultValue={field.value}
 											disabled
 										/>

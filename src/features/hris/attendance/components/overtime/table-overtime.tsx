@@ -4,14 +4,17 @@ import { useSetAtom } from 'jotai'
 
 import { DataTable } from '@/shared/components/common/data-table'
 
-import { atomModalOvertime } from '../overtime/modal-detail-overtime'
 import { useOvertimes } from '../../api/overtime/use-overtimes'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { useState } from 'react'
+import ModalDetailOvertime from './modal-detail-overtime'
 
 export default function TableOvertime() {
+	const [open, setOpen] = useState(false)
+	const [selected, setSelected] = useState('')
+
 	const { limit, page, q } = usePagination()
 
-	const setModal = useSetAtom(atomModalOvertime)
 	const [query] = useQueryStates({
 		date: parseAsTimestamp,
 	})
@@ -46,21 +49,22 @@ export default function TableOvertime() {
 		},
 	]
 	return (
-		<DataTable
-			columns={columns}
-			data={data?.data.data || []}
-			totalItems={data?.data.total}
-			totalPages={data?.data.total_pages}
-			withPagination
-			onCellClick={(e) => {
-				setModal({
-					id: e.id,
-					open: true,
-				})
-			}}
-			nonClickableColumns={[]}
-			isLoading={isLoading}
-			autoRedirect
-		/>
+		<>
+			<DataTable
+				columns={columns}
+				data={data?.data.data || []}
+				totalItems={data?.data.total}
+				totalPages={data?.data.total_pages}
+				withPagination
+				onCellClick={(e) => {
+					setSelected(e.id)
+					setOpen(true)
+				}}
+				nonClickableColumns={[]}
+				isLoading={isLoading}
+				autoRedirect
+			/>
+			<ModalDetailOvertime id={selected} open={open} setOpen={setOpen} />
+		</>
 	)
 }

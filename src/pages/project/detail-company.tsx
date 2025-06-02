@@ -71,7 +71,7 @@ export default function DetailCompany() {
 								<CreatedSelect />
 							</SortButton>
 						</div>
-						<TableClient companyId={id} />
+						<TableClient />
 					</div>
 				</div>
 			</div>

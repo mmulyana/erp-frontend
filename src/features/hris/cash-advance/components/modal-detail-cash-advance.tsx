@@ -1,8 +1,7 @@
 import { NumericFormat } from 'react-number-format'
 import { useForm } from 'react-hook-form'
-import { Loader } from 'lucide-react'
 import { atom, useAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
@@ -32,12 +31,13 @@ import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
 import ModalDeleteCashAdvance from './modal-delete-cash-advace'
 import { useCashAdvance } from '../api/use-cash-advance'
 import { CashAdvanceForm } from '../types'
+import { useParams } from 'react-router-dom'
 
-export const ModalCashAdvance = atom<{ open: boolean; id: string } | null>(null)
 export default function ModalDetailCashAdvance() {
-	const [modal, setModal] = useAtom(ModalCashAdvance)
+	const [open, setOpen] = useState(false)
 
-	const { data } = useCashAdvance({ id: modal?.id })
+	const { id } = useParams()
+	const { data } = useCashAdvance({ id: open ? id : '' })
 	const { mutate, isPending } = useUpdateCashAdvance()
 
 	const defaultValues = {
@@ -51,8 +51,6 @@ export default function ModalDetailCashAdvance() {
 		defaultValues,
 	})
 
-	const onClose = () => setModal(null)
-
 	useEffect(() => {
 		if (data) {
 			form.reset({
@@ -64,32 +62,18 @@ export default function ModalDetailCashAdvance() {
 		}
 	}, [data])
 
-	useEffect(() => {
-		if (!modal?.open) {
-			form.reset(defaultValues)
-		}
-	}, [modal?.open])
-
 	const onSubmit = async (data: CashAdvanceForm) => {
-		if (!modal?.id) return
 		mutate(
-			{ ...data, id: modal?.id },
+			{ ...data, id },
 			{
-				onSuccess: handleFormSuccess(onClose),
+				onSuccess: handleFormSuccess(setOpen),
 				onError: handleFormError<CashAdvanceForm>(form),
 			}
 		)
 	}
 
 	return (
-		<Dialog
-			open={modal?.open}
-			onOpenChange={(open) => {
-				if (modal) {
-					setModal({ ...modal, open })
-				}
-			}}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent className='p-6'>
 				<DialogTitle>Detail Kasbon</DialogTitle>
 				<DialogDescription>
@@ -109,7 +93,6 @@ export default function ModalDetailCashAdvance() {
 									<FormControl>
 										<EmployeeCombobox
 											onSelect={(e) => field.onChange(e)}
-											style={{ value: 'bg-surface' }}
 											defaultValue={field.value}
 											disabled
 										/>

@@ -1,6 +1,7 @@
-import { parseAsString, parseAsTimestamp, useQueryStates } from 'nuqs'
+import { parseAsBoolean, parseAsTimestamp, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 
+import { usePagination } from '@/shared/hooks/use-pagination'
 import { DataTable } from '@/shared/components/common/data-table'
 
 import { useCreateAttendance } from '../../api/regular/use-create-attendance'
@@ -11,13 +12,10 @@ import { Attendance } from '../../types'
 import ButtonRegular from './button-regular'
 
 export default function TableRegular() {
+	const { q, limit, page } = usePagination()
 	const [query] = useQueryStates({
 		date: parseAsTimestamp,
-
-		// for pagination
-		q: parseAsString.withDefault(''),
-		page: parseAsString.withDefault('1'),
-		limit: parseAsString.withDefault('10'),
+		notYet: parseAsBoolean,
 	})
 
 	const date = new Date(query.date || Date.now())
@@ -25,10 +23,11 @@ export default function TableRegular() {
 	const startDate = date.toString()
 
 	const { data } = useAttendances({
-		limit: query.limit,
-		page: query.page,
-		search: query.q,
+		limit: limit,
+		page: page,
+		search: q,
 		startDate,
+		notYet: String(query.notYet),
 	})
 
 	const { mutate } = useCreateAttendance()

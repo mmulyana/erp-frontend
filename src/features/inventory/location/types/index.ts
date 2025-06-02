@@ -1,4 +1,4 @@
-import { Item } from '../../item/types'
+import { Inventory } from '@/shared/types/api'
 
 export type Location = {
 	id: string
@@ -9,5 +9,5 @@ export type Location = {
 	}
 }
 export type LocationDetail = Location & {
-	inventories: Item[]
+	inventories: Inventory[]
 }

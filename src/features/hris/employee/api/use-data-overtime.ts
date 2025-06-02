@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { IApiPagination } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
+import { Overtime } from '@/shared/types/api'
 import http from '@/shared/utils/http'
-import { Overtime } from '../../_types'
 
 type params = {
 	startDate?: string

@@ -10,7 +10,7 @@ export const useCertificate = (id?: string | null) => {
 		queryKey: [keys.certificate, id],
 		queryFn: async () => {
 			const { data } = await http<IApi<Certificate>>(
-				`${urls.certificate}/${id}`
+				`${urls.employee}/data/certificate/${id}`
 			)
 			return data.data
 		},

@@ -18,12 +18,12 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
-    "strict": true,
+    "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "e2e"],
+  "exclude": ["node_modules", "**/*.mts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -10,31 +10,28 @@ import { useCertificate } from '../../api/use-certificate'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { format } from 'date-fns'
 import { convertUTCToWIB } from '@/shared/utils'
-import { id } from 'date-fns/locale'
+import { id as ind } from 'date-fns/locale'
 import { Button, buttonVariants } from '@/shared/components/ui/button'
 import { Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { baseUrl } from '@/shared/constants/urls'
 import ModalEditCertificate from './modal-edit-certificate'
 import ModalDeleteCertificate from './modal-delete-certificate'
+import { useState } from 'react'
 
-export const atomModalCertificate = atom<{ id: string; open: boolean } | null>(
-	null
-)
-export default function ModalDetailCertificate() {
-	const [modal, setModal] = useAtom(atomModalCertificate)
-
-	const { data, isPending } = useCertificate(modal?.id)
+export default function ModalDetailCertificate({
+	id,
+	open,
+	setOpen,
+}: {
+	id?: string
+	open: boolean
+	setOpen: (val: boolean) => void
+}) {
+	const { data, isPending } = useCertificate(open ? id : '')
 
 	return (
-		<Dialog
-			open={modal?.open}
-			onOpenChange={(open) => {
-				if (modal) {
-					setModal({ ...modal, open })
-				}
-			}}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent className='p-6'>
 				<DialogTitle className='text-center'>Sertifikasi</DialogTitle>
 				<DialogDescription className='text-center'>
@@ -74,7 +71,7 @@ export default function ModalDetailCertificate() {
 							{data?.issueDate && (
 								<p className='text-ink-secondary font-medium'>
 									{format(convertUTCToWIB(new Date(data.issueDate)), 'PPP', {
-										locale: id,
+										locale: ind,
 									})}
 								</p>
 							)}
@@ -86,7 +83,7 @@ export default function ModalDetailCertificate() {
 							{data?.expiryDate && (
 								<p className='text-ink-secondary font-medium'>
 									{format(convertUTCToWIB(new Date(data.expiryDate)), 'PPP', {
-										locale: id,
+										locale: ind,
 									})}
 								</p>
 							)}
@@ -95,7 +92,7 @@ export default function ModalDetailCertificate() {
 				</div>
 				<DialogFooter className=''>
 					<div className='flex justify-between items-center pt-6 w-full'>
-						<ModalDeleteCertificate />
+						<ModalDeleteCertificate id={id} />
 						<ModalEditCertificate />
 					</div>
 				</DialogFooter>
