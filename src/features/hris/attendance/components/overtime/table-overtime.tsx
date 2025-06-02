@@ -1,6 +1,5 @@
 import { parseAsTimestamp, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
-import { useSetAtom } from 'jotai'
 
 import { DataTable } from '@/shared/components/common/data-table'
 

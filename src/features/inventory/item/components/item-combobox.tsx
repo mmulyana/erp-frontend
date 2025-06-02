@@ -31,7 +31,10 @@ export default function ItemCombobox(props: {
 						/>
 						<p>{item.name}</p>
 					</div>
-					{isSelected && <Check className='h-4 w-4' />}
+					<div className='flex gap-2'>
+						<p>{item?.availableStock}</p>
+						{isSelected && <Check className='h-4 w-4' />}
+					</div>
 				</div>
 			)}
 		/>

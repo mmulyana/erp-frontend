@@ -29,12 +29,19 @@ import {
 
 import { useCreateOvertime } from '../../api/overtime/use-create-overtime'
 import { OvertimeForm } from '../../types'
+import { parseAsTimestamp, useQueryStates } from 'nuqs'
 
 export default function ModalAddOvertime() {
 	const [open, setOpen] = useState(false)
+	const [query] = useQueryStates({
+		date: parseAsTimestamp,
+	})
+
+	const date = new Date(query.date || Date.now())
+	date.setHours(0, 0, 0, 0)
 
 	const defaultValues = {
-		date: undefined,
+		date: date,
 		employeeId: '',
 		note: '',
 		totalHour: 0,

@@ -32,8 +32,14 @@ import ModalDeleteCashAdvance from './modal-delete-cash-advace'
 import { useCashAdvance } from '../api/use-cash-advance'
 import { CashAdvanceForm } from '../types'
 import { useParams } from 'react-router-dom'
+import { DialogTrigger } from '@radix-ui/react-dialog'
+import { Pencil } from 'lucide-react'
 
-export default function ModalDetailCashAdvance() {
+export default function ModalDetailCashAdvance({
+	transactions,
+}: {
+	transactions?: number
+}) {
 	const [open, setOpen] = useState(false)
 
 	const { id } = useParams()
@@ -74,6 +80,12 @@ export default function ModalDetailCashAdvance() {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<Button variant='outline'>
+					<Pencil size={18} />
+					<span className='px-0.5'>Edit</span>
+				</Button>
+			</DialogTrigger>
 			<DialogContent className='p-6'>
 				<DialogTitle>Detail Kasbon</DialogTitle>
 				<DialogDescription>
@@ -84,23 +96,6 @@ export default function ModalDetailCashAdvance() {
 						className='flex-1 flex flex-col gap-4 pt-4'
 						onSubmit={form.handleSubmit(onSubmit)}
 					>
-						<FormField
-							name='employeeId'
-							control={form.control}
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Pegawai</FormLabel>
-									<FormControl>
-										<EmployeeCombobox
-											onSelect={(e) => field.onChange(e)}
-											defaultValue={field.value}
-											disabled
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
 						<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 							<FormField
 								name='date'
@@ -141,6 +136,7 @@ export default function ModalDetailCashAdvance() {
 														onValueChange={(values) => {
 															field.onChange(Number(values.value))
 														}}
+														disabled={transactions > 0}
 													/>
 												</div>
 											</FormControl>

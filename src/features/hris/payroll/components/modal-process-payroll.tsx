@@ -1,8 +1,9 @@
 import { useFieldArray, useForm } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
 import { NumericFormat } from 'react-number-format'
+import { Pencil, RotateCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { id as ind } from 'date-fns/locale'
-import { Pencil, RotateCcw } from 'lucide-react'
 import { format } from 'date-fns'
 
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
@@ -10,6 +11,7 @@ import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { formatThousands } from '@/shared/utils'
+import { keys } from '@/shared/constants/keys'
 import { cn } from '@/shared/utils/cn'
 import {
 	Dialog,
@@ -28,15 +30,15 @@ import {
 	FormLabel,
 } from '@/shared/components/ui/form'
 
+import { useCreateTransaction } from '../../cash-advance/api/use-create-transaction'
 import { useSummaryEmployee } from '../../employee/api/use-summary-employee'
 import { useEmployee } from '../../employee/api/use-employee'
 import { useUpdatePayroll } from '../api/use-update-payroll'
-import ModalAddDeduction from './modal-add-deduction'
 import { usePayroll } from '../api/use-payroll'
 import { FormProcess } from '../types'
-import { useCreateTransaction } from '../../cash-advance/api/use-create-transaction'
-import { useQueryClient } from '@tanstack/react-query'
-import { keys } from '@/shared/constants/keys'
+import ModalAddDeduction from './modal-add-deduction'
+import ModalSummaryRegular from '../../attendance/components/regular/modal-summary'
+import ModalSummaryOvertime from '../../attendance/components/overtime/modal-summary'
 
 const optionsPayment = [
 	{
@@ -53,7 +55,6 @@ const optionsPayment = [
 
 type props = {
 	id?: string
-	name?: string
 	employeeId?: string
 	startDate?: string
 	endDate?: string
@@ -64,7 +65,6 @@ export default function ModalProcessPayroll({
 	employeeId,
 	startDate,
 	endDate,
-	name,
 	variant = 'default',
 }: props) {
 	const queryClient = useQueryClient()
@@ -125,12 +125,13 @@ export default function ModalProcessPayroll({
 		})
 
 		if (payroll?.note) {
-			const [namesStr, amountsStr, typesStr] = payroll.note.split('|')
+			const [namesStr, amountsStr, typesStr, refsStr] = payroll.note.split('|')
 
 			if (namesStr && amountsStr && typesStr) {
 				const names = namesStr.split(',')
 				const amounts = amountsStr.split(',')
 				const types = typesStr.split(',')
+				const refs = refsStr ? refsStr.split(',') : []
 
 				if (names.length === amounts.length && names.length === types.length) {
 					names.forEach((name, index) => {
@@ -138,6 +139,7 @@ export default function ModalProcessPayroll({
 							name: name,
 							type: types[index],
 							amount: Number(amounts[index]),
+							referenceId: refs[index] || undefined,
 						})
 					})
 				}
@@ -147,19 +149,6 @@ export default function ModalProcessPayroll({
 
 	const submit = async (data: FormProcess) => {
 		if (!payroll?.id) return
-
-		if (cashAdvances.length > 0) {
-			const promises = cashAdvances.map((id) =>
-				mutateAsync({
-					cashAdvanceId: id,
-					date: new Date(),
-					note: `Dipotong gaji - ${name}`,
-					amount: summary?.cashAdvances.find((i) => i.id === id)?.amount,
-				})
-			)
-
-			await Promise.all(promises)
-		}
 
 		const noteNames = data.deductions?.map((i) => i.name).join(',')
 		const noteValue = data.deductions?.map((i) => i.amount).join(',')
@@ -183,7 +172,7 @@ export default function ModalProcessPayroll({
 				note,
 			},
 			{
-				onSuccess: handleFormSuccess(setOpen, () => {
+				onSuccess: handleFormSuccess(setOpen, async () => {
 					queryClient.invalidateQueries({
 						predicate: (query) =>
 							Array.isArray(query.queryKey) &&
@@ -194,6 +183,20 @@ export default function ModalProcessPayroll({
 							Array.isArray(query.queryKey) &&
 							query.queryKey[0] === keys.payrollProgress,
 					})
+
+					if (cashAdvances.length > 0) {
+						const promises = cashAdvances.map((index) =>
+							mutateAsync({
+								cashAdvanceId: index,
+								date: new Date(),
+								note: `Dipotong dari gaji|${id}`,
+								amount: summary?.cashAdvances.find((i) => i.id === index)
+									?.remaining,
+							})
+						)
+
+						await Promise.all(promises)
+					}
 				}),
 				onError: handleFormError<FormProcess>(form),
 			}
@@ -363,7 +366,10 @@ export default function ModalProcessPayroll({
 										Absensi dan lembur
 									</p>
 									<div className='flex justify-between items-center'>
-										<p className='text-ink-primary/50'>Jml hari</p>
+										<div className='flex gap-2 items-center'>
+											<p className='text-ink-primary/50'>Jml hari</p>
+											<ModalSummaryRegular data={summary?.attendances || []} />
+										</div>
 										<FormField
 											name='workDay'
 											control={form.control}
@@ -382,7 +388,10 @@ export default function ModalProcessPayroll({
 										/>
 									</div>
 									<div className='flex justify-between items-center'>
-										<p className='text-ink-primary/50'>Jml lembur</p>
+										<div className='flex gap-2 items-center'>
+											<p className='text-ink-primary/50'>Jml lembur</p>
+											<ModalSummaryOvertime data={summary?.overtimes || []} />
+										</div>
 										<FormField
 											name='overtimeHour'
 											control={form.control}
@@ -410,21 +419,25 @@ export default function ModalProcessPayroll({
 										>
 											<div className='flex gap-2 items-center'>
 												<p>{i.name}</p>
-												<Button
-													variant='ghost'
-													className='text-sm hover:text-error'
-													onClick={() => {
-														if (i.referenceId !== '') {
-															setCashAdvances(
-																cashAdvances.filter((c) => c !== i.referenceId)
-															)
-														}
-														remove(index)
-													}}
-													type='button'
-												>
-													Batal
-												</Button>
+												{!i.referenceId && (
+													<Button
+														variant='ghost'
+														className='text-sm hover:text-error'
+														onClick={() => {
+															if (i.referenceId !== '') {
+																setCashAdvances(
+																	cashAdvances.filter(
+																		(c) => c !== i.referenceId
+																	)
+																)
+															}
+															remove(index)
+														}}
+														type='button'
+													>
+														Batal
+													</Button>
+												)}
 											</div>
 											<FormField
 												control={form.control}
@@ -493,40 +506,56 @@ export default function ModalProcessPayroll({
 											})
 										}}
 									/>
-									<div>
-										<p className='text-ink-primary font-medium'>Kasbon</p>
-										<p className='text-ink-primary/50'>
-											Pilih kasbon sebagai potongan
-										</p>
-										<div className='flex gap-2 flex-wrap mt-2'>
-											{summary?.cashAdvances
-												.filter((i) => !cashAdvances.includes(i.id))
-												.map((i) => (
-													<Button
-														variant='outline'
-														type='button'
-														className='rounded-full gap-0.5'
-														onClick={() => {
-															append({
-																type: 'numeric',
-																amount: i.amount,
-																name: `kasbon-${format(
-																	new Date(i.date),
-																	'dd/MM/yyyy'
-																)}`,
-																referenceId: i.id,
-															})
-															setCashAdvances((prev) => [...prev, i.id])
-														}}
-													>
-														<p>Rp {formatThousands(i.amount)}</p>-
-														<p>
-															{format(new Date(i.date), 'PPP', { locale: ind })}
-														</p>
-													</Button>
-												))}
+									{summary?.cashAdvances?.length > 0 && (
+										<div>
+											<p className='text-ink-primary font-medium'>Kasbon</p>
+											<p className='text-ink-primary/50'>
+												Pilih kasbon sebagai potongan
+											</p>
+											<div className='flex gap-2 flex-wrap mt-2'>
+												{summary?.cashAdvances
+													.filter((i) => !cashAdvances.includes(i.id))
+													.map((i) => (
+														<Button
+															variant='outline'
+															type='button'
+															className='rounded-full gap-1'
+															onClick={() => {
+																append({
+																	type: 'numeric',
+																	amount: i.remaining,
+																	name: `kasbon-${format(
+																		new Date(i.date),
+																		'dd/MM/yyyy'
+																	)}`,
+																	referenceId: i.id,
+																})
+																setCashAdvances((prev) => [...prev, i.id])
+															}}
+														>
+															<p>
+																<span className='text-ink-primary/50'>
+																	Sisa
+																</span>{' '}
+																Rp {formatThousands(i.remaining)}
+															</p>
+															<p>
+																<span className='text-ink-primary/50'>
+																	Dari
+																</span>{' '}
+																{formatThousands(i.amount)}
+															</p>
+															<span>|</span>
+															<p>
+																{format(new Date(i.date), 'PPP', {
+																	locale: ind,
+																})}
+															</p>
+														</Button>
+													))}
+											</div>
 										</div>
-									</div>
+									)}
 								</div>
 								<div className='pt-4 border-border flex justify-between items-start'>
 									<p className='text-ink-primary font-medium'>Subtotal</p>
@@ -575,16 +604,6 @@ export default function ModalProcessPayroll({
 									</Button>
 								</DialogClose>
 								<div className='flex gap-4 items-center'>
-									{!isPayment && (
-										<Button variant='secondary'>
-											<RotateCcw
-												size={16}
-												className='text-ink-light'
-												strokeWidth={3}
-											/>
-											<span className='px-1'>Ulangi</span>
-										</Button>
-									)}
 									<Button
 										id='btn-payment'
 										type='button'

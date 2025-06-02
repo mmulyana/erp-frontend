@@ -40,7 +40,10 @@ export default function FormCreateLoan({
 	const isEdit = variant === 'edit'
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)}>
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className={variant === 'form' ? 'space-y-6' : ''}
+			>
 				<CardV1
 					title='Detail'
 					icon={<List size={20} className='text-ink-primary' />}
@@ -50,7 +53,7 @@ export default function FormCreateLoan({
 						card: variant === 'project' || isEdit ? 'border-none' : '',
 					}}
 				>
-					{!projectId && projectId === '' && !isEdit && (
+					{!projectId && !isEdit && (
 						<FormField
 							control={form.control}
 							name='projectId'

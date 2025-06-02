@@ -8,8 +8,10 @@ import CardAddress from '@/features/hris/employee/components/detail/card-address
 import CardDetail from '@/features/hris/employee/components/detail/card-detail'
 import { useEmployee } from '@/features/hris/employee/api/use-employee'
 
-import DetailLayout, { Link } from '@/shared/layout/detail-layout'
+import DetailLayout from '@/shared/layout/detail-layout'
 import { paths } from '@/shared/constants/paths'
+import { Link } from '@/shared/types'
+import { useDynamicLinks } from '@/shared/utils/link'
 
 const links: Link[] = [
 	{
@@ -33,19 +35,20 @@ export default function DetailEmployee() {
 
 	const { data } = useEmployee(id)
 
-	const linkMemo: Link[] = useMemo(() => {
-		if (!id || !data) return links
-		return [
-			...links.filter((i) => i.name !== 'Detail'),
-			{
-				name: data?.fullname,
-				path: `${paths.hrisMasterdataEmployee}/${id}`,
-			},
-		]
-	}, [id, data])
+	const dynamicLink = useDynamicLinks({
+		baseLinks: links,
+		replaceName: 'Detail',
+		newLink: data?.fullname
+			? {
+					name: data.fullname ?? '',
+					path: `${paths.hrisMasterdataEmployee}/${data.id}`,
+			  }
+			: undefined,
+		condition: !!(id && data),
+	})
 
 	return (
-		<DetailLayout links={linkMemo} style={{ header: 'w-[1200px]' }}>
+		<DetailLayout links={dynamicLink} style={{ header: 'w-[1200px]' }}>
 			<div className='mx-auto pt-6 px-6 lg:px-0 w-[1200px] max-w-full'>
 				<div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6'>
 					<div className='space-y-6'>

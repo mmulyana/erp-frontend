@@ -117,6 +117,7 @@ function ModalEditLoan({ id }: { id?: string }) {
 	const form = useForm<loanForm>({
 		defaultValues: {
 			projectId: id,
+			note: '',
 		},
 	})
 
@@ -142,7 +143,7 @@ function ModalEditLoan({ id }: { id?: string }) {
 			const res = data.data
 
 			form.reset({
-				note: res.note,
+				note: res.note || '',
 				requestDate: new Date(res.requestDate),
 				photoUrlIn: res.photoUrlIn,
 			})

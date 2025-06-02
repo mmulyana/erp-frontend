@@ -1,30 +1,30 @@
-import { History, House, Pencil, Wallet } from 'lucide-react'
+import { History, House, Wallet } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { id as ind } from 'date-fns/locale'
-import { useState } from 'react'
 import { format } from 'date-fns'
 
+import ModalDetailCashAdvance from '@/features/hris/cash-advance/components/modal-detail-cash-advance'
 import ModalAddTransaction from '@/features/hris/cash-advance/components/modal-add-transaction'
 import { useCashAdvance } from '@/features/hris/cash-advance/api/use-cash-advance'
 import { useTransactions } from '@/features/hris/cash-advance/api/use-transaction'
 
 import HeadPage from '@/shared/components/common/head-page'
+import PhotoUrl from '@/shared/components/common/photo-url'
 import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
 
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
-import { Button } from '@/shared/components/ui/button'
 import { useDynamicLinks } from '@/shared/utils/link'
 import { Badge } from '@/shared/components/ui/badge'
 import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
-import { Link } from '@/shared/types'
+import { Link as Links } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
 
-const links: Link[] = [
+const links: Links[] = [
 	{
 		icon: <House size={20} />,
 		name: 'Dashboard',
@@ -42,7 +42,6 @@ const links: Link[] = [
 ]
 export default function CashAdvanceDetail() {
 	const { id } = useParams()
-	const [open, setOpen] = useState(false)
 	const { limit, page, q } = usePagination()
 
 	const { data, isPending } = useCashAdvance({ id })
@@ -92,23 +91,18 @@ export default function CashAdvanceDetail() {
 	return (
 		<DetailLayout
 			links={linkMemo}
-			buttonAction={
-				<Button variant='outline' onClick={() => setOpen(true)}>
-					<Pencil size={16} className='text-ink-light' />
-					<span className='px-1 text-ink-primary'>Ubah</span>
-				</Button>
-			}
 			style={{
 				header: 'w-[940px]',
 			}}
 		>
-			<div className='w-[940px] mx-auto pt-6 max-w-full px-4 md:px-0 grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6 items-start'>
+			<div className='w-[940px] mx-auto pt-6 max-w-full px-6 lg:px-0 grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6 items-start'>
 				<CardV1
 					title='Kasbon'
 					icon={<Wallet size={20} className='text-ink-primary' />}
 					style={{
-						content: 'space-y-6 pt-2',
+						content: 'space-y-6 pt-4',
 					}}
+					action={<ModalDetailCashAdvance transactions={items?.data?.total} />}
 				>
 					<div className='flex justify-between items-center'>
 						<p className='text-ink-primary/50'>Status</p>
@@ -130,6 +124,23 @@ export default function CashAdvanceDetail() {
 						</Badge>
 					</div>
 
+					<div className='flex justify-between items-center'>
+						<p className='text-ink-primary/50'>Pegawai</p>
+						<LoaderWrapper isLoading={isPending}>
+							<div className='flex gap-2 items-center'>
+								<PhotoUrl
+									url={data?.data?.employee.photoUrl}
+									style={{ img: 'h-10 w-10' }}
+								/>
+								<Link
+									className='text-ink-primary'
+									to={`${paths.hrisMasterdataEmployee}/${data?.data?.employeeId}`}
+								>
+									{data?.data?.employee?.fullname}
+								</Link>
+							</div>
+						</LoaderWrapper>
+					</div>
 					<div className='flex justify-between items-center'>
 						<p className='text-ink-primary/50'>Tanggal</p>
 						<LoaderWrapper isLoading={isPending}>

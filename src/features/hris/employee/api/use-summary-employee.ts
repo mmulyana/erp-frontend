@@ -1,9 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
+
+import { Attendance, CashAdvance, Overtime } from '@/shared/types/api'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
-import { Employee, IApi } from '@/shared/types'
-import { CashAdvance, Overtime } from '@/shared/types/api'
+
+type cashAdvanceWithRemaining = CashAdvance & {
+	remaining: number
+}
 
 type params = {
 	id?: string
@@ -18,10 +22,10 @@ export const useSummaryEmployee = (params?: params) => {
 				presence: number
 				absent: number
 				overtimes: number
-				cashAdvance: number
 			}
 			overtimes: Overtime[]
-			cashAdvances: CashAdvance[]
+			cashAdvances: cashAdvanceWithRemaining[]
+			attendances: Attendance[]
 		}> => {
 			const { data } = await http(`${urls.employee}/${params?.id}/summary`, {
 				params,

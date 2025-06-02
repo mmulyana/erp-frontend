@@ -10,9 +10,9 @@ import { usePagination } from '@/shared/hooks/use-pagination'
 import SearchV3 from '@/shared/components/common/search-v3'
 
 import ModalDetailOvertime from '@/features/hris/attendance/components/overtime/modal-detail-overtime'
-import { Overtime } from '@/features/hris/attendance/types'
 
 import { useDataOvertime } from '../../api/use-data-overtime'
+import { Overtime } from '@/shared/types/api'
 
 export default function EmployeeOvertime() {
 	const [open, setOpen] = useState(false)

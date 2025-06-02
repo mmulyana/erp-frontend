@@ -15,16 +15,17 @@ import FilterButton from '@/shared/components/common/filter-button'
 import SortButton from '@/shared/components/common/sort-button'
 import SearchV3 from '@/shared/components/common/search-v3'
 import DetailLayout from '@/shared/layout/detail-layout'
+
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import { Payroll, PayrollStatus } from '@/shared/types/api'
 import { Button } from '@/shared/components/ui/button'
 import { useDynamicLinks } from '@/shared/utils/link'
 import { Badge } from '@/shared/components/ui/badge'
+import { Link, selectOption } from '@/shared/types'
 import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
-import { Link, selectOption } from '@/shared/types'
 
 const links: Link[] = [
 	{
@@ -152,7 +153,6 @@ export default function PayrolleDetail() {
 				return (
 					<ModalProcessPayroll
 						id={row.original.id}
-						name={data?.data?.name}
 						employeeId={row.original.employeeId}
 						startDate={data?.data?.startDate}
 						endDate={data?.data?.endDate}
@@ -176,7 +176,7 @@ export default function PayrolleDetail() {
 				header: 'w-[1072px]',
 			}}
 		>
-			<div className='mx-auto w-[1072px] max-w-full px-4 md:px-0 pt-6 space-y-6'>
+			<div className='mx-auto w-[1072px] max-w-full px-6 lg:px-0 pt-6 space-y-6'>
 				<div className='flex gap-4 flex-col md:flex-row'>
 					<PayrollProgress />
 					<PayrollDetailTotal />

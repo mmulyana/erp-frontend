@@ -62,11 +62,13 @@ export type Attendance = {
 	id: string
 	employeeId: string
 	createdBy: string
-	date: Date
+	date: string
 	type: AttendanceType
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	employee: Employee
 }
 
 export type Overtime = {
@@ -79,6 +81,8 @@ export type Overtime = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	employee: Employee
 }
 
 export type CashAdvance = {
@@ -170,11 +174,14 @@ export type AssignedEmployee = {
 	id: string
 	employeeId: string
 	projectId: string
-	startDate?: Date
-	endDate?: Date
+	startDate?: string
+	endDate?: string
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+
+	employee: Employee
+	project: Project
 }
 
 export type ProjectAttachment = {

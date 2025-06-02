@@ -15,10 +15,12 @@ import {
 
 import { useDeleteCashAdvance } from '../api/use-delete-cash-advance'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { paths } from '@/shared/constants/paths'
 
 export default function ModalDeleteCashAdvance() {
 	const [open, setOpen] = useState(false)
+	const navigate = useNavigate()
 
 	const { id } = useParams()
 	const { mutate } = useDeleteCashAdvance()
@@ -53,6 +55,9 @@ export default function ModalDeleteCashAdvance() {
 									{
 										onSuccess: () => {
 											setOpen(false)
+											navigate(paths.hrisCashAdvance, {
+												replace: true,
+											})
 										},
 									}
 								)

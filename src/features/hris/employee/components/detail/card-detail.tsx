@@ -24,7 +24,7 @@ export default function CardDetail() {
 		>
 			<Tabs defaultValue='tab-1' className='w-full'>
 				<ScrollArea className='w-full overflow-x-auto whitespace-nowrap'>
-					<TabsList className='inline-flex h-auto w-full gap-2 bg-transparent p-0 relative before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border px-6 select-none'>
+					<TabsList className='inline-flex h-auto w-full gap-2 bg-transparent py-0 relative before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border px-6 select-none !text-lg'>
 						{[
 							{ value: 'tab-1', label: 'Sertifikasi' },
 							{ value: 'tab-2', label: 'Absensi Reguler' },

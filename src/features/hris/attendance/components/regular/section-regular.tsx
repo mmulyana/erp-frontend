@@ -4,12 +4,12 @@ import { UserSearch, X } from 'lucide-react'
 import FilterButton from '@/shared/components/common/filter-button'
 import SortButton from '@/shared/components/common/sort-button'
 import SearchV3 from '@/shared/components/common/search-v3'
+import HeadPage from '@/shared/components/common/head-page'
 import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 
 import TableRegular from './table-regular'
 import ViewType from './view-type'
-import HeadPage from '@/shared/components/common/head-page'
 
 export default function SectionRegular() {
 	const [query, setQuery] = useQueryStates({

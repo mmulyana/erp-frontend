@@ -23,9 +23,9 @@ export const useUpdateCashAdvance = () => {
 			}
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [keys.cashAdvances] })
-			queryClient.invalidateQueries({ queryKey: [keys.cashAdvances, data.id] })
-			queryClient.invalidateQueries({ queryKey: [keys.cashAdvancesReport] })
+			queryClient.invalidateQueries({
+				queryKey: [keys.cashAdvancesDetail, data.id],
+			})
 			toast.success(data.res.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

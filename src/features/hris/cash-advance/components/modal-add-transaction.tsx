@@ -1,16 +1,14 @@
 import { NumericFormat } from 'react-number-format'
-import { Loader, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 
-import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
-import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
-import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import ButtonSubmit from '@/shared/components/common/button-submit'
+import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
+import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { convertUTCToWIB } from '@/shared/utils'
 import {
 	Dialog,
 	DialogClose,
