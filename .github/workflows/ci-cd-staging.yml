@@ -31,7 +31,7 @@ jobs:
 
           BRANCH=${{ github.ref_name }}
           SSH_USER=${{ secrets.SSH_USER }}
-          SERVER_HOST={{ secrets.SERVER_HOST }}
+          SERVER_HOST=${{ secrets.SERVER_HOST }}
           REMOTE_DIR="/home/mmulyana/app/erp-frontend-staging/"
 
           ssh $SSH_USER@$SERVER_HOST "cd $REMOTE_DIR && \
