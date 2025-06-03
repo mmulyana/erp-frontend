@@ -9,7 +9,7 @@ const cookies = new Cookies()
 
 const defaultOptions: CookieSetOptions = {
 	path: '/',
-	secure: true,
+	// secure: true,
 }
 
 export const CookieStorage = {
