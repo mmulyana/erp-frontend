@@ -23,7 +23,7 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -i ./deploy.key ${{ secrets.SSH_USER }}@erp-stg.barokahjayasemesta.com "cd /app/erp-frontend-staging/ && \
+          ssh -i ./deploy.key ${{ secrets.SSH_USER }}@erp-stg.barokahjayasemesta.com "cd /home/mmulyana/app/erp-frontend-staging/ && \
           git fetch origin main && \
           git reset --hard origin/main && \
           pnpm install && \
