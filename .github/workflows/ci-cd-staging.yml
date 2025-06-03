@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - v2
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,12 +23,9 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -i ./deploy.key ${{ secrets.SSH_USER }}@bjs.web.id "cd /var/www/staging/frontend/ && \
-          git config pull.rebase false && \
+          ssh -i ./deploy.key ${{ secrets.SSH_USER }}@${{ secrets.IP }} "cd /app/erp-frontend-staging/ && \
           git fetch origin main && \
           git reset --hard origin/main && \
-          source ~/.nvm/nvm.sh && \
-          export PATH=\"/home/${{ secrets.SSH_USER }}/.nvm/versions/node/v22.11.0/bin:\$PATH\" && \
           pnpm install && \
           pnpm build && \
-          pm2 reload frontend-staging"
+          pm2 reload erp-frontend-staging"
