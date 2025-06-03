@@ -37,7 +37,7 @@ jobs:
           ssh $SSH_USER@$SERVER_HOST "cd $REMOTE_DIR && \
           git fetch origin $BRANCH && \
           git reset --hard origin/$BRANCH && \
-          pnpm install --prod && \
+          pnpm install && \
           pnpm build && \
           pm2 reload erp-frontend-staging || true"
         env:
