@@ -19,7 +19,7 @@ export default function LoginPage() {
 						<div className='flex flex-col gap-6 items-center justify-center'>
 							<div className='flex items-center gap-2'>
 								<img src='/images/logo.png' className='w-10 h-10' />
-								<p className='text-white text-lg font-medium'>Barokah ERP</p>
+								<p className='text-white text-lg font-medium'>Barokah ERP V1</p>
 							</div>
 							<p className='text-white font-light max-w-[280px] mx-auto text-center'>
 								Atur semuanya dengan mudah hanya dalam satu platform
