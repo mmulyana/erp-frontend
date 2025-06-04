@@ -1,24 +1,50 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 
+import CreatedSelect from '@/shared/components/common/select/created-select'
 import ToggleSwitch from '@/shared/components/common/toggle-switch'
+import FilterReset from '@/shared/components/common/filter-reset'
+import SortButton from '@/shared/components/common/sort-button'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { DataTable } from '@/shared/components/common/data-table'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { Employee, selectOption } from '@/shared/types'
 import { paths } from '@/shared/constants/paths'
 import { keys } from '@/shared/constants/keys'
 import { formatPhone } from '@/shared/utils'
-import { Employee } from '@/shared/types'
 
 import { useEmployees } from '@/features/hris/employee/api/use-employees'
 
 import { useUpdateEmployee } from '../api/use-update-employee'
+import FilterEmployee from './filter-employee'
+
+const dateOptions: selectOption[] = [
+	{
+		label: 'Tggl bergabung (Terlama)',
+		value: 'joinedAt:asc',
+	},
+	{
+		label: 'Tggl bergabung (Terbaru)',
+		value: 'joinedAt:desc',
+	},
+]
 
 export default function TableEmployee() {
 	const navigate = useNavigate()
-	const { page, limit, q } = usePagination()
+	const { page, limit, q, sortBy, sortOrder } = usePagination()
+
+	const [query, setQuery] = useQueryStates({
+		active: parseAsString.withDefault(''),
+		lastEdu: parseAsString.withDefault(''),
+		position: parseAsString.withDefault(''),
+		sort: parseAsString.withDefault(''),
+	})
+
+	const hasValue = useHasQueryValue(query)
 
 	const queryClient = useQueryClient()
 	const { mutate } = useUpdateEmployee()
@@ -27,6 +53,11 @@ export default function TableEmployee() {
 		limit,
 		page,
 		search: q,
+		lastEdu: query.lastEdu,
+		position: query.position,
+		sortBy,
+		sortOrder,
+		active: query.active,
 	})
 
 	// COLUMNS EMPLOYEE
@@ -92,9 +123,24 @@ export default function TableEmployee() {
 	// COLUMNS
 
 	return (
-		<div className='p-6 rounded-2xl bg-white border border-border'>
-			<div className='flex justify-between items-center mb-4'>
+		<div className='p-6 rounded-2xl bg-white border border-border space-y-6'>
+			<div className='flex gap-4 items-center'>
 				<SearchV3 />
+				<FilterReset
+					show={hasValue}
+					onClick={() => {
+						setQuery({
+							lastEdu: null,
+							position: null,
+							sort: null,
+							active: null,
+						})
+					}}
+				/>
+				<FilterEmployee />
+				<SortButton>
+					<CreatedSelect options={dateOptions} />
+				</SortButton>
 			</div>
 			<DataTable
 				columns={columns}

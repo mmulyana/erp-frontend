@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
-import { Employee, IApi } from '@/shared/types'
+import { Employee } from '@/shared/types/api'
 
 export const useEmployee = (id?: string | null) => {
 	return useQuery({

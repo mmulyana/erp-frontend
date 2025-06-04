@@ -1,14 +1,15 @@
 import { differenceInMonths, differenceInYears } from 'date-fns'
+import { BriefcaseBusiness } from 'lucide-react'
 import { useMemo } from 'react'
 
-import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import CardData from '@/shared/components/common/card-data'
 import CardV1 from '@/shared/components/common/card-v1'
+import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import { formatToRupiah } from '@/shared/utils'
+import { PayType } from '@/shared/types/api'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditPosition from './modal-edit-position'
-import { BriefcaseBusiness } from 'lucide-react'
 
 export default function CardPosition() {
 	const { data, isPending } = useDetailEmployee()
@@ -25,6 +26,8 @@ export default function CardPosition() {
 
 		return { years, months }
 	}, [data])
+
+	const isDaily = data?.payType === PayType.DAILY
 
 	return (
 		<>
@@ -64,7 +67,9 @@ export default function CardPosition() {
 				<div className='gap-6 flex justify-between'>
 					<LoaderWrapper isLoading={isPending}>
 						<CardData
-							title='Gaji pokok (per hari)'
+							title={
+								isDaily ? 'Gaji pokok (per hari)' : 'Gaji pokok (per bulan)'
+							}
 							value={
 								data?.salary
 									? data?.salary > 0

@@ -1,11 +1,13 @@
-import CardV1 from '@/shared/components/common/card-v1'
+import { parseAsString, useQueryStates } from 'nuqs'
 import { User } from 'lucide-react'
-import { useClientRank } from '../api/use-client-rank'
+
+import BaseSelect from '@/shared/components/common/select/base-select'
+import CardV1 from '@/shared/components/common/card-v1'
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import { Badge } from '@/shared/components/ui/badge'
-import BaseSelect from '@/shared/components/common/select/base-select'
 import { selectOption } from '@/shared/types'
-import { parseAsString, useQueryStates } from 'nuqs'
+
+import { useClientRank } from '../api/use-client-rank'
 
 const sortOptions: selectOption[] = [
 	{

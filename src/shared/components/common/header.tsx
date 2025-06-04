@@ -1,4 +1,4 @@
-import { ChevronsUpDown, Power, User } from 'lucide-react'
+import { ChevronsUpDown, Power, Search, User } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 
@@ -10,7 +10,6 @@ import { cn } from '@/shared/utils/cn'
 
 import { useIsMobile } from '../../hooks/use-mobile'
 import TopNavigation from './top-navigation'
-import SearchAction from './search-action'
 import PhotoUrl from './photo-url'
 import {
 	DropdownMenu,
@@ -22,6 +21,9 @@ import {
 	DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
 import { paths } from '@/shared/constants/paths'
+import { useEffect, useState } from 'react'
+import Sportlight from './spotlight-search/spotlight-modal'
+import { SpotlightSearch } from './spotlight-search'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)
@@ -57,7 +59,7 @@ export default function Header() {
 			</div>
 
 			<div className='flex gap-6 items-center'>
-				<SearchAction />
+				<SpotlightSearch />
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button

@@ -12,6 +12,7 @@ export type EmployeeForm = {
 	salary?: number
 	photoUrl?: File | string | null
 	safetyInductionDate?: Date
+	payType?: 'monthly' | 'daily'
 }
 
 export type CertificateForm = {

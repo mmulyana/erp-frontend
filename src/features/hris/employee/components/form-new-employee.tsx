@@ -6,6 +6,7 @@ import { useSetAtom } from 'jotai'
 
 import { ImageUpload } from '@/shared/components/common/image-upload'
 import { MultiStep } from '@/shared/components/common/multi-step'
+import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { atomProgress } from '@/shared/store/progress'
 import { Input } from '@/shared/components/ui/input'
@@ -27,6 +28,20 @@ import {
 } from '@/shared/components/ui/select'
 
 import { EmployeeForm } from '../types'
+import { cn } from '@/shared/utils/cn'
+
+const options = [
+	{
+		id: 'daily',
+		name: 'Harian',
+		description: 'Pegawai gaji harian',
+	},
+	{
+		id: 'monthly',
+		name: 'Bulanan',
+		description: 'Staf perusahaan',
+	},
+]
 
 export default function FormNewEmployee({
 	form,
@@ -35,9 +50,11 @@ export default function FormNewEmployee({
 	form: UseFormReturn<EmployeeForm>
 	onSubmit: (data: EmployeeForm) => void
 }) {
-	const setProgress = useSetAtom(atomProgress)
 	const [step, setStep] = useState(0)
+
+	const setProgress = useSetAtom(atomProgress)
 	const photoWatch = form.watch('photoUrl')
+	const payType = form.watch('payType')
 
 	const steps = [
 		{
@@ -178,7 +195,7 @@ export default function FormNewEmployee({
 							)}
 						/>
 					</div>
-					<div className='p-10 grid grid-cols-1 md:grid-cols-2 gap-6'>
+					<div className='px-10 py-6 grid grid-cols-1 md:grid-cols-2 gap-6'>
 						<FormField
 							control={form.control}
 							name='salary'
@@ -190,7 +207,9 @@ export default function FormNewEmployee({
 									<FormItem>
 										<FormLabel>
 											Gaji pokok{' '}
-											<span className='text-ink-light'>(per hari)</span>
+											<span className='text-ink-light'>
+												({payType == 'daily' ? 'per hari' : 'per bulan'})
+											</span>
 										</FormLabel>
 										<FormControl>
 											<div className='relative'>
@@ -248,6 +267,54 @@ export default function FormNewEmployee({
 									</FormItem>
 								)
 							}}
+						/>
+					</div>
+					<div className='px-10 pb-10'>
+						<FormField
+							control={form.control}
+							name='payType'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Tipe Gaji</FormLabel>
+									<RadioGroup
+										value={field.value}
+										onValueChange={field.onChange}
+										className='grid grid-cols-1 md:grid-cols-2 gap-4'
+									>
+										{options.map((option) => (
+											<label
+												key={option.id}
+												htmlFor={option.id}
+												className={cn(
+													'relative flex items-center rounded-lg border p-4 cursor-pointer transition-colors',
+													field.value === option.id
+														? 'bg-blue-50 border-blue-600'
+														: 'bg-white border-gray-200 hover:border-gray-300'
+												)}
+											>
+												<div className='flex flex-col flex-1'>
+													<span className='font-medium'>{option.name}</span>
+													<span className='text-gray-500 text-sm'>
+														{option.description}
+													</span>
+												</div>
+												<div className='ml-auto'>
+													<RadioGroupItem
+														value={option.id}
+														id={option.id}
+														className={cn(
+															'h-6 w-6 border-2',
+															field.value === option.id
+																? 'border-blue-600 text-blue-600'
+																: 'border-gray-300'
+														)}
+													/>
+												</div>
+											</label>
+										))}
+									</RadioGroup>
+								</FormItem>
+							)}
 						/>
 					</div>
 				</>
