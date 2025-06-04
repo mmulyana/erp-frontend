@@ -83,6 +83,7 @@ export type Overtime = {
 	deletedAt?: string
 
 	employee: Employee
+	project?: Project
 }
 
 export type CashAdvance = {

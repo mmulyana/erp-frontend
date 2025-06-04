@@ -8,6 +8,8 @@ import http from '@/shared/utils/http'
 
 type Params = Pagination & {
 	startDate?: string
+	position?: string
+	projectId?: string
 }
 
 export const useOvertimes = (params?: Params) => {

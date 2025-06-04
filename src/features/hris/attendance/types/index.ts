@@ -9,6 +9,7 @@ export type OvertimeForm = {
 	date?: Date
 	totalHour: number
 	note?: string
+	projectId?: string
 }
 
 export type Attendance = {

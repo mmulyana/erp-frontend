@@ -30,6 +30,7 @@ import {
 import { useCreateOvertime } from '../../api/overtime/use-create-overtime'
 import { OvertimeForm } from '../../types'
 import { parseAsTimestamp, useQueryStates } from 'nuqs'
+import ProjectCombobox from '@/features/projects/project/components/project-combobox'
 
 export default function ModalAddOvertime() {
 	const [open, setOpen] = useState(false)
@@ -45,6 +46,7 @@ export default function ModalAddOvertime() {
 		employeeId: '',
 		note: '',
 		totalHour: 0,
+		projectId: '',
 	}
 
 	const { mutate, isPending } = useCreateOvertime()
@@ -141,6 +143,22 @@ export default function ModalAddOvertime() {
 									<FormLabel>Keterangan</FormLabel>
 									<FormControl>
 										<Textarea {...field} className='bg-surface shadow-none' />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							name='projectId'
+							control={form.control}
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Proyek</FormLabel>
+									<FormControl>
+										<ProjectCombobox
+											defaultValue={field.value}
+											onSelect={field.onChange}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>

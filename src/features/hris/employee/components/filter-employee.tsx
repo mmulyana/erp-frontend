@@ -47,10 +47,12 @@ export const educationOption: selectOption[] = [
 type props = {
 	className?: string
 	hideFilter?: string[]
+	children?: React.ReactNode
 }
 export default function FilterEmployee({
 	className = 'ml-0 md:ml-auto',
 	hideFilter = [],
+	children,
 }: props) {
 	const [query, setQuery] = useQueryStates({
 		active: parseAsString.withDefault(''),
@@ -116,11 +118,13 @@ export default function FilterEmployee({
 		<FilterButton
 			style={{
 				trigger: className,
+				content: 'space-y-2',
 			}}
 		>
 			{filters
 				.filter((i) => !hideFilter.includes(i.name))
 				.map((i) => i.component)}
+			{children}
 		</FilterButton>
 	)
 }
