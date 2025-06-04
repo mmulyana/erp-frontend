@@ -13,6 +13,7 @@ interface PasswordInputProps {
 	label?: string
 	placeholder?: string
 	className?: string
+	disabled?: boolean
 }
 
 export default function InputPassword({
@@ -20,6 +21,7 @@ export default function InputPassword({
 	label,
 	placeholder = 'Masukkan password',
 	className,
+	disabled,
 }: PasswordInputProps) {
 	const {
 		register,
@@ -41,6 +43,7 @@ export default function InputPassword({
 					type={showPassword ? 'text' : 'password'}
 					id={name}
 					placeholder={placeholder}
+					disabled={disabled}
 					{...register(name, {
 						required: 'Password harus diisi',
 						minLength: {

@@ -13,11 +13,10 @@ import Logo from '/images/logo.png'
 
 import { useLogin } from '../api/use-login'
 import { LoginSchema } from '../schema'
-import { Payload } from '../types'
 
 type FormData = z.infer<typeof LoginSchema>
 
-export default function LoginForm() {
+export default function LoginForm({ guestMode }: { guestMode?: boolean }) {
 	const { mutate } = useLogin()
 
 	const form = useForm<FormData>({
@@ -28,17 +27,22 @@ export default function LoginForm() {
 		},
 	})
 
-	const onSubmit = async (data: FormData) => {
-		const payload: Payload = {
-			password: data.password,
-		}
+	const onSubmit = async (payload: FormData) => {
+		mutate(
+			{ password: payload.password, username: payload.username },
+			{
+				onError: handleFormError<FormData>(form),
+			}
+		)
+	}
 
-		payload.username = data.username
-		payload.phone = data.phone as string
-
-		mutate(payload, {
-			onError: handleFormError<FormData>(form),
+	const loginAsGuest = () => {
+		form.reset({
+			password: 'password',
+			username: 'GUEST',
 		})
+
+		form.handleSubmit(onSubmit)()
 	}
 
 	return (
@@ -93,6 +97,23 @@ export default function LoginForm() {
 						</Button>
 					</form>
 				</Form>
+				{guestMode && (
+					<div className='p-6 border border-yellow-500 rounded-xl bg-amber-50/50'>
+						<h2 className='text-lg font-semibold mb-2 text-yellow-600'>
+							Mode Tamu
+						</h2>
+						<p className='mb-4 text-sm text-yellow-600'>
+							Gunakan akun tamu untuk masuk kedalam sistem
+						</p>
+						<Button
+							onClick={loginAsGuest}
+							variant='secondary'
+							className='w-full py-2.5 h-fit bg-amber-500'
+						>
+							Masuk sebagai tamu
+						</Button>
+					</div>
+				)}
 			</div>
 		</>
 	)

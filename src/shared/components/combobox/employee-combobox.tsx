@@ -1,7 +1,8 @@
 import { Check } from 'lucide-react'
 
 import { useEmployeeInfinite } from '@/features/hris/employee/api/use-employees-infinite'
-import { useEmployee } from '@/features/hris/employee/api/use-employee'
+import { urls } from '@/shared/constants/urls'
+import http from '@/shared/utils/http'
 
 import InfiniteCombobox from '../common/infinite-combobox'
 import PhotoUrl from '../common/photo-url'
@@ -17,10 +18,7 @@ export default function EmployeeCombobox(props: {
 			useInfiniteQuery={({ search }) =>
 				useEmployeeInfinite({ search, limit: 10 })
 			}
-			fetchItemById={async (id) => {
-				const { data } = await useEmployee(id)
-				return data ?? null
-			}}
+			fetchItemById={fetchItemById}
 			label={(item) => item.fullname}
 			placeholder='Pilih pegawai'
 			renderItem={(item, isSelected) => (
@@ -38,4 +36,9 @@ export default function EmployeeCombobox(props: {
 			)}
 		/>
 	)
+}
+
+const fetchItemById = async (id: string) => {
+	const { data } = await http(`${urls.employee}/${id}`)
+	return data.data ?? null
 }

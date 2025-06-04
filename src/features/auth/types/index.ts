@@ -6,7 +6,5 @@ export type Response = {
 
 export type Payload = {
 	username?: string
-	email?: string
 	password: string
-	phone?: string
 }

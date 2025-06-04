@@ -1,9 +1,10 @@
-import { parseAsIsoDate, parseAsString, useQueryStates } from 'nuqs'
+import { parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 
 import { DataTable } from '@/shared/components/common/data-table'
+import { usePagination } from '@/shared/hooks/use-pagination'
 import { Badge } from '@/shared/components/ui/badge'
 import { paths } from '@/shared/constants/paths'
 import { formatToRupiah } from '@/shared/utils'
@@ -15,18 +16,19 @@ import { CashAdvance } from '../types'
 export default function TableCashAdvance() {
 	const navigate = useNavigate()
 
+	const { limit, page, q, sortBy, sortOrder } = usePagination()
+
 	const [query] = useQueryStates({
-		q: parseAsString.withDefault(''),
-		page: parseAsString.withDefault('1'),
-		limit: parseAsString.withDefault('10'),
-		startDate: parseAsIsoDate.withDefault(new Date()),
-		endDate: parseAsIsoDate.withDefault(new Date()),
+		position: parseAsString.withDefault(''),
 	})
 
 	const { data, isLoading } = useCashAdvances({
-		limit: query.limit,
-		page: query.page,
-		search: query.q,
+		limit,
+		page,
+		search: q,
+		position: query.position,
+		sortBy,
+		sortOrder,
 	})
 
 	const columns: ColumnDef<CashAdvance>[] = [

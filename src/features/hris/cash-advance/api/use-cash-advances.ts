@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { IApiPagination } from '@/shared/types'
+import { IApiPagination, Pagination } from '@/shared/types'
 
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
@@ -8,13 +8,11 @@ import http from '@/shared/utils/http'
 
 import { CashAdvance } from '../types'
 
-type Params = {
-	search?: string
-	page?: string
-	limit?: string
-}
-
-export const useCashAdvances = (params?: Params) => {
+export const useCashAdvances = (
+	params?: Pagination & {
+		position?: string
+	}
+) => {
 	return useQuery({
 		queryKey: [keys.cashAdvances, params],
 		queryFn: async (): Promise<IApiPagination<CashAdvance[]>> => {

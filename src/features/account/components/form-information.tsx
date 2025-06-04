@@ -47,6 +47,7 @@ export default function FormInformation() {
 	}, [user])
 
 	const photoWatch = form.watch('photoUrl')
+	const isGuest = user.username === 'GUEST'
 
 	const onSubmit = (values: UserForm) => {
 		if (!user?.id) return
@@ -90,9 +91,15 @@ export default function FormInformation() {
 							<FormItem>
 								<FormLabel>Username</FormLabel>
 								<FormControl>
-									<Input {...field} />
+									<Input {...field} disabled={isGuest} />
 								</FormControl>
 								<FormMessage />
+								{isGuest && (
+									<p className='text-sm text-ink-primary/80'>
+										<span className='text-error'>*</span>
+										Akun tamu tidak diizinkan mengganti username
+									</p>
+								)}
 							</FormItem>
 						)}
 					/>

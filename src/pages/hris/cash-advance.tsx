@@ -7,8 +7,20 @@ import CashAdvanceTotal from '@/features/hris/cash-advance/components/cash-advan
 import FilterButton from '@/shared/components/common/filter-button'
 import SortButton from '@/shared/components/common/sort-button'
 import HeadPage from '@/shared/components/common/head-page'
+import FilterEmployee from '@/features/hris/employee/components/filter-employee'
+import CreatedSelect from '@/shared/components/common/select/created-select'
+import { parseAsString, useQueryStates } from 'nuqs'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
+import FilterReset from '@/shared/components/common/filter-reset'
 
 export default function CashAdvancePage() {
+	const [query, setQuery] = useQueryStates({
+		position: parseAsString.withDefault(''),
+		sort: parseAsString.withDefault(''),
+	})
+
+	const hasValue = useHasQueryValue(query)
+
 	return (
 		<DefaultLayout module='hris' className='space-y-6'>
 			<CashAdvanceTotal />
@@ -18,14 +30,21 @@ export default function CashAdvancePage() {
 				action={<ModalAddCashAdvance />}
 			/>
 			<div className='bg-white rounded-xl border border-border p-6 space-y-6'>
-				<div className='flex justify-between items-center flex-col md:flex-row gap-4 w-full'>
-					<div className='flex gap-4 items-start md:items-center w-full md:w-fit flex-col md:flex-row'>
-						<SearchV3 />
-					</div>
-					<div className='flex justify-end w-full gap-4'>
-						<FilterButton></FilterButton>
-						<SortButton></SortButton>
-					</div>
+				<div className='flex items-center flex-wrap gap-4 w-full'>
+					<SearchV3 />
+					<FilterReset
+						show={hasValue}
+						onClick={() =>
+							setQuery({
+								position: null,
+								sort: null,
+							})
+						}
+					/>
+					<FilterEmployee hideFilter={['active', 'lastEdu']} />
+					<SortButton>
+						<CreatedSelect />
+					</SortButton>
 				</div>
 				<TableCashAdvance />
 			</div>

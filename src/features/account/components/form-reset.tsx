@@ -10,10 +10,12 @@ import { useChangePassword } from '../api/use-change-password'
 import { useAtomValue } from 'jotai'
 import { userAtom } from '@/shared/store/auth'
 import { handleFormError } from '@/shared/utils/form'
+import ButtonSubmit from '@/shared/components/common/button-submit'
 
 export default function FormReset() {
 	const user = useAtomValue(userAtom)
 	const { mutate, isPending } = useChangePassword()
+	const isGuest = user.username === 'GUEST'
 
 	const form = useForm<PasswordForm>({
 		defaultValues: {
@@ -49,10 +51,30 @@ export default function FormReset() {
 					onSubmit={form.handleSubmit(onSubmit)}
 					className='flex flex-col gap-4'
 				>
-					<InputPassword label='Password lama' name='oldPassword' />
-					<InputPassword label='Password baru' name='newPassword' />
+					{isGuest && (
+						<div className='p-2 rounded-md border border-error'>
+							<p className='text-sm text-ink-primary/80'>
+								<span className='text-error'>*</span>
+								Akun tamu tidak diizinkan mengganti password 🙏
+							</p>
+						</div>
+					)}
+					<InputPassword
+						disabled={isGuest}
+						label='Password lama'
+						name='oldPassword'
+					/>
+					<InputPassword
+						disabled={isGuest}
+						label='Password baru'
+						name='newPassword'
+					/>
 					<div className='flex justify-end pt-2'>
-						<Button type='submit'>Simpan</Button>
+						{isGuest ? (
+							<Button disabled>Simpan</Button>
+						) : (
+							<ButtonSubmit isPending={isPending} />
+						)}
 					</div>
 				</form>
 			</Form>
