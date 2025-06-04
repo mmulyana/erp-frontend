@@ -31,7 +31,7 @@ const links: Link[] = [
 ]
 
 export default function NewEmployee() {
-	const defaultValues = {
+	const defaultValues: EmployeeForm = {
 		fullname: '',
 		address: '',
 		birthDate: undefined,
@@ -42,6 +42,7 @@ export default function NewEmployee() {
 		position: '',
 		salary: undefined,
 		photoUrl: undefined,
+		payType: 'daily',
 	}
 
 	const { mutate } = useCreateEmployee()

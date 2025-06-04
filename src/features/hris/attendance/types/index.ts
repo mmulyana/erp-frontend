@@ -14,6 +14,7 @@ export type OvertimeForm = {
 
 export type Attendance = {
 	employeeId: string
+	photoUrl?: string
 	fullname: string
 	position: string
 	status: null | 'presence' | 'absent'

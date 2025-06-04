@@ -12,8 +12,12 @@ import { cn } from '@/shared/utils/cn'
 
 import TableRegular from './table-regular'
 import ViewType from './view-type'
+import { useLocalStorage } from '@uidotdev/usehooks'
+import GridRegular from './grid-regular'
 
 export default function SectionRegular() {
+	const [view] = useLocalStorage<string>('view-type', 'table')
+
 	const [query, setQuery] = useQueryStates({
 		notYet: parseAsBoolean.withDefault(false),
 		position: parseAsString.withDefault(''),
@@ -67,7 +71,7 @@ export default function SectionRegular() {
 						<FilterEmployee hideFilter={['active', 'lastEdu']} />
 					</div>
 				</div>
-				<TableRegular />
+				{view === 'table' ? <TableRegular /> : <GridRegular />}
 			</div>
 		</div>
 	)
