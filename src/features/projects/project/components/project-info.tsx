@@ -1,13 +1,13 @@
-import { CalendarDays, Clock, Pencil } from 'lucide-react'
 import { differenceInDays, format } from 'date-fns'
+import { CalendarDays, Clock } from 'lucide-react'
 import { id as ind } from 'date-fns/locale'
 
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
 import CardV1 from '@/shared/components/common/card-v1'
 import { Badge } from '@/shared/components/ui/badge'
 
-import { useProject } from '../api/use-project'
 import ModalEditProject from './modal-edit-project'
+import { useProject } from '../api/use-project'
 
 export default function ProjectInfo({ id }: { id?: string }) {
 	const { data, isPending } = useProject({ id })
@@ -43,7 +43,8 @@ export default function ProjectInfo({ id }: { id?: string }) {
 									variant='secondary'
 									className='text-xs text-ink-secondary'
 								>
-									{differenceInDays(new Date(data.data.createdAt), new Date()) * -1}{' '}
+									{differenceInDays(new Date(data.data.createdAt), new Date()) *
+										-1}{' '}
 									hari terlewati
 								</Badge>
 							</div>

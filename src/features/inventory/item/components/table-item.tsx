@@ -1,16 +1,16 @@
+import { parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from 'react-router-dom'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
-import StatusBadge from '@/shared/components/common/status-badge'
-import PhotoUrl from '@/shared/components/common/photo-url'
 import { paths } from '@/shared/constants/paths'
 import { Inventory } from '@/shared/types/api'
+import StatusBadge from '@/shared/components/common/status-badge'
+import PhotoUrl from '@/shared/components/common/photo-url'
 
 import { useItems } from '../api/use-items'
 import { statusItem } from '../constant'
-import { parseAsString, useQueryStates } from 'nuqs'
 
 export default function TableItem() {
 	const { limit, page, q, sortBy, sortOrder } = usePagination()

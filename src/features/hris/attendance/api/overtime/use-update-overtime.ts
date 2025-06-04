@@ -28,7 +28,7 @@ export const useUpdateOvertime = () => {
 			queryClient.invalidateQueries({
 				queryKey: [keys.overtimeDetail, data.id],
 			})
-			queryClient.invalidateQueries({ queryKey: [keys.overtimeTotalPerDay] })
+			queryClient.invalidateQueries({ queryKey: [keys.overtimeByDate] })
 
 			toast.success(data.res.data.message)
 		},

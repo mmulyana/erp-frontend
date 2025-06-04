@@ -12,6 +12,7 @@ export type ProjectForm = {
 	doneAt?: Date
 	status?: string
 	priority?: string
+	employeeIds?: string[]
 }
 
 export type ProjectEmployee = {

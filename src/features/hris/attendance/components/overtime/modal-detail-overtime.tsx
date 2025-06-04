@@ -160,7 +160,7 @@ export default function ModalDetailOvertime({
 						/>
 						<DialogFooter>
 							<div className='flex justify-between w-full pt-4'>
-								<ModalDeleteOvertime />
+								<ModalDeleteOvertime id={id} onClose={() => setOpen(false)} />
 								<div className='flex justify-end gap-4 items-center'>
 									<DialogClose asChild>
 										<Button variant='outline' type='button'>

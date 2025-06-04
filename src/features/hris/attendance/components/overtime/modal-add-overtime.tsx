@@ -42,7 +42,7 @@ export default function ModalAddOvertime() {
 	date.setHours(0, 0, 0, 0)
 
 	const defaultValues = {
-		date: date,
+		date: date || new Date(),
 		employeeId: '',
 		note: '',
 		totalHour: 0,

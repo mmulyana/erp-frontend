@@ -17,10 +17,15 @@ import { useDeleteOvertime } from '../../api/overtime/use-delete-overtime'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-export default function ModalDeleteOvertime() {
+export default function ModalDeleteOvertime({
+	id,
+	onClose,
+}: {
+	id?: string
+	onClose?: () => void
+}) {
 	const [open, setOpen] = useState(false)
 
-	const { id } = useParams()
 	const { mutate } = useDeleteOvertime()
 
 	return (
@@ -53,6 +58,7 @@ export default function ModalDeleteOvertime() {
 									{
 										onSuccess: () => {
 											setOpen(false)
+											onClose?.()
 										},
 									}
 								)

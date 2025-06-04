@@ -23,6 +23,7 @@ export const useCreateItem = () => {
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.item] })
 			queryClient.invalidateQueries({ queryKey: [keys.itemInfinite] })
+			queryClient.invalidateQueries({ queryKey: [keys.itemStatusChart] })
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

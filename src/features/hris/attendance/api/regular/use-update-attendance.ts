@@ -22,6 +22,7 @@ export const useUpdateAttendance = () => {
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.attendance] })
 			queryClient.invalidateQueries({ queryKey: [keys.attendanceTotalPerDay] })
+			queryClient.invalidateQueries({ queryKey: [keys.attendanceByDate] })
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

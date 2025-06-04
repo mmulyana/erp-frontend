@@ -19,10 +19,9 @@ export const useCreateOvertime = () => {
 			return await http.post(urls.overtime, payload)
 		},
 		onSuccess: (data) => {
+			queryClient.invalidateQueries({ queryKey: [keys.overtimeByDate] })
 			queryClient.invalidateQueries({ queryKey: [keys.overtime] })
-			queryClient.invalidateQueries({
-				queryKey: [keys.overtimeTotalPerDay],
-			})
+
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

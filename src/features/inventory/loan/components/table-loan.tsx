@@ -98,6 +98,7 @@ export default function TableLoan() {
 		},
 		{
 			id: 'status',
+			header: "Status",
 			cell: ({ row }) => (
 				<StatusBadge options={statusLoan} value={row.original.status} />
 			),

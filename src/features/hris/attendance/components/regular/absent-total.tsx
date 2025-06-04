@@ -29,7 +29,9 @@ export default function AbsentTotal() {
 			<div className='flex justify-between items-end mt-2'>
 				<div>
 					<div className='flex gap-1.5 items-center'>
-						<p className='text-3xl font-medium text-ink-primary'>32</p>
+						<p className='text-3xl font-medium text-ink-primary'>
+							{data?.data?.absent.data.at(-1)?.total}
+						</p>
 						<div
 							className={cn(
 								'rounded-full flex text-xs px-1.5 py-0.5 gap-1',

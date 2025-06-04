@@ -1,5 +1,5 @@
+import { PieChartIcon } from 'lucide-react'
 import { Pie, PieChart } from 'recharts'
-import { PieChartIcon, Users } from 'lucide-react'
 
 import CardV1 from '@/shared/components/common/card-v1'
 import { cn } from '@/shared/utils/cn'
@@ -15,11 +15,7 @@ import { useStatusChart } from '../api/use-status-chart'
 type props = {
 	variant?: 'default' | 'compact'
 }
-const chartData = [
-	{ name: 'Tersedia', total: 40, fill: '#47AF97' },
-	{ name: 'Hampir habis', total: 10, fill: '#EE682F' },
-	{ name: 'Habis', total: 4, fill: '#D52B42' },
-]
+
 export default function ItemAvailability({ variant = 'default' }: props) {
 	const { data } = useStatusChart()
 	return (

@@ -2,8 +2,9 @@ import { UseFormReturn } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai'
 
+import UserCombobox from '@/features/user/components/user-combobox'
+
 import { EditorDescription } from '@/shared/components/common/tiptap/editor-description'
-import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import { MultiStep } from '@/shared/components/common/multi-step'
 import { atomProgress } from '@/shared/store/progress'
 import { Input } from '@/shared/components/ui/input'
@@ -18,6 +19,7 @@ import {
 
 import ClientCombobox from '../../client/components/client-combobox'
 import { ProjectForm } from '../types'
+import AssignedEmployeeProject from './assigned-employee-project'
 
 type props = {
 	form: UseFormReturn<ProjectForm>
@@ -88,7 +90,7 @@ export default function FormNewProject({ form, onSubmit }: props) {
 										Penanggung Jawab Lapangan
 									</FormLabel>
 									<FormControl>
-										<EmployeeCombobox onSelect={field.onChange} />
+										<UserCombobox onSelect={field.onChange} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -117,7 +119,9 @@ export default function FormNewProject({ form, onSubmit }: props) {
 			title: 'Pegawai',
 			content: (
 				<>
-					<div className='p-10'></div>
+					<div className='p-10'>
+						<AssignedEmployeeProject form={form} />
+					</div>
 				</>
 			),
 		},

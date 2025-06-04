@@ -91,7 +91,7 @@ export function DataTable<TData, TValue>({
 					key={row.id}
 					data-state={row.getIsSelected() && 'selected'}
 					className={cn(
-						'h-10 py-0 border-none transition-colors hover:bg-ink-primary/10',
+						'h-10 py-0 border-none transition-colors hover:bg-ink-primary/5',
 						rowIndex % 2 === 1 && (style?.stripRowColor || 'bg-[#FAFAFA]')
 					)}
 				>
