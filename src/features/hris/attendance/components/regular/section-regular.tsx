@@ -1,10 +1,12 @@
-import { parseAsBoolean, useQueryStates } from 'nuqs'
+import { parseAsBoolean, parseAsString, useQueryStates } from 'nuqs'
 import { UserSearch, X } from 'lucide-react'
 
-import FilterButton from '@/shared/components/common/filter-button'
-import SortButton from '@/shared/components/common/sort-button'
+import FilterEmployee from '@/features/hris/employee/components/filter-employee'
+
+import FilterReset from '@/shared/components/common/filter-reset'
 import SearchV3 from '@/shared/components/common/search-v3'
 import HeadPage from '@/shared/components/common/head-page'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
 import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 
@@ -14,7 +16,10 @@ import ViewType from './view-type'
 export default function SectionRegular() {
 	const [query, setQuery] = useQueryStates({
 		notYet: parseAsBoolean.withDefault(false),
+		position: parseAsString.withDefault(''),
 	})
+
+	const hasValue = useHasQueryValue(query)
 
 	return (
 		<div className='w-full space-y-6'>
@@ -24,8 +29,17 @@ export default function SectionRegular() {
 			/>
 			<div className='p-6 bg-white rounded-xl border border-line space-y-6'>
 				<div className='flex gap-4 items-center flex-wrap md:flex-nowrap w-full'>
-					<SearchV3 />
+					<SearchV3 className='w-28' placeholder='Cari' />
 					<ViewType />
+					<FilterReset
+						show={hasValue}
+						onClick={() => {
+							setQuery({
+								notYet: null,
+								position: null,
+							})
+						}}
+					/>
 
 					<div className='ml-auto flex gap-4 items-start'>
 						<Button
@@ -50,8 +64,7 @@ export default function SectionRegular() {
 							</span>
 							{query.notYet && <X size={18} className='text-white ml-2' />}
 						</Button>
-						<FilterButton></FilterButton>
-						<SortButton></SortButton>
+						<FilterEmployee hideFilter={['active', 'lastEdu']} />
 					</div>
 				</div>
 				<TableRegular />

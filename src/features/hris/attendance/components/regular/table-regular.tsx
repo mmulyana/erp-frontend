@@ -1,4 +1,9 @@
-import { parseAsBoolean, parseAsTimestamp, useQueryStates } from 'nuqs'
+import {
+	parseAsBoolean,
+	parseAsString,
+	parseAsTimestamp,
+	useQueryStates,
+} from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { usePagination } from '@/shared/hooks/use-pagination'
@@ -12,10 +17,11 @@ import { Attendance } from '../../types'
 import ButtonRegular from './button-regular'
 
 export default function TableRegular() {
-	const { q, limit, page } = usePagination()
+	const { q, limit, page, sortBy, sortOrder } = usePagination()
 	const [query] = useQueryStates({
 		date: parseAsTimestamp,
 		notYet: parseAsBoolean,
+		position: parseAsString.withDefault(''),
 	})
 
 	const date = new Date(query.date || Date.now())
@@ -28,6 +34,9 @@ export default function TableRegular() {
 		search: q,
 		startDate,
 		notYet: String(query.notYet),
+		sortBy,
+		sortOrder,
+		position: query.position,
 	})
 
 	const { mutate } = useCreateAttendance()
