@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Button } from '../../ui/button'
 import { Search } from 'lucide-react'
-import SpotlightModal from './spotlight-modal'
+import { Button } from '@/shared/components/ui/button'
+import CommandModal from './command-modal'
+import { cn } from '@/shared/utils/cn'
 
-export function SpotlightSearch() {
+export function CommandSearch({ className }: { className?: string }) {
 	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
@@ -22,7 +23,10 @@ export function SpotlightSearch() {
 		<>
 			<Button
 				variant='outline'
-				className='relative w-full max-w-lg justify-start text-ink-primary/50'
+				className={cn(
+					'relative w-full max-w-lg justify-start text-ink-primary/50',
+					className
+				)}
 				onClick={() => setOpen(true)}
 			>
 				<Search className='h-4 w-4 mr-2' />
@@ -33,7 +37,7 @@ export function SpotlightSearch() {
 					</kbd>
 				</div>
 			</Button>
-			<SpotlightModal open={open} onOpenChange={setOpen} />
+			<CommandModal open={open} onOpenChange={setOpen} />
 		</>
 	)
 }

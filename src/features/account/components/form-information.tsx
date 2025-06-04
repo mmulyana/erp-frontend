@@ -97,7 +97,7 @@ export default function FormInformation() {
 								{isGuest && (
 									<p className='text-sm text-ink-primary/80'>
 										<span className='text-error'>*</span>
-										Akun tamu tidak diizinkan mengganti username
+										Akun tamu tidak diizinkan mengganti username 🙏
 									</p>
 								)}
 							</FormItem>

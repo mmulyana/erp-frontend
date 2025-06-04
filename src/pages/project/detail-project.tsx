@@ -12,6 +12,7 @@ import DetailLayout from '@/shared/layout/detail-layout'
 import { useDynamicLinks } from '@/shared/utils/link'
 import { paths } from '@/shared/constants/paths'
 import { Link } from '@/shared/types'
+import { CommandSearch } from '@/features/command/components/command-search'
 
 const links: Link[] = [
 	{
@@ -48,8 +49,12 @@ export default function DetailProject() {
 	})
 
 	return (
-		<DetailLayout links={dynamicLink} style={{ header: 'w-[1020px]' }}>
-			<div className='grid grid-cols-1 md:grid-cols-[640px_380px] gap-8 w-[1020px] max-w-full px-4 md:px-0 mx-auto pt-6'>
+		<DetailLayout
+			links={dynamicLink}
+			style={{ header: 'w-[1020px]' }}
+			buttonAction={<CommandSearch className='w-[200px]' />}
+		>
+			<div className='grid grid-cols-1 md:grid-cols-[640px_1fr] gap-8 w-[1020px] max-w-full px-4 md:px-0 mx-auto pt-6'>
 				<div className='space-y-6'>
 					<ProjectInfo id={id} />
 					<ProjectDetail id={id} />

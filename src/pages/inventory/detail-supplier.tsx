@@ -5,6 +5,7 @@ import SupplierTransaction from '@/features/inventory/supplier/components/suppli
 import SupplierDetail from '@/features/inventory/supplier/components/supplier-detail'
 import SupplierInfo from '@/features/inventory/supplier/components/supplier-info'
 import { useSupplier } from '@/features/inventory/supplier/api/use-supplier'
+import { CommandSearch } from '@/features/command/components/command-search'
 
 import DetailLayout from '@/shared/layout/detail-layout'
 import { useDynamicLinks } from '@/shared/utils/link'
@@ -51,6 +52,7 @@ export default function DetailSupplier() {
 			style={{
 				header: 'w-[600px]',
 			}}
+			buttonAction={<CommandSearch className='w-[200px]' />}
 		>
 			<div className='space-y-6 w-[600px] max-w-full px-4 md:px-0 mx-auto py-6'>
 				<SupplierInfo id={id} />

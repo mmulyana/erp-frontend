@@ -21,9 +21,7 @@ import {
 	DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
 import { paths } from '@/shared/constants/paths'
-import { useEffect, useState } from 'react'
-import Sportlight from './spotlight-search/spotlight-modal'
-import { SpotlightSearch } from './spotlight-search'
+import { CommandSearch } from '@/features/command/components/command-search'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)
@@ -59,7 +57,7 @@ export default function Header() {
 			</div>
 
 			<div className='flex gap-6 items-center'>
-				<SpotlightSearch />
+				<CommandSearch />
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button

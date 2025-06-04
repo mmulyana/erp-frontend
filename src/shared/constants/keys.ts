@@ -109,4 +109,6 @@ export const keys = {
 	ledger: 'ledger',
 	ledgerChart: 'ledger-chart',
 	ledgerActivity: 'ledger-activity',
+
+	command: 'command'
 }

@@ -484,3 +484,11 @@ export enum LoanStatus {
 	PARTIAL_RETURNED = 'PARTIAL_RETURNED',
 	RETURNED = 'RETURNED',
 }
+
+type CommandItem = {
+	id: string
+	label: string
+	extra?: string
+}
+
+export type CommandGrouped = Record<string, CommandItem[]>

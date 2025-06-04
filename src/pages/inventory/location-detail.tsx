@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react'
 import { format } from 'date-fns'
 
 import ModalDetailLocation from '@/features/inventory/location/components/modal-detail-location'
+import { CommandSearch } from '@/features/command/components/command-search'
 import { useLocation } from '@/features/inventory/location/api/use-location'
 import { useItems } from '@/features/inventory/item/api/use-items'
 import { statusItem } from '@/features/inventory/item/constant'
@@ -104,6 +105,7 @@ export default function LocationDetail() {
 			style={{
 				header: 'w-[940px]',
 			}}
+			buttonAction={<CommandSearch className='w-[200px]' />}
 		>
 			<div className='w-[940px] mx-auto pt-6 max-w-full px-4 md:px-0 grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6 items-start'>
 				<CardV1

@@ -3,6 +3,7 @@ import { House } from 'lucide-react'
 import { useQueryState } from 'nuqs'
 import { useEffect } from 'react'
 
+import { CommandSearch } from '@/features/command/components/command-search'
 import { useItem } from '@/features/inventory/item/api/use-item'
 import ItemSupplier from '@/features/inventory/item/components/item-supplier'
 import ItemDetail from '@/features/inventory/item/components/item-detail'
@@ -58,7 +59,11 @@ export default function DetailItem() {
 	}, [])
 
 	return (
-		<DetailLayout links={dynamicLink} style={{ header: 'w-[1020px]' }}>
+		<DetailLayout
+			links={dynamicLink}
+			style={{ header: 'w-[1020px]' }}
+			buttonAction={<CommandSearch className='w-[200px]' />}
+		>
 			<div className='grid grid-cols-1 xl:grid-cols-[640px_1fr] gap-8 w-[1020px] max-w-full px-4 xl:px-0 mx-auto pt-6 pb-10'>
 				<div className='space-y-6'>
 					<ItemInfo id={id} />

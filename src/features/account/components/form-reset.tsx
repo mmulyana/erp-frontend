@@ -52,12 +52,10 @@ export default function FormReset() {
 					className='flex flex-col gap-4'
 				>
 					{isGuest && (
-						<div className='p-2 rounded-md border border-error'>
-							<p className='text-sm text-ink-primary/80'>
-								<span className='text-error'>*</span>
-								Akun tamu tidak diizinkan mengganti password 🙏
-							</p>
-						</div>
+						<p className='text-sm text-ink-primary/80'>
+							<span className='text-error'>*</span>
+							Akun tamu tidak diizinkan mengganti password 🙏
+						</p>
 					)}
 					<InputPassword
 						disabled={isGuest}

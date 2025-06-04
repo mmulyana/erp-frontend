@@ -1,152 +1,146 @@
-import type React from 'react'
-
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import {
 	Search,
 	FileText,
-	User,
-	Settings,
-	Hash,
+	Users,
 	ArrowRight,
+	Users2,
+	Building,
+	Store,
+	Hammer,
+	Warehouse,
+	HardHat,
 } from 'lucide-react'
 import { Dialog, DialogContent } from '@/shared/components/ui/dialog'
 import { Input } from '@/shared/components/ui/input'
-import { Badge } from '@/shared/components/ui/badge'
+import { useCommand } from '../api/use-command'
+import { debounce } from '@/shared/utils'
+import CommandSelector from './command-selector'
+import { paths } from '@/shared/constants/paths'
+import { baseUrl } from '@/shared/constants/urls'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface SearchResult {
 	id: string
 	title: string
 	description?: string
-	category: 'pages' | 'users' | 'documents' | 'settings' | 'tags'
+	category:
+		| 'employee'
+		| 'payrollPeriod'
+		| 'project'
+		| 'client'
+		| 'companyClient'
+		| 'inventory'
+		| 'supplier'
+		| 'warehouse'
+		| 'projectAttachment'
 	url?: string
 }
 
-interface SearchModalProps {
+interface Props {
 	open: boolean
 	onOpenChange: (open: boolean) => void
 }
 
-const mockData: SearchResult[] = [
-	{
-		id: '1',
-		title: 'Dashboard',
-		description: 'Main dashboard overview',
-		category: 'pages',
-		url: '/dashboard',
-	},
-	{
-		id: '2',
-		title: 'User Profile',
-		description: 'Manage your profile settings',
-		category: 'pages',
-		url: '/profile',
-	},
-	{
-		id: '3',
-		title: 'Analytics',
-		description: 'View detailed analytics',
-		category: 'pages',
-		url: '/analytics',
-	},
-	{
-		id: '4',
-		title: 'John Doe',
-		description: 'Software Engineer',
-		category: 'users',
-	},
-	{
-		id: '5',
-		title: 'Jane Smith',
-		description: 'Product Manager',
-		category: 'users',
-	},
-	{
-		id: '6',
-		title: 'Project Proposal',
-		description: 'Q4 2024 roadmap document',
-		category: 'documents',
-	},
-	{
-		id: '7',
-		title: 'Meeting Notes',
-		description: 'Weekly team sync notes',
-		category: 'documents',
-	},
-	{
-		id: '8',
-		title: 'Account Settings',
-		description: 'Manage account preferences',
-		category: 'settings',
-		url: '/settings',
-	},
-	{
-		id: '9',
-		title: 'Billing',
-		description: 'View billing and subscription',
-		category: 'settings',
-		url: '/billing',
-	},
-	{
-		id: '10',
-		title: '#frontend',
-		description: 'Frontend development tag',
-		category: 'tags',
-	},
-	{
-		id: '11',
-		title: '#design',
-		description: 'Design related content',
-		category: 'tags',
-	},
-]
-
 const categoryIcons = {
-	pages: FileText,
-	users: User,
-	documents: FileText,
-	settings: Settings,
-	tags: Hash,
+	employee: Users2,
+	payrollPeriod: FileText,
+	project: HardHat,
+	client: Users,
+	companyClient: Building,
+	inventory: Hammer,
+	supplier: Store,
+	warehouse: Warehouse,
+	projectAttachment: FileText,
+}
+
+const categoryUrl = {
+	employee: paths.hrisMasterdataEmployee,
+	payrollPeriod: paths.hrisPayroll,
+	project: paths.projectMasterdataProjects,
+	client: paths.projectMasterdataClient,
+	companyClient: paths.projectMasterdataClientCompany,
+	inventory: paths.inventoryMasterdataItem,
+	supplier: paths.inventoryMasterdataSupplier,
+	warehouse: paths.inventoryMasterdataLocation,
+	projectAttachment: baseUrl,
+}
+
+const categoryTitle = {
+	employee: 'Pegawai',
+	payrollPeriod: 'Periode gaji',
+	project: 'Proyek',
+	client: 'Klien',
+	companyClient: 'Perusahaan klien',
+	inventory: 'Barang',
+	supplier: 'Supplier ',
+	warehouse: 'Gudang',
+	projectAttachment: 'Lampiran',
 }
 
 const categoryColors = {
-	pages: 'bg-blue-100 text-blue-800',
-	users: 'bg-green-100 text-green-800',
-	documents: 'bg-purple-100 text-purple-800',
-	settings: 'bg-orange-100 text-orange-800',
-	tags: 'bg-pink-100 text-pink-800',
+	employee: 'bg-green-100 text-green-800',
+	payrollPeriod: 'bg-indigo-100 text-indigo-800',
+	project: 'bg-cyan-100 text-cyan-800',
+	client: 'bg-yellow-100 text-yellow-800',
+	companyClient: 'bg-yellow-100 text-yellow-800',
+	inventory: 'bg-teal-100 text-teal-800',
+	supplier: 'bg-orange-100 text-orange-800',
+	warehouse: 'bg-gray-100 text-gray-800',
+	projectAttachment: 'bg-purple-100 text-purple-800',
 }
 
-export default function SpotlightModal({
-	open,
-	onOpenChange,
-}: SearchModalProps) {
+export default function CommandModal({ open, onOpenChange }: Props) {
+	const navigate = useNavigate()
 	const [query, setQuery] = useState('')
+	const [debouncedQuery, setDebouncedQuery] = useState('')
 	const [results, setResults] = useState<SearchResult[]>([])
 	const [selectedIndex, setSelectedIndex] = useState(0)
+	const [types, setTypes] = useState([])
 
-	const searchResults = useCallback((searchQuery: string) => {
-		if (!searchQuery.trim()) {
+	console.log(results)
+
+	const handleDebounce = useMemo(() => {
+		return debounce((val: string) => {
+			setDebouncedQuery(val)
+		}, 300)
+	}, [])
+
+	const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const val = e.target.value
+		setQuery(val)
+		handleDebounce(val)
+	}
+
+	const { data } = useCommand({
+		q: debouncedQuery,
+		types,
+	})
+
+	useEffect(() => {
+		if (!data?.data) {
 			setResults([])
 			return
 		}
 
-		const filtered = mockData.filter(
-			(item) =>
-				item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+		const mapped: SearchResult[] = Object.entries(data?.data).flatMap(
+			([category, items]) =>
+				items.map((item) => ({
+					id: item.id,
+					title: item.label,
+					description: item.extra,
+					category: category as SearchResult['category'],
+				}))
 		)
 
-		setResults(filtered)
+		setResults(mapped)
 		setSelectedIndex(0)
-	}, [])
-
-	useEffect(() => {
-		searchResults(query)
-	}, [query, searchResults])
+	}, [data, open])
 
 	useEffect(() => {
 		if (!open) {
 			setQuery('')
+			setDebouncedQuery('')
 			setResults([])
 			setSelectedIndex(0)
 		}
@@ -166,10 +160,8 @@ export default function SpotlightModal({
 	}
 
 	const handleResultClick = (result: SearchResult) => {
-		console.log('Navigate to:', result.url || result.title)
-		onOpenChange(false)
-		// In a real app, you would navigate to the result URL
-		// router.push(result.url || '/')
+		const url = `${categoryUrl[result.category]}/${result.id}`
+		navigate(url)
 	}
 
 	const groupedResults = results.reduce((acc, result) => {
@@ -180,76 +172,56 @@ export default function SpotlightModal({
 		return acc
 	}, {} as Record<string, SearchResult[]>)
 
+	console.log(groupedResults)
+
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className='max-w-2xl p-0 gap-0' showClose={false}>
 				<div className='flex items-center border-b px-4 py-3'>
 					<Search className='h-4 w-4 text-muted-foreground mr-3' />
 					<Input
-						placeholder='Search everything...'
+						placeholder='Cari semua data'
 						value={query}
-						onChange={(e) => setQuery(e.target.value)}
+						onChange={handleQueryChange}
 						onKeyDown={handleKeyDown}
 						className='border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base'
 						autoFocus
 					/>
 				</div>
 
+				<CommandSelector selectedChips={types} setSelectedChips={setTypes} />
+
 				<div className='max-h-96 overflow-y-auto'>
-					{query && results.length === 0 && (
+					{debouncedQuery && results.length === 0 && (
 						<div className='p-8 text-center text-muted-foreground'>
 							<Search className='h-8 w-8 mx-auto mb-2 opacity-50' />
-							<p>No results found for "{query}"</p>
-						</div>
-					)}
-
-					{!query && (
-						<div className='p-4 text-sm text-muted-foreground'>
-							<p className='mb-2'>Try searching for:</p>
-							<div className='flex flex-wrap gap-2'>
-								<Badge
-									variant='secondary'
-									className='cursor-pointer'
-									onClick={() => setQuery('dashboard')}
-								>
-									Dashboard
-								</Badge>
-								<Badge
-									variant='secondary'
-									className='cursor-pointer'
-									onClick={() => setQuery('users')}
-								>
-									Users
-								</Badge>
-								<Badge
-									variant='secondary'
-									className='cursor-pointer'
-									onClick={() => setQuery('settings')}
-								>
-									Settings
-								</Badge>
-							</div>
+							<p>No results found for "{debouncedQuery}"</p>
 						</div>
 					)}
 
 					{Object.entries(groupedResults).map(([category, categoryResults]) => {
 						const Icon = categoryIcons[category as keyof typeof categoryIcons]
+						const text = categoryTitle[category as keyof typeof categoryTitle]
 						return (
 							<div key={category} className='p-2'>
 								<div className='flex items-center gap-2 px-2 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wide'>
 									<Icon className='h-3 w-3' />
-									{category}
+									{text}
 								</div>
 								{categoryResults.map((result) => {
 									const globalIndex = results.indexOf(result)
 									const isSelected = globalIndex === selectedIndex
 									return (
-										<div
+										<Link
+											to={`${categoryUrl[category]}/${result.id}`}
 											key={result.id}
 											className={`flex items-center justify-between p-2 mx-1 rounded cursor-pointer transition-colors ${
 												isSelected ? 'bg-accent' : 'hover:bg-accent/50'
 											}`}
-											onClick={() => handleResultClick(result)}
+											// onClick={() => handleResultClick(result)}
+											target={
+												category === 'projectAttachment' ? '_blank' : '_parent'
+											}
 										>
 											<div className='flex items-center gap-3 flex-1 min-w-0'>
 												<div
@@ -271,7 +243,7 @@ export default function SpotlightModal({
 												</div>
 											</div>
 											<ArrowRight className='h-3 w-3 text-muted-foreground' />
-										</div>
+										</Link>
 									)
 								})}
 							</div>
