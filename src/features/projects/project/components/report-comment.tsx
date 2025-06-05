@@ -291,7 +291,7 @@ export default function ReportComment({ id }: { id?: string }) {
 					</div>
 				</div>
 				<div className='absolute top-4 right-4'>
-					{user.id === data.data.createdBy && (
+					{user.id === data?.data?.createdBy && (
 						<DropdownMenuV1 style={{ content: 'min-w-[96px]' }}>
 							<ModalEditReport
 								reportId={id}
