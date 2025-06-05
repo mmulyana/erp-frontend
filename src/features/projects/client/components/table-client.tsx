@@ -11,7 +11,7 @@ import { Client } from '@/shared/types/api'
 
 import { useClients } from '../api/use-clients'
 
-export default function TableClient() {
+export default function TableClient({ companyId }: { companyId?: string }) {
 	const navigate = useNavigate()
 	const { limit, page, q, sortOrder } = usePagination()
 
@@ -24,7 +24,7 @@ export default function TableClient() {
 		page,
 		search: q,
 		sortOrder,
-		companyId: query.companyId,
+		companyId: companyId || query.companyId,
 	})
 
 	// COLUMNS EMPLOYEE
