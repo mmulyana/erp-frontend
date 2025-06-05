@@ -137,9 +137,7 @@ export default function ReportComment({ id }: { id?: string }) {
 	}
 
 	const handleDeleteComment = (id: string) => {
-		if (confirm('Are you sure you want to delete this comment?')) {
-			socket.emit('report-comment:delete', id)
-		}
+		socket.emit('report-comment:delete', id)
 	}
 
 	const renderComments = (parentId: string | null = null, depth = 0) => {
@@ -154,9 +152,7 @@ export default function ReportComment({ id }: { id?: string }) {
 				>
 					<div className='flex gap-3 relative'>
 						<Avatar className='h-8 w-8'>
-							<AvatarImage
-								src={baseUrl + '/' + comment.user.photoUrl}
-							/>
+							<AvatarImage src={baseUrl + '/' + comment.user.photoUrl} />
 							<AvatarFallback className='uppercase'>
 								{comment.user.username[0]}
 							</AvatarFallback>
@@ -171,7 +167,7 @@ export default function ReportComment({ id }: { id?: string }) {
 										{new Date(comment.createdAt).toLocaleTimeString()}
 									</p>
 								</div>
-								{comment.createdBy === user?.id && (
+								{comment.createdBy === user?.id && !comment.deletedAt && (
 									<DropdownMenuV1
 										style={{
 											trigger: 'p-0 h-6 w-6 bg-transparent',
@@ -295,16 +291,18 @@ export default function ReportComment({ id }: { id?: string }) {
 					</div>
 				</div>
 				<div className='absolute top-4 right-4'>
-					<DropdownMenuV1 style={{ content: 'min-w-[96px]' }}>
-						<ModalEditReport
-							reportId={id}
-							defaultValues={{
-								attachments: data?.data?.attachments || [],
-								message: data?.data?.message || '',
-								type: data?.data?.type || '',
-							}}
-						/>
-					</DropdownMenuV1>
+					{user.id === data.data.createdBy && (
+						<DropdownMenuV1 style={{ content: 'min-w-[96px]' }}>
+							<ModalEditReport
+								reportId={id}
+								defaultValues={{
+									attachments: data?.data?.attachments || [],
+									message: data?.data?.message || '',
+									type: data?.data?.type || '',
+								}}
+							/>
+						</DropdownMenuV1>
+					)}
 				</div>
 				<div className='flex gap-4 items-center pl-14 pt-4'>
 					<div className='flex gap-2 items-center'>

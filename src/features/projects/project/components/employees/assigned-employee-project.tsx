@@ -1,10 +1,12 @@
-import { useState } from 'react'
-import { X, Search } from 'lucide-react'
-import { ProjectForm } from '../types'
 import { UseFormReturn } from 'react-hook-form'
+import { X, Search } from 'lucide-react'
+import { useState } from 'react'
+
 import { useEmployees } from '@/features/hris/employee/api/use-employees'
+
 import PhotoUrl from '@/shared/components/common/photo-url'
 import { Input } from '@/shared/components/ui/input'
+import { ProjectForm } from '../../types'
 
 type Employee = {
 	id: string
@@ -114,7 +116,7 @@ export default function AssignedEmployeeProject({
 				))}
 			</div>
 
-			{selected.length > 0 && filteredResults.length > 0  && (
+			{selected.length > 0 && filteredResults.length > 0 && (
 				<hr className='w-full h-1' />
 			)}
 			{selected.length > 0 && (
