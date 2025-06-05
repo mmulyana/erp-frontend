@@ -17,7 +17,13 @@ import {
 import { useDeleteCertificate } from '../../api/use-delete-certificate'
 import { useState } from 'react'
 
-export default function ModalDeleteCertificate({ id }: { id?: string }) {
+export default function ModalDeleteCertificate({
+	id,
+	onSuccess,
+}: {
+	id?: string
+	onSuccess?: () => void
+}) {
 	const [open, setOpen] = useState(false)
 	const { mutate } = useDeleteCertificate()
 	const { id: employeeId } = useParams()
@@ -55,6 +61,7 @@ export default function ModalDeleteCertificate({ id }: { id?: string }) {
 									{
 										onSuccess: () => {
 											setOpen(false)
+											onSuccess?.()
 										},
 									}
 								)

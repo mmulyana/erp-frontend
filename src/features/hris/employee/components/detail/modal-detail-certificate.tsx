@@ -17,7 +17,6 @@ import { Link } from 'react-router-dom'
 import { baseUrl } from '@/shared/constants/urls'
 import ModalEditCertificate from './modal-edit-certificate'
 import ModalDeleteCertificate from './modal-delete-certificate'
-import { useState } from 'react'
 
 export default function ModalDetailCertificate({
 	id,
@@ -92,7 +91,7 @@ export default function ModalDetailCertificate({
 				</div>
 				<DialogFooter className=''>
 					<div className='flex justify-between items-center pt-6 w-full'>
-						<ModalDeleteCertificate id={id} />
+						<ModalDeleteCertificate id={id} onSuccess={() => setOpen(false)} />
 						<ModalEditCertificate />
 					</div>
 				</DialogFooter>

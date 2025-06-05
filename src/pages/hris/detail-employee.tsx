@@ -1,18 +1,17 @@
 import { useParams } from 'react-router-dom'
 import { House } from 'lucide-react'
-import { useMemo } from 'react'
 
 import CardInformation from '@/features/hris/employee/components/detail/card-information'
 import CardPosition from '@/features/hris/employee/components/detail/card-position'
 import CardAddress from '@/features/hris/employee/components/detail/card-address'
 import CardDetail from '@/features/hris/employee/components/detail/card-detail'
+import { CommandSearch } from '@/features/command/components/command-search'
 import { useEmployee } from '@/features/hris/employee/api/use-employee'
 
 import DetailLayout from '@/shared/layout/detail-layout'
+import { useDynamicLinks } from '@/shared/utils/link'
 import { paths } from '@/shared/constants/paths'
 import { Link } from '@/shared/types'
-import { useDynamicLinks } from '@/shared/utils/link'
-import { CommandSearch } from '@/features/command/components/command-search'
 
 const links: Link[] = [
 	{
