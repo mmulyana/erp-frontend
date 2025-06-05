@@ -1,7 +1,6 @@
-import { ChevronRight, Plus, Users } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 import { differenceInDays, format } from 'date-fns'
+import { Link } from 'react-router-dom'
+import { Users } from 'lucide-react'
 import { useState } from 'react'
 
 import EmptyState from '@/shared/components/common/empty-state'
@@ -10,14 +9,14 @@ import PhotoUrl from '@/shared/components/common/photo-url'
 import CardV1 from '@/shared/components/common/card-v1'
 
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
-import { Button } from '@/shared/components/ui/button'
 import { paths } from '@/shared/constants/paths'
 
-import { useProjectEmployees } from '../../api/employees/use-project-employees'
-import ModalAssignedAdd from './modal-assigned-add'
 import ModalAssignedDetail from './modal-assigned-detail'
-import { Badge } from '@/shared/components/ui/badge'
+import ModalAssignedAdd from './modal-assigned-add'
+import { useProjectEmployees } from '../../api/employees/use-project-employees'
 import { ModalCost } from './modal-cost'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 	const [search, setSearch] = useState('')
@@ -40,14 +39,6 @@ export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 				)}
 				<div className='flex flex-col gap-4'>
 					{data?.data?.map((i, index) => {
-						const total =
-							(i.startDate &&
-								differenceInDays(
-									i.endDate ? new Date(i.endDate) : new Date(),
-									new Date(i.startDate)
-								)) ||
-							0
-
 						return (
 							<div
 								key={index}
@@ -85,18 +76,23 @@ export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 										</p>
 									</div>
 								</div>
-								<div className='flex gap-2 items-center'>
-									<ModalAssignedDetail id={i.id} />
-								</div>
+
+								<ProtectedComponent required={[permissions.project_assignee]}>
+									<div className='flex gap-2 items-center'>
+										<ModalAssignedDetail id={i.id} />
+									</div>
+								</ProtectedComponent>
 							</div>
 						)
 					})}
 				</div>
 			</ScrollArea>
-			<div className='mt-4 space-y-4'>
-				<ModalAssignedAdd id={id} />
-				<ModalCost />
-			</div>
+			<ProtectedComponent required={[permissions.project_assignee]}>
+				<div className='mt-4 space-y-4'>
+					<ModalAssignedAdd id={id} />
+					<ModalCost />
+				</div>
+			</ProtectedComponent>
 		</CardV1>
 	)
 }

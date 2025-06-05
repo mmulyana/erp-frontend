@@ -1,4 +1,4 @@
-import { Download, FileText, FileTextIcon, Plus } from 'lucide-react'
+import { Download, Ellipsis, FileText, FileTextIcon, Plus } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -9,12 +9,16 @@ import { Button, buttonVariants } from '@/shared/components/ui/button'
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
 import { Input } from '@/shared/components/ui/input'
 
+import ProtectedComponent from '@/shared/components/common/protected'
 import ButtonSubmit from '@/shared/components/common/button-submit'
 import ToggleSwitch from '@/shared/components/common/toggle-switch'
 import EmptyState from '@/shared/components/common/empty-state'
 import FileUpload from '@/shared/components/common/file-upload'
 import SearchV3 from '@/shared/components/common/search-v3'
 import CardV1 from '@/shared/components/common/card-v1'
+
+import { useHasPermission } from '@/shared/hooks/use-has-permission'
+import { permissions } from '@/shared/constants/permissions'
 import { Badge } from '@/shared/components/ui/badge'
 import { baseUrl } from '@/shared/constants/urls'
 import { paths } from '@/shared/constants/paths'
@@ -44,6 +48,12 @@ import {
 	FormItem,
 	FormLabel,
 } from '@/shared/components/ui/form'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from '@/shared/components/ui/dropdown-menu'
+import ModalDeleteAttachment from './modal-delete-attachment'
 
 import { useCreateAttachment } from '../api/attachment/use-create-attachment'
 import { useAttachments } from '../api/attachment/use-attachments'
@@ -61,6 +71,10 @@ export default function ProjectAttachment({
 
 	const attachments = data?.data
 	const anyAttachment = attachments && attachments.length > 0
+
+	const canReadSecret = useHasPermission([
+		permissions.project_read_secret_attachment,
+	])
 
 	return (
 		<>
@@ -83,9 +97,35 @@ export default function ProjectAttachment({
 									<div className='flex gap-2 items-center'>
 										<FileText className='text-[#565659]' size={28} />
 										<div className='space-y-1'>
-											<p className='text-ink-primary w-[240px] truncate font-medium'>
-												{i.name}
-											</p>
+											<Link
+												to={`${baseUrl}/${i.fileUrl}`}
+												className='text-ink-primary w-[240px] truncate font-medium'
+												target='_blank'
+											></Link>
+											{!i.secret ? (
+												<Link
+													to={`${baseUrl}/${i.fileUrl}`}
+													className={buttonVariants({ variant: 'ghost' })}
+												>
+													{i.name}
+												</Link>
+											) : canReadSecret ? (
+												<Link
+													to={`${baseUrl}/${i.fileUrl}`}
+													className={buttonVariants({ variant: 'ghost' })}
+												>
+													{i.name}
+												</Link>
+											) : (
+												<p
+													className={buttonVariants({
+														variant: 'ghost',
+														className: 'cursor-default',
+													})}
+												>
+													{i.name}
+												</p>
+											)}
 											<div className='flex gap-2.5 items-center flex-wrap'>
 												{!id && (
 													<Link
@@ -101,12 +141,35 @@ export default function ProjectAttachment({
 											</div>
 										</div>
 									</div>
-									<Link
-										to={`${baseUrl}/${i.fileUrl}`}
-										className={buttonVariants({ variant: 'ghost' })}
-									>
-										<Download size={20} />
-									</Link>
+									<div className='flex gap-4 md:gap-2'>
+										{!i.secret ? (
+											<Link
+												to={`${baseUrl}/${i.fileUrl}`}
+												className={buttonVariants({ variant: 'ghost' })}
+											>
+												<Download size={20} />
+											</Link>
+										) : canReadSecret ? (
+											<Link
+												to={`${baseUrl}/${i.fileUrl}`}
+												className={buttonVariants({ variant: 'ghost' })}
+											>
+												<Download size={20} />
+											</Link>
+										) : null}
+										<ProtectedComponent
+											required={[permissions.project_delete_attachment]}
+										>
+											<DropdownMenu>
+												<DropdownMenuTrigger className='border p-1 rounded-md'>
+													<Ellipsis size={18} />
+												</DropdownMenuTrigger>
+												<DropdownMenuContent align='end'>
+													<ModalDeleteAttachment id={i.id} />
+												</DropdownMenuContent>
+											</DropdownMenu>
+										</ProtectedComponent>
+									</div>
 								</div>
 							))}
 						</div>
@@ -114,7 +177,13 @@ export default function ProjectAttachment({
 						<EmptyState className='h-full w-full' />
 					)}
 				</ScrollArea>
-				{showButton && <ModalAttachment />}
+				{showButton && (
+					<ProtectedComponent
+						required={[permissions.project_upload_attachment]}
+					>
+						<ModalAttachment />
+					</ProtectedComponent>
+				)}
 			</CardV1>
 		</>
 	)

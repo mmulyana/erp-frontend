@@ -1,10 +1,13 @@
-import { ChevronsUpDown, Power, Search, User } from 'lucide-react'
+import { ChevronsUpDown, Power, User } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
+
+import { CommandSearch } from '@/features/command/components/command-search'
 
 import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
 import { SidebarTrigger } from '@/shared/components/ui/sidebar'
 import { Button } from '@/shared/components/ui/button'
+import { paths } from '@/shared/constants/paths'
 import { userAtom } from '@/shared/store/auth'
 import { cn } from '@/shared/utils/cn'
 
@@ -20,8 +23,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import { paths } from '@/shared/constants/paths'
-import { CommandSearch } from '@/features/command/components/command-search'
 
 export default function Header() {
 	const user = useAtomValue(userAtom)
@@ -56,7 +57,7 @@ export default function Header() {
 				{!isMobile && <TopNavigation />}
 			</div>
 
-			<div className='flex gap-6 items-center'>
+			<div className='flex gap-2 md:gap-6 items-center'>
 				<CommandSearch />
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>

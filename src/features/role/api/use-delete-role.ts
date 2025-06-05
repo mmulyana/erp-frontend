@@ -1,26 +1,26 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
 import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
-import http from '@/shared/utils/http'
+import { IApi } from '@/shared/types'
 
-export const useDeleteAttachment = () => {
+import http from '@/shared/utils/http'
+import { Role } from '@/shared/types/api'
+
+export const useDeleteRole = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async ({ id }: { id: string }) => {
-			const { data } = await http.delete(
-				`${urls.project}/data/attachment/${id}`
-			)
-			return data
+		mutationFn: async (payload: {
+			id: string
+		}): Promise<AxiosResponse<IApi<Role>>> => {
+			return await http.delete(`${urls.role}/${payload.id}`)
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({
-				queryKey: [keys.projectAttachment],
-			})
-			toast.success(data?.message)
+			queryClient.invalidateQueries({ queryKey: [keys.roles] })
+			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {
 			toast.error(error.response?.data.message)

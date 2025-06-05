@@ -1,6 +1,7 @@
-import { useAtom } from 'jotai'
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/shared/components/ui/button'
+import { paths } from '@/shared/constants/paths'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -14,8 +15,6 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteLocation } from '../api/use-delete-location'
-import { useNavigate } from 'react-router-dom'
-import { paths } from '@/shared/constants/paths'
 
 type props = {
 	setOpen: (val: boolean) => void

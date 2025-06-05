@@ -16,9 +16,15 @@ type Props = {
 	data: PermissionGroup[]
 	value: string[]
 	onChange?: (val: string[]) => void
+	disabled?: boolean
 }
 
-export default function PermissionList({ data, value, onChange }: Props) {
+export default function PermissionList({
+	data,
+	value,
+	onChange,
+	disabled = false,
+}: Props) {
 	const [selected, setSelected] = useState<string[]>([])
 
 	useEffect(() => {
@@ -48,6 +54,7 @@ export default function PermissionList({ data, value, onChange }: Props) {
 						{group.permissions.map((permission) => (
 							<div key={permission.key} className='flex gap-4 items-center'>
 								<ToggleSwitch
+									disabled={disabled}
 									value={selected.includes(permission.key)}
 									onCheck={() => togglePermission(permission.key)}
 								/>

@@ -1,19 +1,21 @@
 import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { Key } from 'lucide-react'
-import { format } from 'date-fns'
 
+import PermissionList from '@/features/permission/components/permission-list'
 import ModalDetailRole from '@/features/role/components/modal-detail-role'
+import { useUpdatePermissionRole } from '@/features/role/api/use-update-permission-role'
 import { usePermissions } from '@/features/permission/api/use-permissions'
 import { useRole } from '@/features/role/api/use-role'
 
+import ProtectedComponent from '@/shared/components/common/protected'
 import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
+import { useHasPermission } from '@/shared/hooks/use-has-permission'
+import { permissions } from '@/shared/constants/permissions'
 import { useDynamicLinks } from '@/shared/utils/link'
 import { paths } from '@/shared/constants/paths'
 import { Link } from '@/shared/types'
-import PermissionList from '@/features/permission/components/permission-list'
-import { useEffect, useState } from 'react'
-import { useUpdatePermissionRole } from '@/features/role/api/use-update-permission-role'
 
 const links: Link[] = [
 	{
@@ -31,13 +33,17 @@ export default function DetailRole() {
 	const { id } = useParams()
 
 	const { data } = useRole({ id })
-	const { data: permissions } = usePermissions()
+	const { data: dataPermissions } = usePermissions()
 
 	const { mutate } = useUpdatePermissionRole()
 
 	const [rolePermissions, setRolePermissions] = useState<string[]>(
-		permissions?.data ?? []
+		dataPermissions?.data ?? []
 	)
+
+	const canChangePermission = useHasPermission([
+		permissions.role_permission_update,
+	])
 
 	useEffect(() => {
 		setRolePermissions(data?.data?.permissions ?? [])
@@ -69,7 +75,11 @@ export default function DetailRole() {
 					style={{
 						content: 'space-y-4 pt-4',
 					}}
-					action={<ModalDetailRole />}
+					action={
+						<ProtectedComponent required={[permissions.role_update]}>
+							<ModalDetailRole />
+						</ProtectedComponent>
+					}
 				>
 					<div className='flex justify-between items-center'>
 						<p className='text-ink-primary/50'>Nama</p>
@@ -88,12 +98,13 @@ export default function DetailRole() {
 					style={{ content: 'pt-4 px-0' }}
 				>
 					<PermissionList
-						data={permissions?.data || []}
+						data={dataPermissions?.data || []}
 						value={rolePermissions}
 						onChange={(val) => {
 							if (id) mutate({ id, permissions: val.join(',') })
 							setRolePermissions(val)
 						}}
+						disabled={!canChangePermission}
 					/>
 				</CardV1>
 			</div>

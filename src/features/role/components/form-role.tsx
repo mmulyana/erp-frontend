@@ -14,14 +14,18 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
+import ModalDeleteRole from './modal-delete-role'
 
 type props = {
 	form: UseFormReturn<Partial<Role>>
 	onSubmit: (values: Partial<Role>) => void
 	isPending?: boolean
+	id?: string
 }
 
-export function FormRole({ form, onSubmit, isPending }: props) {
+export function FormRole({ form, onSubmit, isPending, id }: props) {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
@@ -54,11 +58,20 @@ export function FormRole({ form, onSubmit, isPending }: props) {
 				/>
 
 				<DialogFooter>
-					<div className='flex justify-end gap-4'>
-						<DialogClose asChild>
-							<Button variant='outline'>Batal</Button>
-						</DialogClose>
-						<ButtonSubmit isPending={isPending || false} />
+					<div className='flex justify-between gap-4 w-full'>
+						<div>
+							{id && (
+								<ProtectedComponent required={[permissions.role_delete]}>
+									<ModalDeleteRole id={id} />
+								</ProtectedComponent>
+							)}
+						</div>
+						<div className='flex gap-4'>
+							<DialogClose asChild>
+								<Button variant='outline'>Batal</Button>
+							</DialogClose>
+							<ButtonSubmit isPending={isPending || false} />
+						</div>
 					</div>
 				</DialogFooter>
 			</form>

@@ -1,9 +1,12 @@
-import { useForm } from 'react-hook-form'
-import { Pencil, Plus } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Pencil } from 'lucide-react'
 
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { Button } from '@/shared/components/ui/button'
+import { keys } from '@/shared/constants/keys'
 import { Role } from '@/shared/types/api'
 import {
 	Dialog,
@@ -14,12 +17,9 @@ import {
 	DialogTrigger,
 } from '@/shared/components/ui/dialog'
 
-import { FormRole } from './form-role'
 import { useUpdateRole } from '../api/use-update-role'
 import { useRole } from '../api/use-role'
-import { useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
-import { keys } from '@/shared/constants/keys'
+import { FormRole } from './form-role'
 
 export default function ModalDetailRole() {
 	const queryClient = useQueryClient()
@@ -73,7 +73,12 @@ export default function ModalDetailRole() {
 						Pastikan semua data yang dimasukkan sudah benar sebelum disimpan.
 					</DialogDescription>
 				</DialogHeader>
-				<FormRole form={form} onSubmit={onSubmit} isPending={isPending} />
+				<FormRole
+					id={id}
+					form={form}
+					onSubmit={onSubmit}
+					isPending={isPending}
+				/>
 			</DialogContent>
 		</Dialog>
 	)

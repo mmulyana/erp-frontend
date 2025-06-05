@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
 	Search,
 	FileText,
@@ -10,17 +11,19 @@ import {
 	Hammer,
 	Warehouse,
 	HardHat,
+	X,
 } from 'lucide-react'
-import { Dialog, DialogContent } from '@/shared/components/ui/dialog'
-import { Input } from '@/shared/components/ui/input'
-import { useCommand } from '../api/use-command'
-import { debounce } from '@/shared/utils'
-import CommandSelector from './command-selector'
-import { paths } from '@/shared/constants/paths'
-import { baseUrl } from '@/shared/constants/urls'
-import { Link, useNavigate } from 'react-router-dom'
 import LoadingState from '@/shared/components/common/loading-state'
+import { Dialog, DialogContent } from '@/shared/components/ui/dialog'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
+import { baseUrl } from '@/shared/constants/urls'
+import { paths } from '@/shared/constants/paths'
+import { debounce } from '@/shared/utils'
 import { cn } from '@/shared/utils/cn'
+
+import CommandSelector from './command-selector'
+import { useCommand } from '../api/use-command'
 
 interface SearchResult {
 	id: string
@@ -175,16 +178,19 @@ export default function CommandModal({ open, onOpenChange }: Props) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className='max-w-2xl p-0 gap-0 min-h-40' showClose={false}>
-				<div className='flex items-center border-b px-4 py-3'>
-					<Search className='h-4 w-4 text-muted-foreground mr-3' />
+				<div className='flex items-center border-b px-4 py-3 gap-4 relative'>
+					<Search className='absolute left-6' size={20} />
 					<Input
 						placeholder='Cari semua data'
 						value={query}
 						onChange={handleQueryChange}
 						onKeyDown={handleKeyDown}
-						className='border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base'
+						className='border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base pl-9'
 						autoFocus
 					/>
+					<Button variant='ghost' onClick={() => onOpenChange(false)}>
+						<X />
+					</Button>
 				</div>
 
 				<CommandSelector selectedChips={types} setSelectedChips={setTypes} />
@@ -231,7 +237,7 @@ export default function CommandModal({ open, onOpenChange }: Props) {
 														<div
 															className={cn(
 																categoryColors[result.category],
-																'p-1.5 rounded',
+																'p-1.5 rounded'
 															)}
 														>
 															<Icon className='h-4 w-4' />

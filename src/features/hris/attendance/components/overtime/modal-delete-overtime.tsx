@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai'
+import { useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -14,8 +14,6 @@ import {
 } from '@/shared/components/ui/alert-dialog'
 
 import { useDeleteOvertime } from '../../api/overtime/use-delete-overtime'
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 export default function ModalDeleteOvertime({
 	id,
