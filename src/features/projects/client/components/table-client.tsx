@@ -32,7 +32,7 @@ export default function TableClient({ companyId }: { companyId?: string }) {
 		{
 			id: 'name',
 			accessorKey: 'name',
-			header: 'Nama',
+			header: () => <p className='text-nowrap'>Nama</p>,
 		},
 		{
 			accessorKey: 'email',
@@ -40,7 +40,7 @@ export default function TableClient({ companyId }: { companyId?: string }) {
 		},
 		{
 			accessorKey: 'phone',
-			header: 'Nomor telp',
+			header: () => <p className='text-nowrap'>Nomor Telp</p>,
 		},
 		{
 			accessorKey: 'position',
@@ -66,27 +66,25 @@ export default function TableClient({ companyId }: { companyId?: string }) {
 		},
 		{
 			id: 'total',
-			header: 'Jml proyek',
-			cell: ({ row }) => row.original._count?.project,
+			header: () => <p className='text-nowrap'>Jml proyek</p>,
+			cell: ({ row }) => <p className='text-center'>{row.original._count?.project}</p>,
 		},
 	]
 	// COLUMNS
 
 	return (
-		<>
-			<DataTable
-				columns={columns}
-				data={data?.data.data || []}
-				isLoading={isLoading}
-				autoRedirect
-				totalItems={data?.data.total}
-				totalPages={data?.data.total_pages}
-				withPagination
-				nonClickableColumns={['company']}
-				onCellClick={({ id }) =>
-					navigate(`${paths.projectMasterdataClient}/${id}`)
-				}
-			/>
-		</>
+		<DataTable
+			columns={columns}
+			data={data?.data.data || []}
+			isLoading={isLoading}
+			autoRedirect
+			totalItems={data?.data.total}
+			totalPages={data?.data.total_pages}
+			withPagination
+			nonClickableColumns={['company']}
+			onCellClick={({ id }) =>
+				navigate(`${paths.projectMasterdataClient}/${id}`)
+			}
+		/>
 	)
 }

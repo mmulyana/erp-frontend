@@ -37,7 +37,7 @@ export default function TableCompany() {
 		},
 		{
 			accessorKey: 'phone',
-			header: 'No. telp (Kantor)',
+			header: () => <p className='text-nowrap'>No. telp (Kantor)</p>,
 		},
 		{
 			accessorKey: 'email',
@@ -49,7 +49,7 @@ export default function TableCompany() {
 		},
 		{
 			accessorKey: 'employees',
-			header: 'Jml klien',
+			header: () => <p className='text-nowrap'>Jml klien</p>,
 			cell: ({ row }) => row.original._count.employees,
 		},
 	]

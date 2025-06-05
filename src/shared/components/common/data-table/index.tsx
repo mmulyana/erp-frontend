@@ -122,7 +122,7 @@ export function DataTable<TData, TValue>({
 	return (
 		<div
 			className={cn(
-				'overflow-hidden',
+				'max-w-[calc(100vw-104px)] md:max-w-full',
 				variant === 'rounded-bordered' && 'rounded-xl border'
 			)}
 		>

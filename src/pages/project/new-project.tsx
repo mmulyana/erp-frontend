@@ -10,6 +10,7 @@ import { Link } from '@/shared/types'
 
 import { useCreateProject } from '@/features/projects/project/api/use-create-project'
 import { ProjectForm } from '@/features/projects/project/types'
+import { handleFormError } from '@/shared/utils/form'
 
 const links: Link[] = [
 	{
@@ -30,7 +31,11 @@ const links: Link[] = [
 
 export default function NewProject() {
 	const { mutate } = useCreateProject()
-	const form = useForm<ProjectForm>()
+	const form = useForm<ProjectForm>({
+		defaultValues: {
+			name: ''
+		}
+	})
 	const navigate = useNavigate()
 
 	const onSubmit = (payload: ProjectForm) => {
@@ -41,6 +46,7 @@ export default function NewProject() {
 					`${paths.projectMasterdataProjects}/${data.data?.id}` as string
 				)
 			},
+			onError: handleFormError(form),
 		})
 	}
 

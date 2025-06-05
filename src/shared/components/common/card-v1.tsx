@@ -31,7 +31,7 @@ export default function CardV1({
 				style?.card
 			)}
 		>
-			<div className='pl-4 pr-6 pt-4 flex justify-between items-start w-full'>
+			<div className='pl-4 pr-6 pt-4 flex justify-between items-start w-full flex-wrap'>
 				<div className='flex gap-1 items-center flex-1'>
 					{icon && (
 						<div className='h-8 w-8 flex items-center justify-center'>

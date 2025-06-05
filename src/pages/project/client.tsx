@@ -33,7 +33,7 @@ export default function Client() {
 				subtitle='Kelola data klien'
 				action={<ModalAddClient />}
 			/>
-			<div className='p-6 rounded-xl bg-white border border-border space-y-6'>
+			<div className='p-6 rounded-xl bg-white border border-border space-y-6 w-full'>
 				<div className='flex items-center gap-4 flex-wrap'>
 					<SearchV3 />
 					<FilterReset

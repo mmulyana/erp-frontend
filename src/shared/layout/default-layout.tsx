@@ -24,8 +24,6 @@ export function DefaultLayout({
 			>
 				{children}
 			</main>
-			{/* <Helpdesk /> */}
-			{/* <Setting /> */}
 		</SidebarProvider>
 	)
 }

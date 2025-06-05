@@ -29,7 +29,7 @@ export default function PayrollTotal() {
 		<CardV1
 			title='Total pengeluaran'
 			icon={<BarChartIcon size={20} className='text-ink-primary' />}
-			style={{ card: 'w-[384px] max-w-full' }}
+			style={{ card: 'w-full md:w-[384px] max-w-full' }}
 			action={
 				<Select
 					value={String(selectedMonth) || '0'}

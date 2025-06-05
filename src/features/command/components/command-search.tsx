@@ -26,7 +26,7 @@ export function CommandSearch({ className }: { className?: string }) {
 			<Button
 				variant='outline'
 				className={cn(
-					'relative w-8 p-0 md:px-2 md:w-full max-w-fit md:max-w-36 justify-start text-ink-primary rounded-full md:rounded-md',
+					'relative w-8 p-0 md:px-2 md:w-full md:max-w-36 justify-start text-ink-primary rounded-full md:rounded-md',
 					className
 				)}
 				onClick={() => setOpen(true)}

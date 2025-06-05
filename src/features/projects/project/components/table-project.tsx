@@ -40,8 +40,8 @@ export default function TableProject() {
 	const columns: ColumnDef<Project>[] = [
 		{
 			id: 'name',
-			accessorKey: 'name',
 			header: 'Nama',
+			cell: ({row}) => <p className='text-nowrap'>{row.original.name}</p>
 		},
 		{
 			id: 'client',
@@ -57,7 +57,7 @@ export default function TableProject() {
 		},
 		{
 			id: 'lead',
-			header: 'Penanggung Jwb',
+			header: () => <p className='text-nowrap'>Penanggung Jwb</p>,
 			cell: ({ row }) => {
 				if (!row.original.lead) return null
 				return (

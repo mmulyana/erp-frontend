@@ -31,7 +31,7 @@ export default function ReportItem({
 }: ReportItemProps) {
 	return (
 		<div className='flex' key={item.id}>
-			<div className='w-14 min-h-full relative'>
+			<div className='w-14 hidden md:block min-h-full relative'>
 				<div
 					className={cn(
 						'z-10 h-8 w-8 rounded-full bg-brand text-white flex justify-center items-center absolute left-1/2 -translate-x-1/2',
