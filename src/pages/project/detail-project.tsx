@@ -52,7 +52,7 @@ export default function DetailProject() {
 		<DetailLayout
 			links={dynamicLink}
 			style={{ header: 'w-[1020px]' }}
-			buttonAction={<CommandSearch className='w-[200px]' />}
+			buttonAction={<CommandSearch />}
 		>
 			<div className='grid grid-cols-1 md:grid-cols-[640px_1fr] gap-8 w-[1020px] max-w-full px-4 md:px-0 mx-auto pt-6'>
 				<div className='space-y-6'>

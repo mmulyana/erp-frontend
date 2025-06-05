@@ -9,6 +9,7 @@ import {
 	TooltipTrigger,
 } from '../components/ui/tooltip'
 import { ChevronRight } from 'lucide-react'
+import { useIsMobile } from '../hooks/use-mobile'
 
 type Props = {
 	children: React.ReactNode
@@ -37,6 +38,7 @@ export default function DetailLayout({
 	titleAction,
 	buttonAction,
 }: Props) {
+	const isMobile = useIsMobile()
 	return (
 		<>
 			<div className='px-6 h-16 w-full bg-white fixed top-0 left-0 flex justify-between items-center z-50'>
@@ -47,45 +49,49 @@ export default function DetailLayout({
 					)}
 				>
 					<div className='flex'>
-						{links.map((link, index) => (
-							<div key={index} className='flex items-center gap-1'>
-								{link.hideName ? (
-									<TooltipProvider>
-										<Tooltip>
-											<TooltipTrigger asChild>
-												<Link to={link.path}>
-													<Button variant='ghost' size='sm' className='p-2'>
-														{link?.icon}
-													</Button>
-												</Link>
-											</TooltipTrigger>
-											<TooltipContent>
-												<p>{link.name}</p>
-											</TooltipContent>
-										</Tooltip>
-									</TooltipProvider>
-								) : (
-									<Link to={link.path}>
-										<Button
-											variant='ghost'
-											size='sm'
-											className={cn(
-												'gap-2',
-												index === links.length - 1 &&
-													'text-brand hover:text-brand'
-											)}
-										>
-											{link?.icon}
-											{link.name}
-										</Button>
-									</Link>
-								)}
+						{links.map((link, index) => {
+							if (index === links.length - 1 && isMobile) return null
+							return (
+								<div key={index} className='flex items-center gap-1'>
+									{link.hideName ? (
+										<TooltipProvider>
+											<Tooltip>
+												<TooltipTrigger asChild>
+													<Link to={link.path}>
+														<Button variant='ghost' size='sm' className='p-2'>
+															{link?.icon}
+														</Button>
+													</Link>
+												</TooltipTrigger>
+												<TooltipContent>
+													<p>{link.name}</p>
+												</TooltipContent>
+											</Tooltip>
+										</TooltipProvider>
+									) : (
+										<Link to={link.path}>
+											<Button
+												variant='ghost'
+												size='sm'
+												className={cn(
+													'gap-2',
+													index === links.length - 1 &&
+														'text-brand hover:text-brand'
+												)}
+											>
+												{link?.icon}
+												{link.name}
+											</Button>
+										</Link>
+									)}
 
-								{index < links.length - 1 && (
-									<ChevronRight size={16} className='text-ink-light' />
-								)}
-							</div>
-						))}
+									{index < links.length - 1 &&
+										(!isMobile || index < links.length - 2) && (
+											<ChevronRight size={16} className='text-ink-light' />
+										)}
+								</div>
+							)
+						})}
 					</div>
 					{buttonAction ||
 						(titleAction && (

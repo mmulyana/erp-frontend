@@ -51,7 +51,7 @@ export default function DetailClient() {
 		<DetailLayout
 			links={dynamicLink}
 			style={{ header: 'w-[960px]' }}
-			buttonAction={<CommandSearch className='w-[200px]' />}
+			buttonAction={<CommandSearch />}
 		>
 			<div className='grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6 w-[960px] max-w-full px-4 md:px-0 mx-auto pt-6'>
 				<div className='space-y-6'>

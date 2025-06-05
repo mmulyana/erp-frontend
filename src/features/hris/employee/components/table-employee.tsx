@@ -124,7 +124,7 @@ export default function TableEmployee() {
 
 	return (
 		<div className='p-6 rounded-2xl bg-white border border-border space-y-6'>
-			<div className='flex gap-4 items-center'>
+			<div className='flex gap-4 items-center flex-wrap'>
 				<SearchV3 />
 				<FilterReset
 					show={hasValue}

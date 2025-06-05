@@ -52,7 +52,7 @@ export default function DetailSupplier() {
 			style={{
 				header: 'w-[600px]',
 			}}
-			buttonAction={<CommandSearch className='w-[200px]' />}
+			buttonAction={<CommandSearch />}
 		>
 			<div className='space-y-6 w-[600px] max-w-full px-4 md:px-0 mx-auto py-6'>
 				<SupplierInfo id={id} />

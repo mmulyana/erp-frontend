@@ -31,10 +31,11 @@ export default function TotalEmployee({ variant = 'default' }: props) {
 			style={{
 				card: cn(
 					'h-fit col-span-2 xl:col-span-1 w-full',
-					variant === 'compact' && 'h-fit w-fit'
+					variant === 'compact' && 'h-fit w-full md:w-[352px]'
 				),
 				content: cn(
-					variant === 'compact' && 'flex items-center justify-start p-4 py-0 gap-4 min-w-[352px] relative h-[120px]'
+					variant === 'compact' &&
+						'flex items-center justify-start p-4 py-0 gap-4 relative h-[120px]'
 				),
 			}}
 		>
@@ -42,7 +43,8 @@ export default function TotalEmployee({ variant = 'default' }: props) {
 				config={{} as ChartConfig}
 				className={cn(
 					'mx-auto w-full h-[180px]',
-					variant === 'compact' && 'h-[132px] w-[132px] mx-0 -ml-4 absolute -mt-2'
+					variant === 'compact' &&
+						'h-[132px] w-[132px] mx-0 -ml-4 absolute -mt-2'
 				)}
 			>
 				<PieChart>
@@ -78,8 +80,13 @@ export default function TotalEmployee({ variant = 'default' }: props) {
 											</tspan>
 											<tspan
 												x={viewBox.cx}
-												y={(viewBox.cy || 0) + (variant === 'default' ? 16 : 12)}
-												className={cn('fill-ink-primary text-2xl font-bold', variant === 'compact' && 'text-xl')}
+												y={
+													(viewBox.cy || 0) + (variant === 'default' ? 16 : 12)
+												}
+												className={cn(
+													'fill-ink-primary text-2xl font-bold',
+													variant === 'compact' && 'text-xl'
+												)}
 											>
 												{totalEmployees?.toLocaleString()}
 											</tspan>

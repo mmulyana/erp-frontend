@@ -105,7 +105,7 @@ export default function LocationDetail() {
 			style={{
 				header: 'w-[940px]',
 			}}
-			buttonAction={<CommandSearch className='w-[200px]' />}
+			buttonAction={<CommandSearch />}
 		>
 			<div className='w-[940px] mx-auto pt-6 max-w-full px-4 md:px-0 grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6 items-start'>
 				<CardV1
