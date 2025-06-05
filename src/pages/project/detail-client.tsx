@@ -5,14 +5,13 @@ import ModalDetailClient from '@/features/projects/client/components/modal-detai
 import ClientProjects from '@/features/projects/client/components/client-projects'
 import CompanyInfo from '@/features/projects/company/components/company-info'
 import ClientInfo from '@/features/projects/client/components/client-info'
-
+import { CommandSearch } from '@/features/command/components/command-search'
 import { useClient } from '@/features/projects/client/api/use-client'
 
 import DetailLayout from '@/shared/layout/detail-layout'
 import { useDynamicLinks } from '@/shared/utils/link'
 import { paths } from '@/shared/constants/paths'
 import { Link } from '@/shared/types'
-import { CommandSearch } from '@/features/command/components/command-search'
 
 const links: Link[] = [
 	{
@@ -59,7 +58,7 @@ export default function DetailClient() {
 					<ClientInfo id={id} />
 					<CompanyInfo
 						id={data?.data?.companyId || ''}
-						action={<ModalDetailClient variant='info' />}
+						action={<ModalDetailClient variant='company' />}
 					/>
 				</div>
 				<div className='space-y-6'>
