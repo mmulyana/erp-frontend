@@ -19,7 +19,7 @@ import {
 
 import ClientCombobox from '../../client/components/client-combobox'
 import { ProjectForm } from '../types'
-import AssignedEmployeeProject from './assigned-employee-project'
+import AssignedEmployeeProject from './employees/assigned-employee-project'
 
 type props = {
 	form: UseFormReturn<ProjectForm>

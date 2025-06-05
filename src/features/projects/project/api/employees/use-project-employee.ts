@@ -6,18 +6,22 @@ import http from '@/shared/utils/http'
 import { IApi } from '@/shared/types'
 
 import { ProjectEmployee } from '../../types'
+import { AssignedEmployee } from '@/shared/types/api'
 
 type Params = {
 	id?: string
 }
 
-export const useProjectEmployeee = (params?: Params) => {
+export const useProjectEmployee = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.projectEmployee, params?.id],
-		queryFn: async (): Promise<IApi<ProjectEmployee[]>> => {
-			const { data } = await http(`${urls.project}/${params?.id}/employee`, {
-				params,
-			})
+		queryKey: [keys.projectEmployeeDetail, params?.id],
+		queryFn: async (): Promise<IApi<AssignedEmployee>> => {
+			const { data } = await http(
+				`${urls.project}/data/assigned/${params?.id}`,
+				{
+					params,
+				}
+			)
 			return data
 		},
 		enabled:

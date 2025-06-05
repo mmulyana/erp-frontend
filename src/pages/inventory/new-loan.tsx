@@ -6,9 +6,28 @@ import { useCreateLoan } from '@/features/inventory/loan/api/use-create-loan'
 import { loanForm } from '@/features/inventory/loan/types'
 
 import DetailLayout from '@/shared/layout/detail-layout'
+import { Button } from '@/shared/components/ui/button'
 import { handleFormError } from '@/shared/utils/form'
 import { paths } from '@/shared/constants/paths'
-import { Button } from '@/shared/components/ui/button'
+import { Link } from '@/shared/types'
+import { House } from 'lucide-react'
+
+const links: Link[] = [
+	{
+		icon: <House size={20} />,
+		name: 'Dashboard',
+		path: paths.inventory,
+		hideName: true,
+	},
+	{
+		name: 'Peminjaman',
+		path: paths.inventoryStockLoan,
+	},
+	{
+		name: 'Baru',
+		path: paths.inventoryStockLoanNew,
+	},
+]
 
 export default function NewLoan() {
 	const { mutate, isPending } = useCreateLoan()
@@ -27,7 +46,6 @@ export default function NewLoan() {
 	})
 
 	const submit = (payload: loanForm) => {
-		console.log('payload', payload)
 		mutate(payload, {
 			onSuccess: () => {
 				form.reset(defaultValues)
@@ -41,10 +59,11 @@ export default function NewLoan() {
 
 	return (
 		<DetailLayout
-			links={[]}
+			links={links}
 			buttonAction={
 				<Button onClick={() => form.handleSubmit(submit)()}>Simpan</Button>
 			}
+			style={{ header: 'w-[576px]' }}
 		>
 			<div className='space-y-6 max-w-xl mx-auto pt-6 pb-10'>
 				<FormCreateLoan

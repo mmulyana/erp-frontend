@@ -43,3 +43,10 @@ export type ReportMutate = {
 }
 
 export type Attachment = Base & AttachmentForm
+
+export type AssignedForm = {
+	employeeId: string
+	projectId?: string
+	startDate: Date
+	endDate: Date
+}
