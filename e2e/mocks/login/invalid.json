@@ -1,0 +1,15 @@
+{
+	"message": "Invalid input data. Please check your request and try again.",
+	"errors": [
+		{
+			"code": "too_small",
+			"path": ["phone"],
+			"message": "String must contain at least 10 character(s)"
+		},
+		{
+			"code": "custom",
+			"path": ["username", "email", "phone"],
+			"message": "Minimal isi salah satu: nama, email, atau nomor telepon"
+		}
+	]
+}

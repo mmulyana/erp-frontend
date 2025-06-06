@@ -1,8 +1,11 @@
-name: staging
+name: frontend-staging
+
 on:
   push:
     branches:
       - main
+      - v2
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -10,24 +13,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up SSH
+      - name: Set up SSH Agent
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Add SSH Known Hosts
         run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ./deploy.key
-          sudo chmod 600 ./deploy.key
-          ssh-keyscan -H bjs.web.id >> ~/.ssh/known_hosts
+          mkdir -p ~/.ssh
+          echo "${{ secrets.KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
         shell: bash
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_KEY}}
 
       - name: Deploy to Server
         run: |
-          ssh -i ./deploy.key ${{ secrets.SSH_USER }}@bjs.web.id "cd /var/www/staging/frontend/ && \
-          git config pull.rebase false && \
-          git fetch origin main && \
-          git reset --hard origin/main && \
-          source ~/.nvm/nvm.sh && \
-          export PATH=\"/home/${{ secrets.SSH_USER }}/.nvm/versions/node/v22.11.0/bin:\$PATH\" && \
+          set -e
+
+          BRANCH=${{ github.ref_name }}
+          SSH_USER=${{ secrets.SSH_USER }}
+          SERVER_HOST=${{ secrets.SERVER_HOST }}
+          REMOTE_DIR="/home/mmulyana/app/erp-frontend-staging/"
+
+          ssh $SSH_USER@$SERVER_HOST "cd $REMOTE_DIR && \
+          git fetch origin $BRANCH && \
+          git reset --hard origin/$BRANCH && \
           pnpm install && \
           pnpm build && \
-          pm2 reload frontend-staging"
+          pm2 reload erp-frontend-staging || true"
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
