@@ -11,6 +11,8 @@ import CreatedSelect from '@/shared/components/common/select/created-select'
 import { parseAsString, useQueryStates } from 'nuqs'
 import { useHasQueryValue } from '@/shared/hooks/use-has-query'
 import FilterReset from '@/shared/components/common/filter-reset'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function CashAdvancePage() {
 	const [query, setQuery] = useQueryStates({
@@ -26,7 +28,11 @@ export default function CashAdvancePage() {
 			<HeadPage
 				title='Kasbon'
 				subtitle='Kelola kasbon pegawai'
-				action={<ModalAddCashAdvance />}
+				action={
+					<ProtectedComponent required={[permissions.cash_advance_create]}>
+						<ModalAddCashAdvance />
+					</ProtectedComponent>
+				}
 			/>
 			<div className='bg-white rounded-xl border border-border p-6 space-y-6'>
 				<div className='flex items-center flex-wrap gap-4 w-full'>

@@ -12,6 +12,8 @@ import HeadPage from '@/shared/components/common/head-page'
 import CompanyCombobox from '@/features/projects/company/components/company-combobox'
 import ModalAddClient from '@/features/projects/client/components/modal-add-client'
 import TableClient from '@/features/projects/client/components/table-client'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function Client() {
 	const [query, setQuery] = useQueryStates({
@@ -31,7 +33,11 @@ export default function Client() {
 			<HeadPage
 				title='Klien'
 				subtitle='Kelola data klien'
-				action={<ModalAddClient />}
+				action={
+					<ProtectedComponent required={[permissions.client_create]}>
+						<ModalAddClient />
+					</ProtectedComponent>
+				}
 			/>
 			<div className='p-6 rounded-xl bg-white border border-border space-y-6 w-full'>
 				<div className='flex items-center gap-4 flex-wrap'>

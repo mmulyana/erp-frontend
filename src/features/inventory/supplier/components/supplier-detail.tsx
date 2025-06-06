@@ -1,8 +1,10 @@
 import { ExternalLink, List } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import ProtectedComponent from '@/shared/components/common/protected'
 import CardV1 from '@/shared/components/common/card-v1'
+import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import { permissions } from '@/shared/constants/permissions'
 
 import ModalDetailSupplier from './modal-detail-supplier'
 import { useSupplier } from '../api/use-supplier'
@@ -15,7 +17,11 @@ export default function SupplierDetail({ id }: { id?: string }) {
 			title='Detail'
 			icon={<List size={20} className='text-ink-primary' />}
 			style={{ content: 'pt-4 flex flex-col gap-4' }}
-			action={<ModalDetailSupplier variant='detail' />}
+			action={
+				<ProtectedComponent required={[permissions.supplier_update]}>
+					<ModalDetailSupplier variant='detail' />
+				</ProtectedComponent>
+			}
 		>
 			<div className='flex justify-between items-center'>
 				<p className='text-ink-light'>

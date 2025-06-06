@@ -14,8 +14,11 @@ import FilterReset from '@/shared/components/common/filter-reset'
 import SortButton from '@/shared/components/common/sort-button'
 import HeadPage from '@/shared/components/common/head-page'
 import SearchV3 from '@/shared/components/common/search-v3'
+
+import { useHasPermission } from '@/shared/hooks/use-has-permission'
 import { useHasQueryValue } from '@/shared/hooks/use-has-query'
 import { DefaultLayout } from '@/shared/layout/default-layout'
+import { permissions } from '@/shared/constants/permissions'
 import { paths } from '@/shared/constants/paths'
 
 export default function Loan() {
@@ -28,6 +31,7 @@ export default function Loan() {
 	})
 
 	const hasQuery = useHasQueryValue(query)
+	const canCreate = useHasPermission([permissions.transaction_create])
 
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
@@ -38,6 +42,7 @@ export default function Loan() {
 				title='Peminjaman'
 				subtitle='Kelola data peminjaman barang'
 				url={paths.inventoryStockLoanNew}
+				hideAction={!canCreate}
 			/>
 			<div className='p-6 rounded-xl bg-white border border-border space-y-6'>
 				<div className='flex gap-4 items-center'>

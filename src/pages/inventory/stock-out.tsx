@@ -8,16 +8,18 @@ import { useStockOuts } from '@/features/inventory/stock-out/api/use-stock-outs'
 
 import CreatedSelect from '@/shared/components/common/select/created-select'
 import FilterButton from '@/shared/components/common/filter-button'
+import FilterReset from '@/shared/components/common/filter-reset'
 import SortButton from '@/shared/components/common/sort-button'
 import SearchV3 from '@/shared/components/common/search-v3'
 import HeadPage from '@/shared/components/common/head-page'
 
 import { Pagination } from '@/shared/components/common/data-table/component'
+import { useHasPermission } from '@/shared/hooks/use-has-permission'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { permissions } from '@/shared/constants/permissions'
 import { paths } from '@/shared/constants/paths'
-import { useHasQueryValue } from '@/shared/hooks/use-has-query'
-import FilterReset from '@/shared/components/common/filter-reset'
 
 export default function StockOut() {
 	const [query, setQuery] = useQueryStates({
@@ -38,6 +40,7 @@ export default function StockOut() {
 	})
 
 	const hasQuery = useHasQueryValue(query)
+	const canCreate = useHasPermission([permissions.transaction_create])
 
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
@@ -46,6 +49,7 @@ export default function StockOut() {
 				title='Stok Keluar'
 				subtitle='Kelola data stok keluar'
 				url={paths.inventoryStockOutNew}
+				hideAction={!canCreate}
 			/>
 			<div className='p-6 bg-white rounded-xl border border-border space-y-6'>
 				<div className='flex items-center gap-4'>

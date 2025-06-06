@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Pencil } from 'lucide-react'
 
+import ProtectedComponent from '@/shared/components/common/protected'
 import ButtonSubmit from '@/shared/components/common/button-submit'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { ImageUpload } from '@/shared/components/common/image-upload'
+import { permissions } from '@/shared/constants/permissions'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -207,7 +209,13 @@ export default function ModalDetailSupplier({ variant }: props) {
 							{FormType[variant as keyof typeof FormType]}
 							<DialogFooter>
 								<div className='flex justify-between w-full pt-4'>
-									<ModalDeleteSupplier />
+									<div>
+										<ProtectedComponent
+											required={[permissions.supplier_delete]}
+										>
+											<ModalDeleteSupplier />
+										</ProtectedComponent>
+									</div>
 									<div className='flex gap-2 ml-auto'>
 										<DialogClose asChild>
 											<Button variant='outline' type='button'>

@@ -32,6 +32,8 @@ import { useUpdateOvertime } from '../../api/overtime/use-update-overtime'
 import { useOvertime } from '../../api/overtime/use-overtime'
 import ModalDeleteOvertime from './modal-delete-overtime'
 import { OvertimeForm } from '../../types'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function ModalDetailOvertime({
 	id,
@@ -160,7 +162,14 @@ export default function ModalDetailOvertime({
 						/>
 						<DialogFooter>
 							<div className='flex justify-between w-full pt-4'>
-								<ModalDeleteOvertime id={id} onClose={() => setOpen(false)} />
+								<div>
+									<ProtectedComponent required={[permissions.overtime_delete]}>
+										<ModalDeleteOvertime
+											id={id}
+											onClose={() => setOpen(false)}
+										/>
+									</ProtectedComponent>
+								</div>
 								<div className='flex justify-end gap-4 items-center'>
 									<DialogClose asChild>
 										<Button variant='outline' type='button'>

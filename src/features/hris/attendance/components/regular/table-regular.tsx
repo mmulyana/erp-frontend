@@ -15,6 +15,8 @@ import { useAttendances } from '../../api/regular/use-attendances'
 import { Attendance } from '../../types'
 
 import ButtonRegular from './button-regular'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function TableRegular() {
 	const { q, limit, page, sortBy, sortOrder } = usePagination()
@@ -56,46 +58,48 @@ export default function TableRegular() {
 			header: 'Status',
 			cell: ({ row }) => {
 				return (
-					<div className='flex gap-2 items-center'>
-						<ButtonRegular
-							variant='presence'
-							status={row.original.status}
-							onClick={() => {
-								if (row.original.status !== null) {
-									update({
+					<ProtectedComponent required={[permissions.attendance_create]}>
+						<div className='flex gap-2 items-center'>
+							<ButtonRegular
+								variant='presence'
+								status={row.original.status}
+								onClick={() => {
+									if (row.original.status !== null) {
+										update({
+											employeeId: row.original.employeeId,
+											date: startDate.toString(),
+											type: 'presence',
+										})
+										return
+									}
+									mutate({
 										employeeId: row.original.employeeId,
 										date: startDate.toString(),
 										type: 'presence',
 									})
-									return
-								}
-								mutate({
-									employeeId: row.original.employeeId,
-									date: startDate.toString(),
-									type: 'presence',
-								})
-							}}
-						/>
-						<ButtonRegular
-							variant='absent'
-							status={row.original.status}
-							onClick={() => {
-								if (row.original.status !== null) {
-									update({
+								}}
+							/>
+							<ButtonRegular
+								variant='absent'
+								status={row.original.status}
+								onClick={() => {
+									if (row.original.status !== null) {
+										update({
+											employeeId: row.original.employeeId,
+											date: startDate.toString(),
+											type: 'absent',
+										})
+										return
+									}
+									mutate({
 										employeeId: row.original.employeeId,
 										date: startDate.toString(),
 										type: 'absent',
 									})
-									return
-								}
-								mutate({
-									employeeId: row.original.employeeId,
-									date: startDate.toString(),
-									type: 'absent',
-								})
-							}}
-						/>
-					</div>
+								}}
+							/>
+						</div>
+					</ProtectedComponent>
 				)
 			},
 		},

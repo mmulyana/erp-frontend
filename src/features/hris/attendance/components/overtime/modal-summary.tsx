@@ -1,8 +1,8 @@
 import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 
-import { Attendance, AttendanceType, Overtime } from '@/shared/types/api'
 import { Button } from '@/shared/components/ui/button'
+import { Overtime } from '@/shared/types/api'
 import {
 	Dialog,
 	DialogContent,
@@ -35,7 +35,10 @@ export default function ModalSummaryOvertime({ data }: { data?: Overtime[] }) {
 								<p className='text-ink-primary'>
 									{format(new Date(i.date), 'PPP', { locale: id })}
 								</p>
-								<p className='text-ink-primary font-medium'><span className='opacity-50 font-normal'>Jml jam:</span> {i.totalHour}</p>
+								<p className='text-ink-primary font-medium'>
+									<span className='opacity-50 font-normal'>Jml jam:</span>{' '}
+									{i.totalHour}
+								</p>
 							</div>
 						)
 					})}

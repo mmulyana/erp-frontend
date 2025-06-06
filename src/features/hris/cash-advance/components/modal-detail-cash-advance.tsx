@@ -1,7 +1,8 @@
 import { NumericFormat } from 'react-number-format'
-import { useForm } from 'react-hook-form'
-import { atom, useAtom } from 'jotai'
+import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Pencil } from 'lucide-react'
 
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
@@ -17,6 +18,7 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogTitle,
+	DialogTrigger,
 } from '@/shared/components/ui/dialog'
 import {
 	Form,
@@ -31,9 +33,8 @@ import { useUpdateCashAdvance } from '../api/use-update-cash-advance'
 import ModalDeleteCashAdvance from './modal-delete-cash-advace'
 import { useCashAdvance } from '../api/use-cash-advance'
 import { CashAdvanceForm } from '../types'
-import { useParams } from 'react-router-dom'
-import { DialogTrigger } from '@radix-ui/react-dialog'
-import { Pencil } from 'lucide-react'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function ModalDetailCashAdvance({
 	transactions,
@@ -160,7 +161,11 @@ export default function ModalDetailCashAdvance({
 						/>
 						<DialogFooter>
 							<div className='flex justify-between w-full pt-4'>
-								<ModalDeleteCashAdvance />
+								<div>
+									<ProtectedComponent required={[permissions.overtime_delete]}>
+										<ModalDeleteCashAdvance />
+									</ProtectedComponent>
+								</div>
 								<div className='flex justify-end gap-4 items-center'>
 									<DialogClose asChild>
 										<Button variant='outline' type='button'>

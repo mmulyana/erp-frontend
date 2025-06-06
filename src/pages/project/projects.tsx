@@ -16,6 +16,8 @@ import FilterButton from '@/shared/components/common/filter-button'
 import FilterReset from '@/shared/components/common/filter-reset'
 import SortButton from '@/shared/components/common/sort-button'
 import HeadPage from '@/shared/components/common/head-page'
+import { permissions } from '@/shared/constants/permissions'
+import { useHasPermission } from '@/shared/hooks/use-has-permission'
 import { selectOption } from '@/shared/types'
 
 const statusOptions: selectOption[] = [
@@ -70,6 +72,8 @@ export default function Projects() {
 		)
 	}, [query])
 
+	const canCreate = useHasPermission([permissions.project_create])
+
 	return (
 		<DefaultLayout className='space-y-6' module='project'>
 			<ProjectStatus variant='compact' />
@@ -78,6 +82,7 @@ export default function Projects() {
 				subtitle='Kelola data proyek dalam perusahaan'
 				url={paths.projectNew}
 				actionLabel='Tambah Proyek'
+				hideAction={!canCreate}
 			/>
 			<div className='p-6 rounded-xl bg-white border border-border space-y-6'>
 				<div className='flex w-full items-center gap-4'>

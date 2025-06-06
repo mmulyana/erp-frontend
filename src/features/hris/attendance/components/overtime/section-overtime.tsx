@@ -10,6 +10,8 @@ import SortButton from '@/shared/components/common/sort-button'
 import CreatedSelect from '@/shared/components/common/select/created-select'
 import FilterReset from '@/shared/components/common/filter-reset'
 import { useHasQueryValue } from '@/shared/hooks/use-has-query'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function SectionOvertime() {
 	const [query, setQuery] = useQueryStates({
@@ -25,7 +27,11 @@ export default function SectionOvertime() {
 			<HeadPage
 				title='Lembur'
 				subtitle='Kelola lemburan pegawai harian'
-				action={<ModalAddOvertime />}
+				action={
+					<ProtectedComponent required={[permissions.overtime_create]}>
+						<ModalAddOvertime />
+					</ProtectedComponent>
+				}
 			/>
 			<div className='p-6 rounded-xl border border-border bg-white space-y-6'>
 				<div className='flex gap-4 items-center'>

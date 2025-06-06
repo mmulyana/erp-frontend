@@ -7,17 +7,19 @@ import { useStockIns } from '@/features/inventory/stock-in/api/use-stock-ins'
 
 import CreatedSelect from '@/shared/components/common/select/created-select'
 import FilterButton from '@/shared/components/common/filter-button'
+import UserCombobox from '@/features/user/components/user-combobox'
+import FilterReset from '@/shared/components/common/filter-reset'
 import SortButton from '@/shared/components/common/sort-button'
 import HeadPage from '@/shared/components/common/head-page'
 import SearchV3 from '@/shared/components/common/search-v3'
 
 import { Pagination } from '@/shared/components/common/data-table/component'
+import { useHasPermission } from '@/shared/hooks/use-has-permission'
+import { useHasQueryValue } from '@/shared/hooks/use-has-query'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { permissions } from '@/shared/constants/permissions'
 import { paths } from '@/shared/constants/paths'
-import { useHasQueryValue } from '@/shared/hooks/use-has-query'
-import FilterReset from '@/shared/components/common/filter-reset'
-import UserCombobox from '@/features/user/components/user-combobox'
 
 export default function StockIn() {
 	const [query, setQuery] = useQueryStates({
@@ -39,6 +41,8 @@ export default function StockIn() {
 
 	const hasQuery = useHasQueryValue(query)
 
+	const canCreate = useHasPermission([permissions.transaction_create])
+
 	return (
 		<DefaultLayout module='inventory' className='space-y-6'>
 			<StockInTotal />
@@ -46,6 +50,7 @@ export default function StockIn() {
 				title='Stok Masuk'
 				subtitle='Kelola data stok masuk'
 				url={paths.inventoryStockInNew}
+				hideAction={!canCreate}
 			/>
 			<div className='p-6 bg-white rounded-xl border border-border space-y-6'>
 				<div className='flex gap-4 items-center'>

@@ -7,6 +7,8 @@ import SearchV3 from '@/shared/components/common/search-v3'
 import ModalAddCompany from '@/features/projects/company/components/modal-add-company'
 import TableCompany from '@/features/projects/company/components/table-company'
 import CreatedSelect from '@/shared/components/common/select/created-select'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function Company() {
 	return (
@@ -14,7 +16,11 @@ export default function Company() {
 			<HeadPage
 				title='Perusahaan'
 				subtitle='Kelola data perusahaan klien'
-				action={<ModalAddCompany />}
+				action={
+					<ProtectedComponent required={[permissions.company_create]}>
+						<ModalAddCompany />
+					</ProtectedComponent>
+				}
 			/>
 			<div className='bg-white p-6 space-y-6 rounded-xl border border-border'>
 				<div className='flex justify-between items-center'>

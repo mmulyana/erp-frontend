@@ -6,7 +6,10 @@ import BrandCombobox from '@/features/inventory/brand/components/brand-combobox'
 import ModalAddItem from '@/features/inventory/item/components/modal-add-item'
 import CreatedSelect from '@/shared/components/common/select/created-select'
 import TableItem from '@/features/inventory/item/components/table-item'
+import { statusOption } from '@/features/inventory/item/constant'
 
+import BaseSelect from '@/shared/components/common/select/base-select'
+import ProtectedComponent from '@/shared/components/common/protected'
 import FilterButton from '@/shared/components/common/filter-button'
 import FilterReset from '@/shared/components/common/filter-reset'
 import SortButton from '@/shared/components/common/sort-button'
@@ -14,8 +17,7 @@ import HeadPage from '@/shared/components/common/head-page'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { useHasQueryValue } from '@/shared/hooks/use-has-query'
 import { DefaultLayout } from '@/shared/layout/default-layout'
-import BaseSelect from '@/shared/components/common/select/base-select'
-import { statusOption } from '@/features/inventory/item/constant'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function Item() {
 	const [query, setQuery] = useQueryStates({
@@ -34,7 +36,11 @@ export default function Item() {
 			<HeadPage
 				title='Barang'
 				subtitle='Kelola data barang'
-				action={<ModalAddItem />}
+				action={
+					<ProtectedComponent required={[permissions.item_create]}>
+						<ModalAddItem />
+					</ProtectedComponent>
+				}
 			/>
 
 			<div className='p-6 rounded-xl border borde-border bg-white space-y-6'>
@@ -47,7 +53,7 @@ export default function Item() {
 								warehouseId: null,
 								brandId: null,
 								sort: null,
-								status: null
+								status: null,
 							})
 						}
 					/>
