@@ -16,7 +16,9 @@ export function useCreateStockOut() {
 			const formData = new FormData()
 
 			formData.append('note', payload.note ?? '')
-			formData.append('date', new Date(payload.date).toISOString())
+			if (payload.date) {
+				formData.append('date', new Date(payload.date).toISOString())
+			}
 			if (payload.projectId) {
 				formData.append('projectId', payload.projectId)
 			}

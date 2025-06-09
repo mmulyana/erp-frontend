@@ -8,9 +8,12 @@ import http from '@/shared/utils/http'
 
 import { ProjectForm } from '../types'
 import { IApi } from '@/shared/types'
+import { useNavigate } from 'react-router-dom'
+import { paths } from '@/shared/constants/paths'
 
 export const useCreateProject = () => {
 	const queryClient = useQueryClient()
+	const navigate = useNavigate()
 
 	return useMutation({
 		mutationFn: async (payload: ProjectForm) => {
@@ -24,7 +27,14 @@ export const useCreateProject = () => {
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.project] })
 			queryClient.invalidateQueries({ queryKey: [keys.projectInfinite] })
-			toast.success(data?.message)
+			toast.success(data.message, {
+				duration: 2000,
+				action: {
+					label: 'Lihat',
+					onClick: () =>
+						navigate(`${paths.projectMasterdataProjects}/${data.data.id}`),
+				},
+			})
 		},
 		onError: (error: AxiosError<any>) => {
 			toast.error(error.response?.data.message)

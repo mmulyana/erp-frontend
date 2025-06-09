@@ -26,7 +26,6 @@ export const paths = {
 	projectMasterdataClientDetail: '/project/masterdata/client/:id',
 	projectMasterdataClientCompany: '/project/masterdata/company',
 	projectMasterdataClientCompanyDetail: '/project/masterdata/company/:id',
-	projectKanban: '/project/kanban',
 
 	inventory: '/inventory',
 	inventoryMasterdataItem: '/inventory/masterdata/item',

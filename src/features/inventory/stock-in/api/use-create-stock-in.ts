@@ -20,7 +20,9 @@ export function useCreateStockIn() {
 			formData.append('referenceNumber', payload.referenceNumber ?? '')
 			formData.append('supplierId', payload.supplierId ?? '')
 			formData.append('note', payload.note ?? '')
-			formData.append('date', new Date(payload.date).toISOString())
+			if (payload.date) {
+				formData.append('date', new Date(payload.date).toISOString())
+			}
 
 			formData.append('items', JSON.stringify(payload.items))
 
@@ -39,6 +41,7 @@ export function useCreateStockIn() {
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {
+			console.log(error)
 			toast.error(error.response?.data.message)
 		},
 	})

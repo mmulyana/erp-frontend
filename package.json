@@ -70,6 +70,7 @@
     "react-joyride": "^2.9.3",
     "react-number-format": "^5.4.4",
     "react-router-dom": "^6.28.0",
+    "react-to-pdf": "^2.0.1",
     "react-use": "^17.5.1",
     "recharts": "^2.13.3",
     "socket.io-client": "^4.8.1",

@@ -34,6 +34,7 @@ import ModalDeleteOvertime from './modal-delete-overtime'
 import { OvertimeForm } from '../../types'
 import ProtectedComponent from '@/shared/components/common/protected'
 import { permissions } from '@/shared/constants/permissions'
+import ProjectCombobox from '@/features/projects/project/components/project-combobox'
 
 export default function ModalDetailOvertime({
 	id,
@@ -65,6 +66,7 @@ export default function ModalDetailOvertime({
 				date: new Date(data.data?.date as string),
 				employeeId: data.data?.employee.id,
 				note: data.data?.note,
+				projectId: data.data.projectId,
 			})
 		}
 	}, [data])
@@ -155,6 +157,22 @@ export default function ModalDetailOvertime({
 									<FormLabel>Keterangan</FormLabel>
 									<FormControl>
 										<Textarea {...field} className='bg-surface shadow-none' />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							name='projectId'
+							control={form.control}
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Proyek</FormLabel>
+									<FormControl>
+										<ProjectCombobox
+											defaultValue={field.value}
+											onSelect={field.onChange}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>

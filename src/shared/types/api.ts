@@ -81,6 +81,7 @@ export type Overtime = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+	projectId?: string
 
 	employee: Employee
 	project?: Project

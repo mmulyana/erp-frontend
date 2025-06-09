@@ -8,6 +8,8 @@ import { usePagination } from '@/shared/hooks/use-pagination'
 import { useState } from 'react'
 import ModalDetailOvertime from './modal-detail-overtime'
 import { Overtime } from '@/shared/types/api'
+import { Button } from '@/shared/components/ui/button'
+import { Pencil } from 'lucide-react'
 
 export default function TableOvertime() {
 	const [open, setOpen] = useState(false)
@@ -56,6 +58,22 @@ export default function TableOvertime() {
 		{
 			header: 'Proyek',
 			cell: ({ row }) => row.original?.project?.name,
+		},
+		{
+			id: 'action',
+			header: '',
+			cell: ({ row }) => (
+				<Button
+					variant='outline'
+					onClick={() => {
+						setSelected(row.original.id)
+						setOpen(!open)
+					}}
+				>
+					<Pencil size={18} />
+					<span className='px-0.5'>Edit</span>
+				</Button>
+			),
 		},
 	]
 	return (

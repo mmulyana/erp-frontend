@@ -196,28 +196,38 @@ export default function FormStockIn({
 
 									return (
 										<TableRow key={item.id} className='border-none'>
-											<TableCell>
+											<TableCell className='align-top'>
 												<FormField
 													control={form.control}
 													name={`items.${index}.itemId`}
 													render={({ field }) => (
-														<ItemCombobox
-															onSelect={field.onChange}
-															defaultValue={field.value || ''}
-														/>
+														<FormItem>
+															<FormControl>
+																<ItemCombobox
+																	onSelect={field.onChange}
+																	defaultValue={field.value || ''}
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
 													)}
 												/>
 											</TableCell>
-											<TableCell>
+											<TableCell className='align-top'>
 												<FormField
 													control={form.control}
 													name={`items.${index}.quantity`}
 													render={({ field }) => (
-														<Input type='number' {...field} min={1} />
+														<FormItem>
+															<FormControl>
+																<Input type='number' {...field} min={1} />
+															</FormControl>
+															<FormMessage />
+														</FormItem>
 													)}
 												/>
 											</TableCell>
-											<TableCell>
+											<TableCell className='align-top'>
 												<FormField
 													control={form.control}
 													name={`items.${index}.unitPrice`}
@@ -243,15 +253,20 @@ export default function FormStockIn({
 																		/>
 																	</div>
 																</FormControl>
+																<FormMessage />
 															</FormItem>
 														)
 													}}
 												/>
 											</TableCell>
-											<TableCell className='text-right'>
-												{formatThousands(total)}
+											<TableCell className='align-top'>
+												<div className='flex items-center h-10'>
+													<p className='text-right w-full'>
+														{formatThousands(total)}
+													</p>
+												</div>
 											</TableCell>
-											<TableCell>
+											<TableCell className='align-top'>
 												<Button
 													variant='ghost'
 													className='text-error hover:text-red-600'
