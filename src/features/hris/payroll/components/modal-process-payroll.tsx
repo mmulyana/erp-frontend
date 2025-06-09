@@ -59,6 +59,7 @@ type props = {
 	startDate?: string
 	endDate?: string
 	variant?: 'default' | 'update'
+	payType?: 'daily' | 'monthly'
 }
 export default function ModalProcessPayroll({
 	id,
@@ -66,6 +67,7 @@ export default function ModalProcessPayroll({
 	startDate,
 	endDate,
 	variant = 'default',
+	payType,
 }: props) {
 	const queryClient = useQueryClient()
 
@@ -90,13 +92,16 @@ export default function ModalProcessPayroll({
 			overtimeHour: 0,
 			workDay: 0,
 			overtimeSalary: 0,
-			salary: 9,
+			salary: 0,
 			paymentType: '',
 		},
 	})
 	const formWatch = form.watch()
 
-	const totalBasic = formWatch.salary * formWatch.workDay
+	const totalBasic =
+		payType === 'daily'
+			? formWatch.salary * formWatch.workDay
+			: formWatch.salary
 	const totalOvertime = formWatch.overtimeSalary * formWatch.overtimeHour
 	const totalIncome = totalBasic + totalOvertime
 
@@ -108,7 +113,7 @@ export default function ModalProcessPayroll({
 		?.filter((d) => d.type === 'percent')
 		?.reduce((acc, curr) => acc + totalIncome * (curr.amount / 100), 0)
 
-	const totalDeduction = numericDeductions + percentDeductions || 0
+	const totalDeduction = (numericDeductions || 0) + (percentDeductions || 0)
 
 	const { fields, append, remove } = useFieldArray({
 		control: form.control,
@@ -118,7 +123,8 @@ export default function ModalProcessPayroll({
 	useEffect(() => {
 		if (isPending) return
 		form.reset({
-			workDay: payroll?.workDay || summary?.total.presence,
+			workDay:
+				payType === 'daily' ? payroll?.workDay || summary?.total.presence : 0,
 			overtimeHour: payroll?.overtimeHour || summary?.total.overtimes,
 			overtimeSalary: payroll?.overtimeSalary,
 			salary: payroll?.salary,
@@ -145,7 +151,7 @@ export default function ModalProcessPayroll({
 				}
 			}
 		}
-	}, [summary, isPending])
+	}, [summary, isPending, payroll, payType, append, form])
 
 	const submit = async (data: FormProcess) => {
 		if (!payroll?.id) return
@@ -292,7 +298,10 @@ export default function ModalProcessPayroll({
 									</div>
 									<div className='grid grid-cols-1 md:grid-cols-2 gap-4 pt-4'>
 										<div className='space-y-2'>
-											<p className='text-ink-primary/50'>Gaji pokok (harian)</p>
+											<p className='text-ink-primary/50'>
+												Gaji pokok ({payType === 'daily' ? 'harian' : 'bulanan'}
+												)
+											</p>
 											<FormField
 												name='salary'
 												control={form.control}
@@ -365,28 +374,32 @@ export default function ModalProcessPayroll({
 									<p className='text-ink-primary font-medium'>
 										Absensi dan lembur
 									</p>
-									<div className='flex justify-between items-center'>
-										<div className='flex gap-2 items-center'>
-											<p className='text-ink-primary/50'>Jml hari</p>
-											<ModalSummaryRegular data={summary?.attendances || []} />
-										</div>
-										<FormField
-											name='workDay'
-											control={form.control}
-											render={({ field }) => (
-												<FormItem>
-													<FormControl>
-														<div className='relative'>
-															<div className='w-12 bg-white rounded-r-lg absolute top-1/2 -translate-y-1/2 px-3 right-[1px] border-l border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
-																Hari
+									{payType === 'daily' && (
+										<div className='flex justify-between items-center'>
+											<div className='flex gap-2 items-center'>
+												<p className='text-ink-primary/50'>Jml hari</p>
+												<ModalSummaryRegular
+													data={summary?.attendances || []}
+												/>
+											</div>
+											<FormField
+												name='workDay'
+												control={form.control}
+												render={({ field }) => (
+													<FormItem>
+														<FormControl>
+															<div className='relative'>
+																<div className='w-12 bg-white rounded-r-lg absolute top-1/2 -translate-y-1/2 px-3 right-[1px] border-l border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
+																	Hari
+																</div>
+																<Input className='w-28 pr-14' {...field} />
 															</div>
-															<Input className='w-28 pr-14' {...field} />
-														</div>
-													</FormControl>
-												</FormItem>
-											)}
-										/>
-									</div>
+														</FormControl>
+													</FormItem>
+												)}
+											/>
+										</div>
+									)}
 									<div className='flex justify-between items-center'>
 										<div className='flex gap-2 items-center'>
 											<p className='text-ink-primary/50'>Jml lembur</p>
@@ -560,14 +573,26 @@ export default function ModalProcessPayroll({
 								<div className='pt-4 border-border flex justify-between items-start'>
 									<p className='text-ink-primary font-medium'>Subtotal</p>
 									<div className='space-y-4'>
-										<div className='text-right space-y-2'>
-											<p className='text-ink-primary/50 text-sm'>
-												Gaji pokok x hari kerja
-											</p>
-											<p className='text-ink-primary text-xl'>
-												Rp {formatThousands(totalBasic)}
-											</p>
-										</div>
+										{payType === 'daily' && (
+											<div className='text-right space-y-2'>
+												<p className='text-ink-primary/50 text-sm'>
+													Gaji pokok x hari kerja
+												</p>
+												<p className='text-ink-primary text-xl'>
+													Rp {formatThousands(totalBasic)}
+												</p>
+											</div>
+										)}
+										{payType === 'monthly' && (
+											<div className='text-right space-y-2'>
+												<p className='text-ink-primary/50 text-sm'>
+													Gaji pokok
+												</p>
+												<p className='text-ink-primary text-xl'>
+													Rp {formatThousands(totalBasic)}
+												</p>
+											</div>
+										)}
 										<div className='text-right space-y-2'>
 											<p className='text-ink-primary/50 text-sm'>
 												Gaji lembur x jam lembur

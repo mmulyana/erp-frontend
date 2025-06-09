@@ -1,10 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { House, Pencil } from 'lucide-react'
 import { useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { House } from 'lucide-react'
 
 import ModalProcessPayroll from '@/features/hris/payroll/components/modal-process-payroll'
 import PayrollDetailTotal from '@/features/hris/payroll/components/payroll-detail-total'
+import ModalDetailPayroll from '@/features/hris/payroll/components/modal-detail-payroll'
 import PayrollProgress from '@/features/hris/payroll/components/payroll-progress'
 import { usePayrolls } from '@/features/hris/payroll/api/use-payrolls'
 import { usePeriod } from '@/features/hris/payroll/api/use-period'
@@ -26,7 +26,6 @@ import { Link, selectOption } from '@/shared/types'
 import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
-import ModalDetailPayroll from '@/features/hris/payroll/components/modal-detail-payroll'
 
 const links: Link[] = [
 	{
@@ -66,7 +65,6 @@ const createdOptions: selectOption[] = [
 ]
 export default function PayrolleDetail() {
 	const { id } = useParams()
-	const [open, setOpen] = useState(false)
 	const { limit, page, q, sortBy, sortOrder, status } = usePagination()
 
 	const { data } = usePeriod({ id })

@@ -26,14 +26,13 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 
 	const { data } = usePayroll({ id: open ? id : '' })
 
-	// Pastikan data ada sebelum melakukan perhitungan untuk menghindari error
 	const totalSalary = useMemo(() => {
-		if (!data) return 0
-		return (
-			data.salary * data.workDay +
-			data.overtimeSalary * data.overtimeHour -
-			data.deduction
-		)
+		if (!data || !data.period) return 0
+
+		const baseSalary =
+			data.period.payType === 'daily' ? data.salary * data.workDay : data.salary
+
+		return baseSalary + data.overtimeSalary * data.overtimeHour - data.deduction
 	}, [data])
 
 	const notes = useMemo(() => {
@@ -81,7 +80,7 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 			},
 		})
 
-		await new Promise((resolve) => setTimeout(resolve, 50)) // Small delay
+		await new Promise((resolve) => setTimeout(resolve, 50))
 		setPrintMode(false)
 	}
 
@@ -109,7 +108,7 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 								printMode && 'max-w-6xl p-6'
 							)}
 						>
-							{printMode && (
+							{printMode && data?.period && (
 								<div className='flex flex-col'>
 									<p className='text-lg text-center mb-2'>Slip gaji</p>
 									<p className='text-ink-primary/50'>Periode</p>
@@ -128,27 +127,27 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 									<p className='font-medium'>{data?.employee.position}</p>
 								</div>
 							)}
-							<div className='flex flex-col gap-4'>
+							{data?.period?.payType === 'daily' && (
 								<div className='flex justify-between items-center'>
 									<p className='text-ink-primary/50'>Hari Kerja</p>
 									<p>{data?.workDay} hari</p>
 								</div>
-								<div className='flex justify-between items-center'>
-									<p className='text-ink-primary/50'>Jam Lembur</p>
-									<p>{data?.overtimeHour} jam</p>
-								</div>
-								<div className='flex justify-between items-center'>
-									<p className='text-ink-primary/50'>Gaji Pokok</p>
-									<p>Rp {data?.salary?.toLocaleString('id-ID')}</p>
-								</div>
-								<div className='flex justify-between items-center'>
-									<p className='text-ink-primary/50'>Gaji Lembur</p>
-									<p>Rp {data?.overtimeSalary?.toLocaleString('id-ID')}</p>
-								</div>
-								<div className='flex justify-between items-center'>
-									<p className='text-ink-primary/50'>Potongan</p>
-									<p>Rp {data?.deduction?.toLocaleString('id-ID')}</p>
-								</div>
+							)}
+							<div className='flex justify-between items-center'>
+								<p className='text-ink-primary/50'>Jam Lembur</p>
+								<p>{data?.overtimeHour} jam</p>
+							</div>
+							<div className='flex justify-between items-center'>
+								<p className='text-ink-primary/50'>Gaji Pokok</p>
+								<p>Rp {data?.salary?.toLocaleString('id-ID')}</p>
+							</div>
+							<div className='flex justify-between items-center'>
+								<p className='text-ink-primary/50'>Gaji Lembur</p>
+								<p>Rp {data?.overtimeSalary?.toLocaleString('id-ID')}</p>
+							</div>
+							<div className='flex justify-between items-center'>
+								<p className='text-ink-primary/50'>Potongan</p>
+								<p>Rp {data?.deduction?.toLocaleString('id-ID')}</p>
 							</div>
 							{notes.length > 0 && (
 								<div className='space-y-2 border p-3 rounded-xl'>
@@ -186,7 +185,7 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 					</div>
 
 					<Button
-						className='mb-10 w-full py-2.5 h-fit'
+						className='mb-10 mt-4 w-full py-2.5 h-fit'
 						variant='outline'
 						onClick={handleDownloadPdf}
 					>

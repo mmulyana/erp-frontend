@@ -1,25 +1,10 @@
-import {
-	AlertCircle,
-	BarChartIcon,
-	Circle,
-	TrendingDown,
-	TrendingUp,
-} from 'lucide-react'
-import { useState } from 'react'
+import { AlertCircle, BarChartIcon } from 'lucide-react'
+import { useParams } from 'react-router-dom'
 
 import CardV1 from '@/shared/components/common/card-v1'
-import { months } from '@/shared/constants/months'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/shared/components/ui/select'
 import { formatThousands } from '@/shared/utils'
-import { cn } from '@/shared/utils/cn'
+
 import { useAmountTotal } from '../api/use-amount-total'
-import { useParams } from 'react-router-dom'
 
 export default function PayrollDetailTotal() {
 	const { id } = useParams()
