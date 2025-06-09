@@ -28,6 +28,21 @@ import { useEmployee } from '../../api/use-employee'
 import { EmployeeForm } from '../../types'
 import { useUpdateEmployee } from '../../api/use-update-employee'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
+import { cn } from '@/shared/utils/cn'
+
+const options = [
+	{
+		id: 'daily',
+		name: 'Harian',
+		description: 'Pegawai gaji harian',
+	},
+	{
+		id: 'monthly',
+		name: 'Bulanan',
+		description: 'Staf perusahaan',
+	},
+]
 
 export default function ModalEditPosition() {
 	const { id } = useParams()
@@ -52,6 +67,7 @@ export default function ModalEditPosition() {
 				joinedAt: data.joinedAt ? new Date(data.joinedAt) : undefined,
 				salary: data.salary,
 				overtimeSalary: data.overtimeSalary,
+				payType: data.payType,
 			})
 		}
 	}, [data])
@@ -187,6 +203,52 @@ export default function ModalEditPosition() {
 									</FormItem>
 								)
 							}}
+						/>
+						<FormField
+							control={form.control}
+							name='payType'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Tipe Gaji</FormLabel>
+									<RadioGroup
+										value={field.value}
+										onValueChange={field.onChange}
+										className='grid grid-cols-1 md:grid-cols-2 gap-4'
+									>
+										{options.map((option) => (
+											<label
+												key={option.id}
+												htmlFor={option.id}
+												className={cn(
+													'relative flex items-center rounded-lg border p-4 cursor-pointer transition-colors',
+													field.value === option.id
+														? 'bg-blue-50 border-blue-600'
+														: 'bg-white border-gray-200 hover:border-gray-300'
+												)}
+											>
+												<div className='flex flex-col flex-1'>
+													<span className='font-medium'>{option.name}</span>
+													<span className='text-gray-500 text-sm'>
+														{option.description}
+													</span>
+												</div>
+												<div className='ml-auto'>
+													<RadioGroupItem
+														value={option.id}
+														id={option.id}
+														className={cn(
+															'h-6 w-6 border-2',
+															field.value === option.id
+																? 'border-blue-600 text-blue-600'
+																: 'border-gray-300'
+														)}
+													/>
+												</div>
+											</label>
+										))}
+									</RadioGroup>
+								</FormItem>
+							)}
 						/>
 						<DialogFooter>
 							<div className='flex justify-end gap-4 items-center pt-4'>
