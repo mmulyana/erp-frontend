@@ -1,5 +1,5 @@
 import { NumericFormat } from 'react-number-format'
-import { Plus } from 'lucide-react'
+import { Pencil, Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 
@@ -30,19 +30,40 @@ import {
 import { CashAdvanceForm } from '../types'
 import { useCreateTransaction } from '../api/use-create-transaction'
 import { useParams } from 'react-router-dom'
+import { useUpdateTransaction } from '../api/use-update-transaction'
 import { useQueryClient } from '@tanstack/react-query'
 import { keys } from '@/shared/constants/keys'
+import ModalDeleteTransaction from './modal-delete-transaction'
 
-export default function ModalAddTransaction() {
-	const { id } = useParams()
+export default function ModalEditTransaction({
+	data,
+}: {
+	data?: {
+		date: string
+		amount: number
+		note?: string
+		id: string
+		cashAdvanceId: string
+	}
+}) {
 	const queryClient = useQueryClient()
+	const { id } = useParams()
 	const [open, setOpen] = useState(false)
 
-	const { mutate, isPending } = useCreateTransaction()
+	const { mutate, isPending } = useUpdateTransaction()
+
+	const onInvalidate = () => {
+		queryClient.invalidateQueries({
+			queryKey: [keys.cashAdvancesDetail, data.cashAdvanceId],
+		})
+		queryClient.invalidateQueries({
+			queryKey: [keys.cashAdvanceTransactions, data.cashAdvanceId],
+		})
+	}
 
 	const defaultValues = {
 		amount: 0,
-		date: new Date(),
+		date: undefined,
 		employeeId: '',
 		note: '',
 	}
@@ -51,25 +72,32 @@ export default function ModalAddTransaction() {
 		defaultValues,
 	})
 
-	const onSubmit = (data: CashAdvanceForm) => {
+	const onSubmit = (payload: CashAdvanceForm) => {
 		if (!id) return
 		mutate(
 			{
-				...data,
-				cashAdvanceId: id,
+				amount: payload.amount,
+				date: data.date,
+				note: payload.note,
+				id: data.id,
+				cashAdvanceId: data.cashAdvanceId,
 			},
 			{
-				onSuccess: handleFormSuccess(setOpen, () => {
-					queryClient.invalidateQueries({
-						queryKey: [keys.cashAdvancesDetail, id],
-					})
-				}),
+				onSuccess: handleFormSuccess(setOpen, () => onInvalidate()),
 				onError: handleFormError<CashAdvanceForm>(form),
 			}
 		)
 	}
 
 	useEffect(() => {
+		if (open && data) {
+			form.reset({
+				amount: data.amount,
+				date: new Date(data.date),
+				note: data.note,
+			})
+		}
+
 		if (!open) {
 			form.reset(defaultValues)
 		}
@@ -78,9 +106,9 @@ export default function ModalAddTransaction() {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button>
-					<Plus strokeWidth={2} size={16} className='text-white' />
-					<span className='px-0.5'>Tambah</span>
+				<Button variant='outline'>
+					<Pencil size={16} />
+					<span className='px-0.5'>Edit</span>
 				</Button>
 			</DialogTrigger>
 
@@ -156,13 +184,22 @@ export default function ModalAddTransaction() {
 							)}
 						/>
 						<DialogFooter>
-							<div className='flex justify-end gap-4 items-center pt-4'>
-								<DialogClose asChild>
-									<Button variant='outline' type='button'>
-										Batal
-									</Button>
-								</DialogClose>
-								<ButtonSubmit isPending={isPending} />
+							<div className='flex justify-between items-center w-full pt-4'>
+								<ModalDeleteTransaction
+									id={data.id}
+									callback={() => {
+										onInvalidate()
+										setOpen(false)
+									}}
+								/>
+								<div className='flex justify-end gap-4 items-center'>
+									<DialogClose asChild>
+										<Button variant='outline' type='button'>
+											Batal
+										</Button>
+									</DialogClose>
+									<ButtonSubmit isPending={isPending} />
+								</div>
 							</div>
 						</DialogFooter>
 					</form>

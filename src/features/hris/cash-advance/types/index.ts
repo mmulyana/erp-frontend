@@ -7,7 +7,7 @@ export type CashAdvance = {
 	amount: number
 	date: string
 	note?: string
-	status: "notYetPaidOff" | "paidOff"
+	status: 'notYetPaidOff' | 'paidOff'
 
 	craetedAt: string
 	updatedAt: string
@@ -46,4 +46,11 @@ export type ReportTop = {
 	fullname: string
 	position: string
 	total: number
+}
+
+export type TransactionMutate = {
+	cashAdvanceId: string
+	amount: number
+	date: string
+	note?: string
 }

@@ -15,7 +15,7 @@ type Params = {
 
 export const useTransactions = (params?: Params) => {
 	return useQuery({
-		queryKey: [keys.cashAdvanceTransactions, params],
+		queryKey: [keys.cashAdvanceTransactions, params.id, params],
 		queryFn: async (): Promise<IApiPagination<any[]>> => {
 			const { data } = await http(
 				`${urls.cashAdvances}/${params?.id}/transaction`,
