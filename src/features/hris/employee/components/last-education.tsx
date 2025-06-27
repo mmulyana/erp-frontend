@@ -31,7 +31,7 @@ export default function LastEducation({ variant }: props) {
 			style={{
 				card: cn(
 					'h-fit col-span-2 xl:col-span-1 w-full',
-					variant === 'compact' && 'h-fit w-fit'
+					variant === 'compact' && 'h-fit w-full md:w-[352px]'
 				),
 				content: cn(
 					variant === 'compact' &&
