@@ -14,9 +14,11 @@ import TableRegular from './table-regular'
 import ViewType from './view-type'
 import { useLocalStorage } from '@uidotdev/usehooks'
 import GridRegular from './grid-regular'
+import { useAtomValue } from 'jotai'
+import { viewMode } from '../../store'
 
 export default function SectionRegular() {
-	const [view] = useLocalStorage<string>('view-type', 'table')
+	const view = useAtomValue(viewMode)
 
 	const [query, setQuery] = useQueryStates({
 		notYet: parseAsBoolean.withDefault(false),
