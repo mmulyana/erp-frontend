@@ -1,5 +1,5 @@
 {
-	"message": "Invalid input data. Please check your request and try again.",
+	"message": "Data yang diminta belum sesuai, mohon ulangi",
 	"errors": [
 		{
 			"code": "too_small",
@@ -8,8 +8,8 @@
 		},
 		{
 			"code": "custom",
-			"path": ["username", "email", "phone"],
-			"message": "Minimal isi salah satu: nama, email, atau nomor telepon"
+			"path": ["username"],
+			"message": "Tidak boleh kosong"
 		}
 	]
 }

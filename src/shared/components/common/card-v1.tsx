@@ -13,6 +13,7 @@ type props = {
 		content?: string
 	}
 	count?: number
+	dataTestId?: string
 }
 
 export default function CardV1({
@@ -23,9 +24,11 @@ export default function CardV1({
 	action,
 	style,
 	count,
+	dataTestId,
 }: props) {
 	return (
 		<Card
+			data-testid={dataTestId}
 			className={cn(
 				'p-0 rounded-xl border border-border shadow-none',
 				style?.card

@@ -23,6 +23,7 @@ import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { Link as Links } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
+import ModalEditTransaction from '@/features/hris/cash-advance/components/modal-edit-transaction'
 
 const links: Links[] = [
 	{
@@ -83,6 +84,24 @@ export default function CashAdvanceDetail() {
 		{
 			accessorKey: 'note',
 			header: 'Catatan',
+		},
+		{
+			id: 'action',
+			header: '',
+			cell: ({ row }) => {
+				const { id, amount, date, note, cashAdvanceId } = row.original
+				return (
+					<ModalEditTransaction
+						data={{
+							amount,
+							date,
+							id,
+							note,
+							cashAdvanceId,
+						}}
+					/>
+				)
+			},
 		},
 	]
 

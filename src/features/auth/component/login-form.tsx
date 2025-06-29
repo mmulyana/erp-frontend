@@ -3,7 +3,12 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import InputPassword from '@/shared/components/fields/password-field'
-import { Form, FormField } from '@/shared/components/ui/form'
+import {
+	Form,
+	FormField,
+	FormItem,
+	FormMessage,
+} from '@/shared/components/ui/form'
 import { handleFormError } from '@/shared/utils/form'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -71,13 +76,16 @@ export default function LoginForm({ guestMode }: { guestMode?: boolean }) {
 								control={form.control}
 								name='username'
 								render={({ field }) => (
-									<Input
-										placeholder='No telepon/Email/Username'
-										autoComplete='none'
-										className='bg-[#FAFBFF] border border-[#EFEFEF]'
-										data-testid={testIds.loginInputName}
-										{...field}
-									/>
+									<FormItem>
+										<Input
+											placeholder='No telepon/Email/Username'
+											autoComplete='none'
+											className='bg-[#FAFBFF] border border-[#EFEFEF]'
+											data-testid={testIds.loginInputName}
+											{...field}
+										/>
+										<FormMessage />
+									</FormItem>
 								)}
 							/>
 

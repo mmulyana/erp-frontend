@@ -10,14 +10,14 @@ import invalidLogin from '../mocks/login/invalid.json' assert { type: 'json' }
 
 test.describe('authentication', () => {
 	let submitBtn: any
-	let phoneInput: any
+	let nameInput: any
 	let passwordInput: any
 
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/')
 
 		submitBtn = page.getByTestId(testIds.loginButtonSubmit)
-		phoneInput = page.getByTestId(testIds.loginInputPhone)
+		nameInput = page.getByTestId(testIds.loginInputName)
 		passwordInput = page.getByTestId(testIds.loginInputPassword)
 	})
 
@@ -37,7 +37,7 @@ test.describe('authentication', () => {
 
 		await submitBtn.click()
 
-		await expect(page.getByText('Minimal isi salah satu')).toBeVisible()
+		await expect(page.getByText('Tidak boleh kosong')).toBeVisible()
 	})
 
 	test('should show error if invalid credentials', async ({ page }) => {
@@ -48,7 +48,7 @@ test.describe('authentication', () => {
 			})
 		})
 
-		await phoneInput.fill(loginFixtures.validPhone)
+		await nameInput.fill(loginFixtures.validPhone)
 		await passwordInput.fill(loginFixtures.invalidPassword)
 
 		await submitBtn.click()
@@ -63,7 +63,7 @@ test.describe('authentication', () => {
 			})
 		})
 
-		await phoneInput.fill(loginFixtures.invalidPhone)
+		await nameInput.fill(loginFixtures.invalidPhone)
 		await passwordInput.fill(loginFixtures.invalidPassword)
 
 		await submitBtn.click()
@@ -80,7 +80,7 @@ test.describe('authentication', () => {
 			})
 		})
 
-		await phoneInput.fill(loginFixtures.validPhone)
+		await nameInput.fill(loginFixtures.validPhone)
 		await passwordInput.fill(loginFixtures.validPassword)
 
 		await submitBtn.click()

@@ -87,7 +87,6 @@ export const testIds = {
 	buttonAdd: 'button-add',
 
 	// LOGIN
-	loginInputPhone: 'login-input-phone',
 	loginInputName: 'login-input-name',
 	loginInputPassword: 'login-input-passwoord',
 	loginButtonSubmit: 'login-button-submit',
