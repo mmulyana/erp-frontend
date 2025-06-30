@@ -28,13 +28,6 @@ export default function ReportDetail({
 
 	const isMobile = useIsMobile()
 
-	useEffect(() => {
-		const body = document.body
-		if (open && body.style.pointerEvents === 'none') {
-			body.style.pointerEvents = ''
-		}
-	}, [open])
-
 	return (
 		<Dialog open={open} onOpenChange={setOpen} modal>
 			<DialogContent

@@ -140,16 +140,20 @@ export default function StockInDetail() {
 						</div>
 						<div className='flex justify-between items-start'>
 							<p className='text-ink-primary/50'>Supplier</p>
-							<div className='flex items-end gap-2 flex-col'>
-								<p className='text-ink-primary font-medium'>{supplier?.name}</p>
-								<Link
-									to={`${paths.inventoryMasterdataSupplier}/${supplier?.id}`}
-									className='text-ink-primary flex gap-2 items-center'
-								>
-									<span className='px-0.5'>Lihat</span>
-									<ExternalLink size={16} />
-								</Link>
-							</div>
+							{supplier?.name && (
+								<div className='flex items-end gap-2 flex-col'>
+									<p className='text-ink-primary font-medium'>
+										{supplier?.name}
+									</p>
+									<Link
+										to={`${paths.inventoryMasterdataSupplier}/${supplier?.id}`}
+										className='text-ink-primary flex gap-2 items-center'
+									>
+										<span className='px-0.5'>Lihat</span>
+										<ExternalLink size={16} />
+									</Link>
+								</div>
+							)}
 						</div>
 						<div>
 							<p className='text-ink-primary/50'>Catatan</p>

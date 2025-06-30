@@ -15,8 +15,11 @@ import FormStockIn from './form-stock-in'
 import { useUpdateStockIn } from '../api/use-update-stock-in'
 import { useStockIn } from '../api/use-stock-in'
 import { StockInForm } from '../type'
+import { useQueryClient } from '@tanstack/react-query'
+import { keys } from '@/shared/constants/keys'
 
 export default function ModalDetailStockIn() {
+	const queryClient = useQueryClient()
 	const [open, setOpen] = useState(false)
 	const { id } = useParams()
 
@@ -51,7 +54,9 @@ export default function ModalDetailStockIn() {
 				supplierId: payload.supplierId,
 			},
 			{
-				onSuccess: handleFormSuccess(setOpen),
+				onSuccess: handleFormSuccess(setOpen, () => {
+					queryClient.invalidateQueries({ queryKey: [keys.stockInDetail, id] })
+				}),
 				onError: handleFormError(form),
 			}
 		)

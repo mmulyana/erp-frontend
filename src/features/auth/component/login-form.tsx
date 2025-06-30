@@ -122,6 +122,24 @@ export default function LoginForm({ guestMode }: { guestMode?: boolean }) {
 						</Button>
 					</div>
 				)}
+				<div className='p-4 border border-yellow-500 rounded-xl bg-amber-50/50'>
+					<div className='flex justify-between items-center'>
+						<p>Email</p>
+						<p>Kata sandi</p>
+					</div>
+					<div className='flex justify-between items-center mt-2'>
+						<p>user1@mail.com</p>
+						<p>password</p>
+					</div>
+					<div className='flex justify-between items-center mt-2'>
+						<p>user2@mail.com</p>
+						<p>password</p>
+					</div>
+					<div className='flex justify-between items-center mt-2'>
+						<p>user3@mail.com</p>
+						<p>password</p>
+					</div>
+				</div>
 			</div>
 		</>
 	)
