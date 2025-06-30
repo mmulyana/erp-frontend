@@ -8,6 +8,8 @@ import { Badge } from '@/shared/components/ui/badge'
 
 import ModalEditProject from './modal-edit-project'
 import { useProject } from '../api/use-project'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function ProjectInfo({ id }: { id?: string }) {
 	const { data, isPending } = useProject({ id })
@@ -20,7 +22,11 @@ export default function ProjectInfo({ id }: { id?: string }) {
 		<>
 			<CardV1
 				style={{ content: 'space-y-4 relative', card: 'relative' }}
-				action={<ModalEditProject variant='info' />}
+				action={
+					<ProtectedComponent required={[permissions.project_update]}>
+						<ModalEditProject variant='info' />
+					</ProtectedComponent>
+				}
 			>
 				<div className='flex justify-between items-start'>
 					<LoaderWrapper isLoading={isPending}>

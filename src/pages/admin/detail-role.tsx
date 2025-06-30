@@ -104,7 +104,7 @@ export default function DetailRole() {
 							if (id) mutate({ id, permissions: val.join(',') })
 							setRolePermissions(val)
 						}}
-						// disabled={!canChangePermission}
+						disabled={!canChangePermission}
 					/>
 				</CardV1>
 			</div>

@@ -17,6 +17,7 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
+	FormMessage,
 } from '@/shared/components/ui/form'
 
 import ItemCombobox from '../../item/components/item-combobox'
@@ -99,6 +100,7 @@ export default function FormCreateLoan({
 											onSelect={field.onChange}
 										/>
 									</FormControl>
+									<FormMessage />
 								</FormItem>
 							)}
 						/>
@@ -111,8 +113,9 @@ export default function FormCreateLoan({
 								<FormItem>
 									<FormLabel>Qty</FormLabel>
 									<FormControl>
-										<Input {...field} type='number' />
+										<Input {...field} type='number' min={1} />
 									</FormControl>
+									<FormMessage />
 								</FormItem>
 							)}
 						/>
@@ -151,6 +154,7 @@ export default function FormCreateLoan({
 								<FormControl>
 									<ImageUpload onChange={field.onChange} value={field.value} />
 								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>

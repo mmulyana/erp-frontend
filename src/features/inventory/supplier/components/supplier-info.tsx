@@ -8,6 +8,8 @@ import CardV1 from '@/shared/components/common/card-v1'
 
 import ModalDetailSupplier from './modal-detail-supplier'
 import { useSupplier } from '../api/use-supplier'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function SupplierInfo({ id }: { id?: string }) {
 	const { data, isPending } = useSupplier({ id })
@@ -19,7 +21,11 @@ export default function SupplierInfo({ id }: { id?: string }) {
 			style={{
 				content: 'flex gap-4 items-center pt-4',
 			}}
-			action={<ModalDetailSupplier variant='info' />}
+			action={
+				<ProtectedComponent required={[permissions.supplier_update]}>
+					<ModalDetailSupplier variant='info' />
+				</ProtectedComponent>
+			}
 		>
 			<PhotoUrl
 				url={data?.data?.photoUrl as string}

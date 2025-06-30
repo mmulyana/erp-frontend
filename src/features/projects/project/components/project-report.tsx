@@ -9,6 +9,8 @@ import { ModalAddReport } from './modal-add-report'
 import { warningTypes } from '../constant/types'
 import ReportDetail from './report-detail'
 import ReportItem from './report-item'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 type props = {
 	projectId?: string

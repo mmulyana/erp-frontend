@@ -25,7 +25,11 @@ export default function ProjectDetail({ id }: { id?: string }) {
 			title='Detail'
 			icon={<List size={20} className='text-ink-primary' />}
 			style={{ content: 'space-y-4 pt-4', card: 'relative' }}
-			action={<ModalEditProject variant='detail' />}
+			action={
+				<ProtectedComponent required={[permissions.project_update]}>
+					<ModalEditProject variant='detail' />
+				</ProtectedComponent>
+			}
 		>
 			<ProtectedComponent required={[permissions.project_read_value]}>
 				<div className='flex justify-between items-center'>

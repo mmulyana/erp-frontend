@@ -48,7 +48,9 @@ export default function ProjectStockOut({ id }: props) {
 						</p>
 					</div>
 				</div>
-				<ModalAddStockOut id={id} />
+				<ProtectedComponent required={[permissions.project_stock_out]}>
+					<ModalAddStockOut id={id} />
+				</ProtectedComponent>
 			</div>
 			<CardData title='Total' value={`Rp ${formatThousands(total)}`} />
 			<ScrollArea className='mb-4 h-[320px]'>

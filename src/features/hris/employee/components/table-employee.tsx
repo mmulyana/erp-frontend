@@ -21,6 +21,8 @@ import { useEmployees } from '@/features/hris/employee/api/use-employees'
 
 import { useUpdateEmployee } from '../api/use-update-employee'
 import FilterEmployee from './filter-employee'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 const dateOptions: selectOption[] = [
 	{
@@ -100,22 +102,24 @@ export default function TableEmployee() {
 			header: 'Status',
 			cell: ({ row }) => (
 				<div className='w-[120px]'>
-					<ToggleSwitch
-						value={row.original.active}
-						label={{ true: 'Aktif', false: 'Nonaktif' }}
-						onCheck={(val) => {
-							mutate(
-								{ id: row.original.id, active: val },
-								{
-									onSuccess: () => {
-										queryClient.invalidateQueries({
-											queryKey: [keys.employeeReportData],
-										})
-									},
-								}
-							)
-						}}
-					/>
+					<ProtectedComponent required={[permissions.employee_update]}>
+						<ToggleSwitch
+							value={row.original.active}
+							label={{ true: 'Aktif', false: 'Nonaktif' }}
+							onCheck={(val) => {
+								mutate(
+									{ id: row.original.id, active: val },
+									{
+										onSuccess: () => {
+											queryClient.invalidateQueries({
+												queryKey: [keys.employeeReportData],
+											})
+										},
+									}
+								)
+							}}
+						/>
+					</ProtectedComponent>
 				</div>
 			),
 		},

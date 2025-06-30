@@ -40,7 +40,11 @@ export default function CardPosition() {
 						'pt-4 grid grid-cols-1 md:grid-cols-[1fr_342px] gap-6 md:gap-0',
 				}}
 				icon={<BriefcaseBusiness size={20} className='text-ink-primary' />}
-				action={<ModalEditPosition />}
+				action={
+					<ProtectedComponent required={[permissions.employee_update]}>
+						<ModalEditPosition />
+					</ProtectedComponent>
+				}
 			>
 				<div className='flex flex-col items-start justify-center'>
 					<LoaderWrapper isLoading={isPending}>

@@ -13,6 +13,8 @@ import ModalDetailOvertime from '@/features/hris/attendance/components/overtime/
 
 import { useDataOvertime } from '../../api/use-data-overtime'
 import { Overtime } from '@/shared/types/api'
+import { useHasPermission } from '@/shared/hooks/use-has-permission'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function EmployeeOvertime() {
 	const [open, setOpen] = useState(false)
@@ -20,6 +22,8 @@ export default function EmployeeOvertime() {
 
 	const { q, limit, page } = usePagination()
 	const { id: employeeId } = useParams()
+
+	const canUpdate = useHasPermission([permissions.overtime_update])
 
 	// atom in component
 
@@ -67,6 +71,7 @@ export default function EmployeeOvertime() {
 				autoRedirect
 				nonClickableColumns={[]}
 				onCellClick={({ id }) => {
+					if (!canUpdate) return
 					setSelected(id)
 					setOpen(true)
 				}}

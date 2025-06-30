@@ -9,6 +9,8 @@ import CardV1 from '@/shared/components/common/card-v1'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditInformation from './modal-edit-information'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function CardInformation() {
 	const { data, isPending } = useDetailEmployee()
@@ -22,7 +24,11 @@ export default function CardInformation() {
 		<CardV1
 			title='Informasi'
 			icon={<SquareUserRound size={20} className='text-ink-primary' />}
-			action={<ModalEditInformation />}
+			action={
+				<ProtectedComponent required={[permissions.employee_update]}>
+					<ModalEditInformation />
+				</ProtectedComponent>
+			}
 			style={{ content: 'pt-4' }}
 		>
 			<div className='space-y-6'>

@@ -97,6 +97,7 @@ export type Employee = {
 	overtimeSalary: number
 	status: boolean
 	safetyInductionDate?: string
+	payType?: string
 }
 
 export type Base = {

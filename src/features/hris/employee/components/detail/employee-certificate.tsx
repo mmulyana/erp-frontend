@@ -10,6 +10,8 @@ import SearchV3 from '@/shared/components/common/search-v3'
 import ModalDetailCertificate from './modal-detail-certificate'
 import { useCertificates } from '../../api/use-certificates'
 import ModalAddCertificate from './modal-add-certificate'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function EmployeeCertificate() {
 	const [open, setOpen] = useState(false)
@@ -47,7 +49,9 @@ export default function EmployeeCertificate() {
 			</div>
 			<div className='flex justify-between items-center gap-4'>
 				<SearchV3 />
-				<ModalAddCertificate />
+				<ProtectedComponent required={[permissions.employee_update]}>
+					<ModalAddCertificate />
+				</ProtectedComponent>
 			</div>
 			<DataTable
 				data={data?.data.data || []}

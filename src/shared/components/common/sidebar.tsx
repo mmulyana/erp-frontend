@@ -305,7 +305,7 @@ const allLink: Links[] = [
 
 export default function AppSidebar({ module }: AppSidebarProps) {
 	const { isMobile, toggleSidebar } = useSidebar()
-	const menus = useActiveMenu()
+	const menus = useActiveMenu()	
 	const [activeMobileModule, setActiveMobileModule] = useState(module)
 	const userPermissions = usePermission()
 

@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { Employee, IApi } from '@/shared/types'
+import { IApi } from '@/shared/types'
 import { keys } from '@/shared/constants/keys'
 import { urls } from '@/shared/constants/urls'
 import http from '@/shared/utils/http'
+import { Employee } from '@/shared/types/api'
 
 type Params = {
 	projectId?: string

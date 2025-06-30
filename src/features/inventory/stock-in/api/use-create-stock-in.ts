@@ -41,7 +41,6 @@ export function useCreateStockIn() {
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {
-			console.log(error)
 			toast.error(error.response?.data.message)
 		},
 	})

@@ -6,6 +6,8 @@ import { formatPhone } from '@/shared/utils'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditAddress from './modal-edit-address'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function CardAddress() {
 	const { data, isPending } = useDetailEmployee()
@@ -15,7 +17,11 @@ export default function CardAddress() {
 			title='Alamat dan kontak'
 			icon={<MapPin size={20} className='text-ink-primary' />}
 			style={{ content: 'space-y-6 pt-4' }}
-			action={<ModalEditAddress />}
+			action={
+				<ProtectedComponent required={[permissions.employee_update]}>
+					<ModalEditAddress />
+				</ProtectedComponent>
+			}
 		>
 			<div>
 				<p className='text-ink-primary/50'>Alamat</p>

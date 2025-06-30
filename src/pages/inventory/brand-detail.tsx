@@ -126,7 +126,6 @@ export default function BrandDetail() {
 				<CardV1
 					title='Barang'
 					icon={<Package size={20} className='text-ink-primary' />}
-					action={<FilterButton></FilterButton>}
 					style={{ content: 'pt-4' }}
 				>
 					<DataTable

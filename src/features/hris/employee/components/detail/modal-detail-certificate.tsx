@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom'
 import { baseUrl } from '@/shared/constants/urls'
 import ModalEditCertificate from './modal-edit-certificate'
 import ModalDeleteCertificate from './modal-delete-certificate'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function ModalDetailCertificate({
 	id,
@@ -89,12 +91,17 @@ export default function ModalDetailCertificate({
 						</LoaderWrapper>
 					</div>
 				</div>
-				<DialogFooter className=''>
-					<div className='flex justify-between items-center pt-6 w-full'>
-						<ModalDeleteCertificate id={id} onSuccess={() => setOpen(false)} />
-						<ModalEditCertificate />
-					</div>
-				</DialogFooter>
+				<ProtectedComponent required={[permissions.employee_update]}>
+					<DialogFooter className=''>
+						<div className='flex justify-between items-center pt-6 w-full'>
+							<ModalDeleteCertificate
+								id={id}
+								onSuccess={() => setOpen(false)}
+							/>
+							<ModalEditCertificate />
+						</div>
+					</DialogFooter>
+				</ProtectedComponent>
 			</DialogContent>
 		</Dialog>
 	)

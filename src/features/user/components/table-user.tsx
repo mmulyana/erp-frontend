@@ -12,6 +12,8 @@ import { useUpdateUser } from '../api/use-update-user'
 import ModalEditUser from './modal-edit-user'
 import { useUsers } from '../api/use-users'
 import DialogResetPassword from './dialog-reset-password'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function TableUser() {
 	const queryClient = useQueryClient()
@@ -61,22 +63,24 @@ export default function TableUser() {
 			header: 'Status',
 			cell: ({ row }) => (
 				<div className='w-[120px]'>
-					<ToggleSwitch
-						value={row.original.active}
-						label={{ true: 'Aktif', false: 'Nonaktif' }}
-						onCheck={(val) => {
-							mutate(
-								{ id: row.original.id, active: val },
-								{
-									onSuccess: () => {
-										queryClient.invalidateQueries({
-											queryKey: [keys.user],
-										})
-									},
-								}
-							)
-						}}
-					/>
+					<ProtectedComponent required={[permissions.user_update]}>
+						<ToggleSwitch
+							value={row.original.active}
+							label={{ true: 'Aktif', false: 'Nonaktif' }}
+							onCheck={(val) => {
+								mutate(
+									{ id: row.original.id, active: val },
+									{
+										onSuccess: () => {
+											queryClient.invalidateQueries({
+												queryKey: [keys.user],
+											})
+										},
+									}
+								)
+							}}
+						/>
+					</ProtectedComponent>
 				</div>
 			),
 		},
@@ -84,8 +88,12 @@ export default function TableUser() {
 			id: 'action',
 			cell: ({ row }) => (
 				<div className='flex gap-4 items-center'>
-					<DialogResetPassword id={row.original.id} />
-					<ModalEditUser id={row.original.id} />
+					<ProtectedComponent required={[permissions.user_reset_password]}>
+						<DialogResetPassword id={row.original.id} />
+					</ProtectedComponent>
+					<ProtectedComponent required={[permissions.user_update]}>
+						<ModalEditUser id={row.original.id} />
+					</ProtectedComponent>
 				</div>
 			),
 		},

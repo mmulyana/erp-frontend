@@ -25,6 +25,8 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/shared/components/ui/dialog'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 type props = {
 	id?: string
@@ -49,7 +51,9 @@ export default function ProjectLoan({ id }: props) {
 						</p>
 					</div>
 				</div>
-				<ModalAddStockOut id={id} callback={() => refetch()} />
+				<ProtectedComponent required={[permissions.project_borrow_inventory]}>
+					<ModalAddStockOut id={id} callback={() => refetch()} />
+				</ProtectedComponent>
 			</div>
 			<ScrollArea className='mb-4 h-[320px]'>
 				<div className='mt-6 space-y-4'>
@@ -156,6 +160,8 @@ function ModalAddStockOut({ id, callback }: props & { callback?: () => void }) {
 	const form = useForm<loanForm>({
 		defaultValues: {
 			projectId: id,
+			requestDate: new Date(),
+			requestQuantity: 1,
 		},
 	})
 

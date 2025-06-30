@@ -6,6 +6,8 @@ import SortButton from '@/shared/components/common/sort-button'
 import HeadPage from '@/shared/components/common/head-page'
 import SearchV3 from '@/shared/components/common/search-v3'
 import { DefaultLayout } from '@/shared/layout/default-layout'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function User() {
 	return (
@@ -13,7 +15,11 @@ export default function User() {
 			<HeadPage
 				title='User'
 				subtitle='Kelola data user'
-				action={<ModalAddUser />}
+				action={
+					<ProtectedComponent required={[permissions.user_create]}>
+						<ModalAddUser />
+					</ProtectedComponent>
+				}
 			/>
 
 			<div className='p-6 rounded-xl border borde-border bg-white space-y-6'>
