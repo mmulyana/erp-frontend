@@ -22,6 +22,9 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/shared/components/ui/dialog'
+import { formatThousands } from '@/shared/utils'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 type props = {
 	id?: string
@@ -63,6 +66,16 @@ export default function ProjectStockOut({ id }: props) {
 											</div>
 											<p className='text-ink-primary'>{i._count.items}</p>
 										</div>
+										<ProtectedComponent
+											required={[permissions.project_read_value]}
+										>
+											<div>
+												<p className='text-ink-primary/50'>Total</p>
+												<p className='text-ink-primary'>
+													Rp {formatThousands(i.totalPrice)}
+												</p>
+											</div>
+										</ProtectedComponent>
 										<div>
 											<p className='text-ink-primary/50'>Keterangan</p>
 											<p className='text-ink-primary'>{i?.note || '-'}</p>

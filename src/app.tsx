@@ -5,6 +5,7 @@ import LoadingScreen from '@/shared/components/common/loading-screen'
 import ProtectedRoute from '@/shared/utils/protected-route'
 import { paths } from '@/shared/constants/paths'
 import { RoutesConfig } from '@/shared/types'
+import { permissions } from './shared/constants/permissions'
 
 const NotFound = lazy(() => import('./pages/not-found'))
 const Login = lazy(() => import('./pages/login'))
@@ -56,8 +57,9 @@ const Account = lazy(() => import('./pages/account'))
 const User = lazy(() => import('./pages/admin/user'))
 const Role = lazy(() => import('./pages/admin/role'))
 const RoleDetail = lazy(() => import('./pages/admin/detail-role'))
+const AccessDenied = lazy(() => import('./pages/access-denied'))
 
-const routes: RoutesConfig[] = [
+export const routes: RoutesConfig[] = [
 	{
 		path: paths.notFound,
 		component: <NotFound />,
@@ -68,9 +70,41 @@ const routes: RoutesConfig[] = [
 		component: <Login />,
 		withoutAuth: true,
 	},
+
+	// hris
 	{
-		path: paths.account,
-		component: <Account />,
+		path: paths.hris,
+		component: <HrisDashboard />,
+	},
+	{
+		path: paths.hrisMasterdataEmployee,
+		component: <Employee />,
+		permission: [permissions.pages_hris_employee],
+	},
+	{
+		path: paths.hrisCashAdvance,
+		component: <CashAdvance />,
+		permission: [permissions.pages_hris_cash_advance],
+	},
+	{
+		path: paths.hrisAttendanceRegular,
+		component: <Regular />,
+		permission: [permissions.pages_hris_attendance],
+	},
+	{
+		path: paths.hrisAttendanceOvertime,
+		component: <Overtime />,
+		permission: [permissions.pages_hris_overtime],
+	},
+	{
+		path: paths.hrisPayroll,
+		component: <Payroll />,
+		permission: [permissions.pages_hris_payroll],
+	},
+	{
+		path: paths.hrisSalarySlip,
+		component: <SalarySlip />,
+		permission: [permissions.pages_hris_slip_gaji],
 	},
 
 	// project
@@ -81,76 +115,17 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.projectMasterdataProjects,
 		component: <Projects />,
-	},
-	{
-		path: paths.projectMasterdataProjectsDetail,
-		component: <DetailProject />,
+		permission: [permissions.pages_project_list],
 	},
 	{
 		path: paths.projectMasterdataClient,
 		component: <Client />,
-	},
-	{
-		path: paths.projectMasterdataClientDetail,
-		component: <DetailClient />,
+		permission: [permissions.pages_project_client],
 	},
 	{
 		path: paths.projectMasterdataClientCompany,
 		component: <Company />,
-	},
-	{
-		path: paths.projectMasterdataClientCompanyDetail,
-		component: <DetailCompany />,
-	},
-	{
-		path: paths.projectNew,
-		component: <ProjectNew />,
-	},
-
-	// hris
-	{
-		path: paths.hris,
-		component: <HrisDashboard />,
-	},
-	{
-		path: paths.hrisMasterdataEmployee,
-		component: <Employee />,
-	},
-	{
-		path: paths.hrisMasterdataEmployeeCreate,
-		component: <NewEmployee />,
-	},
-	{
-		path: paths.hrisMasterdataEmployeeDetail,
-		component: <DetailEmployee />,
-	},
-	{
-		path: paths.hrisCashAdvance,
-		component: <CashAdvance />,
-	},
-	{
-		path: paths.hrisCashAdvanceDetail,
-		component: <CashAdvanceDetail />,
-	},
-	{
-		path: paths.hrisAttendanceRegular,
-		component: <Regular />,
-	},
-	{
-		path: paths.hrisAttendanceOvertime,
-		component: <Overtime />,
-	},
-	{
-		path: paths.hrisPayroll,
-		component: <Payroll />,
-	},
-	{
-		path: paths.hrisPayrollDetail,
-		component: <PayrollDetail />,
-	},
-	{
-		path: paths.hrisSalarySlip,
-		component: <SalarySlip />,
+		permission: [permissions.pages_project_client_company],
 	},
 
 	// inventory
@@ -161,84 +136,136 @@ const routes: RoutesConfig[] = [
 	{
 		path: paths.inventoryMasterdataItem,
 		component: <Item />,
+		permission: [permissions.pages_inventory_item],
+	},
+	{
+		path: paths.inventoryMasterdataBrand,
+		component: <Brand />,
+		permission: [permissions.pages_inventory_brand],
+	},
+	{
+		path: paths.inventoryMasterdataLocation,
+		component: <Location />,
+		permission: [permissions.pages_inventory_warehouse],
+	},
+	{
+		path: paths.inventoryMasterdataSupplier,
+		component: <Supplier />,
+		permission: [permissions.pages_inventory_supplier],
+	},
+	{
+		path: paths.inventoryStockIn,
+		component: <StockIn />,
+		permission: [permissions.pages_inventory_stock_in],
+	},
+	{
+		path: paths.inventoryStockOut,
+		component: <StockOut />,
+		permission: [permissions.pages_inventory_stock_out],
+	},
+	{
+		path: paths.inventoryStockLoan,
+		component: <Loan />,
+		permission: [permissions.pages_inventory_stock_borrow],
+	},
+	{
+		path: paths.adminUser,
+		component: <User />,
+		permission: [permissions.pages_admin_user],
+	},
+	{
+		path: paths.adminRole,
+		component: <Role />,
+		permission: [permissions.pages_admin_role],
+	},
+
+	{
+		path: paths.account,
+		component: <Account />,
+	},
+
+	{
+		path: paths.accessDenied,
+		component: <AccessDenied />,
+		withoutAuth: true,
+	},
+	{
+		path: paths.projectNew,
+		component: <ProjectNew />,
+		permission: [permissions.project_create],
+	},
+
+	{
+		path: paths.adminRoleDetail,
+		component: <RoleDetail />,
+	},
+	{
+		path: paths.projectMasterdataProjectsDetail,
+		component: <DetailProject />,
+	},
+	{
+		path: paths.projectMasterdataClientDetail,
+		component: <DetailClient />,
+	},
+	{
+		path: paths.projectMasterdataClientCompanyDetail,
+		component: <DetailCompany />,
 	},
 	{
 		path: paths.inventoryMasterdataItemDetail,
 		component: <ItemDetail />,
 	},
 	{
-		path: paths.inventoryMasterdataBrand,
-		component: <Brand />,
-	},
-	{
 		path: paths.inventoryMasterdataBrandDetail,
 		component: <BrandDetail />,
-	},
-	{
-		path: paths.inventoryMasterdataLocation,
-		component: <Location />,
 	},
 	{
 		path: paths.inventoryMasterdataLocationDetail,
 		component: <LocationDetail />,
 	},
 	{
-		path: paths.inventoryMasterdataSupplier,
-		component: <Supplier />,
-	},
-	{
 		path: paths.inventoryMasterdataSupplierDetail,
 		component: <SupplierDetail />,
-	},
-	{
-		path: paths.inventoryStockIn,
-		component: <StockIn />,
 	},
 	{
 		path: paths.inventoryStockInDetail,
 		component: <StockInDetail />,
 	},
 	{
-		path: paths.inventoryStockInNew,
-		component: <NewStockIn />,
-	},
-	{
-		path: paths.inventoryStockOut,
-		component: <StockOut />,
-	},
-	{
-		path: paths.inventoryStockOutNew,
-		component: <NewStockOut />,
-	},
-	{
 		path: paths.inventoryStockOutDetail,
 		component: <StockOutDetail />,
-	},
-	{
-		path: paths.inventoryStockLoan,
-		component: <Loan />,
 	},
 	{
 		path: paths.inventoryStockLoanDetail,
 		component: <LoanDetail />,
 	},
 	{
+		path: paths.hrisMasterdataEmployeeDetail,
+		component: <DetailEmployee />,
+	},
+	{
+		path: paths.hrisCashAdvanceDetail,
+		component: <CashAdvanceDetail />,
+	},
+	{
+		path: paths.hrisPayrollDetail,
+		component: <PayrollDetail />,
+	},
+	{
+		path: paths.inventoryStockInNew,
+		component: <NewStockIn />,
+	},
+	{
+		path: paths.hrisMasterdataEmployeeCreate,
+		component: <NewEmployee />,
+	},
+	{
+		path: paths.inventoryStockOutNew,
+		component: <NewStockOut />,
+	},
+	{
 		path: paths.inventoryStockLoanNew,
 		component: <NewLoan />,
-	},
-
-	// admin
-	{
-		path: paths.adminUser,
-		component: <User />,
-	},
-	{
-		path: paths.adminRole,
-		component: <Role />,
-	},
-	{
-		path: paths.adminRoleDetail,
-		component: <RoleDetail />,
 	},
 ]
 

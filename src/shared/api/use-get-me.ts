@@ -7,12 +7,13 @@ import http from '@/shared/utils/http'
 import { IApi } from '../types'
 import { User } from '../types/api'
 
-export const useGetme = () => {
+export const useGetme = ({ enabled }: { enabled: boolean }) => {
 	return useQuery({
 		queryKey: [keys.me],
 		queryFn: async (): Promise<IApi<User>> => {
 			const { data } = await http(urls.me)
 			return data
 		},
+		enabled,
 	})
 }

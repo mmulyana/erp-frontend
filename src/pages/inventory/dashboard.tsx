@@ -10,6 +10,8 @@ import PieLoan from '@/features/inventory/loan/components/pie-loan'
 import { DefaultLayout } from '@/shared/layout/default-layout'
 import { useWeek } from '@/shared/hooks/use-week'
 import TotalData from '@/features/inventory/dashboard/components/total-data'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function DashboardInventory() {
 	const { startOfWeek, endOfWeek } = useWeek()
@@ -24,21 +26,23 @@ export default function DashboardInventory() {
 			className='grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-6'
 			module='inventory'
 		>
-			<div className='space-y-6'>
-				<div className='h-fit space-y-6'>
-					<TotalData />
-					<div className='flex justify-end'>
-						<DateRangePicker />
+			<ProtectedComponent required={[permissions.pages_inventory_dashboard]}>
+				<div className='space-y-6'>
+					<div className='h-fit space-y-6'>
+						<TotalData />
+						<div className='flex justify-end'>
+							<DateRangePicker />
+						</div>
+						<LineTransaction startDate={startDate} endDate={endDate} />
+						<TableTransaction startDate={startDate} endDate={endDate} />
 					</div>
-					<LineTransaction startDate={startDate} endDate={endDate} />
-					<TableTransaction startDate={startDate} endDate={endDate} />
 				</div>
-			</div>
-			<div className='space-y-6'>
-				<ItemAvailability />
-				<ItemDueSoon />
-				<PieLoan />
-			</div>
+				<div className='space-y-6'>
+					<ItemAvailability />
+					<ItemDueSoon />
+					<PieLoan />
+				</div>
+			</ProtectedComponent>
 		</DefaultLayout>
 	)
 }

@@ -10,6 +10,8 @@ import { PayType } from '@/shared/types/api'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditPosition from './modal-edit-position'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function CardPosition() {
 	const { data, isPending } = useDetailEmployee()
@@ -65,32 +67,34 @@ export default function CardPosition() {
 					</LoaderWrapper>
 				</div>
 				<div className='gap-6 flex justify-between'>
-					<LoaderWrapper isLoading={isPending}>
-						<CardData
-							title={
-								isDaily ? 'Gaji pokok (per hari)' : 'Gaji pokok (per bulan)'
-							}
-							value={
-								data?.salary
-									? data?.salary > 0
-										? formatToRupiah(data.salary)
+					<ProtectedComponent required={[permissions.employee_read_salary]}>
+						<LoaderWrapper isLoading={isPending}>
+							<CardData
+								title={
+									isDaily ? 'Gaji pokok (per hari)' : 'Gaji pokok (per bulan)'
+								}
+								value={
+									data?.salary
+										? data?.salary > 0
+											? formatToRupiah(data.salary)
+											: 0
 										: 0
-									: 0
-							}
-						/>
-					</LoaderWrapper>
-					<LoaderWrapper isLoading={isPending}>
-						<CardData
-							title='Gaji lemburan (per jam)'
-							value={
-								data?.overtimeSalary
-									? data?.overtimeSalary > 0
-										? formatToRupiah(data.overtimeSalary)
+								}
+							/>
+						</LoaderWrapper>
+						<LoaderWrapper isLoading={isPending}>
+							<CardData
+								title='Gaji lemburan (per jam)'
+								value={
+									data?.overtimeSalary
+										? data?.overtimeSalary > 0
+											? formatToRupiah(data.overtimeSalary)
+											: 0
 										: 0
-									: 0
-							}
-						/>
-					</LoaderWrapper>
+								}
+							/>
+						</LoaderWrapper>
+					</ProtectedComponent>
 				</div>
 			</CardV1>
 		</>

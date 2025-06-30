@@ -10,6 +10,8 @@ import ReminderCertif from '@/features/hris/dashboard/components/reminder-certif
 import ReminderSafety from '@/features/hris/dashboard/components/reminder-safety'
 import TotalEmployee from '@/features/hris/employee/components/total-employee'
 import { useWeek } from '@/shared/hooks/use-week'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function DashboardHris() {
 	const { startOfWeek, endOfWeek } = useWeek()
@@ -21,21 +23,23 @@ export default function DashboardHris() {
 
 	return (
 		<DefaultLayout module='hris'>
-			<div className='grid grid-cols-1 xl:grid-cols-3 gap-6'>
-				<div className='col-span-1 xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit'>
-					<TotalEmployee />
-					<TotalAttendance />
-					<div className='col-span-2 flex justify-end pb-2'>
-						<DateRangePicker startDate={startDate} endDate={endDate} />
+			<ProtectedComponent required={[permissions.pages_hris_dashboard]}>
+				<div className='grid grid-cols-1 xl:grid-cols-3 gap-6'>
+					<div className='col-span-1 xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit'>
+						<TotalEmployee />
+						<TotalAttendance />
+						<div className='col-span-2 flex justify-end pb-2'>
+							<DateRangePicker startDate={startDate} endDate={endDate} />
+						</div>
+						<BarRegular startDate={startDate} endDate={endDate} />
+						<BarOvertime startDate={startDate} endDate={endDate} />
 					</div>
-					<BarRegular startDate={startDate} endDate={endDate} />
-					<BarOvertime startDate={startDate} endDate={endDate} />
+					<div className='space-y-4'>
+						<ReminderSafety />
+						<ReminderCertif />
+					</div>
 				</div>
-				<div className='space-y-4'>
-					<ReminderSafety />
-					<ReminderCertif />
-				</div>
-			</div>
+			</ProtectedComponent>
 		</DefaultLayout>
 	)
 }

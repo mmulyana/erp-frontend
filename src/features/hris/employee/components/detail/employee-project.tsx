@@ -26,14 +26,13 @@ export default function EmployeeProject() {
 		sortBy,
 		sortOrder,
 	})
-	console.log('data', data)
 
 	const column: ColumnDef<AssignedEmployee>[] = [
 		{
 			header: 'Nama',
 			cell: ({ row }) => (
 				<Link
-					to={`${paths.projectMasterdataProjects}/${row.original.projectId}`}
+					to={`${paths.projectMasterdataProjects}/${row.original.project.id}`}
 					className='flex gap-2 items-center'
 				>
 					{row.original.project.name}

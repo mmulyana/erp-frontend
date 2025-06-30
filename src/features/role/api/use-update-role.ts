@@ -4,10 +4,9 @@ import { toast } from 'sonner'
 
 import { urls } from '@/shared/constants/urls'
 import { keys } from '@/shared/constants/keys'
-import { IApi } from '@/shared/types'
-
-import http from '@/shared/utils/http'
 import { Role } from '@/shared/types/api'
+import { IApi } from '@/shared/types'
+import http from '@/shared/utils/http'
 
 export const useUpdateRole = () => {
 	const queryClient = useQueryClient()
@@ -20,6 +19,7 @@ export const useUpdateRole = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [keys.roles] })
+			queryClient.invalidateQueries({ queryKey: [keys.me] })
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

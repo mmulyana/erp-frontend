@@ -89,7 +89,7 @@ export default function ProjectAttachment({
 					/>
 				}
 				style={{
-					content: 'p-0'
+					content: 'p-0',
 				}}
 			>
 				<ScrollArea className='h-[280px] pt-2 px-4'>
@@ -184,7 +184,9 @@ export default function ProjectAttachment({
 					<ProtectedComponent
 						required={[permissions.project_upload_attachment]}
 					>
-						<ModalAttachment />
+						<div className='p-4'>
+							<ModalAttachment />
+						</div>
 					</ProtectedComponent>
 				)}
 			</CardV1>
@@ -228,7 +230,6 @@ function ModalAttachment() {
 	}, [fileWatch])
 
 	const submit = (payload: AttachmentForm) => {
-		console.log('submit', payload)
 		mutate(payload, {
 			onSuccess: handleFormSuccess(setOpen, () => {
 				form.reset(defaultValues)

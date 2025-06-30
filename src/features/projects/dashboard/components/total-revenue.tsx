@@ -13,6 +13,8 @@ import {
 	SelectValue,
 } from '@/shared/components/ui/select'
 import { useTotalNetValue } from '../../project/api/use-total-net-value'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function TotalRevenue() {
 	const [selectedMonth, setSelectedMonth] = useState<number | null>(
@@ -49,32 +51,36 @@ export default function TotalRevenue() {
 			}
 		>
 			<div className='flex justify-between items-end mt-4'>
-				<div>
-					<div className='flex gap-1.5 items-center'>
-						<div className='flex items-end gap-1'>
-							<p className='text-ink-primary/50 text-lg'>Rp</p>
-							<p className='text-2xl font-medium text-ink-primary'>
-								{formatThousands(data?.data?.current)}
-							</p>
+				<ProtectedComponent required={[permissions.project_read_value]}>
+					<div>
+						<div className='flex gap-1.5 items-center'>
+							<div className='flex items-end gap-1'>
+								<p className='text-ink-primary/50 text-lg'>Rp</p>
+								<p className='text-2xl font-medium text-ink-primary'>
+									{formatThousands(data?.data?.current)}
+								</p>
+							</div>
+							<div
+								className={cn(
+									'rounded-full flex text-xs px-1.5 py-0.5 gap-1',
+									percentage > 0
+										? 'bg-success/10 text-success'
+										: 'bg-error/10 text-error'
+								)}
+							>
+								{percentage > 0 ? (
+									<TrendingUp size={16} />
+								) : (
+									<TrendingDown size={16} />
+								)}
+								<p>{percentage}%</p>
+							</div>
 						</div>
-						<div
-							className={cn(
-								'rounded-full flex text-xs px-1.5 py-0.5 gap-1',
-								percentage > 0
-									? 'bg-success/10 text-success'
-									: 'bg-error/10 text-error'
-							)}
-						>
-							{percentage > 0 ? (
-								<TrendingUp size={16} />
-							) : (
-								<TrendingDown size={16} />
-							)}
-							<p>{percentage}%</p>
-						</div>
+						<p className='text-sm text-ink-primary/50'>
+							Dibanding bulan kemarin
+						</p>
 					</div>
-					<p className='text-sm text-ink-primary/50'>Dibanding bulan kemarin</p>
-				</div>
+				</ProtectedComponent>
 			</div>
 		</CardV1>
 	)

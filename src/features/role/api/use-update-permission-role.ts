@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'sonner'
 
@@ -7,8 +7,10 @@ import { IApi } from '@/shared/types'
 
 import http from '@/shared/utils/http'
 import { Role } from '@/shared/types/api'
+import { keys } from '@/shared/constants/keys'
 
 export const useUpdatePermissionRole = () => {
+	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: async (payload: {
 			id: string
@@ -17,6 +19,7 @@ export const useUpdatePermissionRole = () => {
 			return await http.patch(`${urls.role}/${payload.id}`, payload)
 		},
 		onSuccess: (data) => {
+			queryClient.invalidateQueries({ queryKey: [keys.me] })
 			toast.success(data.data.message)
 		},
 		onError: (error: AxiosError<any>) => {

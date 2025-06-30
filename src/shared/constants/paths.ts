@@ -4,6 +4,7 @@ export const paths = {
 	forgot: '/forgot',
 	notFound: '*',
 	account: '/account',
+	accessDenied: '/access-denied',
 
 	hris: '/hris',
 	hrisMasterdataEmployee: '/hris/masterdata/employee',

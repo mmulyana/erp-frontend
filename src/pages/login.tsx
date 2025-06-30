@@ -1,14 +1,19 @@
 import useProtected from '@/features/auth/hooks/use-protected'
 import LoginForm from '@/features/auth/component/login-form'
 import { useSearchParams } from 'react-router-dom'
+import LoadingState from '@/shared/components/common/loading-state'
 
 export default function LoginPage() {
-	useProtected()
+	const { loading } = useProtected()
 
 	const [searchParams] = useSearchParams()
 
 	const mode = searchParams.get('mode')
 	const guestMode = mode === 'GUEST'
+
+	if (loading) {
+		return <LoadingState />
+	}
 
 	return (
 		<>

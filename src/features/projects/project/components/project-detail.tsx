@@ -14,6 +14,8 @@ import { statusBadges } from '../constant/types'
 import { useProject } from '../api/use-project'
 import ModalEditProject from './modal-edit-project'
 import Priority from './priority'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 export default function ProjectDetail({ id }: { id?: string }) {
 	const { data, isPending } = useProject({ id })
@@ -25,12 +27,14 @@ export default function ProjectDetail({ id }: { id?: string }) {
 			style={{ content: 'space-y-4 pt-4', card: 'relative' }}
 			action={<ModalEditProject variant='detail' />}
 		>
-			<div className='flex justify-between items-center'>
-				<p className='text-ink-light'>Nilai Proyek</p>
-				<LoaderWrapper isLoading={isPending}>
-					<p>Rp {formatThousands(data?.data?.netValue)}</p>
-				</LoaderWrapper>
-			</div>
+			<ProtectedComponent required={[permissions.project_read_value]}>
+				<div className='flex justify-between items-center'>
+					<p className='text-ink-light'>Nilai Proyek</p>
+					<LoaderWrapper isLoading={isPending}>
+						<p>Rp {formatThousands(data?.data?.netValue)}</p>
+					</LoaderWrapper>
+				</div>
+			</ProtectedComponent>
 			<div className='flex justify-between items-center'>
 				<p className='text-ink-light'>Progress</p>
 				<LoaderWrapper isLoading={isPending}>
@@ -39,12 +43,16 @@ export default function ProjectDetail({ id }: { id?: string }) {
 					/>
 				</LoaderWrapper>
 			</div>
-			<div className='flex justify-between items-center'>
-				<p className='text-ink-light'>Progress Pembayaran</p>
-				<LoaderWrapper isLoading={isPending}>
-					<ProgressPercentage percentage={data?.data?.paymentPercentage || 0} />
-				</LoaderWrapper>
-			</div>
+			<ProtectedComponent required={[permissions.project_read_value]}>
+				<div className='flex justify-between items-center'>
+					<p className='text-ink-light'>Progress Pembayaran</p>
+					<LoaderWrapper isLoading={isPending}>
+						<ProgressPercentage
+							percentage={data?.data?.paymentPercentage || 0}
+						/>
+					</LoaderWrapper>
+				</div>
+			</ProtectedComponent>
 			<div className='flex justify-between items-center'>
 				<p className='text-ink-light'>Prioritas</p>
 				<Priority value={data?.data?.priority as string} />

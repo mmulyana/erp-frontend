@@ -1,14 +1,17 @@
-import { usePagination } from '@/shared/hooks/use-pagination'
-import { useUsers } from '../api/use-users'
-import { ColumnDef } from '@tanstack/react-table'
-import { User } from '@/shared/types/api'
-import PhotoUrl from '@/shared/components/common/photo-url'
-import { DataTable } from '@/shared/components/common/data-table'
-import ToggleSwitch from '@/shared/components/common/toggle-switch'
-import ModalEditUser from './modal-edit-user'
-import { useUpdateUser } from '../api/use-update-user'
 import { useQueryClient } from '@tanstack/react-query'
+import { ColumnDef } from '@tanstack/react-table'
+
+import ToggleSwitch from '@/shared/components/common/toggle-switch'
+import { DataTable } from '@/shared/components/common/data-table'
+import { usePagination } from '@/shared/hooks/use-pagination'
+import PhotoUrl from '@/shared/components/common/photo-url'
 import { keys } from '@/shared/constants/keys'
+import { User } from '@/shared/types/api'
+
+import { useUpdateUser } from '../api/use-update-user'
+import ModalEditUser from './modal-edit-user'
+import { useUsers } from '../api/use-users'
+import DialogResetPassword from './dialog-reset-password'
 
 export default function TableUser() {
 	const queryClient = useQueryClient()
@@ -79,7 +82,12 @@ export default function TableUser() {
 		},
 		{
 			id: 'action',
-			cell: ({ row }) => <ModalEditUser id={row.original.id} />,
+			cell: ({ row }) => (
+				<div className='flex gap-4 items-center'>
+					<DialogResetPassword id={row.original.id} />
+					<ModalEditUser id={row.original.id} />
+				</div>
+			),
 		},
 	]
 

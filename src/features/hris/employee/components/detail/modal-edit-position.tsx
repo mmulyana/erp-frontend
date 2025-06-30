@@ -30,6 +30,8 @@ import { useUpdateEmployee } from '../../api/use-update-employee'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
 import { cn } from '@/shared/utils/cn'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 
 const options = [
 	{
@@ -134,76 +136,78 @@ export default function ModalEditPosition() {
 							)}
 						/>
 
-						<FormField
-							control={form.control}
-							name='salary'
-							render={({ field }) => {
-								const usedField = { ...field }
-								delete (usedField as any).onChange
+						<ProtectedComponent required={[permissions.employee_read_salary]}>
+							<FormField
+								control={form.control}
+								name='salary'
+								render={({ field }) => {
+									const usedField = { ...field }
+									delete (usedField as any).onChange
 
-								return (
-									<FormItem>
-										<FormLabel>
-											Gaji pokok{' '}
-											<span className='text-ink-light'>(per hari)</span>
-										</FormLabel>
-										<FormControl>
-											<div className='relative'>
-												<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
-													Rp
+									return (
+										<FormItem>
+											<FormLabel>
+												Gaji pokok{' '}
+												<span className='text-ink-light'>(per hari)</span>
+											</FormLabel>
+											<FormControl>
+												<div className='relative'>
+													<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
+														Rp
+													</div>
+													<NumericFormat
+														type='text'
+														thousandSeparator='.'
+														decimalSeparator=','
+														customInput={Input}
+														className='h-10 w-full pl-12'
+														{...usedField}
+														onValueChange={(values) => {
+															field.onChange(Number(values.value))
+														}}
+													/>
 												</div>
-												<NumericFormat
-													type='text'
-													thousandSeparator='.'
-													decimalSeparator=','
-													customInput={Input}
-													className='h-10 w-full pl-12'
-													{...usedField}
-													onValueChange={(values) => {
-														field.onChange(Number(values.value))
-													}}
-												/>
-											</div>
-										</FormControl>
-									</FormItem>
-								)
-							}}
-						/>
-						<FormField
-							control={form.control}
-							name='overtimeSalary'
-							render={({ field }) => {
-								const usedField = { ...field }
-								delete (usedField as any).onChange
+											</FormControl>
+										</FormItem>
+									)
+								}}
+							/>
+							<FormField
+								control={form.control}
+								name='overtimeSalary'
+								render={({ field }) => {
+									const usedField = { ...field }
+									delete (usedField as any).onChange
 
-								return (
-									<FormItem>
-										<FormLabel>
-											Gaji Lembur{' '}
-											<span className='text-ink-light'>(per jam)</span>
-										</FormLabel>
-										<FormControl>
-											<div className='relative'>
-												<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
-													Rp
+									return (
+										<FormItem>
+											<FormLabel>
+												Gaji Lembur{' '}
+												<span className='text-ink-light'>(per jam)</span>
+											</FormLabel>
+											<FormControl>
+												<div className='relative'>
+													<div className='absolute top-1/2 -translate-y-1/2 px-3 left-[1px] border-r border-border h-[calc(100%-2px)] flex justify-center items-center select-none text-sm text-ink-secondary font-medium'>
+														Rp
+													</div>
+													<NumericFormat
+														type='text'
+														thousandSeparator='.'
+														decimalSeparator=','
+														customInput={Input}
+														className='h-10 w-full pl-12'
+														{...usedField}
+														onValueChange={(values) => {
+															field.onChange(Number(values.value))
+														}}
+													/>
 												</div>
-												<NumericFormat
-													type='text'
-													thousandSeparator='.'
-													decimalSeparator=','
-													customInput={Input}
-													className='h-10 w-full pl-12'
-													{...usedField}
-													onValueChange={(values) => {
-														field.onChange(Number(values.value))
-													}}
-												/>
-											</div>
-										</FormControl>
-									</FormItem>
-								)
-							}}
-						/>
+											</FormControl>
+										</FormItem>
+									)
+								}}
+							/>
+						</ProtectedComponent>
 						<FormField
 							control={form.control}
 							name='payType'

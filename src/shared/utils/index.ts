@@ -101,3 +101,11 @@ export const delay = <T extends any[]>(
 		callback(...args)
 	}, ms)
 }
+
+export const hasAnyPermission = (
+	userPermissions: string[],
+	required?: string[]
+) => {
+	if (!required || required.length === 0) return true
+	return required.some((perm) => userPermissions.includes(perm))
+}

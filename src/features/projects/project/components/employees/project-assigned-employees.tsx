@@ -1,6 +1,6 @@
-import { differenceInDays, format } from 'date-fns'
 import { Link } from 'react-router-dom'
 import { Users } from 'lucide-react'
+import { format } from 'date-fns'
 import { useState } from 'react'
 
 import EmptyState from '@/shared/components/common/empty-state'
@@ -8,15 +8,15 @@ import SearchV3 from '@/shared/components/common/search-v3'
 import PhotoUrl from '@/shared/components/common/photo-url'
 import CardV1 from '@/shared/components/common/card-v1'
 
+import ProtectedComponent from '@/shared/components/common/protected'
 import { ScrollArea } from '@/shared/components/ui/scroll-area'
+import { permissions } from '@/shared/constants/permissions'
 import { paths } from '@/shared/constants/paths'
 
 import ModalAssignedDetail from './modal-assigned-detail'
 import ModalAssignedAdd from './modal-assigned-add'
-import { useProjectEmployees } from '../../api/employees/use-project-employees'
 import { ModalCost } from './modal-cost'
-import ProtectedComponent from '@/shared/components/common/protected'
-import { permissions } from '@/shared/constants/permissions'
+import { useProjectEmployees } from '../../api/employees/use-project-employees'
 
 export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 	const [search, setSearch] = useState('')
@@ -87,10 +87,17 @@ export default function ProjectAssignedEmployees({ id }: { id?: string }) {
 					})}
 				</div>
 			</ScrollArea>
-			<ProtectedComponent required={[permissions.project_assignee]}>
+			<ProtectedComponent
+				required={[
+					permissions.project_assignee,
+					permissions.project_read_value,
+				]}
+			>
 				<div className='mt-4 space-y-4'>
 					<ModalAssignedAdd id={id} />
-					<ModalCost />
+					<ProtectedComponent required={[permissions.project_read_value]}>
+						<ModalCost />
+					</ProtectedComponent>
 				</div>
 			</ProtectedComponent>
 		</CardV1>

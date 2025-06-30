@@ -26,7 +26,7 @@ export default function ProtectedRoute({
 
 	const [id, setId] = useState<number | undefined>(undefined)
 
-	const { data: account, isLoading } = useGetme()
+	const { data: account, isLoading } = useGetme({ enabled: !!id })
 
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)

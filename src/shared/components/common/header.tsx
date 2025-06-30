@@ -1,5 +1,5 @@
 import { ChevronsUpDown, Power, User } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 
 import { CommandSearch } from '@/features/command/components/command-search'
@@ -45,7 +45,7 @@ export default function Header() {
 		>
 			<div className='flex gap-2 md:gap-8 items-center'>
 				{isMobile && <SidebarTrigger />}
-				<div className='flex gap-2 items-center'>
+				<Link to='/' className='flex gap-2 items-center'>
 					<img src='/images/logo.png' className='w-8 h-8' />
 					<div className='gap-1 items-center hidden md:flex'>
 						<p className='font-medium text-[#2D2F36]'>Barokah</p>
@@ -53,7 +53,7 @@ export default function Header() {
 							ERP
 						</span>
 					</div>
-				</div>
+				</Link>
 				{!isMobile && <TopNavigation />}
 			</div>
 

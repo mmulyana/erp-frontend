@@ -1,21 +1,22 @@
 import { useForm } from 'react-hook-form'
+import { useAtomValue } from 'jotai'
 import { Lock } from 'lucide-react'
 
 import InputPassword from '@/shared/components/fields/password-field'
+import ButtonSubmit from '@/shared/components/common/button-submit'
 import CardV1 from '@/shared/components/common/card-v1'
 import { Button } from '@/shared/components/ui/button'
-import { Form } from '@/shared/components/ui/form'
-import { PasswordForm } from '../types'
-import { useChangePassword } from '../api/use-change-password'
-import { useAtomValue } from 'jotai'
-import { userAtom } from '@/shared/store/auth'
 import { handleFormError } from '@/shared/utils/form'
-import ButtonSubmit from '@/shared/components/common/button-submit'
+import { Form } from '@/shared/components/ui/form'
+import { userAtom } from '@/shared/store/auth'
+
+import { useChangePassword } from '../api/use-change-password'
+import { PasswordForm } from '../types'
 
 export default function FormReset() {
 	const user = useAtomValue(userAtom)
 	const { mutate, isPending } = useChangePassword()
-	const isGuest = user.username === 'GUEST'
+	const isGuest = user?.username === 'GUEST'
 
 	const form = useForm<PasswordForm>({
 		defaultValues: {

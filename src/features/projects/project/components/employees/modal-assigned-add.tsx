@@ -33,7 +33,7 @@ export default function ModalAssignedAdd({ id }: { id?: string }) {
 			{
 				employeeId: data.employeeId,
 				projectId: id,
-				startDate: new Date().toDateString(),
+				startDate: data.startDate.toDateString(),
 			},
 			{
 				onSuccess: () => {
@@ -61,6 +61,7 @@ export default function ModalAssignedAdd({ id }: { id?: string }) {
 					onSubmit={submit}
 					variant='add'
 					isPending={isPending}
+					open={open}
 				/>
 			</DialogContent>
 		</Dialog>

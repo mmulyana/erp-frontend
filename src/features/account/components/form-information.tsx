@@ -1,10 +1,15 @@
 import { useForm } from 'react-hook-form'
+import { useAtomValue } from 'jotai'
 import { User } from 'lucide-react'
+import { useEffect } from 'react'
 
-import CardV1 from '@/shared/components/common/card-v1'
 import { ImageUpload } from '@/shared/components/common/image-upload'
-import { Button } from '@/shared/components/ui/button'
+import ButtonSubmit from '@/shared/components/common/button-submit'
+import CardV1 from '@/shared/components/common/card-v1'
+import { handleFormError } from '@/shared/utils/form'
 import { Input } from '@/shared/components/ui/input'
+import { useGetme } from '@/shared/api/use-get-me'
+import { userAtom } from '@/shared/store/auth'
 import {
 	Form,
 	FormControl,
@@ -13,17 +18,14 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/shared/components/ui/form'
+
 import { useUpdateInfo } from '../api/use-update-info'
 import { UserForm } from '../types'
-import { useAtomValue } from 'jotai'
-import { userAtom } from '@/shared/store/auth'
-import { handleFormError } from '@/shared/utils/form'
-import { useEffect } from 'react'
-import { baseUrl } from '@/shared/constants/urls'
-import ButtonSubmit from '@/shared/components/common/button-submit'
 
 export default function FormInformation() {
 	const user = useAtomValue(userAtom)
+
+	const { data: account } = useGetme({ enabled: true })
 	const { mutate, isPending } = useUpdateInfo()
 
 	const form = useForm<UserForm>({
@@ -36,18 +38,18 @@ export default function FormInformation() {
 	})
 
 	useEffect(() => {
-		if (user) {
+		if (account && account?.data) {
 			form.reset({
-				username: user?.username,
-				email: user?.email,
-				phone: user?.phone,
-				photoUrl: user?.photoUrl,
+				username: account.data.username,
+				email: account.data.email,
+				phone: account.data.phone,
+				photoUrl: account.data.photoUrl,
 			})
 		}
-	}, [user])
+	}, [account])
 
 	const photoWatch = form.watch('photoUrl')
-	const isGuest = user.username === 'GUEST'
+	const isGuest = user?.username === 'GUEST'
 
 	const onSubmit = (values: UserForm) => {
 		if (!user?.id) return
