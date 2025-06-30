@@ -12,6 +12,7 @@ import {
 	TabsTrigger,
 } from '@/shared/components/ui/tabs'
 import PhotoGrid from '@/shared/components/common/photo-grid'
+import { useEffect } from 'react'
 
 export default function ReportDetail({
 	id,
@@ -27,11 +28,17 @@ export default function ReportDetail({
 
 	const isMobile = useIsMobile()
 
+	useEffect(() => {
+		if (open && isMobile) {
+			document.body.style.pointerEvents = 'auto'
+		}
+	}, [open, isMobile])
+
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={setOpen} modal>
 			<DialogContent
 				className={cn(
-					'min-h-screen md:min-h-min md:h-[80vh] w-full p-0 overflow-hidden',
+					'min-h-screen md:min-h-min md:h-[80vh] w-full p-0 overflow-hidde pointer-events-auto',
 					!!imagesLength && 'max-w-6xl '
 				)}
 				showClose={isMobile}

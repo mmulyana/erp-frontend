@@ -52,7 +52,6 @@ export default function ReportComment({ id }: { id?: string }) {
 	const user = useAtomValue(userAtom)
 
 	const { data } = useReport({ id })
-	const imagesLength = data?.data?.attachments.length || 0
 
 	const [comments, setComments] = useState<Comment[]>([])
 	const [newComment, setNewComment] = useState('')
@@ -153,7 +152,7 @@ export default function ReportComment({ id }: { id?: string }) {
 					<div className='flex gap-3 relative'>
 						<Avatar className='h-8 w-8'>
 							<AvatarImage src={baseUrl + '/' + comment.user.photoUrl} />
-							<AvatarFallback className='uppercase'>
+							<AvatarFallback className='uppercase bg-gray-200'>
 								{comment.user.username[0]}
 							</AvatarFallback>
 						</Avatar>
@@ -227,7 +226,7 @@ export default function ReportComment({ id }: { id?: string }) {
 						>
 							<Avatar className='h-8 w-8'>
 								<AvatarImage src={baseUrl + '/' + user?.photoUrl || ''} />
-								<AvatarFallback className='uppercase font-medium'>
+								<AvatarFallback className='uppercase font-medium bg-gray-200'>
 									{user?.username.at(1)}
 								</AvatarFallback>
 							</Avatar>
@@ -269,7 +268,7 @@ export default function ReportComment({ id }: { id?: string }) {
 	return (
 		<div
 			className={cn(
-				'bg-white flex flex-col h-[calc(100svh-56px)] md:h-full relative'
+				'bg-white flex flex-col h-[calc(100vh-56px)] md:h-full relative'
 			)}
 		>
 			<div className='p-4 border-b'>
@@ -306,14 +305,6 @@ export default function ReportComment({ id }: { id?: string }) {
 					)}
 				</div>
 				<div className='flex gap-4 items-center pl-14 pt-4'>
-					<div className='flex gap-2 items-center'>
-						<MessageSquareMoreIcon size={20} className='text-[#959597]' />
-						<p className='text-[#959597]'>{comments?.length}</p>
-					</div>
-					<div className='flex gap-2 items-center'>
-						<Image size={20} className='text-[#959597]' />
-						<p className='text-[#959597]'>{data?.data?._count.attachments}</p>
-					</div>
 					<div className='flex gap-2 items-center ml-0 md:ml-auto'>
 						<Calendar size={20} className='text-[#959597]' />
 						{data?.data?.createdAt && (
@@ -328,7 +319,7 @@ export default function ReportComment({ id }: { id?: string }) {
 			</div>
 
 			<ScrollArea className='h-full px-4 pb-[72px] bg-gray-50'>
-				<div className='space-y-4 pb-6'>{renderComments(null)}</div>
+				<div className='space-y-6 pb-6'>{renderComments(null)}</div>
 			</ScrollArea>
 
 			<div className='p-4 border-t space-y-2 absolute left-0 bottom-0 w-full bg-white'>
@@ -353,7 +344,7 @@ export default function ReportComment({ id }: { id?: string }) {
 				<div className='flex gap-2'>
 					<Avatar className='h-10 w-10'>
 						<AvatarImage src={baseUrl + '/' + user?.photoUrl || ''} />
-						<AvatarFallback className='uppercase font-medium'>
+						<AvatarFallback className='uppercase font-medium bg-gray-200'>
 							{user?.username.at(1)}
 						</AvatarFallback>
 					</Avatar>

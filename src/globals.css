@@ -171,3 +171,7 @@ h3.tiptap-heading + h2.tiptap-heading {
 	margin: 1.5rem 0;
 	padding-left: 1rem;
 }
+
+.yarl__container {
+  z-index: 9999 !important;
+}

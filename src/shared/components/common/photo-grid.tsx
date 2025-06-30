@@ -39,7 +39,7 @@ export default function PhotoGrid({ urls, style }: Props) {
 
 	return (
 		<>
-			<div className={cn('grid grid-cols-2 gap-4', style?.grid)}>
+			<div className={cn('grid grid-cols-2 gap-4 p-2', style?.grid)}>
 				{images.map((image, index) => (
 					<img
 						key={index}
@@ -50,7 +50,7 @@ export default function PhotoGrid({ urls, style }: Props) {
 							setIsLightboxOpen(true)
 						}}
 						className={cn(
-							'h-32 w-32 object-cover rounded-md cursor-pointer',
+							'h-32 w-full object-cover rounded-md cursor-pointer',
 							style?.img
 						)}
 					/>
