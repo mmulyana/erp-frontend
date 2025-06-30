@@ -195,7 +195,7 @@ export default function ModalProcessPayroll({
 							mutateAsync({
 								cashAdvanceId: index,
 								date: new Date(),
-								note: `Dipotong dari gaji|${id}`,
+								note: `Dipotong dari gaji|---payroll---|${id}`,
 								amount: summary?.cashAdvances.find((i) => i.id === index)
 									?.remaining,
 							})
@@ -374,7 +374,7 @@ export default function ModalProcessPayroll({
 									<p className='text-ink-primary font-medium'>
 										Absensi dan lembur
 									</p>
-									{payType === 'daily' && (
+									{payType === 'daily' && summary && (
 										<div className='flex justify-between items-center'>
 											<div className='flex gap-2 items-center'>
 												<p className='text-ink-primary/50'>Jml hari</p>

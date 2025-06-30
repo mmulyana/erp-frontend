@@ -5,6 +5,7 @@ import { id as ind } from 'date-fns/locale'
 import { format } from 'date-fns'
 
 import ModalDetailCashAdvance from '@/features/hris/cash-advance/components/modal-detail-cash-advance'
+import ModalEditTransaction from '@/features/hris/cash-advance/components/modal-edit-transaction'
 import ModalAddTransaction from '@/features/hris/cash-advance/components/modal-add-transaction'
 import { useCashAdvance } from '@/features/hris/cash-advance/api/use-cash-advance'
 import { useTransactions } from '@/features/hris/cash-advance/api/use-transaction'
@@ -23,7 +24,7 @@ import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { Link as Links } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
-import ModalEditTransaction from '@/features/hris/cash-advance/components/modal-edit-transaction'
+import { DrawerSalarySlip } from '@/features/hris/payroll/components/drawer-salary-slip'
 
 const links: Links[] = [
 	{
@@ -70,33 +71,65 @@ export default function CashAdvanceDetail() {
 			id: 'date',
 			header: 'Tanggal',
 			cell: ({ row }) =>
-				row.original.date &&
-				format(new Date(row.original.date), 'PPP', { locale: ind }),
+				row.original.date && (
+					<p className='text-nowrap'>
+						{format(new Date(row.original.date), 'PPP', { locale: ind })}
+					</p>
+				),
 		},
 		{
 			header: 'Jumlah',
-			cell: ({ row }) => `Rp ${formatThousands(row.original.amount)}`,
+			cell: ({ row }) => (
+				<p className='text-nowrap'>Rp {formatThousands(row.original.amount)}</p>
+			),
 		},
 		{
 			header: 'Sisa',
-			cell: ({ row }) => `Rp ${formatThousands(row.original.remaining)}`,
+			cell: ({ row }) => (
+				<p className='text-nowrap'>
+					Rp {formatThousands(row.original.remaining)}
+				</p>
+			),
 		},
 		{
 			accessorKey: 'note',
 			header: 'Catatan',
+			cell: ({ row }) => {
+				const note = row.getValue('note') || ''
+				const match = (note as string).match(/\|---payroll---\|([^\|]+)/)
+				const payrollId = match ? match[1] : null
+
+				if (payrollId) {
+					return (
+						<div className='flex items-center gap-2'>
+							<p className='text-nowrap'>Dipotong gaji</p>
+							<DrawerSalarySlip id={payrollId} />
+						</div>
+					)
+				}
+
+				return note
+			},
 		},
 		{
 			id: 'action',
 			header: '',
 			cell: ({ row }) => {
-				const { id, amount, date, note, cashAdvanceId } = row.original
+				const { id, amount, date, cashAdvanceId } = row.original
+
+				const note = (row.getValue('note') as string) || ''
+				const match = (note as string).match(/\|---payroll---\|([^\|]+)/)
+				const payrollId = match ? match[1] : null
+
+				if (payrollId) return null
+
 				return (
 					<ModalEditTransaction
 						data={{
 							amount,
 							date,
 							id,
-							note,
+							note: note || '',
 							cashAdvanceId,
 						}}
 					/>

@@ -225,6 +225,7 @@ function ModalAttachment() {
 	}, [fileWatch])
 
 	const submit = (payload: AttachmentForm) => {
+		console.log('submit', payload)
 		mutate(payload, {
 			onSuccess: handleFormSuccess(setOpen, () => {
 				form.reset(defaultValues)

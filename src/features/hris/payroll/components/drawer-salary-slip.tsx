@@ -1,24 +1,22 @@
+import { useMemo, useState } from 'react'
 import { usePDF } from 'react-to-pdf'
-import { useRef, useMemo, useState } from 'react'
+import { Eye } from 'lucide-react'
+import { format } from 'date-fns'
+
+import { ScrollArea } from '@/shared/components/ui/scroll-area'
+import { Button } from '@/shared/components/ui/button'
+import { formatThousands } from '@/shared/utils'
+import { cn } from '@/shared/utils/cn'
 import {
 	Drawer,
 	DrawerContent,
 	DrawerHeader,
 	DrawerTitle,
 	DrawerDescription,
-	DrawerClose,
-	DrawerFooter,
 	DrawerTrigger,
 } from '@/shared/components/ui/drawer'
-import { format } from 'date-fns'
-import { Button } from '@/shared/components/ui/button'
-import { Badge } from '@/shared/components/ui/badge'
+
 import { usePayroll } from '../api/use-payroll'
-import { id as ind } from 'date-fns/locale'
-import { delay, formatThousands } from '@/shared/utils'
-import { Eye } from 'lucide-react'
-import { ScrollArea } from '@/shared/components/ui/scroll-area'
-import { cn } from '@/shared/utils/cn'
 
 export function DrawerSalarySlip({ id }: { id?: string }) {
 	const [open, setOpen] = useState(false)
@@ -76,6 +74,7 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 
 		toPDF({
 			page: {
+				margin: 2,
 				format: 'B5',
 			},
 		})
@@ -102,12 +101,7 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 
 				<ScrollArea className='h-[400px] px-6'>
 					<div ref={targetRef}>
-						<div
-							className={cn(
-								'space-y-4 py-4 mx-auto',
-								printMode && 'max-w-6xl p-6'
-							)}
-						>
+						<div className={cn('space-y-4 py-4 mx-auto', printMode && 'p-6')}>
 							{printMode && data?.period && (
 								<div className='flex flex-col'>
 									<p className='text-lg text-center mb-2'>Slip gaji</p>
@@ -121,7 +115,7 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 								<p className='text-sm text-ink-primary/50'>Nama</p>
 								<p>{data?.employee.fullname}</p>
 							</div>
-							{data?.employee.position && (
+							{!printMode && data?.employee.position && (
 								<div>
 									<p className='text-sm text-ink-primary/50'>Posisi</p>
 									<p className='font-medium'>{data?.employee.position}</p>
@@ -150,7 +144,7 @@ export function DrawerSalarySlip({ id }: { id?: string }) {
 								<p>Rp {data?.deduction?.toLocaleString('id-ID')}</p>
 							</div>
 							{notes.length > 0 && (
-								<div className='space-y-2 border p-3 rounded-xl'>
+								<div className='space-y-2 border p-3 rounded-xl pb-4'>
 									<p className='text-sm text-ink-primary/50'>Catatan</p>
 									<div className='space-y-2'>
 										{notes.map((i, index) => {
