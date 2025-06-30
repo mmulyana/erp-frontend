@@ -100,7 +100,7 @@ export default function ModalAddItem() {
 							control={form.control}
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
-									<FormLabel>Nama lokasi</FormLabel>
+									<FormLabel>Nama</FormLabel>
 									<FormControl>
 										<Input {...field} />
 									</FormControl>
