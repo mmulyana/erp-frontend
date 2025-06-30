@@ -264,11 +264,13 @@ export default function ReportComment({ id }: { id?: string }) {
 	}
 
 	const isWarning = warningTypes.includes(data?.data?.type || '')
+	const imagesLength = data?.data?.attachments.length || 0
 
 	return (
 		<div
 			className={cn(
-				'bg-white flex flex-col h-[calc(100vh-56px)] md:h-full relative w-full'
+				'bg-white flex flex-col h-[calc(100vh-56px)] md:h-full relative w-full',
+				imagesLength && 'w-full md:w-[420px]'
 			)}
 		>
 			<div className='p-4 border-b'>
