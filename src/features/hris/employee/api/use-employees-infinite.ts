@@ -9,6 +9,7 @@ type Params = {
 	search?: string
 	limit?: number
 	page?: string
+	active?: boolean
 }
 
 export function useEmployeeInfinite(params: Params) {

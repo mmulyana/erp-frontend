@@ -16,7 +16,7 @@ export default function EmployeeCombobox(props: {
 		<InfiniteCombobox
 			{...props}
 			useInfiniteQuery={({ search }) =>
-				useEmployeeInfinite({ search, limit: 10 })
+				useEmployeeInfinite({ search, limit: 10, active: true })
 			}
 			fetchItemById={fetchItemById}
 			label={(item) => item.fullname}
