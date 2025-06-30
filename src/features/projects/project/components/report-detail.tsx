@@ -11,6 +11,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '@/shared/components/ui/tabs'
+import PhotoGrid from '@/shared/components/common/photo-grid'
 
 export default function ReportDetail({
 	id,
@@ -55,7 +56,9 @@ export default function ReportDetail({
 							<ReportComment id={id} />
 						</TabsContent>
 						<TabsContent value='tab-2' className='w-full'>
-							<ReportAttachment id={id} />
+							<PhotoGrid
+								urls={data?.data.attachments?.map((i) => i.photoUrl) || []}
+							/>
 						</TabsContent>
 					</Tabs>
 				) : (
