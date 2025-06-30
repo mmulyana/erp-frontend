@@ -1,21 +1,41 @@
+import { useParams } from 'react-router-dom'
+import { List } from 'lucide-react'
+
+import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area'
+import CardV1 from '@/shared/components/common/card-v1'
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 } from '@/shared/components/ui/tabs'
-import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area'
-import { Card, CardContent } from '@/shared/components/ui/card'
 
 import EmployeeCashAdvance from './employee-cash-advance'
 import EmployeeCertificate from './employee-certificate'
 import EmployeeOvertime from './employee-overtime'
 import EmployeeRegular from './employee-regular'
 import EmployeeProject from './employee-project'
-import CardV1 from '@/shared/components/common/card-v1'
-import { List } from 'lucide-react'
+
+import { useEmployee } from '../../api/use-employee'
 
 export default function CardDetail() {
+	const { id } = useParams()
+	const { data } = useEmployee(id)
+
+	const isDaily = data?.payType === 'daily'
+
+	const tabs = [
+		{ value: 'tab-1', label: 'Sertifikasi', payType: 'all' },
+		{ value: 'tab-2', label: 'Absensi Reguler', payType: 'daily' },
+		{ value: 'tab-3', label: 'Lembur', payType: 'daily' },
+		{ value: 'tab-4', label: 'Kasbon', payType: 'all' },
+		{ value: 'tab-5', label: 'Proyek', payType: 'all' },
+	]
+
+	const filteredTabs = isDaily
+		? tabs
+		: tabs.filter((tab) => tab.payType === 'all')
+
 	return (
 		<CardV1
 			title='Detail'
@@ -25,13 +45,7 @@ export default function CardDetail() {
 			<Tabs defaultValue='tab-1' className='w-full'>
 				<ScrollArea className='w-full overflow-x-auto whitespace-nowrap'>
 					<TabsList className='inline-flex h-auto w-full gap-2 bg-transparent py-0 relative before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border px-6 select-none !text-lg'>
-						{[
-							{ value: 'tab-1', label: 'Sertifikasi' },
-							{ value: 'tab-2', label: 'Absensi Reguler' },
-							{ value: 'tab-3', label: 'Lembur' },
-							{ value: 'tab-4', label: 'Kasbon' },
-							{ value: 'tab-5', label: 'Proyek' },
-						].map((tab) => (
+						{filteredTabs.map((tab) => (
 							<TabsTrigger
 								key={tab.value}
 								value={tab.value}

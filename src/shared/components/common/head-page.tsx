@@ -22,7 +22,7 @@ export default function HeadPage({
 	hideAction = false,
 }: props) {
 	return (
-		<div className='flex justify-between items-center'>
+		<div className='flex justify-between items-center flex-wrap gap-4'>
 			<div>
 				<div className='flex gap-2 items-center mb-2'>
 					{icon}

@@ -68,6 +68,7 @@ export default function TableEmployee() {
 			id: 'fullname',
 			accessorKey: 'fullname',
 			header: 'Nama lengkap',
+			cell: ({ row }) => <p className='text-nowrap'>{row.original.fullname}</p>,
 		},
 		{
 			id: 'joined_at',
@@ -75,13 +76,19 @@ export default function TableEmployee() {
 			header: 'Bergabung sejak',
 			cell: ({ row }) =>
 				row.original.joinedAt && (
-					<p>{format(row.original.joinedAt, 'dd MMMM yyyy')}</p>
+					<p className='text-nowrap'>
+						{format(row.original.joinedAt, 'dd MMMM yyyy')}
+					</p>
 				),
 		},
 		{
 			id: 'position',
 			accessorKey: 'position',
 			header: 'Jabatan',
+			cell: ({ row }) =>
+				row.original.position !== '' && (
+					<p className='text-nowrap'>{row.original.position}</p>
+				),
 		},
 		{
 			id: 'last_education',
@@ -94,7 +101,9 @@ export default function TableEmployee() {
 			accessorKey: 'phone',
 			header: 'Nomor telp',
 			cell: ({ row }) =>
-				row.original.phone && formatPhone(row?.original?.phone),
+				row.original.phone && (
+					<p className='text-nowrap'>{formatPhone(row?.original?.phone)}</p>
+				),
 		},
 		{
 			id: 'status',

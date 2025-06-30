@@ -35,7 +35,7 @@ export default function LastEducation({ variant }: props) {
 				),
 				content: cn(
 					variant === 'compact' &&
-						'flex items-center justify-start p-4 py-0 gap-4 min-w-[352px] relative h-[120px]'
+						'flex items-center justify-start p-4 py-0 gap-4 min-w-[352px] relative h-fit md:h-[120px] flex-col md:flex-row pb-4 md:pb-0'
 				),
 			}}
 		>
@@ -44,7 +44,7 @@ export default function LastEducation({ variant }: props) {
 				className={cn(
 					'mx-auto w-full h-[180px]',
 					variant === 'compact' &&
-						'h-[132px] w-[132px] mx-0 -ml-4 absolute -mt-2'
+						'h-[132px] w-[120px] md:w-[132px] mx-0 -ml-4 absolute -mt-2'
 				)}
 			>
 				<PieChart>
@@ -102,7 +102,7 @@ export default function LastEducation({ variant }: props) {
 				className={cn(
 					'flex justify-center gap-2 flex-wrap',
 					variant === 'compact' &&
-						'max-w-[180px] justify-start items-start ml-32 -mt-2'
+						'max-w-[180px] justify-start items-start ml-0 md:ml-32 mt-32 md:-mt-2'
 				)}
 			>
 				{data?.data?.map((i, idx) => {
