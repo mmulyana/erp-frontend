@@ -4,7 +4,7 @@ import { Input } from '@/shared/components/ui/input'
 import { selectOption } from '@/shared/types'
 import { debounce } from '@/shared/utils'
 import { parseAsString, useQueryStates } from 'nuqs'
-import { useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 export const activeOption: selectOption[] = [
 	{
@@ -123,7 +123,9 @@ export default function FilterEmployee({
 		>
 			{filters
 				.filter((i) => !hideFilter.includes(i.name))
-				.map((i) => i.component)}
+				.map((i) => (
+					<React.Fragment key={i.name}>{i.component}</React.Fragment>
+				))}
 			{children}
 		</FilterButton>
 	)

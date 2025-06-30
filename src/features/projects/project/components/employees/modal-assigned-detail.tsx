@@ -1,7 +1,10 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { ChevronRight, Plus } from 'lucide-react'
+import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ChevronRight, Plus } from 'lucide-react'
 
+import { keys } from '@/shared/constants/keys'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Dialog,
@@ -10,11 +13,6 @@ import {
 	DialogContent,
 	DialogDescription,
 } from '@/shared/components/ui/dialog'
-
-import FormAssignedEmployee from './form-assigned-employee'
-import { useUpdateAssignProject } from '../../api/employees/use-update-assign-project'
-import { useProjectEmployee } from '../../api/employees/use-project-employee'
-import { AssignedForm } from '../../types'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -26,13 +24,16 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/shared/components/ui/alert-dialog'
+
+import FormAssignedEmployee from './form-assigned-employee'
 import { useDeleteAssignProject } from '../../api/employees/use-delete-assign-project'
-import { useQueryClient } from '@tanstack/react-query'
-import { keys } from '@/shared/constants/keys'
-import { useParams } from 'react-router-dom'
+import { useUpdateAssignProject } from '../../api/employees/use-update-assign-project'
+import { useProjectEmployee } from '../../api/employees/use-project-employee'
+import { AssignedForm } from '../../types'
 
 export default function ModalAssignedDetail({ id }: { id?: string }) {
 	const [open, setOpen] = useState(false)
+	const queryClient = useQueryClient()
 
 	const { data } = useProjectEmployee({ id: open ? id : '' })
 	const { mutate, isPending } = useUpdateAssignProject()
@@ -55,6 +56,9 @@ export default function ModalAssignedDetail({ id }: { id?: string }) {
 			{
 				onSuccess: () => {
 					setOpen(false)
+					queryClient.invalidateQueries({
+						queryKey: [keys.projectEmployeeDetail, id],
+					})
 				},
 			}
 		)
@@ -69,7 +73,14 @@ export default function ModalAssignedDetail({ id }: { id?: string }) {
 				endDate: res.endDate ? new Date(res.endDate) : undefined,
 			})
 		}
-	}, [data])
+		if (!open) {
+			form.reset({
+				employeeId: '',
+				startDate: undefined,
+				endDate: undefined,
+			})
+		}
+	}, [data, open])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -108,7 +119,11 @@ function ModalDelete({ onClose, id }: { id?: string; onClose?: () => void }) {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<Button variant='ghost' className='text-error hover:bg-error hover:text-white' type='button'>
+				<Button
+					variant='ghost'
+					className='text-error hover:bg-error hover:text-white'
+					type='button'
+				>
 					Hapus
 				</Button>
 			</AlertDialogTrigger>

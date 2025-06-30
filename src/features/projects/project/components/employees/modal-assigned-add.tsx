@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Plus } from 'lucide-react'
-import { useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -33,7 +33,7 @@ export default function ModalAssignedAdd({ id }: { id?: string }) {
 			{
 				employeeId: data.employeeId,
 				projectId: id,
-				startDate: data.startDate.toDateString(),
+				startDate: data.startDate,
 			},
 			{
 				onSuccess: () => {
@@ -42,6 +42,16 @@ export default function ModalAssignedAdd({ id }: { id?: string }) {
 			}
 		)
 	}
+
+	useEffect(() => {
+		if (!open) {
+			form.reset({
+				employeeId: '',
+				startDate: new Date(),
+				endDate: undefined,
+			})
+		}
+	}, [open])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>

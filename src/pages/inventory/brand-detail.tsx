@@ -1,8 +1,7 @@
 import { CalendarDays, House, Package, Tag } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { id as ind } from 'date-fns/locale'
-import { useMemo, useState } from 'react'
 import { format } from 'date-fns'
 
 import ModalDetailBrand from '@/features/inventory/brand/components/modal-detail-brand'
@@ -15,10 +14,10 @@ import DetailLayout from '@/shared/layout/detail-layout'
 import CardV1 from '@/shared/components/common/card-v1'
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { useDynamicLinks } from '@/shared/utils/link'
 import { paths } from '@/shared/constants/paths'
 import { Inventory } from '@/shared/types/api'
 import { Link } from '@/shared/types'
-import { useDynamicLinks } from '@/shared/utils/link'
 
 const links: Link[] = [
 	{
@@ -37,6 +36,8 @@ const links: Link[] = [
 	},
 ]
 export default function BrandDetail() {
+	const navigate = useNavigate()
+
 	const { id } = useParams()
 	const { limit, page, q } = usePagination()
 
@@ -135,6 +136,9 @@ export default function BrandDetail() {
 						totalPages={items?.data.total_pages}
 						withPagination
 						autoRedirect
+						onCellClick={({ id }) => {
+							navigate(`${paths.inventoryMasterdataItem}/${id}`)
+						}}
 					/>
 				</CardV1>
 			</div>

@@ -1,10 +1,14 @@
+import { Check, ExternalLink } from 'lucide-react'
 import { UseFormReturn } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 import { useEmployeeProject } from '@/features/hris/employee/api/use-employee-project'
 import { DatePickerField } from '@/shared/components/fields/data-picker-fields'
 import EmployeeCombobox from '@/shared/components/combobox/employee-combobox'
 import ButtonSubmit from '@/shared/components/common/button-submit'
 import { Button } from '@/shared/components/ui/button'
+import { paths } from '@/shared/constants/paths'
 import {
 	Form,
 	FormControl,
@@ -23,11 +27,9 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/shared/components/ui/dialog'
+
+import { useUpdateAssignProject } from '../../api/employees/use-update-assign-project'
 import { AssignedForm } from '../../types'
-import { ExternalLink } from 'lucide-react'
-import { paths } from '@/shared/constants/paths'
-import { Link } from 'react-router-dom'
-import { baseUrl } from '@/shared/constants/urls'
 
 type props = {
 	form: UseFormReturn<AssignedForm>
@@ -49,7 +51,8 @@ export default function FormAssignedEmployee({
 
 	const employeeId = form.watch('employeeId')
 
-	const { data } = useEmployeeProject({
+	const { mutate } = useUpdateAssignProject()
+	const { data, refetch } = useEmployeeProject({
 		employeeId,
 		isEnd: false,
 		enabled: open && employeeId !== '' && employeeId !== undefined,
@@ -58,6 +61,9 @@ export default function FormAssignedEmployee({
 	const totalProjects = data?.data?.data?.filter(
 		(i) => i.project.status !== 'DONE'
 	).length
+	const undoneProjects = data?.data?.data?.filter(
+		(i) => i.project.status !== 'DONE'
+	)
 
 	return (
 		<Form {...form}>
@@ -86,7 +92,7 @@ export default function FormAssignedEmployee({
 									Pegawai ini sudah ditugaskan di {totalProjects} proyek
 								</p>
 								<DialogHistoryProject>
-									{data?.data?.data.map((i) => (
+									{undoneProjects?.map((i) => (
 										<div
 											key={i.id}
 											className='flex gap-2 items-center justify-between'
@@ -166,7 +172,67 @@ export default function FormAssignedEmployee({
 									Batal
 								</Button>
 							</DialogClose>
-							<ButtonSubmit isPending={isPending} />
+							{variant === 'add' ? (
+								totalProjects ? (
+									<DialogHistoryProject
+										trigger={<Button type='button'>Simpan</Button>}
+										title='Pegawai Ini Sedang Aktif di Proyek Lain'
+										description='Pegawai ini masih memiliki penugasan aktif di proyek lain. Anda tetap bisa menambahkannya ke proyek ini jika diperlukan.'
+									>
+										{({ setOpen }) => (
+											<>
+												<div className='mb-2 border-b pb-1'>
+													<p className='font-medium'>Proyek</p>
+												</div>
+												{undoneProjects?.map((i) => (
+													<div
+														key={i.id}
+														className='flex gap-2 items-center justify-between mt-2'
+													>
+														<p className='text-ink-primary'>{i.project.name}</p>
+														<Button
+															variant='outline'
+															className='gap-1'
+															onClick={() => {
+																mutate(
+																	{
+																		id: i.id,
+																		endDate: new Date().toString(),
+																		startDate: i.startDate,
+																	},
+																	{
+																		onSuccess: () => {
+																			refetch()
+																		},
+																	}
+																)
+															}}
+														>
+															Tandai Selesai
+															<Check size={16} strokeWidth={3} />
+														</Button>
+													</div>
+												))}
+												<div className='pt-6 flex justify-end gap-4'>
+													<Button
+														variant='outline'
+														onClick={() => setOpen(false)}
+													>
+														Batal
+													</Button>
+													<Button onClick={() => form.handleSubmit(onSubmit)()}>
+														Tetap tambahkan ke Proyek
+													</Button>
+												</div>
+											</>
+										)}
+									</DialogHistoryProject>
+								) : (
+									<ButtonSubmit isPending={isPending} />
+								)
+							) : (
+								<ButtonSubmit isPending={isPending} />
+							)}
 						</div>
 					</div>
 				</DialogFooter>
@@ -175,20 +241,40 @@ export default function FormAssignedEmployee({
 	)
 }
 
-function DialogHistoryProject({ children }: React.PropsWithChildren) {
+type DialogHistoryProjectProps = {
+	trigger?: React.ReactNode
+	children:
+		| React.ReactNode
+		| ((props: {
+				open: boolean
+				setOpen: (v: boolean) => void
+		  }) => React.ReactNode)
+	title?: string
+	description?: string
+}
+
+function DialogHistoryProject({
+	children,
+	trigger,
+	title = 'Riwayat Proyek',
+	description = 'Daftar proyek yang pernah diikuti oleh pegawai ini.',
+}: DialogHistoryProjectProps) {
+	const [open, setOpen] = useState(false)
+
+	const renderChildren =
+		typeof children === 'function' ? children({ open, setOpen }) : children
+
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant='ghost'>Lihat Proyek</Button>
+				{trigger || <Button variant='ghost'>Lihat Proyek</Button>}
 			</DialogTrigger>
 			<DialogContent className='p-6'>
 				<DialogHeader className='mb-4'>
-					<DialogTitle>Riwayat Proyek</DialogTitle>
-					<DialogDescription>
-						Daftar proyek yang pernah diikuti oleh pegawai ini.
-					</DialogDescription>
+					<DialogTitle>{title}</DialogTitle>
+					<DialogDescription>{description}</DialogDescription>
 				</DialogHeader>
-				{children}
+				{renderChildren}
 			</DialogContent>
 		</Dialog>
 	)

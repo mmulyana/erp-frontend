@@ -32,7 +32,7 @@ export default function HeadPage({
 			</div>
 			{!hideAction &&
 				(action || (
-					<Link to={url || ''} className={buttonVariants()}>
+					<Link to={url || ''} className={buttonVariants()} role='link'>
 						<Plus size={16} className='stroke-white' />
 						<span className='px-0.5'>{actionLabel}</span>
 					</Link>

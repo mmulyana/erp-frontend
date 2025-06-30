@@ -25,6 +25,7 @@ import {
 import { formatThousands } from '@/shared/utils'
 import ProtectedComponent from '@/shared/components/common/protected'
 import { permissions } from '@/shared/constants/permissions'
+import CardData from '@/shared/components/common/card-data'
 
 type props = {
 	id?: string
@@ -33,6 +34,9 @@ export default function ProjectStockOut({ id }: props) {
 	const { data } = useStockOuts({
 		projectId: id,
 	})
+
+	const total = data.data.data.reduce((acc, i) => acc + i.totalPrice, 0)
+
 	return (
 		<div className='pt-6'>
 			<div className='flex justify-between items-center'>
@@ -46,6 +50,7 @@ export default function ProjectStockOut({ id }: props) {
 				</div>
 				<ModalAddStockOut id={id} />
 			</div>
+			<CardData title='Total' value={`Rp ${formatThousands(total)}`} />
 			<ScrollArea className='mb-4 h-[320px]'>
 				<div className='mt-6 space-y-4'>
 					{data?.data.data.map((i) => (

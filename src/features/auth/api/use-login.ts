@@ -36,6 +36,7 @@ export const useLogin = () => {
 			}
 		},
 		onError: (error) => {
+			console.log(error)
 			const err = error as AxiosError<ErrorResponse<any>>
 			toast.error(err.response?.data?.message || 'Login failed')
 		},
