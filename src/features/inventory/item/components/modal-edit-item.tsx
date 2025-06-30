@@ -131,6 +131,19 @@ export default function ModalEditItem({ variant }: props) {
 					)}
 				/>
 				<FormField
+					name='minimum'
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Minimum</FormLabel>
+							<FormControl>
+								<Input {...field} type='number' />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
 					name='unitOfMeasurement'
 					control={form.control}
 					render={({ field }) => (
