@@ -29,27 +29,36 @@ export default function AssignedEmployeeProject({
 	})
 
 	const toggleEmployee = (emp: Employee) => {
-		setSelected((prev) =>
-			prev.some((e) => e.id === emp.id)
+		setSelected((prev) => {
+			const updated = prev.some((e) => e.id === emp.id)
 				? prev.filter((e) => e.id !== emp.id)
 				: [...prev, emp]
-		)
-		handleForm()
+
+			form.setValue(
+				'employeeIds',
+				updated.map((i) => i.id)
+			)
+
+			return updated
+		})
 	}
 
 	const removeEmployee = (id: string) => {
-		setSelected((prev) => prev.filter((e) => e.id !== id))
-		handleForm()
-	}
-
-	const handleForm = () => {
-		const ids = selected.map((i) => i.id)
-		form.setValue('employeeIds', ids)
+		setSelected((prev) => {
+			const updated = prev.filter((e) => e.id !== id)
+			form.setValue(
+				'employeeIds',
+				updated.map((i) => i.id)
+			)
+			return updated
+		})
 	}
 
 	const clearAll = () => {
-		setSelected([])
-		handleForm()
+		setSelected(() => {
+			form.setValue('employeeIds', [])
+			return []
+		})
 	}
 
 	const clearSearch = () => setSearchQuery('')

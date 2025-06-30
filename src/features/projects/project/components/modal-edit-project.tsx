@@ -44,6 +44,9 @@ import { priorityOption, statusBadges } from '../constant/types'
 import { useUpdateProject } from '../api/use-update-project'
 import { useProject } from '../api/use-project'
 import { ProjectForm } from '../types'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
+import ModalDeleteProject from './modal-delete-project'
 
 type FormValues = Partial<ProjectForm>
 
@@ -367,12 +370,22 @@ export default function ModalEditProject({ variant }: props) {
 					<form className='px-4 pt-4' onSubmit={form.handleSubmit(submit)}>
 						{FormType[variant as keyof typeof FormType]}
 						<DialogFooter className='pt-6'>
-							<DialogClose asChild>
-								<Button variant='outline' type='button'>
-									Batal
-								</Button>
-							</DialogClose>
-							<ButtonSubmit isPending={isPending} />
+							<div className='flex justify-between w-full'>
+								<div>
+									<ProtectedComponent required={[permissions.project_delete]}>
+										<ModalDeleteProject id={id} />
+									</ProtectedComponent>
+								</div>
+
+								<div className='flex gap-4 justify-end'>
+									<DialogClose asChild>
+										<Button variant='outline' type='button'>
+											Batal
+										</Button>
+									</DialogClose>
+									<ButtonSubmit isPending={isPending} />
+								</div>
+							</div>
 						</DialogFooter>
 					</form>
 				</Form>

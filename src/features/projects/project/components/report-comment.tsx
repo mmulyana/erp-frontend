@@ -268,7 +268,7 @@ export default function ReportComment({ id }: { id?: string }) {
 	return (
 		<div
 			className={cn(
-				'bg-white flex flex-col h-[calc(100vh-56px)] md:h-full relative'
+				'bg-white flex flex-col h-[calc(100vh-56px)] md:h-full relative w-full'
 			)}
 		>
 			<div className='p-4 border-b'>
