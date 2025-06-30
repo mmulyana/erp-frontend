@@ -29,10 +29,11 @@ export default function ReportDetail({
 	const isMobile = useIsMobile()
 
 	useEffect(() => {
-		if (open && isMobile) {
-			document.body.style.pointerEvents = 'auto'
+		const body = document.body
+		if (open && body.style.pointerEvents === 'none') {
+			body.style.pointerEvents = ''
 		}
-	}, [open, isMobile])
+	}, [open])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen} modal>
