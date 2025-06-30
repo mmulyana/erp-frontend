@@ -49,7 +49,7 @@ export default function ModalDeleteClient() {
 					<AlertDialogAction
 						className='bg-error'
 						onClick={() => {
-							if (!id) {
+							if (id) {
 								mutate(
 									{ id },
 									{
