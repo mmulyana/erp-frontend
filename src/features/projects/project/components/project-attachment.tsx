@@ -88,14 +88,17 @@ export default function ProjectAttachment({
 						onValueChange={setSearch}
 					/>
 				}
+				style={{
+					content: 'p-0'
+				}}
 			>
-				<ScrollArea className='h-[280px] pt-2 '>
+				<ScrollArea className='h-[280px] pt-2 px-4'>
 					{anyAttachment ? (
 						<div className='flex flex-col gap-4'>
-							{attachments?.map((i, index) => (
-								<div key={index} className='flex justify-between items-center'>
-									<div className='flex gap-2 items-center'>
-										<FileText className='text-[#565659]' size={28} />
+							{attachments?.map((i) => (
+								<div key={i.id} className='flex justify-between items-center'>
+									<div className='flex gap-2 items-start'>
+										<FileText className='text-[#565659] mt-4' size={20} />
 										<div className='space-y-1'>
 											<Link
 												to={`${baseUrl}/${i.fileUrl}`}
