@@ -36,8 +36,11 @@ export default function TopClient() {
 					defaultValue='desc'
 				/>
 			}
+			style={{
+				content: 'p-0',
+			}}
 		>
-			<ScrollArea className='h-[200px]'>
+			<ScrollArea className='h-[200px] px-4 pb-4'>
 				<div className='space-y-4 pt-4'>
 					{data?.data?.map((i) => (
 						<div className='flex justify-between items-center' key={i.id}>

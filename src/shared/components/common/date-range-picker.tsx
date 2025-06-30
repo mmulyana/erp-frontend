@@ -21,7 +21,7 @@ export default function DateRangePicker({
 	})
 
 	return (
-		<div className='flex gap-2'>
+		<div className='flex gap-2 flex-wrap md:flex-nowrap'>
 			<div>
 				<p className='text-sm text-ink-primary/50'>Dari</p>
 				<Popover>

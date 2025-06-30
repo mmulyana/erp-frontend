@@ -35,7 +35,7 @@ export default function LastEducation({ variant }: props) {
 				),
 				content: cn(
 					variant === 'compact' &&
-						'flex items-center justify-start p-4 py-0 gap-4 min-w-[352px] relative h-fit md:h-[120px] flex-col md:flex-row pb-4 md:pb-0'
+						'flex items-center justify-start p-4 py-0 gap-4 relative h-fit md:h-[120px] flex-col md:flex-row pb-4 md:pb-0'
 				),
 			}}
 		>

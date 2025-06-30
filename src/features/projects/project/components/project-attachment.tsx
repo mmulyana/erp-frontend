@@ -94,11 +94,11 @@ export default function ProjectAttachment({
 			>
 				<ScrollArea className='h-[280px] pt-2 px-4'>
 					{anyAttachment ? (
-						<div className='flex flex-col gap-4'>
+						<div className='flex flex-col gap-4 pb-4'>
 							{attachments?.map((i) => (
 								<div key={i.id} className='flex justify-between items-center'>
 									<div className='flex gap-2 items-start'>
-										<FileText className='text-[#565659] mt-4' size={20} />
+										{showButton && <FileText className='text-[#565659] mt-4' size={20} />}
 										<div className='space-y-1'>
 											<Link
 												to={`${baseUrl}/${i.fileUrl}`}
@@ -108,7 +108,7 @@ export default function ProjectAttachment({
 											{!i.secret ? (
 												<Link
 													to={`${baseUrl}/${i.fileUrl}`}
-													className={buttonVariants({ variant: 'ghost' })}
+													className={buttonVariants({ variant: 'ghost', className: "max-w-[180px] text-wrap h-fit" })}
 												>
 													{i.name}
 												</Link>
