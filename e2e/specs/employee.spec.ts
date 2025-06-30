@@ -18,7 +18,7 @@ test.describe('create new employee', () => {
 			},
 		])
 
-		await page.route('**/api/auth/me', async (route) => {
+		await page.route(/\/api\/auth\/me$/, async (route) => {
 			await route.fulfill({
 				status: 200,
 				body: JSON.stringify(meResponse),

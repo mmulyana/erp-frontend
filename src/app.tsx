@@ -75,6 +75,7 @@ export const routes: RoutesConfig[] = [
 	{
 		path: paths.hris,
 		component: <HrisDashboard />,
+		permission: [permissions.pages_hris_dashboard],
 	},
 	{
 		path: paths.hrisMasterdataEmployee,

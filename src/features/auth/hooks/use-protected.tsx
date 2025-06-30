@@ -4,64 +4,64 @@ import { useAtom, useSetAtom } from 'jotai'
 
 import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
 import { permissionAtom } from '@/shared/store/permission'
-import { delay, hasAnyPermission } from '@/shared/utils'
 import { useGetme } from '@/shared/api/use-get-me'
+import { hasAnyPermission } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { userAtom } from '@/shared/store/auth'
 import { routes } from '@/app'
 
+export const delay = (ms: number) =>
+	new Promise((resolve) => setTimeout(resolve, ms))
+
 const useProtected = () => {
 	const navigate = useNavigate()
+
 	const setUser = useSetAtom(userAtom)
-	const [permissions, setPermission] = useAtom(permissionAtom)
+	const [permissions, setPermissions] = useAtom(permissionAtom)
+
 	const [enabled, setEnabled] = useState(false)
-
-	const { data: account, isLoading } = useGetme({ enabled })
-
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
 		const token = CookieStorage.get(CookieKeys.AuthToken)
-		if (!token) {
+		if (token) {
+			setEnabled(true)
+		} else {
 			setEnabled(false)
 			setLoading(false)
 		}
 	}, [])
 
+	const { data: account } = useGetme({ enabled })
+
 	useEffect(() => {
 		if (account?.data) {
-			setPermission(account.data.permissions || [])
 			setUser(account.data)
+			setPermissions(account.data.permissions || [])
 		}
-		const token = CookieStorage.get(CookieKeys.AuthToken)
-		if (token) {
-			setEnabled(true)
-		}
-	}, [account, setPermission, setUser])
+	}, [account, setUser, setPermissions])
 
 	useEffect(() => {
-		async function checkPermissions() {
-			if (enabled && !isLoading) {
-				delay(500, () => {
-					if (permissions.length > 0) {
-						const firstAllowedRoute = routes.find((route) => {
-							if (route.withoutAuth) return false
-							return hasAnyPermission(permissions, route.permission)
-						})
+		const doRedirect = async () => {
+			if (!enabled || permissions.length === 0) return
 
-						if (firstAllowedRoute) {
-							navigate(firstAllowedRoute.path, { replace: true })
-						} else {
-							navigate(paths.accessDenied, { replace: true })
-						}
-					}
-					setLoading(false)
-				})
+			await delay(500)
+
+			const firstAllowedRoute = routes.find((route) => {
+				if (route.withoutAuth) return false
+				return hasAnyPermission(permissions, route.permission)
+			})
+			console.log('first', firstAllowedRoute)
+			if (firstAllowedRoute) {
+				navigate(firstAllowedRoute.path, { replace: true })
+			} else {
+				navigate(paths.accessDenied, { replace: true })
 			}
+			setLoading(false)
 		}
 
-		checkPermissions()
-	}, [permissions, isLoading])
+		doRedirect()
+	}, [enabled, permissions, navigate])
 
 	return {
 		loading,
