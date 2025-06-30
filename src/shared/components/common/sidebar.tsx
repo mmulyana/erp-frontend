@@ -299,6 +299,7 @@ const allLink: Links[] = [
 	{
 		module: 'admin',
 		items: adminLink,
+		permissions: [permissions.pages_admin_role, permissions.pages_admin_user],
 	},
 ]
 
@@ -400,21 +401,26 @@ export default function AppSidebar({ module }: AppSidebarProps) {
 							onValueChange={setActiveMobileModule}
 						>
 							<TabsList className='mb-4 border-b w-full rounded border-ink-primary/10'>
-								{allModules.map((mod) => (
-									<TabsTrigger
-										key={mod}
-										value={mod}
-										className={cn(
-											'flex-1 capitalize rounded-none font-medium py-3 relative',
-											'data-[state=active]:bg-white data-[state=inactive]:bg-transparent',
-											'data-[state=inactive]:hover:bg-gray-200',
-											'data-[state=active]:text-ink-primary',
-											'data-[state=active]:before:bg-brand data-[state=active]:before:absolute data-[state=active]:before:w-full data-[state=active]:before:h-1 data-[state=active]:before:bottom-0'
-										)}
-									>
-										{mod === 'hris' ? 'HRIS' : mod}
-									</TabsTrigger>
-								))}
+								{allLink
+									.filter((mod) => {
+										if (!mod.permissions) return true
+										return hasAnyPermission(userPermissions, mod.permissions)
+									})
+									.map((mod) => (
+										<TabsTrigger
+											key={mod.module}
+											value={mod.module}
+											className={cn(
+												'flex-1 capitalize rounded-none font-medium py-3 relative',
+												'data-[state=active]:bg-white data-[state=inactive]:bg-transparent',
+												'data-[state=inactive]:hover:bg-gray-200',
+												'data-[state=active]:text-ink-primary',
+												'data-[state=active]:before:bg-brand data-[state=active]:before:absolute data-[state=active]:before:w-full data-[state=active]:before:h-1 data-[state=active]:before:bottom-0'
+											)}
+										>
+											{mod.module === 'hris' ? 'HRIS' : mod.module}
+										</TabsTrigger>
+									))}
 							</TabsList>
 
 							{allModules.map((mod) => (
