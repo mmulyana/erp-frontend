@@ -80,6 +80,7 @@ export default function TablePayroll() {
 			data={data?.data.data || []}
 			totalItems={data?.data.total}
 			totalPages={data?.data.total_pages}
+			withPagination
 			autoRedirect
 			nonClickableColumns={[]}
 			onCellClick={({ id }) => navigate(`${paths.hrisPayroll}/${id}`)}
