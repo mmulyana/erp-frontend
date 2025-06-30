@@ -156,7 +156,7 @@ export default function PayrolleDetail() {
 						startDate={data?.data?.startDate}
 						endDate={data?.data?.endDate}
 						variant={isDone ? 'update' : 'default'}
-						payType={data.data.payType}
+						payType={data?.data?.payType}
 					/>
 				)
 			},
