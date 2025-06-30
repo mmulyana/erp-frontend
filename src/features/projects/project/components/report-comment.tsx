@@ -144,7 +144,7 @@ export default function ReportComment({ id }: { id?: string }) {
 		if (!comments.length) return <EmptyState className='h-[400px]' />
 
 		return comments
-			.filter((c) => c.commentId === parentId)
+			.filter((c) => c.commentId === parentId && !c.deletedAt)
 			.map((comment) => (
 				<div
 					key={comment.id}
@@ -198,19 +198,21 @@ export default function ReportComment({ id }: { id?: string }) {
 							>
 								{comment.deletedAt ? 'Komentar dihapus' : comment.message}
 							</p>
-							{!comment.deletedAt && depth < 2 && (
-								<Button
-									variant='link'
-									className='text-sm !no-underline text-brand p-0'
-									onClick={() => {
-										setReplyTo(comment)
-										setEditingCommentId(null)
-										setNewComment('')
-									}}
-								>
-									Balas
-								</Button>
-							)}
+							{!comment.deletedAt &&
+								depth === 0 &&
+								!comments.some((c) => c.commentId === comment.id) && (
+									<Button
+										variant='link'
+										className='text-sm !no-underline text-brand p-0'
+										onClick={() => {
+											setReplyTo(comment)
+											setEditingCommentId(null)
+											setNewComment('')
+										}}
+									>
+										Balas
+									</Button>
+								)}
 						</div>
 					</div>
 
@@ -267,8 +269,7 @@ export default function ReportComment({ id }: { id?: string }) {
 	return (
 		<div
 			className={cn(
-				'bg-white flex flex-col h-[calc(100svh-370px)] md:h-full relative',
-				imagesLength ? 'w-full md:w-[480px]' : 'w-full h-full'
+				'bg-white flex flex-col h-[calc(100svh-56px)] md:h-full relative'
 			)}
 		>
 			<div className='p-4 border-b'>
@@ -327,7 +328,7 @@ export default function ReportComment({ id }: { id?: string }) {
 			</div>
 
 			<ScrollArea className='h-full px-4 pb-[72px] bg-gray-50'>
-				<div className='space-y-4'>{renderComments(null)}</div>
+				<div className='space-y-4 pb-6'>{renderComments(null)}</div>
 			</ScrollArea>
 
 			<div className='p-4 border-t space-y-2 absolute left-0 bottom-0 w-full bg-white'>

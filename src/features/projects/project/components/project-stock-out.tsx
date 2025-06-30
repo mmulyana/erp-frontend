@@ -35,7 +35,7 @@ export default function ProjectStockOut({ id }: props) {
 		projectId: id,
 	})
 
-	const total = data.data.data.reduce((acc, i) => acc + i.totalPrice, 0)
+	const total = data?.data?.data?.reduce((acc, i) => acc + i.totalPrice, 0) || 0
 
 	return (
 		<div className='pt-6'>

@@ -5,6 +5,12 @@ import { cn } from '@/shared/utils/cn'
 import { useReport } from '../api/report/use-report'
 import ReportAttachment from './report-attachment'
 import ReportComment from './report-comment'
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@/shared/components/ui/tabs'
 
 export default function ReportDetail({
 	id,
@@ -29,10 +35,35 @@ export default function ReportDetail({
 				)}
 				showClose={isMobile}
 			>
-				<div className='flex flex-col md:flex-row h-full pt-12 md:pt-0'>
-					<ReportAttachment id={id} />
-					<ReportComment id={id} />
-				</div>
+				{isMobile ? (
+					<Tabs defaultValue='tab-1' className='items-center'>
+						<TabsList className='h-auto w-full rounded-none border-b bg-transparent px-4 pt-4'>
+							<TabsTrigger
+								value='tab-1'
+								className='data-[state=active]:after:bg-brand data-[state=active]:!text-brand relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=inactive]:bg-transparent'
+							>
+								Komentar
+							</TabsTrigger>
+							<TabsTrigger
+								value='tab-2'
+								className='data-[state=active]:after:bg-brand data-[state=active]:!text-brand relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=inactive]:bg-transparent'
+							>
+								Lampiran
+							</TabsTrigger>
+						</TabsList>
+						<TabsContent className='w-full' value='tab-1'>
+							<ReportComment id={id} />
+						</TabsContent>
+						<TabsContent value='tab-2' className='w-full'>
+							<ReportAttachment id={id} />
+						</TabsContent>
+					</Tabs>
+				) : (
+					<div className='flex flex-col md:flex-row h-full pt-12 md:pt-0'>
+						<ReportAttachment id={id} />
+						<ReportComment id={id} />
+					</div>
+				)}
 			</DialogContent>
 		</Dialog>
 	)
