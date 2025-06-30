@@ -79,9 +79,9 @@ export default function BrandDetail() {
 			accessorKey: 'totalStock',
 		},
 		{
-			id: 'brand',
-			header: 'Merek',
-			cell: ({ row }) => row.original?.brand?.name,
+			id: 'warehouseName',
+			header: 'Gudang',
+			cell: ({ row }) => row.original?.warehouseName,
 		},
 	]
 

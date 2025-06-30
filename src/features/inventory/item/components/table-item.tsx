@@ -17,7 +17,7 @@ export default function TableItem() {
 	const [query] = useQueryStates({
 		warehouseId: parseAsString.withDefault(''),
 		brandId: parseAsString.withDefault(''),
-		status: parseAsString.withDefault('')
+		status: parseAsString.withDefault(''),
 	})
 	const navigate = useNavigate()
 
@@ -29,7 +29,7 @@ export default function TableItem() {
 		sortOrder,
 		brandId: query.brandId,
 		warehouseId: query.warehouseId,
-		status: query.status
+		status: query.status,
 	})
 
 	// COLUMNS EMPLOYEE
@@ -57,15 +57,13 @@ export default function TableItem() {
 			id: 'location',
 			header: 'Gudang',
 			cell: ({ row }) =>
-				row.original.warehouse?.deletedAt
-					? ''
-					: row.original.warehouse?.name ?? '',
+				row.original.warehouseDeletedAt ? '' : row.original.warehouseName ?? '',
 		},
 		{
 			id: 'brand',
 			header: 'Merek',
 			cell: ({ row }) =>
-				row.original.brand?.deletedAt ? '' : row.original.brand?.name ?? '',
+				row.original.brandDeletedAt ? '' : row.original.brandName ?? '',
 		},
 		{
 			id: 'status',

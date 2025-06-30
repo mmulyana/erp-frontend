@@ -4,8 +4,8 @@ import { useAtom, useSetAtom } from 'jotai'
 
 import { CookieKeys, CookieStorage } from '@/shared/utils/cookie'
 import { permissionAtom } from '@/shared/store/permission'
-import { useGetme } from '@/shared/api/use-get-me'
 import { delay, hasAnyPermission } from '@/shared/utils'
+import { useGetme } from '@/shared/api/use-get-me'
 import { paths } from '@/shared/constants/paths'
 import { userAtom } from '@/shared/store/auth'
 import { routes } from '@/app'
@@ -33,13 +33,15 @@ const useProtected = () => {
 			setPermission(account.data.permissions || [])
 			setUser(account.data)
 		}
+		const token = CookieStorage.get(CookieKeys.AuthToken)
+		if (token) {
+			setEnabled(true)
+		}
 	}, [account, setPermission, setUser])
 
 	useEffect(() => {
-		const token = CookieStorage.get(CookieKeys.AuthToken)
-
 		async function checkPermissions() {
-			if (!isLoading && token) {
+			if (enabled && !isLoading) {
 				delay(500, () => {
 					if (permissions.length > 0) {
 						const firstAllowedRoute = routes.find((route) => {
@@ -59,7 +61,7 @@ const useProtected = () => {
 		}
 
 		checkPermissions()
-	}, [permissions, isLoading, navigate])
+	}, [permissions, isLoading])
 
 	return {
 		loading,

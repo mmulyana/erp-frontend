@@ -8,18 +8,9 @@ export const testIds = {
 	cardCertifList: 'card-certif-list',
 	cardSafetyList: 'card-safety-list',
 
-	// POSITION
-	buttonAddPosition: 'button-add-position',
-	dropdownEditPosition: 'dropdown-edit-position',
-	totalEmployeePosition: 'total-employee-position',
-	totalStatusEmployeePosition: 'total-status-employee-position',
-	detailPosition: 'detail-position',
-
 	// EMPLOYEE
 	buttonAddEmployee: 'button-add-employee',
-	buttonOpenCompetency: 'button-open-competency',
-	detailEmployee: 'detail-employee',
-	dropdownEditEmployee: 'dropdown-edit-employee',
+	inputNameEmployee: 'input-name-employee',
 
 	// ATTENDANCE
 	buttonNavigationDate: 'button-navigation-date',

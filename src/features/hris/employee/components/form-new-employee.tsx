@@ -29,6 +29,7 @@ import {
 
 import { EmployeeForm } from '../types'
 import { cn } from '@/shared/utils/cn'
+import { testIds } from '@/shared/constants/testId'
 
 const options = [
 	{
@@ -85,6 +86,7 @@ export default function FormNewEmployee({
 											}}
 											className='bg-surface-secondary w-full'
 											placeholder='Nama lengkap'
+											data-testid={testIds.inputNameEmployee}
 										/>
 									</FormControl>
 									<FormMessage />

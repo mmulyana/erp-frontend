@@ -290,8 +290,14 @@ export type Inventory = {
 	deletedAt?: string
 	status?: string
 
-	brand: BrandInventory
-	warehouse: Warehouse
+	brand?: BrandInventory
+	warehouse?: Warehouse
+
+	brandName: string
+	brandPhotoUrl: string
+	brandDeletedAt?: string
+	warehouseName: string
+	warehouseDeletedAt?: string
 }
 
 export type StockLedger = {

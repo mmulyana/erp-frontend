@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronRight, Package } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { id as ind } from 'date-fns/locale'
 import { Fragment, useState } from 'react'
 import { format } from 'date-fns'
@@ -141,7 +141,11 @@ export default function TableStockIn({ data }: props) {
 																	url={(item.item.photoUrl as string) || ''}
 																	style={{ img: 'h-8 w-8' }}
 																/>
-																{item.item?.name || '-'}
+																<Link
+																	to={`${paths.inventoryMasterdataItem}/${item.itemId}`}
+																>
+																	{item.item?.name || '-'}
+																</Link>
 															</div>
 														</TableCell>
 														<TableCell className='p-2'>

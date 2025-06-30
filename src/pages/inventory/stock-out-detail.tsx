@@ -64,7 +64,12 @@ export default function StockInDetail() {
 						url={row.original.item.photoUrl}
 						style={{ img: 'h-12 w-12 rounded-lg' }}
 					/>
-					<p className='text-ink-primary'>{row.original.item.name}</p>
+					<Link
+						to={`${paths.inventoryMasterdataItem}/${row.original.itemId}`}
+						className='text-ink-primary'
+					>
+						{row.original.item.name}
+					</Link>
 				</div>
 			),
 		},
@@ -86,7 +91,7 @@ export default function StockInDetail() {
 			header: 'Total',
 			cell: ({ row }) => (
 				<p className='text-right'>
-					Rp {formatThousands(row.original.totalPrice)}
+					Rp {formatThousands(row.original.quantity * row.original.unitPrice)}
 				</p>
 			),
 		},

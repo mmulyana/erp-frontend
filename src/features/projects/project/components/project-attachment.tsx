@@ -308,26 +308,30 @@ function ModalAttachment() {
 								</FormItem>
 							)}
 						/>
-						<FormField
-							control={form.control}
-							name='secret'
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<ToggleSwitch
-											value={field.value}
-											label={{
-												true: 'Berkas rahasia',
-												false: 'Berkas rahasia',
-											}}
-											onCheck={(val) => {
-												field.onChange(val)
-											}}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
+						<ProtectedComponent
+							required={[permissions.project_read_secret_attachment]}
+						>
+							<FormField
+								control={form.control}
+								name='secret'
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<ToggleSwitch
+												value={field.value}
+												label={{
+													true: 'Berkas rahasia',
+													false: 'Berkas rahasia',
+												}}
+												onCheck={(val) => {
+													field.onChange(val)
+												}}
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+						</ProtectedComponent>
 
 						<DialogFooter>
 							<div className='flex justify-end gap-4 items-center pt-4'>

@@ -1,6 +1,6 @@
 import { CalendarDays, House, Package, Pencil, Warehouse } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { id as ind } from 'date-fns/locale'
 import { useMemo, useState } from 'react'
 import { format } from 'date-fns'
@@ -44,6 +44,7 @@ export default function LocationDetail() {
 	const { id } = useParams()
 	const [open, setOpen] = useState(false)
 	const { page, limit, q } = usePagination()
+	const navigate = useNavigate()
 
 	const { data } = useLocation({ id })
 
@@ -87,7 +88,7 @@ export default function LocationDetail() {
 		{
 			id: 'brand',
 			header: 'Merek',
-			cell: ({ row }) => row.original.brand.name,
+			cell: ({ row }) => row.original?.brandName,
 		},
 		{
 			id: 'status',
@@ -147,11 +148,14 @@ export default function LocationDetail() {
 				>
 					<DataTable
 						columns={column}
-						data={items?.data.data || []}
+						data={items?.data?.data || []}
 						withPagination
 						autoRedirect
 						totalItems={items?.data?.total}
 						totalPages={items?.data?.total_pages}
+						onCellClick={({ id }) => {
+							navigate(`${paths.inventoryMasterdataItem}/${id}`)
+						}}
 					/>
 				</CardV1>
 			</div>

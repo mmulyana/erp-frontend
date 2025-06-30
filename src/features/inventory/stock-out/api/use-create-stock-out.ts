@@ -41,7 +41,9 @@ export function useCreateStockOut() {
 		},
 
 		onError: (error: AxiosError<any>) => {
-			toast.error(error.response?.data.message ?? 'Gagal membuat stock out')
+			toast.error(error.response?.data.message ?? 'Gagal membuat stock out', {
+				duration: 5000,
+			})
 		},
 	})
 }

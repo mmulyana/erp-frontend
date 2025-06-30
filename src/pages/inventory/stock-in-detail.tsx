@@ -95,7 +95,7 @@ export default function StockInDetail() {
 			header: 'Total',
 			cell: ({ row }) => (
 				<p className='text-right'>
-					Rp {formatThousands(row.original.totalPrice)}
+					Rp {formatThousands(row.original.quantity * row.original.unitPrice)}
 				</p>
 			),
 		},
