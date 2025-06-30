@@ -72,6 +72,7 @@ export default function ModalEditProject({ variant }: props) {
 				progressPercentage: Array.isArray(data.progressPercentage)
 					? data.progressPercentage[0]
 					: undefined,
+				doneAt: data.doneAt ? data.doneAt : undefined,
 			},
 			{
 				onSuccess: handleFormSuccess(setOpen),
@@ -148,7 +149,6 @@ export default function ModalEditProject({ variant }: props) {
 									<DatePickerField
 										onChange={field.onChange}
 										value={field.value}
-										showReset
 										disabledDate={() => false}
 									/>
 								</FormControl>
@@ -166,7 +166,6 @@ export default function ModalEditProject({ variant }: props) {
 									<DatePickerField
 										onChange={field.onChange}
 										value={field.value}
-										showReset
 										disabledDate={() => false}
 									/>
 								</FormControl>
