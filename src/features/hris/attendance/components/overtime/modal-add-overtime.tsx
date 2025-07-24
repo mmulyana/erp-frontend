@@ -128,7 +128,7 @@ export default function ModalAddOvertime() {
 									<FormItem className='flex flex-col'>
 										<FormLabel>Jumlah jam</FormLabel>
 										<FormControl>
-											<Input {...field} type='number' />
+											<Input {...field} type='number' min={1} max={24} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

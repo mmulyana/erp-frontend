@@ -225,7 +225,7 @@ export default function CashAdvanceDetail() {
 				<div className='space-y-6'>
 					<HeadPage
 						title='Riwayat'
-						subtitle='Lihat riwayat pembayaran kasbon'
+						subtitle='Lihat riwayat pengembalian kasbon'
 						icon={<History size={20} className='text-ink-primary' />}
 						action={<ModalAddTransaction />}
 						hideAction={isPaid}

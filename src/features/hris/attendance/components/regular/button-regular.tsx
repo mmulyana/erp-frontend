@@ -17,7 +17,7 @@ const config = {
 		color: 'text-success',
 	},
 	absent: {
-		label: 'Absen',
+		label: 'Tdk hadir',
 		icon: X,
 		bg: 'bg-error border-error hover:bg-red-400',
 		color: 'text-error',
