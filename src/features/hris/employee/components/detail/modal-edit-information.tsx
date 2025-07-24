@@ -129,6 +129,18 @@ export default function ModalEditInformation() {
 						/>
 						<FormField
 							control={form.control}
+							name='nik'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Nomor Induk Kependudukan (NIK)</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name='lastEducation'
 							render={({ field }) => (
 								<FormItem>

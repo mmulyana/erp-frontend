@@ -26,8 +26,6 @@ export default function ModalEditCertificate({ id }: { id?: string }) {
 
 	const { mutate, isPending } = useUpdateCertificate()
 	const { data } = useCertificate(id)
-	console.log('id', id)
-	console.log('data', data)
 
 	const form = useForm<CertificateForm>({
 		defaultValues: {

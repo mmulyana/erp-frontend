@@ -4,13 +4,13 @@ import { id } from 'date-fns/locale'
 import { useMemo } from 'react'
 
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { permissions } from '@/shared/constants/permissions'
 import PhotoUrl from '@/shared/components/common/photo-url'
 import CardV1 from '@/shared/components/common/card-v1'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
 import ModalEditInformation from './modal-edit-information'
-import ProtectedComponent from '@/shared/components/common/protected'
-import { permissions } from '@/shared/constants/permissions'
 
 export default function CardInformation() {
 	const { data, isPending } = useDetailEmployee()
@@ -44,6 +44,12 @@ export default function CardInformation() {
 					<p className='text-ink-primary/50'>Nama lengkap</p>
 					<LoaderWrapper isLoading={isPending}>
 						<p className='text-ink-primary'>{data?.fullname}</p>
+					</LoaderWrapper>
+				</div>
+				<div className='flex justify-between items-center'>
+					<p className='text-ink-primary/50'>Nomor Induk Kependudukan (NIK)</p>
+					<LoaderWrapper isLoading={isPending}>
+						<p className='text-ink-primary'>{data?.nik}</p>
 					</LoaderWrapper>
 				</div>
 				<div className='flex justify-between items-center'>

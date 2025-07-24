@@ -164,6 +164,18 @@ export default function FormNewEmployee({
 								</FormItem>
 							)}
 						/>
+						<FormField
+							control={form.control}
+							name='nik'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Nomor Induk Kependudukan (NIK)</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+								</FormItem>
+							)}
+						/>
 					</div>
 				</>
 			),

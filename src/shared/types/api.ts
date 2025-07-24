@@ -43,6 +43,7 @@ export type Employee = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+	nik?: string
 }
 
 export type Certificate = {
