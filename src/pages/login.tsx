@@ -1,15 +1,9 @@
+import LoadingState from '@/shared/components/common/loading-state'
 import useProtected from '@/features/auth/hooks/use-protected'
 import LoginForm from '@/features/auth/component/login-form'
-import { useSearchParams } from 'react-router-dom'
-import LoadingState from '@/shared/components/common/loading-state'
 
 export default function LoginPage() {
 	const { loading } = useProtected()
-
-	const [searchParams] = useSearchParams()
-
-	const mode = searchParams.get('mode')
-	const guestMode = mode === 'GUEST'
 
 	if (loading) {
 		return <LoadingState />
@@ -19,7 +13,7 @@ export default function LoginPage() {
 		<>
 			<div className='grid grid-cols-1 md:grid-cols-2 h-screen'>
 				<div className='h-full w-full flex justify-center items-center'>
-					<LoginForm guestMode={guestMode} />
+					<LoginForm />
 				</div>
 				<div className='h-full w-full justify-center items-center bg-[#475DEF] hidden md:flex'>
 					<div className='flex flex-col gap-[120px] items-center justify-center'>

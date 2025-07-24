@@ -6,8 +6,9 @@ import { useEffect } from 'react'
 
 type props = {
 	onChange?: (file: File | undefined) => void
+	accept?: string
 }
-export default function FileUpload({ onChange }: props) {
+export default function FileUpload({ onChange, accept }: props) {
 	const maxSize = 10 * 1024 * 1024
 
 	const [
@@ -23,6 +24,7 @@ export default function FileUpload({ onChange }: props) {
 		},
 	] = useFileUpload({
 		maxSize,
+		accept,
 		// onFilesChange: (files) => {
 		// 	onChange?.(files[0]?.file instanceof File ? files[0].file : undefined)
 		// },

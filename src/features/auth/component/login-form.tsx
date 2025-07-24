@@ -21,7 +21,7 @@ import { LoginSchema } from '../schema'
 
 type FormData = z.infer<typeof LoginSchema>
 
-export default function LoginForm({ guestMode }: { guestMode?: boolean }) {
+export default function LoginForm() {
 	const { mutate } = useLogin()
 
 	const form = useForm<FormData>({

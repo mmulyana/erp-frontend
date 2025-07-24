@@ -11,7 +11,7 @@ import {
 } from '@/shared/components/ui/tabs'
 
 import EmployeeCashAdvance from './employee-cash-advance'
-import EmployeeCertificate from './employee-certificate'
+import EmployeeCertificate from '../certificate/employee-certificate'
 import EmployeeOvertime from './employee-overtime'
 import EmployeeRegular from './employee-regular'
 import EmployeeProject from './employee-project'

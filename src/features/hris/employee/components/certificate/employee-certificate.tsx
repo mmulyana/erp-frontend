@@ -7,9 +7,10 @@ import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
 import SearchV3 from '@/shared/components/common/search-v3'
 
-import ModalDetailCertificate from './modal-detail-certificate'
+import ModalDetailCertificate from '../certificate/modal-detail-certificate'
+import ModalAddCertificate from '../certificate/modal-add-certificate'
 import { useCertificates } from '../../api/use-certificates'
-import ModalAddCertificate from './modal-add-certificate'
+
 import ProtectedComponent from '@/shared/components/common/protected'
 import { permissions } from '@/shared/constants/permissions'
 

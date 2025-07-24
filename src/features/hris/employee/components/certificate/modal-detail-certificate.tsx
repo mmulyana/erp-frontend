@@ -1,3 +1,14 @@
+import { id as ind } from 'date-fns/locale'
+import { Link } from 'react-router-dom'
+import { Eye } from 'lucide-react'
+import { format } from 'date-fns'
+
+import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import ProtectedComponent from '@/shared/components/common/protected'
+import { buttonVariants } from '@/shared/components/ui/button'
+import { permissions } from '@/shared/constants/permissions'
+import { baseUrl } from '@/shared/constants/urls'
+import { convertUTCToWIB } from '@/shared/utils'
 import {
 	Dialog,
 	DialogContent,
@@ -5,20 +16,10 @@ import {
 	DialogFooter,
 	DialogTitle,
 } from '@/shared/components/ui/dialog'
-import { atom, useAtom } from 'jotai'
-import { useCertificate } from '../../api/use-certificate'
-import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
-import { format } from 'date-fns'
-import { convertUTCToWIB } from '@/shared/utils'
-import { id as ind } from 'date-fns/locale'
-import { Button, buttonVariants } from '@/shared/components/ui/button'
-import { Eye } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { baseUrl } from '@/shared/constants/urls'
-import ModalEditCertificate from './modal-edit-certificate'
+
 import ModalDeleteCertificate from './modal-delete-certificate'
-import ProtectedComponent from '@/shared/components/common/protected'
-import { permissions } from '@/shared/constants/permissions'
+import ModalEditCertificate from './modal-edit-certificate'
+import { useCertificate } from '../../api/use-certificate'
 
 export default function ModalDetailCertificate({
 	id,
@@ -98,7 +99,7 @@ export default function ModalDetailCertificate({
 								id={id}
 								onSuccess={() => setOpen(false)}
 							/>
-							<ModalEditCertificate />
+							<ModalEditCertificate id={id} />
 						</div>
 					</DialogFooter>
 				</ProtectedComponent>
