@@ -67,6 +67,7 @@ export default function ModalEditInformation() {
 					: undefined,
 				lastEducation: data.lastEducation,
 				photoUrl: data.photoUrl,
+				nik: data.nik,
 			})
 		}
 	}, [data])
@@ -132,7 +133,7 @@ export default function ModalEditInformation() {
 							name='nik'
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
-									<FormLabel>Nomor Induk Kependudukan (NIK)</FormLabel>
+									<FormLabel>NIK</FormLabel>
 									<FormControl>
 										<Input {...field} />
 									</FormControl>
