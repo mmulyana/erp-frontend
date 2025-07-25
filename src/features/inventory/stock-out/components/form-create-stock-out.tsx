@@ -63,7 +63,7 @@ export default function FormCreateStockOut({
 				onSubmit={form.handleSubmit(onSubmit)}
 				className={cn(
 					'flex flex-col max-w-full w-[800px] mx-auto pt-6 px-6 md:px-0',
-					variant === 'form' && 'pb-10 gap-6'
+					variant === 'form' ? 'pb-10 gap-6' : 'px-0'
 				)}
 			>
 				<div className='space-y-6'>
