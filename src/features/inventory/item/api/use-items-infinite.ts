@@ -6,7 +6,7 @@ import { urls } from '@/shared/constants/urls'
 import { Inventory } from '@/shared/types/api'
 import http from '@/shared/utils/http'
 
-export function useItemInfinite(params: Pagination) {
+export function useItemInfinite(params: Pagination & { type?: string }) {
 	return useInfiniteQuery<NormalizedResponse<Inventory>>({
 		queryKey: [keys.itemInfinite, params],
 		queryFn: async ({ pageParam = 1 }) => {

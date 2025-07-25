@@ -12,7 +12,7 @@ import PhotoUrl from '@/shared/components/common/photo-url'
 import { useItems } from '../api/use-items'
 import { statusItem } from '../constant'
 
-export default function TableItem() {
+export default function TableItem({ type }: { type?: string }) {
 	const { limit, page, q, sortBy, sortOrder } = usePagination()
 	const [query] = useQueryStates({
 		warehouseId: parseAsString.withDefault(''),
@@ -30,6 +30,7 @@ export default function TableItem() {
 		brandId: query.brandId,
 		warehouseId: query.warehouseId,
 		status: query.status,
+		type,
 	})
 
 	// COLUMNS EMPLOYEE

@@ -14,10 +14,11 @@ import { useStatusChart } from '../api/use-status-chart'
 
 type props = {
 	variant?: 'default' | 'compact'
+	type?: string
 }
 
-export default function ItemAvailability({ variant = 'default' }: props) {
-	const { data } = useStatusChart()
+export default function ItemAvailability({ variant = 'default', type }: props) {
+	const { data } = useStatusChart({ type })
 	return (
 		<CardV1
 			title='Ketersediaan Barang'

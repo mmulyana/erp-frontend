@@ -24,8 +24,7 @@ interface props<T extends BaseItem> {
 	defaultValue?: string
 	onSelect?: (value: string) => void
 	disabled?: boolean
-	style?: { value?: string }
-
+	style?: { value?: string; content?: string }
 	placeholder?: string
 	label?: (item: T) => string
 	renderItem?: (item: T, isSelected: boolean) => React.ReactNode
@@ -155,9 +154,9 @@ export default function InfiniteCombobox<T extends BaseItem>({
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent
-				className='p-0'
+				className={cn('p-0', style?.content)}
 				align='start'
-				style={{ width: 'var(--radix-popover-trigger-width)' }}
+				// style={{ width: 'var(--radix-popover-trigger-width)' }}
 			>
 				<Command shouldFilter={false}>
 					<CommandInput

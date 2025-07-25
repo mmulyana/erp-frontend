@@ -36,6 +36,7 @@ const DetailProject = lazy(() => import('./pages/project/detail-project'))
 // INVENTORY
 const InventoryDashboard = lazy(() => import('./pages/inventory/dashboard'))
 const Item = lazy(() => import('./pages/inventory/item'))
+const Material = lazy(() => import('./pages/inventory/material'))
 const ItemDetail = lazy(() => import('./pages/inventory/detail-item'))
 const Location = lazy(() => import('./pages/inventory/location'))
 const LocationDetail = lazy(() => import('./pages/inventory/location-detail'))
@@ -137,6 +138,11 @@ export const routes: RoutesConfig[] = [
 	{
 		path: paths.inventoryMasterdataItem,
 		component: <Item />,
+		permission: [permissions.pages_inventory_item],
+	},
+	{
+		path: paths.inventoryMasterdataMaterial,
+		component: <Material />,
 		permission: [permissions.pages_inventory_item],
 	},
 	{

@@ -18,7 +18,6 @@ export const statusItem: BadgeOption[] = [
 	},
 ]
 
-
 export const statusOption: selectOption[] = [
 	{
 		label: 'Habis',
@@ -31,5 +30,16 @@ export const statusOption: selectOption[] = [
 	{
 		label: 'Tersedia',
 		value: 'Available',
+	},
+]
+
+export const inventoryTypes = [
+	{
+		value: 'tool',
+		label: 'Alat proyek',
+	},
+	{
+		value: 'material',
+		label: 'Material',
 	},
 ]

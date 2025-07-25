@@ -11,12 +11,13 @@ export default function ItemCombobox(props: {
 	onSelect?: (val: string) => void
 	defaultValue?: string
 	className?: string
+	type?: string
 }) {
 	return (
 		<InfiniteCombobox
 			{...props}
 			useInfiniteQuery={({ search }) =>
-				useItemInfinite({ search, limit: '10' })
+				useItemInfinite({ search, limit: '10', type: props.type })
 			}
 			style={{ value: props.className }}
 			fetchItemById={fetchItemById}

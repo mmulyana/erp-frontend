@@ -31,11 +31,22 @@ import { Button } from '@/shared/components/ui/button'
 import { Pencil } from 'lucide-react'
 import ButtonSubmit from '@/shared/components/common/button-submit'
 import { handleFormError, handleFormSuccess } from '@/shared/utils/form'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+} from '@/shared/components/ui/select'
+import { SelectValue } from '@radix-ui/react-select'
+import { inventoryTypes } from '../constant'
+import { useQueryClient } from '@tanstack/react-query'
+import { keys } from '@/shared/constants/keys'
 
 type props = {
 	variant: 'info' | 'detail'
 }
 export default function ModalEditItem({ variant }: props) {
+	const queryClient = useQueryClient()
 	const { id } = useParams()
 	const { data } = useItem({ id })
 	const { mutate, isPending } = useUpdateItem()
@@ -57,6 +68,7 @@ export default function ModalEditItem({ variant }: props) {
 				name: res.name,
 				photoUrl: res.photoUrl,
 				unitOfMeasurement: res.unitOfMeasurement || undefined,
+				type: res.type,
 			})
 		}
 	}, [data])
@@ -67,7 +79,9 @@ export default function ModalEditItem({ variant }: props) {
 		mutate(
 			{ ...data, id },
 			{
-				onSuccess: handleFormSuccess(setOpen),
+				onSuccess: handleFormSuccess(setOpen, () => {
+					queryClient.invalidateQueries({ queryKey: [keys.itemDetail, id] })
+				}),
 				onError: handleFormError<ItemForm>(form),
 			}
 		)
@@ -108,6 +122,28 @@ export default function ModalEditItem({ variant }: props) {
 									onChange={field.onChange}
 								/>
 							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					name='type'
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Tipe</FormLabel>
+							<Select value={field.value} onValueChange={field.onChange}>
+								<SelectTrigger>
+									<SelectValue placeholder='Tipe' />
+								</SelectTrigger>
+								<SelectContent>
+									{inventoryTypes.map((i, index) => (
+										<SelectItem value={i.value} key={index}>
+											{i.label}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -210,7 +246,7 @@ export default function ModalEditItem({ variant }: props) {
 				<Form {...form}>
 					<form className='px-4 pt-4' onSubmit={form.handleSubmit(submit)}>
 						{FormType[variant as keyof typeof FormType]}
-						<DialogFooter className='pt-6'>
+						<DialogFooter className='pt-6 gap-2'>
 							<DialogClose asChild>
 								<Button variant='outline' type='button'>
 									Batal

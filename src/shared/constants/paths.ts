@@ -30,6 +30,7 @@ export const paths = {
 
 	inventory: '/inventory',
 	inventoryMasterdataItem: '/inventory/masterdata/item',
+	inventoryMasterdataMaterial: '/inventory/masterdata/material',
 	inventoryMasterdataItemDetail: '/inventory/masterdata/item/:id',
 	inventoryMasterdataLocation: '/inventory/masterdata/location',
 	inventoryMasterdataLocationDetail: '/inventory/masterdata/location/:id',

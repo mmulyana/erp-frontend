@@ -40,6 +40,7 @@ type props = {
 	onSubmit: (data: StockOutForm) => void
 	isPending?: boolean
 	variant?: 'project' | 'form'
+	type?: string
 }
 export default function FormCreateStockOut({
 	form,
@@ -47,6 +48,7 @@ export default function FormCreateStockOut({
 	projectId,
 	isPending,
 	variant = 'form',
+	type,
 }: props) {
 	const { fields, append, remove } = useFieldArray({
 		control: form.control,
@@ -176,6 +178,7 @@ export default function FormCreateStockOut({
 															<ItemCombobox
 																onSelect={field.onChange}
 																defaultValue={field.value || ''}
+																type={type}
 															/>
 														</FormControl>
 														<FormMessage className='absolute text-nowrap text-sm -bottom-5' />

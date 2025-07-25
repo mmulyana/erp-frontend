@@ -7,4 +7,5 @@ export type ItemForm = {
 	unitOfMeasurement?: string
 	photoUrl?: string | File | null
 	category?: string
+	type?: string
 }

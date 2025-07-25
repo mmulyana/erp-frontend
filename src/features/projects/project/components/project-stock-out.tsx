@@ -185,6 +185,7 @@ function ModalAddStockOut({ id }: props & { callback?: () => void }) {
 					onSubmit={submit}
 					isPending={isPending}
 					variant='project'
+					type='material'
 				/>
 			</DialogContent>
 		</Dialog>

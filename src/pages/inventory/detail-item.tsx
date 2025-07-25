@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { House } from 'lucide-react'
 import { useQueryState } from 'nuqs'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { CommandSearch } from '@/features/command/components/command-search'
 import { useItem } from '@/features/inventory/item/api/use-item'
@@ -16,7 +16,7 @@ import { useDynamicLinks } from '@/shared/utils/link'
 import { paths } from '@/shared/constants/paths'
 import { Link } from '@/shared/types'
 
-const links: Link[] = [
+const baseLinks: Link[] = [
 	{
 		icon: <House size={20} />,
 		name: 'Dashboard',
@@ -37,20 +37,27 @@ export default function DetailItem() {
 	const { id } = useParams()
 	const [query, setQuery] = useQueryState('scroll')
 
-	const { data } = useItem({ id })
+	const { data, isSuccess } = useItem({ id })
 
-	const dynamicLink = useDynamicLinks({
-		baseLinks: links,
-		replaceName: 'Detail',
-		newLink: data?.data
-			? {
-					name: data.data.name ?? '',
-					path: `${paths.inventoryMasterdataItem}/${data.data.id}`,
-			  }
-			: undefined,
-		condition: !!(id && data?.data),
-	})
+	const links = useMemo(() => {
+		if (isSuccess && data?.data) {
+			return baseLinks.map((item) => {
+				const isMaterial = data.data.type === 'material'
 
+				if (item.name === 'Barang') {
+					return {
+						...item,
+						name: isMaterial ? 'Material' : 'Alat proyek',
+						path: isMaterial
+							? paths.inventoryMasterdataMaterial
+							: paths.inventoryMasterdataItem,
+					}
+				}
+				return item
+			})
+		}
+		return baseLinks
+	}, [data, isSuccess])
 	useEffect(() => {
 		if (query !== '') {
 			window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -60,7 +67,7 @@ export default function DetailItem() {
 
 	return (
 		<DetailLayout
-			links={dynamicLink}
+			links={links}
 			style={{ header: 'w-[1020px]' }}
 			buttonAction={<CommandSearch />}
 		>

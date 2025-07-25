@@ -12,6 +12,7 @@ export const useItems = (
 		brandId?: string
 		warehouseId?: string
 		status?: string
+		type?: string
 	}
 ) => {
 	return useQuery({

@@ -93,11 +93,12 @@ export default function FormCreateLoan({
 							name='inventoryId'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Barang</FormLabel>
+									<FormLabel>Alat Proyek</FormLabel>
 									<FormControl>
 										<ItemCombobox
 											defaultValue={field.value}
 											onSelect={field.onChange}
+											type='tool'
 										/>
 									</FormControl>
 									<FormMessage />

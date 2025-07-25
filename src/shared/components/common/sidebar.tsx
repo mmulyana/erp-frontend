@@ -3,6 +3,7 @@ import {
 	BriefcaseBusiness,
 	Building,
 	ChevronLeft,
+	Cuboid,
 	FileBarChart,
 	FileClock,
 	FilePen,
@@ -92,7 +93,7 @@ const hrisLink: SidebarLinkGroup[] = [
 		],
 	},
 	{
-		groupName: 'Absensi',
+		groupName: 'Kehadiran',
 		links: [
 			{
 				href: paths.hrisAttendanceRegular,
@@ -192,6 +193,12 @@ const inventoryLink: SidebarLinkGroup[] = [
 				href: paths.inventoryMasterdataItem,
 				icon: <Hammer size={20} strokeWidth={2} />,
 				name: 'Barang',
+				permission: permissions.pages_inventory_item,
+			},
+			{
+				href: paths.inventoryMasterdataMaterial,
+				icon: <Cuboid size={20} strokeWidth={2} />,
+				name: 'Material',
 				permission: permissions.pages_inventory_item,
 			},
 			{
@@ -305,7 +312,7 @@ const allLink: Links[] = [
 
 export default function AppSidebar({ module }: AppSidebarProps) {
 	const { isMobile, toggleSidebar } = useSidebar()
-	const menus = useActiveMenu()	
+	const menus = useActiveMenu()
 	const [activeMobileModule, setActiveMobileModule] = useState(module)
 	const userPermissions = usePermission()
 

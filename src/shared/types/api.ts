@@ -291,6 +291,7 @@ export type Inventory = {
 	updatedAt: string
 	deletedAt?: string
 	status?: string
+	type?: string
 
 	brand?: BrandInventory
 	warehouse?: Warehouse
