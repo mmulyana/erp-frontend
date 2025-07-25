@@ -2,9 +2,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { parseAsString, useQueryStates } from 'nuqs'
 import { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from 'react-router-dom'
+import { id } from 'date-fns/locale'
 import { format } from 'date-fns'
 
 import CreatedSelect from '@/shared/components/common/select/created-select'
+import ProtectedComponent from '@/shared/components/common/protected'
 import ToggleSwitch from '@/shared/components/common/toggle-switch'
 import FilterReset from '@/shared/components/common/filter-reset'
 import SortButton from '@/shared/components/common/sort-button'
@@ -12,6 +14,7 @@ import SearchV3 from '@/shared/components/common/search-v3'
 import { DataTable } from '@/shared/components/common/data-table'
 import { useHasQueryValue } from '@/shared/hooks/use-has-query'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { permissions } from '@/shared/constants/permissions'
 import { Employee, selectOption } from '@/shared/types'
 import { paths } from '@/shared/constants/paths'
 import { keys } from '@/shared/constants/keys'
@@ -21,8 +24,6 @@ import { useEmployees } from '@/features/hris/employee/api/use-employees'
 
 import { useUpdateEmployee } from '../api/use-update-employee'
 import FilterEmployee from './filter-employee'
-import ProtectedComponent from '@/shared/components/common/protected'
-import { permissions } from '@/shared/constants/permissions'
 
 const dateOptions: selectOption[] = [
 	{
@@ -77,7 +78,9 @@ export default function TableEmployee() {
 			cell: ({ row }) =>
 				row.original.joinedAt && (
 					<p className='text-nowrap'>
-						{format(row.original.joinedAt, 'dd MMMM yyyy')}
+						{format(row.original.joinedAt, 'PPP', {
+							locale: id,
+						})}
 					</p>
 				),
 		},

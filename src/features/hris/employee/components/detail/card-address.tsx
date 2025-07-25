@@ -1,13 +1,13 @@
 import { MapPin } from 'lucide-react'
 
-import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import ProtectedComponent from '@/shared/components/common/protected'
 import CardV1 from '@/shared/components/common/card-v1'
+import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import { permissions } from '@/shared/constants/permissions'
 import { formatPhone } from '@/shared/utils'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
-import ModalEditAddress from './modal-edit-address'
-import ProtectedComponent from '@/shared/components/common/protected'
-import { permissions } from '@/shared/constants/permissions'
+import ModalEditEmployee from '../modal-edit-employee'
 
 export default function CardAddress() {
 	const { data, isPending } = useDetailEmployee()
@@ -19,7 +19,7 @@ export default function CardAddress() {
 			style={{ content: 'space-y-6 pt-4' }}
 			action={
 				<ProtectedComponent required={[permissions.employee_update]}>
-					<ModalEditAddress />
+					<ModalEditEmployee variant='address' />
 				</ProtectedComponent>
 			}
 		>

@@ -16,8 +16,8 @@ import {
 
 import { useUpdateCertificate } from '../../api/use-update-certificate'
 import { useCertificate } from '../../api/use-certificate'
-import { CertificateForm } from '../../types'
 import FormCertificate from './form-certificate'
+import { CertificateForm } from '../../types'
 
 export default function ModalEditCertificate({ id }: { id?: string }) {
 	const { id: employeeId } = useParams()

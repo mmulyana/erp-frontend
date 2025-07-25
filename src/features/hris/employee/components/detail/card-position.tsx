@@ -2,16 +2,16 @@ import { differenceInMonths, differenceInYears } from 'date-fns'
 import { BriefcaseBusiness } from 'lucide-react'
 import { useMemo } from 'react'
 
+import ProtectedComponent from '@/shared/components/common/protected'
 import CardData from '@/shared/components/common/card-data'
 import CardV1 from '@/shared/components/common/card-v1'
 import { LoaderWrapper } from '@/shared/components/common/loader-wrapper'
+import { permissions } from '@/shared/constants/permissions'
 import { formatToRupiah } from '@/shared/utils'
 import { PayType } from '@/shared/types/api'
 
 import { useDetailEmployee } from '../../hooks/use-detail-employee'
-import ModalEditPosition from './modal-edit-position'
-import ProtectedComponent from '@/shared/components/common/protected'
-import { permissions } from '@/shared/constants/permissions'
+import ModalEditEmployee from '../modal-edit-employee'
 
 export default function CardPosition() {
 	const { data, isPending } = useDetailEmployee()
@@ -42,7 +42,7 @@ export default function CardPosition() {
 				icon={<BriefcaseBusiness size={20} className='text-ink-primary' />}
 				action={
 					<ProtectedComponent required={[permissions.employee_update]}>
-						<ModalEditPosition />
+						<ModalEditEmployee variant='position' />
 					</ProtectedComponent>
 				}
 			>

@@ -5,14 +5,13 @@ import { useState } from 'react'
 
 import { DataTable } from '@/shared/components/common/data-table'
 import { usePagination } from '@/shared/hooks/use-pagination'
+import { permissions } from '@/shared/constants/permissions'
+import ProtectedComponent from '@/shared/components/common/protected'
 import SearchV3 from '@/shared/components/common/search-v3'
 
 import ModalDetailCertificate from '../certificate/modal-detail-certificate'
 import ModalAddCertificate from '../certificate/modal-add-certificate'
 import { useCertificates } from '../../api/use-certificates'
-
-import ProtectedComponent from '@/shared/components/common/protected'
-import { permissions } from '@/shared/constants/permissions'
 
 export default function EmployeeCertificate() {
 	const [open, setOpen] = useState(false)

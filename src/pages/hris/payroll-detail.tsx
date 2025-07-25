@@ -26,6 +26,7 @@ import { Link, selectOption } from '@/shared/types'
 import { formatThousands } from '@/shared/utils'
 import { paths } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
+import { useMemo } from 'react'
 
 const links: Link[] = [
 	{
@@ -93,10 +94,12 @@ export default function PayrolleDetail() {
 
 	const column: ColumnDef<Payroll & { salary: number }>[] = [
 		{
+			id: 'name',
 			header: 'Nama',
 			cell: ({ row }) => row.original.employee.fullname,
 		},
 		{
+			id: 'workDay',
 			header: 'Hari kerja',
 			accessorKey: 'workDay',
 		},
@@ -105,11 +108,13 @@ export default function PayrolleDetail() {
 			accessorKey: 'overtimeHour',
 		},
 		{
+			id: 'deduction',
 			header: 'Potongan',
 			accessorKey: 'deduction',
 			cell: ({ row }) => `Rp ${formatThousands(row.original.deduction)}`,
 		},
 		{
+			id: 'note',
 			header: 'Catatan',
 			accessorKey: 'note',
 			cell: ({ row }) => row.original.note && row.original.note.split('|')[0],
@@ -120,6 +125,7 @@ export default function PayrolleDetail() {
 			cell: ({ row }) => `Rp ${formatThousands(row.original.salary)}`,
 		},
 		{
+			id: 'status',
 			header: 'Status',
 			cell: ({ row }) => {
 				const isDone = row.original.status === PayrollStatus.DONE
@@ -163,6 +169,13 @@ export default function PayrolleDetail() {
 		},
 	]
 
+	const columns = useMemo(() => {
+		if (data?.data?.payType === 'monthly') {
+			return column.filter((i) => i.id !== 'workDay')
+		}
+		return column
+	}, [data])
+
 	return (
 		<DetailLayout
 			links={linkMemo}
@@ -193,7 +206,7 @@ export default function PayrolleDetail() {
 						</div>
 					</div>
 					<DataTable
-						columns={column}
+						columns={columns}
 						data={payrolls?.data.data || []}
 						totalItems={payrolls?.data.total}
 						totalPages={payrolls?.data.total_pages}

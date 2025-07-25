@@ -9,6 +9,7 @@ import { Payroll } from '@/shared/types/api'
 
 import { usePayrolls } from '../api/use-payrolls'
 import { DrawerSalarySlip } from './drawer-salary-slip'
+import { id } from 'date-fns/locale'
 
 export default function SalarySlipTable() {
 	const { page, limit, q, sortBy, sortOrder } = usePagination()
@@ -42,7 +43,9 @@ export default function SalarySlipTable() {
 			header: 'Tanggal diproses',
 			cell: ({ row }) =>
 				row.original.doneAt &&
-				format(new Date(row.original.doneAt), 'dd/MM/yyyy'),
+				format(new Date(row.original.doneAt), 'PPP', {
+					locale: id,
+				}),
 		},
 		{
 			header: 'Gaji diterima',

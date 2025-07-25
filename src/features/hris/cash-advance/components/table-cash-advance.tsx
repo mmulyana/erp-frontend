@@ -12,6 +12,7 @@ import { cn } from '@/shared/utils/cn'
 
 import { useCashAdvances } from '../api/use-cash-advances'
 import { CashAdvance } from '../types'
+import { id } from 'date-fns/locale'
 
 export default function TableCashAdvance() {
 	const navigate = useNavigate()
@@ -50,7 +51,10 @@ export default function TableCashAdvance() {
 		{
 			id: 'requestDate',
 			header: 'Tanggal',
-			cell: ({ row }) => format(new Date(row.original.date), 'dd/MM/yyyy'),
+			cell: ({ row }) =>
+				format(new Date(row.original.date), 'PPP', {
+					locale: id,
+				}),
 		},
 		{
 			id: 'note',

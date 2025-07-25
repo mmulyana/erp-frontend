@@ -1,48 +1,11 @@
-import FilterButton from '@/shared/components/common/filter-button'
-import BaseSelect from '@/shared/components/common/select/base-select'
-import { Input } from '@/shared/components/ui/input'
-import { selectOption } from '@/shared/types'
-import { debounce } from '@/shared/utils'
 import { parseAsString, useQueryStates } from 'nuqs'
 import React, { useMemo, useState } from 'react'
 
-export const activeOption: selectOption[] = [
-	{
-		label: 'Aktif',
-		value: 'true',
-	},
-	{
-		label: 'Nonaktif',
-		value: 'false',
-	},
-]
-
-export const educationOption: selectOption[] = [
-	{
-		label: 'SD',
-		value: 'sd',
-	},
-	{
-		label: 'SMP',
-		value: 'smp',
-	},
-	{
-		label: 'SMA',
-		value: 'sma',
-	},
-	{
-		label: 'S1',
-		value: 's1',
-	},
-	{
-		label: 'S2',
-		value: 's2',
-	},
-	{
-		label: 'S3',
-		value: 's3',
-	},
-]
+import { activeOption, educationOption } from '@/shared/constants/common'
+import BaseSelect from '@/shared/components/common/select/base-select'
+import FilterButton from '@/shared/components/common/filter-button'
+import { Input } from '@/shared/components/ui/input'
+import { debounce } from '@/shared/utils'
 
 type props = {
 	className?: string
