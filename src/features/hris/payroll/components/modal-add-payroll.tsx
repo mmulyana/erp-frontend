@@ -27,12 +27,23 @@ import {
 } from '@/shared/components/ui/form'
 
 import { useCreatePeriod } from '../api/use-create-period'
+import { Textarea } from '@/shared/components/ui/textarea'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/shared/components/ui/select'
+import { months } from '@/shared/constants/months'
+import { getMonthRange } from '@/shared/utils'
 
 type Form = {
-	name: string
+	name?: string
 	startDate: Date
 	endDate: Date
 	payType: string
+	description?: string
 }
 
 const options = [
@@ -50,6 +61,8 @@ const options = [
 
 export default function ModalAddPayroll() {
 	const [open, setOpen] = useState(false)
+	const [monthIndex, setMonthIndex] = useState(0)
+
 	const { mutate, isPending } = useCreatePeriod()
 	const form = useForm<Form>({
 		defaultValues: {
@@ -60,7 +73,23 @@ export default function ModalAddPayroll() {
 		},
 	})
 
+	const payType = form.watch('payType')
+
 	const submit = (payload: Form) => {
+		if (payType === 'monthly') {
+			let { endDate, startDate } = getMonthRange(
+				monthIndex,
+				new Date().getFullYear()
+			)
+			mutate(
+				{ ...payload, startDate, endDate },
+				{
+					onSuccess: handleFormSuccess(setOpen),
+					onError: handleFormError<Form>(form),
+				}
+			)
+			return
+		}
 		mutate(payload, {
 			onSuccess: handleFormSuccess(setOpen),
 			onError: handleFormError<Form>(form),
@@ -96,52 +125,6 @@ export default function ModalAddPayroll() {
 						onSubmit={form.handleSubmit(submit)}
 						className='flex gap-4 flex-col pt-4'
 					>
-						<FormField
-							name='name'
-							control={form.control}
-							render={({ field }) => (
-								<FormItem className='flex flex-col'>
-									<FormLabel>Nama</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<div className='flex gap-4'>
-							<FormField
-								name='startDate'
-								control={form.control}
-								render={({ field }) => (
-									<FormItem className='flex flex-col w-full'>
-										<FormLabel>Tanggal dimulai</FormLabel>
-										<DatePickerField
-											value={field.value}
-											onChange={field.onChange}
-											disabledDate={() => false}
-										/>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								name='endDate'
-								control={form.control}
-								render={({ field }) => (
-									<FormItem className='flex flex-col w-full'>
-										<FormLabel>Tangga berakhir</FormLabel>
-										<DatePickerField
-											value={field.value}
-											onChange={field.onChange}
-											disabledDate={() => false}
-										/>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
-
 						<div className='space-y-2'>
 							<FormLabel className='mb-2'>Jenis Periode Gaji</FormLabel>
 							<FormField
@@ -188,6 +171,72 @@ export default function ModalAddPayroll() {
 								)}
 							/>
 						</div>
+
+						{!!payType &&
+							(payType === 'daily' ? (
+								<div className='flex gap-4'>
+									<FormField
+										name='startDate'
+										control={form.control}
+										render={({ field }) => (
+											<FormItem className='flex flex-col w-full'>
+												<FormLabel>Tanggal dimulai</FormLabel>
+												<DatePickerField
+													value={field.value}
+													onChange={field.onChange}
+													disabledDate={() => false}
+												/>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name='endDate'
+										control={form.control}
+										render={({ field }) => (
+											<FormItem className='flex flex-col w-full'>
+												<FormLabel>Tangga berakhir</FormLabel>
+												<DatePickerField
+													value={field.value}
+													onChange={field.onChange}
+													disabledDate={() => false}
+												/>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
+							) : (
+								<Select
+									value={String(monthIndex)}
+									onValueChange={(e) => setMonthIndex(Number(e))}
+								>
+									<SelectTrigger>
+										<SelectValue placeholder='Pilih bulan' />
+									</SelectTrigger>
+									<SelectContent>
+										{months.map((i) => (
+											<SelectItem value={String(i.value)} key={i.value}>
+												{i.name}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							))}
+
+						<FormField
+							name='description'
+							control={form.control}
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Catatan</FormLabel>
+									<FormControl>
+										<Textarea {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						<DialogFooter>
 							<div className='flex justify-end gap-4 items-center pt-4'>

@@ -115,7 +115,7 @@ export type CashAdvanceTransaction = {
 
 export type PayrollPeriod = {
 	id: string
-	name: string
+	name?: string
 	startDate: string
 	endDate: string
 	payType: PayType
@@ -123,6 +123,7 @@ export type PayrollPeriod = {
 	createdAt: string
 	updatedAt: string
 	deletedAt?: string
+	description?: string
 }
 
 export type Payroll = {

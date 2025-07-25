@@ -1,3 +1,5 @@
+import { endOfMonth, startOfMonth } from 'date-fns'
+
 export function debounce<T extends (...args: any[]) => void>(
 	func: T,
 	delay: number
@@ -108,4 +110,14 @@ export const hasAnyPermission = (
 ) => {
 	if (!required || required.length === 0) return true
 	return required.some((perm) => userPermissions.includes(perm))
+}
+
+export function getMonthRange(
+	monthIndex: number,
+	year: number
+): { startDate: Date; endDate: Date } {
+	const date = new Date(year, monthIndex)
+	const startDate = startOfMonth(date)
+	const endDate = endOfMonth(date)
+	return { startDate, endDate }
 }

@@ -11,6 +11,7 @@ import { formatThousands } from '@/shared/utils'
 import { cn } from '@/shared/utils/cn'
 
 import { usePeriods } from '../api/use-periods'
+import { id } from 'date-fns/locale'
 
 export default function TablePayroll() {
 	const navigate = useNavigate()
@@ -27,25 +28,31 @@ export default function TablePayroll() {
 
 	const column: ColumnDef<PayrollPeriod & { totalSpending: number }>[] = [
 		{
-			accessorKey: 'name',
-			header: 'Nama',
-		},
-		{
 			id: 'startDate',
 			header: 'Tanggal mulai',
 			cell: ({ row }) =>
-				row.original.startDate && format(row.original.startDate, 'dd/MM/yyyy'),
+				row.original.startDate &&
+				format(row.original.startDate, 'PPP', {
+					locale: id,
+				}),
 		},
 		{
 			id: 'endDate',
 			header: 'Tanggal berakhir',
 			cell: ({ row }) =>
-				row.original.endDate && format(row.original.endDate, 'dd/MM/yyyy'),
+				row.original.endDate &&
+				format(row.original.endDate, 'PPP', {
+					locale: id,
+				}),
 		},
 		{
 			id: 'total',
 			header: 'Total pengeluaran',
 			cell: ({ row }) => `Rp ${formatThousands(row.original.totalSpending)}`,
+		},
+		{
+			accessorKey: 'description',
+			header: 'Keterangan',
 		},
 		{
 			id: 'status',
