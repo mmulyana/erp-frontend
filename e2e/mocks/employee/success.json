@@ -1,0 +1,22 @@
+{
+	"message": "pegawai berhasil ditambahkan",
+	"data": {
+		"id": "b7c3b901-d8b6-4315-b300-bf3bd9949bc1",
+		"fullname": "Rosim",
+		"position": "",
+		"photoUrl": null,
+		"birthDate": null,
+		"joinedAt": null,
+		"active": true,
+		"phone": "",
+		"lastEducation": "",
+		"salary": null,
+		"overtimeSalary": null,
+		"safetyInductionDate": null,
+		"address": "",
+		"payType": "daily",
+		"createdAt": "2025-07-22T14:54:45.728Z",
+		"updatedAt": "2025-07-22T14:54:45.728Z",
+		"deletedAt": null
+	}
+}

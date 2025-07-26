@@ -1,0 +1,10 @@
+{
+	"message": "Data yang diminta belum sesuai, mohon ulangi",
+	"errors": [
+		{
+			"code": "too_small",
+			"path": ["fullname"],
+			"message": "Nama pegawai tidak boleh kosong"
+		}
+	]
+}
