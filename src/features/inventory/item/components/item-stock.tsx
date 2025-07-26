@@ -18,14 +18,14 @@ export default function ItemStock({ id }: props) {
 			style={{ content: 'pt-4 space-y-4' }}
 		>
 			<div>
-				<p className='text-ink-light'>{isMaterial ? 'Tersisa' : 'Tersedia'}</p>
+				<p className='text-ink-light'>{isMaterial ? 'Total' : 'Tersedia'}</p>
 				<p className='text-ink-secondary text-2xl font-medium'>
 					{data?.data?.totalStock} {data?.data?.unitOfMeasurement}
 				</p>
 			</div>
 			{!isMaterial && (
 				<div>
-					<p className='text-ink-light'>Tersisa</p>
+					<p className='text-ink-light'>Tersedia</p>
 					<p className='text-ink-secondary text-2xl font-medium'>
 						{data?.data?.availableStock}
 					</p>

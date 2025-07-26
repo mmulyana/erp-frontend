@@ -37,18 +37,18 @@ test.describe('create new employee', () => {
 	})
 
 	test('should show validation error if name not filled', async ({ page }) => {
-		await page.goto('/hris/masterdata/new-employee')
-
-		const saveButton = page.getByRole('button', { name: /Simpan/i })
-		await expect(saveButton).toBeVisible()
-		await saveButton.click()
-
 		await page.route('**/api/employee', async (route) => {
 			await route.fulfill({
 				status: 400,
 				body: JSON.stringify(errorResponse),
 			})
 		})
+
+		await page.goto('/hris/masterdata/new-employee')
+
+		const saveButton = page.getByRole('button', { name: /Simpan/i })
+		await expect(saveButton).toBeVisible()
+		await saveButton.click()
 
 		const errorMessage = page
 			.getByText('Nama pegawai tidak boleh kosong')
@@ -59,17 +59,17 @@ test.describe('create new employee', () => {
 	test('should successfully fill and submit employee name', async ({
 		page,
 	}) => {
-		await page.goto('/hris/masterdata/new-employee')
-
-		const nameInput = page.getByTestId(testIds.inputNameEmployee)
-		const saveButton = page.getByRole('button', { name: /Simpan/i })
-
 		await page.route('**/api/employee', async (route) => {
 			await route.fulfill({
 				status: 200,
 				body: JSON.stringify(successResponse),
 			})
 		})
+		
+		await page.goto('/hris/masterdata/new-employee')
+
+		const nameInput = page.getByTestId(testIds.inputNameEmployee)
+		const saveButton = page.getByRole('button', { name: /Simpan/i })
 
 		await expect(nameInput).toBeVisible()
 		await nameInput.fill('mulmul')
