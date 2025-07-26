@@ -18,7 +18,7 @@ test.describe('create new employee', () => {
 			},
 		])
 
-		await page.route(/\/api\/auth\/me$/, async (route) => {
+		await page.route('**/api/auth/me', async (route) => {
 			await route.fulfill({
 				status: 200,
 				body: JSON.stringify(meResponse),
@@ -37,7 +37,7 @@ test.describe('create new employee', () => {
 	})
 
 	test('should show validation error if name not filled', async ({ page }) => {
-		await page.route('**/api/employee', async (route) => {
+		await page.route('**/api/employee/pegawai', async (route) => {
 			await route.fulfill({
 				status: 400,
 				body: JSON.stringify(errorResponse),
@@ -59,13 +59,13 @@ test.describe('create new employee', () => {
 	test('should successfully fill and submit employee name', async ({
 		page,
 	}) => {
-		await page.route('**/api/employee', async (route) => {
+		await page.route('**/api/employee/pegawai', async (route) => {
 			await route.fulfill({
 				status: 200,
 				body: JSON.stringify(successResponse),
 			})
 		})
-		
+
 		await page.goto('/hris/masterdata/new-employee')
 
 		const nameInput = page.getByTestId(testIds.inputNameEmployee)
