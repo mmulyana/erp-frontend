@@ -58,6 +58,7 @@ export default function DetailItem() {
 		}
 		return baseLinks
 	}, [data, isSuccess])
+	
 	useEffect(() => {
 		if (query !== '') {
 			window.scrollTo({ top: 0, behavior: 'smooth' })
